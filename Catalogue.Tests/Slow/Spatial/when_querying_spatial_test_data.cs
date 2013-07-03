@@ -39,7 +39,18 @@ namespace Catalogue.Tests.Slow.Spatial
                 .Count().Should().Be(1);
         }
 
-        //                .Where(i => i.Id == Seeder.SmallBox.Id) 
+        [Test]
+        public void tiny_inner_box_should_be_within_large_outer_box()
+        {
+            Assert.Fail();
+        }
+
+        [Test]
+        public void should_be_able_to_combine_spatial_query_with_nonspatial_quer()
+        {
+            Assert.Fail();
+            //                .Where(i => i.Id == Seeder.SmallBox.Id) 
+        }
     }
 }
 

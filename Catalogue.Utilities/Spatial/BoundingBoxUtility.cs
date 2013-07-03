@@ -10,7 +10,7 @@ namespace Catalogue.Utilities.Spatial
     {
         public static string GetWkt(decimal north, decimal south, decimal east, decimal west)
         {
-            return String.Format("POLYGON(({0} {1},{2} {3},{4} {5},{6} {7},{8} {9}))",
+            return String.Format("POLYGON(({0:G7} {1:G7},{2:G7} {3:G7},{4:G7} {5:G7},{6:G7} {7:G7},{8:G7} {9:G7}))",
                 west, south,
                 east, south,
                 east, north,
