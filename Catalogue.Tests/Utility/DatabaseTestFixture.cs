@@ -1,16 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Catalogue.Data;
 using Catalogue.Data.Model;
-using Catalogue.Tests.Utility;
 using NUnit.Framework;
 using Raven.Client;
 using Raven.Client.Embedded;
 
-namespace Catalogue.Tests.Slow
+namespace Catalogue.Tests.Utility
 {
     public class DatabaseTestFixture
     {

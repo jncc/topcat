@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Catalogue.Data;
 using Catalogue.Data.Indexes;
 using Catalogue.Data.Model;
+using Catalogue.Tests.Utility;
 using FluentAssertions;
 using NUnit.Framework;
 using Raven.Abstractions.Indexing;
@@ -31,7 +32,7 @@ namespace Catalogue.Tests.Slow.Spatial
         }
 
         [Test]
-        public void small_box_should_be_within_containing_box()
+        public void inner_box_should_be_within_outer_box()
         {
             Db.Query<Item, Items_SpatialIndex>()
                 .Customize(x => x.RelatesToShape(FieldNames.Spatial, Seeder.BoundingBoxContainingSmallBox, SpatialRelation.Within))

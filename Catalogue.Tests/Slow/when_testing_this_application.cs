@@ -1,5 +1,6 @@
 ﻿using System.Linq;
 using Catalogue.Data.Model;
+using Catalogue.Tests.Utility;
 using FluentAssertions;
 using NUnit.Framework;
 
