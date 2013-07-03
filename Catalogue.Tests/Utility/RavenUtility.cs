@@ -5,6 +5,11 @@ namespace Catalogue.Tests.Utility
 {
     public class RavenUtility
     {
+        public static void WaitForIndexing(IDocumentSession session)
+        {
+            WaitForIndexing(session.Advanced.DocumentStore);
+        }
+
         public static void WaitForIndexing(IDocumentStore store, string db = null)
         {
             var databaseCommands = store.DatabaseCommands;

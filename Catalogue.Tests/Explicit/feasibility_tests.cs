@@ -5,8 +5,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Linq;
+using Catalogue.Data.Model;
+using Catalogue.Tests.Utility;
+using Catalogue.Utilities.Spatial;
 using NUnit.Framework;
 using Raven.Abstractions.Extensions;
+using Raven.Client.Document;
+using Raven.Client.Indexes;
 
 namespace Catalogue.Tests.Explicit
 {
@@ -22,17 +27,47 @@ namespace Catalogue.Tests.Explicit
             var q = (from f in Directory.GetFiles(dir, "*.xml")
                      where File.ReadLines(f).Any()
                      let xml = XDocument.Load(f)
+                     let p = new
+                         {
+                             North = (decimal) xml.Descendants(gmd + "northBoundLatitude").Single(),
+                             South = (decimal) xml.Descendants(gmd + "southBoundLatitude").Single(),
+                             East = (decimal) xml.Descendants(gmd + "eastBoundLongitude").Single(),
+                             West = (decimal) xml.Descendants(gmd + "westBoundLongitude").Single(),
+                         }
                      select new
                          {
                              File = Path.GetFileName(f),
-                             North = xml.Descendants(gmd + "northBoundLatitude").Single().Value,
-                             South = xml.Descendants(gmd + "southBoundLatitude").Single().Value,
-                             East = xml.Descendants(gmd + "eastBoundLongitude").Single().Value,
-                             West = xml.Descendants(gmd + "westBoundLongitude").Single().Value,
+                             Wkt = BoundingBoxUtility.GetWkt(p.North, p.South, p.East, p.West)
                          }).ToList();
 
             Console.WriteLine(q.Count());
             q.ForEach(Console.WriteLine);
+
+
+            var store = new DocumentStore { Url = "http://jncc-dev:8090/"}.Initialize();
+            
+            using (var db = store.OpenSession())
+            {
+                foreach (var x in q)
+                {
+                    var item = new Item
+                        {
+                            Metadata = new Metadata
+                                {
+                                    Title = x.File,
+                                    BoundingBox = x.Wkt,
+                                }
+                        };
+
+                    db.Store(item);
+                }
+
+                db.SaveChanges();
+                
+            }
+
+            IndexCreation.CreateIndexes(typeof(Item).Assembly, store);
+            RavenUtility.WaitForIndexing(store);
         }
     }
 }
