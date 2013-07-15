@@ -48,8 +48,10 @@ namespace Catalogue.Tests.Slow.Spatial
         [Test]
         public void should_be_able_to_combine_spatial_query_with_nonspatial_quer()
         {
-            Assert.Fail();
-            //                .Where(i => i.Id == Seeder.SmallBox.Id) 
+            Db.Query<Item, Items_SpatialIndex>()
+                .Customize(x => x.RelatesToShape(FieldNames.Spatial, Seeder.BoundingBoxContainingSmallBox, SpatialRelation.Intersects))
+                .Where(i => i.Metadata.Title.StartsWith("Small"))
+                .Count().Should().Be(1);
         }
     }
 }

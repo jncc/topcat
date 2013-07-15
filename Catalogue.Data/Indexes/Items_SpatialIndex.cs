@@ -12,7 +12,8 @@ namespace Catalogue.Data.Indexes
             Map = items => from e in items
                            select new
                            {
-                               __ = SpatialGenerate(FieldNames.Spatial, e.Metadata.BoundingBox, SpatialSearchStrategy.QuadPrefixTree, 23)
+                               __ = SpatialGenerate(FieldNames.Spatial, e.Metadata.BoundingBox, SpatialSearchStrategy.QuadPrefixTree, 16),
+                               e.Metadata
                            };
         }
     }

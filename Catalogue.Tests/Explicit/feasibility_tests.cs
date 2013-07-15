@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -21,10 +22,12 @@ namespace Catalogue.Tests.Explicit
 {
     class feasibility_tests
     {
+        private readonly string RavenUrl = "http://localhost:8081/";
+
         [Explicit, Test]
         public void load_gemini_records()
         {
-            string dir = @"C:\Users\Pete Montgomery\Downloads\nbn-gemini2";
+            string dir = @"C:\Users\PETMON\Downloads\nbn-gemini2";
             XNamespace gmd = "http://www.isotc211.org/2005/gmd";
 
             var q = (from f in Directory.GetFiles(dir, "*.xml")
@@ -37,18 +40,19 @@ namespace Catalogue.Tests.Explicit
                              East = (decimal) xml.Descendants(gmd + "eastBoundLongitude").Single(),
                              West = (decimal) xml.Descendants(gmd + "westBoundLongitude").Single(),
                          }
+                     where p.North < 61 && p.South > 50 && p.East < 2 && p.West > -12 // ignore bad data
                      select new
                          {
                              File = Path.GetFileName(f),
                              Wkt = BoundingBoxUtility.GetWkt(p.North, p.South, p.East, p.West)
                          })
-                         .Take(1).ToList();
+                         .ToList();
 
             Console.WriteLine(q.Count());
             q.ForEach(Console.WriteLine);
 
 
-            var store = new DocumentStore { Url = "http://jncc-dev:8090/"}.Initialize();
+            var store = new DocumentStore { Url = RavenUrl }.Initialize();
             
             using (var db = store.OpenSession())
             {
@@ -76,21 +80,32 @@ namespace Catalogue.Tests.Explicit
         [Explicit, Test]
         public void query_gemini_records()
         {
-            var store = new DocumentStore { Url = "http://jncc-dev:8090/" }.Initialize();
+            var store = new DocumentStore { Url = RavenUrl }.Initialize();
             RavenUtility.WaitForIndexing(store);
 
             string peakDistrictBbox = BoundingBoxUtility.GetWkt(53.6m, 53.0m, -1.52m, -2.14m);
+
+            var watch = Stopwatch.StartNew();
 
             using (var db = store.OpenSession())
             {
                 var results = db.Query<Item, Items_SpatialIndex>()
                     .Customize(x => x.RelatesToShape(FieldNames.Spatial, peakDistrictBbox, SpatialRelation.Intersects))
-                    .Select(i => i.Metadata.Title)
-                    .Take(10)
+                    .Where(i => i.Metadata.Title.StartsWith("GA"))
+                    //.Take(10)
                     .ToList();
 
-                results.Count().Should().Be(10);
+                //results.Count().Should().Be(10);
+                Console.WriteLine(results.Count);
             }
+
+            Console.WriteLine(watch.ElapsedMilliseconds);
+        }
+
+        [Explicit, Test]
+        public void generate_random_boxes()
+        {
+            
         }
     }
 }
