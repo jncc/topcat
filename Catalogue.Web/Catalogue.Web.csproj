@@ -137,6 +137,8 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Editor\index.html" />
+    <Content Include="Editor\js\script.js" />
     <Content Include="favicon.ico" />
     <Content Include="Global.asax" />
     <None Include="Assets\js\jquery-1.7.1.intellisense.js" />

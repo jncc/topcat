@@ -18,3 +18,7 @@ Download, unblock and unzip, and copy Web folder to e.g. e:\catalogue-deployment
 ** C:\Windows\System32\inetsrv\config\applicationHost.config ensure startMode="AlwaysRunning":
 ** <add name="Catalogue.Data.Live" managedRuntimeVersion="v4.0" startMode="AlwaysRunning" />
 
+
+AngularJS
+---------
+There is Resharper support http://blogs.jetbrains.com/dotnet/2013/02/angularjs-support-for-resharper/
