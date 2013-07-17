@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Xml.Linq;
 using Catalogue.Gemini.Model;
 
@@ -30,7 +31,7 @@ namespace Catalogue.Gemini.Encoding
                 MakeResourceType(m),
                 MakeMetadataPointOfContact(m),
                 MakeMetadataDate(m),
-                new XElement(gmd + "identificationInfo",
+                new XElement(gmd + "identificationInfo", 
                     new XElement(gmd + "MD_DataIdentification",
                         new XElement(gmd + "citation",
                             new XElement(gmd + "CI_Citation",
@@ -39,7 +40,6 @@ namespace Catalogue.Gemini.Encoding
                                 MakeUniqueResourceIdentifier(m))),
                         MakeAbstract(m),
                         MakeResponsibleOrganisation(m),
-                        MakeFrequencyOfUpdate(m),
                         MakeKeywords(m),
                         new XElement(gmd + "resourceContraints",
                             new XElement(gmd + "MD_LegalConstraints",
@@ -90,7 +90,7 @@ namespace Catalogue.Gemini.Encoding
 
         XElement MakeMetadataPointOfContact(Metadata metadata)
         {
-            return new XElement(gmd + "contact", Shared.MakeResponsibleParty(metadata.MetadataPointOfContact));
+            return new XElement(gmd + "contact", Shared.MakeResponsiblePartyNode(metadata.MetadataPointOfContact));
         }
 
         XElement MakeMetadataDate(Metadata metadata)
@@ -129,8 +129,21 @@ namespace Catalogue.Gemini.Encoding
 
         XElement MakeResponsibleOrganisation(Metadata metadata)
         {
-            return new XElement(gmd + "abstract", new XElement(gco + "CharacterString", metadata.Abstract));
+            return new XElement(gmd + "pointOfContact", Shared.MakeResponsiblePartyNode(metadata.ResponsibleOrganisation));
         }
+
+        XElement MakeKeywords(Metadata metadata)
+        {
+            return new XElement(gmd + "descriptiveKeywords",
+                new XElement(gmd + "MD_Keywords",
+                    from keyword in metadata.Keywords
+                    select new XElement(gmd + "keyword", new XElement(gco + "CharacterString", keyword))));
+        }
+
+//        XElement MakeXXX(Metadata metadata)
+//        {
+//            return new XElement();
+//        }
 
 
 
@@ -144,7 +157,7 @@ namespace Catalogue.Gemini.Encoding
 
         static class Shared
         {
-            public static XElement MakeResponsibleParty(ResponsibleParty c)
+            public static XElement MakeResponsiblePartyNode(ResponsibleParty c)
             {
                 return new XElement(gmd + "CI_ResponsibleParty",
                     new XElement(gmd + "organisationName",
