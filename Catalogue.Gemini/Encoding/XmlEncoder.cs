@@ -23,6 +23,7 @@ namespace Catalogue.Gemini.Encoding
             // todo: don't delete information that we don't support on first edit!
             // (that's more complicated than just creating a new document!)
 
+            // tip: don't mess up the indentation!
             return new XDocument(gmd + "MD_Metadata",
                 GetFileIdentifier(fileIdentifier),
                 GetMetadataLanguage(m),
@@ -43,7 +44,17 @@ namespace Catalogue.Gemini.Encoding
                         new XElement(gmd + "resourceContraints",
                             new XElement(gmd + "MD_LegalConstraints",
                                 GetLimitationsOnPublicAccess(m)),
-                            new XElement(gmd + "MD_Constraints") ))));
+                            new XElement(gmd + "MD_Constraints",
+                                GetUseConstraints(m))),
+                        GetSpatialResolution(m),
+                        GetDatasetLanguage(m),
+                        new XElement(gmd + "extent",
+                            GetBoundingBox(m),
+                            GetTemporalExtent(m)))),
+                new XElement(gmd + "distributionInfo",
+                    new XElement(gmd + "MD_Distribution",
+                        GetDataFormat(m))),
+                GetLineage(m));
 
 
         }
@@ -72,11 +83,15 @@ namespace Catalogue.Gemini.Encoding
                         metadata.ResourceType));
         }
 
-
-
         XElement GetTitle(Metadata metadata)
         {
             return new XElement(gmd + "title", new XElement(gco + "CharacterString", metadata.Title));
+        }
+
+        XElement GetDatasetLanguage(Metadata metadata)
+        {
+            // this is required unfortunately by ISO 19115 but not Gemini - default to metadata language  
+            throw new NotImplementedException();
         }
 
 
