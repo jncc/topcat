@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Catalogue.Data.Model;
+using Catalogue.Gemini.Model;
 using Raven.Client;
 using Raven.Client.Document;
 
@@ -42,11 +43,11 @@ namespace Catalogue.Data
         {
             Id = new Guid("764dcdea-1231-4494-bc18-6931cc8adcee"),
             Metadata = new Metadata
-            {
-                Title = "Small Box",
-                DataFormat = "csv",
-                BoundingBox = "POLYGON((50 20,60 20,60 30,50 30,50 20))",
-            }
+                {
+                    Title = "Small Box",
+                    DataFormat = new DataFormat {Name = "csv" },
+                },
+            Wkt = "POLYGON((50 20,60 20,60 30,50 30,50 20))",
         };
     }
 }

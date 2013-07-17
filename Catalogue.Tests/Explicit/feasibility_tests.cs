@@ -9,6 +9,7 @@ using System.Xml.Linq;
 using Catalogue.Data;
 using Catalogue.Data.Indexes;
 using Catalogue.Data.Model;
+using Catalogue.Gemini.Model;
 using Catalogue.Tests.Utility;
 using Catalogue.Utilities.Spatial;
 using FluentAssertions;
@@ -63,8 +64,8 @@ namespace Catalogue.Tests.Explicit
                             Metadata = new Metadata
                                 {
                                     Title = x.File,
-                                    BoundingBox = x.Wkt,
-                                }
+                                },
+                            Wkt = x.Wkt,
                         };
 
                     db.Store(item);
