@@ -21,42 +21,41 @@ namespace Catalogue.Gemini.Encoding
 
         public XDocument Encode(Metadata m, Guid fileIdentifier)
         {
-            // todo: don't delete information that we don't support on first edit!
-            // (that's more complicated than just creating a new document!)
+            // see http://data.gov.uk/sites/default/files/UK%20GEMINI%20Encoding%20Guidance%201.4.pdf
+            // *please* don't mess up the indentation!
 
-            // tip: don't mess up the indentation!
-            return new XDocument(gmd + "MD_Metadata",
-                MakeFileIdentifier(fileIdentifier),
-                MakeMetadataLanguage(m),
-                MakeResourceType(m),
-                MakeMetadataPointOfContact(m),
-                MakeMetadataDate(m),
-                new XElement(gmd + "identificationInfo", 
-                    new XElement(gmd + "MD_DataIdentification",
-                        new XElement(gmd + "citation",
-                            new XElement(gmd + "CI_Citation",
-                                MakeTitle(m),
-                                MakeDatasetReferenceDate(m),
-                                MakeUniqueResourceIdentifier(m))),
-                        MakeAbstract(m),
-                        MakeResponsibleOrganisation(m),
-                        MakeKeywords(m),
-                        new XElement(gmd + "resourceContraints",
-                            new XElement(gmd + "MD_LegalConstraints",
-                                MakeLimitationsOnPublicAccess(m)),
-                            new XElement(gmd + "MD_Constraints",
-                                MakeUseConstraints(m))),
-                        MakeSpatialResolution(m),
-                        MakeDatasetLanguage(m),
-                        new XElement(gmd + "extent",
-                            MakeBoundingBox(m),
-                            MakeTemporalExtent(m)))),
-                new XElement(gmd + "distributionInfo",
-                    new XElement(gmd + "MD_Distribution",
-                        MakeDataFormat(m))),
-                MakeLineage(m));
-
-
+            return new XDocument(
+                new XAttribute(XNamespace.Xmlns + "gmd", gmd.NamespaceName),
+                new XAttribute(XNamespace.Xmlns + "gco", gco.NamespaceName),
+                new XAttribute(XNamespace.Xmlns + "gml", gml.NamespaceName),
+                new XElement(gmd + "MD_Metadata",
+                    MakeFileIdentifier(fileIdentifier),
+                    MakeMetadataLanguage(m),
+                    MakeResourceType(m),
+                    MakeMetadataPointOfContact(m),
+                    MakeMetadataDate(m),
+                    new XElement(gmd + "identificationInfo", 
+                        new XElement(gmd + "MD_DataIdentification",
+                            new XElement(gmd + "citation",
+                                new XElement(gmd + "CI_Citation",
+                                    MakeTitle(m),
+                                    MakeDatasetReferenceDate(m),
+                                    MakeUniqueResourceIdentifier(m))),
+                            MakeAbstract(m),
+                            MakeResponsibleOrganisation(m),
+                            MakeKeywords(m),
+                            new XElement(gmd + "resourceContraints",                                
+                                MakeLimitationsOnPublicAccess(m),
+                                MakeUseConstraints(m)),
+                            MakeDatasetLanguage(m),
+                            new XElement(gmd + "extent",
+                                new XElement(gmd + "EX_Extent",
+                                    MakeBoundingBox(m),
+                                    MakeTemporalExtent(m))))),
+                    new XElement(gmd + "distributionInfo",
+                        new XElement(gmd + "MD_Distribution",
+                            MakeDataFormat(m))),
+                    MakeLineage(m)));
         }
 
         XElement MakeFileIdentifier(Guid fileIdentifier)
@@ -140,20 +139,71 @@ namespace Catalogue.Gemini.Encoding
                     select new XElement(gmd + "keyword", new XElement(gco + "CharacterString", keyword))));
         }
 
+        XElement MakeLimitationsOnPublicAccess(Metadata metadata)
+        {
+            return new XElement(gmd + "MD_LegalConstraints",
+                new XElement(gmd + "accessConstraints",
+                    new XElement(gmd + "MD_RestrictionCode",
+                        new XAttribute("codeList", "http://standards.iso.org/ittf/PubliclyAvailableStandards/ISO_19139_Schemas/resources/codelist/gmxCodelists.xml#MD_RestrictionCode"),
+                        new XAttribute("codeListValue", "otherRestrictions"),
+                        "otherRestrictions")),
+                new XElement(gmd + "otherConstraints",
+                    new XElement(gco + "CharacterString", metadata.LimitationsOnPublicAccess)));
+        }
+
+        XElement MakeUseConstraints(Metadata metadata)
+        {
+            return new XElement(gmd + "MD_Constraints", 
+                new XElement(gmd + "useLimitation",
+                    new XElement(gco + "CharacterString", metadata.UseConstraints)));
+        }
+        
+        XElement MakeDatasetLanguage(Metadata metadata)
+        {
+            // this is required unfortunately by ISO19115 but not Gemini - default to metadata language  
+            
+            return new XElement(gmd + "language",
+                new XElement(gmd + "LanguageCode",
+                    new XAttribute("codeList", "http://www.loc.gov/standards/iso639-2/php/code_list.php"),
+                    new XAttribute("codeListValue", metadata.MetadataLanguage),
+                    metadata.MetadataLanguage));
+        }
+
+
+        XElement MakeBoundingBox(Metadata metadata)
+        {
+            return new XElement(gmd + "geographicElement",
+                new XElement(gmd + "EX_GeographicBoundingBox",
+                    new XElement(gmd + "westBoundLongitude",
+                        new XElement(gco + "Decimal",
+                            metadata.BoundingBox.West)),
+                    new XElement(gmd + "eastBoundLongitude",
+                        new XElement(gco + "Decimal",
+                            metadata.BoundingBox.East)),
+                    new XElement(gmd + "southBoundLongitude",
+                        new XElement(gco + "Decimal",
+                            metadata.BoundingBox.South)),
+                    new XElement(gmd + "northBoundLongitude",
+                        new XElement(gco + "Decimal",
+                            metadata.BoundingBox.North))));
+        }
+
+        XElement MakeTemporalExtent(Metadata metadata)
+        {
+            return new XElement(gmd + "temporalElement",
+                new XElement(gmd + "EX_TemporalElement",
+                    new XElement(gmd + "extent",
+                        new XElement(gmd + "TimePeriod",
+                            new XElement(gml + "beginPosition", metadata.TemporalExtent.Begin),
+                            new XElement(gml + "endPosition", metadata.TemporalExtent.End)))));
+        }
+
 //        XElement MakeXXX(Metadata metadata)
 //        {
 //            return new XElement();
 //        }
 
 
-
-
-
-        XElement MakeDatasetLanguage(Metadata metadata)
-        {
-            // this is required unfortunately by ISO19115 but not Gemini - default to metadata language  
-            throw new NotImplementedException();
-        }
 
         static class Shared
         {

@@ -50,7 +50,7 @@ namespace Catalogue.Tests.Fast.Catalogue.Gemini.Encoding
 
                 };
 
-            var xml = new XmlEncoder().Encode(metadata);
+            var xml = new XmlEncoder().Encode(metadata, new Guid("5eb63655-d7fe-46af-88bc-71f7db243ad3"));
         }
     }
 }
