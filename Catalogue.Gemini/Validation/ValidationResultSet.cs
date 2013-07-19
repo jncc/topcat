@@ -15,6 +15,8 @@ namespace Catalogue.Gemini.Validation
         public string Validation { get; set; }
         public string Status { get; set; }
         public List<ValidationError> Errors { get; set; }
+
+        public bool Valid { get { return Status == "valid"; } }
     }
 
     public class ValidationError

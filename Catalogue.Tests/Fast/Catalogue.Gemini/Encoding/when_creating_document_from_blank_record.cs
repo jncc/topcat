@@ -10,7 +10,7 @@ using NUnit.Framework;
 
 namespace Catalogue.Tests.Fast.Catalogue.Gemini.Encoding
 {
-    class when_creating_xml_document
+    class when_creating_document_from_blank_record
     {
         [Test]
         public void should_have_correct_root_element()

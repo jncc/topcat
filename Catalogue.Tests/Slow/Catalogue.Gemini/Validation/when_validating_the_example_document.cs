@@ -15,18 +15,23 @@ namespace Catalogue.Tests.Slow.Catalogue.Gemini.Validation
     /// This is an end-to-end style test that exercises several bits of the system
     /// and depends on an external web service.
     /// </summary>
-    class when_validating_example_document
+    class when_validating_the_example_document
     {
         [Test]
         public void should_be_valid_gemini()
         {
+            // start with the example document
             var metadata = Library.Example();
+            
+            // ...encode it into xml
             var doc = new XmlEncoder().Create(metadata);
+
+            // ...validate it with the CEH validator
             var result = new Validator().Validate(doc);
 
             result.Results.Single(r => r.Validation.StartsWith("GEMINI2"))
-                .Status
-                .Should().Be("valid");
+                .Valid
+                .Should().BeTrue();
         }
     }
 }
