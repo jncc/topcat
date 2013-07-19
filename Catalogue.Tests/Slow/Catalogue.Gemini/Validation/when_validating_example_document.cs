@@ -24,11 +24,9 @@ namespace Catalogue.Tests.Slow.Catalogue.Gemini.Validation
             var doc = new XmlEncoder().Create(metadata);
             var result = new Validator().Validate(doc);
 
-            string status = result.Root.Elements("result")
-                .Single(e => e.Element("validation").Value == "GEMINI2.1_Schematron1.3.xsl")
-                .Element("status").Value;
-
-            status.Should().Be("valid");
+            result.Results.Single(r => r.Validation.StartsWith("GEMINI2"))
+                .Status
+                .Should().Be("valid");
         }
     }
 }
