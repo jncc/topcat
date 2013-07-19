@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Xml.Linq;
 using Catalogue.Gemini.Model;
@@ -7,19 +8,28 @@ namespace Catalogue.Gemini.Encoding
 {
     public interface IXmlEncoder
     {
-        XDocument Encode(Metadata metadata, Guid fileIdentifier);
-        Metadata Decode(XDocument document);
+        /// <summary>
+        /// Creates an ISO XML metadata document using the given metadata.
+        /// </summary>
+        XDocument Create(Metadata metadata);
+
+        /// <summary>
+        /// Updates the ISO XML document using the given metadata.
+        /// The input document is not mutated.
+        /// </summary>
+        XDocument Update(XDocument doc, Metadata metadata);
+
     }
 
     public class XmlEncoder : IXmlEncoder
     {
-        static readonly XNamespace gmd = "http://www.isotc211.org/2005/gmd";
-        static readonly XNamespace gco = "http://www.isotc211.org/2005/gco";
-        static readonly XNamespace srv = "http://www.isotc211.org/2005/srv";
-        static readonly XNamespace gml = "http://www.opengis.net/gml/3.2";
-        static readonly XNamespace xlink = "http://www.w3.org/1999/xlink";
+        public static readonly XNamespace gmd = "http://www.isotc211.org/2005/gmd";
+        public static readonly XNamespace gco = "http://www.isotc211.org/2005/gco";
+        public static readonly XNamespace srv = "http://www.isotc211.org/2005/srv";
+        public static readonly XNamespace gml = "http://www.opengis.net/gml/3.2";
+        public static readonly XNamespace xlink = "http://www.w3.org/1999/xlink";
 
-        public XDocument Encode(Metadata m, Guid fileIdentifier)
+        public XDocument Create(Metadata m)
         {
             // see http://data.gov.uk/sites/default/files/UK%20GEMINI%20Encoding%20Guidance%201.4.pdf
             // *please* don't mess up the indentation!
@@ -29,13 +39,14 @@ namespace Catalogue.Gemini.Encoding
                     new XAttribute(XNamespace.Xmlns + "gmd", gmd.NamespaceName),
                     new XAttribute(XNamespace.Xmlns + "gco", gco.NamespaceName),
                     new XAttribute(XNamespace.Xmlns + "gml", gml.NamespaceName),
-                    MakeFileIdentifier(fileIdentifier),
+                    MakeFileIdentifier(m),
                     MakeMetadataLanguage(m),
                     MakeResourceType(m),
                     MakeMetadataPointOfContact(m),
                     MakeMetadataDate(m),
                     new XElement(gmd + "identificationInfo", 
                         new XElement(gmd + "MD_DataIdentification",
+                            new XAttribute("id", "_" + m.FileIdentifier),
                             new XElement(gmd + "citation",
                                 new XElement(gmd + "CI_Citation",
                                     MakeTitle(m),
@@ -57,11 +68,18 @@ namespace Catalogue.Gemini.Encoding
                     MakeLineage(m)));
         }
 
-        XElement MakeFileIdentifier(Guid fileIdentifier)
+        public XDocument Update(XDocument doc, Metadata metadata)
         {
-            return new XElement(gmd + "fileIdentifier", new XElement(gco + "CharacterString", fileIdentifier.ToString()));
+            throw new NotImplementedException();
         }
 
+
+        #region Elements
+
+        XElement MakeFileIdentifier(Metadata metadata)
+        {
+            return new XElement(gmd + "fileIdentifier", new XElement(gco + "CharacterString", metadata.FileIdentifier.ToString()));
+        }
 
         XElement MakeMetadataLanguage(Metadata metadata)
         {
@@ -114,9 +132,6 @@ namespace Catalogue.Gemini.Encoding
 
         XElement MakeUniqueResourceIdentifier(Metadata metadata)
         {
-//            string codespace = new Uri(metadata.UniqueResourceIdentifier).GetLeftPart(UriPartial.Authority);
-//            string code = metadata.UniqueResourceIdentifier.Replace(codespace, String.Empty).Trim('/');
-
             return new XElement(gmd + "identifier",
                 new XElement(gmd + "MD_Identifier",
                     new XElement(gmd + "code",
@@ -197,7 +212,7 @@ namespace Catalogue.Gemini.Encoding
                 new XElement(gmd + "EX_TemporalExtent",
                     new XElement(gmd + "extent",
                         new XElement(gml + "TimePeriod",
-                            new XAttribute(gml + "id", "_" + metadata.FileIdentifier), // id underscore hack (see guidance)
+                            new XAttribute(gml + "id", "t1"),
                             new XElement(gml + "beginPosition", metadata.TemporalExtent.Begin),
                             new XElement(gml + "endPosition", metadata.TemporalExtent.End)))));
         }
@@ -228,7 +243,6 @@ namespace Catalogue.Gemini.Encoding
                                 new XElement(gco + "CharacterString", metadata.Lineage))))));
         }
 
-
         static class Shared
         {
             public static XElement MakeResponsiblePartyNode(ResponsibleParty c)
@@ -250,11 +264,6 @@ namespace Catalogue.Gemini.Encoding
             }
         }
 
-
-
-        public Metadata Decode(XDocument document)
-        {
-            return new Metadata();
-        }
+        #endregion
     }
 }

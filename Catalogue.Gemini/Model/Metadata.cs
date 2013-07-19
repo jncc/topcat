@@ -8,7 +8,11 @@ namespace Catalogue.Gemini.Model
     /// </summary>
     public class Metadata
     {
-        public string FileIdentifier { get; set; }
+        /// <summary>
+        /// The "id" is not actually part of the metadata record itself, but is convenient to have available.
+        /// </summary>
+        public Guid FileIdentifier { get; set; }
+
         public string Title { get; set; }
         public string Abstract { get; set; }
         public string TopicCategory { get; set; }
@@ -20,6 +24,7 @@ namespace Catalogue.Gemini.Model
         public ResponsibleParty ResponsibleOrganisation { get; set; }
         public string LimitationsOnPublicAccess { get; set; }
         public string UseConstraints { get; set; }
+        public string SpatialReferenceSystem { get; set; }
         public string MetadataDate { get; set; }
         public string MetadataLanguage { get; set; }
         public ResponsibleParty MetadataPointOfContact { get; set; }
@@ -47,6 +52,9 @@ namespace Catalogue.Gemini.Model
         public string Role { get; set; }
     }
 
+    /// <summary>
+    ///  Bounding box referenced to WGS 84.
+    /// </summary>
     public class BoundingBox
     {
         public decimal North { get; set; }
