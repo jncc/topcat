@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Xml;
 using System.Xml.Linq;
+using System.Xml.XPath;
 using Catalogue.Gemini.Model;
 
 namespace Catalogue.Gemini.Encoding
@@ -70,7 +72,10 @@ namespace Catalogue.Gemini.Encoding
 
         public XDocument Update(XDocument doc, Metadata metadata)
         {
-            throw new NotImplementedException();
+            var d = new XDocument(doc);
+            SetMetadataLanguage(d, metadata);
+
+            return d;
         }
 
 
@@ -88,6 +93,14 @@ namespace Catalogue.Gemini.Encoding
                     new XAttribute("codeList", "http://www.loc.gov/standards/iso639-2/php/code_list.php"),
                     new XAttribute("codeListValue", metadata.MetadataLanguage),
                     metadata.MetadataLanguage));
+        }
+
+        void SetMetadataLanguage(XDocument doc, Metadata metadata)
+        {
+            var e = doc.XPath("//*/gmd:language/gmd:LanguageCode");
+
+            e.SetAttributeValue("codeListValue", metadata.MetadataLanguage);
+            e.SetValue(metadata.MetadataLanguage);
         }
 
         XElement MakeResourceType(Metadata metadata)
