@@ -8,6 +8,7 @@ namespace Catalogue.Gemini.Model
     /// </summary>
     public class Metadata
     {
+        public string FileIdentifier { get; set; }
         public string Title { get; set; }
         public string Abstract { get; set; }
         public string TopicCategory { get; set; }

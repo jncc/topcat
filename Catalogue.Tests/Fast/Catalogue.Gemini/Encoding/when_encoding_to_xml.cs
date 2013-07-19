@@ -1,9 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
+using System.Xml.Linq;
 using Catalogue.Gemini.Encoding;
 using Catalogue.Gemini.Model;
 using NUnit.Framework;
+using Raven.Imports.Newtonsoft.Json;
 
 namespace Catalogue.Tests.Fast.Catalogue.Gemini.Encoding
 {
@@ -14,6 +17,7 @@ namespace Catalogue.Tests.Fast.Catalogue.Gemini.Encoding
         {
             var metadata = new Metadata
                 {
+                    FileIdentifier = "5eb63655-d7fe-46af-88bc-71f7db243ad3",
                     Title = "Demo Dataset",
                     Abstract = "This is just a demo dataset.",
                     TopicCategory = "geoscientificInformation",
@@ -30,7 +34,7 @@ namespace Catalogue.Tests.Fast.Catalogue.Gemini.Encoding
                         },
                     LimitationsOnPublicAccess = "no limitations",
                     UseConstraints = "no conditions apply",
-                    MetadataDate = "2013/07/16",
+                    MetadataDate = "2013-07-16",
                     MetadataLanguage = "eng",
                     MetadataPointOfContact = new ResponsibleParty
                         {
@@ -51,6 +55,15 @@ namespace Catalogue.Tests.Fast.Catalogue.Gemini.Encoding
                 };
 
             var xml = new XmlEncoder().Encode(metadata, new Guid("5eb63655-d7fe-46af-88bc-71f7db243ad3"));
+//            Console.WriteLine(xml);
+
+            // validate using CEH web service
+            var c = new WebClient();
+            c.Headers[HttpRequestHeader.ContentType] = "application/vnd.iso.19139+xml";
+            c.Headers[HttpRequestHeader.Accept] = "application/xml";
+            var xmlResult = XDocument.Parse(c.UploadString("http://metacheck.nerc-lancaster.ac.uk/validator", xml.ToString()));
+            string jsonResult = JsonConvert.SerializeXNode(xmlResult.Root);
+            Console.WriteLine(jsonResult);
         }
     }
 }

@@ -25,10 +25,10 @@ namespace Catalogue.Gemini.Encoding
             // *please* don't mess up the indentation!
 
             return new XDocument(
-                new XAttribute(XNamespace.Xmlns + "gmd", gmd.NamespaceName),
-                new XAttribute(XNamespace.Xmlns + "gco", gco.NamespaceName),
-                new XAttribute(XNamespace.Xmlns + "gml", gml.NamespaceName),
                 new XElement(gmd + "MD_Metadata",
+                    new XAttribute(XNamespace.Xmlns + "gmd", gmd.NamespaceName),
+                    new XAttribute(XNamespace.Xmlns + "gco", gco.NamespaceName),
+                    new XAttribute(XNamespace.Xmlns + "gml", gml.NamespaceName),
                     MakeFileIdentifier(fileIdentifier),
                     MakeMetadataLanguage(m),
                     MakeResourceType(m),
@@ -44,10 +44,9 @@ namespace Catalogue.Gemini.Encoding
                             MakeAbstract(m),
                             MakeResponsibleOrganisation(m),
                             MakeKeywords(m),
-                            new XElement(gmd + "resourceContraints",                                
-                                MakeLimitationsOnPublicAccess(m),
-                                MakeUseConstraints(m)),
+                            MakeLimitationsOnPublicAccessAndUseConstraints(m),                                
                             MakeDatasetLanguage(m),
+                            MakeTopicCategory(m),
                             new XElement(gmd + "extent",
                                 new XElement(gmd + "EX_Extent",
                                     MakeBoundingBox(m),
@@ -84,17 +83,20 @@ namespace Catalogue.Gemini.Encoding
 
         XElement MakeTitle(Metadata metadata)
         {
-            return new XElement(gmd + "title", new XElement(gco + "CharacterString", metadata.Title));
+            return new XElement(gmd + "title",
+                new XElement(gco + "CharacterString", metadata.Title));
         }
 
         XElement MakeMetadataPointOfContact(Metadata metadata)
         {
-            return new XElement(gmd + "contact", Shared.MakeResponsiblePartyNode(metadata.MetadataPointOfContact));
+            return new XElement(gmd + "contact",
+                Shared.MakeResponsiblePartyNode(metadata.MetadataPointOfContact));
         }
 
         XElement MakeMetadataDate(Metadata metadata)
         {
-            return new XElement(gmd + "dateStamp", new XElement(gco + "Date", metadata.MetadataDate));
+            return new XElement(gmd + "dateStamp",
+                new XElement(gco + "Date", metadata.MetadataDate));
         }
 
         XElement MakeDatasetReferenceDate(Metadata metadata)
@@ -123,12 +125,14 @@ namespace Catalogue.Gemini.Encoding
 
         XElement MakeAbstract(Metadata metadata)
         {
-            return new XElement(gmd + "abstract", new XElement(gco + "CharacterString", metadata.Abstract));
+            return new XElement(gmd + "abstract",
+                new XElement(gco + "CharacterString", metadata.Abstract));
         }
 
         XElement MakeResponsibleOrganisation(Metadata metadata)
         {
-            return new XElement(gmd + "pointOfContact", Shared.MakeResponsiblePartyNode(metadata.ResponsibleOrganisation));
+            return new XElement(gmd + "pointOfContact",
+                Shared.MakeResponsiblePartyNode(metadata.ResponsibleOrganisation));
         }
 
         XElement MakeKeywords(Metadata metadata)
@@ -136,26 +140,24 @@ namespace Catalogue.Gemini.Encoding
             return new XElement(gmd + "descriptiveKeywords",
                 new XElement(gmd + "MD_Keywords",
                     from keyword in metadata.Keywords
-                    select new XElement(gmd + "keyword", new XElement(gco + "CharacterString", keyword))));
+                    select new XElement(gmd + "keyword",
+                        new XElement(gco + "CharacterString", keyword))));
         }
 
-        XElement MakeLimitationsOnPublicAccess(Metadata metadata)
+        XElement MakeLimitationsOnPublicAccessAndUseConstraints(Metadata metadata)
         {
-            return new XElement(gmd + "MD_LegalConstraints",
-                new XElement(gmd + "accessConstraints",
-                    new XElement(gmd + "MD_RestrictionCode",
-                        new XAttribute("codeList", "http://standards.iso.org/ittf/PubliclyAvailableStandards/ISO_19139_Schemas/resources/codelist/gmxCodelists.xml#MD_RestrictionCode"),
-                        new XAttribute("codeListValue", "otherRestrictions"),
-                        "otherRestrictions")),
-                new XElement(gmd + "otherConstraints",
-                    new XElement(gco + "CharacterString", metadata.LimitationsOnPublicAccess)));
-        }
-
-        XElement MakeUseConstraints(Metadata metadata)
-        {
-            return new XElement(gmd + "MD_Constraints", 
-                new XElement(gmd + "useLimitation",
-                    new XElement(gco + "CharacterString", metadata.UseConstraints)));
+            return new XElement(gmd + "resourceConstraints",
+                new XElement(gmd + "MD_LegalConstraints",
+                    new XElement(gmd + "useLimitation",
+                        new XElement(gco + "CharacterString", metadata.UseConstraints)),
+                    new XElement(gmd + "accessConstraints",
+                        new XElement(gmd + "MD_RestrictionCode",
+                            new XAttribute("codeList", "http://standards.iso.org/ittf/PubliclyAvailableStandards/ISO_19139_Schemas/resources/codelist/gmxCodelists.xml#MD_RestrictionCode"),
+                            new XAttribute("codeListValue", "otherRestrictions"),
+                            "otherRestrictions")),
+                    new XElement(gmd + "otherConstraints",
+                        new XElement(gco + "CharacterString", metadata.LimitationsOnPublicAccess))
+                    ));
         }
         
         XElement MakeDatasetLanguage(Metadata metadata)
@@ -169,40 +171,62 @@ namespace Catalogue.Gemini.Encoding
                     metadata.MetadataLanguage));
         }
 
+        XElement MakeTopicCategory(Metadata metadata)
+        {
+            return new XElement(gmd + "topicCategory",
+                new XElement(gmd + "MD_TopicCategoryCode", metadata.TopicCategory));
+        }
 
         XElement MakeBoundingBox(Metadata metadata)
         {
             return new XElement(gmd + "geographicElement",
                 new XElement(gmd + "EX_GeographicBoundingBox",
                     new XElement(gmd + "westBoundLongitude",
-                        new XElement(gco + "Decimal",
-                            metadata.BoundingBox.West)),
+                        new XElement(gco + "Decimal", metadata.BoundingBox.West)),
                     new XElement(gmd + "eastBoundLongitude",
-                        new XElement(gco + "Decimal",
-                            metadata.BoundingBox.East)),
-                    new XElement(gmd + "southBoundLongitude",
-                        new XElement(gco + "Decimal",
-                            metadata.BoundingBox.South)),
-                    new XElement(gmd + "northBoundLongitude",
-                        new XElement(gco + "Decimal",
-                            metadata.BoundingBox.North))));
+                        new XElement(gco + "Decimal", metadata.BoundingBox.East)),
+                    new XElement(gmd + "southBoundLatitude",
+                        new XElement(gco + "Decimal", metadata.BoundingBox.South)),
+                    new XElement(gmd + "northBoundLatitude",
+                        new XElement(gco + "Decimal", metadata.BoundingBox.North))));
         }
 
         XElement MakeTemporalExtent(Metadata metadata)
         {
             return new XElement(gmd + "temporalElement",
-                new XElement(gmd + "EX_TemporalElement",
+                new XElement(gmd + "EX_TemporalExtent",
                     new XElement(gmd + "extent",
-                        new XElement(gmd + "TimePeriod",
+                        new XElement(gml + "TimePeriod",
+                            new XAttribute(gml + "id", "_" + metadata.FileIdentifier), // id underscore hack (see guidance)
                             new XElement(gml + "beginPosition", metadata.TemporalExtent.Begin),
                             new XElement(gml + "endPosition", metadata.TemporalExtent.End)))));
         }
 
-//        XElement MakeXXX(Metadata metadata)
-//        {
-//            return new XElement();
-//        }
+        XElement MakeDataFormat(Metadata metadata)
+        {
+            return new XElement(gmd + "distributionFormat",
+                new XElement(gmd + "MD_Format",
+                    new XElement(gmd + "name",
+                        new XElement(gco + "CharacterString", metadata.DataFormat.Name)),
+                    new XElement(gmd + "version",
+                        new XElement(gco + "CharacterString", metadata.DataFormat.Version))));
+        }
 
+        XElement MakeLineage(Metadata metadata)
+        {
+            return new XElement(gmd + "dataQualityInfo",
+                new XElement(gmd + "DQ_DataQuality",
+                    new XElement(gmd + "scope",
+                        new XElement(gmd + "DQ_Scope",
+                            new XElement(gmd + "level",
+                                new XElement(gmd + "MD_ScopeCode",
+                                    new XAttribute("codeList", "http://standards.iso.org/ittf/PubliclyAvailableStandards/ISO_19139_Schemas/resources/codelist/gmxCodelists.xml#MD_ScopeCode"),
+                                    new XAttribute("codeListValue", "dataset"))))),
+                    new XElement(gmd + "lineage",
+                        new XElement(gmd + "LI_Lineage",
+                            new XElement(gmd + "statement",
+                                new XElement(gco + "CharacterString", metadata.Lineage))))));
+        }
 
 
         static class Shared
@@ -217,7 +241,7 @@ namespace Catalogue.Gemini.Encoding
                             new XElement(gmd + "address",
                                 new XElement(gmd + "CI_Address",
                                     new XElement(gmd + "electronicMailAddress",
-                                        new XElement(gmd + "CharacterString", c.Email)))))),
+                                        new XElement(gco + "CharacterString", c.Email)))))),
                     new XElement(gmd + "role",
                         new XElement(gmd + "CI_RoleCode",
                             new XAttribute("codeList", "http://standards.iso.org/ittf/PubliclyAvailableStandards/ISO_19139_Schemas/resources/codelist/gmxCodelists.xml#CI_RoleCode"),
