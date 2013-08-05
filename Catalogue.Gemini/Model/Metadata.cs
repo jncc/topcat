@@ -33,6 +33,13 @@ namespace Catalogue.Gemini.Model
         public BoundingBox BoundingBox { get; set; }
     }
 
+    public class Keyword
+    {
+        public string Value { get; set; }
+        public string VocabularyIdentifier { get; set; }
+        
+    }
+
     public class DataFormat
     {
         public string Name { get; set; }
@@ -61,5 +68,11 @@ namespace Catalogue.Gemini.Model
         public decimal South { get; set; }
         public decimal East { get; set; }
         public decimal West { get; set; }
+    }
+
+    public class Citation
+    {
+        public string IdentifierUrl { get; set; }
+        public string Name { get; set; }
     }
 }

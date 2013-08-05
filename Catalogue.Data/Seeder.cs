@@ -30,7 +30,26 @@ namespace Catalogue.Data
 
         void AddItems()
         {
+            AddVocabularies();
+
             db.Store(SmallBox);
+        }
+
+        private void AddVocabularies()
+        {
+            var jnccCategories = new Vocabulary
+                {
+                    Id = "http://data.jncc.gov.uk/vocabs/jncc-categories",
+                    Name = "JNCC Categories",
+                    Description = "The broad dataset categories used within JNCC.",
+                    PublicationDate = "2013",
+                    Values = new List<string>
+                        {
+                            "marine-habitat-data",
+                            "marine-activities-pressures-data",
+                        }
+                };
+            db.Store(jnccCategories);
         }
 
         // BigBoundingBoxWithNothingInside and SmallBox do not intersect
