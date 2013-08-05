@@ -42,7 +42,7 @@ namespace Catalogue.Gemini.Encoding
                     new XAttribute(XNamespace.Xmlns + "gco", gco.NamespaceName),
                     new XAttribute(XNamespace.Xmlns + "gml", gml.NamespaceName),
                     MakeFileIdentifier(m),
-                    MakeMetadataLanguage(m),
+                    MetadataLanguage.Make(m),
                     MakeResourceType(m),
                     MakeMetadataPointOfContact(m),
                     MakeMetadataDate(m),
@@ -57,7 +57,7 @@ namespace Catalogue.Gemini.Encoding
                             MakeAbstract(m),
                             MakeResponsibleOrganisation(m),
                             MakeKeywords(m),
-                            MakeLimitationsOnPublicAccessAndUseConstraints(m),                                
+                            MakeLimitationsOnPublicAccessAndUseConstraints(m), // think ienum will actually work                             
                             MakeDatasetLanguage(m),
                             MakeTopicCategory(m),
                             new XElement(gmd + "extent",
@@ -73,7 +73,8 @@ namespace Catalogue.Gemini.Encoding
         public XDocument Update(XDocument doc, Metadata metadata)
         {
             var d = new XDocument(doc);
-            SetMetadataLanguage(d, metadata);
+
+            MetadataLanguage.Set(d, metadata);
 
             return d;
         }
@@ -86,22 +87,6 @@ namespace Catalogue.Gemini.Encoding
             return new XElement(gmd + "fileIdentifier", new XElement(gco + "CharacterString", metadata.FileIdentifier.ToString()));
         }
 
-        XElement MakeMetadataLanguage(Metadata metadata)
-        {
-            return new XElement(gmd + "language",
-                new XElement(gmd + "LanguageCode",
-                    new XAttribute("codeList", "http://www.loc.gov/standards/iso639-2/php/code_list.php"),
-                    new XAttribute("codeListValue", metadata.MetadataLanguage),
-                    metadata.MetadataLanguage));
-        }
-
-        void SetMetadataLanguage(XDocument doc, Metadata metadata)
-        {
-            var e = doc.XPath("//*/gmd:language/gmd:LanguageCode");
-
-            e.SetAttributeValue("codeListValue", metadata.MetadataLanguage);
-            e.SetValue(metadata.MetadataLanguage);
-        }
 
         XElement MakeResourceType(Metadata metadata)
         {
@@ -278,5 +263,37 @@ namespace Catalogue.Gemini.Encoding
         }
 
         #endregion
+
+        static class MetadataLanguage
+        {
+            public static XElement Make(Metadata m)
+            {
+                return new XElement(gmd + "language",
+                    new XElement(gmd + "LanguageCode",
+                        new XAttribute("codeList", "http://www.loc.gov/standards/iso639-2/php/code_list.php"),
+                        new XAttribute("codeListValue", m.MetadataLanguage),
+                        m.MetadataLanguage));
+            }
+
+            static readonly string xpath = "//*/gmd:language/gmd:LanguageCode";
+
+            public static string Get(XDocument doc)
+            {
+                // todo use this Get to test out reading from the xml
+                // we will have to read from the xml each time i guess??
+                // can't rely on the metadata record in raven. it's only for indexing.
+                // inex the record, defer to the xml for reading i guess.
+                return doc.XPath(xpath).Value;
+            }
+
+            public static void Set(XDocument doc, Metadata m)
+            {
+                var e = doc.XPath(xpath);
+                e.SetAttributeValue("codeListValue", m.MetadataLanguage);
+                e.SetValue(m.MetadataLanguage);
+            }
+        }
+    
     }
+
 }
