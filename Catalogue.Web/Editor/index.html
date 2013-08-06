@@ -1,5 +1,5 @@
 ﻿<!DOCTYPE html>
-<html ng-app>
+<html ng-app="editor" id="ng-app">
     <head>
         <link href="http://netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/css/bootstrap-combined.min.css" rel="stylesheet">
         <link href="css/styles.css" rel="stylesheet">
@@ -32,7 +32,7 @@
             <br/><br/>
     
             <label>Contacts:</label>
-            [ <a href="" ng-click="addContact()">add</a> ]
+            [ <a href="#" ng-click="addContact()">add</a> ]
             <div ng-repeat="contact in form.contacts" ng-animate=" 'animate' ">
                 <select ng-model="contact.type">
                     <option>email</option>
@@ -41,7 +41,7 @@
                     <option>IM</option>
                 </select>
             <input type="text" ng-model="contact.value" required/>
-            [ <a href="" ng-click="removeContact(contact)">X</a> ]
+            [ <a href="#" ng-click="removeContact(contact)">X</a> ]
             </div>
             <button ng-click="cancel()" ng-disabled="isCancelDisabled()">Cancel</button>
             <button ng-click="save()" ng-disabled="isSaveDisabled()">Save</button>

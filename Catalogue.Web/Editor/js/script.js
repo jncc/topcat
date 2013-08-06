@@ -1,14 +1,29 @@
-﻿function UserForm($scope) {
+﻿
+// doing some dependency injection!
+var editorModule = angular.module("editor", []);
+
+editorModule.factory("defaults", function () { // angular uses parameter name cos no types in js!
+    return {
+        name: 'John Smit',
+        line1: '123 Main St.',
+        city: 'Anytown',
+        state: 'AA',
+        zip: '12345',
+        phone: '1(234) 555-1212'
+    };
+});
+
+function UserForm($scope, defaults) {
     var master = {
-        name: 'John Smith',
+        name: defaults.name,
         address: {
-            line1: '123 Main St.',
-            city: 'Anytown',
-            state: 'AA',
-            zip: '12345'
+            line1: defaults.line1,
+            city: defaults.city,
+            state: defaults.state,
+            zip: defaults.zip
         },
         contacts: [
-          { type: 'phone', value: '1(234) 555-1212' }
+          { type: 'phone', value: defaults.phone }
         ]
     };
 
