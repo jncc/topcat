@@ -139,6 +139,12 @@
   <ItemGroup>
     <Content Include="Editor\css\styles.css" />
     <Content Include="Editor\index.html" />
+    <Content Include="Editor\js\decaf.js">
+      <DependentUpon>decaf.coffee</DependentUpon>
+    </Content>
+    <Content Include="Editor\js\decaf.min.js">
+      <DependentUpon>decaf.coffee</DependentUpon>
+    </Content>
     <Content Include="Editor\js\script.js" />
     <Content Include="favicon.ico" />
     <Content Include="Global.asax" />
