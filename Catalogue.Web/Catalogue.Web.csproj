@@ -143,7 +143,6 @@
     <Content Include="Editor\css\main.min.css">
       <DependentUpon>main.less</DependentUpon>
     </Content>
-    <Content Include="Editor\css\styles.css" />
     <Content Include="Editor\index.html" />
     <Content Include="Editor\js\decaf.js">
       <DependentUpon>decaf.coffee</DependentUpon>
@@ -151,7 +150,6 @@
     <Content Include="Editor\js\decaf.min.js">
       <DependentUpon>decaf.coffee</DependentUpon>
     </Content>
-    <Content Include="Editor\js\script.js" />
     <Content Include="Editor\pete.html" />
     <Content Include="favicon.ico" />
     <Content Include="Global.asax" />
