@@ -1,28 +1,30 @@
 ﻿
 
-# doing some angular dependency injection!
-editorModule = angular.module('editor', []);
+# a "module" is essentially a configuration for Angular's dependency injector
+# which allows you to group a set of controllers, directives, filters, etc. under one name
+module = angular.module('editor', []);
 
-editorModule.factory 'defaults', () ->
-        name: 'John Smit',
-        line1: '123 Main St.',
-        city: 'Anytown',
-        state: 'AA',
-        zip: '12345',
-        phone: '1(234) 555-1212',
+# when i ask for defaults, provide this object
+module.factory 'defaults', () ->
+    name: 'John Smit',
+    line1: '123 Main St.',
+    city: 'Anytown',
+    state: 'AA',
+    zip: '12345',
+    phone: '1(234) 555-1212',
 
-editorModule.controller 'UserForm', ($scope, defaults) -> 
+# when this Controller1 is instantiated, this is it
+module.controller 'Controller1', ($scope, defaults) -> 
 
     master = 
         name: defaults.name,
-        address: {
+        address: 
             line1: defaults.line1,
             city: defaults.city,
             state: defaults.state,
-            zip: defaults.zip
-        },
+            zip: defaults.zip,
         contacts: [
-          { type: 'phone', value: defaults.phone }
+          type: 'phone', value: defaults.phone
         ]
 
     $scope.state = /^\w\w$/

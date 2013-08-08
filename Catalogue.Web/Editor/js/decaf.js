@@ -1,9 +1,9 @@
 ﻿(function() {
-  var editorModule;
+  var module;
 
-  editorModule = angular.module('editor', []);
+  module = angular.module('editor', []);
 
-  editorModule.factory('defaults', function() {
+  module.factory('defaults', function() {
     return {
       name: 'John Smit',
       line1: '123 Main St.',
@@ -14,7 +14,7 @@
     };
   });
 
-  editorModule.controller('UserForm', function($scope, defaults) {
+  module.controller('Controller1', function($scope, defaults) {
     var master;
     master = {
       name: defaults.name,

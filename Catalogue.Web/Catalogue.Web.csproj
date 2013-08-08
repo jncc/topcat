@@ -137,6 +137,12 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Editor\css\main.css">
+      <DependentUpon>main.less</DependentUpon>
+    </Content>
+    <Content Include="Editor\css\main.min.css">
+      <DependentUpon>main.less</DependentUpon>
+    </Content>
     <Content Include="Editor\css\styles.css" />
     <Content Include="Editor\index.html" />
     <Content Include="Editor\js\decaf.js">
@@ -146,6 +152,7 @@
       <DependentUpon>decaf.coffee</DependentUpon>
     </Content>
     <Content Include="Editor\js\script.js" />
+    <Content Include="Editor\pete.html" />
     <Content Include="favicon.ico" />
     <Content Include="Global.asax" />
     <None Include="Assets\js\jquery-1.7.1.intellisense.js" />
@@ -177,6 +184,7 @@
     <Content Include="Views\Shared\Error.cshtml" />
     <Content Include="Views\Shared\_Layout.cshtml" />
     <Content Include="Editor\js\decaf.coffee" />
+    <Content Include="Editor\css\main.less" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Assets\css\" />

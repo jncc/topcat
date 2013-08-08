@@ -1,6 +1,19 @@
 JNCC Catalogue
 ==============
 
+Web Essentials
+--------------
+
+Install the Visual Studio extensions pack for design-time support for CoffeeScript (.coffee) and LESS (.less).
+These are essential if you want to edit the application's Javascript or CSS.
+There are no build-time or run-time steps used to compile Coffeescript and LESS - the Visual Studio extensions are simpler.
+The application will expect the correct .js and .css files to have be design-time generated.
+http://visualstudiogallery.msdn.microsoft.com/07d54d12-7133-4e15-becb-6f451ea3bea6
+*This may be in Visual Studio Update 2 now!*
+
+AngularJS
+---------
+There is Resharper support http://blogs.jetbrains.com/dotnet/2013/02/angularjs-support-for-resharper/
 
 Setting up RavenDB
 ------------------
@@ -19,11 +32,4 @@ http://ravendb.net/docs/server/deployment/as-iis-application
 ** <add name="Catalogue.Data.Live" managedRuntimeVersion="v4.0" startMode="AlwaysRunning" />
 
 
-AngularJS
----------
-There is Resharper support http://blogs.jetbrains.com/dotnet/2013/02/angularjs-support-for-resharper/
 
-Web Essentials
---------------
-Install the Visual Studio extensions pack for support for CoffeeScript.
-http://visualstudiogallery.msdn.microsoft.com/07d54d12-7133-4e15-becb-6f451ea3bea6
