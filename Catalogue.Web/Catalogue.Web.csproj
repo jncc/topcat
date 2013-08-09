@@ -150,6 +150,16 @@
     <Content Include="Editor\js\decaf.min.js">
       <DependentUpon>decaf.coffee</DependentUpon>
     </Content>
+    <Content Include="Editor\lib\angular-1.1.5\angular.min.js" />
+    <Content Include="Editor\lib\bootstrap-3.0-rc1\css\bootstrap.css" />
+    <Content Include="Editor\lib\bootstrap-3.0-rc1\css\bootstrap.min.css" />
+    <Content Include="Editor\lib\bootstrap-3.0-rc1\js\bootstrap.js" />
+    <Content Include="Editor\lib\bootstrap-3.0-rc1\js\bootstrap.min.js" />
+    <Content Include="Editor\lib\jquery-placeholder-2.0.7\demo.html" />
+    <Content Include="Editor\lib\jquery-placeholder-2.0.7\jquery.placeholder.js" />
+    <Content Include="Editor\lib\jquery-placeholder-2.0.7\jquery.placeholder.min.js" />
+    <Content Include="Editor\lib\jquery-placeholder-2.0.7\LICENSE-GPL.txt" />
+    <Content Include="Editor\lib\jquery-placeholder-2.0.7\LICENSE-MIT.txt" />
     <Content Include="Editor\pete.html" />
     <Content Include="favicon.ico" />
     <Content Include="Global.asax" />
@@ -183,6 +193,7 @@
     <Content Include="Views\Shared\_Layout.cshtml" />
     <Content Include="Editor\js\decaf.coffee" />
     <Content Include="Editor\css\main.less" />
+    <Content Include="Editor\lib\jquery-placeholder-2.0.7\README.md" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Assets\css\" />

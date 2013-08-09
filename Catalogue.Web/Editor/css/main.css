@@ -1,13 +1,4 @@
-﻿.ng-pristine {
-  border: 1px solid Gold;
-}
-.ng-dirty.ng-valid {
-  border: 1px solid Green;
-}
-.ng-dirty.ng-invalid {
-  border: 1px solid Red;
-}
-.animate-enter {
+﻿.animate-enter {
   -webkit-transition: 1s linear all;
   transition: 1s linear all;
   opacity: 0;
