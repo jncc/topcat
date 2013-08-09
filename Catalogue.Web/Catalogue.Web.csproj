@@ -167,6 +167,7 @@
     <Content Include="Editor\lib\jquery-placeholder-2.0.7\jquery.placeholder.min.js" />
     <Content Include="Editor\lib\jquery-placeholder-2.0.7\LICENSE-GPL.txt" />
     <Content Include="Editor\lib\jquery-placeholder-2.0.7\LICENSE-MIT.txt" />
+    <Content Include="Editor\lib\jquery.elastic-1.6.11\jquery.elastic.source.js" />
     <Content Include="Editor\lib\respond-1.2.0\cross-domain\example.html" />
     <Content Include="Editor\lib\respond-1.2.0\cross-domain\respond-proxy.html" />
     <Content Include="Editor\lib\respond-1.2.0\cross-domain\respond.proxy.gif" />

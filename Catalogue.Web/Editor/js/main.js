@@ -23,4 +23,13 @@
     };
   });
 
+  module.directive('elastic', function() {
+    return {
+      restrict: 'A',
+      link: function(scope, element, attrs) {
+        return $(element).elastic();
+      }
+    };
+  });
+
 }).call(this);

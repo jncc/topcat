@@ -12,9 +12,13 @@ module.factory 'defaults', () ->
     zip: '12345',
     phone: '1(234) 555-1212',
 
-# use jquery placeholder plugin
+# use jquery placeholder plugin for old IE
 # in angular, we can use a custom directive with the same name as the html5 attribute!
 module.directive 'placeholder', () -> 
     restrict: 'A', # attribute
     link: (scope, element, attrs) -> $(element).placeholder()
 
+# use jquery elastic plugin to auto-expand textareas
+module.directive 'elastic', () -> 
+    restrict: 'A', # attribute
+    link: (scope, element, attrs) -> $(element).elastic()

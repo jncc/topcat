@@ -12,6 +12,7 @@
         <script src="lib/bootstrap-3.0-rc1/js/bootstrap.min.js"></script>
         <script src="lib/angular-1.1.5/angular.min.js"></script>
         <script src="lib/jquery-placeholder-2.0.7/jquery.placeholder.min.js"></script>
+        <script src="lib/jquery.elastic-1.6.11/jquery.elastic.source.js"></script>
         <script src="js/main.js"></script>
         <script src="js/controller1.js"></script>
     </head>
@@ -34,7 +35,7 @@
                 <div class="form-group">
                     <div>Address</div>
                     <input type="text" ng-model="form.address.line1" size="33" required class="form-control" />
-                    <input type="text" ng-model="form.address.city" size="12" required elastic class="form-control" />,
+                    <textarea id="expandme" type="text" ng-model="form.address.city" size="12" required elastic class="form-control"></textarea>
                     <input type="text" ng-model="form.address.state" size="2"
                             ng-pattern="state" required/>
                     <input type="text" ng-model="form.address.zip" size="5"
