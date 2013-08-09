@@ -29,7 +29,7 @@ angular.module('editor').controller 'Controller1', ($scope, defaults) ->
     $scope.addContact = () -> $scope.form.contacts.push({ type: '', value: '' })
 
     $scope.removeContact = (contact) ->
-        i = $scope.form.contacts.indexOf contact
+        i = $scope.form.contacts.indexOf contact # indexOf doesn't work in ie7!
         $scope.form.contacts.splice i, 1
 
     $scope.isCancelDisabled = () -> angular.equals(master, $scope.form)
