@@ -150,16 +150,39 @@
     <Content Include="Editor\js\decaf.min.js">
       <DependentUpon>decaf.coffee</DependentUpon>
     </Content>
+    <Content Include="Editor\js\main.js">
+      <DependentUpon>main.coffee</DependentUpon>
+    </Content>
+    <Content Include="Editor\js\main.min.js">
+      <DependentUpon>main.coffee</DependentUpon>
+    </Content>
     <Content Include="Editor\lib\angular-1.1.5\angular.min.js" />
     <Content Include="Editor\lib\bootstrap-3.0-rc1\css\bootstrap.css" />
     <Content Include="Editor\lib\bootstrap-3.0-rc1\css\bootstrap.min.css" />
     <Content Include="Editor\lib\bootstrap-3.0-rc1\js\bootstrap.js" />
     <Content Include="Editor\lib\bootstrap-3.0-rc1\js\bootstrap.min.js" />
+    <Content Include="Editor\lib\jquery-1.10.2\jquery.min.js" />
     <Content Include="Editor\lib\jquery-placeholder-2.0.7\demo.html" />
     <Content Include="Editor\lib\jquery-placeholder-2.0.7\jquery.placeholder.js" />
     <Content Include="Editor\lib\jquery-placeholder-2.0.7\jquery.placeholder.min.js" />
     <Content Include="Editor\lib\jquery-placeholder-2.0.7\LICENSE-GPL.txt" />
     <Content Include="Editor\lib\jquery-placeholder-2.0.7\LICENSE-MIT.txt" />
+    <Content Include="Editor\lib\respond-1.2.0\cross-domain\example.html" />
+    <Content Include="Editor\lib\respond-1.2.0\cross-domain\respond-proxy.html" />
+    <Content Include="Editor\lib\respond-1.2.0\cross-domain\respond.proxy.gif" />
+    <Content Include="Editor\lib\respond-1.2.0\cross-domain\respond.proxy.js" />
+    <Content Include="Editor\lib\respond-1.2.0\respond.min.js" />
+    <Content Include="Editor\lib\respond-1.2.0\respond.src.js" />
+    <Content Include="Editor\lib\respond-1.2.0\test\test.css" />
+    <Content Include="Editor\lib\respond-1.2.0\test\test.html" />
+    <Content Include="Editor\lib\respond-1.2.0\test\test2.css" />
+    <Content Include="Editor\lib\respond-1.2.0\test\unit\index.html" />
+    <Content Include="Editor\lib\respond-1.2.0\test\unit\qunit\qunit.css" />
+    <Content Include="Editor\lib\respond-1.2.0\test\unit\qunit\qunit.js" />
+    <Content Include="Editor\lib\respond-1.2.0\test\unit\test.css" />
+    <Content Include="Editor\lib\respond-1.2.0\test\unit\test2.css" />
+    <Content Include="Editor\lib\respond-1.2.0\test\unit\test3.css" />
+    <Content Include="Editor\lib\respond-1.2.0\test\unit\tests.js" />
     <Content Include="Editor\pete.html" />
     <Content Include="favicon.ico" />
     <Content Include="Global.asax" />
@@ -194,6 +217,8 @@
     <Content Include="Editor\js\decaf.coffee" />
     <Content Include="Editor\css\main.less" />
     <Content Include="Editor\lib\jquery-placeholder-2.0.7\README.md" />
+    <Content Include="Editor\js\main.coffee" />
+    <Content Include="Editor\lib\respond-1.2.0\README.md" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Assets\css\" />

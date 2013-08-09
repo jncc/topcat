@@ -2,17 +2,25 @@
 <html ng-app="editor" id="ng-app">
     <head>
         <title>Metadata Editor</title>
+        <meta name="viewport" content="width=device-width">
+        
         <link href="lib/bootstrap-3.0-rc1/css/bootstrap.min.css" rel="stylesheet">
         <link href="css/main.css" rel="stylesheet">
         
+        <script src="lib/respond-1.2.0/respond.min.js"></script><!-- required by bootstrap for IE8 -->
+        
         <script src="lib/jquery-1.10.2/jquery.min.js"></script>
         <script src="lib/bootstrap-3.0-rc1/js/bootstrap.min.js"></script>
+        
         <script src="lib/angular-1.1.5/angular.min.js"></script>
         <script src="lib/jquery-placeholder-2.0.7/jquery.placeholder.min.js"></script>
+        <script src="js/main.js"></script>
         <script src="js/decaf.js"></script>
     </head>
-    <body class="container">
+    <body>
                 
+        <div class="container">
+            
         <h1>Metadata editor</h1>
 
         <div ng-controller="Controller1">
@@ -57,6 +65,7 @@
             <h3>Debug</h3>
             <pre>form={{form}}</pre>
 
+        </div>
         </div>
     </body>
 </html>
