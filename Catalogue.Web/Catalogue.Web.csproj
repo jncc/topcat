@@ -144,11 +144,11 @@
       <DependentUpon>main.less</DependentUpon>
     </Content>
     <Content Include="Editor\index.html" />
-    <Content Include="Editor\js\decaf.js">
-      <DependentUpon>decaf.coffee</DependentUpon>
+    <Content Include="Editor\js\controller1.js">
+      <DependentUpon>controller1.coffee</DependentUpon>
     </Content>
-    <Content Include="Editor\js\decaf.min.js">
-      <DependentUpon>decaf.coffee</DependentUpon>
+    <Content Include="Editor\js\controller1.min.js">
+      <DependentUpon>controller1.coffee</DependentUpon>
     </Content>
     <Content Include="Editor\js\main.js">
       <DependentUpon>main.coffee</DependentUpon>
@@ -214,7 +214,7 @@
     <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Views\Shared\Error.cshtml" />
     <Content Include="Views\Shared\_Layout.cshtml" />
-    <Content Include="Editor\js\decaf.coffee" />
+    <Content Include="Editor\js\controller1.coffee" />
     <Content Include="Editor\css\main.less" />
     <Content Include="Editor\lib\jquery-placeholder-2.0.7\README.md" />
     <Content Include="Editor\js\main.coffee" />
