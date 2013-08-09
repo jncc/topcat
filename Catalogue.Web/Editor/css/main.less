@@ -3,6 +3,16 @@
 // ie8 placeholder is a bit dark by default (jquery-placeholder plugin)
 .placeholder { color: #bbb; }
 
+// bootstrap's disabled buttons are too faint for my liking
+.btn[disabled] {
+    opacity: .85;
+    }
+
+//  textareas should not grow beyond reasonable (they are autosized with a plugin)
+textarea {
+    max-height: 8em;
+}
+
 // example validation styles
 //.ng-pristine { border:1px solid Gold; }
 //.ng-dirty.ng-valid { border:1px solid Green; }
@@ -17,6 +27,3 @@
 	opacity: 1;
 }
 
-.btn[disabled] {
-    opacity: .85;
-    }

@@ -1,6 +1,12 @@
 ﻿.placeholder {
   color: #bbb;
 }
+.btn[disabled] {
+  opacity: .85;
+}
+textarea {
+  max-height: 8em;
+}
 .animate-enter {
   -webkit-transition: 1s linear all;
   transition: 1s linear all;
@@ -8,7 +14,4 @@
 }
 .animate-enter.animate-enter-active {
   opacity: 1;
-}
-.btn[disabled] {
-  opacity: .85;
 }

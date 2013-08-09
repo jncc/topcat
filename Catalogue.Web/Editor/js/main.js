@@ -23,11 +23,11 @@
     };
   });
 
-  module.directive('elastic', function() {
+  module.directive('autosize', function() {
     return {
       restrict: 'A',
       link: function(scope, element, attrs) {
-        return $(element).elastic();
+        return $(element).autosize();
       }
     };
   });

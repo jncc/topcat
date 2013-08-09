@@ -18,7 +18,7 @@ module.directive 'placeholder', () ->
     restrict: 'A', # attribute
     link: (scope, element, attrs) -> $(element).placeholder()
 
-# use jquery elastic plugin to auto-expand textareas
-module.directive 'elastic', () -> 
+# use jquery autosize plugin to auto-expand textareas
+module.directive 'autosize', () -> 
     restrict: 'A', # attribute
-    link: (scope, element, attrs) -> $(element).elastic()
+    link: (scope, element, attrs) -> $(element).autosize()
