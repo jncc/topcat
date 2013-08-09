@@ -3,7 +3,7 @@
 
 
 # when this Controller1 is instantiated, this is it
-# (not sure if this is the right way to grab the module?)
+# (not sure if this is the right way to grab the module in a separate file?)
 angular.module('editor').controller 'Controller1', ($scope, defaults) -> 
 
     master = 

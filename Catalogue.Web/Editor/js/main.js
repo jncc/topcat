@@ -1,10 +1,6 @@
 ﻿(function() {
   var module;
 
-  $(document).ready(function() {
-    return $('input, textarea').placeholder();
-  });
-
   module = angular.module('editor', []);
 
   module.factory('defaults', function() {
@@ -15,6 +11,15 @@
       state: 'AA',
       zip: '12345',
       phone: '1(234) 555-1212'
+    };
+  });
+
+  module.directive('placeholder', function() {
+    return {
+      restrict: 'A',
+      link: function(scope, element, attrs) {
+        return $(element).placeholder();
+      }
     };
   });
 
