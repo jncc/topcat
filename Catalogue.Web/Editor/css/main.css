@@ -9,3 +9,6 @@
 .animate-enter.animate-enter-active {
   opacity: 1;
 }
+.btn[disabled] {
+  opacity: .85;
+}

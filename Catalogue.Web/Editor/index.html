@@ -7,11 +7,9 @@
         <link href="lib/bootstrap-3.0-rc1/css/bootstrap.min.css" rel="stylesheet">
         <link href="css/main.css" rel="stylesheet">
         
-        <script src="lib/respond-1.2.0/respond.min.js"></script><!-- required by bootstrap for IE8 -->
-        
         <script src="lib/jquery-1.10.2/jquery.min.js"></script>
+        <script src="lib/respond-1.2.0/respond.min.js"></script><!-- required by bootstrap for IE8 -->
         <script src="lib/bootstrap-3.0-rc1/js/bootstrap.min.js"></script>
-        
         <script src="lib/angular-1.1.5/angular.min.js"></script>
         <script src="lib/jquery-placeholder-2.0.7/jquery.placeholder.min.js"></script>
         <script src="js/main.js"></script>
@@ -23,42 +21,52 @@
             
         <h1>Metadata editor</h1>
 
-        <div ng-controller="Controller1">
+        <br/><br/>
+
+            <div ng-controller="Controller1">
     
             <form name="myForm">
-                <fieldset>
-                    <legend>Some fields</legend>
 
-                    <input type="text" ng-model="form.name" required placeholder="Name" class="form-control"/> <br/><br/>
-    
-                    <div class="form-group">
-                        <label>Address:</label> <br/>
-                        <input type="text" ng-model="form.address.line1" size="33" required/> <br/>
-                        <input type="text" ng-model="form.address.city" size="12" required/>,
-                        <input type="text" ng-model="form.address.state" size="2"
-                               ng-pattern="state" required/>
-                        <input type="text" ng-model="form.address.zip" size="5"
-                               ng-pattern="zip" required/>
-                    </div>
-
-                </fieldset>
-            
+                <input type="text" ng-model="form.name" required autofocus placeholder="Name" class="form-control" style="font-size: larger"/>
+                
                 <br/><br/>
     
-                <label>Contacts:</label>
-                [ <a href="#" ng-click="addContact()">add</a> ]
-                <div ng-repeat="contact in form.contacts" ng-animate=" 'animate' ">
-                    <select ng-model="contact.type">
-                        <option>email</option>
-                        <option>phone</option>
-                        <option>pager</option>
-                        <option>IM</option>
-                    </select>
-                    <input type="text" ng-model="contact.value" placeholder="go on, go on" required/>
-                    [ <a href="#" ng-click="removeContact(contact)">X</a> ]
+                <div class="form-group">
+                    <div>Address</div>
+                    <input type="text" ng-model="form.address.line1" size="33" required class="form-control" />
+                    <input type="text" ng-model="form.address.city" size="12" required elastic class="form-control" />,
+                    <input type="text" ng-model="form.address.state" size="2"
+                            ng-pattern="state" required/>
+                    <input type="text" ng-model="form.address.zip" size="5"
+                            ng-pattern="zip" required/>
                 </div>
-                <button ng-click="cancel()" ng-disabled="isCancelDisabled()">Cancel</button>
-                <button ng-click="save()" ng-disabled="isSaveDisabled()">Save</button>
+
+            
+
+                <br/><br/>
+
+                <div class="well">
+                    <div>Contacts</div>
+
+                    <div ng-repeat="contact in form.contacts" ng-animate=" 'animate' " class="form-inline form-group">
+                        <select ng-model="contact.type" class="form-control" style="width: 140px">
+                            <option>email</option>
+                            <option>phone</option>
+                            <option>pager</option>
+                            <option>IM</option>
+                        </select>
+                        <input type="text" ng-model="contact.value" required placeholder="go on, go on" class="form-control" style="width: 140px"/>
+                        <a href="#" ng-click="removeContact(contact)" class="btn btn-primary">X</a>
+                    </div>
+
+                    <a href="#" ng-click="addContact()" class="btn btn-primary">ADD</a>
+
+                </div>
+
+                <div class="form-group">
+                    <button ng-click="cancel()" ng-disabled="isCancelDisabled()" class="btn">CANCEL</button>
+                    <button ng-click="save()" ng-disabled="isSaveDisabled()" class="btn btn-danger">SAVE</button>
+                </div>
             </form>
     
             <hr/>

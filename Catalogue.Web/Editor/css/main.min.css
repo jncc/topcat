@@ -1,1 +1,1 @@
-﻿.placeholder{color:#bbb}.animate-enter{-webkit-transition:1s linear all;transition:1s linear all;opacity:0}.animate-enter.animate-enter-active{opacity:1}
+﻿.placeholder{color:#bbb}.animate-enter{-webkit-transition:1s linear all;transition:1s linear all;opacity:0}.animate-enter.animate-enter-active{opacity:1}.btn[disabled]{opacity:.85}
