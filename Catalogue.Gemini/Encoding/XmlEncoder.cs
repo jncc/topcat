@@ -154,7 +154,7 @@ namespace Catalogue.Gemini.Encoding
                 new XElement(gmd + "MD_Keywords",
                     from keyword in metadata.Keywords
                     select new XElement(gmd + "keyword",
-                        new XElement(gco + "CharacterString", keyword))));
+                        new XElement(gco + "CharacterString", keyword)))); // todo encode the vocab? see Gemini spec
         }
 
         XElement MakeLimitationsOnPublicAccessAndUseConstraints(Metadata metadata)

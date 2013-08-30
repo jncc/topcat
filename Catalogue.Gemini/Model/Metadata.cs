@@ -16,15 +16,17 @@ namespace Catalogue.Gemini.Model
         public string Title { get; set; }
         public string Abstract { get; set; }
         public string TopicCategory { get; set; }
-        public List<string> Keywords { get; set; }
+        public List<Keyword> Keywords { get; set; }
         public TemporalExtent TemporalExtent { get; set; }
         public string DatasetReferenceDate { get; set; }
         public string Lineage { get; set; }
+//      public decimal SpatialResolution { get; set; } // todo we'll probably need this https://wiki.ceh.ac.uk/display/cehigh/Spatial+resolution
         public DataFormat DataFormat { get; set; }
         public ResponsibleParty ResponsibleOrganisation { get; set; }
         public string LimitationsOnPublicAccess { get; set; }
         public string UseConstraints { get; set; }
         public string SpatialReferenceSystem { get; set; }
+//      public string Extent { get; set; } todo i think we need this for Known Locations
         public string MetadataDate { get; set; }
         public string MetadataLanguage { get; set; }
         public ResponsibleParty MetadataPointOfContact { get; set; }
@@ -37,7 +39,6 @@ namespace Catalogue.Gemini.Model
     {
         public string Value { get; set; }
         public string VocabularyIdentifier { get; set; }
-        
     }
 
     public class DataFormat

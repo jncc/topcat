@@ -14,6 +14,7 @@ namespace Catalogue.Data.Model
 
         public bool     Public   { get; set; }
         public string   Location { get; set; }
+        public string   Notes    { get; set; }
         public bool     TopCopy  { get; set; }
     }
 }

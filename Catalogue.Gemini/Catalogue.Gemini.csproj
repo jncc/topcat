@@ -42,6 +42,7 @@
     <Compile Include="Encoding\Ns.cs" />
     <Compile Include="Encoding\XmlEncoder.cs" />
     <Compile Include="Encoding\XPathExtensions.cs" />
+    <Compile Include="Helpers\Extensions.cs" />
     <Compile Include="Model\Metadata.cs" />
     <Compile Include="Model\Vocabulary.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

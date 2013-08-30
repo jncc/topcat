@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Catalogue.Gemini.Model;
+using Catalogue.Gemini.Helpers;
 
 namespace Catalogue.Gemini.Templates
 {
@@ -20,7 +22,12 @@ namespace Catalogue.Gemini.Templates
                 Title = "Demo Dataset",
                 Abstract = "This is just a demo dataset.",
                 TopicCategory = "geoscientificInformation",
-                Keywords = new List<string> { "sounding" },
+                Keywords = new Dictionary<string, string>
+                    {
+                        { null, "sounding" },
+                        { "http://vocab.ndg.nerc.ac.uk/list/C751/220", "Bermuda Institute of Ocean Sciences" },
+                    }
+                    .ToKeywordsList(),
                 TemporalExtent = new TemporalExtent { Begin = "2001-01-13", End = "2010-01-25" },
                 DatasetReferenceDate = "2012-03-17",
                 Lineage = "This dataset was imagined by a developer.",
@@ -62,7 +69,12 @@ namespace Catalogue.Gemini.Templates
                 Title = "Demo Dataset",
                 Abstract = "This is just a demo dataset.",
                 TopicCategory = "geoscientificInformation",
-                Keywords = new List<string> { "sounding" },
+                Keywords = new Dictionary<string, string>
+                    {
+                        { null, "sounding" },
+                        { "http://vocab.ndg.nerc.ac.uk/list/C751/220", "Bermuda Institute of Ocean Sciences" },
+                    }
+                    .ToKeywordsList(),
                 TemporalExtent = new TemporalExtent { Begin = "2001-01-13", End = "2010-01-25" },
                 DatasetReferenceDate = "2012-03-17",
                 Lineage = "This dataset was imagined by a developer.",
