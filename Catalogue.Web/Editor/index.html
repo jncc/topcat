@@ -29,7 +29,9 @@
     
             <form name="myForm">
 
-                <input type="text" ng-model="form.name" required autofocus placeholder="Name" class="form-control" style="font-size: larger"/>
+                <input type="text" ng-model="form.name" required autofocus placeholder="Name" class="form-control" style="font-size: larger"
+                    title="This is the name"
+                    />
                 
                 <br/><br/>
     
@@ -47,8 +49,7 @@
 
                 <br/><br/>
 
-                <div class="well">
-                    <div>Contacts</div>
+                <div class="well well-sm">
 
                     <div ng-repeat="contact in form.contacts" ng-animate=" 'animate' " class="form-inline form-group">
                         <select ng-model="contact.type" class="form-control" style="width: 140px">
