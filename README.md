@@ -1,9 +1,11 @@
-JNCC Catalogue
-==============
+JNCC Datasets Catalogue
+=======================
+
+Licensed under http://www.nationalarchives.gov.uk/doc/open-government-licence/version/2/
+
 
 Web Essentials
 --------------
-
 Install the Visual Studio extensions pack for design-time support for CoffeeScript (.coffee) and LESS (.less).
 These are essential if you want to edit the application's Javascript or CSS.
 There are no build-time or run-time steps used to compile Coffeescript and LESS - the Visual Studio extensions are simpler.
@@ -17,7 +19,6 @@ There is Resharper support http://blogs.jetbrains.com/dotnet/2013/02/angularjs-s
 
 Setting up RavenDB
 ------------------
-
 You can deploy Raven in various ways; the recommended is using IIS.
 http://ravendb.net/docs/server/deployment/as-iis-application
 
