@@ -49,6 +49,7 @@
     <Compile Include="Templates\Library.cs" />
     <Compile Include="Validation\ValidationResultSet.cs" />
     <Compile Include="Validation\Validator.cs" />
+    <Compile Include="Vocabs\TopicCategories.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

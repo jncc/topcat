@@ -59,6 +59,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Explicit\feasibility_tests.cs" />
+    <Compile Include="Explicit\Vocabs\topic_category_codes.cs" />
     <Compile Include="Fast\Catalogue.Gemini\Encoding\when_creating_document_from_blank_record.cs" />
     <Compile Include="Fast\Catalogue.Gemini\Encoding\when_updating_the_metadata_language.cs" />
     <Compile Include="Fast\Catalogue.Utilities\Spatial\bounding_box_utility_tests.cs" />
