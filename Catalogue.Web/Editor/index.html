@@ -1,44 +1,51 @@
 ﻿<!DOCTYPE html>
 <html ng-app="editor" id="ng-app">
-    <head>
-        <title>Metadata Editor</title>
-        <meta name="viewport" content="width=device-width">
-        
-        <link href="lib/bootstrap-3.0.0/css/bootstrap.min.css" rel="stylesheet">
-        <link href="css/main.css" rel="stylesheet">
-        
-        <script src="lib/jquery-1.10.2/jquery.min.js"></script>
-        <script src="lib/respond-1.2.0/respond.min.js"></script><!-- required by bootstrap for IE8 -->
-        <script src="lib/bootstrap-3.0.0/js/bootstrap.min.js"></script>
-        <script src="lib/angular-1.1.5/angular.min.js"></script>
-        <script src="lib/jquery-placeholder-2.0.7/jquery.placeholder.min.js"></script>
-        <script src="lib/autosize-1.17.2/jquery.autosize-min.js"></script>
+<head>
+    <title>Metadata Editor</title>
+    <meta name="viewport" content="width=device-width">
 
-        <script src="js/main.js"></script>
-        <script src="js/controller1.js"></script>
-    </head>
-    <body>
-                
-        <div ng-controller="Controller1" class="container">
-                
-            <form name="myForm">
-                
-                <div class="row">
-                    
-                <div class="col-lg-12">
-                    
+    <link href="lib/bootstrap-3.0.0/css/bootstrap.min.css" rel="stylesheet">
+    <link href="css/main.css" rel="stylesheet">
+
+    <script src="lib/jquery-1.10.2/jquery.min.js"></script>
+    <script src="lib/respond-1.2.0/respond.min.js"></script>
+    <!-- required by bootstrap for IE8 -->
+    <script src="lib/bootstrap-3.0.0/js/bootstrap.min.js"></script>
+    <script src="lib/angular-1.1.5/angular.min.js"></script>
+    <script src="lib/jquery-placeholder-2.0.7/jquery.placeholder.min.js"></script>
+    <script src="lib/autosize-1.17.2/jquery.autosize-min.js"></script>
+
+    <script src="js/main.js"></script>
+    <script src="js/controller1.js"></script>
+</head>
+<body>
+
+    <div ng-controller="Controller1" class="container">
+
+        <form name="myForm">
+            <div class="row">
+
+                <div class="col-md-12">
                     <h1>Metadata editor</h1>
+                    <br />
 
-                    <br/>
+                    <div class="form-group">
+                        <input type="text" ng-model="form.name" required autofocus placeholder="Name" class="form-control" style="font-size: larger"
+                            title="This is the name" />
+                    </div>
 
-                    <input type="text" ng-model="form.name" required autofocus placeholder="Name" class="form-control" style="font-size: larger"
-                           title="This is the name" />
-                    
-                    <hr />
                 </div>
 
-                <div class="col-lg-9">
+                <div class="col-md-9">
+
+                    <div class="form-group">
+                        <span class="label label-default">these</span>
+                        <span class="label label-default">are example tags that can be very</span>
+                        <span class="label label-default">long</span>
+                    </div>
                     
+                    <br />
+
                     <div class="form-group">
                         <input type="text" ng-model="form.address.line1" size="33" required class="form-control" />
                     </div>
@@ -53,7 +60,7 @@
                             <input type="text" ng-model="form.address.zip" size="5" ng-pattern="zip" required class="form-control" />
                         </div>
                     </div>
-                    
+
                     <hr />
                     <div class="well well-sm">
 
@@ -64,7 +71,7 @@
                                 <option>pager</option>
                                 <option>IM</option>
                             </select>
-                            <input type="text" ng-model="contact.value" required placeholder="go on, go on" class="form-control" style="width: 140px"/>
+                            <input type="text" ng-model="contact.value" required placeholder="go on, go on" class="form-control" style="width: 140px" />
                             <a href="#" ng-click="removeContact(contact)" class="btn btn-primary">X</a>
                         </div>
 
@@ -76,22 +83,22 @@
                         <button ng-click="cancel()" ng-disabled="isCancelDisabled()" class="btn">CANCEL</button>
                         <button ng-click="save()" ng-disabled="isSaveDisabled()" class="btn btn-danger">SAVE</button>
                     </div>
-                    
+
                 </div>
 
-                <div class="col-lg-3">
+                <div class="col-md-3">
                     <div class="well well-sm">
-            <h3>Debug</h3>
-            <pre>form={{form}}</pre>
+                        <h3>Debug</h3>
+                        <pre>form={{form}}</pre>
                     </div>
 
                 </div>
 
-                </div>
-    
+            </div>
 
-            </form>
-    
-        </div>
-    </body>
+
+        </form>
+
+    </div>
+</body>
 </html>
