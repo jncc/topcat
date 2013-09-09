@@ -6,6 +6,12 @@
 # (not sure if this is the right way to grab the module in a separate file?)
 angular.module('editor').controller 'Controller1', ($scope, defaults) -> 
 
+    $scope.lookups = {}
+    $scope.lookups.topics = [
+        { key: "a", value: "aaa" },
+        { key: "b", value: "bbb" },
+        { key: "c", value: "ccc" } ]
+           
     master = 
         name: defaults.name,
         address: 
@@ -15,7 +21,9 @@ angular.module('editor').controller 'Controller1', ($scope, defaults) ->
             zip: defaults.zip,
         contacts: [
           type: 'phone', value: defaults.phone
-        ]
+        ],
+        topic: $scope.lookups.topics[1]
+
 
     $scope.state = /^\w\w$/
     $scope.zip = /^\d\d\d\d\d$/
@@ -36,6 +44,7 @@ angular.module('editor').controller 'Controller1', ($scope, defaults) ->
 
     $scope.isSaveDisabled = () -> $scope.myForm.$invalid || angular.equals(master, $scope.form)
 
+    # call scope.cancel() to initially set up form
     $scope.cancel()
     return
 

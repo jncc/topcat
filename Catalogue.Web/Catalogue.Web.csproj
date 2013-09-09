@@ -157,6 +157,7 @@
       <DependentUpon>main.coffee</DependentUpon>
     </Content>
     <Content Include="Editor\lib\angular-1.1.5\angular.min.js" />
+    <Content Include="Editor\lib\angular-strap-0.7.5\angular-strap-min.js" />
     <Content Include="Editor\lib\autosize-1.17.2\demo.html" />
     <Content Include="Editor\lib\autosize-1.17.2\jquery.autosize-min.js" />
     <Content Include="Editor\lib\autosize-1.17.2\jquery.autosize.js" />

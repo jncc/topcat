@@ -1,7 +1,8 @@
 ﻿
 # a "module" is essentially a configuration for Angular's dependency injector
 # which allows you to group a set of controllers, directives, filters, etc. under one name
-module = angular.module('editor', []);
+
+module = angular.module('editor', ['$strap.directives']); #strap.directives is for angular-strap
 
 # when i ask for defaults, provide this object
 module.factory 'defaults', () ->
@@ -23,8 +24,4 @@ module.directive 'autosize', () ->
     restrict: 'A', # attribute
     link: (scope, element, attrs) -> $(element).autosize()
 
-# use http://silviomoreto.github.io/bootstrap-select/ for dropdowns
-module.directive 'selectpicker', () ->
-    restrict: 'A', # attribute
-    link: (scope, element, attrs) -> $(element).selectpicker()
 

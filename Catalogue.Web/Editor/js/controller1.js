@@ -2,6 +2,19 @@
 
   angular.module('editor').controller('Controller1', function($scope, defaults) {
     var master;
+    $scope.lookups = {};
+    $scope.lookups.topics = [
+      {
+        key: "a",
+        value: "aaa"
+      }, {
+        key: "b",
+        value: "bbb"
+      }, {
+        key: "c",
+        value: "ccc"
+      }
+    ];
     master = {
       name: defaults.name,
       address: {
@@ -15,7 +28,8 @@
           type: 'phone',
           value: defaults.phone
         }
-      ]
+      ],
+      topic: $scope.lookups.topics[1]
     };
     $scope.state = /^\w\w$/;
     $scope.zip = /^\d\d\d\d\d$/;

@@ -1,7 +1,7 @@
 ﻿(function() {
   var module;
 
-  module = angular.module('editor', []);
+  module = angular.module('editor', ['$strap.directives']);
 
   module.factory('defaults', function() {
     return {
@@ -28,15 +28,6 @@
       restrict: 'A',
       link: function(scope, element, attrs) {
         return $(element).autosize();
-      }
-    };
-  });
-
-  module.directive('selectpicker', function() {
-    return {
-      restrict: 'A',
-      link: function(scope, element, attrs) {
-        return $(element).selectpicker();
       }
     };
   });

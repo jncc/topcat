@@ -13,6 +13,7 @@
     <script src="lib/respond-1.2.0/respond.min.js"></script>
     <script src="lib/bootstrap-3.0.0/js/bootstrap.min.js"></script>
     <script src="lib/angular-1.1.5/angular.min.js"></script>
+    <script src="lib/angular-strap-0.7.5/angular-strap-min.js"></script>
     <script src="lib/jquery-placeholder-2.0.7/jquery.placeholder.min.js"></script>
     <script src="lib/autosize-1.17.2/jquery.autosize-min.js"></script>
     <script src="lib/silviomoreto-bootstrap-select-aeb60b3/bootstrap-select.min.js"></script>
@@ -29,20 +30,21 @@
             <div class="row">
                 <div class="col-md-6">
                     <h1>MetCat</h1>
-                    <br />
-                    
                 </div>
                 
                 <div class="col-md-6">
                     <br />
                     <div class="form-group text-right">
                         <button  class="btn btn-primary">BACK</button>
+                        &nbsp;
                         <button ng-click="cancel()" ng-disabled="isCancelDisabled()" class="btn">CANCEL</button>
                         <button ng-click="save()" ng-disabled="isSaveDisabled()" class="btn btn-danger">SAVE</button>
                     </div>
                 </div>
 
             </div>
+            
+            <br />
 
             <div class="row">
                 <div class="col-md-12">
@@ -75,11 +77,8 @@
                             <div class="form-inline">
                                 <div class="form-group text-left">
 
-                                    <select selectpicker>
-                                        <option>Mustard</option>
-                                        <option>Ketchup</option>
-                                        <option>Relish</option>
-                                        <option data-content="<span class='label label-success'>Relish</span>">Relish</option>
+                                    <select ng-model="form.topic" ng-options="topic.key as topic.value for topic in lookups.topics" bs-select>
+                                          <option value=""></option>
                                     </select>
                                 
                                 </div>
@@ -92,7 +91,7 @@
                         <input type="text" ng-model="form.address.line1" size="33" required class="form-control" />
                     </div>
                     <div class="form-group">
-                        <textarea id="expandme" type="text" ng-model="form.address.city" rows="2" required autosize class="form-control" placeholder="Abstract" title="This is the abstract"></textarea>
+                        <textarea type="text" ng-model="form.address.city" rows="2" required autosize class="form-control" placeholder="Abstract" title="This is the abstract"></textarea>
                     </div>
                     <div class="form-inline">
                         <div class="form-group">
@@ -132,6 +131,11 @@
                     <div class="well well-sm">
                         <h3>Debug</h3>
                         <pre>form={{form}}</pre>
+                        
+                    <div class="form-group">
+                        <textarea type="text" rows="4" autosize class="form-control" placeholder="Notes" title="Notes to keep separate from the Gemini record"></textarea>
+                    </div>
+
                     </div>
 
                 </div>
