@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width">
 
     <link href="lib/bootstrap-3.0.0/css/bootstrap.min.css" rel="stylesheet">
+    <link href="lib/silviomoreto-bootstrap-select-aeb60b3/bootstrap-select.min.css" rel="stylesheet">
     <link href="css/main.css" rel="stylesheet">
 
     <script src="lib/jquery-1.10.2/jquery.min.js"></script>
@@ -15,7 +16,6 @@
     <script src="lib/jquery-placeholder-2.0.7/jquery.placeholder.min.js"></script>
     <script src="lib/autosize-1.17.2/jquery.autosize-min.js"></script>
     <script src="lib/silviomoreto-bootstrap-select-aeb60b3/bootstrap-select.min.js"></script>
-    <link href="lib/silviomoreto-bootstrap-select-aeb60b3/bootstrap-select.min.css" rel="stylesheet">
 
     <script src="js/main.js"></script>
     <script src="js/controller1.js"></script>
@@ -25,33 +25,67 @@
     <div ng-controller="Controller1" class="container">
 
         <form name="myForm">
+            
             <div class="row">
-
-                <div class="col-md-12">
+                <div class="col-md-6">
                     <h1>Metadata editor</h1>
                     <br />
+                    
+                </div>
+                
+                <div class="col-md-6">
+                    <br />
+                    <div class="form-group text-right">
+                        <button  class="btn btn-primary">BACK</button>
+                        <button ng-click="cancel()" ng-disabled="isCancelDisabled()" class="btn">CANCEL</button>
+                        <button ng-click="save()" ng-disabled="isSaveDisabled()" class="btn btn-danger">SAVE</button>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="row">
+                <div class="col-md-12">
 
                     <div class="form-group">
                         <input type="text" ng-model="form.name" required autofocus placeholder="Name" class="form-control" style="font-size: larger"
-                            title="This is the name" />
+                               title="This is the name" />
                     </div>
 
                 </div>
 
+            </div>
+
+            <div class="row">
+                
                 <div class="col-md-9">
+                    
+                    
+                    <div class="row">
+                        <div class="col-md-8">
+                            <div class="form-inline">
+                                <div class="form-group">
+                                    <span class="label label-default">these</span>
+                                    <span class="label label-default">are example tags that can be very</span>
+                                    <span class="label label-default">long</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4 text-right">
+                            <div class="form-inline">
+                                <div class="form-group text-left">
 
-                    <div class="form-group">
-                        <span class="label label-default">these</span>
-                        <span class="label label-default">are example tags that can be very</span>
-                        <span class="label label-default">long</span>
-                        <select class="selectpicker">
-    <option>Mustard</option>
-    <option>Ketchup</option>
-    <option>Relish</option>
-  </select>
+                                    <select selectpicker>
+                                        <option>Mustard</option>
+                                        <option>Ketchup</option>
+                                        <option>Relish</option>
+                                        <option data-content="<span class='label label-success'>Relish</span>">Relish</option>
+                                    </select>
+                                
+                                 </div>
+                            </div>
+                        </div>
                     </div>
-
-                    <br />
 
                     <div class="form-group">
                         <input type="text" ng-model="form.address.line1" size="33" required class="form-control" />

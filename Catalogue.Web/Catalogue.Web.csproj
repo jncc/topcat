@@ -160,10 +160,12 @@
     <Content Include="Editor\lib\autosize-1.17.2\demo.html" />
     <Content Include="Editor\lib\autosize-1.17.2\jquery.autosize-min.js" />
     <Content Include="Editor\lib\autosize-1.17.2\jquery.autosize.js" />
-    <Content Include="Editor\lib\bootstrap-3.0-rc1\css\bootstrap.css" />
-    <Content Include="Editor\lib\bootstrap-3.0-rc1\css\bootstrap.min.css" />
-    <Content Include="Editor\lib\bootstrap-3.0-rc1\js\bootstrap.js" />
-    <Content Include="Editor\lib\bootstrap-3.0-rc1\js\bootstrap.min.js" />
+    <Content Include="Editor\lib\bootstrap-3.0.0\css\bootstrap-theme.css" />
+    <Content Include="Editor\lib\bootstrap-3.0.0\css\bootstrap-theme.min.css" />
+    <Content Include="Editor\lib\bootstrap-3.0.0\css\bootstrap.css" />
+    <Content Include="Editor\lib\bootstrap-3.0.0\css\bootstrap.min.css" />
+    <Content Include="Editor\lib\bootstrap-3.0.0\js\bootstrap.js" />
+    <Content Include="Editor\lib\bootstrap-3.0.0\js\bootstrap.min.js" />
     <Content Include="Editor\lib\jquery-1.10.2\jquery.min.js" />
     <Content Include="Editor\lib\jquery-placeholder-2.0.7\demo.html" />
     <Content Include="Editor\lib\jquery-placeholder-2.0.7\jquery.placeholder.js" />
@@ -186,6 +188,11 @@
     <Content Include="Editor\lib\respond-1.2.0\test\unit\test2.css" />
     <Content Include="Editor\lib\respond-1.2.0\test\unit\test3.css" />
     <Content Include="Editor\lib\respond-1.2.0\test\unit\tests.js" />
+    <Content Include="Editor\lib\silviomoreto-bootstrap-select-aeb60b3\bootstrap-select.css" />
+    <Content Include="Editor\lib\silviomoreto-bootstrap-select-aeb60b3\bootstrap-select.js" />
+    <Content Include="Editor\lib\silviomoreto-bootstrap-select-aeb60b3\bootstrap-select.min.css" />
+    <Content Include="Editor\lib\silviomoreto-bootstrap-select-aeb60b3\bootstrap-select.min.js" />
+    <Content Include="Editor\lib\silviomoreto-bootstrap-select-aeb60b3\test.html" />
     <Content Include="Editor\pete.html" />
     <Content Include="favicon.ico" />
     <Content Include="Global.asax" />
@@ -226,6 +233,15 @@
     <Content Include="Editor\lib\autosize-1.17.2\bower.json" />
     <Content Include="Editor\lib\autosize-1.17.2\package.json" />
     <Content Include="Editor\lib\autosize-1.17.2\readme.md" />
+    <Content Include="Editor\lib\bootstrap-3.0.0\fonts\glyphicons-halflings-regular.eot" />
+    <Content Include="Editor\lib\bootstrap-3.0.0\fonts\glyphicons-halflings-regular.svg" />
+    <Content Include="Editor\lib\bootstrap-3.0.0\fonts\glyphicons-halflings-regular.ttf" />
+    <Content Include="Editor\lib\bootstrap-3.0.0\fonts\glyphicons-halflings-regular.woff" />
+    <Content Include="Editor\lib\silviomoreto-bootstrap-select-aeb60b3\bootstrap-select.jquery.json" />
+    <Content Include="Editor\lib\silviomoreto-bootstrap-select-aeb60b3\bower.json" />
+    <Content Include="Editor\lib\silviomoreto-bootstrap-select-aeb60b3\CONTRIBUTING.md" />
+    <Content Include="Editor\lib\silviomoreto-bootstrap-select-aeb60b3\package.json" />
+    <Content Include="Editor\lib\silviomoreto-bootstrap-select-aeb60b3\README.md" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Assets\css\" />

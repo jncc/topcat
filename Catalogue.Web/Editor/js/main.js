@@ -32,7 +32,7 @@
     };
   });
 
-  module.directive('selectp', function() {
+  module.directive('selectpicker', function() {
     return {
       restrict: 'A',
       link: function(scope, element, attrs) {

@@ -23,8 +23,8 @@ module.directive 'autosize', () ->
     restrict: 'A', # attribute
     link: (scope, element, attrs) -> $(element).autosize()
 
-#
-module.directive 'selectp', () ->
+# use http://silviomoreto.github.io/bootstrap-select/ for dropdowns
+module.directive 'selectpicker', () ->
     restrict: 'A', # attribute
     link: (scope, element, attrs) -> $(element).selectpicker()
 
