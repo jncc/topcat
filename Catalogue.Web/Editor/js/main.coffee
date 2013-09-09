@@ -22,3 +22,9 @@ module.directive 'placeholder', () ->
 module.directive 'autosize', () -> 
     restrict: 'A', # attribute
     link: (scope, element, attrs) -> $(element).autosize()
+
+#
+module.directive 'selectp', () ->
+    restrict: 'A', # attribute
+    link: (scope, element, attrs) -> $(element).selectpicker()
+

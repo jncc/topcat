@@ -32,4 +32,13 @@
     };
   });
 
+  module.directive('selectp', function() {
+    return {
+      restrict: 'A',
+      link: function(scope, element, attrs) {
+        return $(element).selectpicker();
+      }
+    };
+  });
+
 }).call(this);
