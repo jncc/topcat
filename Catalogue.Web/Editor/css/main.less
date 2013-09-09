@@ -13,6 +13,11 @@ textarea {
     max-height: 8em;
 }
 
+// minimise the FOUC due to bootstrap-select resizing the select element 
+.selectContainer {
+    min-height: 34px;    
+}
+
 // example validation styles
 //.ng-pristine { border:1px solid Gold; }
 //.ng-dirty.ng-valid { border:1px solid Green; }

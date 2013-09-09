@@ -67,7 +67,7 @@
                         <div class="col-md-8">
                             <div class="form-inline">
                                 <div class="form-group">
-                                    <span class="label label-default">these</span>
+                                    <span class="label label-success">these</span>
                                     <span class="label label-default">are example tags that can be very</span>
                                     <span class="label label-default">long</span>
                                 </div>
@@ -75,12 +75,14 @@
                         </div>
                         <div class="col-md-4 text-right">
                             <div class="form-inline">
-                                <div class="form-group text-left">
-
-                                    <select ng-model="form.topic" ng-options="topic.key as topic.value for topic in lookups.topics" bs-select>
-                                          <option value=""></option>
-                                    </select>
-                                
+                                <div class="form-group text-left selectContainer">
+                                    <select
+                                        ng-model="form.topic"
+                                        ng-options="topic.Key for topic in lookups.topics"
+                                        
+                                        title="Topic">
+                                        <option value=""></option>
+                                    </select>                                    
                                 </div>
                             </div>
                         </div>

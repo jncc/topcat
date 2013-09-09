@@ -7,6 +7,9 @@
 textarea {
   max-height: 8em;
 }
+.selectContainer {
+  min-height: 34px;
+}
 .animate-enter {
   -webkit-transition: 1s linear all;
   transition: 1s linear all;

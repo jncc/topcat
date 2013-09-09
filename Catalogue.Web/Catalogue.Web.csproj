@@ -131,6 +131,8 @@
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\Home\HomeController.cs" />
     <Compile Include="Controllers\Items\ItemsController.cs" />
+    <Compile Include="Controllers\Topics\TopicModel.cs" />
+    <Compile Include="Controllers\Topics\TopicsController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -250,6 +252,20 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Catalogue.Data\Catalogue.Data.csproj">
+      <Project>{3ad6b61c-cab1-4cc4-8895-ba2dd3b58c59}</Project>
+      <Name>Catalogue.Data</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Catalogue.Gemini\Catalogue.Gemini.csproj">
+      <Project>{b4789e53-cc5c-4e4e-8358-fc9739846ccc}</Project>
+      <Name>Catalogue.Gemini</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Catalogue.Utilities\Catalogue.Utilities.csproj">
+      <Project>{b6b90aa2-bf70-4460-a975-5192ab5ecdca}</Project>
+      <Name>Catalogue.Utilities</Name>
+    </ProjectReference>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

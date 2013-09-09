@@ -4,14 +4,13 @@
 
 # when this Controller1 is instantiated, this is it
 # (not sure if this is the right way to grab the module in a separate file?)
-angular.module('editor').controller 'Controller1', ($scope, defaults) -> 
+angular.module('editor').controller 'Controller1', ($scope, defaults, $http) -> 
 
     $scope.lookups = {}
-    $scope.lookups.topics = [
-        { key: "a", value: "aaa" },
-        { key: "b", value: "bbb" },
-        { key: "c", value: "ccc" } ]
-           
+
+    $http.get('../api/topics').success (result) -> $scope.lookups.topics = result
+
+    $scope.lookups.topics =            
     master = 
         name: defaults.name,
         address: 
@@ -22,8 +21,7 @@ angular.module('editor').controller 'Controller1', ($scope, defaults) ->
         contacts: [
           type: 'phone', value: defaults.phone
         ],
-        topic: $scope.lookups.topics[1]
-
+        topic: ''
 
     $scope.state = /^\w\w$/
     $scope.zip = /^\d\d\d\d\d$/

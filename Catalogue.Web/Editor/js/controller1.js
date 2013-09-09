@@ -1,21 +1,12 @@
 ﻿(function() {
 
-  angular.module('editor').controller('Controller1', function($scope, defaults) {
+  angular.module('editor').controller('Controller1', function($scope, defaults, $http) {
     var master;
     $scope.lookups = {};
-    $scope.lookups.topics = [
-      {
-        key: "a",
-        value: "aaa"
-      }, {
-        key: "b",
-        value: "bbb"
-      }, {
-        key: "c",
-        value: "ccc"
-      }
-    ];
-    master = {
+    $http.get('../api/topics').success(function(result) {
+      return $scope.lookups.topics = result;
+    });
+    $scope.lookups.topics = master = {
       name: defaults.name,
       address: {
         line1: defaults.line1,
@@ -29,7 +20,7 @@
           value: defaults.phone
         }
       ],
-      topic: $scope.lookups.topics[1]
+      topic: ''
     };
     $scope.state = /^\w\w$/;
     $scope.zip = /^\d\d\d\d\d$/;
