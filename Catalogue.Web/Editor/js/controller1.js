@@ -6,7 +6,7 @@
     $http.get('../api/topics').success(function(result) {
       return $scope.lookups.topics = result;
     });
-    $scope.lookups.topics = master = {
+    master = {
       name: defaults.name,
       address: {
         line1: defaults.line1,
@@ -22,6 +22,8 @@
       ],
       topic: ''
     };
+    $scope.prefs = {};
+    $scope.prefs.bigLocation = false;
     $scope.state = /^\w\w$/;
     $scope.zip = /^\d\d\d\d\d$/;
     $scope.cancel = function() {

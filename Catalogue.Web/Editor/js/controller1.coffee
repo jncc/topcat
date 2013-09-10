@@ -9,8 +9,7 @@ angular.module('editor').controller 'Controller1', ($scope, defaults, $http) ->
     $scope.lookups = {}
 
     $http.get('../api/topics').success (result) -> $scope.lookups.topics = result
-
-    $scope.lookups.topics =            
+          
     master = 
         name: defaults.name,
         address: 
@@ -22,6 +21,9 @@ angular.module('editor').controller 'Controller1', ($scope, defaults, $http) ->
           type: 'phone', value: defaults.phone
         ],
         topic: ''
+
+    $scope.prefs = {}
+    $scope.prefs.bigLocation = false
 
     $scope.state = /^\w\w$/
     $scope.zip = /^\d\d\d\d\d$/

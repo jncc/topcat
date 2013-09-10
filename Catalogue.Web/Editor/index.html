@@ -25,11 +25,11 @@
 
     <div ng-controller="Controller1" class="container">
 
-        <form name="editorForm">
+        <form name="theForm">
             
             <div class="row">
                 <div class="col-md-6">
-                    <h1>MetCat</h1>
+                    <h1>Metcat</h1>
                 </div>
                 
                 <div class="col-md-6">
@@ -53,6 +53,22 @@
                         <input type="text" ng-model="form.name" required autofocus placeholder="Name" class="form-control" style="font-size: larger"
                                title="This is the name" />
                     </div>
+                    
+                    <div class="well well-sm form-group" ng-show="prefs.bigLocation">
+                        <div class="input-group">
+                                
+                            <span class="input-group-btn">
+                                <button class="btn btn-default" type="button" ng-click="prefs.bigLocation = false">
+                                    <span class="glyphicon glyphicon-th-large"></span>
+                                </button>
+                            </span>
+                            <input type="text" ng-model="form.location" class="form-control" placeholder="Location"/>
+                            <span class="input-group-btn">
+                                <button class="btn btn-primary" type="button">GO</button>
+                            </span>
+                                
+                        </div>
+                    </div>
 
                 </div>
 
@@ -67,9 +83,12 @@
                         <div class="col-md-8">
                             <div class="form-inline">
                                 <div class="form-group">
-                                    <span class="label label-success">these</span>
-                                    <span class="label label-default">are example tags that can be very</span>
+                                    <span class="label label-success">&nbsp</span>
+                                    <span class="label label-default">these are example tags that can be very</span>
+                                    <span> </span>
+                                    <span class="label label-warning">&nbsp</span>
                                     <span class="label label-default">long</span>
+                                    <span class="label label-default">blah-blah</span>
                                 </div>
                             </div>
                         </div>
@@ -131,12 +150,30 @@
 
                 <div class="col-md-3">
                     <div class="well well-sm">
-                        <h3>Debug</h3>
+                        
+                        <h3>Internal</h3>
+
+                        <div class="form-group">
+                            <div class="input-group" ng-hide="prefs.bigLocation">
+                                
+                                <span class="input-group-btn">
+                                    <button class="btn btn-default" type="button" ng-click="prefs.bigLocation = true">
+                                        <span class="glyphicon glyphicon-th-large"></span>
+                                    </button>
+                                </span>
+                                <input type="text" ng-model="form.location" class="form-control" placeholder="Location"/>
+                                <span class="input-group-btn">
+                                    <button class="btn btn-primary" type="button">GO</button>
+                                </span>
+                                
+                            </div>
+                        </div>
+
                         <pre>form={{form}}</pre>
                         
-                    <div class="form-group">
-                        <textarea type="text" rows="4" autosize class="form-control" placeholder="Notes" title="Notes to keep separate from the Gemini record"></textarea>
-                    </div>
+                        <div class="form-group">
+                            <textarea type="text" rows="4" autosize class="form-control" placeholder="Notes" title="Notes to keep separate from the Gemini record"></textarea>
+                        </div>
 
                     </div>
 

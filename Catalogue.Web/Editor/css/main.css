@@ -7,6 +7,9 @@
 textarea {
   max-height: 8em;
 }
+.glyphicon {
+  color: #999;
+}
 .selectContainer {
   min-height: 34px;
 }
