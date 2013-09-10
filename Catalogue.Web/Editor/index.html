@@ -25,7 +25,7 @@
 
     <div ng-controller="Controller1" class="container">
 
-        <form name="myForm">
+        <form name="editorForm">
             
             <div class="row">
                 <div class="col-md-6">
@@ -63,7 +63,7 @@
                 <div class="col-md-9">
                     
                     
-                    <div class="row">
+                    <div class="row form-group">
                         <div class="col-md-8">
                             <div class="form-inline">
                                 <div class="form-group">
@@ -79,15 +79,14 @@
                                     <select
                                         ng-model="form.topic"
                                         ng-options="topic.Key for topic in lookups.topics"
-                                        
+                                        class="form-control"
                                         title="Topic">
-                                        <option value=""></option>
+                                        <option value="" disabled selected style="display: none">Topic</option>
                                     </select>                                    
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <br />
 
                     <div class="form-group">
                         <input type="text" ng-model="form.address.line1" size="33" required class="form-control" />
@@ -99,6 +98,7 @@
                         <div class="form-group">
                             <input type="text" ng-model="form.address.state" size="2" ng-pattern="state" required class="form-control" />
                         </div>
+                        <span>&rarr;</span>
                         <div class="form-group">
                             <input type="text" ng-model="form.address.zip" size="5" ng-pattern="zip" required class="form-control" />
                         </div>
