@@ -22,8 +22,6 @@
       ],
       topic: ''
     };
-    $scope.prefs = {};
-    $scope.prefs.bigLocation = false;
     $scope.state = /^\w\w$/;
     $scope.zip = /^\d\d\d\d\d$/;
     $scope.cancel = function() {
@@ -48,7 +46,7 @@
       return angular.equals(master, $scope.form);
     };
     $scope.isSaveDisabled = function() {
-      return $scope.editorForm.$invalid || angular.equals(master, $scope.form);
+      return $scope.theForm.$invalid || angular.equals(master, $scope.form);
     };
     $scope.cancel();
   });

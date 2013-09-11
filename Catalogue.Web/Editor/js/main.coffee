@@ -24,4 +24,14 @@ module.directive 'autosize', () ->
     restrict: 'A', # attribute
     link: (scope, element, attrs) -> $(element).autosize()
 
-
+module.directive 'servervalidation', ($http) ->
+    require: 'ngModel',
+    link: (scope, elem, attrs, ctrl) ->
+        elem.on 'blur', (e) ->
+            scope.$apply () -> $http(
+                method: 'POST',
+                url: '../api/validator',
+                data: "value": elem.val())
+                .success (data, status, headers, config) ->
+                    console.log data
+                    ctrl.$setValidity('myErrorKey', data.valid)

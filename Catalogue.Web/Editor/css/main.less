@@ -1,5 +1,7 @@
 ﻿
-
+h1 {
+    opacity: .5;
+}
 // ie8 placeholder is a bit dark by default (jquery-placeholder plugin)
 .placeholder { color: #bbb; }
 
@@ -13,13 +15,20 @@ textarea {
     max-height: 8em;
 }
 
-.glyphicon {
+.grey {
     color: #999;
 }
-// minimise the FOUC due to bootstrap-select resizing the select element 
-.selectContainer {
-    min-height: 34px;    
+.white {
+    color: white;
 }
+// make these look better when in a bootstrap well
+.well-input-group-addon {
+    background-color: white;
+}
+// minimise the FOUC due to bootstrap-select resizing the select element 
+//.selectContainer {
+//    min-height: 34px;    
+//}
 
 // example validation styles
 //.ng-pristine { border:1px solid Gold; }

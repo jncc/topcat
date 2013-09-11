@@ -29,13 +29,13 @@
             
             <div class="row">
                 <div class="col-md-6">
-                    <h1>Metcat</h1>
+                    <h1><img src="img/logo.gif" alt="logo" height="50" width="80"> topcat</h1>
                 </div>
                 
                 <div class="col-md-6">
                     <br />
                     <div class="form-group text-right">
-                        <button  class="btn btn-primary">BACK</button>
+                        <button  class="btn btn-primary"><span class="white glyphicon glyphicon-circle-arrow-left"></span> BACK</button>
                         &nbsp;
                         <button ng-click="cancel()" ng-disabled="isCancelDisabled()" class="btn">CANCEL</button>
                         <button ng-click="save()" ng-disabled="isSaveDisabled()" class="btn btn-danger">SAVE</button>
@@ -54,15 +54,12 @@
                                title="This is the name" />
                     </div>
                     
-                    <div class="well well-sm form-group" ng-show="prefs.bigLocation">
+                    <div class="well well-sm form-group">
                         <div class="input-group">
-                                
-                            <span class="input-group-btn">
-                                <button class="btn btn-default" type="button" ng-click="prefs.bigLocation = false">
-                                    <span class="glyphicon glyphicon-th-large"></span>
-                                </button>
-                            </span>
-                            <input type="text" ng-model="form.location" class="form-control" placeholder="Location"/>
+                            <span class="input-group-addon well-input-group-addon"><span class="grey glyphicon glyphicon-th-large"></span></span>
+
+                            <input name="location" type="text" ng-model="form.location" class="form-control" placeholder="Location" servervalidation />
+
                             <span class="input-group-btn">
                                 <button class="btn btn-primary" type="button">GO</button>
                             </span>
@@ -97,7 +94,7 @@
                                 <div class="form-group text-left selectContainer">
                                     <select
                                         ng-model="form.topic"
-                                        ng-options="topic.Key for topic in lookups.topics"
+                                        ng-options="topic.key for topic in lookups.topics"
                                         class="form-control"
                                         title="Topic">
                                         <option value="" disabled selected style="display: none">Topic</option>
@@ -154,18 +151,17 @@
                         <h3>Internal</h3>
 
                         <div class="form-group">
-                            <div class="input-group" ng-hide="prefs.bigLocation">
+                            <div class="input-group">
                                 
-                                <span class="input-group-btn">
-                                    <button class="btn btn-default" type="button" ng-click="prefs.bigLocation = true">
-                                        <span class="glyphicon glyphicon-th-large"></span>
-                                    </button>
-                                </span>
-                                <input type="text" ng-model="form.location" class="form-control" placeholder="Location"/>
-                                <span class="input-group-btn">
-                                    <button class="btn btn-primary" type="button">GO</button>
-                                </span>
-                                
+                                <div class="btn-group" data-toggle="buttons">
+                                  <label class="btn btn-primary">
+                                    <input type="radio" name="options" id="option1"> Internal
+                                  </label>
+                                  <label class="btn btn-success">
+                                    <input type="radio" name="options" id="option2"> Publishable
+                                  </label>
+                                </div>
+
                             </div>
                         </div>
 

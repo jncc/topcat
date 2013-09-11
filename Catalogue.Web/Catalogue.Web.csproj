@@ -133,6 +133,9 @@
     <Compile Include="Controllers\Items\ItemsController.cs" />
     <Compile Include="Controllers\Topics\TopicModel.cs" />
     <Compile Include="Controllers\Topics\TopicsController.cs" />
+    <Compile Include="Controllers\Validator\ValidatorController.cs" />
+    <Compile Include="Controllers\Validator\ValidatorInputModel.cs" />
+    <Compile Include="Controllers\Validator\ValidatorResult.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -145,6 +148,7 @@
     <Content Include="Editor\css\main.min.css">
       <DependentUpon>main.less</DependentUpon>
     </Content>
+    <Content Include="Editor\img\logo.gif" />
     <Content Include="Editor\index.html" />
     <Content Include="Editor\js\controller1.js">
       <DependentUpon>controller1.coffee</DependentUpon>

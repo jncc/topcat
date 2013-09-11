@@ -22,9 +22,6 @@ angular.module('editor').controller 'Controller1', ($scope, defaults, $http) ->
         ],
         topic: ''
 
-    $scope.prefs = {}
-    $scope.prefs.bigLocation = false
-
     $scope.state = /^\w\w$/
     $scope.zip = /^\d\d\d\d\d$/
 
@@ -42,7 +39,7 @@ angular.module('editor').controller 'Controller1', ($scope, defaults, $http) ->
 
     $scope.isCancelDisabled = () -> angular.equals(master, $scope.form)
 
-    $scope.isSaveDisabled = () -> $scope.editorForm.$invalid || angular.equals(master, $scope.form)
+    $scope.isSaveDisabled = () -> $scope.theForm.$invalid || angular.equals(master, $scope.form)
 
     # call scope.cancel() to initially set up form
     $scope.cancel()

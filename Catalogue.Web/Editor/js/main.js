@@ -32,4 +32,26 @@
     };
   });
 
+  module.directive('servervalidation', function($http) {
+    return {
+      require: 'ngModel',
+      link: function(scope, elem, attrs, ctrl) {
+        return elem.on('blur', function(e) {
+          return scope.$apply(function() {
+            return $http({
+              method: 'POST',
+              url: '../api/validator',
+              data: {
+                "value": elem.val()
+              }
+            }).success(function(data, status, headers, config) {
+              console.log(data);
+              return ctrl.$setValidity('myErrorKey', data.valid);
+            });
+          });
+        });
+      }
+    };
+  });
+
 }).call(this);
