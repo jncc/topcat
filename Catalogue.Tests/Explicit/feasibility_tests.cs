@@ -59,7 +59,7 @@ namespace Catalogue.Tests.Explicit
             {
                 foreach (var x in q)
                 {
-                    var item = new Item
+                    var item = new Record
                         {
                             Metadata = new Metadata
                                 {
@@ -75,7 +75,7 @@ namespace Catalogue.Tests.Explicit
                 
             }
 
-            IndexCreation.CreateIndexes(typeof(Item).Assembly, store);
+            IndexCreation.CreateIndexes(typeof(Record).Assembly, store);
         }
 
         [Explicit, Test]
@@ -90,7 +90,7 @@ namespace Catalogue.Tests.Explicit
 
             using (var db = store.OpenSession())
             {
-                var results = db.Query<Item, Items_SpatialIndex>()
+                var results = db.Query<Record, Items_SpatialIndex>()
                     .Customize(x => x.RelatesToShape(FieldNames.Spatial, peakDistrictBbox, SpatialRelation.Intersects))
                     .Where(i => i.Metadata.Title.StartsWith("GA"))
                     //.Take(10)

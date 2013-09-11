@@ -58,7 +58,7 @@ namespace Catalogue.Data
         public static readonly string BoundingBoxContainingNothing = "POLYGON((10 10,40 10,40 40,10 40,10 10))";
         public static readonly string BoundingBoxContainingSmallBox = "POLYGON((40 10,60 10,60 30,40 30,40 10))";
 
-        public static readonly Item SmallBox = new Item
+        public static readonly Record SmallBox = new Record
         {
             Id = new Guid("764dcdea-1231-4494-bc18-6931cc8adcee"),
             Metadata = new Metadata

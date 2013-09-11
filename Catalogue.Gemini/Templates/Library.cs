@@ -12,7 +12,7 @@ namespace Catalogue.Gemini.Templates
     public static class Library
     {
         /// <summary>
-        /// This is the important template, used for creating new records. 
+        /// This is the important template, used for creating new records. (todo)
         /// </summary>
         public static Metadata Blank()
         {
@@ -21,7 +21,7 @@ namespace Catalogue.Gemini.Templates
                 FileIdentifier = new Guid("5eb63655-d7fe-46af-88bc-71f7db243ad3"),
                 Title = "Demo Dataset",
                 Abstract = "This is just a demo dataset.",
-                TopicCategory = "geoscientificInformation",
+                TopicCategory = "oceans",
                 Keywords = new Dictionary<string, string>
                     {
                         { null, "sounding" },
@@ -31,13 +31,14 @@ namespace Catalogue.Gemini.Templates
                 TemporalExtent = new TemporalExtent { Begin = "2001-01-13", End = "2010-01-25" },
                 DatasetReferenceDate = "2012-03-17",
                 Lineage = "This dataset was imagined by a developer.",
+                ResourceLocator = @"Z:\some\file\share",
                 DataFormat = new DataFormat { Name = "GML", Version = "3.2.1" },
                 ResponsibleOrganisation = new ResponsibleParty
-                {
-                    Name = "Joint Nature Conservation Committee (JNCC)",
-                    Email = "data@jncc.gov.uk",
-                    Role = "distributor",
-                },
+                    {
+                        Name = "Joint Nature Conservation Committee (JNCC)",
+                        Email = "data@jncc.gov.uk",
+                        Role = "distributor",
+                    },
                 LimitationsOnPublicAccess = "no limitations",
                 UseConstraints = "no conditions apply",
                 SpatialReferenceSystem = "http://www.opengis.net/def/crs/EPSG/0/4326",
@@ -78,7 +79,8 @@ namespace Catalogue.Gemini.Templates
                 TemporalExtent = new TemporalExtent { Begin = "2001-01-13", End = "2010-01-25" },
                 DatasetReferenceDate = "2012-03-17",
                 Lineage = "This dataset was imagined by a developer.",
-                DataFormat = new DataFormat { Name = "GML", Version = "3.2.1" },
+                ResourceLocator = @"Z:\some\file\share\path.xsl",
+                DataFormat = new DataFormat { Name = "XLS" },
                 ResponsibleOrganisation = new ResponsibleParty
                     {
                         Name = "Joint Nature Conservation Committee (JNCC)",

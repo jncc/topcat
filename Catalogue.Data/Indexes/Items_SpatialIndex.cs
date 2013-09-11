@@ -5,7 +5,7 @@ using Raven.Client.Indexes;
 
 namespace Catalogue.Data.Indexes
 {
-    public class Items_SpatialIndex : AbstractIndexCreationTask<Item>
+    public class Items_SpatialIndex : AbstractIndexCreationTask<Record>
     {
         public Items_SpatialIndex()
         {

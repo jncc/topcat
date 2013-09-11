@@ -15,7 +15,7 @@ namespace Catalogue.Tests.Fast.Catalogue.Web.Controllers.Validator
         public void should_validate_location_with_valid_uri()
         {
             var c = new ValidatorController();
-            var result = c.Post("http://example.com/nice/url");
+            var result = c.Post(new ValidatorInputModel { Value = "http://example.com/nice/url" });
 
             result.Valid.Should().BeTrue();
         }
@@ -24,7 +24,7 @@ namespace Catalogue.Tests.Fast.Catalogue.Web.Controllers.Validator
         public void should_not_validate_location_with_invalid_uri()
         {
             var c = new ValidatorController();
-            var result = c.Post("not/a/url");
+            var result = c.Post(new ValidatorInputModel { Value = "not/a/url" });
 
             result.Valid.Should().BeFalse();
         }    

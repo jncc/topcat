@@ -18,7 +18,7 @@ namespace Catalogue.Tests.Slow.Spatial
         [Test]
         public void non_intersecting_boxes_should_not_intersect()
         {
-            Db.Query<Item, Items_SpatialIndex>()
+            Db.Query<Record, Items_SpatialIndex>()
                 .Customize(x => x.RelatesToShape(FieldNames.Spatial, Seeder.BoundingBoxContainingNothing, SpatialRelation.Intersects))
                 .Count().Should().Be(0);
         }
@@ -26,7 +26,7 @@ namespace Catalogue.Tests.Slow.Spatial
         [Test]
         public void intersecting_boxes_should_intersect()
         {
-            Db.Query<Item, Items_SpatialIndex>()
+            Db.Query<Record, Items_SpatialIndex>()
                 .Customize(x => x.RelatesToShape(FieldNames.Spatial, Seeder.BoundingBoxContainingSmallBox, SpatialRelation.Intersects))
                 .Count().Should().Be(1);
         }
@@ -34,7 +34,7 @@ namespace Catalogue.Tests.Slow.Spatial
         [Test]
         public void inner_box_should_be_within_outer_box()
         {
-            Db.Query<Item, Items_SpatialIndex>()
+            Db.Query<Record, Items_SpatialIndex>()
                 .Customize(x => x.RelatesToShape(FieldNames.Spatial, Seeder.BoundingBoxContainingSmallBox, SpatialRelation.Within))
                 .Count().Should().Be(1);
         }
@@ -49,7 +49,7 @@ namespace Catalogue.Tests.Slow.Spatial
 //        [Test]
 //        public void should_be_able_to_combine_spatial_query_with_nonspatial_quer()
 //        {
-//            Db.Query<Item, Items_SpatialIndex>()
+//            Db.Query<Record, Items_SpatialIndex>()
 //                .Customize(x => x.RelatesToShape(FieldNames.Spatial, Seeder.BoundingBoxContainingSmallBox, SpatialRelation.Intersects))
 //                .Where(i => i.Metadata.Title.StartsWith("Small"))
 //                .Count().Should().Be(1);

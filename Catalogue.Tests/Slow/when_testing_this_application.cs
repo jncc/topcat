@@ -13,7 +13,7 @@ namespace Catalogue.Tests.Slow
         {
             using (var db = ReusableDocumentStore.OpenSession())
             {
-                db.Query<Item>().Count().Should().BePositive();
+                db.Query<Record>().Count().Should().BePositive();
             }
         }
     }

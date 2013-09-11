@@ -19,7 +19,7 @@ namespace Catalogue.Tests.Utility
 
             // seed with test data and wait for indexing
             Seeder.Seed(store);
-            Raven.Client.Indexes.IndexCreation.CreateIndexes(typeof(Item).Assembly, store);
+            Raven.Client.Indexes.IndexCreation.CreateIndexes(typeof(Record).Assembly, store);
             RavenUtility.WaitForIndexing(store);
             
             // todo: is it possible to make the database read-only to prevent accidental mutation of test data?
