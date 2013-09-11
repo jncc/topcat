@@ -28,10 +28,7 @@ module.directive 'servervalidation', ($http) ->
     require: 'ngModel',
     link: (scope, elem, attrs, ctrl) ->
         elem.on 'blur', (e) ->
-            scope.$apply () -> $http(
-                method: 'POST',
-                url: '../api/validator',
-                data: "value": elem.val())
-                .success (data, status, headers, config) ->
-                    console.log data
+            scope.$apply () -> $http.post('../api/validator', "value": elem.val())
+                .success (data) ->
                     ctrl.$setValidity('myErrorKey', data.valid)
+

@@ -38,14 +38,9 @@
       link: function(scope, elem, attrs, ctrl) {
         return elem.on('blur', function(e) {
           return scope.$apply(function() {
-            return $http({
-              method: 'POST',
-              url: '../api/validator',
-              data: {
-                "value": elem.val()
-              }
-            }).success(function(data, status, headers, config) {
-              console.log(data);
+            return $http.post('../api/validator', {
+              "value": elem.val()
+            }).success(function(data) {
               return ctrl.$setValidity('myErrorKey', data.valid);
             });
           });

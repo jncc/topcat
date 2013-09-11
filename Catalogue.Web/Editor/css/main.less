@@ -30,10 +30,12 @@ textarea {
 //    min-height: 34px;    
 //}
 
-// example validation styles
-//.ng-pristine { border:1px solid Gold; }
+// validation styles. angular also puts these classes on the form so ignore that
 //.ng-dirty.ng-valid { border:1px solid Green; }
-//.ng-dirty.ng-invalid { border:1px solid Red; }
+form .ng-dirty.ng-invalid {
+    border:1px solid #FF1493;
+    background-color: #f9f2f4;
+}
 
 .animate-enter {
 	-webkit-transition: 1s linear all; // Chrome

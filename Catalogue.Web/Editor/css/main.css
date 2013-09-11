@@ -19,6 +19,10 @@ textarea {
 .well-input-group-addon {
   background-color: white;
 }
+form .ng-dirty.ng-invalid {
+  border: 1px solid #FF1493;
+  background-color: #f9f2f4;
+}
 .animate-enter {
   -webkit-transition: 1s linear all;
   transition: 1s linear all;
