@@ -12,14 +12,17 @@
     <!-- required by bootstrap for IE8 -->
     <script src="lib/respond-1.2.0/respond.min.js"></script>
     <script src="lib/bootstrap-3.0.0/js/bootstrap.min.js"></script>
-    <script src="lib/angular-1.1.5/angular.min.js"></script>
+    <script src="lib/angular-1.2.0-rc.2/angular.min.js"></script>
     <script src="lib/angular-strap-0.7.5/angular-strap-min.js"></script>
     <script src="lib/jquery-placeholder-2.0.7/jquery.placeholder.min.js"></script>
     <script src="lib/autosize-1.17.2/jquery.autosize-min.js"></script>
     <script src="lib/silviomoreto-bootstrap-select-aeb60b3/bootstrap-select.min.js"></script>
-
+    <script src="lib/zeroclipboard-1.1.7/zeroclipboard.min.js"></script>
     <script src="js/main.js"></script>
     <script src="js/controller1.js"></script>
+    <script type="text/javascript">
+        ZeroClipboard.setDefaults({ moviePath: 'lib/zeroclipboard-1.1.7/ZeroClipboard.swf' });
+    </script>
 </head>
 <body>
 
@@ -50,7 +53,7 @@
                 <div class="col-md-12">
 
                     <div class="form-group">
-                        <input type="text" ng-model="form.name" required autofocus placeholder="Name" class="form-control" style="font-size: larger"
+                        <input id="xname" type="text" ng-model="form.name" required autofocus placeholder="Name" class="form-control" style="font-size: larger"
                                title="This is the name" />
                     </div>
                     
@@ -58,12 +61,17 @@
                         <div class="input-group">
                             <span class="input-group-addon well-input-group-addon"><span class="grey glyphicon glyphicon-th-large"></span></span>
 
-                            <input name="location" type="text" ng-model="form.location" class="form-control" placeholder="Location" required servervalidation />
+                            <input id="location" name="location" type="text" ng-model="form.location" class="form-control" placeholder="Location"
+                                required
+                                servervalidation />
 
-<!--                            <span class="input-group-btn">-->
-<!--                                <button class="btn btn-primary" type="button">GO</button>-->
-<!--                            </span>-->
-                                
+                            <span class="input-group-btn">
+                                <button class="btn btn-primary" type="button"
+                                    locationclipboard
+                                    data-clipboard-target="location">
+                                    <span class="glyphicon glyphicon-new-window"></span>
+                                </button>
+                            </span>
                         </div>
                     </div>
 

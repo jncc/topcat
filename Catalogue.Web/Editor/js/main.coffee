@@ -32,3 +32,11 @@ module.directive 'servervalidation', ($http) ->
                 .success (data) ->
                     ctrl.$setValidity('myErrorKey', data.valid)
 
+
+module.directive 'locationclipboard', () ->
+    restrict: 'A', #attribute
+    link: (scope, elem, attrs) ->
+        clip = new ZeroClipboard $(elem)
+        clip.on 'complete', (client, args) ->
+            alert 'done ' + args.text
+

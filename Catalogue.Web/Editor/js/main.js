@@ -49,4 +49,17 @@
     };
   });
 
+  module.directive('locationclipboard', function() {
+    return {
+      restrict: 'A',
+      link: function(scope, elem, attrs) {
+        var clip;
+        clip = new ZeroClipboard($(elem));
+        return clip.on('complete', function(client, args) {
+          return alert('done ' + args.text);
+        });
+      }
+    };
+  });
+
 }).call(this);
