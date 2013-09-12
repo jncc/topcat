@@ -28,10 +28,17 @@ module.directive 'servervalidation', ($http) ->
     require: 'ngModel',
     link: (scope, elem, attrs, ctrl) ->
         elem.on 'blur', (e) ->
+            alert 'hi'
             scope.$apply () -> $http.post('../api/validator', "value": elem.val())
                 .success (data) ->
                     ctrl.$setValidity('myErrorKey', data.valid)
 
+module.directive 'tooltip', () ->
+    restrict: 'A',
+    link: (scope, elem, attrs) -> $(elem).tooltip 
+        placement: 'auto',
+        delay: show: 500, hide: 100
+        
 
 module.directive 'locationclipboard', () ->
     restrict: 'A', #attribute
@@ -39,10 +46,23 @@ module.directive 'locationclipboard', () ->
         clip = new ZeroClipboard $(elem)
         clip.on 'complete', (client, args) ->
             l = $('#location')
+            l.highlightInputSelectionRange 0, (l.val().length) 
             l.tooltip
                 title: 'Copied to clipboard!',
                 trigger: 'manual',
                 container: 'body'
             l.tooltip 'show'
-            setTimeout (() -> l.tooltip 'hide'), 2000
+            setTimeout (() -> l.tooltip 'hide'), 2000 # angular $timeout is not working?!
 
+# from http://programanddesign.com/js/jquery-select-text-range/
+$.fn.highlightInputSelectionRange = (start, end) ->
+    this.each () ->
+        if this.setSelectionRange # non-IE
+            this.focus()
+            this.setSelectionRange start, end
+        else if this.createTextRange # IE
+            range = this.createTextRange()
+            range.collapse true
+            range.moveEnd 'character', end
+            range.moveStart 'character', start
+            range.select()

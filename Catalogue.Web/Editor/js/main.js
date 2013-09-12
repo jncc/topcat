@@ -37,6 +37,7 @@
       require: 'ngModel',
       link: function(scope, elem, attrs, ctrl) {
         return elem.on('blur', function(e) {
+          alert('hi');
           return scope.$apply(function() {
             return $http.post('../api/validator', {
               "value": elem.val()
@@ -44,6 +45,21 @@
               return ctrl.$setValidity('myErrorKey', data.valid);
             });
           });
+        });
+      }
+    };
+  });
+
+  module.directive('tooltip', function() {
+    return {
+      restrict: 'A',
+      link: function(scope, elem, attrs) {
+        return $(elem).tooltip({
+          placement: 'auto',
+          delay: {
+            show: 500,
+            hide: 100
+          }
         });
       }
     };
@@ -58,6 +74,7 @@
         return clip.on('complete', function(client, args) {
           var l;
           l = $('#location');
+          l.highlightInputSelectionRange(0, (l.val().length));
           l.tooltip({
             title: 'Copied to clipboard!',
             trigger: 'manual',
@@ -71,5 +88,21 @@
       }
     };
   });
+
+  $.fn.highlightInputSelectionRange = function(start, end) {
+    return this.each(function() {
+      var range;
+      if (this.setSelectionRange) {
+        this.focus();
+        return this.setSelectionRange(start, end);
+      } else if (this.createTextRange) {
+        range = this.createTextRange();
+        range.collapse(true);
+        range.moveEnd('character', end);
+        range.moveStart('character', start);
+        return range.select();
+      }
+    });
+  };
 
 }).call(this);
