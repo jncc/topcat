@@ -38,5 +38,11 @@ module.directive 'locationclipboard', () ->
     link: (scope, elem, attrs) ->
         clip = new ZeroClipboard $(elem)
         clip.on 'complete', (client, args) ->
-            alert 'done ' + args.text
+            l = $('#location')
+            l.tooltip
+                title: 'Copied to clipboard!',
+                trigger: 'manual',
+                container: 'body'
+            l.tooltip 'show'
+            setTimeout (() -> l.tooltip 'hide'), 2000
 

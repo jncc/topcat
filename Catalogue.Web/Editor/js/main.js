@@ -56,7 +56,17 @@
         var clip;
         clip = new ZeroClipboard($(elem));
         return clip.on('complete', function(client, args) {
-          return alert('done ' + args.text);
+          var l;
+          l = $('#location');
+          l.tooltip({
+            title: 'Copied to clipboard!',
+            trigger: 'manual',
+            container: 'body'
+          });
+          l.tooltip('show');
+          return setTimeout((function() {
+            return l.tooltip('hide');
+          }), 2000);
         });
       }
     };

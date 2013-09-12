@@ -201,6 +201,8 @@
     <Content Include="Editor\lib\silviomoreto-bootstrap-select-aeb60b3\bootstrap-select.min.css" />
     <Content Include="Editor\lib\silviomoreto-bootstrap-select-aeb60b3\bootstrap-select.min.js" />
     <Content Include="Editor\lib\silviomoreto-bootstrap-select-aeb60b3\test.html" />
+    <Content Include="Editor\lib\zeroclipboard-1.1.7\ZeroClipboard.min.js" />
+    <Content Include="Editor\lib\zeroclipboard-1.1.7\ZeroClipboard.swf" />
     <Content Include="Editor\pete.html" />
     <Content Include="favicon.ico" />
     <Content Include="Global.asax" />
