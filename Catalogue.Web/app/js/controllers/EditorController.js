@@ -46,7 +46,7 @@
       return angular.equals(master, $scope.form);
     };
     $scope.isSaveDisabled = function() {
-      return $scope.theForm.$invalid || angular.equals(master, $scope.form);
+      return angular.equals(master, $scope.form);
     };
     $scope.cancel();
   });

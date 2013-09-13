@@ -34,7 +34,7 @@ angular.module('app.controllers').controller 'EditorController', ($scope, defaul
 
     $scope.isCancelDisabled = () -> angular.equals(master, $scope.form)
 
-    $scope.isSaveDisabled = () -> $scope.theForm.$invalid || angular.equals(master, $scope.form)
+    $scope.isSaveDisabled = () -> angular.equals(master, $scope.form) # || $scope.theForm.$invalid 
 
     # call scope.cancel() to initially set up form
     $scope.cancel()
