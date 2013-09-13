@@ -125,10 +125,6 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="App_Start\BundleConfig.cs" />
-    <Compile Include="App_Start\FilterConfig.cs" />
-    <Compile Include="App_Start\RouteConfig.cs" />
-    <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\Home\HomeController.cs" />
     <Compile Include="Controllers\Items\ItemsController.cs" />
     <Compile Include="Controllers\Sandbox\SandboxController.cs" />
@@ -143,84 +139,69 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Editor\css\main.css">
+    <Content Include="app\css\main.css">
       <DependentUpon>main.less</DependentUpon>
     </Content>
-    <Content Include="Editor\css\main.min.css">
+    <Content Include="app\css\main.min.css">
       <DependentUpon>main.less</DependentUpon>
     </Content>
-    <Content Include="Editor\img\logo.gif" />
-    <Content Include="Editor\index.html" />
-    <Content Include="Editor\js\controller1.js">
+    <Content Include="app\img\logo.gif" />
+    <Content Include="app\index.html" />
+    <Content Include="app\js\controller1.js">
       <DependentUpon>controller1.coffee</DependentUpon>
     </Content>
-    <Content Include="Editor\js\controller1.min.js">
+    <Content Include="app\js\controller1.min.js">
       <DependentUpon>controller1.coffee</DependentUpon>
     </Content>
-    <Content Include="Editor\js\main.js">
+    <Content Include="app\js\main.js">
       <DependentUpon>main.coffee</DependentUpon>
     </Content>
-    <Content Include="Editor\js\main.min.js">
+    <Content Include="app\js\main.min.js">
       <DependentUpon>main.coffee</DependentUpon>
     </Content>
-    <Content Include="Editor\lib\angular-1.2.0-rc.2\angular.min.js" />
-    <Content Include="Editor\lib\angular-strap-0.7.5\angular-strap-min.js" />
-    <Content Include="Editor\lib\autosize-1.17.2\demo.html" />
-    <Content Include="Editor\lib\autosize-1.17.2\jquery.autosize-min.js" />
-    <Content Include="Editor\lib\autosize-1.17.2\jquery.autosize.js" />
-    <Content Include="Editor\lib\bootstrap-3.0.0\css\bootstrap-theme.css" />
-    <Content Include="Editor\lib\bootstrap-3.0.0\css\bootstrap-theme.min.css" />
-    <Content Include="Editor\lib\bootstrap-3.0.0\css\bootstrap.css" />
-    <Content Include="Editor\lib\bootstrap-3.0.0\css\bootstrap.min.css" />
-    <Content Include="Editor\lib\bootstrap-3.0.0\js\bootstrap.js" />
-    <Content Include="Editor\lib\bootstrap-3.0.0\js\bootstrap.min.js" />
-    <Content Include="Editor\lib\jquery-1.10.2\jquery.min.js" />
-    <Content Include="Editor\lib\jquery-placeholder-2.0.7\demo.html" />
-    <Content Include="Editor\lib\jquery-placeholder-2.0.7\jquery.placeholder.js" />
-    <Content Include="Editor\lib\jquery-placeholder-2.0.7\jquery.placeholder.min.js" />
-    <Content Include="Editor\lib\jquery-placeholder-2.0.7\LICENSE-GPL.txt" />
-    <Content Include="Editor\lib\jquery-placeholder-2.0.7\LICENSE-MIT.txt" />
-    <Content Include="Editor\lib\respond-1.2.0\cross-domain\example.html" />
-    <Content Include="Editor\lib\respond-1.2.0\cross-domain\respond-proxy.html" />
-    <Content Include="Editor\lib\respond-1.2.0\cross-domain\respond.proxy.gif" />
-    <Content Include="Editor\lib\respond-1.2.0\cross-domain\respond.proxy.js" />
-    <Content Include="Editor\lib\respond-1.2.0\respond.min.js" />
-    <Content Include="Editor\lib\respond-1.2.0\respond.src.js" />
-    <Content Include="Editor\lib\respond-1.2.0\test\test.css" />
-    <Content Include="Editor\lib\respond-1.2.0\test\test.html" />
-    <Content Include="Editor\lib\respond-1.2.0\test\test2.css" />
-    <Content Include="Editor\lib\respond-1.2.0\test\unit\index.html" />
-    <Content Include="Editor\lib\respond-1.2.0\test\unit\qunit\qunit.css" />
-    <Content Include="Editor\lib\respond-1.2.0\test\unit\qunit\qunit.js" />
-    <Content Include="Editor\lib\respond-1.2.0\test\unit\test.css" />
-    <Content Include="Editor\lib\respond-1.2.0\test\unit\test2.css" />
-    <Content Include="Editor\lib\respond-1.2.0\test\unit\test3.css" />
-    <Content Include="Editor\lib\respond-1.2.0\test\unit\tests.js" />
-    <Content Include="Editor\lib\silviomoreto-bootstrap-select-aeb60b3\bootstrap-select.css" />
-    <Content Include="Editor\lib\silviomoreto-bootstrap-select-aeb60b3\bootstrap-select.js" />
-    <Content Include="Editor\lib\silviomoreto-bootstrap-select-aeb60b3\bootstrap-select.min.css" />
-    <Content Include="Editor\lib\silviomoreto-bootstrap-select-aeb60b3\bootstrap-select.min.js" />
-    <Content Include="Editor\lib\silviomoreto-bootstrap-select-aeb60b3\test.html" />
-    <Content Include="Editor\lib\zeroclipboard-1.1.7\ZeroClipboard.min.js" />
-    <Content Include="Editor\lib\zeroclipboard-1.1.7\ZeroClipboard.swf" />
-    <Content Include="Editor\pete.html" />
+    <Content Include="app\lib\angular-1.2.0-rc.2\angular.min.js" />
+    <Content Include="app\lib\angular-strap-0.7.5\angular-strap-min.js" />
+    <Content Include="app\lib\autosize-1.17.2\demo.html" />
+    <Content Include="app\lib\autosize-1.17.2\jquery.autosize-min.js" />
+    <Content Include="app\lib\autosize-1.17.2\jquery.autosize.js" />
+    <Content Include="app\lib\bootstrap-3.0.0\css\bootstrap-theme.css" />
+    <Content Include="app\lib\bootstrap-3.0.0\css\bootstrap-theme.min.css" />
+    <Content Include="app\lib\bootstrap-3.0.0\css\bootstrap.css" />
+    <Content Include="app\lib\bootstrap-3.0.0\css\bootstrap.min.css" />
+    <Content Include="app\lib\bootstrap-3.0.0\js\bootstrap.js" />
+    <Content Include="app\lib\bootstrap-3.0.0\js\bootstrap.min.js" />
+    <Content Include="app\lib\jquery-1.10.2\jquery.min.js" />
+    <Content Include="app\lib\jquery-placeholder-2.0.7\demo.html" />
+    <Content Include="app\lib\jquery-placeholder-2.0.7\jquery.placeholder.js" />
+    <Content Include="app\lib\jquery-placeholder-2.0.7\jquery.placeholder.min.js" />
+    <Content Include="app\lib\jquery-placeholder-2.0.7\LICENSE-GPL.txt" />
+    <Content Include="app\lib\jquery-placeholder-2.0.7\LICENSE-MIT.txt" />
+    <Content Include="app\lib\respond-1.2.0\cross-domain\example.html" />
+    <Content Include="app\lib\respond-1.2.0\cross-domain\respond-proxy.html" />
+    <Content Include="app\lib\respond-1.2.0\cross-domain\respond.proxy.gif" />
+    <Content Include="app\lib\respond-1.2.0\cross-domain\respond.proxy.js" />
+    <Content Include="app\lib\respond-1.2.0\respond.min.js" />
+    <Content Include="app\lib\respond-1.2.0\respond.src.js" />
+    <Content Include="app\lib\respond-1.2.0\test\test.css" />
+    <Content Include="app\lib\respond-1.2.0\test\test.html" />
+    <Content Include="app\lib\respond-1.2.0\test\test2.css" />
+    <Content Include="app\lib\respond-1.2.0\test\unit\index.html" />
+    <Content Include="app\lib\respond-1.2.0\test\unit\qunit\qunit.css" />
+    <Content Include="app\lib\respond-1.2.0\test\unit\qunit\qunit.js" />
+    <Content Include="app\lib\respond-1.2.0\test\unit\test.css" />
+    <Content Include="app\lib\respond-1.2.0\test\unit\test2.css" />
+    <Content Include="app\lib\respond-1.2.0\test\unit\test3.css" />
+    <Content Include="app\lib\respond-1.2.0\test\unit\tests.js" />
+    <Content Include="app\lib\silviomoreto-bootstrap-select-aeb60b3\bootstrap-select.css" />
+    <Content Include="app\lib\silviomoreto-bootstrap-select-aeb60b3\bootstrap-select.js" />
+    <Content Include="app\lib\silviomoreto-bootstrap-select-aeb60b3\bootstrap-select.min.css" />
+    <Content Include="app\lib\silviomoreto-bootstrap-select-aeb60b3\bootstrap-select.min.js" />
+    <Content Include="app\lib\silviomoreto-bootstrap-select-aeb60b3\test.html" />
+    <Content Include="app\lib\zeroclipboard-1.1.7\ZeroClipboard.min.js" />
+    <Content Include="app\lib\zeroclipboard-1.1.7\ZeroClipboard.swf" />
+    <Content Include="app\pete.html" />
     <Content Include="favicon.ico" />
     <Content Include="Global.asax" />
-    <None Include="Assets\js\jquery-1.7.1.intellisense.js" />
-    <Content Include="Assets\js\jquery-1.7.1.js" />
-    <Content Include="Assets\js\jquery-1.7.1.min.js" />
-    <None Include="Assets\js\jquery.validate-vsdoc.js" />
-    <Content Include="Assets\js\jquery-ui-1.8.20.js" />
-    <Content Include="Assets\js\jquery-ui-1.8.20.min.js" />
-    <Content Include="Assets\js\jquery.unobtrusive-ajax.js" />
-    <Content Include="Assets\js\jquery.unobtrusive-ajax.min.js" />
-    <Content Include="Assets\js\jquery.validate.js" />
-    <Content Include="Assets\js\jquery.validate.min.js" />
-    <Content Include="Assets\js\jquery.validate.unobtrusive.js" />
-    <Content Include="Assets\js\jquery.validate.unobtrusive.min.js" />
-    <Content Include="Assets\js\knockout-2.1.0.debug.js" />
-    <Content Include="Assets\js\knockout-2.1.0.js" />
-    <Content Include="Assets\js\modernizr-2.5.3.js" />
     <Content Include="Web.config" />
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
@@ -228,35 +209,26 @@
     <Content Include="Web.Release.config">
       <DependentUpon>Web.config</DependentUpon>
     </Content>
-    <Content Include="Assets\js\_references.js" />
-    <Content Include="Views\Web.config" />
-    <Content Include="Views\_ViewStart.cshtml" />
-    <Content Include="Views\Home\Index.cshtml" />
-    <Content Include="Views\Shared\Error.cshtml" />
-    <Content Include="Views\Shared\_Layout.cshtml" />
-    <Content Include="Editor\js\controller1.coffee" />
-    <Content Include="Editor\css\main.less" />
-    <Content Include="Editor\lib\jquery-placeholder-2.0.7\README.md" />
-    <Content Include="Editor\js\main.coffee" />
-    <Content Include="Editor\lib\respond-1.2.0\README.md" />
-    <Content Include="Editor\lib\autosize-1.17.2\autosize.jquery.json" />
-    <Content Include="Editor\lib\autosize-1.17.2\bower.json" />
-    <Content Include="Editor\lib\autosize-1.17.2\package.json" />
-    <Content Include="Editor\lib\autosize-1.17.2\readme.md" />
-    <Content Include="Editor\lib\bootstrap-3.0.0\fonts\glyphicons-halflings-regular.eot" />
-    <Content Include="Editor\lib\bootstrap-3.0.0\fonts\glyphicons-halflings-regular.svg" />
-    <Content Include="Editor\lib\bootstrap-3.0.0\fonts\glyphicons-halflings-regular.ttf" />
-    <Content Include="Editor\lib\bootstrap-3.0.0\fonts\glyphicons-halflings-regular.woff" />
-    <Content Include="Editor\lib\silviomoreto-bootstrap-select-aeb60b3\bootstrap-select.jquery.json" />
-    <Content Include="Editor\lib\silviomoreto-bootstrap-select-aeb60b3\bower.json" />
-    <Content Include="Editor\lib\silviomoreto-bootstrap-select-aeb60b3\CONTRIBUTING.md" />
-    <Content Include="Editor\lib\silviomoreto-bootstrap-select-aeb60b3\package.json" />
-    <Content Include="Editor\lib\silviomoreto-bootstrap-select-aeb60b3\README.md" />
+    <Content Include="app\js\controller1.coffee" />
+    <Content Include="app\css\main.less" />
+    <Content Include="app\lib\jquery-placeholder-2.0.7\README.md" />
+    <Content Include="app\js\main.coffee" />
+    <Content Include="app\lib\respond-1.2.0\README.md" />
+    <Content Include="app\lib\autosize-1.17.2\autosize.jquery.json" />
+    <Content Include="app\lib\autosize-1.17.2\bower.json" />
+    <Content Include="app\lib\autosize-1.17.2\package.json" />
+    <Content Include="app\lib\autosize-1.17.2\readme.md" />
+    <Content Include="app\lib\bootstrap-3.0.0\fonts\glyphicons-halflings-regular.eot" />
+    <Content Include="app\lib\bootstrap-3.0.0\fonts\glyphicons-halflings-regular.svg" />
+    <Content Include="app\lib\bootstrap-3.0.0\fonts\glyphicons-halflings-regular.ttf" />
+    <Content Include="app\lib\bootstrap-3.0.0\fonts\glyphicons-halflings-regular.woff" />
+    <Content Include="app\lib\silviomoreto-bootstrap-select-aeb60b3\bootstrap-select.jquery.json" />
+    <Content Include="app\lib\silviomoreto-bootstrap-select-aeb60b3\bower.json" />
+    <Content Include="app\lib\silviomoreto-bootstrap-select-aeb60b3\CONTRIBUTING.md" />
+    <Content Include="app\lib\silviomoreto-bootstrap-select-aeb60b3\package.json" />
+    <Content Include="app\lib\silviomoreto-bootstrap-select-aeb60b3\README.md" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Assets\css\" />
-    <Folder Include="Assets\img\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <Content Include="packages.config" />
   </ItemGroup>

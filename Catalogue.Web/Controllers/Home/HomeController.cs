@@ -6,7 +6,7 @@ namespace Catalogue.Web.Controllers.Home
     {
         public ActionResult Index()
         {
-            return View();
+            return RedirectPermanent("~/app");
         }
     }
 }
