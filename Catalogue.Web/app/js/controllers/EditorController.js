@@ -1,11 +1,5 @@
 ﻿(function() {
 
-  angular.module('app.controllers').controller('SearchController', function($scope) {
-    return $scope.foo = {
-      bar: 'hello'
-    };
-  });
-
   angular.module('app.controllers').controller('EditorController', function($scope, defaults, $http) {
     var master;
     $scope.lookups = {};

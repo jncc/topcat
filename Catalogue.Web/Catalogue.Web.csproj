@@ -154,11 +154,17 @@
     <Content Include="app\js\app.min.js">
       <DependentUpon>app.coffee</DependentUpon>
     </Content>
-    <Content Include="app\js\controllers.js">
-      <DependentUpon>controllers.coffee</DependentUpon>
+    <Content Include="app\js\controllers\EditorController.js">
+      <DependentUpon>EditorController.coffee</DependentUpon>
     </Content>
-    <Content Include="app\js\controllers.min.js">
-      <DependentUpon>controllers.coffee</DependentUpon>
+    <Content Include="app\js\controllers\EditorController.min.js">
+      <DependentUpon>EditorController.coffee</DependentUpon>
+    </Content>
+    <Content Include="app\js\controllers\SearchController.js">
+      <DependentUpon>SearchController.coffee</DependentUpon>
+    </Content>
+    <Content Include="app\js\controllers\SearchController.min.js">
+      <DependentUpon>SearchController.coffee</DependentUpon>
     </Content>
     <Content Include="app\js\directives.js">
       <DependentUpon>directives.coffee</DependentUpon>
@@ -266,10 +272,13 @@
     <Content Include="app\js\directives.coffee" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="app\js\controllers.coffee" />
+    <Content Include="app\js\app.coffee" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="app\js\app.coffee" />
+    <Content Include="app\js\controllers\SearchController.coffee" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="app\js\controllers\EditorController.coffee" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

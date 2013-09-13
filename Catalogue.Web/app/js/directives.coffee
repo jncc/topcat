@@ -12,7 +12,14 @@ module.directive 'autosize', () ->
     restrict: 'A', # attribute
     link: (scope, element, attrs) -> $(element).autosize()
 
-
+module.directive 'spinner', [ '$rootScope', ($rootScope) ->
+    restrict: 'A',
+    link: (scope, elem, attrs) ->
+        elem.addClass 'hide'
+        $rootScope.$on '$routeChangeStart', () ->
+            elem.removeClass 'hide'
+        $rootScope.$on '$routeChangeSuccess', () ->
+            elem.addClass 'hide' ]
 
 
 module.directive 'servervalidation', ($http) ->

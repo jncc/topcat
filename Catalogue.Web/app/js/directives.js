@@ -21,6 +21,23 @@
     };
   });
 
+  module.directive('spinner', [
+    '$rootScope', function($rootScope) {
+      return {
+        restrict: 'A',
+        link: function(scope, elem, attrs) {
+          elem.addClass('hide');
+          $rootScope.$on('$routeChangeStart', function() {
+            return elem.removeClass('hide');
+          });
+          return $rootScope.$on('$routeChangeSuccess', function() {
+            return elem.addClass('hide');
+          });
+        }
+      };
+    }
+  ]);
+
   module.directive('servervalidation', function($http) {
     return {
       require: 'ngModel',

@@ -1,9 +1,4 @@
 ﻿
-
-angular.module('app.controllers').controller 'SearchController', ($scope) ->
-    $scope.foo = { bar : 'hello' }
-
-
 angular.module('app.controllers').controller 'EditorController', ($scope, defaults, $http) -> 
 
     $scope.lookups = {}
