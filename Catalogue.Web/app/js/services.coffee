@@ -1,5 +1,5 @@
 ﻿
-module = angular.module 'app.services', ['ngResource']
+module = angular.module 'app.services'
 
 module.factory 'Record', ['$resource', ($resource) ->
     $resource '../api/records/:id', id: '@id' ]

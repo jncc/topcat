@@ -1,7 +1,7 @@
 ﻿(function() {
   var module;
 
-  module = angular.module('app.services', ['ngResource']);
+  module = angular.module('app.services');
 
   module.factory('Record', [
     '$resource', function($resource) {

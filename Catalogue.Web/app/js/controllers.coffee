@@ -1,26 +1,10 @@
 ﻿
-module = angular.module 'app', [
-    'ngRoute',
-    'app.directives',
-    'app.services' ]
 
-module.config ['$routeProvider', ($routeProvider) ->
-    $routeProvider
-        .when '/'
-            controller: 'MyController',
-            templateUrl: 'views/editor/blah.html'
-        .when '/editor',
-            controller: 'EditorController',
-            templateUrl: 'views/editor/editor.html'
-        .otherwise
-            redirectTo: '/'
-    ]
-
-module.controller 'MyController', ($scope) ->
+angular.module('app.controllers').controller 'SearchController', ($scope) ->
     $scope.foo = { bar : 'hello' }
 
 
-module.controller 'EditorController', ($scope, defaults, $http) -> 
+angular.module('app.controllers').controller 'EditorController', ($scope, defaults, $http) -> 
 
     $scope.lookups = {}
 

@@ -146,7 +146,14 @@
       <DependentUpon>main.less</DependentUpon>
     </Content>
     <Content Include="app\img\logo.gif" />
+    <Content Include="app\img\spinner.gif" />
     <Content Include="app\index.html" />
+    <Content Include="app\js\app.js">
+      <DependentUpon>app.coffee</DependentUpon>
+    </Content>
+    <Content Include="app\js\app.min.js">
+      <DependentUpon>app.coffee</DependentUpon>
+    </Content>
     <Content Include="app\js\controllers.js">
       <DependentUpon>controllers.coffee</DependentUpon>
     </Content>
@@ -158,12 +165,6 @@
     </Content>
     <Content Include="app\js\directives.min.js">
       <DependentUpon>directives.coffee</DependentUpon>
-    </Content>
-    <Content Include="app\js\main.js">
-      <DependentUpon>main.coffee</DependentUpon>
-    </Content>
-    <Content Include="app\js\main.min.js">
-      <DependentUpon>main.coffee</DependentUpon>
     </Content>
     <Content Include="app\js\services.js">
       <DependentUpon>services.coffee</DependentUpon>
@@ -213,9 +214,8 @@
     <Content Include="app\lib\silviomoreto-bootstrap-select-aeb60b3\test.html" />
     <Content Include="app\lib\zeroclipboard-1.1.7\ZeroClipboard.min.js" />
     <Content Include="app\lib\zeroclipboard-1.1.7\ZeroClipboard.swf" />
-    <Content Include="app\pete.html" />
-    <Content Include="app\views\editor\blah.html" />
     <Content Include="app\views\editor\editor.html" />
+    <Content Include="app\views\search\search.html" />
     <Content Include="favicon.ico" />
     <Content Include="Global.asax" />
     <Content Include="Web.config" />
@@ -227,7 +227,6 @@
     </Content>
     <Content Include="app\css\main.less" />
     <Content Include="app\lib\jquery-placeholder-2.0.7\README.md" />
-    <Content Include="app\js\main.coffee" />
     <Content Include="app\lib\respond-1.2.0\README.md" />
     <Content Include="app\lib\autosize-1.17.2\autosize.jquery.json" />
     <Content Include="app\lib\autosize-1.17.2\bower.json" />
@@ -268,6 +267,9 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="app\js\controllers.coffee" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="app\js\app.coffee" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

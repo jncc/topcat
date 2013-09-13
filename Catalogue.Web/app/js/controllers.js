@@ -1,29 +1,12 @@
 ﻿(function() {
-  var module;
 
-  module = angular.module('app', ['ngRoute', 'app.directives', 'app.services']);
-
-  module.config([
-    '$routeProvider', function($routeProvider) {
-      return $routeProvider.when('/', {
-        controller: 'MyController',
-        templateUrl: 'views/editor/blah.html'
-      }).when('/editor', {
-        controller: 'EditorController',
-        templateUrl: 'views/editor/editor.html'
-      }).otherwise({
-        redirectTo: '/'
-      });
-    }
-  ]);
-
-  module.controller('MyController', function($scope) {
+  angular.module('app.controllers').controller('SearchController', function($scope) {
     return $scope.foo = {
       bar: 'hello'
     };
   });
 
-  module.controller('EditorController', function($scope, defaults, $http) {
+  angular.module('app.controllers').controller('EditorController', function($scope, defaults, $http) {
     var master;
     $scope.lookups = {};
     $http.get('../api/topics').success(function(result) {

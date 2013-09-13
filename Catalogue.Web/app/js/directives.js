@@ -1,7 +1,7 @@
 ﻿(function() {
   var module;
 
-  module = angular.module('app.directives', []);
+  module = angular.module('app.directives');
 
   module.directive('placeholder', function() {
     return {

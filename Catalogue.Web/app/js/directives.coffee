@@ -1,5 +1,5 @@
 ﻿
-module = angular.module 'app.directives', []
+module = angular.module 'app.directives'
 
 # use jquery placeholder plugin for old IE
 # in angular, we can use a custom directive with the same name as the html5 attribute!
@@ -11,6 +11,9 @@ module.directive 'placeholder', () ->
 module.directive 'autosize', () -> 
     restrict: 'A', # attribute
     link: (scope, element, attrs) -> $(element).autosize()
+
+
+
 
 module.directive 'servervalidation', ($http) ->
     require: 'ngModel',
