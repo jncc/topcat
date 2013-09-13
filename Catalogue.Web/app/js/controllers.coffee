@@ -1,7 +1,26 @@
 ﻿
+module = angular.module 'app', [
+    'ngRoute',
+    'app.directives',
+    'app.services' ]
 
-# (not sure if this is the right way to grab the module in a separate file?)
-angular.module('editor').controller 'Controller1', ($scope, defaults, $http) -> 
+module.config ['$routeProvider', ($routeProvider) ->
+    $routeProvider
+        .when '/'
+            controller: 'MyController',
+            templateUrl: 'views/editor/blah.html'
+        .when '/editor',
+            controller: 'EditorController',
+            templateUrl: 'views/editor/editor.html'
+        .otherwise
+            redirectTo: '/'
+    ]
+
+module.controller 'MyController', ($scope) ->
+    $scope.foo = { bar : 'hello' }
+
+
+module.controller 'EditorController', ($scope, defaults, $http) -> 
 
     $scope.lookups = {}
 
@@ -41,6 +60,5 @@ angular.module('editor').controller 'Controller1', ($scope, defaults, $http) ->
     # call scope.cancel() to initially set up form
     $scope.cancel()
     return
-
 
 

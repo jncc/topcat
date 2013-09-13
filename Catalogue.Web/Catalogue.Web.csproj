@@ -147,11 +147,17 @@
     </Content>
     <Content Include="app\img\logo.gif" />
     <Content Include="app\index.html" />
-    <Content Include="app\js\controller1.js">
-      <DependentUpon>controller1.coffee</DependentUpon>
+    <Content Include="app\js\controllers.js">
+      <DependentUpon>controllers.coffee</DependentUpon>
     </Content>
-    <Content Include="app\js\controller1.min.js">
-      <DependentUpon>controller1.coffee</DependentUpon>
+    <Content Include="app\js\controllers.min.js">
+      <DependentUpon>controllers.coffee</DependentUpon>
+    </Content>
+    <Content Include="app\js\directives.js">
+      <DependentUpon>directives.coffee</DependentUpon>
+    </Content>
+    <Content Include="app\js\directives.min.js">
+      <DependentUpon>directives.coffee</DependentUpon>
     </Content>
     <Content Include="app\js\main.js">
       <DependentUpon>main.coffee</DependentUpon>
@@ -159,6 +165,14 @@
     <Content Include="app\js\main.min.js">
       <DependentUpon>main.coffee</DependentUpon>
     </Content>
+    <Content Include="app\js\services.js">
+      <DependentUpon>services.coffee</DependentUpon>
+    </Content>
+    <Content Include="app\js\services.min.js">
+      <DependentUpon>services.coffee</DependentUpon>
+    </Content>
+    <Content Include="app\lib\angular-1.2.0-rc.2\angular-resource.min.js" />
+    <Content Include="app\lib\angular-1.2.0-rc.2\angular-route.min.js" />
     <Content Include="app\lib\angular-1.2.0-rc.2\angular.min.js" />
     <Content Include="app\lib\angular-strap-0.7.5\angular-strap-min.js" />
     <Content Include="app\lib\autosize-1.17.2\demo.html" />
@@ -200,6 +214,8 @@
     <Content Include="app\lib\zeroclipboard-1.1.7\ZeroClipboard.min.js" />
     <Content Include="app\lib\zeroclipboard-1.1.7\ZeroClipboard.swf" />
     <Content Include="app\pete.html" />
+    <Content Include="app\views\editor\blah.html" />
+    <Content Include="app\views\editor\editor.html" />
     <Content Include="favicon.ico" />
     <Content Include="Global.asax" />
     <Content Include="Web.config" />
@@ -209,7 +225,6 @@
     <Content Include="Web.Release.config">
       <DependentUpon>Web.config</DependentUpon>
     </Content>
-    <Content Include="app\js\controller1.coffee" />
     <Content Include="app\css\main.less" />
     <Content Include="app\lib\jquery-placeholder-2.0.7\README.md" />
     <Content Include="app\js\main.coffee" />
@@ -228,7 +243,9 @@
     <Content Include="app\lib\silviomoreto-bootstrap-select-aeb60b3\package.json" />
     <Content Include="app\lib\silviomoreto-bootstrap-select-aeb60b3\README.md" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Content Include="app\js\services.coffee" />
+  </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />
   </ItemGroup>
@@ -245,6 +262,12 @@
       <Project>{b6b90aa2-bf70-4460-a975-5192ab5ecdca}</Project>
       <Name>Catalogue.Utilities</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="app\js\directives.coffee" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="app\js\controllers.coffee" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
