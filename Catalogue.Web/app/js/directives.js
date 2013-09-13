@@ -21,6 +21,19 @@
     };
   });
 
+  module.directive('tcBackButton', [
+    '$window', function($window) {
+      return {
+        restrict: 'A',
+        link: function(scope, elem, attrs) {
+          return elem.on('click', function() {
+            return $window.history.back();
+          });
+        }
+      };
+    }
+  ]);
+
   module.directive('spinner', [
     '$rootScope', function($rootScope) {
       return {

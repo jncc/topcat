@@ -44,7 +44,9 @@
             <div class="col-md-6">
                 <br />
                 <div class="form-group text-right">
-                    <button  class="btn btn-primary"><span class="white glyphicon glyphicon-circle-arrow-left"></span> BACK</button>
+                    <button  class="btn btn-primary" tc-back-button>
+                        <span class="white glyphicon glyphicon-circle-arrow-left"></span> BACK
+                    </button>
                     &nbsp;
                     <button ng-click="cancel()"  class="btn">CANCEL</button> <!--ng-disabled="isCancelDisabled()"-->
                     <button ng-click="save()" class="btn btn-danger">SAVE</button> <!--ng-disabled="isSaveDisabled()"-->
@@ -52,8 +54,8 @@
             </div>
         </div>
         
+        <hr />
         <br />
-
         <div ng-view></div>
           
     </div>

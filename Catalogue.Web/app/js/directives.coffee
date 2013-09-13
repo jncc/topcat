@@ -12,6 +12,11 @@ module.directive 'autosize', () ->
     restrict: 'A', # attribute
     link: (scope, element, attrs) -> $(element).autosize()
 
+module.directive 'tcBackButton', [ '$window', ($window) ->
+    restrict: 'A',
+    link: (scope, elem, attrs) ->
+        elem.on 'click', () -> $window.history.back() ]
+
 module.directive 'spinner', [ '$rootScope', ($rootScope) ->
     restrict: 'A',
     link: (scope, elem, attrs) ->

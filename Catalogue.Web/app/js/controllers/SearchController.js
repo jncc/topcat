@@ -1,9 +1,10 @@
 ﻿(function() {
 
   angular.module('app.controllers').controller('SearchController', function($scope) {
-    return $scope.foo = {
+    $scope.foo = {
       bar: 'hello'
     };
+    return $scope.doSearch = function() {};
   });
 
 }).call(this);
