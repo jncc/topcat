@@ -37,7 +37,6 @@
       require: 'ngModel',
       link: function(scope, elem, attrs, ctrl) {
         return elem.on('blur', function(e) {
-          alert('hi');
           return scope.$apply(function() {
             return $http.post('../api/validator', {
               "value": elem.val()
