@@ -2,11 +2,13 @@
 
 module = angular.module 'app', [
     'ngRoute',
+    'app.utilities',
     'app.directives',
     'app.services',
     'app.controllers',
     ]
 
+angular.module 'app.utilities', []
 angular.module 'app.directives', []
 angular.module 'app.services', ['ngResource']
 angular.module 'app.controllers', []
