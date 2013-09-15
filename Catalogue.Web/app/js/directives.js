@@ -5,7 +5,6 @@
 
   module.directive('placeholder', function() {
     return {
-      restrict: 'A',
       link: function(scope, element, attrs) {
         return $(element).placeholder();
       }
@@ -14,7 +13,6 @@
 
   module.directive('autosize', function() {
     return {
-      restrict: 'A',
       link: function(scope, element, attrs) {
         return $(element).autosize();
       }
@@ -24,7 +22,6 @@
   module.directive('tcBackButton', [
     '$window', function($window) {
       return {
-        restrict: 'A',
         link: function(scope, elem, attrs) {
           return elem.on('click', function() {
             return $window.history.back();
@@ -37,7 +34,6 @@
   module.directive('spinner', [
     '$rootScope', function($rootScope) {
       return {
-        restrict: 'A',
         link: function(scope, elem, attrs) {
           elem.addClass('hide');
           $rootScope.$on('$routeChangeStart', function() {
@@ -70,7 +66,6 @@
 
   module.directive('tooltip', function() {
     return {
-      restrict: 'A',
       link: function(scope, elem, attrs) {
         return $(elem).tooltip({
           placement: 'auto',
@@ -83,9 +78,23 @@
     };
   });
 
+  module.directive('tcFocustip', function() {
+    return {
+      link: function(scope, elem, attrs) {
+        return $(elem).tooltip({
+          trigger: 'focus',
+          placement: 'top',
+          delay: {
+            show: 0,
+            hide: 100
+          }
+        });
+      }
+    };
+  });
+
   module.directive('locationclipboard', function() {
     return {
-      restrict: 'A',
       link: function(scope, elem, attrs) {
         var clip;
         clip = new ZeroClipboard($(elem));
@@ -106,21 +115,5 @@
       }
     };
   });
-
-  $.fn.highlightInputSelectionRange = function(start, end) {
-    return this.each(function() {
-      var range;
-      if (this.setSelectionRange) {
-        this.focus();
-        return this.setSelectionRange(start, end);
-      } else if (this.createTextRange) {
-        range = this.createTextRange();
-        range.collapse(true);
-        range.moveEnd('character', end);
-        range.moveStart('character', start);
-        return range.select();
-      }
-    });
-  };
 
 }).call(this);

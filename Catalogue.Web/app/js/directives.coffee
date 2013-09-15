@@ -35,6 +35,12 @@ module.directive 'tooltip', () ->
     link: (scope, elem, attrs) -> $(elem).tooltip 
         placement: 'auto',
         delay: show: 500, hide: 100
+
+module.directive 'tcFocustip', () ->
+    link: (scope, elem, attrs) -> $(elem).tooltip 
+        trigger: 'focus',
+        placement: 'top',
+        delay: show: 0, hide: 100
         
 
 module.directive 'locationclipboard', () ->
