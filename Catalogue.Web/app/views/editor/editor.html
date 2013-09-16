@@ -7,23 +7,23 @@
             <div class="col-md-12">
 
                 <div class="form-group">
-                    <input id="xname" type="text" ng-model="form.name" required autofocus placeholder="Name" class="form-control" style="font-size: larger"
+                    <input id="xname" type="text" ng-model="form.name" required placeholder="Name" class="form-control" style="font-size: larger"
                         title="This is the name"
-                        tooltip />
+                        tc-focus-tip />
                 </div>
                     
                 <div class="well well-sm form-group">
                     <div class="input-group">
                         <span class="input-group-addon well-input-group-addon"><span class="grey glyphicon glyphicon-th-large"></span></span>
 
-                        <input id="location" name="location" type="text" ng-model="form.location" class="form-control" placeholder="Location"
-                            required
-                            servervalidation />
+                        <input id="form-location" name="form.location" ng-model="form.location" type="text" class="form-control" placeholder="Location"
+                               tc-server-validation
+                                tc-focus-tip title="The location (path) of the resource on the file share or the web."/>
 
                         <span class="input-group-btn">
                             <button class="btn btn-primary" type="button"
                                 ng-disabled="!form.location"
-                                locationclipboard
+                                tc-copy-to-clipboard="form-location"
                                 data-clipboard-target="location">
                                 <span class="glyphicon glyphicon-new-window"></span>
                             </button>
@@ -69,13 +69,13 @@
                 </div>
 
                 <div class="form-group">
-                    <input type="text" ng-model="form.address.line1" size="33" tc-focustip title="blah blah blah" class="form-control" />
+                    <input type="text" ng-model="form.address.line1" size="33" tc-focus-tip title="blah blah blah" class="form-control" />
                 </div>
                 <div class="form-group">
-                    <textarea type="text" ng-model="form.address.city" rows="2" required autosize class="form-control"
+                    <textarea type="text" ng-model="form.address.city" rows="2" required tc-autosize class="form-control"
                                 placeholder="Abstract" 
                                 title="This is the abstract"
-                                tooltip></textarea>
+                                tc-focus-tip></textarea>
                 </div>
                 <div class="form-inline">
                     <div class="form-group">
@@ -135,7 +135,7 @@
                     <pre>form={{form}}</pre>
                         
                     <div class="form-group">
-                        <textarea type="text" rows="4" autosize class="form-control" placeholder="Notes" title="Notes to keep separate from the Gemini record"></textarea>
+                        <textarea type="text" rows="4" tc-autosize class="form-control" placeholder="Notes" title="Notes to keep separate from the Gemini record"></textarea>
                     </div>
 
                 </div>

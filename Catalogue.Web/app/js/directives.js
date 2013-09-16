@@ -11,7 +11,15 @@
     };
   });
 
-  module.directive('autosize', function() {
+  module.directive('autofocus', function() {
+    return {
+      link: function(scope, elem, attrs) {
+        return elem[0].focus();
+      }
+    };
+  });
+
+  module.directive('tcAutosize', function() {
     return {
       link: function(scope, element, attrs) {
         return $(element).autosize();
@@ -31,7 +39,7 @@
     }
   ]);
 
-  module.directive('spinner', [
+  module.directive('tcSpinner', [
     '$rootScope', function($rootScope) {
       return {
         link: function(scope, elem, attrs) {
@@ -47,7 +55,7 @@
     }
   ]);
 
-  module.directive('servervalidation', function($http) {
+  module.directive('tcServerValidation', function($http) {
     return {
       require: 'ngModel',
       link: function(scope, elem, attrs, ctrl) {
@@ -64,21 +72,7 @@
     };
   });
 
-  module.directive('tooltip', function() {
-    return {
-      link: function(scope, elem, attrs) {
-        return $(elem).tooltip({
-          placement: 'auto',
-          delay: {
-            show: 500,
-            hide: 100
-          }
-        });
-      }
-    };
-  });
-
-  module.directive('tcFocustip', function() {
+  module.directive('tcFocusTip', function() {
     return {
       link: function(scope, elem, attrs) {
         return $(elem).tooltip({
@@ -93,24 +87,28 @@
     };
   });
 
-  module.directive('locationclipboard', function() {
+  module.directive('tcCopyToClipboard', function() {
     return {
       link: function(scope, elem, attrs) {
         var clip;
         clip = new ZeroClipboard($(elem));
         return clip.on('complete', function(client, args) {
-          var l;
-          l = $('#location');
-          l.highlightInputSelectionRange(0, (l.val().length));
-          l.tooltip({
-            title: 'Copied to clipboard!',
-            trigger: 'manual',
-            container: 'body'
-          });
-          l.tooltip('show');
+          var t;
+          t = $('#' + attrs.tcCopyToClipboard);
+          console.log(t);
+          t.tooltip('destroy');
+          t.highlightInputSelectionRange(0, (t.val().length));
           return setTimeout((function() {
-            return l.tooltip('hide');
-          }), 2000);
+            t.tooltip({
+              html: 'Copied to clipboard!',
+              trigger: 'manual',
+              position: 'bottom'
+            });
+            t.tooltip('show');
+            return setTimeout((function() {
+              return t.tooltip('hide');
+            }), 2000);
+          }), 1000);
         });
       }
     };
