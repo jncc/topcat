@@ -4,15 +4,18 @@ module = angular.module 'app.directives'
 # use jquery placeholder plugin (for old IE)
 # in angular, we can use a custom directive with the same name as the html5 attribute!
 module.directive 'placeholder', () -> 
-    link: (scope, element, attrs) -> $(element).placeholder()
+    link: (scope, elem, attrs) -> $(elem).placeholder()
 
 # make autofocus work for old IE
 module.directive 'autofocus', () ->
-    link: (scope, elem, attrs) -> elem[0].focus(); # call focus on the raw dom object
+    link: (scope, elem, attrs) -> elem[0].focus() # call focus on the raw dom object
+
+module.directive 'tcAutofocusIfBlank', () ->
+    link: (scope, elem, attrs) -> elem[0].focus() if !elem.val()
 
 # use jquery autosize plugin to auto-expand textareas
 module.directive 'tcAutosize', () -> 
-    link: (scope, element, attrs) -> $(element).autosize()
+    link: (scope, elem, attrs) -> $(elem).autosize()
 
 module.directive 'tcBackButton', [ '$window', ($window) ->
     link: (scope, elem, attrs) ->

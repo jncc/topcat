@@ -5,8 +5,8 @@
 
   module.directive('placeholder', function() {
     return {
-      link: function(scope, element, attrs) {
-        return $(element).placeholder();
+      link: function(scope, elem, attrs) {
+        return $(elem).placeholder();
       }
     };
   });
@@ -19,10 +19,20 @@
     };
   });
 
+  module.directive('tcAutofocusIfBlank', function() {
+    return {
+      link: function(scope, elem, attrs) {
+        if (!elem.val()) {
+          return elem[0].focus();
+        }
+      }
+    };
+  });
+
   module.directive('tcAutosize', function() {
     return {
-      link: function(scope, element, attrs) {
-        return $(element).autosize();
+      link: function(scope, elem, attrs) {
+        return $(elem).autosize();
       }
     };
   });

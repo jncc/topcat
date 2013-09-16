@@ -1,47 +1,28 @@
 ﻿
-angular.module('app.controllers').controller 'EditorController', ($scope, defaults, $http, record) -> 
+angular.module('app.controllers').controller 'EditorController', 
 
-    $scope.lookups = {}
+    ($scope, defaults, $http, record) -> 
 
-    $http.get('../api/topics').success (result) -> $scope.lookups.topics = result
+        $scope.lookups = {}
+        $http.get('../api/topics').success (result) -> $scope.lookups.topics = result
+        $scope.state = /^\w\w$/
+        $scope.zip = /^\d\d\d\d\d$/
+
           
-    console.log record
-    alert 'hi'
-    #$scope.record = record
+        pristine = record
 
-    master = 
-        name: defaults.name,
-        address: 
-            line1: defaults.line1,
-            city: defaults.city,
-            state: defaults.state,
-            zip: defaults.zip,
-        contacts: [
-          type: 'phone', value: defaults.phone
-        ],
-        topic: ''
+        $scope.reset = () -> $scope.record = angular.copy(pristine)
 
-    $scope.state = /^\w\w$/
-    $scope.zip = /^\d\d\d\d\d$/
+        $scope.save = () ->
+            pristine = $scope.record
+            $scope.reset()
 
-    $scope.cancel = () -> $scope.form = angular.copy(master)
+        $scope.isResetDisabled = () -> angular.equals(pristine, $scope.record)
 
-    $scope.save = () ->
-        master = $scope.form
-        $scope.cancel()
+        $scope.isSaveDisabled = () -> angular.equals(pristine, $scope.form) # || $scope.theForm.$invalid 
 
-    $scope.addContact = () -> $scope.form.contacts.push({ type: '', value: '' })
-
-    $scope.removeContact = (contact) ->
-        i = $scope.form.contacts.indexOf contact # indexOf doesn't work in ie7!
-        $scope.form.contacts.splice i, 1
-
-    $scope.isCancelDisabled = () -> angular.equals(master, $scope.form)
-
-    $scope.isSaveDisabled = () -> angular.equals(master, $scope.form) # || $scope.theForm.$invalid 
-
-    # call scope.cancel() to initially set up form
-    $scope.cancel()
-    return
+        # call reset() to initially set up form
+        $scope.reset()
+        return
     
 
