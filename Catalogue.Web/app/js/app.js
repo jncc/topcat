@@ -1,7 +1,9 @@
 ﻿(function() {
   var module;
 
-  module = angular.module('app', ['ngRoute', 'app.directives', 'app.services', 'app.controllers']);
+  module = angular.module('app', ['ngRoute', 'app.utilities', 'app.directives', 'app.services', 'app.controllers']);
+
+  angular.module('app.utilities', []);
 
   angular.module('app.directives', []);
 
@@ -14,9 +16,14 @@
       return $routeProvider.when('/', {
         controller: 'SearchController',
         templateUrl: 'views/search/search.html'
-      }).when('/editor', {
+      }).when('/editor/:recordId', {
         controller: 'EditorController',
-        templateUrl: 'views/editor/editor.html'
+        templateUrl: 'views/editor/editor.html',
+        resolve: {
+          'record': function(RecordLoader) {
+            return RecordLoader();
+          }
+        }
       }).otherwise({
         redirectTo: '/'
       });

@@ -1,10 +1,14 @@
 ﻿
-angular.module('app.controllers').controller 'EditorController', ($scope, defaults, $http) -> 
+angular.module('app.controllers').controller 'EditorController', ($scope, defaults, $http, record) -> 
 
     $scope.lookups = {}
 
     $http.get('../api/topics').success (result) -> $scope.lookups.topics = result
           
+    console.log record
+    alert 'hi'
+    #$scope.record = record
+
     master = 
         name: defaults.name,
         address: 
@@ -39,5 +43,5 @@ angular.module('app.controllers').controller 'EditorController', ($scope, defaul
     # call scope.cancel() to initially set up form
     $scope.cancel()
     return
-
+    
 

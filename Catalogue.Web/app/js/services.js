@@ -11,6 +11,21 @@
     }
   ]);
 
+  module.factory('RecordLoader', function(Record, $route, $q) {
+    return function() {
+      var d;
+      d = $q.defer();
+      Record.get({
+        id: $route.current.params.recordId
+      }, function(record) {
+        return d.resolve(record);
+      }, function() {
+        return d.reject('Unable to fetch record ' + $route.current.params.recordId);
+      });
+      return d.promise;
+    };
+  });
+
   module.factory('defaults', function() {
     return {
       name: 'John Smit',

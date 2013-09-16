@@ -18,9 +18,10 @@ module.config ['$routeProvider', ($routeProvider) ->
         .when '/'
             controller: 'SearchController',
             templateUrl: 'views/search/search.html'
-        .when '/editor',
+        .when '/editor/:recordId',
             controller: 'EditorController',
-            templateUrl: 'views/editor/editor.html'
+            templateUrl: 'views/editor/editor.html',
+            resolve: 'record': (RecordLoader) -> RecordLoader() 
         .otherwise
             redirectTo: '/'
     ]

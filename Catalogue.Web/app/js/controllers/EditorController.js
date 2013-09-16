@@ -1,11 +1,13 @@
 ﻿(function() {
 
-  angular.module('app.controllers').controller('EditorController', function($scope, defaults, $http) {
+  angular.module('app.controllers').controller('EditorController', function($scope, defaults, $http, record) {
     var master;
     $scope.lookups = {};
     $http.get('../api/topics').success(function(result) {
       return $scope.lookups.topics = result;
     });
+    console.log(record);
+    alert('hi');
     master = {
       name: defaults.name,
       address: {

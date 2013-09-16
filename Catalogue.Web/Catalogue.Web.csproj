@@ -127,6 +127,7 @@
   <ItemGroup>
     <Compile Include="Controllers\Home\HomeController.cs" />
     <Compile Include="Controllers\Items\ItemsController.cs" />
+    <Compile Include="Controllers\Records\RecordsController.cs" />
     <Compile Include="Controllers\Sandbox\SandboxController.cs" />
     <Compile Include="Controllers\Topics\TopicModel.cs" />
     <Compile Include="Controllers\Topics\TopicsController.cs" />

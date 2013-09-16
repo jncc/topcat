@@ -67,7 +67,7 @@ namespace Catalogue.Gemini.Templates
                 TopicCategory = "geoscientificInformation",
                 Keywords = new Dictionary<string, string>
                     {
-                        { null, "sounding" },
+                        { "", "sounding" },
                         { "http://vocab.ndg.nerc.ac.uk/list/C751/220", "Bermuda Institute of Ocean Sciences" },
                     }
                     .ToKeywordsList(),
