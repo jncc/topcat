@@ -16,7 +16,7 @@ namespace Catalogue.Web.Controllers.Records
         {
             return new Record
                 {
-                    Metadata = Library.Example(),
+                    Gemini = Library.Example(),
                 };
         }
     }

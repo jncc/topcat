@@ -51,7 +51,7 @@ namespace Catalogue.Tests.Slow.Spatial
 //        {
 //            Db.Query<Record, Items_SpatialIndex>()
 //                .Customize(x => x.RelatesToShape(FieldNames.Spatial, Seeder.BoundingBoxContainingSmallBox, SpatialRelation.Intersects))
-//                .Where(i => i.Metadata.Title.StartsWith("Small"))
+//                .Where(i => i.Gemini.Title.StartsWith("Small"))
 //                .Count().Should().Be(1);
 //        }
     }

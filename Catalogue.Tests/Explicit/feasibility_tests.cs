@@ -61,7 +61,7 @@ namespace Catalogue.Tests.Explicit
                 {
                     var item = new Record
                         {
-                            Metadata = new Metadata
+                            Gemini = new Metadata
                                 {
                                     Title = x.File,
                                 },
@@ -92,7 +92,7 @@ namespace Catalogue.Tests.Explicit
             {
                 var results = db.Query<Record, Items_SpatialIndex>()
                     .Customize(x => x.RelatesToShape(FieldNames.Spatial, peakDistrictBbox, SpatialRelation.Intersects))
-                    .Where(i => i.Metadata.Title.StartsWith("GA"))
+                    .Where(i => i.Gemini.Title.StartsWith("GA"))
                     //.Take(10)
                     .ToList();
 

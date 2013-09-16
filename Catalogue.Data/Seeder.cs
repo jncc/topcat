@@ -61,7 +61,7 @@ namespace Catalogue.Data
         public static readonly Record SmallBox = new Record
         {
             Id = new Guid("764dcdea-1231-4494-bc18-6931cc8adcee"),
-            Metadata = new Metadata
+            Gemini = new Metadata
                 {
                     Title = "Small Box",
                     DataFormat = new DataFormat {Name = "csv" },

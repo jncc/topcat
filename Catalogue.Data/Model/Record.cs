@@ -7,7 +7,7 @@ namespace Catalogue.Data.Model
     {
         public Guid Id { get; set; }
 
-        public Metadata Metadata { get; set; }
+        public Metadata Gemini  { get; set; }
 
         public string   Wkt      { get; set; }
 

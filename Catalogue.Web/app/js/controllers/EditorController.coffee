@@ -9,17 +9,15 @@ angular.module('app.controllers').controller 'EditorController',
         $scope.zip = /^\d\d\d\d\d$/
 
           
-        pristine = record
-
-        $scope.reset = () -> $scope.record = angular.copy(pristine)
+        $scope.reset = () -> $scope.form = angular.copy(record)
 
         $scope.save = () ->
-            pristine = $scope.record
+            record = $scope.record
             $scope.reset()
 
-        $scope.isResetDisabled = () -> angular.equals(pristine, $scope.record)
+        $scope.isResetDisabled = () -> angular.equals($scope.form, record)
 
-        $scope.isSaveDisabled = () -> angular.equals(pristine, $scope.form) # || $scope.theForm.$invalid 
+        $scope.isSaveDisabled = () -> angular.equals($scope.form, record) # || $scope.theForm.$invalid 
 
         # call reset() to initially set up form
         $scope.reset()

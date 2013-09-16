@@ -6,26 +6,28 @@
             <div class="col-md-12">
 
                 <div class="form-group">
-                    <input id="xname" type="text" ng-model="record.metadata.title" required placeholder="Title" class="form-control"
+                    <input type="text" ng-model="form.gemini.title" required placeholder="Title" class="form-control"
                         style="font-size: larger"
                         title="The title or name of the resource"
-                        tc-autofocus-if-blank tc-focus-tip
-                        />
+                        required
+                        tc-autofocus-if-blank tc-focus-tip />
                 </div>
 
                 <div class="well well-sm form-group">
                     <div class="input-group">
                         <span class="input-group-addon well-input-group-addon"><span class="grey glyphicon glyphicon-th-large"></span></span>
 
-                        <input id="form-location" name="form.location" ng-model="form.location" type="text" class="form-control" placeholder="Location"
+                        <input id="form-gemini-resourceLocator" name="form.gemini.resourceLocator" ng-model="form.gemini.resourceLocator" 
+                            type="text" class="form-control" 
+                            placeholder="Location"
                             tc-server-validation
                             tc-focus-tip title="The path to the resource on the file share or the web" />
 
                         <span class="input-group-btn">
                             <button class="btn btn-primary" type="button"
-                                ng-disabled="!form.location"
-                                tc-copy-to-clipboard="form-location"
-                                data-clipboard-target="location">
+                                ng-disabled="!form.gemini.resourceLocator"
+                                tc-copy-to-clipboard="form-gemini-resourceLocator"
+                                data-clipboard-target="form-gemini-resourceLocator">
                                 <span class="glyphicon glyphicon-new-window"></span>
                             </button>
                         </span>
