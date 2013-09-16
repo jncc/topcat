@@ -19,9 +19,6 @@ textarea {
 .well-input-group-addon {
   background-color: white;
 }
-div[class="tooltip-inner"] {
-  max-width: 100%;
-}
 form .ng-dirty.ng-invalid {
   border: 1px solid #FF1493;
   background-color: #f9f2f4;
