@@ -8,7 +8,7 @@
 
                 <div class="form-group">
                     <input id="xname" type="text" ng-model="form.name" required placeholder="Name" class="form-control" style="font-size: larger"
-                        title="This is the name"
+                        title="The title or name of the resource"
                         tc-focus-tip />
                 </div>
                     
@@ -18,7 +18,7 @@
 
                         <input id="form-location" name="form.location" ng-model="form.location" type="text" class="form-control" placeholder="Location"
                                tc-server-validation
-                                tc-focus-tip title="The location (path) of the resource on the file share or the web."/>
+                                tc-focus-tip title="The path to the resource on the file share or the web"/>
 
                         <span class="input-group-btn">
                             <button class="btn btn-primary" type="button"
@@ -60,7 +60,7 @@
                                     ng-model="form.topic"
                                     ng-options="topic.key for topic in lookups.topics"
                                     class="form-control"
-                                    title="Topic">
+                                    title="The main theme of the data resource">
                                     <option value="" disabled selected style="display: none">Topic</option>
                                 </select>                                    
                             </div>
@@ -74,7 +74,7 @@
                 <div class="form-group">
                     <textarea type="text" ng-model="form.address.city" rows="2" required tc-autosize class="form-control"
                                 placeholder="Abstract" 
-                                title="This is the abstract"
+                                title="A clear, brief summary of the content of the resource"
                                 tc-focus-tip></textarea>
                 </div>
                 <div class="form-inline">
