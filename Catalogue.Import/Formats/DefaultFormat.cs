@@ -12,7 +12,7 @@ namespace Catalogue.Import.Formats
             // see http://joshclose.github.io/CsvHelper/
 
             config.RegisterClassMap<DefaultRecordMap>();
-            //config.RegisterClassMap<DefaultMetadataMap>();
+            config.RegisterClassMap<DefaultMetadataMap>();
         }
     }
 
@@ -21,6 +21,7 @@ namespace Catalogue.Import.Formats
         public override void CreateMap()
         {
             Map(m => m.Notes).Name("Notes");
+            References<DefaultMetadataMap>(m => m.Gemini);
         }
     }
 
