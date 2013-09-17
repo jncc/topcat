@@ -35,21 +35,16 @@ namespace Catalogue.Tests.Slow.Catalogue.Import
             db = store.OpenSession();
         }
 
-        [TearDown]
-        public void test_down()
-        {
-            db.Dispose();
-        }
-
         [Test]
-        public void should_import_all_records_in_test_data()
+        public void should_import_all_records()
         {
             db.Query<Record>().Count().Should().Be(2);
         }
 
         [Test]
-        public void should_import_gemini_component()
+        public void should_import_gemini_object()
         {
+            // make sure that the importer is filling in the gemini object as well as the top-level field(s)
             var record = db.Query<Record>().Single(r => r.Notes == "These are the notes");
             record.Gemini.Abstract.Should().Be("This is the abstract");
         }
@@ -58,6 +53,12 @@ namespace Catalogue.Tests.Slow.Catalogue.Import
 @"Abstract,Notes,Blah
 This is the abstract,These are the notes
 Another abstract,Some more notes";
+
+        [TearDown]
+        public void test_down()
+        {
+            db.Dispose();
+        }
 
     }
 }
