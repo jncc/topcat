@@ -65,6 +65,16 @@
     }
   ]);
 
+  module.directive('tcDatepicker', function() {
+    return {
+      link: function(scope, elem, attrs) {
+        return $(elem).datepicker({
+          format: 'yyyy-dd-mm'
+        });
+      }
+    };
+  });
+
   module.directive('tcServerValidation', function($http) {
     return {
       require: 'ngModel',

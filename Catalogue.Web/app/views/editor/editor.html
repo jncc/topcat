@@ -2,6 +2,7 @@
 
     <form name="theForm">
 
+        <!-- title-and-location  -->
         <div class="row">
             <div class="col-md-12">
 
@@ -43,6 +44,7 @@
             <div class="col-md-9">
 
 
+                <!-- tags and topic  -->
                 <div class="row form-group">
                     <div class="col-md-8">
                         <div class="form-inline">
@@ -70,25 +72,45 @@
                         </div>
                     </div>
                 </div>
+                
+                <!-- abstract -->
+                <div class="form-group">
+                    <textarea type="text" ng-model="form.gemini.abstract" rows="2" class="form-control"
+                              placeholder="Abstract"
+                              title="A clear, brief summary of the content of the resource"
+                              tc-focus-tip tc-autosize></textarea>
+                </div>
+
 
                 <div class="form-group">
-                    <input type="text" ng-model="form.address.line1" size="33" tc-focus-tip title="blah blah blah" class="form-control" />
-                </div>
-                <div class="form-group">
-                    <textarea type="text" ng-model="form.address.city" rows="2" required tc-autosize class="form-control"
-                        placeholder="Abstract"
-                        title="A clear, brief summary of the content of the resource"
-                        tc-focus-tip></textarea>
-                </div>
-                <div class="form-inline">
-                    <div class="form-group">
-                        <input type="text" ng-model="form.address.state" size="2" ng-pattern="state" required class="form-control" />
+                    <div class="row">
+                        <div class="col-md-3">
+                            <div class="input-group">
+                                <input type="text" class="form-control date"
+                                    name="form.gemini.temporalExtent.begin" ng-model="form.gemini.temporalExtent.begin"
+                                    placeholder="yyyy-mm-dd"
+                                    tc-datepicker
+                                    tc-focus-tip title="The dates covered by the data resource" />
+                                <span class="input-group-addon"><span class="grey glyphicon glyphicon-calendar"></span></span>
+                                <span class="grey glyphicon glyphicon-chevron-right" style="margin-left: 2em;"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="input-group">
+                                <input type="text" class="form-control date"
+                                    name="form.gemini.temporalExtent.end" ng-model="form.gemini.temporalExtent.end"
+                                    placeholder="yyyy-mm-dd"
+                                    tc-datepicker
+                                    tc-focus-tip title="The dates covered by the data resource" />
+                                <span class="input-group-addon"><span class="grey glyphicon glyphicon-calendar"></span></span>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                        </div>
                     </div>
-                    <span class="grey glyphicon glyphicon-arrow-right"></span>
-                    <div class="form-group">
-                        <input type="text" ng-model="form.address.zip" size="5" ng-pattern="zip" required class="form-control" />
-                    </div>
                 </div>
+
+
 
                 <hr />
                 <div class="well well-sm">

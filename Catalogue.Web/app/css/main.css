@@ -1,4 +1,7 @@
-﻿h1 {
+﻿html {
+  overflow-y: scroll;
+}
+h1 {
   opacity: .5;
 }
 .placeholder {
@@ -18,6 +21,9 @@ textarea {
 }
 .well-input-group-addon {
   background-color: white;
+}
+.datexx {
+  width: 10em;
 }
 form .ng-dirty.ng-invalid {
   border: 1px solid #FF1493;

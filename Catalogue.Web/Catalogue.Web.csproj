@@ -198,6 +198,8 @@
     <Content Include="app\lib\bootstrap-3.0.0\css\bootstrap.min.css" />
     <Content Include="app\lib\bootstrap-3.0.0\js\bootstrap.js" />
     <Content Include="app\lib\bootstrap-3.0.0\js\bootstrap.min.js" />
+    <Content Include="app\lib\datepicker\css\datepicker.css" />
+    <Content Include="app\lib\datepicker\js\bootstrap-datepicker.js" />
     <Content Include="app\lib\jquery-1.10.2\jquery.min.js" />
     <Content Include="app\lib\jquery-placeholder-2.0.7\demo.html" />
     <Content Include="app\lib\jquery-placeholder-2.0.7\jquery.placeholder.js" />
@@ -228,6 +230,8 @@
     <Content Include="app\lib\zeroclipboard-1.1.7\ZeroClipboard.min.js" />
     <Content Include="app\lib\zeroclipboard-1.1.7\ZeroClipboard.swf" />
     <Content Include="app\views\editor\editor.html" />
+    <Content Include="app\views\editor\tags-and-topic.html" />
+    <Content Include="app\views\editor\title-and-location.html" />
     <Content Include="app\views\search\search.html" />
     <Content Include="favicon.ico" />
     <Content Include="Global.asax" />
@@ -289,6 +293,9 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="app\js\utilities.coffee" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="app\lib\datepicker\less\datepicker.less" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
