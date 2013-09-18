@@ -23,9 +23,12 @@
 <br />
 
 
-<div ng-show="results.results"> 
-    {{results.count}}
+<div ng-show="q.value"> 
+    Showing {{results.results.length || 0 }} of {{results.total || 0}} results
+    <span ng-show="results.speed">({{results.speed / 1000}} seconds)</span>
+    <hr />
 </div>
+
 <div ng-repeat="r in results.results">
     <div>
         <div class=""><a ng-href="#/editor/{{r.id}}">{{r.title}}</a></div>

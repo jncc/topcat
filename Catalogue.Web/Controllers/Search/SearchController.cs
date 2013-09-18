@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading;
 using System.Web;
@@ -19,13 +20,16 @@ namespace Catalogue.Web.Controllers.Search
                             new ResultOutputModel { Id = Guid.NewGuid(), Title = "Yet another result", Snippet = "This is yet another result" },
                         };
 
+            var watch = Stopwatch.StartNew();
             var results = data.Where(d => d.Title.Contains(q) || d.Snippet.Contains(q)).ToList();
 
-            Thread.Sleep(2000);
+            Thread.Sleep(1000);
             return new SearchOutputModel
                 {
                     Total = results.Count,
-                    Results = results
+                    Results = results,
+                    Speed = watch.ElapsedMilliseconds,
+                    Query = q,
                 };
         }
     }

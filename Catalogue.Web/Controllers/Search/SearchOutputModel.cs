@@ -8,7 +8,10 @@ namespace Catalogue.Web.Controllers.Search
     public class SearchOutputModel
     {
         public int Total { get; set; }
-        public List<ResultOutputModel> Results { get; set; } 
+        public List<ResultOutputModel> Results { get; set; }
+        public long Speed { get; set; }
+
+        public string Query { get; set; }
     }
 
     public class ResultOutputModel
