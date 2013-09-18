@@ -1,10 +1,18 @@
 ﻿(function() {
 
-  angular.module('app.controllers').controller('SearchController', function($scope) {
-    $scope.foo = {
-      bar: 'hello'
+  angular.module('app.controllers').controller('SearchController', function($scope, $location) {
+    alert('hi');
+    $scope.query = {
+      q: ''
     };
-    return $scope.doSearch = function() {};
+    $scope.$watch('query.q', function(q) {
+      return $location.search('q', q);
+    });
+    return $scope.$watch(function() {
+      return $location.search()['q'];
+    }, function() {
+      return $scope.query.q = $location.search()['q'] || '';
+    });
   });
 
 }).call(this);

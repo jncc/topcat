@@ -8,7 +8,7 @@
 <div class="form-group">
                     <div class="input-group">
                         
-                        <input name="q" type="text" class="form-control" autofocus />
+                        <input name="q" type="text" class="form-control" autofocus ng-model="query.q" />
 
                         <span class="input-group-btn">
                             <button class="btn btn-primary" type="button" style="width: 60px">
@@ -22,6 +22,5 @@
     </div>
 </div>
 
-<form role="form" class="form-search">
-</form>
+{{query.q}}
 

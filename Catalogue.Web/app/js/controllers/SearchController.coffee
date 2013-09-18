@@ -1,6 +1,14 @@
 ﻿
 
-angular.module('app.controllers').controller 'SearchController', ($scope) ->
-    $scope.foo = { bar : 'hello' }
+angular.module('app.controllers').controller 'SearchController', ($scope, $location) ->
 
-    $scope.doSearch = () ->
+    alert 'hi'
+    $scope.query = { q: '' }
+
+    $scope.$watch 'query.q', (q) -> $location.search('q', q)
+
+    $scope.$watch(
+        () -> $location.search()['q']
+        () -> $scope.query.q = $location.search()['q'] || ''
+    )
+

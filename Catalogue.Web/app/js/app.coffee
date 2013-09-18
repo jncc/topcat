@@ -17,7 +17,8 @@ module.config ['$routeProvider', ($routeProvider) ->
     $routeProvider
         .when '/'
             controller: 'SearchController',
-            templateUrl: 'views/search/search.html'
+            templateUrl: 'views/search/search.html',
+            reloadOnSearch: false,
         .when '/editor/:recordId',
             controller: 'EditorController',
             templateUrl: 'views/editor/editor.html',

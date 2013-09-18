@@ -129,6 +129,8 @@
     <Compile Include="Controllers\Items\ItemsController.cs" />
     <Compile Include="Controllers\Records\RecordsController.cs" />
     <Compile Include="Controllers\Sandbox\SandboxController.cs" />
+    <Compile Include="Controllers\Search\SearchController.cs" />
+    <Compile Include="Controllers\Search\SearchOutputModel.cs" />
     <Compile Include="Controllers\Topics\TopicModel.cs" />
     <Compile Include="Controllers\Topics\TopicsController.cs" />
     <Compile Include="Controllers\Validator\ValidatorController.cs" />
