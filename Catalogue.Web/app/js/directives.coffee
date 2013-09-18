@@ -23,11 +23,11 @@ module.directive 'tcBackButton', [ '$window', ($window) ->
 
 module.directive 'tcSpinner', [ '$rootScope', ($rootScope) ->
     link: (scope, elem, attrs) ->
-        elem.addClass 'hide'
+        elem.addClass 'ng-hide'
         $rootScope.$on '$routeChangeStart', () ->
-            elem.removeClass 'hide'
+            elem.removeClass 'ng-hide'
         $rootScope.$on '$routeChangeSuccess', () ->
-            elem.addClass 'hide' ]
+            elem.addClass 'ng-hide' ]
 
 module.directive 'tcDatepicker', () ->
     link: (scope, elem, attrs) ->

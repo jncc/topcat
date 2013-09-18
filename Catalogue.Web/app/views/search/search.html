@@ -4,23 +4,36 @@
 
 <div class="row">
     <div class="col-lg-8 col-lg-offset-2">
-        
-<div class="form-group">
-                    <div class="input-group">
+        <div class="form-group">
+            <div class="input-group">
                         
-                        <input name="q" type="text" class="form-control" autofocus ng-model="query.q" />
+                <input name="q.value" ng-model="q.value" type="text" class="form-control" autofocus />
 
-                        <span class="input-group-btn">
-                            <button class="btn btn-primary" type="button" style="width: 60px">
-                                <span class="glyphicon glyphicon-search"></span>
-                            </button>
-                        </span>
-                    </div>
-                </div>
+                <span class="input-group-btn">
+                    <button class="btn btn-primary" type="button" style="width: 60px">
+                        <span class="glyphicon glyphicon-search"></span>
+                    </button>
+                </span>
 
-
+            </div>
+        </div>
     </div>
 </div>
+
+<br />
+
+
+<div ng-show="results.results"> 
+    {{results.count}}
+</div>
+<div ng-repeat="r in results.results">
+    <div>
+        <div class=""><a ng-href="#/editor/{{r.id}}">{{r.title}}</a></div>
+        <p>{{r.snippet}}</p>
+    </div>
+    <hr />
+</div>
+
 
 {{query.q}}
 

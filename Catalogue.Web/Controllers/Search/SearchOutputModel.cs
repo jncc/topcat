@@ -7,7 +7,7 @@ namespace Catalogue.Web.Controllers.Search
 {
     public class SearchOutputModel
     {
-        public int TotalResults { get; set; }
+        public int Total { get; set; }
         public List<ResultOutputModel> Results { get; set; } 
     }
 

@@ -53,12 +53,12 @@
     '$rootScope', function($rootScope) {
       return {
         link: function(scope, elem, attrs) {
-          elem.addClass('hide');
+          elem.addClass('ng-hide');
           $rootScope.$on('$routeChangeStart', function() {
-            return elem.removeClass('hide');
+            return elem.removeClass('ng-hide');
           });
           return $rootScope.$on('$routeChangeSuccess', function() {
-            return elem.addClass('hide');
+            return elem.addClass('ng-hide');
           });
         }
       };
