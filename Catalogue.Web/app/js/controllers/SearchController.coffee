@@ -3,25 +3,29 @@
 angular.module('app.controllers').controller 'SearchController',
     ($scope, $rootScope, $location, $http) ->
 
-        search = (q) ->
-            $location.search('q', q) # update the url
-            if q
+        # note: $location.search is the angular api for the querystring value
+         
+        doSearch = (query) ->
+            $location.search('q', query.q) # update the url
+            if query.q
                 $rootScope.busy = { value: true }
-                $http.get('../api/search?q=' + q).success (results) ->
+                # search the server
+                $http.get('../api/search?q=' + query.q).success (result) ->
                     $rootScope.busy = { value: false }
-                    if results.query == $scope.q.value # don't overwrite faster queries!
-                        $scope.results = results
+                    # don't overwrite with old slow results!
+                    if angular.equals result.query, $scope.query
+                        $scope.result = result
             else
-                $scope.results = {}
+                $scope.result = {}
 
-        $scope.q = { value: '' }
+        $scope.query = { q: '', p: 1 }
 
         # when the model query value is updated, do the search
-        $scope.$watch 'q.value', search 
+        $scope.$watch 'query', doSearch, true
 
         # when the url query value is updated, update the model query value
         $scope.$watch(
-            ()  -> $location.search()['q']
-            (q) -> $scope.q.value = q || ''
+            ()  -> $location.search()['q'] #todo watch and update whole querystring
+            (q) -> $scope.query.q = q || ''
         )
 

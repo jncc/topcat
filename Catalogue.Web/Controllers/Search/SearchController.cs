@@ -11,7 +11,7 @@ namespace Catalogue.Web.Controllers.Search
     public class SearchController : ApiController
     {
         // GET api/search?q=blah
-        public SearchOutputModel Get(string q)
+        public SearchOutputModel Get(string q, int p = 1)
         {
             var data = new List<ResultOutputModel>
                         {
@@ -29,7 +29,7 @@ namespace Catalogue.Web.Controllers.Search
                     Total = results.Count,
                     Results = results,
                     Speed = watch.ElapsedMilliseconds,
-                    Query = q,
+                    Query = new QueryOutputModel { Q = q, P = p,}
                 };
         }
     }

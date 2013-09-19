@@ -1,27 +1,32 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Configuration;
 using System.Web;
 using System.Web.Http;
 using System.Web.Mvc;
-using System.Web.Optimization;
 using System.Web.Routing;
+using Catalogue.Data.Model;
 using Newtonsoft.Json.Serialization;
+using Raven.Client;
+using Raven.Client.Document;
+using Raven.Client.Embedded;
+using Raven.Database.Server;
 
 namespace Catalogue.Web
 {
     public class WebApiApplication : HttpApplication
     {
+        public static IDocumentStore DocumentStore { get; private set; }
+
         protected void Application_Start()
         {
             AreaRegistration.RegisterAllAreas();
-
             ConfigWebApi(GlobalConfiguration.Configuration);
             RegisterRoutes(RouteTable.Routes);
 
             // we want to serialize PascalCase .NET properties with camelCase in json responses
             GlobalConfiguration.Configuration.Formatters.JsonFormatter.SerializerSettings.ContractResolver =
                 new CamelCasePropertyNamesContractResolver();
+
+            InitializeDataStore();
         }
 
         static void ConfigWebApi(HttpConfiguration config)
@@ -42,6 +47,29 @@ namespace Catalogue.Web
                 url: "{controller}/{action}/{id}",
                 defaults: new { controller = "Home", action = "Index", id = UrlParameter.Optional }
             );
+        }
+
+        static void InitializeDataStore()
+        {
+            if (ConfigurationManager.AppSettings["Environment"] == "Dev")
+            {
+                // use in-memory database for development
+                var s = new EmbeddableDocumentStore();
+                const int port = 8888;
+                s.Configuration.Port = port;
+                NonAdminHttp.EnsureCanListenToWhenInNonAdminContext(port);
+                s.RunInMemory = true;
+                s.UseEmbeddedHttpServer = true;
+
+                DocumentStore = s;
+            }
+            else
+            {
+                DocumentStore = new DocumentStore { ConnectionStringName = "Data" };
+            }
+
+            DocumentStore.Initialize();
+            Raven.Client.Indexes.IndexCreation.CreateIndexes(typeof(Record).Assembly, DocumentStore);
         }
     }
 }

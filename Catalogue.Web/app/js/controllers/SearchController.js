@@ -1,33 +1,34 @@
 ﻿(function() {
 
   angular.module('app.controllers').controller('SearchController', function($scope, $rootScope, $location, $http) {
-    var search;
-    search = function(q) {
-      $location.search('q', q);
-      if (q) {
+    var doSearch;
+    doSearch = function(query) {
+      $location.search('q', query.q);
+      if (query.q) {
         $rootScope.busy = {
           value: true
         };
-        return $http.get('../api/search?q=' + q).success(function(results) {
+        return $http.get('../api/search?q=' + query.q).success(function(result) {
           $rootScope.busy = {
             value: false
           };
-          if (results.query === $scope.q.value) {
-            return $scope.results = results;
+          if (angular.equals(result.query, $scope.query)) {
+            return $scope.result = result;
           }
         });
       } else {
-        return $scope.results = {};
+        return $scope.result = {};
       }
     };
-    $scope.q = {
-      value: ''
+    $scope.query = {
+      q: '',
+      p: 1
     };
-    $scope.$watch('q.value', search);
+    $scope.$watch('query', doSearch, true);
     return $scope.$watch(function() {
       return $location.search()['q'];
     }, function(q) {
-      return $scope.q.value = q || '';
+      return $scope.query.q = q || '';
     });
   });
 

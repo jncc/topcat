@@ -7,7 +7,7 @@
         <div class="form-group">
             <div class="input-group">
                         
-                <input name="q.value" ng-model="q.value" type="text" class="form-control" autofocus />
+                <input name="query.q" ng-model="query.q" type="text" class="form-control" autofocus />
 
                 <span class="input-group-btn">
                     <button class="btn btn-primary" type="button" style="width: 60px">
@@ -23,20 +23,28 @@
 <br />
 
 
-<div ng-show="q.value"> 
-    Showing {{results.results.length || 0 }} of {{results.total || 0}} results
-    <span ng-show="results.speed">({{results.speed / 1000}} seconds)</span>
+<div ng-show="query.q"> 
+    Showing {{result.results.length || 0 }} of {{result.total || 0}} results
+    <span ng-show="result.speed">({{result.speed / 1000}} seconds)</span>
     <hr />
 </div>
 
-<div ng-repeat="r in results.results">
+<div ng-repeat="r in result.results">
     <div>
         <div class=""><a ng-href="#/editor/{{r.id}}">{{r.title}}</a></div>
         <p>{{r.snippet}}</p>
     </div>
-    <hr />
 </div>
 
-
-{{query.q}}
-
+<div class="text-center" ng-show="result.total > result.results.length">
+    <!-- todo -->
+    <ul class="pagination">
+        <li class="disabled"><a href="">&laquo;</a></li>
+        <li class="active"><a href="">1 <span class="sr-only">(current)</span></a></li>
+        <li><a href="#">2</a></li>
+        <li><a href="#">3</a></li>
+        <li><a href="#">4</a></li>
+        <li><a href="#">5</a></li>
+        <li><a href="#">&raquo;</a></li>
+    </ul>
+</div>
