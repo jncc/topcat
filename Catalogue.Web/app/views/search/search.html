@@ -28,7 +28,7 @@
 
 <div ng-show="query.q"> 
     Showing {{result.results.length || 0 }} of {{result.total || 0}} results
-    <span ng-show="result.speed">({{result.speed / 1000}} seconds)</span>
+    <span ng-show="result.speed">({{(result.speed / 1000) | number:2}} seconds)</span>
     <hr />
 </div>
 
