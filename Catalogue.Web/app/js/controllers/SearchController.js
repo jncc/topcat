@@ -8,7 +8,7 @@
         $rootScope.busy = {
           value: true
         };
-        return $http.get('../api/search?q=' + query.q).success(function(result) {
+        return $http.get('../api/search?' + $.param(query)).success(function(result) {
           $rootScope.busy = {
             value: false
           };
@@ -21,7 +21,7 @@
       }
     };
     $scope.query = {
-      q: '',
+      q: $location.search()['q'] || '',
       p: 1
     };
     $scope.$watch('query', doSearch, true);

@@ -37,33 +37,29 @@
     };
   });
 
-  module.directive('tcBackButton', [
-    '$window', function($window) {
-      return {
-        link: function(scope, elem, attrs) {
-          return elem.on('click', function() {
-            return $window.history.back();
-          });
-        }
-      };
-    }
-  ]);
+  module.directive('tcBackButton', function($window) {
+    return {
+      link: function(scope, elem, attrs) {
+        return elem.on('click', function() {
+          return $window.history.back();
+        });
+      }
+    };
+  });
 
-  module.directive('tcSpinner', [
-    '$rootScope', function($rootScope) {
-      return {
-        link: function(scope, elem, attrs) {
-          elem.addClass('ng-hide');
-          $rootScope.$on('$routeChangeStart', function() {
-            return elem.removeClass('ng-hide');
-          });
-          return $rootScope.$on('$routeChangeSuccess', function() {
-            return elem.addClass('ng-hide');
-          });
-        }
-      };
-    }
-  ]);
+  module.directive('tcSpinner', function($rootScope) {
+    return {
+      link: function(scope, elem, attrs) {
+        elem.addClass('ng-hide');
+        $rootScope.$on('$routeChangeStart', function() {
+          return elem.removeClass('ng-hide');
+        });
+        return $rootScope.$on('$routeChangeSuccess', function() {
+          return elem.addClass('ng-hide');
+        });
+      }
+    };
+  });
 
   module.directive('tcDatepicker', function() {
     return {

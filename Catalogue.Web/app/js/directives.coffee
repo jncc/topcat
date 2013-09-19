@@ -13,21 +13,27 @@ module.directive 'autofocus', () ->
 module.directive 'tcAutofocusIfBlank', () ->
     link: (scope, elem, attrs) -> elem[0].focus() if !elem.val()
 
+# eat the click (used on the search page) for old IE
+module.directive 'tcEatClick', () ->
+    link: (scope, elem, attrs) ->
+        $(elem).click (e) -> e.preventDefault()
+    }
+})
 # use jquery autosize plugin to auto-expand textareas
 module.directive 'tcAutosize', () -> 
     link: (scope, elem, attrs) -> $(elem).autosize()
 
-module.directive 'tcBackButton', [ '$window', ($window) ->
+module.directive 'tcBackButton', ($window) ->
     link: (scope, elem, attrs) ->
-        elem.on 'click', () -> $window.history.back() ]
+        elem.on 'click', () -> $window.history.back()
 
-module.directive 'tcSpinner', [ '$rootScope', ($rootScope) ->
+module.directive 'tcSpinner', ($rootScope) ->
     link: (scope, elem, attrs) ->
         elem.addClass 'ng-hide'
         $rootScope.$on '$routeChangeStart', () ->
             elem.removeClass 'ng-hide'
         $rootScope.$on '$routeChangeSuccess', () ->
-            elem.addClass 'ng-hide' ]
+            elem.addClass 'ng-hide'
 
 module.directive 'tcDatepicker', () ->
     link: (scope, elem, attrs) ->
