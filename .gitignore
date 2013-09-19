@@ -109,5 +109,6 @@ UpgradeLog*.XML
 
 
 # our specific ignores:
+Catalogue.Web/local.config
 build/Output
 __emails/
