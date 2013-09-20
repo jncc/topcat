@@ -7,7 +7,7 @@
     it('should redirect to /', function() {
       return expect(browser().location().path()).toBe('/');
     });
-    return it('query parameter values should be empty ', function() {
+    return it('should have empty query parameter values', function() {
       var v, _i, _len, _ref, _results;
       _ref = browser().location().search();
       _results = [];
@@ -25,8 +25,13 @@
     beforeEach(function() {
       return input('query.q').enter('result');
     });
-    return it('should return 3 results', function() {
-      return expect(repeater('.search-result').count()).toEqual(3);
+    it('should return 3 results', function() {
+      return expect(repeater('.search-result').count()).toBe(3);
+    });
+    return it('should update search querystring correctly', function() {
+      return expect(browser().location().search()).toEqual({
+        q: 'result'
+      });
     });
   });
 

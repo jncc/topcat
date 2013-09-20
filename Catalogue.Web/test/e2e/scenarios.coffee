@@ -11,7 +11,7 @@ describe 'when starting the app', ->
     it 'should redirect to /', ->
         expect(browser().location().path()).toBe '/'
 
-    it 'query parameter values should be empty ', ->
+    it 'should have empty query parameter values', ->
         for v in browser().location().search()
             do (v) -> expect(v).toBe ''
 
@@ -21,4 +21,7 @@ describe 'when searching for "result"', ->
         input('query.q').enter 'result'
     
     it 'should return 3 results', ->
-        expect(repeater('.search-result').count()).toEqual 3 
+        expect(repeater('.search-result').count()).toBe 3 
+
+    it 'should update search querystring correctly', ->
+        expect( browser().location().search() ).toEqual { q: 'result' }
