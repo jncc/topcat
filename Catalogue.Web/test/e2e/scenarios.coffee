@@ -25,3 +25,18 @@ describe 'when searching for "result"', ->
 
     it 'should update search querystring correctly', ->
         expect( browser().location().search() ).toEqual { q: 'result' }
+
+describe 'when deleting all search box content', ->
+    
+    beforeEach ->
+        input('query.q').enter 'result'
+        input('query.q').enter 'resul'
+        input('query.q').enter 'resu'
+        input('query.q').enter 'res'
+        input('query.q').enter 're'
+        input('query.q').enter 'r'
+        input('query.q').enter ''
+
+    it 'should show no results', ->
+        expect(repeater('.search-result').count()).toBe 0 
+
