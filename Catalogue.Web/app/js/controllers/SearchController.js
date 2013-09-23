@@ -15,6 +15,10 @@
           if (angular.equals(result.query, $scope.query)) {
             return $scope.result = result;
           }
+        }).error(function() {
+          return $rootScope.busy = {
+            value: false
+          };
         });
       } else {
         return $scope.result = {};

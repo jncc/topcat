@@ -10,12 +10,13 @@ angular.module('app.controllers').controller 'SearchController',
             if query.q
                 $rootScope.busy = { value: true }
                 # search the server
-                $http.get('../api/search?' + $.param query).success (result) ->
-                    $rootScope.busy = { value: false }
-                    # don't overwrite with old slow results!
-                    if angular.equals result.query, $scope.query
-                        $scope.result = result
-                        
+                $http.get('../api/search?' + $.param query)
+                    .success (result) ->
+                        $rootScope.busy = { value: false }
+                        # don't overwrite with old slow results!
+                        if angular.equals result.query, $scope.query
+                            $scope.result = result
+                    .error () -> $rootScope.busy = { value: false }
             else
                 $scope.result = {}
 
@@ -30,4 +31,3 @@ angular.module('app.controllers').controller 'SearchController',
             ()  -> $location.search()['q'] #todo watch and update whole querystring
             (q) -> $scope.query.q = q || ''
         )
-

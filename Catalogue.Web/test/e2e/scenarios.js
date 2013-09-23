@@ -37,12 +37,6 @@
 
   describe('when deleting all search box content', function() {
     beforeEach(function() {
-      input('query.q').enter('result');
-      input('query.q').enter('resul');
-      input('query.q').enter('resu');
-      input('query.q').enter('res');
-      input('query.q').enter('re');
-      input('query.q').enter('r');
       return input('query.q').enter('');
     });
     return it('should show no results', function() {

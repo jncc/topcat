@@ -18,9 +18,9 @@
       Record.get({
         id: $route.current.params.recordId
       }, function(record) {
-        return d.resolve(record);
-      }, function() {
-        return d.reject('Unable to fetch record ' + $route.current.params.recordId);
+        return d.resolve(record, function() {
+          return d.reject('Unable to fetch record ' + $route.current.params.recordId);
+        });
       });
       return d.promise;
     };
