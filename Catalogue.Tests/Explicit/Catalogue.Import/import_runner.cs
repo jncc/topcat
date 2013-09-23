@@ -4,7 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Catalogue.Data.Import;
-using Catalogue.Data.Import.Formats;
+using Catalogue.Data.Import.Mappings;
+using Catalogue.Data.Write;
 using Catalogue.Tests.Utility;
 using NUnit.Framework;
 using Raven.Client.Document;
@@ -23,7 +24,7 @@ namespace Catalogue.Tests.Explicit.Catalogue.Import
 
             using (var db = store.OpenSession())
             {
-                var importer = new Importer<DefaultFormat>(new FileSystem(), db);
+                var importer = new Importer<MeshMapping>(new FileSystem(), new RecordService(db));
                 importer.Import(@"C:\Users\Pete\Desktop\mesh.csv");
             }
         }

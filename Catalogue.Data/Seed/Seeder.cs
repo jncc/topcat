@@ -3,8 +3,9 @@ using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
 using Catalogue.Data.Import;
-using Catalogue.Data.Import.Formats;
+using Catalogue.Data.Import.Mappings;
 using Catalogue.Data.Model;
+using Catalogue.Data.Write;
 using Catalogue.Gemini.Model;
 using Raven.Client;
 
@@ -41,7 +42,7 @@ namespace Catalogue.Data.Seed
 
             using (var reader = new StreamReader(s))
             {
-                var importer = new Importer<DefaultFormat>(new FileSystem(), db);
+                var importer = new Importer<MeshMapping>(new FileSystem(), new RecordService(db));
                 importer.Import(reader);
             }
         }

@@ -1,57 +1,42 @@
 ﻿using System.IO;
-using System.Linq;
 using Catalogue.Data.Import;
-using Catalogue.Data.Import.Formats;
+using Catalogue.Data.Import.Mappings;
 using Catalogue.Data.Model;
+using Catalogue.Data.Write;
 using Catalogue.Gemini.Model;
-using Catalogue.Tests.Utility;
 using CsvHelper.Configuration;
-using FluentAssertions;
 using Moq;
 using NUnit.Framework;
-using Raven.Client;
-using Raven.Client.Embedded;
 
-namespace Catalogue.Tests.Slow.Catalogue.Import
+namespace Catalogue.Tests.Fast.Catalogue.Data.Import
 {
-    class when_importing_test_data
+    class when_importing_test_records
     {
-        IDocumentStore store;
-        IDocumentSession db;
+        IRecordService recordService;
 
         [SetUp]
         public void setup()
         {
-            store = new EmbeddableDocumentStore { RunInMemory = true };
-            store.Initialize();
+            recordService = Mock.Of<IRecordService>();
 
             string path = @"c:\some\path.csv";
             var fileSystem = Mock.Of<IFileSystem>(fs => fs.OpenReader(path) == new StringReader(testData));
 
-            using (var x = store.OpenSession())
-            {
-                var importer = new Importer<TestDataFormat>(fileSystem, x);
-                importer.Import(path);
-
-                x.SaveChanges();
-            }
-
-            RavenUtility.WaitForIndexing(store);
-            db = store.OpenSession();
+            var importer = new Importer<TestDataMapping>(fileSystem, recordService);
+            importer.Import(path);
         }
 
         [Test]
-        public void should_import_all_records()
+        public void should_import_both_records()
         {
-            db.Query<Record>().Count().Should().Be(2);
+            Mock.Get(recordService).Verify(s => s.Insert(It.IsAny<Record>()), Times.Exactly(2));
         }
 
         [Test]
         public void should_import_gemini_object()
         {
             // make sure that the importer is filling in the gemini object as well as the top-level field(s)
-            var record = db.Query<Record>().Single(r => r.Notes == "These are the notes");
-            record.Gemini.Abstract.Should().Be("This is the abstract");
+            Mock.Get(recordService).Verify(s => s.Insert(It.Is((Record r) => r.Gemini.Abstract == "This is the abstract")));
         }
 
         string testData =
@@ -59,18 +44,11 @@ namespace Catalogue.Tests.Slow.Catalogue.Import
 This is the abstract,These are the notes
 Another abstract,Some more notes";
 
-        [TearDown]
-        public void tear_down()
-        {
-            if (db != null)
-                db.Dispose();
-        }
-
     }
 
-    public class TestDataFormat : IFormat
+    public class TestDataMapping : IMapping
     {
-        public void Configure(CsvConfiguration config)
+        public void Apply(CsvConfiguration config)
         {
             // see http://joshclose.github.io/CsvHelper/
 
@@ -95,5 +73,4 @@ Another abstract,Some more notes";
             }
         }
     }
-
 }

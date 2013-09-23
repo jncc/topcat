@@ -1,21 +1,21 @@
 ﻿using System;
 using System.IO;
-using Catalogue.Data.Import.Formats;
+using Catalogue.Data.Import.Mappings;
 using Catalogue.Data.Model;
+using Catalogue.Data.Write;
 using CsvHelper;
-using Raven.Client;
 
 namespace Catalogue.Data.Import
 {
-    public class Importer<T> where T : IFormat, new()
+    public class Importer<T> where T : IMapping, new()
     {
         readonly IFileSystem fileSystem;
-        readonly IDocumentSession db;
+        readonly IRecordService recordService;
 
-        public Importer(IFileSystem fileSystem, IDocumentSession db)
+        public Importer(IFileSystem fileSystem, IRecordService recordService)
         {
             this.fileSystem = fileSystem;
-            this.db = db;
+            this.recordService = recordService;
         }
 
         public void Import(string path)
@@ -30,14 +30,14 @@ namespace Catalogue.Data.Import
         {
             var csv = new CsvReader(reader);
 
-            var format = Activator.CreateInstance<T>();
-            format.Configure(csv.Configuration);
+            var mapping = Activator.CreateInstance<T>();
+            mapping.Apply(csv.Configuration);
 
             var records = csv.GetRecords<Record>();
 
             foreach (var record in records)
             {
-                db.Store(record);
+                recordService.Insert(record);
             }
         }
      }

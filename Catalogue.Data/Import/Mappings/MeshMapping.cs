@@ -2,11 +2,14 @@
 using Catalogue.Gemini.Model;
 using CsvHelper.Configuration;
 
-namespace Catalogue.Data.Import.Formats
+namespace Catalogue.Data.Import.Mappings
 {
-    public class DefaultFormat : IFormat
+    /// <summary>
+    /// The mappings for importing the Marine Habitat (MESH) data.
+    /// </summary>
+    public class MeshMapping : IMapping
     {
-        public void Configure(CsvConfiguration config)
+        public void Apply(CsvConfiguration config)
         {
             // see http://joshclose.github.io/CsvHelper/
 
