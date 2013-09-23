@@ -3,9 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Catalogue.Import;
-using Catalogue.Import.Formats;
-using Catalogue.Import.Utilities;
+using Catalogue.Data.Import;
+using Catalogue.Data.Import.Formats;
 using Catalogue.Tests.Utility;
 using NUnit.Framework;
 using Raven.Client.Document;
@@ -19,10 +18,14 @@ namespace Catalogue.Tests.Explicit.Catalogue.Import
         public void run()
         {
             var store = new DocumentStore();
+            store.ParseConnectionString("Url=http://localhost:8888/");
             store.Initialize();
 
-            var importer = new Importer<DefaultFormat>(new FileSystem(), store);
-            importer.Import(@"c:\work\mesh\mesh.csv");
+            using (var db = store.OpenSession())
+            {
+                var importer = new Importer<DefaultFormat>(new FileSystem(), db);
+                importer.Import(@"C:\Users\Pete\Desktop\mesh.csv");
+            }
         }
     }
 }

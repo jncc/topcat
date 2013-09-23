@@ -20,6 +20,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <UseVSHostingProcess>false</UseVSHostingProcess>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -95,10 +96,6 @@
     <ProjectReference Include="..\Catalogue.Gemini\Catalogue.Gemini.csproj">
       <Project>{b4789e53-cc5c-4e4e-8358-fc9739846ccc}</Project>
       <Name>Catalogue.Gemini</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Catalogue.Import\Catalogue.Import.csproj">
-      <Project>{4619213b-5246-4a6a-a6bf-1bdbbab36a3d}</Project>
-      <Name>Catalogue.Import</Name>
     </ProjectReference>
     <ProjectReference Include="..\Catalogue.Utilities\Catalogue.Utilities.csproj">
       <Project>{b6b90aa2-bf70-4460-a975-5192ab5ecdca}</Project>

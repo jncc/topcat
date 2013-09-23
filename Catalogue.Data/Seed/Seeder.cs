@@ -1,14 +1,14 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.IO;
+using System.Reflection;
+using Catalogue.Data.Import;
+using Catalogue.Data.Import.Formats;
 using Catalogue.Data.Model;
 using Catalogue.Gemini.Model;
 using Raven.Client;
-using Raven.Client.Document;
 
-namespace Catalogue.Data
+namespace Catalogue.Data.Seed
 {
     public class Seeder
     {
@@ -23,19 +23,35 @@ namespace Catalogue.Data
         {
             using (var db = store.OpenSession())
             {
-                new Seeder(db).AddItems();
+                var s = new Seeder(db);
+
+                s.AddVocabularies();
+                s.AddMeshRecords();
+                s.AddBboxes();
+
                 db.SaveChanges();
             }
         }
 
-        void AddItems()
+        void AddMeshRecords()
         {
-            AddVocabularies();
+            // load the seed data file from the embedded resource
+            string resource = "Catalogue.Data.Seed.mesh.csv";
+            var s = Assembly.GetExecutingAssembly().GetManifestResourceStream(resource);
 
-            db.Store(SmallBox);
+            using (var reader = new StreamReader(s))
+            {
+                var importer = new Importer<DefaultFormat>(new FileSystem(), db);
+                importer.Import(reader);
+            }
         }
 
-        private void AddVocabularies()
+        void AddBboxes()
+        {
+            this.db.Store(SmallBox);
+        }
+
+        void AddVocabularies()
         {
             var jnccCategories = new Vocabulary
                 {
@@ -49,7 +65,7 @@ namespace Catalogue.Data
                             "marine-activities-pressures-data",
                         }
                 };
-            db.Store(jnccCategories);
+            this.db.Store(jnccCategories);
         }
 
         // BigBoundingBoxWithNothingInside and SmallBox do not intersect

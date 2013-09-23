@@ -1,26 +1,21 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
+using Catalogue.Data.Import.Formats;
 using Catalogue.Data.Model;
-using Catalogue.Import.Formats;
-using Catalogue.Import.Utilities;
 using CsvHelper;
-using CsvHelper.Configuration;
 using Raven.Client;
 
-namespace Catalogue.Import
+namespace Catalogue.Data.Import
 {
     public class Importer<T> where T : IFormat, new()
     {
         readonly IFileSystem fileSystem;
-        readonly IDocumentStore store;
+        readonly IDocumentSession db;
 
-        public Importer(IFileSystem fileSystem, IDocumentStore store)
+        public Importer(IFileSystem fileSystem, IDocumentSession db)
         {
             this.fileSystem = fileSystem;
-            this.store = store;
+            this.db = db;
         }
 
         public void Import(string path)
@@ -40,14 +35,9 @@ namespace Catalogue.Import
 
             var records = csv.GetRecords<Record>();
 
-            using (var db = store.OpenSession())
+            foreach (var record in records)
             {
-                foreach (var record in records)
-                {
-                    db.Store(record);
-                }
-
-                db.SaveChanges();
+                db.Store(record);
             }
         }
      }

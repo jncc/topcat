@@ -1,11 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Catalogue.Data;
+﻿using System.Linq;
 using Catalogue.Data.Indexes;
 using Catalogue.Data.Model;
+using Catalogue.Data.Seed;
 using Catalogue.Tests.Utility;
 using FluentAssertions;
 using NUnit.Framework;

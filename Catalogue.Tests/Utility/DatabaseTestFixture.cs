@@ -1,5 +1,6 @@
 using Catalogue.Data;
 using Catalogue.Data.Model;
+using Catalogue.Data.Seed;
 using NUnit.Framework;
 using Raven.Client;
 using Raven.Client.Embedded;

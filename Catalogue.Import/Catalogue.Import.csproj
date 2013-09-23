@@ -55,7 +55,6 @@
     <Compile Include="Importer.cs" />
     <Compile Include="Formats\DefaultFormat.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Utilities\FileSystem.cs" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>

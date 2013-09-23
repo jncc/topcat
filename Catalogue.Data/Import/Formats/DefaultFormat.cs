@@ -1,9 +1,8 @@
-﻿using System;
-using Catalogue.Data.Model;
+﻿using Catalogue.Data.Model;
 using Catalogue.Gemini.Model;
 using CsvHelper.Configuration;
 
-namespace Catalogue.Import.Formats
+namespace Catalogue.Data.Import.Formats
 {
     public class DefaultFormat : IFormat
     {
@@ -19,8 +18,8 @@ namespace Catalogue.Import.Formats
         {
             public override void CreateMap()
             {
-                Map(m => m.Notes).Ignore();
-                References<MetadataMap>(m => m.Gemini);
+                this.Map(m => m.Notes).Ignore();
+                this.References<MetadataMap>(m => m.Gemini);
             }
         }
 
@@ -28,8 +27,8 @@ namespace Catalogue.Import.Formats
         {
             public override void CreateMap()
             {
-                Map(m => m.Title);
-                Map(m => m.Abstract);
+                this.Map(m => m.Title);
+                this.Map(m => m.Abstract);
             }
         }
     }
