@@ -4,6 +4,7 @@ using System.Web.Http;
 using System.Web.Mvc;
 using System.Web.Routing;
 using Catalogue.Data.Model;
+using Catalogue.Data.Seed;
 using Newtonsoft.Json.Serialization;
 using Raven.Client;
 using Raven.Client.Document;
@@ -60,15 +61,18 @@ namespace Catalogue.Web
                 NonAdminHttp.EnsureCanListenToWhenInNonAdminContext(port);
                 s.RunInMemory = true;
                 s.UseEmbeddedHttpServer = true;
+                s.Initialize();
+                // seed the database with dev-time data
+                Seeder.Seed(s);
 
                 DocumentStore = s;
             }
             else
             {
                 DocumentStore = new DocumentStore { ConnectionStringName = "Data" };
+                DocumentStore.Initialize();
             }
 
-            DocumentStore.Initialize();
             Raven.Client.Indexes.IndexCreation.CreateIndexes(typeof(Record).Assembly, DocumentStore);
         }
     }
