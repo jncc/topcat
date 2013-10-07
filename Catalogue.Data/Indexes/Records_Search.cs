@@ -13,20 +13,15 @@ namespace Catalogue.Data.Indexes
     {
         public class ReduceResult
         {
-//            public Guid Id { get; set; }
             public string Title { get; set; }
-//            public string Abstract { get; set; }
         }
 
         public Records_Search()
         {
             Map = records => from record in records
-                             let t  = record.Gemini.Title
                              select new
                                  {
-//                                     record.Id,
-                                     Title = t,
-//                                     record.Gemini.Abstract,
+                                     Title = record.Gemini.Title,
                                  };
 
             Index(x => x.Title, FieldIndexing.Analyzed);

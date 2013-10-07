@@ -12,6 +12,7 @@ using Catalogue.Data.Write;
 using Catalogue.Tests.Utility;
 using FluentAssertions;
 using NUnit.Framework;
+using Raven.Client;
 using Raven.Client.Embedded;
 using Raven.Client.Indexes;
 
@@ -22,8 +23,20 @@ namespace Catalogue.Tests.Explicit
         [Explicit, Test]
         public void can_search()
         {
+            // sanity check the seed data has loaded
             Db.Query<Record>().Count().Should().BeGreaterThan(100);
+            
 
+            var list = Db.Advanced.LuceneQuery<Record>("Records/Search")
+                .Search("Title", "North")
+                .ToList();
+
+            foreach (var record in list)
+            {
+                Console.WriteLine(record.Gemini.Title);
+            }
+
+            list.Count.Should().BeGreaterThan(0);
         }
     }
 }
