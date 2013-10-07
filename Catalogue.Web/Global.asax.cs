@@ -9,6 +9,7 @@ using Newtonsoft.Json.Serialization;
 using Raven.Client;
 using Raven.Client.Document;
 using Raven.Client.Embedded;
+using Raven.Client.Indexes;
 using Raven.Database.Server;
 
 namespace Catalogue.Web
@@ -73,7 +74,7 @@ namespace Catalogue.Web
                 DocumentStore.Initialize();
             }
 
-            Raven.Client.Indexes.IndexCreation.CreateIndexes(typeof(Record).Assembly, DocumentStore);
+            IndexCreation.CreateIndexes(typeof(Record).Assembly, DocumentStore);
         }
     }
 }

@@ -90,7 +90,7 @@ namespace Catalogue.Tests.Explicit
 
             using (var db = store.OpenSession())
             {
-                var results = db.Query<Record, Items_SpatialIndex>()
+                var results = db.Query<Record, Records_SpatialIndex>()
                     .Customize(x => x.RelatesToShape(FieldNames.Spatial, peakDistrictBbox, SpatialRelation.Intersects))
                     .Where(i => i.Gemini.Title.StartsWith("GA"))
                     //.Take(10)

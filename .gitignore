@@ -110,5 +110,6 @@ UpgradeLog*.XML
 
 # our specific ignores:
 Catalogue.Web/local.config
+Catalogue.Web/Raven
 build/Output
 __emails/
