@@ -17,35 +17,13 @@ using Raven.Client.Indexes;
 
 namespace Catalogue.Tests.Explicit
 {
-    class exploratory_search_tests
+    class exploratory_search_tests : DatabaseTestFixture
     {
         [Explicit, Test]
         public void can_search()
         {
-            var store = new EmbeddableDocumentStore { RunInMemory = true };
-            store.Initialize();
-            
-            using (var db = store.OpenSession())
-            {
-                string resource = "Catalogue.Data.Seed.mesh.csv";
-                var s = Assembly.GetAssembly(typeof(Record)).GetManifestResourceStream(resource);
+            Db.Query<Record>().Count().Should().BeGreaterThan(100);
 
-                using (var reader = new StreamReader(s))
-                {
-                    var importer = new Importer<MeshMapping>(new FileSystem(), new RecordService(db));
-                    importer.Import(reader);
-                }
-
-                db.SaveChanges();
-            }
-
-            IndexCreation.CreateIndexes(typeof(Record).Assembly, store);
-            RavenUtility.WaitForIndexing(store);
-
-            using (var db = store.OpenSession())
-            {
-                db.Query<Record>().Count().Should().BeGreaterThan(100);
-            }
         }
     }
 }
