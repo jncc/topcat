@@ -28,6 +28,7 @@ namespace Catalogue.Web.Controllers.Search
 //                                .Highlight("Title", 128, 2, out lites)
 //                                .SetHighlighterTags("<span style='background: yellow'>", "</span>")
                                 .Search("Title", q + "*").Boost(10)
+                                .Search("Abstract", q + "*")
                                 .Take(25)
                                 .ToList();
 
