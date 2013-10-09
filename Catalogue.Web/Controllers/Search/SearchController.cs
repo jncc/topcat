@@ -20,19 +20,29 @@ namespace Catalogue.Web.Controllers.Search
 
             using (var db = WebApiApplication.DocumentStore.OpenSession())
             {
-                var results = db.Query<Records_Search.ReduceResult, Records_Search>() // Query<Record>("Records_Search")
-                  .Search(x => x.Title, q)
-                  .Take(10)
-                  .ToList();
+                RavenQueryStatistics stats;
+                FieldHighlightings lites;
+
+                var results = db.Advanced.LuceneQuery<Record>("Records/Search")
+                                .Statistics(out stats)
+//                                .Highlight("Title", 128, 2, out lites)
+//                                .SetHighlighterTags("<span style='background: yellow'>", "</span>")
+                                .Search("Title", q + "*").Boost(10)
+                                .Take(25)
+                                .ToList();
+
+                
+//                var fs = lites.GetFragments("Records/" + results.First().Id);
+                
 
                 return new SearchOutputModel
                     {
-                        Total = results.Count,
+                        Total = stats.TotalResults,
                         Results = results.Select(r => new ResultOutputModel
                             {
-                                Id = Guid.NewGuid(), // r.Id,
-                                Title = r.Title,
-                                Snippet = "", //r.Gemini.Abstract,
+                                Id = r.Id,
+                                Title = r.Gemini.Title,
+                                Snippet = r.Gemini.Abstract,
                             })
                             .ToList(),
                         Speed = watch.ElapsedMilliseconds,

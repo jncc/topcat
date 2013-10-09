@@ -13,8 +13,6 @@ using Catalogue.Tests.Utility;
 using FluentAssertions;
 using NUnit.Framework;
 using Raven.Client;
-using Raven.Client.Embedded;
-using Raven.Client.Indexes;
 
 namespace Catalogue.Tests.Explicit
 {
@@ -25,10 +23,10 @@ namespace Catalogue.Tests.Explicit
         {
             // sanity check the seed data has loaded
             Db.Query<Record>().Count().Should().BeGreaterThan(100);
-            
 
+            string q = "broad bio";
             var list = Db.Advanced.LuceneQuery<Record>("Records/Search")
-                .Search("Title", "North")
+                .Search("Title", q + "*").Boost(10)
                 .ToList();
 
             foreach (var record in list)
