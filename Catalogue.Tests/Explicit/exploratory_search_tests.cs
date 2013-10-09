@@ -36,5 +36,24 @@ namespace Catalogue.Tests.Explicit
 
             list.Count.Should().BeGreaterThan(0);
         }
+
+        [Test]
+        public void should_be_able_to_highlight_search_terms()
+        {
+            FieldHighlightings lites;
+            string q = "north";
+
+            var results = Db.Advanced.LuceneQuery<Record>("Records/Search")
+                                .Highlight("Title", 128, 2, out lites)
+                                .SetHighlighterTags("<strong>", "</strong>")
+                                .Search("Title", q).Boost(10)
+                                .Take(10)
+                                .ToList();
+
+            results.Count.Should().Be(10);
+            lites.FieldName.Should().Be("Title");
+            lites.GetFragments("records/" + results.First().Id).First().Should().ContainEquivalentOf("<strong>north</strong>");
+
+        }
     }
 }

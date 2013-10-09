@@ -25,10 +25,10 @@ namespace Catalogue.Web.Controllers.Search
 
                 var results = db.Advanced.LuceneQuery<Record>("Records/Search")
                                 .Statistics(out stats)
-//                                .Highlight("Title", 128, 2, out lites)
-//                                .SetHighlighterTags("<span style='background: yellow'>", "</span>")
-                                .Search("Title", q + "*").Boost(10)
-                                .Search("Abstract", q + "*")
+                                .Highlight("Title", 128, 2, out lites)
+                                .SetHighlighterTags("<strong>", "</strong>")
+                                .Search("Title", q).Boost(10)
+                                .Search("Abstract", q)
                                 .Take(25)
                                 .ToList();
 
