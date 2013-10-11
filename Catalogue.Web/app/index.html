@@ -1,7 +1,7 @@
 ﻿<!DOCTYPE html>
 <html ng-app="app" id="ng-app">
 <head>
-    <title>Topcat</title>
+    <title>Catalogue</title>
     <meta name="viewport" content="width=device-width">
 
     <link href="lib/bootstrap-3.0.0/css/bootstrap.min.css" rel="stylesheet">
@@ -41,21 +41,21 @@
         <div class="row ">
             <div class="col-md-6">
                 <h1>
-                    <img src="img/logo.gif" alt="logo" height="50" width="80"> topcat 
+                    <img src="img/logo.gif" alt="logo" height="50" width="80"> catalogue 
                     <span tc-spinner ng-show="busy.value"><img src="img/spinner.gif"/></span>
                 </h1>
             </div>
         
             <div class="col-md-6">
-                <br />
-                <div class="form-group text-right">
-                    <button  class="btn btn-primary" tc-back-button>
-                        <span class="white glyphicon glyphicon-circle-arrow-left"></span> BACK
-                    </button>
-                    &nbsp;
-                    <button ng-click="cancel()"  class="btn">CANCEL</button> <!--ng-disabled="isCancelDisabled()"-->
-                    <button ng-click="save()" class="btn btn-danger">SAVE</button> <!--ng-disabled="isSaveDisabled()"-->
-                </div>
+<!--                <br />-->
+<!--                <div class="form-group text-right">-->
+<!--                    <button  class="btn btn-primary" tc-back-button>-->
+<!--                        <span class="white glyphicon glyphicon-circle-arrow-left"></span> BACK-->
+<!--                    </button>-->
+<!--                    &nbsp;-->
+<!--                    <button ng-click="cancel()"  class="btn">CANCEL</button> $1$ng-disabled="isCancelDisabled()"#1#-->
+<!--                    <button ng-click="save()" class="btn btn-danger">SAVE</button> $1$ng-disabled="isSaveDisabled()"#1#-->
+<!--                </div>-->
             </div>
         </div>
         
@@ -63,9 +63,11 @@
         <br />
         <div ng-view></div>
           
-        <nav class="navbar navbar-default navbar-fixed-bottom text-center" role="navigation">
-            Go to <a ng-href="#/editor/123">editor</a>.
-        </nav>
+        <br class="clearfix" />
+
+<!--        <nav class="navbar navbar-default navbar-fixed-bottom text-center" role="navigation">-->
+<!--            Go to <a ng-href="#/editor/123">editor</a>.-->
+<!--        </nav>-->
 
     </div>
 
