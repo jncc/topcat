@@ -25,20 +25,23 @@ namespace Catalogue.Web.Controllers.Search
             {
                 RavenQueryStatistics stats;
                 FieldHighlightings titleLites;
-                FieldHighlightings title2Lites;
+                FieldHighlightings titleNLites;
                 FieldHighlightings abstractLites;
+                FieldHighlightings abstractNLites;
 
                 string pattern = q; // +"*";
 
                 var query = db.Advanced.LuceneQuery<Record>("Records/Search")
                                 .Statistics(out stats)
                                 .Highlight("Title", 202, 1, out titleLites)
-                                .Highlight("Lineage", 202, 1, out title2Lites)
+                                .Highlight("TitleN", 202, 1, out titleNLites)
                                 .Highlight("Abstract", 202, 1, out abstractLites)
+                                .Highlight("AbstractN", 202, 1, out abstractNLites)
                                 .SetHighlighterTags("<b>", "</b>")
                                 .Search("Title", pattern).Boost(10)
-                                .Search("Lineage", pattern)
-                                .Search("Abstract", pattern);
+                                .Search("TitleN", pattern)
+                                .Search("Abstract", pattern)
+                                .Search("AbstractN", pattern);
 
                 var results = query.Take(25).ToList();
 
@@ -48,8 +51,8 @@ namespace Catalogue.Web.Controllers.Search
                             select new
                                 {
                                     result = r,
-                                    titleFragments = titleLites.GetFragments("records/" + r.Id).Concat(title2Lites.GetFragments("records/" + r.Id)),
-                                    abstractFragments = abstractLites.GetFragments("records/" + r.Id),
+                                    titleFragments = titleLites.GetFragments("records/" + r.Id).Concat(titleNLites.GetFragments("records/" + r.Id)),
+                                    abstractFragments = abstractLites.GetFragments("records/" + r.Id).Concat(abstractNLites.GetFragments("records/" + r.Id)),
                                 };                
 
                 return new SearchOutputModel

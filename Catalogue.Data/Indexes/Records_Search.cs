@@ -12,8 +12,16 @@ using Raven.Client.Indexes;
 
 namespace Catalogue.Data.Indexes
 {
-    public class Records_Search : AbstractIndexCreationTask<Record, Metadata>
+    public class Records_Search : AbstractIndexCreationTask<Record, Records_Search.Shape>
     {
+        public class Shape
+        {
+            public string Title { get; set; }
+            public string TitleN { get; set; }
+            public string Abstract { get; set; }
+            public string AbstractN { get; set; }
+        }
+
         public Records_Search()
         {
             Map = records => from record in records
@@ -21,22 +29,27 @@ namespace Catalogue.Data.Indexes
                                  {
                                      // redundant explicit property names are actually needed - index doesn't work properly without!
                                      Title = record.Gemini.Title,
-                                     Lineage = record.Gemini.Title, 
-                                     Abstract = record.Gemini.Abstract
+                                     TitleN = record.Gemini.Title, 
+                                     Abstract = record.Gemini.Abstract,
+                                     AbstractN = record.Gemini.Abstract,
                                  };
 
             Analyze(x => x.Title, typeof(StemAnalyzer).AssemblyQualifiedName);
             Stores.Add(x => x.Title, FieldStorage.Yes);
             TermVector(x => x.Title, FieldTermVector.WithPositionsAndOffsets);
 
-            Analyze(x => x.Lineage, typeof(NGramAnalyzer).AssemblyQualifiedName);
-            Stores.Add(x => x.Lineage, FieldStorage.Yes);
-            TermVector(x => x.Lineage, FieldTermVector.WithPositionsAndOffsets);
+            Analyze(x => x.TitleN, typeof(NGramAnalyzer).AssemblyQualifiedName);
+            Stores.Add(x => x.TitleN, FieldStorage.Yes);
+            TermVector(x => x.TitleN, FieldTermVector.WithPositionsAndOffsets);
 
 
-            Analyze(x => x.Abstract, typeof(NGramAnalyzer).AssemblyQualifiedName);
+            Analyze(x => x.Abstract, typeof(StemAnalyzer).AssemblyQualifiedName);
             Stores.Add(x => x.Abstract, FieldStorage.Yes);
             TermVector(x => x.Abstract, FieldTermVector.WithPositionsAndOffsets);
+
+            Analyze(x => x.AbstractN, typeof(NGramAnalyzer).AssemblyQualifiedName);
+            Stores.Add(x => x.AbstractN, FieldStorage.Yes);
+            TermVector(x => x.AbstractN, FieldTermVector.WithPositionsAndOffsets);
         }
     }
 }
