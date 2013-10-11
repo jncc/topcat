@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Catalogue.Data.Analyzers;
 using Catalogue.Data.Model;
 using Catalogue.Gemini.Model;
 using Raven.Abstractions.Indexing;
@@ -22,11 +23,11 @@ namespace Catalogue.Data.Indexes
                                      Abstract = record.Gemini.Abstract
                                  };
 
-            Index(x => x.Title, FieldIndexing.Analyzed);
+            Analyze(x => x.Title, typeof(NGramAnalyzer).AssemblyQualifiedName);
             Stores.Add(x => x.Title, FieldStorage.Yes);
             TermVector(x => x.Title, FieldTermVector.WithPositionsAndOffsets);
 
-            Index(x => x.Abstract, FieldIndexing.Analyzed);
+            Analyze(x => x.Abstract, typeof(NGramAnalyzer).AssemblyQualifiedName);
             Stores.Add(x => x.Abstract, FieldStorage.Yes);
             TermVector(x => x.Abstract, FieldTermVector.WithPositionsAndOffsets);
         }

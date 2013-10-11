@@ -2,6 +2,7 @@
 
 module = angular.module 'app', [
     'ngRoute',
+    'ngSanitize',
     'app.utilities',
     'app.directives',
     'app.services',

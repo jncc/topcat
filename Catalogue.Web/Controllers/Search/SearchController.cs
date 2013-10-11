@@ -7,6 +7,7 @@ using System.Web;
 using System.Web.Http;
 using Catalogue.Data.Indexes;
 using Catalogue.Data.Model;
+using Raven.Abstractions.Data;
 using Raven.Client;
 
 namespace Catalogue.Web.Controllers.Search
@@ -24,15 +25,19 @@ namespace Catalogue.Web.Controllers.Search
                 FieldHighlightings titleLites;
                 FieldHighlightings abstractLites;
 
-                var results = db.Advanced.LuceneQuery<Record>("Records/Search")
+                string pattern = q; // +"*";
+
+                var query = db.Advanced.LuceneQuery<Record>("Records/Search")
                                 .Statistics(out stats)
-                                .Highlight("Title", 128, 2, out titleLites)
+                                .Highlight("Title", 500, 1, out titleLites)
                                 .Highlight("Abstract", 128, 2, out abstractLites)
                                 .SetHighlighterTags("<strong>", "</strong>")
-                                .Search("Title", q).Boost(10)
-                                .Search("Abstract", q)
-                                .Take(25)
-                                .ToList();
+                                .Search("Title", pattern).Boost(10)
+                                .Search("Abstract", pattern);
+
+                var results = query.Take(25).ToList();
+
+                //var suggestions = db.Query<Record>() query..Suggest(new SuggestionQuery { Field = "Name", Term = "Orin" });
 
                 var xs = from r in results
                             select new

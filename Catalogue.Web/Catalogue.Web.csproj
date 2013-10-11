@@ -219,6 +219,7 @@
     </Content>
     <Content Include="app\lib\angular-1.2.0-rc.2\angular-resource.min.js" />
     <Content Include="app\lib\angular-1.2.0-rc.2\angular-route.min.js" />
+    <Content Include="app\lib\angular-1.2.0-rc.2\angular-sanitize.min.js" />
     <Content Include="app\lib\angular-1.2.0-rc.2\angular.min.js" />
     <Content Include="app\lib\angular-strap-0.7.5\angular-strap-min.js" />
     <Content Include="app\lib\autosize-1.17.2\demo.html" />

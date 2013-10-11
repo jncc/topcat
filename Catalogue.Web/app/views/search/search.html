@@ -34,8 +34,8 @@
 
 <div ng-repeat="r in result.results">
     <div tc-search-result class="search-result">
-        <div class=""><a ng-href="#/editor/{{r.id}}">{{r.title}}</a></div>
-        <p>{{r.snippet}}</p>
+        <div class=""><a ng-href="#/editor/{{r.id}}" ng-bind-html="r.title"></a></div>
+        <p ng-bind-html="r.snippet"></p>
     </div>
 </div>
 
