@@ -45,8 +45,6 @@ namespace Catalogue.Web.Controllers.Search
 
                 var results = query.Take(25).ToList();
 
-                //var suggestions = db.Query<Record>() query..Suggest(new SuggestionQuery { Field = "Name", Term = "Orin" });
-
                 var xs = from r in results
                             select new
                                 {
