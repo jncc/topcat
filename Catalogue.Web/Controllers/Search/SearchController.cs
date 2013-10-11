@@ -25,6 +25,7 @@ namespace Catalogue.Web.Controllers.Search
             {
                 RavenQueryStatistics stats;
                 FieldHighlightings titleLites;
+                FieldHighlightings title2Lites;
                 FieldHighlightings abstractLites;
 
                 string pattern = q; // +"*";
@@ -32,9 +33,11 @@ namespace Catalogue.Web.Controllers.Search
                 var query = db.Advanced.LuceneQuery<Record>("Records/Search")
                                 .Statistics(out stats)
                                 .Highlight("Title", 202, 1, out titleLites)
+                                .Highlight("Lineage", 202, 1, out title2Lites)
                                 .Highlight("Abstract", 202, 1, out abstractLites)
                                 .SetHighlighterTags("<b>", "</b>")
                                 .Search("Title", pattern).Boost(10)
+                                .Search("Lineage", pattern)
                                 .Search("Abstract", pattern);
 
                 var results = query.Take(25).ToList();
@@ -45,7 +48,7 @@ namespace Catalogue.Web.Controllers.Search
                             select new
                                 {
                                     result = r,
-                                    titleFragments = titleLites.GetFragments("records/" + r.Id),
+                                    titleFragments = titleLites.GetFragments("records/" + r.Id).Concat(title2Lites.GetFragments("records/" + r.Id)),
                                     abstractFragments = abstractLites.GetFragments("records/" + r.Id),
                                 };                
 

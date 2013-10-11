@@ -111,12 +111,25 @@ namespace Catalogue.Data.Analyzers
     {
         public override TokenStream TokenStream(string fieldName, TextReader reader)
         {
-            var tokenizer = new StandardTokenizer(Version.LUCENE_29, reader);
+            var tokenizer = new StandardTokenizer(Version.LUCENE_30, reader);
             tokenizer.MaxTokenLength = 255;
             TokenStream filter = new StandardFilter(tokenizer);
             filter = new LowerCaseFilter(filter);
             filter = new StopFilter(false, filter, StandardAnalyzer.STOP_WORDS_SET);
-            return new NGramTokenFilter(filter, 2, 10); // needed to change the default max to 10 to get sensible instant results
+            filter = new NGramTokenFilter(filter, 2, 10); // needed to change the default max to 10 to get sensible instant results
+
+            return filter;
+        }
+    }
+
+    public class StemAnalyzer : Analyzer
+    {
+        public override TokenStream TokenStream(String fieldName, TextReader reader)
+        {
+            TokenStream filter = new StandardFilter(new LowerCaseTokenizer(reader));
+            filter = new PorterStemFilter(filter);
+
+            return filter;
         }
     }
 }
