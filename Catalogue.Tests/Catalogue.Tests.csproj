@@ -98,6 +98,7 @@
     <Compile Include="Fast\Catalogue.Data\Import\when_importing_test_data.cs" />
     <Compile Include="Fast\Catalogue.Gemini\Encoding\when_creating_document_from_blank_record.cs" />
     <Compile Include="Fast\Catalogue.Gemini\Encoding\when_updating_the_metadata_language.cs" />
+    <Compile Include="Fast\Catalogue.Utilities\Html\linky_tests.cs" />
     <Compile Include="Fast\Catalogue.Utilities\Spatial\bounding_box_utility_tests.cs" />
     <Compile Include="Fast\Catalogue.Web\Controllers\Validator\validator_controller_tests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

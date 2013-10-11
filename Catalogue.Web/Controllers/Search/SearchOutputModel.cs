@@ -19,6 +19,8 @@ namespace Catalogue.Web.Controllers.Search
         public Guid Id { get; set; }
         public string Title { get; set; }
         public string Snippet { get; set; }
+        public string TemporalExtentFrom { get; set; }
+        public string TemporalExtentTo { get; set; }
     }
 
     public class QueryOutputModel

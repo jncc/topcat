@@ -4,6 +4,9 @@
 h1 {
   opacity: .5;
 }
+p b {
+  color: #555;
+}
 .placeholder {
   color: #bbb;
 }

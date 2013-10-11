@@ -7,6 +7,8 @@ using System.Web;
 using System.Web.Http;
 using Catalogue.Data.Indexes;
 using Catalogue.Data.Model;
+using Catalogue.Utilities.Html;
+using Catalogue.Utilities.Text;
 using Raven.Abstractions.Data;
 using Raven.Client;
 
@@ -29,9 +31,9 @@ namespace Catalogue.Web.Controllers.Search
 
                 var query = db.Advanced.LuceneQuery<Record>("Records/Search")
                                 .Statistics(out stats)
-                                .Highlight("Title", 500, 1, out titleLites)
-                                .Highlight("Abstract", 128, 2, out abstractLites)
-                                .SetHighlighterTags("<strong>", "</strong>")
+                                .Highlight("Title", 202, 1, out titleLites)
+                                .Highlight("Abstract", 202, 1, out abstractLites)
+                                .SetHighlighterTags("<b>", "</b>")
                                 .Search("Title", pattern).Boost(10)
                                 .Search("Abstract", pattern);
 
@@ -45,10 +47,7 @@ namespace Catalogue.Web.Controllers.Search
                                     result = r,
                                     titleFragments = titleLites.GetFragments("records/" + r.Id),
                                     abstractFragments = abstractLites.GetFragments("records/" + r.Id),
-                                };
-
-//                var fs = lites.GetFragments("Records/" + results.First().Id);
-                
+                                };                
 
                 return new SearchOutputModel
                     {
@@ -56,8 +55,10 @@ namespace Catalogue.Web.Controllers.Search
                         Results = xs.Select(x => new ResultOutputModel
                             {
                                 Id = x.result.Id,
-                                Title = x.titleFragments.FirstOrDefault() ?? x.result.Gemini.Title, // x.result.Gemini.Title,
-                                Snippet = x.abstractFragments.FirstOrDefault() ?? x.result.Gemini.Abstract, //.Gemini.Abstract,
+                                Title = x.titleFragments.Select(f => f.TruncateNicely(200)).FirstOrDefault()
+                                    ?? x.result.Gemini.Title.TruncateNicely(200),
+                                Snippet = x.abstractFragments.Select(f => f.TruncateNicely(200)).FirstOrDefault()
+                                    ?? x.result.Gemini.Abstract.TruncateNicely(200),
                             })
                             .ToList(),
                         Speed = watch.ElapsedMilliseconds,
