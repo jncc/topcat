@@ -69,6 +69,7 @@ namespace Catalogue.Web.Controllers.Search
                         Query = new QueryOutputModel { Q = q, P = p, }
                     };
 
+
             }
 
         }
