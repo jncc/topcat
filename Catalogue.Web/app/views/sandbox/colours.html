@@ -1,0 +1,14 @@
+﻿
+<input ng-model="s" type="text" class="form-control" autofocus />
+
+<div ng-style="{ 'background-color': hashStringToColor(s) }">
+    <br />  {{ hashStringToColor(s) }}
+</div>
+
+<hr />
+<div>
+    <span class="tc-tag" ng-repeat="x in strings">
+        <span ng-style="{ 'background-color': hashStringToColor(x) }">&nbsp;</span>
+        {{ x }}
+    </span>
+</div>

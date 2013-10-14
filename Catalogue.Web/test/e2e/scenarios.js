@@ -47,8 +47,8 @@
   describe('search results specifications', function() {
     it('can search for partial words', function() {
       input('query.q').enter('bio');
-      expect(element('.search-result p').text()).toContain('biota');
-      expect(element('.search-result p').text()).toContain('biotopes');
+      expect(element('.search-result').text()).toContain('biota');
+      expect(element('.search-result').text()).toContain('biotopes');
       return expect(repeater('.search-result').count()).toBeGreaterThan(5);
     });
     it('can search for integers', function() {
@@ -56,11 +56,14 @@
       expect(element('.search-result p').text()).toContain('2003');
       return expect(repeater('.search-result').count()).toBeGreaterThan(5);
     });
-    return it('can search for variations of stem', function() {
+    it('can search for variations of stem', function() {
       input('query.q').enter('study');
       expect(element('.search-result').text()).toContain('study');
       expect(element('.search-result').text()).toContain('studied');
       return expect(element('.search-result').text()).toContain('studies');
+    });
+    return it('title should be more important than abstract', function() {
+      return input('query.q').enter('bird');
     });
   });
 

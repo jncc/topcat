@@ -44,6 +44,23 @@ textarea {
     width: 10em;
 }
 
+.tc-tag {
+    white-space:nowrap;
+    font-size:90%;
+    display: inline-block;
+    background-color:#eee;
+    padding-right: 0.4em;
+    margin-right: 0.8em;
+    > span {
+        display: inline-block;
+        width: 0.9em;
+        border-right:0.3em solid white;
+    }
+}
+
+
+
+
 // validation styles. angular also puts these classes on the form so ignore that
 //.ng-dirty.ng-valid { border:1px solid Green; }
 form .ng-dirty.ng-invalid {

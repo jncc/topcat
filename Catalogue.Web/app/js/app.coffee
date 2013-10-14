@@ -23,7 +23,10 @@ module.config ['$routeProvider', ($routeProvider) ->
         .when '/editor/:recordId',
             controller: 'EditorController',
             templateUrl: 'views/editor/editor.html',
-            resolve: 'record': (RecordLoader) -> RecordLoader() 
+            resolve: 'record': (RecordLoader) -> RecordLoader()
+        .when '/sandbox/colours',
+            controller: 'SandboxController',
+            templateUrl: 'views/sandbox/colours.html'
         .otherwise
             redirectTo: '/'
     ]

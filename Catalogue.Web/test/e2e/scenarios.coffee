@@ -38,8 +38,8 @@ describe 'search results specifications', ->
     
     it 'can search for partial words', ->
         input('query.q').enter 'bio'
-        expect(element('.search-result p').text()).toContain 'biota'
-        expect(element('.search-result p').text()).toContain 'biotopes'
+        expect(element('.search-result').text()).toContain 'biota'
+        expect(element('.search-result').text()).toContain 'biotopes'
         expect(repeater('.search-result').count()).toBeGreaterThan 5 
 
     it 'can search for integers', ->
@@ -52,5 +52,12 @@ describe 'search results specifications', ->
         expect(element('.search-result').text()).toContain 'study'
         expect(element('.search-result').text()).toContain 'studied'
         expect(element('.search-result').text()).toContain 'studies'
+
+    it 'title should be more important than abstract', ->
+        input('query.q').enter 'bird'
+        # there's one record with 'bird' in the title and two with it in the abstract;
+        # the title one should appear top
+        # todo
+        #expect(repeater('.search-result').row(0)).toContain 'Bird' 
 
 

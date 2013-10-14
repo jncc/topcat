@@ -25,6 +25,9 @@
             return RecordLoader();
           }
         }
+      }).when('/sandbox/colours', {
+        controller: 'SandboxController',
+        templateUrl: 'views/sandbox/colours.html'
       }).otherwise({
         redirectTo: '/'
       });
