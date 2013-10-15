@@ -1,0 +1,9 @@
+
+instant - the most important thing is to get instant feedback
+speed (very fast, supports instant search)
+highlighting, so you can see the context of where your query actually matched 
+partial matching so you can search within words
+stemming / plurals. 'study' matches 'study', 'studies', and 'studied'
+boost title over abstract
+(frequency, how close a phrase matches, other standard full-text search goodness)
+shareable URLs (see it change as you type)
