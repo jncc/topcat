@@ -1,0 +1,13 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <UsingTask AssemblyFile="Monty.Infrastructure.MSBuild.Tasks.dll" TaskName="Monty.Infrastructure.MSBuild.Tasks.ParallelDeploy" />
+  <UsingTask AssemblyFile="Monty.Infrastructure.MSBuild.Tasks.dll" TaskName="Monty.Infrastructure.MSBuild.Tasks.StringFormat" />
+  <UsingTask AssemblyFile="Monty.Infrastructure.MSBuild.Tasks.dll" TaskName="Monty.Infrastructure.MSBuild.Tasks.StringMatch" />
+  <UsingTask AssemblyFile="Monty.Infrastructure.MSBuild.Tasks.dll" TaskName="Monty.Infrastructure.MSBuild.Tasks.StringContains" />
+  <UsingTask AssemblyFile="Monty.Infrastructure.MSBuild.Tasks.dll" TaskName="Monty.Infrastructure.MSBuild.Tasks.StringReplace" />
+  <UsingTask AssemblyFile="Monty.Infrastructure.MSBuild.Tasks.dll" TaskName="Monty.Infrastructure.MSBuild.Tasks.TransformXml" />
+  <UsingTask AssemblyFile="Monty.Infrastructure.MSBuild.Tasks.dll" TaskName="Monty.Infrastructure.MSBuild.Tasks.GetFullPath" />
+  <UsingTask AssemblyFile="Monty.Infrastructure.MSBuild.Tasks.dll" TaskName="Monty.Infrastructure.MSBuild.Tasks.Subversion.SvnRevert" />
+  <UsingTask AssemblyFile="Monty.Infrastructure.MSBuild.Tasks.dll" TaskName="Monty.Infrastructure.MSBuild.Tasks.Subversion.SvnSwitch" />
+  <UsingTask AssemblyFile="Monty.Infrastructure.MSBuild.Tasks.dll" TaskName="Monty.Infrastructure.MSBuild.Tasks.Msmq.MsmqAdmin" />
+</Project>

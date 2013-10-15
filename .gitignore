@@ -109,7 +109,8 @@ UpgradeLog*.XML
 
 
 # our specific ignores:
+build/output
+build/output.zip
 Catalogue.Web/local.config
 Catalogue.Web/Raven
-build/Output
 __emails/
