@@ -161,6 +161,7 @@
     <Compile Include="Controllers\Sandbox\SandboxController.cs" />
     <Compile Include="Controllers\Search\SearchController.cs" />
     <Compile Include="Controllers\Search\SearchOutputModel.cs" />
+    <Compile Include="Controllers\Seed\SeedController.cs" />
     <Compile Include="Controllers\Topics\TopicModel.cs" />
     <Compile Include="Controllers\Topics\TopicsController.cs" />
     <Compile Include="Controllers\Validator\ValidatorController.cs" />
@@ -334,6 +335,7 @@
   <ItemGroup>
     <Content Include="app\lib\datepicker\less\datepicker.less" />
   </ItemGroup>
+  <ItemGroup />
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>

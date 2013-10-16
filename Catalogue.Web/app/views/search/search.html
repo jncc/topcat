@@ -32,15 +32,15 @@
     <hr />
 </div>
 
-<div ng-repeat="r in result.results">
-    <div tc-search-result class="search-result">
-        <div class=""><a ng-href="#/editor/{{r.id}}" ng-bind-html="r.title"></a></div>
+<div ng-repeat="r in result.results" class="search-result">
+    <div>
+        <div class=""><a ng-href="" ng-bind-html="r.title"></a></div>
         <p ng-bind-html="r.snippet"></p>
     </div>
 </div>
 
 <div class="text-center" ng-show="result.total > result.results.length">
-    <!-- todo -->
+<!-- todo 
     <ul class="pagination">
         <li class="disabled"><a href="">&laquo;</a></li>
         <li class="active"><a href="">1 <span class="sr-only">(current)</span></a></li>
@@ -50,5 +50,6 @@
         <li><a href="#">5</a></li>
         <li><a href="#">&raquo;</a></li>
     </ul>
+    -->
 </div>
 
