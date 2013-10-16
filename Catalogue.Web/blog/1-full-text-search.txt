@@ -1,9 +1,12 @@
 
-instant - the most important thing is to get instant feedback
-speed (very fast, supports instant search)
-highlighting, so you can see the context of where your query actually matched 
-partial matching so you can search within words
-stemming / plurals. 'study' matches 'study', 'studies', and 'studied'
-boost title over abstract
-(frequency, how close a phrase matches, other standard full-text search goodness)
-shareable URLs (see it change as you type)
+- instant (very fast, instant feedback)
+- highlighting, so you can see the context of where your query actually matched 
+- partial matching - 'bio' matches 'biotope', 'biota', 'biology', so you can search within words
+- stemming / plurals. 'study' matches 'study', 'studies', and 'studied'
+- title is boosted in importance (compared with abstract)
+- frequency, how close a phrase matches, other full-text search things
+- shareable URLs (see it change as you type)
+
+doesn't support synomyms or suggestions
+
+
