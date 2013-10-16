@@ -34,9 +34,9 @@
 
 <div ng-repeat="r in result.results" class="search-result">
     <div>
-        <div class=""><a ng-href="" ng-bind-html="r.title"></a></div>
-        <p ng-bind-html="r.snippet"></p>
+        <a ng-href="" ng-bind-html="r.title"></a>
     </div>
+    <p ng-bind-html="r.snippet"></p>
 </div>
 
 <div class="text-center" ng-show="result.total > result.results.length">
