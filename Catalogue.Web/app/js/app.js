@@ -3,6 +3,10 @@
 
   module = angular.module('app', ['ngRoute', 'ngSanitize', 'app.utilities', 'app.directives', 'app.services', 'app.controllers']);
 
+  module.config(function($sceProvider) {
+    return $sceProvider.enabled(false);
+  });
+
   angular.module('app.utilities', []);
 
   angular.module('app.directives', []);

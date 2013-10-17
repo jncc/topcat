@@ -9,6 +9,10 @@ module = angular.module 'app', [
     'app.controllers',
     ]
 
+# todo: remove this line to re-enable Strict Contextual Escaping
+# when this IE8 bug is fixed https://github.com/angular/angular.js/issues/4486
+module.config ($sceProvider) -> $sceProvider.enabled false
+
 angular.module 'app.utilities', []
 angular.module 'app.directives', []
 angular.module 'app.services', ['ngResource']
