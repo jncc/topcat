@@ -14,5 +14,15 @@ $.fn.highlightInputSelectionRange = (start, end) ->
             range.select()
 
 
-
+String.prototype.hashCode = () ->
+    hash = 0 #, i, char;
+    if (this.length == 0)
+        hash
+    else
+        for element, i in this
+            #   for (i = 0, l = this.length; i < l; i++) {
+            char = this.charCodeAt(i)
+            hash = ((hash << 5) - hash) + char
+            hash |= 0 #; // Convert to 32bit integer
+        hash
 

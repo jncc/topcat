@@ -1,7 +1,9 @@
 ﻿
 
 angular.module('app.controllers').controller 'SearchController',
-    ($scope, $rootScope, $location, $http) ->
+    ($scope, $rootScope, $location, $http, misc) ->
+
+        $scope.hashStringToColor = misc.hashStringToColor
 
         # note: $location.search is the angular api for the querystring value
         

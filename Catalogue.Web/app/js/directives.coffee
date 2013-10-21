@@ -17,8 +17,7 @@ module.directive 'tcAutofocusIfBlank', () ->
 module.directive 'tcEatClick', () ->
     link: (scope, elem, attrs) ->
         $(elem).click (e) -> e.preventDefault()
-    }
-})
+
 # use jquery autosize plugin to auto-expand textareas
 module.directive 'tcAutosize', () -> 
     link: (scope, elem, attrs) -> $(elem).autosize()

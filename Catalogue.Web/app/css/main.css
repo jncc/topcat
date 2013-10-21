@@ -4,9 +4,6 @@
 h1 {
   opacity: .5;
 }
-.search-result a {
-  font-size: 110%;
-}
 .search-result p b {
   color: #555;
 }
@@ -33,6 +30,7 @@ textarea {
 }
 .tc-tag {
   white-space: nowrap;
+  font-size: 90%;
   display: inline-block;
   background-color: #eee;
   padding-right: 0.4em;

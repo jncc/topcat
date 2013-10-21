@@ -29,6 +29,16 @@
     };
   });
 
+  module.directive('tcEatClick', function() {
+    return {
+      link: function(scope, elem, attrs) {
+        return $(elem).click(function(e) {
+          return e.preventDefault();
+        });
+      }
+    };
+  });
+
   module.directive('tcAutosize', function() {
     return {
       link: function(scope, elem, attrs) {

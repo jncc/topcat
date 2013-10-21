@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
+using Catalogue.Gemini.Model;
 
 namespace Catalogue.Web.Controllers.Search
 {
@@ -19,6 +20,7 @@ namespace Catalogue.Web.Controllers.Search
         public Guid Id { get; set; }
         public string Title { get; set; }
         public string Snippet { get; set; }
+        public List<Keyword> Keywords { get; set; }
         public string TemporalExtentFrom { get; set; }
         public string TemporalExtentTo { get; set; }
     }

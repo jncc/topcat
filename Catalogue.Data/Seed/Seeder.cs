@@ -56,8 +56,8 @@ namespace Catalogue.Data.Seed
         {
             var jnccCategories = new Vocabulary
                 {
-                    Id = "http://data.jncc.gov.uk/vocabs/jncc-categories",
-                    Name = "JNCC Categories",
+                    Id = "http://vocab.jncc.gov.uk/jncc-broad-categories",
+                    Name = "JNCC Broad Categories",
                     Description = "The broad dataset categories used within JNCC.",
                     PublicationDate = "2013",
                     Values = new List<string>

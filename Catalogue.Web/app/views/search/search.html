@@ -37,6 +37,13 @@
         <a ng-href="" ng-bind-html="r.title"></a>
     </div>
     <p ng-bind-html="r.snippet"></p>
+    <div>
+        <span class="tc-tag" ng-repeat="k in r.keywords">
+            <span ng-style="{ 'background-color': hashStringToColor(k.vocabularyIdentifier) }">&nbsp;</span>
+            {{ k.value }}
+        </span>
+    </div>
+    <br />
 </div>
 
 <div class="text-center" ng-show="result.total > result.results.length">
