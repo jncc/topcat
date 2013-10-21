@@ -1,12 +1,21 @@
 
-- instant (very fast, instant feedback)
-- highlighting, so you can see the context of where your query actually matched 
-- partial matching - 'bio' matches 'biotope', 'biota', 'biology', so you can search within words
-- stemming / plurals. 'study' matches 'study', 'studies', and 'studied'
-- title is boosted in importance (compared with abstract)
-- frequency, how close a phrase matches, other full-text search things
-- shareable URLs (see it change as you type)
+Idea is to have a modern, fast - really useful search to really help people instantly find the datasets we hold.
 
-doesn't support synomyms or suggestions
+'study'
+- instant, as you type (most important thing: very fast, instant feedback)
+- highlighting, so you can see the context / snippet of where your query actually matched 
+- stemming / plurals. 'study' matches 'study', 'studies', and 'studied'
+
+'bio' 
+- partial matching
+	'bio' matches 'biotope', 'biota', 'biology', so you can search within words
+'bird'
+- title is boosted in importance (compared with abstract)
+
+- frequency, how close a phrase matches, other full-text search things
+- can use AND or OR
+	saltmarsh coast
+	saltmarsh AND coast
+
 
 
