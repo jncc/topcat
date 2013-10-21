@@ -8,10 +8,14 @@ h1 {
     opacity: .5;
 }
 
-// bold text in search results looks too black, so make it a bit lighter
-p b {
-    color: #555;
+.search-result {
+    // subtly increase the title size
+    a { font-size: 110%; }
+
+    // bold snippet highlights look too black
+    p b { color: #555; }
 }
+
 // ie8 placeholder is a bit dark by default (jquery-placeholder plugin)
 .placeholder { color: #bbb; }
 
@@ -46,15 +50,14 @@ textarea {
 
 .tc-tag {
     white-space:nowrap;
-    font-size:90%;
     display: inline-block;
     background-color:#eee;
     padding-right: 0.4em;
     margin-right: 0.8em;
     > span {
         display: inline-block;
-        width: 0.9em;
-        border-right:0.3em solid white;
+        width: 0.8em;
+        border-right:0.25em solid white;
     }
 }
 

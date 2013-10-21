@@ -4,7 +4,10 @@
 h1 {
   opacity: .5;
 }
-p b {
+.search-result a {
+  font-size: 110%;
+}
+.search-result p b {
   color: #555;
 }
 .placeholder {
@@ -30,7 +33,6 @@ textarea {
 }
 .tc-tag {
   white-space: nowrap;
-  font-size: 90%;
   display: inline-block;
   background-color: #eee;
   padding-right: 0.4em;
@@ -38,8 +40,8 @@ textarea {
 }
 .tc-tag > span {
   display: inline-block;
-  width: 0.9em;
-  border-right: 0.3em solid white;
+  width: 0.8em;
+  border-right: 0.25em solid white;
 }
 form .ng-dirty.ng-invalid {
   border: 1px solid #FF1493;
