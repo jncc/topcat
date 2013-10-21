@@ -274,6 +274,11 @@
     <Content Include="app\views\search\search.html" />
     <Content Include="favicon.ico" />
     <Content Include="Global.asax" />
+    <Content Include="test\e2e\runner.html" />
+    <Content Include="test\e2e\scenarios.js" />
+    <Content Include="test\e2e\scenarios.min.js" />
+    <Content Include="test\lib\angular\angular-mocks.js" />
+    <Content Include="test\lib\angular\angular-scenario.js" />
     <Content Include="Web.config" />
     <Content Include="Web.Dev.config">
       <DependentUpon>Web.config</DependentUpon>
@@ -342,6 +347,9 @@
     <Content Include="app\lib\angular-1.2.0-rc.3\angular-route.min.js.map" />
     <Content Include="app\lib\angular-1.2.0-rc.3\angular-sanitize.min.js.map" />
     <Content Include="app\lib\angular-1.2.0-rc.3\angular.min.js.map" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="test\e2e\scenarios.coffee" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
