@@ -36,8 +36,8 @@
     <div>
         <a ng-href="" ng-bind-html="r.title"></a>
     </div>
-    <p ng-bind-html="r.snippet"></p>
-    <div>
+    <div ng-bind-html="r.snippet"></div>
+    <div class="search-tags">
         <span class="tc-tag" ng-repeat="k in r.keywords">
             <span ng-style="{ 'background-color': hashStringToColor(k.vocabularyIdentifier) }">&nbsp;</span>
             {{ k.value }}

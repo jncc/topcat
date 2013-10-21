@@ -4,8 +4,14 @@
 h1 {
   opacity: .5;
 }
+.search-result a {
+  font-size: 110%;
+}
 .search-result p b {
   color: #555;
+}
+.search-tags {
+  margin-top: 4px;
 }
 .placeholder {
   color: #bbb;
