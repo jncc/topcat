@@ -39,16 +39,22 @@ textarea {
 }
 .tc-tag {
   white-space: nowrap;
-  font-size: 85%;
   display: inline-block;
   background-color: #eee;
   padding-right: 0.4em;
   margin: 0 0.8em 0.3em 0;
 }
+.tc-tag:hover {
+  background-color: #ddd;
+  cursor: pointer;
+}
 .tc-tag > span {
   display: inline-block;
   width: 7px;
   margin-right: 2px;
+}
+.pointable {
+  cursor: pointer;
 }
 form .ng-dirty.ng-invalid {
   border: 1px solid #FF1493;

@@ -39,6 +39,35 @@
     };
   });
 
+  module.directive('tcTag', function() {
+    return {
+      link: function(scope, elem, attrs) {
+        $(elem).addClass('tc-tag');
+        return $(elem).qtip({
+          content: {
+            text: scope.k.vocabularyIdentifier
+          },
+          position: {
+            my: 'top center',
+            at: 'bottom center',
+            viewport: $(window)
+          },
+          show: {
+            event: 'click mouseenter',
+            solo: true
+          },
+          hide: {
+            fixed: true,
+            delay: 100
+          },
+          style: {
+            classes: 'qtip-tipsy'
+          }
+        });
+      }
+    };
+  });
+
   module.directive('tcAutosize', function() {
     return {
       link: function(scope, elem, attrs) {

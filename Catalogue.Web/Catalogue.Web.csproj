@@ -236,14 +236,14 @@
     <Content Include="app\lib\bootstrap-3.0.0\css\bootstrap.min.css" />
     <Content Include="app\lib\bootstrap-3.0.0\js\bootstrap.js" />
     <Content Include="app\lib\bootstrap-3.0.0\js\bootstrap.min.js" />
-    <Content Include="app\lib\datepicker\css\datepicker.css" />
-    <Content Include="app\lib\datepicker\js\bootstrap-datepicker.js" />
     <Content Include="app\lib\jquery-1.10.2\jquery.min.js" />
     <Content Include="app\lib\jquery-placeholder-2.0.7\demo.html" />
     <Content Include="app\lib\jquery-placeholder-2.0.7\jquery.placeholder.js" />
     <Content Include="app\lib\jquery-placeholder-2.0.7\jquery.placeholder.min.js" />
     <Content Include="app\lib\jquery-placeholder-2.0.7\LICENSE-GPL.txt" />
     <Content Include="app\lib\jquery-placeholder-2.0.7\LICENSE-MIT.txt" />
+    <Content Include="app\lib\qtip2-2.1.1\jquery.qtip.min.css" />
+    <Content Include="app\lib\qtip2-2.1.1\jquery.qtip.min.js" />
     <Content Include="app\lib\respond-1.2.0\cross-domain\example.html" />
     <Content Include="app\lib\respond-1.2.0\cross-domain\respond-proxy.html" />
     <Content Include="app\lib\respond-1.2.0\cross-domain\respond.proxy.gif" />
@@ -337,9 +337,6 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="app\js\utilities.coffee" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="app\lib\datepicker\less\datepicker.less" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="app\lib\angular-1.2.0-rc.3\angular-animate.min.js.map" />
