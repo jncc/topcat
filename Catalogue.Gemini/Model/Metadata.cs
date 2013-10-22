@@ -38,6 +38,11 @@ namespace Catalogue.Gemini.Model
         public Metadata()
         {
             Keywords = new List<Keyword>();
+            TemporalExtent = new TemporalExtent();
+            DataFormat = new DataFormat();
+            ResponsibleOrganisation = new ResponsibleParty();
+            MetadataPointOfContact = new ResponsibleParty();
+            BoundingBox = new BoundingBox();
         }
     }
 

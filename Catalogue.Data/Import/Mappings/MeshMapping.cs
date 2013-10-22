@@ -25,8 +25,8 @@ namespace Catalogue.Data.Import.Mappings
         {
             public override void CreateMap()
             {
-                this.Map(m => m.Notes).Ignore();
-                this.References<MetadataMap>(m => m.Gemini);
+                Map(m => m.Notes).Ignore();
+                References<MetadataMap>(m => m.Gemini);
             }
         }
 
@@ -37,11 +37,25 @@ namespace Catalogue.Data.Import.Mappings
                 Map(m => m.Title);
                 Map(m => m.Abstract);
                 Map(m => m.TopicCategory);
-                this.Map(m => m.Keywords).ConvertUsing(row =>
+                Map(m => m.Keywords).ConvertUsing(row =>
                     {
                         string input = row.GetField("Keywords");
                         return ParseMeshKeywords(input);
                     });
+                Map(m => m.TemporalExtent).ConvertUsing(row =>
+                    {
+                        string beg = row.GetField("TemporalExtentBegin");
+                        string end = row.GetField("TemporalExtentEnd");
+
+                        return new TemporalExtent { Begin = beg, End = end };
+                    });
+                Map(m => m.DatasetReferenceDate);
+                Map(m => m.Lineage);
+                Map(m => m.ResourceLocator);
+                Map(m => m.DataFormat);
+                //Map(m => m.ResponsibleOrganisation) todo
+
+
             }
         }
 

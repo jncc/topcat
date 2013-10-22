@@ -1,15 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Catalogue.Data.Model;
-using Catalogue.Data.Seed;
 using Catalogue.Tests.Utility;
 using FluentAssertions;
 using NUnit.Framework;
-using Raven.Client.Embedded;
-using Raven.Client.Indexes;
 
 namespace Catalogue.Tests.Slow.Catalogue.Import
 {
