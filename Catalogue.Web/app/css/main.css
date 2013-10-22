@@ -37,17 +37,17 @@ textarea {
 .datexx {
   width: 10em;
 }
-.tc-tag {
+.tag {
   white-space: nowrap;
   display: inline-block;
   background-color: #eee;
   padding-right: 0.4em;
   margin: 0 0.8em 0.3em 0;
 }
-.tc-tag:hover {
+.tag:hover {
   background-color: #ddd;
 }
-.tc-tag > span {
+.tag > span {
   display: inline-block;
   width: 7px;
   margin-right: 2px;

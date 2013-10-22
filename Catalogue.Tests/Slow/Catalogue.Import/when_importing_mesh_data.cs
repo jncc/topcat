@@ -28,21 +28,16 @@ namespace Catalogue.Tests.Slow.Catalogue.Import
         [Test]
         public void should_import_keywords()
         {
-            // todo why is this failing?
-//            Db.Query<Record>().Take(128).ToList().Count().Should().Be(128);
+            imported.Count(r => r.Gemini.Keywords
+                .Any(k => k.Vocab == "http://vocab.jncc.gov.uk/jncc-broad-category"))
+                .Should().Be(191);
+        }
 
-            var records = imported // Db.Query<Record>()
-                         .Where(r => r.Gemini.Keywords != null)
-                         .Where(r => r.Gemini.Keywords.Any(k =>
-                             k.VocabularyIdentifier == "OriginalSeabedClassificationSystem"))
-                         .ToList();
-
-            records.Count.Should().Be(108);
-
-//            records
-//                .SelectMany(r => r.Gemini.Keywords)
-//                .Where(k => k.VocabularyIdentifier == "OriginalSeabedClassificationSystem")
-//                .Count().Should().Be(108);
+        [Test]
+        public void should_import_topic_category()
+        {
+            // all records are "geoscientificInformation"
+            imported.Count(r => r.Gemini.TopicCategory == "geoscientificInformation").Should().BeGreaterThan(100);
         }
     }
 }

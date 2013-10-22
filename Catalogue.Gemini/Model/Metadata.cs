@@ -34,12 +34,17 @@ namespace Catalogue.Gemini.Model
         public string UniqueResourceIdentifier { get; set; }
         public string ResourceType { get; set; }
         public BoundingBox BoundingBox { get; set; }
+
+        public Metadata()
+        {
+            Keywords = new List<Keyword>();
+        }
     }
 
     public class Keyword
     {
         public string Value { get; set; }
-        public string VocabularyIdentifier { get; set; }
+        public string Vocab { get; set; }
     }
 
     public class DataFormat

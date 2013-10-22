@@ -42,10 +42,10 @@
   module.directive('tcTag', function() {
     return {
       link: function(scope, elem, attrs) {
-        $(elem).addClass('tc-tag');
+        $(elem).addClass('tag');
         return $(elem).qtip({
           content: {
-            text: scope.k.vocabularyIdentifier
+            text: scope.k.vocab
           },
           position: {
             my: 'top center',
@@ -61,7 +61,7 @@
             delay: 100
           },
           style: {
-            classes: 'qtip-tipsy'
+            classes: 'qtip-tipsy tag-tip'
           }
         });
       }

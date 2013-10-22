@@ -22,7 +22,7 @@ namespace Catalogue.Tests.Fast.Catalogue.Data.Import.Mappings
             var keywords = MeshMapping.ParseMeshKeywords(input);
 
             keywords.Should().HaveCount(5);
-            keywords.Select(k => k.VocabularyIdentifier).Should().ContainInOrder(new []
+            keywords.Select(k => k.Vocab).Should().ContainInOrder(new []
                 {
                     "jncc-broad-category",
                     "OriginalSeabedClassificationSystem",

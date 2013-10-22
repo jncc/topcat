@@ -34,8 +34,9 @@ namespace Catalogue.Data.Import.Mappings
         {
             public override void CreateMap()
             {
-                this.Map(m => m.Title);
-                this.Map(m => m.Abstract);
+                Map(m => m.Title);
+                Map(m => m.Abstract);
+                Map(m => m.TopicCategory);
                 this.Map(m => m.Keywords).ConvertUsing(row =>
                     {
                         string input = row.GetField("Keywords");
@@ -53,7 +54,7 @@ namespace Catalogue.Data.Import.Mappings
                     select new Keyword
                     {
                         // todo: map the source vocab IDs to "real" ones
-                        VocabularyIdentifier = MapSourceVocabToRealVocab(vocab),
+                        Vocab = MapSourceVocabToRealVocab(vocab),
                         Value = MapSourceKeywordToRealKeyword(keyword),
                     };
 

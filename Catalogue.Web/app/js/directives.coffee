@@ -21,10 +21,10 @@ module.directive 'tcEatClick', () ->
 # widget for tags (keywords)
 module.directive 'tcTag', () ->
     link: (scope, elem, attrs) ->
-        $(elem).addClass('tc-tag')
+        $(elem).addClass('tag')
         $(elem).qtip
             content:
-                text: scope.k.vocabularyIdentifier
+                text: scope.k.vocab
             position:
                 my: 'top center',
                 at: 'bottom center',
@@ -36,7 +36,7 @@ module.directive 'tcTag', () ->
                 fixed: true,
                 delay: 100,
             style:
-                classes: 'qtip-tipsy'
+                classes: 'qtip-tipsy tag-tip'
 
 # use jquery autosize plugin to auto-expand textareas
 module.directive 'tcAutosize', () -> 

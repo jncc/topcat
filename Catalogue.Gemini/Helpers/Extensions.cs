@@ -9,7 +9,7 @@ namespace Catalogue.Gemini.Helpers
         public static List<Keyword> ToKeywordsList(this Dictionary<string, string> source)
         {
             return source
-                .Select((pair => new Keyword { VocabularyIdentifier = pair.Key, Value = pair.Value }))
+                .Select((pair => new Keyword { Vocab = pair.Key, Value = pair.Value }))
                 .ToList();
         }
     }
