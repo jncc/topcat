@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 using Catalogue.Data.Model;
@@ -47,14 +48,37 @@ namespace Catalogue.Data.Import.Mappings
         {
             var q = from m in Regex.Matches(input, @"\{(.*?)\}").Cast<Match>()
                     let pair = m.Groups.Cast<Group>().Select(g => g.Value).Skip(1).First().Split(',')
+                    let vocab = pair.ElementAt(0).Trim().Trim('"')
+                    let keyword = pair.ElementAt(1).Trim().Trim('"')
                     select new Keyword
                     {
                         // todo: map the source vocab IDs to "real" ones
-                        VocabularyIdentifier = pair.ElementAt(0).Trim().Trim('"'),
-                        Value = pair.ElementAt(1).Trim().Trim('"'),
+                        VocabularyIdentifier = MapSourceVocabToRealVocab(vocab),
+                        Value = MapSourceKeywordToRealKeyword(keyword),
                     };
 
             return q.ToList();
+        }
+
+        public static string MapSourceVocabToRealVocab(string v)
+        {
+            switch (v)
+            {
+                case "jncc-broad-category": return "http://vocab.jncc.gov.uk/jncc-broad-category";
+                case "SeabedSurveyPurpose": return "http://vocab.jncc.gov.uk/seabed-survey-purpose";
+                case "SeabedSurveyTechnique": return "http://vocab.jncc.gov.uk/seabed-survey-technique";
+                case "SeabedMapStatus": return "http://vocab.jncc.gov.uk/seabed-map-status";
+                case "OriginalSeabedClassificationSystem": return "http://vocab.jncc.gov.uk/original-seabed-classification-system";
+                default: throw new Exception("Unsupported vocab " + v);
+            }
+        }
+
+        public static string MapSourceKeywordToRealKeyword(string w)
+        {
+            switch (w)
+            {
+                default: return w;
+            }
         }
     }
 }

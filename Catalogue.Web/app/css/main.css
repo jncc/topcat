@@ -46,12 +46,14 @@ textarea {
 }
 .tc-tag:hover {
   background-color: #ddd;
-  cursor: pointer;
 }
 .tc-tag > span {
   display: inline-block;
   width: 7px;
   margin-right: 2px;
+}
+.tag-tip {
+  max-width: 100%;
 }
 .pointable {
   cursor: pointer;

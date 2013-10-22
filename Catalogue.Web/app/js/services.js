@@ -31,7 +31,9 @@
       hashStringToColor: function(s) {
         var hue, rgb;
         if (!s) {
-          return '#fff';
+          return '#444';
+        } else if (s === 'http://vocab.jncc.gov.uk/jncc-broad-category') {
+          return 'rgb(38,110,217)';
         } else {
           hue = Math.abs(s.hashCode() % 99) * 0.01;
           rgb = hslToRgb(hue, 0.7, 0.5);

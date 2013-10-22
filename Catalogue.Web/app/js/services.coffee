@@ -17,8 +17,10 @@ module.factory 'RecordLoader', (Record, $route, $q) ->
 
 module.factory 'misc', ->
     hashStringToColor: (s) ->
-        if (!s)
-            '#fff'
+        if !s
+            '#444'
+        else if s == 'http://vocab.jncc.gov.uk/jncc-broad-category'
+            'rgb(38,110,217)' # special case to make this one look good
         else
             hue = Math.abs(s.hashCode() % 99) * 0.01
             rgb = hslToRgb(hue, 0.7, 0.5)
