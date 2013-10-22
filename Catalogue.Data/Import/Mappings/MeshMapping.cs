@@ -17,6 +17,7 @@ namespace Catalogue.Data.Import.Mappings
         {
             // see http://joshclose.github.io/CsvHelper/
 
+            config.TrimFields = true;
             config.RegisterClassMap<RecordMap>();
             config.RegisterClassMap<MetadataMap>();
         }
@@ -54,6 +55,9 @@ namespace Catalogue.Data.Import.Mappings
                 Map(m => m.ResourceLocator);
                 Map(m => m.DataFormat);
                 //Map(m => m.ResponsibleOrganisation) todo
+                Map(m => m.LimitationsOnPublicAccess);
+                Map(m => m.UseConstraints);
+                Map(m => m.SpatialReferenceSystem).Name("Spatial reference system");
 
 
             }
