@@ -4,14 +4,17 @@
 h1 {
   opacity: .5;
 }
+.search-result {
+  margin-bottom: 1.7em;
+}
 .search-result a {
-  font-size: 110%;
+  font-size: 123%;
 }
 .search-result p b {
   color: #555;
 }
 .search-tags {
-  margin-top: 4px;
+  margin-top: 6px;
 }
 .placeholder {
   color: #bbb;
@@ -36,16 +39,16 @@ textarea {
 }
 .tc-tag {
   white-space: nowrap;
-  font-size: 90%;
+  font-size: 85%;
   display: inline-block;
   background-color: #eee;
   padding-right: 0.4em;
-  margin-right: 0.8em;
+  margin: 0 0.8em 0.3em 0;
 }
 .tc-tag > span {
   display: inline-block;
-  width: 0.8em;
-  border-right: 0.25em solid white;
+  width: 7px;
+  margin-right: 2px;
 }
 form .ng-dirty.ng-invalid {
   border: 1px solid #FF1493;
