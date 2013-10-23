@@ -166,6 +166,7 @@
   <ItemGroup>
     <Compile Include="Controllers\Home\HomeController.cs" />
     <Compile Include="Controllers\Items\ItemsController.cs" />
+    <Compile Include="Controllers\Keywords\KeywordsController.cs" />
     <Compile Include="Controllers\Records\RecordsController.cs" />
     <Compile Include="Controllers\Sandbox\SandboxController.cs" />
     <Compile Include="Controllers\Search\SearchController.cs" />
