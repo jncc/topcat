@@ -96,13 +96,6 @@
     <Compile Include="Explicit\feasibility_tests.cs" />
     <Compile Include="Explicit\Catalogue.Gemini\Vocabs\topic_category_codes.cs" />
     <Compile Include="Explicit\highlighting_wildcard_queries.cs" />
-    <Compile Include="Fast\Catalogue.Data\Import\Mappings\when_importing_mesh_data.cs" />
-    <Compile Include="Fast\Catalogue.Data\Import\when_importing_test_data.cs" />
-    <Compile Include="Fast\Catalogue.Gemini\Encoding\when_creating_document_from_blank_record.cs" />
-    <Compile Include="Fast\Catalogue.Gemini\Encoding\when_updating_the_metadata_language.cs" />
-    <Compile Include="Fast\Catalogue.Utilities\Html\linky_tests.cs" />
-    <Compile Include="Fast\Catalogue.Utilities\Spatial\bounding_box_utility_tests.cs" />
-    <Compile Include="Fast\Catalogue.Web\Controllers\Validator\validator_controller_tests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Slow\Catalogue.Gemini\Validation\when_validating_the_example_document.cs" />
     <Compile Include="Slow\Catalogue.Import\when_importing_mesh_data.cs" />

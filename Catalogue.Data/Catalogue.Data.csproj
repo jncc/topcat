@@ -34,6 +34,9 @@
     <Reference Include="CsvHelper">
       <HintPath>..\packages\CsvHelper.2.2.2\lib\net40-client\CsvHelper.dll</HintPath>
     </Reference>
+    <Reference Include="FluentAssertions">
+      <HintPath>..\packages\FluentAssertions.2.0.1\lib\net45\FluentAssertions.dll</HintPath>
+    </Reference>
     <Reference Include="Lucene.Net, Version=3.0.3.0, Culture=neutral, PublicKeyToken=85089178b9ac3181, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\RavenDB.Database.2.5.2700\lib\net45\Lucene.Net.dll</HintPath>
@@ -51,6 +54,12 @@
     </Reference>
     <Reference Include="Microsoft.WindowsAzure.Storage">
       <HintPath>..\packages\WindowsAzure.Storage.2.0.6.1\lib\net40\Microsoft.WindowsAzure.Storage.dll</HintPath>
+    </Reference>
+    <Reference Include="Moq">
+      <HintPath>..\packages\Moq.4.1.1309.1617\lib\net40\Moq.dll</HintPath>
+    </Reference>
+    <Reference Include="nunit.framework">
+      <HintPath>..\packages\NUnit.2.6.2\lib\nunit.framework.dll</HintPath>
     </Reference>
     <Reference Include="Raven.Abstractions, Version=2.5.0.0, Culture=neutral, PublicKeyToken=37f41c7f99471593, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -105,6 +114,10 @@
     <ProjectReference Include="..\Catalogue.Gemini\Catalogue.Gemini.csproj">
       <Project>{b4789e53-cc5c-4e4e-8358-fc9739846ccc}</Project>
       <Name>Catalogue.Gemini</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Catalogue.Utilities\Catalogue.Utilities.csproj">
+      <Project>{b6b90aa2-bf70-4460-a975-5192ab5ecdca}</Project>
+      <Name>Catalogue.Utilities</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup />

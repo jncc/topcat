@@ -27,7 +27,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Import
         [Test]
         public void should_import_all_mesh_data()
         {
-            imported.Count().Should().Be(191);
+            imported.Count().Should().Be(183);
         }
 
         [Test]
@@ -36,22 +36,21 @@ namespace Catalogue.Tests.Slow.Catalogue.Import
             // mesh data is categorised as 'SeabedHabitatMaps'
             imported.Count(r => r.Gemini.Keywords
                 .Any(k => k.Vocab == "http://vocab.jncc.gov.uk/jncc-broad-category" && k.Value == "SeabedHabitatMaps"))
-                .Should().Be(191);
+                .Should().Be(183);
         }
 
         [Test]
         public void should_import_topic_category()
         {
             // all mesh records are "geoscientificInformation"
-            imported.Count(r => r.Gemini.TopicCategory == "geoscientificInformation").Should().Be(191);
+            imported.Count(r => r.Gemini.TopicCategory == "geoscientificInformation").Should().Be(183);
         }
 
         [Test]
         public void should_import_unique_source_identifiers()
         {
-            imported.Select(r => r.SourceIdentifier).Distinct().Count().Should().Be(191);
+            imported.Select(r => r.SourceIdentifier).Distinct().Count().Should().Be(183);
         }
-
 
         [Test]
         public void all_records_should_have_valid_resource_location()
@@ -59,8 +58,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Import
             Uri uri; // need this for Uri.TryCreate; not actually using it
 
             imported.Count(r => Uri.TryCreate(r.Gemini.ResourceLocator, UriKind.Absolute, out uri))
-                    .Should()
-                    .BeGreaterOrEqualTo(191);
+                    .Should().Be(183);
         }
     }
 }

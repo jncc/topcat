@@ -1,14 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net;
-using System.Xml.Linq;
-using Catalogue.Gemini.Encoding;
+﻿using System.Xml.Linq;
 using Catalogue.Gemini.Templates;
 using FluentAssertions;
 using NUnit.Framework;
 
-namespace Catalogue.Tests.Fast.Catalogue.Gemini.Encoding
+namespace Catalogue.Gemini.Encoding
 {
     class when_creating_document_from_blank_record
     {

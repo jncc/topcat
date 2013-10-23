@@ -1,18 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Xml;
-using System.Xml.Linq;
-using System.Xml.XPath;
-using Catalogue.Gemini.Encoding;
+﻿using System.Xml.Linq;
 using Catalogue.Gemini.Templates;
 using FluentAssertions;
 using NUnit.Framework;
 
-namespace Catalogue.Tests.Fast.Catalogue.Gemini.Encoding
+namespace Catalogue.Gemini.Encoding
 {
     class when_updating_the_metadata_language
     {

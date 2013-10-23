@@ -31,6 +31,15 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="FluentAssertions">
+      <HintPath>..\packages\FluentAssertions.2.0.1\lib\net45\FluentAssertions.dll</HintPath>
+    </Reference>
+    <Reference Include="Moq">
+      <HintPath>..\packages\Moq.4.1.1309.1617\lib\net40\Moq.dll</HintPath>
+    </Reference>
+    <Reference Include="nunit.framework">
+      <HintPath>..\packages\NUnit.2.6.2\lib\nunit.framework.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -41,6 +50,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Encoding\Ns.cs" />
+    <Compile Include="Encoding\when_creating_document_from_blank_record.cs" />
+    <Compile Include="Encoding\when_updating_the_metadata_language.cs" />
     <Compile Include="Encoding\XmlEncoder.cs" />
     <Compile Include="Encoding\XPathExtensions.cs" />
     <Compile Include="Helpers\Extensions.cs" />
@@ -51,6 +62,9 @@
     <Compile Include="Validation\ValidationResultSet.cs" />
     <Compile Include="Validation\Validator.cs" />
     <Compile Include="Vocabs\TopicCategories.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
