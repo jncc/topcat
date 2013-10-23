@@ -14,11 +14,11 @@ h1 {
   font-size: 123%;
 }
 .search-result .search-title .glyphicon {
-  margin-left: 0.15em;
-  color: #333;
+  margin-left: 0.2em;
+  color: #666;
 }
 .search-result .search-title .glyphicon:hover {
-  color: #666;
+  color: #777;
 }
 .search-tags {
   margin-top: 6px;
