@@ -9,14 +9,22 @@ h1 {
 }
 
 .search-result {
-    // increase the title size
-    a { font-size: 123%; }
-
     // bold snippet highlights look too black
-    p b { color: #555; }
-
+    p b {
+        color: #555;
+    }
     // spacing between each result
     margin-bottom: 1.7em;
+
+    .search-title {
+        a { font-size: 123%; }
+
+        .glyphicon {
+            margin-left: 0.15em;
+            color: #333;
+            &:hover { color: #666; }
+        }
+    }
 }
 .search-tags {
     margin-top: 6px;
@@ -36,8 +44,12 @@ textarea {
 }
 
 .grey {
-    color: #999;
+    color: #ddd;
 }
+.dark {
+    color: #666;
+}
+
 .white {
     color: white;
 }

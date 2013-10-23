@@ -7,11 +7,18 @@ h1 {
 .search-result {
   margin-bottom: 1.7em;
 }
-.search-result a {
-  font-size: 123%;
-}
 .search-result p b {
   color: #555;
+}
+.search-result .search-title a {
+  font-size: 123%;
+}
+.search-result .search-title .glyphicon {
+  margin-left: 0.15em;
+  color: #333;
+}
+.search-result .search-title .glyphicon:hover {
+  color: #666;
 }
 .search-tags {
   margin-top: 6px;
@@ -26,7 +33,10 @@ textarea {
   max-height: 8em;
 }
 .grey {
-  color: #999;
+  color: #ddd;
+}
+.dark {
+  color: #666;
 }
 .white {
   color: white;

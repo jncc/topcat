@@ -33,8 +33,9 @@
 </div>
 
 <div ng-repeat="r in result.results" class="search-result">
-    <div>
+    <div class="search-title">
         <a ng-href="" ng-bind-html="r.title"></a>
+        <span ng-show="r.topCopy" class="dark glyphicon glyphicon-map-marker" title="Top copy"></span>
     </div>
     <div ng-bind-html="r.snippet"></div>
     <div class="search-tags">

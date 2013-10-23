@@ -62,6 +62,7 @@ namespace Catalogue.Web.Controllers.Search
                                 Snippet = x.abstractFragments.Select(f => f.TruncateNicely(200)).FirstOrDefault()
                                     ?? x.result.Gemini.Abstract.TruncateNicely(200),
                                 Keywords = x.result.Gemini.Keywords.OrderBy(k => k.Vocab).ToList(),
+                                TopCopy = x.result.TopCopy,
                             })
                             .ToList(),
                         Speed = watch.ElapsedMilliseconds,
