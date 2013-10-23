@@ -27,6 +27,7 @@ namespace Catalogue.Data.Import.Mappings
             public override void CreateMap()
             {
                 Map(m => m.Notes).Ignore();
+                Map(m => m.SourceIdentifier).Name("GUI");
                 References<MetadataMap>(m => m.Gemini);
             }
         }

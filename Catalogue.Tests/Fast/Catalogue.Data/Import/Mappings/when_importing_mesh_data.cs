@@ -1,12 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Text.RegularExpressions;
-using System.Threading.Tasks;
+﻿using System.Linq;
 using Catalogue.Data.Import.Mappings;
-using Catalogue.Gemini.Model;
-using Catalogue.Utilities.Text;
 using FluentAssertions;
 using NUnit.Framework;
 
@@ -24,11 +17,11 @@ namespace Catalogue.Tests.Fast.Catalogue.Data.Import.Mappings
             keywords.Should().HaveCount(5);
             keywords.Select(k => k.Vocab).Should().ContainInOrder(new []
                 {
-                    "jncc-broad-category",
-                    "OriginalSeabedClassificationSystem",
-                    "SeabedMapStatus",
-                    "SeabedMapStatus",
-                    "SeabedMapStatus",
+                    "http://vocab.jncc.gov.uk/jncc-broad-category",
+                    "http://vocab.jncc.gov.uk/original-seabed-classification-system",
+                    "http://vocab.jncc.gov.uk/seabed-map-status",
+                    "http://vocab.jncc.gov.uk/seabed-map-status",
+                    "http://vocab.jncc.gov.uk/seabed-map-status",
                 });
             keywords.Select(k => k.Value).Should().ContainInOrder(new[]
                 {

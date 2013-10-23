@@ -8,6 +8,16 @@ namespace Catalogue.Utilities.Text
 {
     public static class StringExtensions
     {
+        public static bool IsBlank(this string s)
+        {
+            return String.IsNullOrWhiteSpace(s);
+        }
+
+        public static bool IsNotBlank(this string s)
+        {
+            return !String.IsNullOrWhiteSpace(s);
+        }
+
         /// <summary>
         /// Creates a string from the sequence by concatenating the elements.
         /// </summary>

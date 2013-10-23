@@ -1,7 +1,9 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Catalogue.Data.Model;
 using Catalogue.Tests.Utility;
+using Catalogue.Utilities.Text;
 using FluentAssertions;
 using NUnit.Framework;
 
@@ -15,23 +17,50 @@ namespace Catalogue.Tests.Slow.Catalogue.Import
         public void SetUp()
         {
             // the DatabaseTestFixture will already have done the import ..!
+            // let's store everything in a list to allow standard linq-to-object queries
+            // (all mesh records have a "GUI" field which seems to be unique and starts with 'GB')
+            imported = Db.Query<Record>().Take(200).ToList()
+                .Where(r => r.SourceIdentifier.IsNotBlank() && r.SourceIdentifier.StartsWith("GB"))
+                .ToList();
+        }
 
-            imported = Db.Query<Record>().Take(200).ToList();
+        [Test]
+        public void should_import_all_mesh_data()
+        {
+            imported.Count().Should().Be(191);
         }
 
         [Test]
         public void should_import_keywords()
         {
+            // mesh data is categorised as 'SeabedHabitatMaps'
             imported.Count(r => r.Gemini.Keywords
-                .Any(k => k.Vocab == "http://vocab.jncc.gov.uk/jncc-broad-category"))
+                .Any(k => k.Vocab == "http://vocab.jncc.gov.uk/jncc-broad-category" && k.Value == "SeabedHabitatMaps"))
                 .Should().Be(191);
         }
 
         [Test]
         public void should_import_topic_category()
         {
-            // all records are "geoscientificInformation"
-            imported.Count(r => r.Gemini.TopicCategory == "geoscientificInformation").Should().BeGreaterThan(100);
+            // all mesh records are "geoscientificInformation"
+            imported.Count(r => r.Gemini.TopicCategory == "geoscientificInformation").Should().Be(191);
+        }
+
+        [Test]
+        public void should_import_unique_source_identifiers()
+        {
+            imported.Select(r => r.SourceIdentifier).Distinct().Count().Should().Be(191);
+        }
+
+
+        [Test]
+        public void all_records_should_have_valid_resource_location()
+        {
+            Uri uri; // need this for Uri.TryCreate; not actually using it
+
+            imported.Count(r => Uri.TryCreate(r.Gemini.ResourceLocator, UriKind.Absolute, out uri))
+                    .Should()
+                    .BeGreaterOrEqualTo(191);
         }
     }
 }
