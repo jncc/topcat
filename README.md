@@ -27,6 +27,11 @@ There is (allegedly) Resharper support. [http://blogs.jetbrains.com/dotnet/2013/
 ###RavenDB
 You can deploy Raven in various ways; the recommended is using IIS.
 
+###Resharper
+Currently best to disable Resharper > Options > Tools > Unit Testing > Javascript Tests > 
+* Enable QUnit support
+* Enable Jasmine support
+
 [http://ravendb.net/docs/server/deployment/as-iis-application]()
 
 * Download, unblock and unzip, and copy Web folder to e.g. e:\catalogue-deployments\Live\RavenDB\Web folder

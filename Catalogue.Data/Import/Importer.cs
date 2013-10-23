@@ -66,7 +66,7 @@ namespace Catalogue.Data.Import
         [SetUp]
         public void setup()
         {
-            recordService = Mock.Of<IRecordService>();
+            recordService = Mock.Of<IRecordService>(rs => rs.Insert(It.IsAny<Record>()).Succeeded == true);
 
             string path = @"c:\some\path.csv";
             var fileSystem = Mock.Of<IFileSystem>(fs => fs.OpenReader(path) == new StringReader(testData));
@@ -89,9 +89,9 @@ namespace Catalogue.Data.Import
         }
 
         string testData =
-@"Abstract,Notes,Blah
-This is the abstract,These are the notes
-Another abstract,Some more notes";
+@"Abstract,Notes,ResourceLocator,Blah
+This is the abstract,These are the notes,Z:\some\location
+Another abstract,Some more notes,file:///z/some/location";
 
     }
 
@@ -119,6 +119,7 @@ Another abstract,Some more notes";
             public override void CreateMap()
             {
                 this.Map(m => m.Abstract);
+                this.Map(m => m.ResourceLocator);
             }
         }
     }
