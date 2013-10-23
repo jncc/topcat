@@ -60,5 +60,10 @@ namespace Catalogue.Tests.Slow.Catalogue.Import
             imported.Count(r => Uri.TryCreate(r.Gemini.ResourceLocator, UriKind.Absolute, out uri))
                     .Should().Be(183);
         }
+
+        [Test] public void all_records_should_be_marked_as_top_copy()
+        {
+            imported.Count(r => r.TopCopy).Should().Be(183);
+        }
     }
 }
