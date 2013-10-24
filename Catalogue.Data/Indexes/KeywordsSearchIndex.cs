@@ -7,6 +7,9 @@ using Raven.Client.Indexes;
 
 namespace Catalogue.Data.Indexes
 {
+    /// <summary>
+    /// This index just makes a list of distinct keywords (vocab/value pairs).
+    /// </summary>
     public class KeywordsSearchIndex : AbstractIndexCreationTask<Record, KeywordsSearchIndex.Result>
     {
         public class Result
@@ -14,12 +17,13 @@ namespace Catalogue.Data.Indexes
             public string Key { get; set; }
             public string Vocab { get; set; }
             public string Value { get; set; }
-            public string ValueN { get; set; }  // don't quite know why we need a separate field for custom ngram search
+            public string ValueN { get; set; }
         }
 
         public KeywordsSearchIndex()
         {
-            // make an index of distinct keywords (vocab/value pairs)
+            // we use a separate field for custom ngram search because it's of limited length
+            // and we want to always be able to match the full keyword!
 
             Map = records => from record in records
                              from k in record.Gemini.Keywords
@@ -41,13 +45,13 @@ namespace Catalogue.Data.Indexes
                                ValueN = g.First().Value,
                            };
 
+            Analyze(x => x.Vocab, typeof(KeywordAnalyzer).AssemblyQualifiedName);
+            Stores.Add(x => x.Vocab, FieldStorage.Yes);
+
             Analyze(x => x.Value, typeof(KeywordAnalyzer).AssemblyQualifiedName);
             Stores.Add(x => x.Value, FieldStorage.Yes);
 
             Analyze(x => x.ValueN, typeof(CustomKeywordAnalyzer).AssemblyQualifiedName);
-
-            Analyze(x => x.Vocab, typeof(KeywordAnalyzer).AssemblyQualifiedName);
-            Stores.Add(x => x.Vocab, FieldStorage.Yes);
         }
     }
 }

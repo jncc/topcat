@@ -15,17 +15,15 @@ namespace Catalogue.Tests.Slow.Catalogue.Data.Indexes
         {
             Db.Query<KeywordsSearchIndex.Result, KeywordsSearchIndex>()
               .Where(k => k.Vocab == "http://vocab.jncc.gov.uk/jncc-broad-category" && k.Value == "SeabedHabitatMaps")
-              //.Search(r => r.Value, "SeabedHabitatMaps")
               .Count().Should().Be(1);
         }
 
         [Test]
-        public void should_be_able_to_get_keywords_grouped_by_vocab()
+        public void should_be_able_to_get_all_vocabs_in_order()
         {
             var results = Db.Query<KeywordsSearchIndex.Result, KeywordsSearchIndex>()
-                .OrderBy(r => r.Vocab).ThenBy(r => r.Value)
-                .Take(100)
-                .ToList();
+                .OrderBy(r => r.Vocab)
+                .Take(100).ToList();
 
             results.GroupBy(r => r.Vocab).Select(g => g.Key).Should().ContainInOrder(new []
                 {
@@ -40,7 +38,11 @@ namespace Catalogue.Tests.Slow.Catalogue.Data.Indexes
         [Test]
         public void can_search_partial_matches_for_autocomplete()
         {
-            // don't quite know why we need a separate field for custom ngram search
+            // use the ngram search field for partial matches
+
+            Db.Query<KeywordsSearchIndex.Result, KeywordsSearchIndex>()
+              .Search(r => r.ValueN, "se")
+              .Count().Should().BeGreaterOrEqualTo(1);
 
             Db.Query<KeywordsSearchIndex.Result, KeywordsSearchIndex>()
               .Search(r => r.ValueN, "seab")
@@ -49,6 +51,12 @@ namespace Catalogue.Tests.Slow.Catalogue.Data.Indexes
             Db.Query<KeywordsSearchIndex.Result, KeywordsSearchIndex>()
               .Search(r => r.ValueN, "seabe")
               .Count().Should().Be(1);
+        }
+
+        [Test]
+        public void can_search_exact_matches()
+        {
+            // use the standard search field for exact matches
 
             Db.Query<KeywordsSearchIndex.Result, KeywordsSearchIndex>()
               .Search(r => r.Value, "SeabedHabitatMaps")
