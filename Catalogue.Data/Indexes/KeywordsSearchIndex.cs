@@ -12,17 +12,34 @@ using Raven.Client.Indexes;
 
 namespace Catalogue.Data.Indexes
 {
-    public class Keywords_Search : AbstractIndexCreationTask<Record, Keyword>
+    public class KeywordsSearchIndex : AbstractIndexCreationTask<Record, KeywordsSearchIndex.Result>
     {
-        public Keywords_Search()
+        public class Result
+        {
+            public string Key { get; set; }
+            public string Vocab { get; set; }
+            public string Value { get; set; }
+        }
+
+        public KeywordsSearchIndex()
         {
             Map = records => from record in records
                              from k in record.Gemini.Keywords
                              select new
                              {
+                                 Key = k.Vocab + ":::" + k.Value,
                                  Vocab = k.Vocab,
                                  Value = k.Value,
                              };
+
+            Reduce = xs => from x in xs
+                           group x by x.Key into g
+                           select new
+                            {
+                                Key = g.Key,
+                                Vocab = g.First().Vocab,
+                                Value = g.First().Value,
+                            };
 
 //            Analyze(x => x.Value, typeof(NGramAnalyzer).AssemblyQualifiedName);
 //            Stores.Add(x => x.Value, FieldStorage.Yes);

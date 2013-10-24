@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Catalogue.Data.Indexes;
 using Catalogue.Gemini.Model;
 using Catalogue.Tests.Utility;
 using FluentAssertions;
@@ -16,12 +17,22 @@ namespace Catalogue.Tests.Slow.Catalogue.Data.Indexes
         [Test]
         public void should_be_able_to_query_keywords()
         {
-            var results = Db.Query<Keyword>("Keywords/Search")
-              .Search(k => k.Value, "SeabedHabitatMaps")
-              .Take(10)
+            Db.Query<KeywordsSearchIndex.Result, KeywordsSearchIndex>()
+              .Where(k => k.Value == "SeabedHabitatMaps")
+              .Count().Should().Be(1);
+
+            var results = Db.Query<KeywordsSearchIndex.Result, KeywordsSearchIndex>()
+              .Take(100)
               .ToList();
 
-            results.Count.Should().Be(10);
+            foreach (var result in results)
+            {
+                Console.WriteLine(result.Key);
+                Console.WriteLine(result.Vocab);
+                Console.WriteLine(result.Value);
+                Console.WriteLine();
+            }
+
         }
     }
 }
