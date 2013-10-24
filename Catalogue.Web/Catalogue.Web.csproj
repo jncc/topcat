@@ -175,7 +175,6 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="App_Start\NinjectWebCommon.cs" />
     <Compile Include="Controllers\Home\HomeController.cs" />
     <Compile Include="Controllers\Items\ItemsController.cs" />
     <Compile Include="Controllers\Keywords\KeywordsController.cs" />
@@ -196,6 +195,7 @@
       <Link>Properties\SharedAssemblyInfo.cs</Link>
     </Compile>
     <Compile Include="Injection\MainNinjectModule.cs" />
+    <Compile Include="Injection\NinjectBootstrapping.cs" />
     <Compile Include="Injection\NinjectDependencyResolver.cs" />
     <Compile Include="Injection\NinjectScope.cs" />
   </ItemGroup>
