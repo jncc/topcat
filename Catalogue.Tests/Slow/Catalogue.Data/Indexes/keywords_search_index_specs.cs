@@ -43,9 +43,11 @@ namespace Catalogue.Tests.Slow.Catalogue.Data.Indexes
         [Test]
         public void can_search_partial_matches_for_autocomplete()
         {
-//            Db.Query<KeywordsSearchIndex.Result, KeywordsSearchIndex>()
-//              .Search(r => r.Value, "Sea")
-//              .Count().Should().Be(1);
+            Db.Advanced.LuceneQuery<KeywordsSearchIndex.Result>("KeywordsSearchIndex")
+//          Db.Query<KeywordsSearchIndex.Result, KeywordsSearchIndex>()
+              .Search("Value", "sea")
+              .ToList()
+              .Count().Should().Be(1);
 //
 //            Db.Query<KeywordsSearchIndex.Result, KeywordsSearchIndex>()
 //              .Search(r => r.Value, "Seabed")

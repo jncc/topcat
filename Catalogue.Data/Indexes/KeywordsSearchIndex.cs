@@ -38,10 +38,11 @@ namespace Catalogue.Data.Indexes
                                Value = g.First().Value,
                            };
 
-            Analyze(x => x.Value, typeof(CustomKeywordAnalyzer).AssemblyQualifiedName);
-            Stores.Add(x => x.Value, FieldStorage.Yes);
-
             Analyze(x => x.Value, typeof(KeywordAnalyzer).AssemblyQualifiedName);
+            Stores.Add(x => x.Value, FieldStorage.Yes);
+            TermVector(x => x.Value, FieldTermVector.WithPositionsAndOffsets);
+
+            Analyze(x => x.Vocab, typeof(KeywordAnalyzer).AssemblyQualifiedName);
             Stores.Add(x => x.Vocab, FieldStorage.Yes);
         }
     }
