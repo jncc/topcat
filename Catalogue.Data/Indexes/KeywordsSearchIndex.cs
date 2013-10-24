@@ -14,6 +14,7 @@ namespace Catalogue.Data.Indexes
             public string Key { get; set; }
             public string Vocab { get; set; }
             public string Value { get; set; }
+            public string ValueN { get; set; }
         }
 
         public KeywordsSearchIndex()
@@ -27,6 +28,7 @@ namespace Catalogue.Data.Indexes
                                  Key = k.Vocab + "::" + k.Value, // make a unique key field
                                  Vocab = k.Vocab,
                                  Value = k.Value,
+                                 ValueN = k.Value,
                              };
 
             Reduce = xs => from x in xs
@@ -36,11 +38,13 @@ namespace Catalogue.Data.Indexes
                                Key = g.Key,
                                Vocab = g.First().Vocab,
                                Value = g.First().Value,
+                               ValueN = g.First().Value,
                            };
 
             Analyze(x => x.Value, typeof(KeywordAnalyzer).AssemblyQualifiedName);
             Stores.Add(x => x.Value, FieldStorage.Yes);
-            TermVector(x => x.Value, FieldTermVector.WithPositionsAndOffsets);
+
+            Analyze(x => x.ValueN, typeof(CustomKeywordAnalyzer).AssemblyQualifiedName);
 
             Analyze(x => x.Vocab, typeof(KeywordAnalyzer).AssemblyQualifiedName);
             Stores.Add(x => x.Vocab, FieldStorage.Yes);
