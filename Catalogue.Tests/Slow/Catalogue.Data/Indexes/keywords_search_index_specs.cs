@@ -1,11 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Catalogue.Data.Indexes;
 using Catalogue.Tests.Utility;
-using Catalogue.Utilities.Diagnostics;
 using FluentAssertions;
 using NUnit.Framework;
 using Raven.Client;
@@ -44,14 +40,14 @@ namespace Catalogue.Tests.Slow.Catalogue.Data.Indexes
         [Test]
         public void can_search_partial_matches_for_autocomplete()
         {
-            var results  = Db.Query<KeywordsSearchIndex.Result, KeywordsSearchIndex>()
-              .Search(r => r.ValueN, "sea").ToList();
-
-            ObjectDumper.WriteAll(results);
-            //              .Count().Should().Be(1);
+            // don't quite know why we need a separate field for custom ngram search
 
             Db.Query<KeywordsSearchIndex.Result, KeywordsSearchIndex>()
               .Search(r => r.ValueN, "seab")
+              .Count().Should().Be(1);
+
+            Db.Query<KeywordsSearchIndex.Result, KeywordsSearchIndex>()
+              .Search(r => r.ValueN, "seabe")
               .Count().Should().Be(1);
 
             Db.Query<KeywordsSearchIndex.Result, KeywordsSearchIndex>()

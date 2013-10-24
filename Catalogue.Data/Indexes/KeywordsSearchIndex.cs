@@ -14,7 +14,7 @@ namespace Catalogue.Data.Indexes
             public string Key { get; set; }
             public string Vocab { get; set; }
             public string Value { get; set; }
-            public string ValueN { get; set; }
+            public string ValueN { get; set; }  // don't quite know why we need a separate field for custom ngram search
         }
 
         public KeywordsSearchIndex()
