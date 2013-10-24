@@ -13,10 +13,7 @@ namespace Catalogue.Web.Controllers.Sandbox
     {
         public ActionResult Active()
         {
-            var p = HttpContext.User.Identity;
-
-
-            string username = "username";
+            string username = HttpContext.User.Identity.Name;
             string domain = "jncc-boss.green.jncc.gov.uk";
 
 
@@ -30,7 +27,7 @@ namespace Catalogue.Web.Controllers.Sandbox
             var emails = from object property in properties["proxyaddresses"]
                          select property.ToString();
 
-            return Json(HttpContext.User.Identity.Name, JsonRequestBehavior.AllowGet);
+            return Json(new { user.EmailAddress, user.DisplayName , user.GivenName }, JsonRequestBehavior.AllowGet);
         }
     }
 //
