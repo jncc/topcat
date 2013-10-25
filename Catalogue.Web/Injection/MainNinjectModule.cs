@@ -2,8 +2,12 @@
 using System.Collections.Generic;
 using System.Configuration;
 using System.Linq;
+using System.Security.Principal;
 using System.Web;
+using Catalogue.Web.Code;
+using Catalogue.Web.Code.Account;
 using Ninject;
+using Ninject.Extensions.Conventions;
 using Ninject.Modules;
 using Ninject.Web.Common;
 using Raven.Client;
@@ -17,30 +21,20 @@ namespace Catalogue.Web.Injection
     {
         public override void Load()
         {
-            // use Ninject.Extensions.Conventions for easy convention-based binding
-            //            this.Kernel.Scan(scanner =>
-            //            {
-            //                scanner.FromAssembliesMatching("Catalogue.*");
-            //                scanner.BindWithDefaultConventions();
-            //            });
-
-            //            Bind<ILog>().ToMethod(x => LogManager.GetLogger("Catalogue.Web.log"));
+            // use Ninject.Extensions.Conventions for easy ISomeType -> SomeType bindings
+            Kernel.Bind(x => x
+                .FromAssembliesMatching("Catalogue.*")
+                .SelectAllClasses()
+                .BindDefaultInterface());
 
             Bind<IDocumentStore>().ToMethod(x => WebApiApplication.DocumentStore);
+
             Bind<IDocumentSession>()
                 .ToMethod(c => c.Kernel.Get<IDocumentStore>().OpenSession())
                 .InRequestScope();
 
-            // convenient and efficient (get user just once)
-            //            Rebind<IUserContext>()
-            //                .ToMethod(x => new UserContext(Kernel.Get<IDocumentSession>(), Kernel.Get<IAuthenticationService>(), Kernel.Get<ISessionService>()))
-            //                .InRequestScope();
-
-            if (ConfigurationManager.AppSettings["Environment"] == "Dev")
-            {
-                // write emails to the file system
-                //                Rebind<ISmtpService>().To<FileSystemSmtpService>();
-            }
+            Bind<IPrincipal>().ToMethod(x => HttpContext.Current.User);
+            Rebind<IUserContext>().To<UserContext>().InRequestScope();
         }
     }
 }

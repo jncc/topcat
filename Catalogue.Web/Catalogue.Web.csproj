@@ -64,6 +64,9 @@
     <Reference Include="Ninject">
       <HintPath>..\packages\Ninject.3.0.1.10\lib\net45-full\Ninject.dll</HintPath>
     </Reference>
+    <Reference Include="Ninject.Extensions.Conventions">
+      <HintPath>..\packages\ninject.extensions.conventions.3.0.0.11\lib\net45-full\Ninject.Extensions.Conventions.dll</HintPath>
+    </Reference>
     <Reference Include="Ninject.Web.Common">
       <HintPath>..\packages\Ninject.Web.Common.3.0.0.7\lib\net45-full\Ninject.Web.Common.dll</HintPath>
     </Reference>
@@ -158,6 +161,10 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Code\Account\User.cs" />
+    <Compile Include="Code\Account\UserContext.cs" />
+    <Compile Include="Code\Settings.cs" />
+    <Compile Include="Controllers\Account\AccountController.cs" />
     <Compile Include="Controllers\Home\HomeController.cs" />
     <Compile Include="Controllers\Items\ItemsController.cs" />
     <Compile Include="Controllers\Keywords\KeywordsController.cs" />
@@ -171,6 +178,7 @@
     <Compile Include="Controllers\Validator\ValidatorController.cs" />
     <Compile Include="Controllers\Validator\ValidatorInputModel.cs" />
     <Compile Include="Controllers\Validator\ValidatorResult.cs" />
+    <Compile Include="Code\Environment.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -359,6 +367,7 @@
   <ItemGroup>
     <Content Include="test\e2e\scenarios.coffee" />
   </ItemGroup>
+  <ItemGroup />
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
