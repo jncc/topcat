@@ -1,10 +1,21 @@
 ﻿
 module = angular.module 'app.services'
 
+#todo: work in progress
+#module.factory 'Account', ($resource) ->
+#    $resource '../api/account'
+
+#module.factory 'UserLoader', (Account, $route, $q) ->
+#    () ->
+#        d = $q.defer()
+#        Account.get
+#            id: $route.current.params.recordId,
+#            (user) -> d.resolve user,
+#            () -> d.reject 'Unable to fetch user'
+#        d.promise
+
 module.factory 'Record', ['$resource', ($resource) ->
     $resource '../api/records/:id', id: '@id' ]
-
-
 
 module.factory 'RecordLoader', (Record, $route, $q) ->
     () ->
@@ -12,7 +23,7 @@ module.factory 'RecordLoader', (Record, $route, $q) ->
         Record.get
             id: $route.current.params.recordId,
             (record) -> d.resolve record,
-                     -> d.reject 'Unable to fetch record ' + $route.current.params.recordId
+            () -> d.reject 'Unable to fetch record ' + $route.current.params.recordId
         d.promise
 
 module.factory 'misc', ->

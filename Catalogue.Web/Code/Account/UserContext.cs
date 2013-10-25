@@ -43,7 +43,6 @@ namespace Catalogue.Web.Code.Account
                     {
                         // swallow and proceed as guest user
                     }
-
                 }
 
                 user = new User("guest@example.com", "Guest User", "Guest");
