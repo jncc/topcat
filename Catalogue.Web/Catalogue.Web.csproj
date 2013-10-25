@@ -287,12 +287,15 @@
     <Content Include="test\e2e\scenarios.min.js" />
     <Content Include="test\lib\angular\angular-mocks.js" />
     <Content Include="test\lib\angular\angular-scenario.js" />
-    <Content Include="Web.config" />
+    <Content Include="Web.config">
+      <SubType>Designer</SubType>
+    </Content>
     <Content Include="Web.Dev.config">
       <DependentUpon>Web.config</DependentUpon>
     </Content>
     <Content Include="Web.Test.config">
       <DependentUpon>Web.config</DependentUpon>
+      <SubType>Designer</SubType>
     </Content>
     <Content Include="app\css\main.less" />
     <Content Include="app\lib\jquery-placeholder-2.0.7\README.md" />
