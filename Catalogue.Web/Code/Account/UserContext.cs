@@ -35,17 +35,19 @@ namespace Catalogue.Web.Code.Account
                     try
                     {
                         var domainContext = new PrincipalContext(ContextType.Domain, settings.Domain);
-                        var userPrincipal = UserPrincipal.FindByIdentity(domainContext, principal.Identity.Name);
+                        var u = UserPrincipal.FindByIdentity(domainContext, principal.Identity.Name);
 
-                        user = new User(userPrincipal.EmailAddress, userPrincipal.DisplayName, userPrincipal.GivenName);
+                        user = new User(u.EmailAddress, u.DisplayName, u.GivenName);
                     }
                     catch (PrincipalServerDownException)
                     {
                         // swallow and proceed as guest user
                     }
+
+                    user = new User("guest@example.com", "Guest User", "Guest");
                 }
 
-                return user ?? new User("guest@example.com", "Guest User", "Guest");
+                return user;
             }
         }
     }
