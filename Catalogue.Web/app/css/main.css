@@ -1,8 +1,24 @@
 ﻿html {
   overflow-y: scroll;
 }
-h1 {
+.header {
+  width: 100%;
+  margin-top: 1.4em;
+}
+.header td {
+  vertical-align: middle;
+}
+.header h1 {
+  margin: 0;
   opacity: .5;
+}
+.header .user-info {
+  text-align: right;
+  color: #aaa;
+}
+.header .user-info div:first-child {
+  font-size: 123%;
+  color: #666;
 }
 .search-result {
   margin-bottom: 1.7em;

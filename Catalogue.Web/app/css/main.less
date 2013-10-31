@@ -4,9 +4,24 @@ html {
 	overflow-y: scroll; 
 }
 
-h1 {
-    opacity: .5;
+.header {
+    // gave up and used a table for vertical alignment
+    width: 100%;
+    margin-top: 1.4em;
+    td { vertical-align: middle; }
+    h1 { margin: 0; opacity: .5; }
+    .user-info {
+        text-align: right;
+        color: #aaa;
+        div:first-child {
+            //margin-right: 3px;
+            font-size:123%;
+            color: #666;
+        }
+    }
 }
+
+
 
 .search-result {
     // bold snippet highlights look too black

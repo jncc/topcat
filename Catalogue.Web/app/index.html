@@ -27,6 +27,7 @@
     <script src="js/utilities.js"></script>
     <script src="js/directives.js"></script>
     <script src="js/services.js"></script>
+    <script src="js/controllers/MainController.js"></script>
     <script src="js/controllers/SandboxController.js"></script>
     <script src="js/controllers/SearchController.js"></script>
     <script src="js/controllers/EditorController.js"></script>
@@ -34,40 +35,39 @@
         ZeroClipboard.setDefaults({ moviePath: 'lib/zeroclipboard-1.1.7/ZeroClipboard.swf' });
     </script>
 </head>
-<body>
-    
+<body ng-controller="MainController">
+ 
     <div class="container">
         
-        <div class="row ">
-            <div class="col-md-6">
-                <h1>
-                    <img src="img/logo.gif" alt="logo" height="50" width="80"> catalogue 
-                    <span tc-spinner ng-show="busy.value"><img src="img/spinner.gif"/></span>
-                </h1>
-            </div>
-        
-            <div class="col-md-6">
-<!--                <br />-->
-<!--                <div class="form-group text-right">-->
-<!--                    <button  class="btn btn-primary" tc-back-button>-->
-<!--                        <span class="white glyphicon glyphicon-circle-arrow-left"></span> BACK-->
-<!--                    </button>-->
-<!--                    &nbsp;-->
-<!--                    <button ng-click="cancel()"  class="btn">CANCEL</button> $1$ng-disabled="isCancelDisabled()"#1#-->
-<!--                    <button ng-click="save()" class="btn btn-danger">SAVE</button> $1$ng-disabled="isSaveDisabled()"#1#-->
-<!--                </div>-->
-            </div>
-        </div>
-        
+        <table class="header">
+            <tr>
+                <td>
+                    <h1 title="Catalogue">
+                        <a href="#">
+                            <img src="img/logo.gif" alt="logo" height="50" width="80">
+                            <span tc-spinner ng-show="busy.value"><img src="img/spinner.gif"/></span>
+                        </a>
+                    </h1>
+
+                </td>
+                <td class="user-info">
+<!--                    <span class="glyphicon glyphicon-user"></span>-->
+                    <div>{{user.displayName}}</div>
+                    <div>{{user.email}}</div>
+                </td>
+            </tr>
+        </table>
         <hr />
+
+        <br />
         <br />
         <div ng-view></div>
           
         <br class="clearfix" />
 
-<!--        <nav class="navbar navbar-default navbar-fixed-bottom text-center" role="navigation">-->
-<!--            Go to <a ng-href="#/editor/123">editor</a>.-->
-<!--        </nav>-->
+        <!--        <nav class="navbar navbar-default navbar-fixed-bottom text-center" role="navigation">-->
+        <!--            Go to <a ng-href="#/editor/123">editor</a>.-->
+        <!--        </nav>-->
 
     </div>
 

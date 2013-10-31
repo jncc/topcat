@@ -212,6 +212,12 @@
     <Content Include="app\js\controllers\EditorController.min.js">
       <DependentUpon>EditorController.coffee</DependentUpon>
     </Content>
+    <Content Include="app\js\controllers\MainController.js">
+      <DependentUpon>MainController.coffee</DependentUpon>
+    </Content>
+    <Content Include="app\js\controllers\MainController.min.js">
+      <DependentUpon>MainController.coffee</DependentUpon>
+    </Content>
     <Content Include="app\js\controllers\SandboxController.js" />
     <Content Include="app\js\controllers\SearchController.js">
       <DependentUpon>SearchController.coffee</DependentUpon>
@@ -367,7 +373,9 @@
   <ItemGroup>
     <Content Include="test\e2e\scenarios.coffee" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Content Include="app\js\controllers\MainController.coffee" />
+  </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
