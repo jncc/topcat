@@ -27,12 +27,16 @@ namespace Catalogue.Web.Injection
                 .SelectAllClasses()
                 .BindDefaultInterface());
 
+            // the raven document store should be an application-scoped singleton
             Bind<IDocumentStore>().ToMethod(x => WebApiApplication.DocumentStore);
 
+            // inject a once-per-request raven document session
             Bind<IDocumentSession>()
-                .ToMethod(c => c.Kernel.Get<IDocumentStore>().OpenSession())
+                .ToMethod(x => WebApiApplication.DocumentStore.OpenSession())
                 .InRequestScope();
 
+            // convenience binding for the asp.net-provided current user
+            // which is used by the once-per-request user context object
             Bind<IPrincipal>().ToMethod(x => HttpContext.Current.User);
             Rebind<IUserContext>().To<UserContext>().InRequestScope();
         }

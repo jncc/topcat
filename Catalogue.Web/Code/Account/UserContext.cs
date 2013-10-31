@@ -1,14 +1,19 @@
 ﻿using System;
 using System.DirectoryServices.AccountManagement;
 using System.Security.Principal;
+using System.Web;
 
 namespace Catalogue.Web.Code.Account
 {
     public interface IUserContext
     {
         User User { get; }
+        bool Authenticated { get; }
     }
 
+    /// <summary>
+    /// Lazily provides (and then retains in its object lifetime) user details from Active Directory.
+    /// </summary>
     public class UserContext : IUserContext
     {
         readonly IPrincipal principal;
@@ -29,26 +34,24 @@ namespace Catalogue.Web.Code.Account
             get
             {
                 // query active directory for user details
-                // just do this once since it must be expensive
+                // just do this once since it is surely expensive
                 if (user == null && environment.WindowsAuthentication && principal.Identity.IsAuthenticated)
                 {
-                    try
-                    {
-                        var domainContext = new PrincipalContext(ContextType.Domain, settings.Domain);
-                        var u = UserPrincipal.FindByIdentity(domainContext, principal.Identity.Name);
+                    // may throw PrincipalServerDownException and presumably a lot more...
 
-                        user = new User(u.EmailAddress, u.DisplayName, u.GivenName);
-                    }
-                    catch (PrincipalServerDownException)
-                    {
-                        // swallow and proceed as guest user
-                    }
+                    var domainContext = new PrincipalContext(ContextType.Domain, settings.Domain);
+                    var u = UserPrincipal.FindByIdentity(domainContext, principal.Identity.Name);
+
+                    user = new User(u.EmailAddress, u.DisplayName, u.GivenName);
                 }
 
-                user = new User("guest@example.com", "Guest User", "Guest");
-
-                return user;
+                return user ?? new User("guest@example.com", "Guest User", "Guest");
             }
+        }
+
+        public bool Authenticated
+        {
+            get { return principal.Identity.IsAuthenticated; }
         }
     }
 }
