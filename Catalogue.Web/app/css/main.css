@@ -2,17 +2,25 @@
   overflow-y: scroll;
 }
 .header {
+  display: table;
   width: 100%;
   margin-top: 1.4em;
 }
-.header td {
+.header .cell-mixin {
+  display: table-cell;
   vertical-align: middle;
 }
-.header h1 {
+.header .logo {
+  display: table-cell;
+  vertical-align: middle;
+}
+.header .logo h1 {
   margin: 0;
   opacity: .5;
 }
 .header .user-info {
+  display: table-cell;
+  vertical-align: middle;
   text-align: right;
   color: #aaa;
 }

@@ -39,24 +39,21 @@
  
     <div class="container">
         
-        <table class="header">
-            <tr>
-                <td>
+        <div class="header">
+                <div class="logo">
                     <h1 title="Catalogue">
                         <a href="#">
                             <img src="img/logo.gif" alt="logo" height="50" width="80">
                             <span tc-spinner ng-show="busy.value"><img src="img/spinner.gif"/></span>
                         </a>
                     </h1>
-
-                </td>
-                <td class="user-info">
-<!--                    <span class="glyphicon glyphicon-user"></span>-->
+                </div>
+                <div class="user-info">
+<!--                <span class="glyphicon glyphicon-user"></span>-->
                     <div>{{user.displayName}}</div>
                     <div>{{user.email}}</div>
-                </td>
-            </tr>
-        </table>
+                </div>
+        </div>
         <hr />
 
         <br />

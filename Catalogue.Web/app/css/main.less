@@ -5,12 +5,24 @@ html {
 }
 
 .header {
+    .cell-mixin {
+        display: table-cell;
+        vertical-align: middle;
+    }
+
     // gave up and used a table for vertical alignment
+    display: table;
     width: 100%;
     margin-top: 1.4em;
-    td { vertical-align: middle; }
-    h1 { margin: 0; opacity: .5; }
+    //td { vertical-align: middle; }
+
+    .logo {
+        .cell-mixin;
+        h1 { margin: 0; opacity: .5; }
+    }
+
     .user-info {
+        .cell-mixin;
         text-align: right;
         color: #aaa;
         div:first-child {
