@@ -3,6 +3,15 @@
 
   module = angular.module('app.services');
 
+  module.factory('Account', function($http, $q) {
+    var d;
+    d = $q.defer();
+    $http.get('../api/account').success(function(data) {
+      return d.resolve(data);
+    });
+    return d.promise;
+  });
+
   module.factory('Record', [
     '$resource', function($resource) {
       return $resource('../api/records/:id', {

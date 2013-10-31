@@ -1,10 +1,9 @@
 ﻿(function() {
 
-  angular.module('app.controllers').controller('MainController', function($scope) {
-    return $scope.user = {
-      displayName: 'Pete Montgomery',
-      email: 'pete.montgomery@jncc.gov.uk'
-    };
+  angular.module('app.controllers').controller('MainController', function($scope, Account) {
+    return Account.then(function(user) {
+      return $scope.user = user;
+    });
   });
 
 }).call(this);

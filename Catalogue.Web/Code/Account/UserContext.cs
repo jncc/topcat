@@ -45,7 +45,7 @@ namespace Catalogue.Web.Code.Account
                     user = new User(u.EmailAddress, u.DisplayName, u.GivenName);
                 }
 
-                return user ?? new User("guest@example.com", "Guest User", "Guest");
+                return user ?? new User("Guest User", "Guest", "guest@example.com");
             }
         }
 

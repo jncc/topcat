@@ -1,18 +1,11 @@
 ﻿
 module = angular.module 'app.services'
 
-#todo: work in progress
-#module.factory 'Account', ($resource) ->
-#    $resource '../api/account'
-
-#module.factory 'UserLoader', (Account, $route, $q) ->
-#    () ->
-#        d = $q.defer()
-#        Account.get
-#            id: $route.current.params.recordId,
-#            (user) -> d.resolve user,
-#            () -> d.reject 'Unable to fetch user'
-#        d.promise
+module.factory 'Account', ($http, $q) ->
+    d = $q.defer()
+    $http.get('../api/account').success (data) ->
+        d.resolve data
+    d.promise
 
 module.factory 'Record', ['$resource', ($resource) ->
     $resource '../api/records/:id', id: '@id' ]
