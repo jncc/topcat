@@ -19,18 +19,25 @@ The application will expect the correct .js and .css files to have be design-tim
 
 [http://visualstudiogallery.msdn.microsoft.com/07d54d12-7133-4e15-becb-6f451ea3bea6]()
 
-This may be in Visual Studio Update 2013 now!
+This support might be built-in to Visual Studio 2013.
 
 ###AngularJS
 There is (allegedly) Resharper support. [http://blogs.jetbrains.com/dotnet/2013/02/angularjs-support-for-resharper/]()
-
-###RavenDB
-You can deploy Raven in various ways; the recommended is using IIS.
 
 ###Resharper
 Currently best to disable Resharper > Options > Tools > Unit Testing > Javascript Tests > 
 * Enable QUnit support
 * Enable Jasmine support
+
+Deployment
+----------
+
+###Windows Authentication
+User account details and authentication rely on Active Directory and Windows authentication.
+This give a great user experience in Chrome and IE.
+
+###RavenDB
+You can deploy Raven in various ways; the recommended is using IIS.
 
 [http://ravendb.net/docs/server/deployment/as-iis-application]()
 
