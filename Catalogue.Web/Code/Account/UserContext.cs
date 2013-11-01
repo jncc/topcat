@@ -42,7 +42,7 @@ namespace Catalogue.Web.Code.Account
                     var domainContext = new PrincipalContext(ContextType.Domain, settings.Domain);
                     var u = UserPrincipal.FindByIdentity(domainContext, principal.Identity.Name);
 
-                    user = new User(u.EmailAddress, u.DisplayName, u.GivenName);
+                    user = new User(u.DisplayName, u.GivenName, u.EmailAddress);
                 }
 
                 return user ?? new User("Guest User", "Guest", "guest@example.com");
