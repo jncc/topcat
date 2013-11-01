@@ -17,6 +17,24 @@
     <Import Project="MSBuild.Community.Tasks\MSBuild.Community.Tasks.Targets" />
     <Import Project="Monty.Infrastructure.MSBuild.Tasks\Monty.Infrastructure.MSBuild.Tasks.targets" />
     
+    <!-- define an inline task to replace strings in files -->
+	  <UsingTask TaskName="ReplaceStringInFile" TaskFactory="CodeTaskFactory" AssemblyFile="$(MSBuildToolsPath)\Microsoft.Build.Tasks.v4.0.dll">
+    <ParameterGroup>
+      <Path ParameterType="System.String" Required="true" />
+      <Token ParameterType="System.String" Required="true" />
+      <Replacement ParameterType="System.String" Required="true" />
+    </ParameterGroup>
+    <Task>
+      <Code Type="Fragment" Language="cs"><![CDATA[
+string content = File.ReadAllText(Path);
+content = content.Replace(Token, Replacement);
+File.WriteAllText(Path, content);
+
+]]></Code>
+    </Task>
+  </UsingTask>
+
+	
     <!-- override property defined in MSBuild.Community.Tasks.targets to reference relatively  -->
     <PropertyGroup>
         <MSBuildCommunityTasksLib>MSBuild.Community.Tasks.dll</MSBuildCommunityTasksLib>
@@ -24,6 +42,8 @@
 
 	<Target Name="Build">
 	
+		       <Message Text="=== $(MSBuildToolsPath)" Importance="high" />
+
         <!-- version-->
         <Time Format="yyyyMMddHHmmss">
             <Output PropertyName="TimeStamp" TaskParameter="FormattedTime" />
@@ -75,7 +95,9 @@
             AssemblyInformationalVersion="$(VersionStamp)"
             AssemblyConfiguration="$(Environment)"    
             />                  
-            
+
+        <!-- put the version stamp into the static index.html page -->    
+		<ReplaceStringInFile Path="..\Catalogue.Web\app\index.html" Token="#version" Replacement="$(VersionStamp)"/>
             
         <!-- clean -->
 		<Message Text="=== Ensuring clean output directory $(BuildOutputPath)" Importance="High" />
