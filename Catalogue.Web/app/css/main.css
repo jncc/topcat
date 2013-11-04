@@ -5,6 +5,9 @@ h2,
 h3 {
   color: #888888;
 }
+.label-success {
+  background-color: #35d926;
+}
 .header {
   display: table;
   width: 100%;
@@ -33,13 +36,14 @@ h3 {
   font-size: 123%;
   color: #666;
 }
-.welcome {
-  border-right: 1px solid #eee;
-}
 .welcome > ul > li {
   margin-bottom: 0.5em;
 }
+.welcome > ul > li > ul > li:first-child {
+  margin-top: 0.5em;
+}
 .roadmap {
+  border-left: 1px solid #eee;
   padding-left: 2em;
 }
 .search-result {

@@ -4,6 +4,9 @@ html { overflow-y: scroll; }
 
 h2, h3 { color: #888 }
 
+// colours picked from our own palette
+.label-success { background-color: rgb(53,217,38); }
+
 .header {
     .cell-mixin {
         display: table-cell;
@@ -35,11 +38,13 @@ h2, h3 { color: #888 }
 }
 
 .welcome {
-    border-right: 1px solid #eee;
+    // extra spacing on the lists methinks
     > ul > li { margin-bottom: 0.5em; }
+    > ul > li > ul > li:first-child { margin-top: 0.5em; }
 }
 
 .roadmap {
+    border-left: 1px solid #eee;
     padding-left: 2em;
 }
 
