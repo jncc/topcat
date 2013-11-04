@@ -1,8 +1,8 @@
 ﻿
 // always have a scroll bar to avoid layout jumps
-html {
-	overflow-y: scroll; 
-}
+html { overflow-y: scroll; }
+
+h2, h3 { color: #888 }
 
 .header {
     .cell-mixin {
@@ -34,7 +34,14 @@ html {
     }
 }
 
+.welcome {
+    border-right: 1px solid #eee;
+    > ul > li { margin-bottom: 0.5em; }
+}
 
+.roadmap {
+    padding-left: 2em;
+}
 
 .search-result {
     // bold snippet highlights look too black
@@ -133,4 +140,6 @@ form .ng-dirty.ng-invalid {
 .animate-enter.animate-enter-active {
 	opacity: 1;
 }
+
+// animation
 

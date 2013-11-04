@@ -1,6 +1,10 @@
 ﻿html {
   overflow-y: scroll;
 }
+h2,
+h3 {
+  color: #888888;
+}
 .header {
   display: table;
   width: 100%;
@@ -28,6 +32,15 @@
 .header .user-info div:first-child {
   font-size: 123%;
   color: #666;
+}
+.welcome {
+  border-right: 1px solid #eee;
+}
+.welcome > ul > li {
+  margin-bottom: 0.5em;
+}
+.roadmap {
+  padding-left: 2em;
 }
 .search-result {
   margin-bottom: 1.7em;

@@ -1,7 +1,7 @@
 ﻿(function() {
   var module;
 
-  module = angular.module('app', ['ngRoute', 'ngSanitize', 'app.utilities', 'app.directives', 'app.services', 'app.controllers']);
+  module = angular.module('app', ['ngAnimate', 'ngRoute', 'ngSanitize', 'app.utilities', 'app.directives', 'app.services', 'app.controllers']);
 
   module.config(function($sceProvider) {
     return $sceProvider.enabled(false);
