@@ -44,7 +44,8 @@ h3 {
 }
 .roadmap {
   border-left: 1px solid #eee;
-  padding-left: 2em;
+  padding-top: 0.5em;
+  padding-left: 3em;
 }
 .search-result {
   margin-bottom: 1.7em;
