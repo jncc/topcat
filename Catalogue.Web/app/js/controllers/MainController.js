@@ -6,7 +6,7 @@
     };
     $timeout(function() {
       return $scope.app.starting = false;
-    }, 1000);
+    }, 500);
     return Account.then(function(user) {
       return $scope.user = user;
     });

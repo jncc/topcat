@@ -117,6 +117,7 @@ form .ng-dirty.ng-invalid {
 }
 .animate-show.ng-enter {
   transition: all cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.5s;
+  transition-delay: 1s;
   opacity: 0;
 }
 .animate-show.ng-enter.ng-enter-active {
