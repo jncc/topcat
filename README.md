@@ -15,7 +15,7 @@ Development
 Install the Visual Studio Web Essentials extensions pack for design-time support for CoffeeScript (.coffee) and LESS (.less).
 These are essential if you want to edit the application's Javascript or CSS.
 There are no build-time or run-time steps used to compile Coffeescript and LESS - the Visual Studio extensions are simpler.
-The application will expect the correct .js and .css files to have be design-time generated.
+The application will expect the correct .js and .css files to have been design-time generated.
 
 [http://visualstudiogallery.msdn.microsoft.com/07d54d12-7133-4e15-becb-6f451ea3bea6]()
 
@@ -33,11 +33,12 @@ Deployment
 ----------
 
 ###Windows Authentication
-User account details and authentication rely on Active Directory and Windows authentication.
-This give a great user experience in Chrome and IE.
+This is an corporate / intranet application and user account details and authentication rely on
+Active Directory and Windows authentication which gives us a great user experience in Chrome and IE.
 
 ###RavenDB
-You can deploy Raven in various ways; the recommended is using IIS.
+You can deploy Raven in various ways; the recommended is using IIS using the new Windows installer which should take
+care of (most of?) the following manual steps:
 
 [http://ravendb.net/docs/server/deployment/as-iis-application]()
 

@@ -60,7 +60,7 @@
     -->
 </div>
 
-<div ng-show="!query.q && !app.starting" class="animate-show">
+<div ng-if="!query.q && !app.starting" class="animate-show">
     <br />
     <div class="row">
         <div class="col-md-7 welcome">
@@ -87,7 +87,7 @@
                         <li><b>contributing</b> to other metadata catalogues and portals</li>
                     </ul>
                 </li>
-                <li>to satisfy external <b>quality</b> requirements</li>
+                <li>to satisfy external <b>quality requirements</b></li>
                 <li>to help teams towards their <b>open data</b> responsibilities</li>
             </ul>
             
