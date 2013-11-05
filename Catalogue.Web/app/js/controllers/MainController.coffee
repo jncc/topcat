@@ -3,7 +3,7 @@ angular.module('app.controllers').controller 'MainController',
 
     ($scope, $timeout, Account) -> 
 
-        # hacky way of delaying things and triggering animations on startup
+        # slightly hacky way of triggering animations on startup
         # to work around angular skipping the initial animation
         $scope.app = { starting: true };
         $timeout(

@@ -118,11 +118,12 @@ form .ng-dirty.ng-invalid {
   border: 1px solid #FF1493;
   background-color: #f9f2f4;
 }
-.animate-show.ng-enter {
+.fade-in-with-delay.ng-hide-remove {
   transition: all cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.5s;
   transition-delay: 1s;
   opacity: 0;
+  display: block!important;
 }
-.animate-show.ng-enter.ng-enter-active {
+.fade-in-with-delay.ng-hide-remove.ng-hide-remove-active {
   opacity: 1;
 }
