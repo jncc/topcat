@@ -8,6 +8,9 @@ h3 {
 .label-success {
   background-color: #35d926;
 }
+.label-danger {
+  background-color: #d92687;
+}
 .header {
   display: table;
   width: 100%;
