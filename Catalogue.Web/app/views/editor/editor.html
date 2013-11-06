@@ -5,6 +5,11 @@
         <!-- title-and-location  -->
         <div class="row">
             <div class="col-md-12">
+                
+                <div class="form-group pull-right">
+                    <button ng-click="reset()" ng-disabled="isResetDisabled()" class="btn">CANCEL</button>
+                    <button ng-click="save()" ng-disabled="isSaveDisabled()" class="btn btn-danger">SAVE</button>
+                </div>
 
                 <div class="form-group">
                     <input type="text" ng-model="form.gemini.title" required placeholder="Title" class="form-control"
@@ -47,15 +52,12 @@
                 <!-- tags and topic  -->
                 <div class="row form-group">
                     <div class="col-md-8">
-                        <div class="form-inline">
-                            <div class="form-group">
-                                <span class="label label-success">&nbsp</span>
-                                <span class="label label-default">these are example tags that can be very</span>
-                                <span></span>
-                                <span class="label label-warning">&nbsp</span>
-                                <span class="label label-default">long</span>
-                                <span class="label label-default">blah-blah</span>
-                            </div>
+                        
+                        <div>
+                            <span ng-repeat="k in form.gemini.keywords" tc-tag>
+                                <span ng-style="{ 'background-color': hashStringToColor(k.vocab) }">&nbsp;</span>
+                                {{ k.value }}
+                            </span>
                         </div>
                     </div>
                     <div class="col-md-4 text-right">
@@ -113,22 +115,22 @@
 
 
                 <hr />
-                <div class="well well-sm">
-
-                    <div ng-repeat="contact in form.contacts" ng-animate=" 'animate' " class="form-inline form-group">
-                        <select ng-model="contact.type" class="form-control" style="width: 140px">
-                            <option>email</option>
-                            <option>phone</option>
-                            <option>pager</option>
-                            <option>IM</option>
-                        </select>
-                        <input type="text" ng-model="contact.value" required placeholder="go on, go on" class="form-control" style="width: 140px" />
-                        <a ng-click="removeContact(contact)" class="btn btn-primary">X</a>
-                    </div>
-
-                    <a ng-click="addContact()" class="btn btn-primary">ADD</a>
-
-                </div>
+<!--                <div class="well well-sm">-->
+<!---->
+<!--                    <div ng-repeat="contact in form.contacts" ng-animate=" 'animate' " class="form-inline form-group">-->
+<!--                        <select ng-model="contact.type" class="form-control" style="width: 140px">-->
+<!--                            <option>email</option>-->
+<!--                            <option>phone</option>-->
+<!--                            <option>pager</option>-->
+<!--                            <option>IM</option>-->
+<!--                        </select>-->
+<!--                        <input type="text" ng-model="contact.value" required placeholder="go on, go on" class="form-control" style="width: 140px" />-->
+<!--                        <a ng-click="removeContact(contact)" class="btn btn-primary">X</a>-->
+<!--                    </div>-->
+<!---->
+<!--                    <a ng-click="addContact()" class="btn btn-primary">ADD</a>-->
+<!---->
+<!--                </div>-->
 
                 <div class="form-group">
                     <button ng-click="reset()" ng-disabled="isResetDisabled()" class="btn">CANCEL</button>

@@ -1,7 +1,7 @@
 ﻿
 
 angular.module('app.controllers').controller 'SearchController',
-    ($scope, $rootScope, $location, $http, $timeout, misc) ->
+    ($scope, $rootScope, $location, $http, $timeout) ->
 
         # slightly hacky way of triggering animations on startup
         # to work around angular skipping the initial animation
@@ -9,8 +9,6 @@ angular.module('app.controllers').controller 'SearchController',
         $timeout(
             -> $scope.app.starting = false,
             500)
-
-        $scope.hashStringToColor = misc.hashStringToColor
 
         # note: $location.search is the angular api for the querystring value
         
