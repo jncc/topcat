@@ -3,7 +3,7 @@
 }
 h2,
 h3 {
-  color: #888888;
+  color: #888;
 }
 .label-success {
   background-color: #35d926;
@@ -64,7 +64,7 @@ h3 {
   color: #666;
 }
 .search-result .search-title .glyphicon:hover {
-  color: #777;
+  color: #444;
 }
 .search-tags {
   margin-top: 6px;

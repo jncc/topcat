@@ -1,5 +1,5 @@
 ﻿(function() {
-  var module;
+  var module, qtipDefaults;
 
   module = angular.module('app.directives');
 
@@ -39,31 +39,48 @@
     };
   });
 
+  qtipDefaults = {
+    position: {
+      my: 'top center',
+      at: 'bottom center',
+      viewport: $(window)
+    },
+    show: {
+      event: 'click mouseenter',
+      solo: true
+    },
+    hide: {
+      fixed: true,
+      delay: 100
+    },
+    style: {
+      classes: 'qtip-tipsy tag-tip'
+    }
+  };
+
   module.directive('tcTag', function() {
     return {
       link: function(scope, elem, attrs) {
         $(elem).addClass('tag');
-        return $(elem).qtip({
+        return $(elem).qtip($.extend({}, qtipDefaults, {
           content: {
             text: scope.k.vocab
-          },
-          position: {
-            my: 'top center',
-            at: 'bottom center',
-            viewport: $(window)
-          },
-          show: {
-            event: 'click mouseenter',
-            solo: true
-          },
-          hide: {
-            fixed: true,
-            delay: 100
-          },
-          style: {
-            classes: 'qtip-tipsy tag-tip'
           }
-        });
+        }));
+      }
+    };
+  });
+
+  module.directive('tcTopCopyIcon', function() {
+    return {
+      link: function(scope, elem, attrs) {
+        $(elem).addClass('dark glyphicon glyphicon-leaf');
+        return $(elem).qtip($.extend({}, qtipDefaults, {
+          position: {
+            my: 'left center',
+            at: 'right center'
+          }
+        }));
       }
     };
   });

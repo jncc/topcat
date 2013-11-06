@@ -18,25 +18,38 @@ module.directive 'tcEatClick', () ->
     link: (scope, elem, attrs) ->
         $(elem).click (e) -> e.preventDefault()
 
+# default qtip options
+qtipDefaults = 
+    position:
+        my: 'top center',
+        at: 'bottom center',
+        viewport: $(window) # but keep in the viewport if poss
+    show:
+        event: 'click mouseenter',
+        solo: true,
+    hide:
+        fixed: true,
+        delay: 100,
+    style:
+        classes: 'qtip-tipsy tag-tip'
+
 # widget for tags (keywords)
 module.directive 'tcTag', () ->
     link: (scope, elem, attrs) ->
         $(elem).addClass('tag')
-        $(elem).qtip
-            content:
-                text: scope.k.vocab
+        # call qtip with options constructed from the defaults
+        $(elem).qtip $.extend {}, qtipDefaults, content: text: scope.k.vocab
+
+# top-copy icon
+module.directive 'tcTopCopyIcon', () ->
+    link: (scope, elem, attrs) ->
+        $(elem).addClass('dark glyphicon glyphicon-leaf')
+        # call qtip with options constructed from the defaults
+        $(elem).qtip $.extend {}, qtipDefaults,
             position:
-                my: 'top center',
-                at: 'bottom center',
-                viewport: $(window) # but keep in the viewport if poss
-            show:
-                event: 'click mouseenter',
-                solo: true,
-            hide:
-                fixed: true,
-                delay: 100,
-            style:
-                classes: 'qtip-tipsy tag-tip'
+                my: 'left center',
+                at: 'right center',
+
 
 # use jquery autosize plugin to auto-expand textareas
 module.directive 'tcAutosize', () -> 
