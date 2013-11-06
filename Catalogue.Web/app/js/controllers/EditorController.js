@@ -1,6 +1,6 @@
 ﻿(function() {
 
-  angular.module('app.controllers').controller('EditorController', function($scope, defaults, $http, record) {
+  angular.module('app.controllers').controller('EditorController', function($scope, $http, record, Record) {
     $scope.lookups = {};
     $http.get('../api/topics').success(function(result) {
       return $scope.lookups.topics = result;
@@ -11,8 +11,9 @@
       return $scope.form = angular.copy(record);
     };
     $scope.save = function() {
-      record = $scope.record;
-      return $scope.reset();
+      record = $scope.form;
+      $scope.reset();
+      return $http.put('../api/records/' + record.id, record);
     };
     $scope.isResetDisabled = function() {
       return angular.equals($scope.form, record);

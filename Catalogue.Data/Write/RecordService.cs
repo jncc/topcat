@@ -15,6 +15,7 @@ namespace Catalogue.Data.Write
 {
     public interface IRecordService
     {
+        Record Load(Guid id);
         RecordInsertionResult Insert(Record record);
     }
 
@@ -25,6 +26,11 @@ namespace Catalogue.Data.Write
         public RecordService(IDocumentSession db)
         {
             this.db = db;
+        }
+
+        public Record Load(Guid id)
+        {
+            return db.Load<Record>(id);
         }
 
         public RecordInsertionResult Insert(Record record)

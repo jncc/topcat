@@ -12,13 +12,22 @@
     return d.promise;
   });
 
-  module.factory('Record', [
-    '$resource', function($resource) {
-      return $resource('../api/records/:id', {
-        id: '@id'
-      });
-    }
-  ]);
+  module.factory('Record', function($resource) {
+    return $resource('../api/records/:id', {}, {
+      query: {
+        method: 'GET',
+        params: {
+          id: '@id'
+        }
+      },
+      update: {
+        method: 'PUT',
+        params: {
+          id: '@id'
+        }
+      }
+    });
+  });
 
   module.factory('RecordLoader', function(Record, $route, $q) {
     return function() {

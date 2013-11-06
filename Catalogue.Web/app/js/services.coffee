@@ -7,8 +7,10 @@ module.factory 'Account', ($http, $q) ->
         d.resolve data
     d.promise
 
-module.factory 'Record', ['$resource', ($resource) ->
-    $resource '../api/records/:id', id: '@id' ]
+module.factory 'Record', ($resource) ->
+    $resource '../api/records/:id', {},
+    query: {method:'GET', params: {id: '@id'}}
+    update: {method:'PUT', params: {id: '@id'}}
 
 module.factory 'RecordLoader', (Record, $route, $q) ->
     () ->

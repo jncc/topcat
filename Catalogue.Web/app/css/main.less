@@ -12,6 +12,12 @@ html { overflow-y: scroll; }
 // minimise the FOUC due to bootstrap-select resizing the select element 
 //.selectContainer { min-height: 34px; }
 
+// ---------
+// utilities
+// ---------
+
+.pointable { cursor: pointer; }
+
 // -------
 // colours
 // -------
@@ -95,7 +101,7 @@ h2, h3 { color: #888; }
     margin-bottom: 1.7em;
 
     .search-title {
-        a { font-size: 123%; }
+        a { font-size: larger; }
 
         .glyphicon {
             margin-left: 0.2em;
@@ -134,17 +140,12 @@ h2, h3 { color: #888; }
 }
 
 
-.pointable {
-    cursor: pointer;    
-}
 
 // ------
 // editor
 // ------
 
-.editor-title {
-    font-size:larger;
-}
+.editor-title { font-size:larger; }
 
 // textareas should not grow beyond reasonable (they are autosized with a plugin)
 textarea { max-height: 8em; }
