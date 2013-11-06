@@ -10,9 +10,6 @@ module.directive 'placeholder', () ->
 module.directive 'autofocus', () ->
     link: (scope, elem, attrs) -> elem[0].focus() # call focus on the raw dom object
 
-module.directive 'tcAutofocusIfBlank', () ->
-    link: (scope, elem, attrs) -> elem[0].focus() if !elem.val()
-
 # eat the click (used on the search page) for old IE
 module.directive 'tcEatClick', () ->
     link: (scope, elem, attrs) ->
@@ -67,10 +64,10 @@ module.directive 'tcSpinner', ($rootScope) ->
         $rootScope.$on '$routeChangeSuccess', () ->
             elem.addClass 'ng-hide'
 
-module.directive 'tcDatepicker', () ->
-    link: (scope, elem, attrs) ->
-        $(elem).datepicker
-            format: 'yyyy-dd-mm'
+#module.directive 'tcDatepicker', () ->
+#    link: (scope, elem, attrs) ->
+#        $(elem).datepicker
+#            format: 'yyyy-dd-mm'
 
 module.directive 'tcServerValidation', ($http) ->
     require: 'ngModel',

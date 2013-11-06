@@ -1,24 +1,23 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading;
-using System.Web;
 using System.Web.Http;
 using Catalogue.Data.Model;
-using Catalogue.Gemini.Model;
-using Catalogue.Gemini.Templates;
+using Raven.Client;
 
 namespace Catalogue.Web.Controllers.Records
 {
     public class RecordsController : ApiController
     {
-        // GET api/items/5 (get an item)
-        public Record Get(int id)
+        readonly IDocumentSession db;
+
+        public RecordsController(IDocumentSession db)
         {
-            return new Record
-                {
-                    Gemini = Library.Example(),
-                };
+            this.db = db;
+        }
+
+        // GET api/records/57d34691-9064-4c1e-90a7-7b0c112daa8d (get a record)
+        public Record Get(Guid id)
+        {
+            return db.Load<Record>(id);
         }
     }
 }

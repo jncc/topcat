@@ -7,16 +7,16 @@
             <div class="col-md-12">
                 
                 <div class="form-group pull-right">
-                    <button ng-click="reset()" ng-disabled="isResetDisabled()" class="btn">CANCEL</button>
-                    <button ng-click="save()" ng-disabled="isSaveDisabled()" class="btn btn-danger">SAVE</button>
+                    <button class="btn">BACK</button>
+                    <button ng-click="reset()" ng-hide="isResetDisabled()" class="btn">CANCEL</button>
+                    <button ng-click="save()" ng-hide="isSaveDisabled()" class="btn btn-danger">SAVE</button>
                 </div>
 
                 <div class="form-group">
-                    <input type="text" ng-model="form.gemini.title" required placeholder="Title" class="form-control"
-                        style="font-size: larger"
+                    <input type="text" ng-model="form.gemini.title" placeholder="Title" class="form-control editor-title"
                         title="The title or name of the resource"
                         required
-                        tc-autofocus-if-blank tc-focus-tip />
+                        tc-focus-tip />
                 </div>
 
                 <div class="well well-sm form-group">
@@ -27,7 +27,8 @@
                             type="text" class="form-control" 
                             placeholder="Location"
                             tc-server-validation
-                            tc-focus-tip title="The path to the resource on the file share or the web" />
+                            tc-focus-tip title="The path to the resource on the file share or the web"
+                            spellcheck="false" />
 
                         <span class="input-group-btn">
                             <button class="btn btn-primary" type="button"
@@ -79,7 +80,7 @@
                 <div class="form-group">
                     <textarea type="text" ng-model="form.gemini.abstract" rows="2" class="form-control"
                               placeholder="Abstract"
-                              title="A clear, brief summary of the content of the resource"
+                              title="The abstract is a clear, brief summary of the resource's content"
                               tc-focus-tip tc-autosize></textarea>
                 </div>
 
@@ -133,8 +134,8 @@
 <!--                </div>-->
 
                 <div class="form-group">
-                    <button ng-click="reset()" ng-disabled="isResetDisabled()" class="btn">CANCEL</button>
-                    <button ng-click="save()" ng-disabled="isSaveDisabled()" class="btn btn-danger">SAVE</button>
+                    <button ng-click="reset()" ng-hide="isResetDisabled()" class="btn">CANCEL</button>
+                    <button ng-click="save()" ng-hide="isSaveDisabled()" class="btn btn-danger">SAVE</button>
                 </div>
 
             </div>
@@ -161,7 +162,7 @@
                         </div>
                     </div>
 
-                    <pre>form={{form}}</pre>
+<!--                    <pre>form={{form}}</pre>-->
 
                     <div class="form-group">
                         <textarea type="text" rows="4" tc-autosize class="form-control" placeholder="Notes" title="Notes to keep separate from the Gemini record"></textarea>

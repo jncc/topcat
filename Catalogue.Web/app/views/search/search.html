@@ -36,7 +36,7 @@
 
 <div ng-repeat="r in result.results" class="search-result">
     <div class="search-title">
-        <a ng-href="" ng-bind-html="r.title"></a>
+        <a ng-href="#/editor/{{r.id}}" ng-bind-html="r.title"></a>
         <span tc-top-copy-icon ng-show="r.topCopy" title="Top copy"></span>
     </div>
     <div ng-bind-html="r.snippet"></div>

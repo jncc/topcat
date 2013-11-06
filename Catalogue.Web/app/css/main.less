@@ -1,14 +1,40 @@
 ﻿
+// -------------
+// general fixes
+// -------------
+
 // always have a scroll bar to avoid layout jumps
 html { overflow-y: scroll; }
 
+// make these look better when in a bootstrap well
+.well-input-group-addon { background-color: white; }
+
+// minimise the FOUC due to bootstrap-select resizing the select element 
+//.selectContainer { min-height: 34px; }
+
+// -------
+// colours
+// -------
+
 h2, h3 { color: #888; }
 
-// colours picked from our own palette
+// general mixin colours
+.grey { color: #bbb; }
+.dark { color: #666; }
+.white { color: white; }
+
+// ie8 placeholder is a bit dark by default (jquery-placeholder plugin)
+.placeholder { .grey; }
+
+// colours overriding bootstrap's classes (ouch)
 .label-success { background-color: rgb(53,217,38); }
 .label-danger { background-color: rgb(217, 38, 135); }
 .btn-danger { background-color: rgb(217, 38, 135); }
 .btn-danger[disabled] { background-color: rgb(217, 38, 135); }
+
+// ---------
+// head/foot
+// ---------
 
 .header {
     .cell-mixin {
@@ -31,7 +57,7 @@ h2, h3 { color: #888; }
     .user-info {
         .cell-mixin;
         text-align: right;
-        color: #aaa;
+        .grey;
         div:first-child {
             //margin-right: 3px;
             font-size:123%;
@@ -39,6 +65,10 @@ h2, h3 { color: #888; }
         }
     }
 }
+
+// ---------
+// home page
+// ---------
 
 .welcome {
     // extra spacing on the lists methinks
@@ -51,6 +81,10 @@ h2, h3 { color: #888; }
     padding-top: 0.5em; // keep it definitely below the main welcome heading 
     padding-left: 3em;
 }
+
+// ------
+// search
+// ------
 
 .search-result {
     // bold snippet highlights look too black
@@ -69,46 +103,16 @@ h2, h3 { color: #888; }
             &:hover { color: #444; }
         }
     }
-}
-.search-tags {
-    margin-top: 6px;
-}
 
-// ie8 placeholder is a bit dark by default (jquery-placeholder plugin)
-.placeholder { color: #bbb; }
-
-// bootstrap's disabled buttons are too faint for my liking
-.btn[disabled] {
-    opacity: .85;
+    .search-tags {
+        margin-top: 6px;
     }
-
-//  textareas should not grow beyond reasonable (they are autosized with a plugin)
-textarea {
-    max-height: 8em;
 }
 
-.grey {
-    color: #ddd;
-}
-.dark {
-    color: #666;
-}
 
-.white {
-    color: white;
-}
-// make these look better when in a bootstrap well
-.well-input-group-addon {
-    background-color: white;
-}
-// minimise the FOUC due to bootstrap-select resizing the select element 
-//.selectContainer {
-//    min-height: 34px;    
-//}
-
-.datexx {
-    width: 10em;
-}
+// ----
+// tags
+// ----
 
 .tag {
     white-space:nowrap;
@@ -134,6 +138,17 @@ textarea {
     cursor: pointer;    
 }
 
+// ------
+// editor
+// ------
+
+.editor-title {
+    font-size:larger;
+}
+
+// textareas should not grow beyond reasonable (they are autosized with a plugin)
+textarea { max-height: 8em; }
+
 // validation styles. angular also puts these classes on the form so ignore that
 //.ng-dirty.ng-valid { border:1px solid Green; }
 form .ng-dirty.ng-invalid {
@@ -141,7 +156,9 @@ form .ng-dirty.ng-invalid {
     background-color: #f9f2f4;
 }
 
+// ---------
 // animation
+// ---------
 
 // animating ngShow is a little tricky - ngIf is easier!
 // .ng-hide-remove is added at the start of the animation
@@ -157,3 +174,4 @@ form .ng-dirty.ng-invalid {
     // this is the end of the animation
     &.ng-hide-remove-active { opacity: 1; }
 } 
+

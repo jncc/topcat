@@ -19,16 +19,6 @@
     };
   });
 
-  module.directive('tcAutofocusIfBlank', function() {
-    return {
-      link: function(scope, elem, attrs) {
-        if (!elem.val()) {
-          return elem[0].focus();
-        }
-      }
-    };
-  });
-
   module.directive('tcEatClick', function() {
     return {
       link: function(scope, elem, attrs) {
@@ -112,16 +102,6 @@
         });
         return $rootScope.$on('$routeChangeSuccess', function() {
           return elem.addClass('ng-hide');
-        });
-      }
-    };
-  });
-
-  module.directive('tcDatepicker', function() {
-    return {
-      link: function(scope, elem, attrs) {
-        return $(elem).datepicker({
-          format: 'yyyy-dd-mm'
         });
       }
     };
