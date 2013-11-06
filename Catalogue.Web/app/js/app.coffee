@@ -22,16 +22,16 @@ angular.module 'app.controllers', []
 module.config ['$routeProvider', ($routeProvider) ->
     $routeProvider
         .when '/'
-            controller: 'SearchController',
-            templateUrl: 'views/search/search.html',
+            controller:     'SearchController',
+            templateUrl:    'views/search/search.html',
             reloadOnSearch: false,
         .when '/editor/:recordId',
-            controller: 'EditorController',
-            templateUrl: 'views/editor/editor.html',
-            resolve: 'record': (RecordLoader) -> RecordLoader()
+            controller:     'EditorController',
+            templateUrl:    'views/editor/editor.html',
+            resolve:        'record': (RecordLoader) -> RecordLoader()
         .when '/sandbox/colours',
-            controller: 'SandboxController',
-            templateUrl: 'views/sandbox/colours.html'
+            controller:     'SandboxController',
+            templateUrl:    'views/sandbox/colours.html'
         .otherwise
-            redirectTo: '/'
+            redirectTo:     '/'
     ]

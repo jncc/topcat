@@ -1,7 +1,13 @@
 ﻿(function() {
 
-  angular.module('app.controllers').controller('SearchController', function($scope, $rootScope, $location, $http, misc) {
+  angular.module('app.controllers').controller('SearchController', function($scope, $rootScope, $location, $http, $timeout, misc) {
     var doSearch;
+    $scope.app = {
+      starting: true
+    };
+    $timeout(function() {
+      return $scope.app.starting = false;
+    }, 500);
     $scope.hashStringToColor = misc.hashStringToColor;
     doSearch = function(query) {
       $location.search('q', query.q);
