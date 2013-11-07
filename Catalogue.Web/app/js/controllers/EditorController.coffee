@@ -1,7 +1,7 @@
 ﻿
 angular.module('app.controllers').controller 'EditorController', 
 
-    ($scope, $http, record, Record) -> 
+    ($scope, $rootScope, $http, record, Record) -> 
 
         $scope.lookups = {}
         $http.get('../api/topics').success (result) -> $scope.lookups.topics = result
@@ -14,12 +14,13 @@ angular.module('app.controllers').controller 'EditorController',
         $scope.save = () ->
             record = $scope.form # oo-er, is updating the parameter a good idea?
             $scope.reset()
+            $rootScope.busy = { value: true }
             $http.put('../api/records/' + record.id, record)
+            $rootScope.busy = { value: false }
             ## todo use resource Record.update 
 
 
-        $scope.isResetDisabled = () -> angular.equals($scope.form, record)
-
+        $scope.isSaveAndResetHidden = () -> angular.equals($scope.form, record)
         $scope.isSaveDisabled = () -> angular.equals($scope.form, record) # || $scope.theForm.$invalid 
 
         # call reset() to initially set up form

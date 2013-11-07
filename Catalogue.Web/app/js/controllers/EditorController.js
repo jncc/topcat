@@ -1,6 +1,6 @@
 ﻿(function() {
 
-  angular.module('app.controllers').controller('EditorController', function($scope, $http, record, Record) {
+  angular.module('app.controllers').controller('EditorController', function($scope, $rootScope, $http, record, Record) {
     $scope.lookups = {};
     $http.get('../api/topics').success(function(result) {
       return $scope.lookups.topics = result;
@@ -13,9 +13,15 @@
     $scope.save = function() {
       record = $scope.form;
       $scope.reset();
-      return $http.put('../api/records/' + record.id, record);
+      $rootScope.busy = {
+        value: true
+      };
+      $http.put('../api/records/' + record.id, record);
+      return $rootScope.busy = {
+        value: false
+      };
     };
-    $scope.isResetDisabled = function() {
+    $scope.isSaveAndResetHidden = function() {
       return angular.equals($scope.form, record);
     };
     $scope.isSaveDisabled = function() {
