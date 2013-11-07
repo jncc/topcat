@@ -62,6 +62,9 @@ namespace Catalogue.Web
                 NonAdminHttp.EnsureCanListenToWhenInNonAdminContext(port);
                 s.RunInMemory = true;
                 s.UseEmbeddedHttpServer = true;
+
+                s.Configuration.Settings.Add("Raven/ActiveBundles", "Versioning");
+
                 s.Initialize();
                 // seed the database with dev-time data
                 Seeder.Seed(s);

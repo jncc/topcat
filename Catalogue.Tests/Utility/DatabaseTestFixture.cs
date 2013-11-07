@@ -17,7 +17,9 @@ namespace Catalogue.Tests.Utility
             // initialise the ResusableDocumentStore once, in this static constructor
 
             var store = new EmbeddableDocumentStore { RunInMemory = true };
+
             store.Initialize();
+            store.Configuration.Settings.Add("Raven/ActiveBundles", "Versioning");
 
             // seed with test data and wait for indexing
             Seeder.Seed(store);
@@ -37,7 +39,17 @@ namespace Catalogue.Tests.Utility
         [TestFixtureSetUp]
         public void TestFixtureSetUp()
         {
+
             Db = ReusableDocumentStore.OpenSession();
+
+            Db.Store(new Raven.Bundles.Versioning.Data.VersioningConfiguration
+            {
+                Exclude = false,
+                Id = "Raven/Versioning/DefaultConfiguration",
+                MaxRevisions = 50
+            }, "Raven/Versioning/DefaultConfiguration");
+            Db.SaveChanges();
+
         }
 
         [TestFixtureTearDown]
