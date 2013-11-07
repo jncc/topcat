@@ -2,6 +2,7 @@ using Catalogue.Data;
 using Catalogue.Data.Model;
 using Catalogue.Data.Seed;
 using NUnit.Framework;
+using Raven.Bundles.Versioning.Data;
 using Raven.Client;
 using Raven.Client.Embedded;
 using Raven.Client.Indexes;
@@ -18,8 +19,21 @@ namespace Catalogue.Tests.Utility
 
             var store = new EmbeddableDocumentStore { RunInMemory = true };
 
-            store.Initialize();
             store.Configuration.Settings.Add("Raven/ActiveBundles", "Versioning");
+            store.Initialize();
+
+            using (var db = store.OpenSession())
+            {
+
+                db.Store(new VersioningConfiguration
+                {
+                    Exclude = false,
+                    Id = "Raven/Versioning/Items",
+                    MaxRevisions = int.MaxValue
+
+                });
+                db.SaveChanges();
+            }
 
             // seed with test data and wait for indexing
             Seeder.Seed(store);
