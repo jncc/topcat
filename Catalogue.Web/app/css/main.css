@@ -1,6 +1,9 @@
 ﻿html {
   overflow-y: scroll;
 }
+.btn-glyphicon {
+  margin-right: 0.5em;
+}
 .well-input-group-addon {
   background-color: white;
 }
@@ -28,6 +31,14 @@ h3 {
 }
 .label-danger {
   background-color: #d92687;
+}
+.btn-default {
+  background-color: #eee;
+  border-color: #eee;
+}
+.btn-default:hover {
+  background-color: #ddd;
+  border-color: #ddd;
 }
 .btn-danger {
   background-color: #d92687;

@@ -7,9 +7,11 @@
             <div class="col-md-12">
 
                 <div class="form-group pull-right">
-                    <button class="btn">BACK</button>
+                    <button class="btn btn-default" tc-back-button>
+                        <span class="white glyphicon glyphicon-circle-arrow-left btn-glyphicon"></span>BACK
+                    </button>
                     <span ng-if="!isSaveAndResetHidden()" class="my-special-animation">
-                        <button ng-click="reset()" class="btn">CANCEL</button>
+                        <button ng-click="reset()" class="btn btn-default">CANCEL</button>
                         <button ng-click="save()" ng-disabled="isSaveDisabled()" class="btn btn-danger">SAVE</button>
                     </span>
                 </div>
