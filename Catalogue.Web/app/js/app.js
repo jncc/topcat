@@ -38,4 +38,29 @@
     }
   ]);
 
+  module.animation('.my-special-animation', function() {
+    return {
+      enter: function(element, done) {
+        $(element).slideDown(500, done);
+        return function(cancelled) {
+          if (cancelled) {
+            return $(element).stop();
+          }
+        };
+      },
+      leave: function(element, done) {
+        return done();
+      },
+      move: function(element, done) {
+        return done();
+      },
+      addClass: function(element, className, done) {
+        return done();
+      },
+      removeClass: function(element, className, done) {
+        return done();
+      }
+    };
+  });
+
 }).call(this);

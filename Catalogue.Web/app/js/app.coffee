@@ -35,3 +35,23 @@ module.config ['$routeProvider', ($routeProvider) ->
         .otherwise
             redirectTo:     '/'
     ]
+
+module.animation '.my-special-animation', ->
+  enter: (element, done) ->
+    $(element).slideDown 500
+    , done
+    (cancelled) ->
+      # this (optional) function is called when the animation is complete or cancelled
+      $(element).stop() if cancelled
+
+  leave: (element, done) ->
+    done()
+
+  move: (element, done) ->
+    done()
+
+  addClass: (element, className, done) ->
+    done()
+
+  removeClass: (element, className, done) ->
+    done()

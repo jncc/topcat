@@ -177,20 +177,3 @@ form .ng-dirty.ng-invalid {
     }
 }
 
-.slide-in-from-right {
-    &.ng-hide-remove {
-        transition:all cubic-bezier(0.250, 0.460, 0.450, 0.940) 1s;
-        display:block!important;
-        width: 0px;
-        &.ng-hide-remove-active { width: 300px; }
-    }
-}
-
-.my-animate { // animates ng-if with a fade in
-    &.ng-enter {
-        transition: all cubic-bezier(0.250, 0.460, 0.450, 0.940) 0.5s;
-        opacity: 0;
-        &.ng-enter-active { opacity: 1; }
-    }
-}
-
