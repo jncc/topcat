@@ -18,20 +18,22 @@ namespace Catalogue.Tests.Utility
             // initialise the ResusableDocumentStore once, in this static constructor
 
             var store = new EmbeddableDocumentStore { RunInMemory = true };
-
+            
+            // activate versioning feature bundle
             store.Configuration.Settings.Add("Raven/ActiveBundles", "Versioning");
+            
             store.Initialize();
 
+            // apparently we need to configure versioning explicity per document type when running in-memory
             using (var db = store.OpenSession())
             {
-
                 db.Store(new VersioningConfiguration
-                {
-                    Exclude = false,
-                    Id = "Raven/Versioning/Items",
-                    MaxRevisions = int.MaxValue
+                    {
+                        Exclude = false,
+                        Id = "Raven/Versioning/Records",
+                        MaxRevisions = int.MaxValue
 
-                });
+                    });
                 db.SaveChanges();
             }
 

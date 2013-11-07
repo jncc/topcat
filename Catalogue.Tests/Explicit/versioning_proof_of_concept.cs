@@ -13,22 +13,11 @@ using Raven.Client.Embedded;
 
 namespace Catalogue.Tests.Explicit
 {
-    class versioning_proof_of_concept_x : DatabaseTestFixture
+    class versioning_proof_of_concept : DatabaseTestFixture
     {
         [Test, Explicit]
         public void try_out_versioning()
         {
-            using (var db = ReusableDocumentStore.OpenSession())
-            {
-                db.Store(new VersioningConfiguration
-                {
-                    Exclude = false,
-                    Id = "Raven/Versioning/Records",
-                    MaxRevisions = int.MaxValue
-                });
-                db.SaveChanges();
-            }
-
             using (var db = ReusableDocumentStore.OpenSession())
             {
                 var record = db.Query<Record>().Customize(x => x.WaitForNonStaleResults())
@@ -46,33 +35,48 @@ namespace Catalogue.Tests.Explicit
                 revisions.Should().NotBeEmpty();
             }
         }
-    }
 
-    class versioning_proof_of_concept : DatabaseTestFixture
-    {
+        
         [Test, Explicit]
-        public void VersioningShouldWork()
+        public void versioning_should_work()
         {
-            using (var db = ReusableDocumentStore.OpenSession())
+            var store = new EmbeddableDocumentStore { RunInMemory = true };
+
+            store.Configuration.Settings.Add("Raven/ActiveBundles", "Versioning");
+            store.Initialize();
+
+            using (var db = store.OpenSession())
+            {
+                db.Store(new VersioningConfiguration
+                {
+                    Exclude = false,
+                    Id = "Raven/Versioning/Items",
+                    MaxRevisions = int.MaxValue
+
+                });
+                db.SaveChanges();
+            }
+
+            using (var db = store.OpenSession())
             {
                 db.Store(new Item { Value = "first revision" });
                 db.SaveChanges();
             }
 
-            using (var db = ReusableDocumentStore.OpenSession())
+            using (var db = store.OpenSession())
             {
                 var item = db.Query<Item>().Customize(x => x.WaitForNonStaleResults()).First();
                 item.Value = "second revision";
                 db.SaveChanges();
             }
-            using (var db = ReusableDocumentStore.OpenSession())
+
+            using (var db = store.OpenSession())
             {
                 var item = db.Query<Item>().Customize(x => x.WaitForNonStaleResults()).First();
+                string id = db.Advanced.GetDocumentId(item);
+                var revisions = db.Advanced.GetRevisionsFor<Item>(id, 0, 10);
 
-                var revisions = db.Advanced.GetRevisionsFor<Item>("items/" + item.Id, 0, 10);
-
-
-                revisions.Should().NotBeEmpty();  // fails
+                revisions.Should().NotBeEmpty();
             }
         }
 
@@ -81,6 +85,5 @@ namespace Catalogue.Tests.Explicit
             public int Id { get; set; }
             public string Value { get; set; }
         }
-        
     }
 }
