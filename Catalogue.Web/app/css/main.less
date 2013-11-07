@@ -161,18 +161,36 @@ form .ng-dirty.ng-invalid {
 // animation
 // ---------
 
-// animating ngShow is a little tricky - ngIf is easier!
-// .ng-hide-remove is added at the start of the animation
-// (when angular removes the .ng-hide class)
-.fade-in-with-delay.ng-hide-remove {
-    transition:all cubic-bezier(0.250, 0.460, 0.450, 0.940) 0.5s;
-    transition-delay: 1s;
-    opacity:0;
-    // this needs to be here to make it visible during the animation since
-    // the .ng-hide class is already on the element - see http://www.yearofmoo.com/2013/08/remastered-animation-in-angularjs-1-2.html
-    display:block!important;
+.fade-in-with-delay {
+    // animating ngShow is a little tricky - ngIf is easier!
+    // this class is added at the start of the animation
+    // (when angular removes the .ng-hide class)
+    &.ng-hide-remove {
+        transition: all cubic-bezier(0.250, 0.460, 0.450, 0.940) 0.5s;
+        transition-delay: 1s;
+        opacity: 0;
+        // this needs to be here to make it visible during the animation since
+        // the .ng-hide class is already on the element - http://www.yearofmoo.com/2013/08/remastered-animation-in-angularjs-1-2.html
+        display: block!important;
+        // this class is added the end of the animation
+        &.ng-hide-remove-active { opacity: 1; }
+    }
+}
 
-    // this is the end of the animation
-    &.ng-hide-remove-active { opacity: 1; }
-} 
+.slide-in-from-right {
+    &.ng-hide-remove {
+        transition:all cubic-bezier(0.250, 0.460, 0.450, 0.940) 1s;
+        display:block!important;
+        width: 0px;
+        &.ng-hide-remove-active { width: 300px; }
+    }
+}
+
+.my-animate { // animates ng-if with a fade in
+    &.ng-enter {
+        transition: all cubic-bezier(0.250, 0.460, 0.450, 0.940) 0.5s;
+        opacity: 0;
+        &.ng-enter-active { opacity: 1; }
+    }
+}
 

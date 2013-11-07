@@ -130,3 +130,18 @@ form .ng-dirty.ng-invalid {
 .fade-in-with-delay.ng-hide-remove.ng-hide-remove-active {
   opacity: 1;
 }
+.slide-in-from-right.ng-hide-remove {
+  transition: all cubic-bezier(0.25, 0.46, 0.45, 0.94) 1s;
+  display: block!important;
+  width: 0px;
+}
+.slide-in-from-right.ng-hide-remove.ng-hide-remove-active {
+  width: 300px;
+}
+.my-animate.ng-enter {
+  transition: all cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.5s;
+  opacity: 0;
+}
+.my-animate.ng-enter.ng-enter-active {
+  opacity: 1;
+}
