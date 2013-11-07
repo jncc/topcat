@@ -32,7 +32,7 @@ namespace Catalogue.Web.Controllers.Records
         public void Put(Guid id, [FromBody]Record record)
         {
             // todo should check ID in record is the same as being PUT to
-            service.Insert(record);
+            service.Update(record);
             db.SaveChanges();
         }
 

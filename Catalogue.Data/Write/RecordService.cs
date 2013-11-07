@@ -16,7 +16,8 @@ namespace Catalogue.Data.Write
     public interface IRecordService
     {
         Record Load(Guid id);
-        RecordInsertionResult Insert(Record record);
+        RecordValidationResult Insert(Record record);
+        RecordValidationResult Update(Record record);
     }
 
     public class RecordService : IRecordService
@@ -33,20 +34,34 @@ namespace Catalogue.Data.Write
             return db.Load<Record>(id);
         }
 
-        public RecordInsertionResult Insert(Record record)
+        public RecordValidationResult Insert(Record record)
         {
-            if (record.Gemini.ResourceLocator.IsBlank())
-                return new RecordInsertionResult { Message = "ResourceLocator must not be blank." };
-
+            var result = this.Validate(record);
             db.Store(record);
-
-            return new RecordInsertionResult { Succeeded = true };
+            return result;
         }
 
+        public RecordValidationResult Update(Record record)
+        {
+            if (record.ReadOnly)
+                return new RecordValidationResult { Message = "Cannot update ReadOnly record." };
 
+            var result = this.Validate(record);
+
+            db.Store(record);
+            return result;
+        }
+
+        RecordValidationResult Validate(Record record)
+        {
+            if (record.Gemini.ResourceLocator.IsBlank())
+                return new RecordValidationResult { Message = "ResourceLocator must not be blank." };
+
+            return new RecordValidationResult { Succeeded = true };
+        }
     }
 
-    public class RecordInsertionResult
+    public class RecordValidationResult
     {
         public bool Succeeded { get; set; }
         public string Message { get; set; }
