@@ -68,4 +68,7 @@ describe 'when viewing a read-only record', ->
     it 'should open the record', ->
         expect(input('form.gemini.title').val()).toBe 'An example read-only record'
     it 'should not be editable', ->
+        input('form.gemini.title').enter 'mwaa ha ha'
+        pause()
+        expect(element('btn-danger:visible').count()).toBe 0 # erm...
         

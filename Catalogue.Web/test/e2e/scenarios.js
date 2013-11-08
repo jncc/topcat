@@ -74,7 +74,11 @@
     it('should open the record', function() {
       return expect(input('form.gemini.title').val()).toBe('An example read-only record');
     });
-    return it('should not be editable', function() {});
+    return it('should not be editable', function() {
+      input('form.gemini.title').enter('mwaa ha ha');
+      pause();
+      return expect(element('btn-danger:visible').count()).toBe(0);
+    });
   });
 
 }).call(this);

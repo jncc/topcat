@@ -1,12 +1,13 @@
 ﻿<div>
 
     <form name="theForm">
-
+        
         <!-- title-and-location  -->
         <div class="row">
             <div class="col-md-12">
 
                 <div class="form-group pull-right">
+                    <span ng-if="form.readOnly && !isClean()">This record is read-only and can't be saved</span>
                     <button class="btn btn-default" tc-back-button>
                         <span class="white glyphicon glyphicon-circle-arrow-left btn-glyphicon"></span>BACK
                     </button>

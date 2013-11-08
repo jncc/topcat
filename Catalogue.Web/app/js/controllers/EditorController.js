@@ -21,11 +21,14 @@
         value: false
       };
     };
+    $scope.isClean = function() {
+      return angular.equals($scope.form, record);
+    };
     $scope.isSaveAndResetHidden = function() {
-      return angular.equals($scope.form, record) || $record.readOnly;
+      return $scope.isClean() || record.readOnly;
     };
     $scope.isSaveDisabled = function() {
-      return angular.equals($scope.form, record);
+      return $scope.isClean();
     };
     $scope.reset();
   });
