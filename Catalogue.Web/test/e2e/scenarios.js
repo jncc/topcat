@@ -53,7 +53,7 @@
     });
     it('can search for integers', function() {
       input('query.q').enter('2003');
-      expect(element('.search-result p').text()).toContain('2003');
+      expect(element('.search-result').text()).toContain('2003');
       return expect(repeater('.search-result').count()).toBeGreaterThan(5);
     });
     it('can search for variations of stem', function() {
