@@ -24,8 +24,11 @@
     $scope.isClean = function() {
       return angular.equals($scope.form, record);
     };
-    $scope.isSaveAndResetHidden = function() {
+    $scope.isSaveHidden = function() {
       return $scope.isClean() || record.readOnly;
+    };
+    $scope.isResetHidden = function() {
+      return $scope.isClean();
     };
     $scope.isSaveDisabled = function() {
       return $scope.isClean();

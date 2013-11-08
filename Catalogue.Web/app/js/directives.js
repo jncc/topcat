@@ -48,6 +48,14 @@
     }
   };
 
+  module.directive('tcTip', function() {
+    return {
+      link: function(scope, elem, attrs) {
+        return $(elem).qtip(qtipDefaults);
+      }
+    };
+  });
+
   module.directive('tcTag', function() {
     return {
       link: function(scope, elem, attrs) {

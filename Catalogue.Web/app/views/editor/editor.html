@@ -2,26 +2,40 @@
 
     <form name="theForm">
         
-        <!-- title-and-location  -->
+        <!-- top row of buttons etc.  -->
         <div class="row">
-            <div class="col-md-12">
-
+            <div class="col-md-6">
+                <div class="form-group">
+                    <span ng-show="form.readOnly" class="editor-readonly">
+                        <span tc-tip class="dark glyphicon glyphicon-lock" title="This record is read-only"></span>
+                        <span ng-show="!isClean()">This record is read-only and can't be saved</span>
+                    </span>
+                </div>
+            </div>
+            <div class="col-md-6">
                 <div class="form-group pull-right">
-                    <span ng-if="form.readOnly && !isClean()">This record is read-only and can't be saved</span>
                     <button class="btn btn-default" tc-back-button>
                         <span class="white glyphicon glyphicon-circle-arrow-left btn-glyphicon"></span>BACK
                     </button>
-                    <span ng-if="!isSaveAndResetHidden()" class="my-special-animation">
-                        <button ng-click="reset()" class="btn btn-default">CANCEL</button>
-                        <button ng-click="save()" ng-disabled="isSaveDisabled()" class="btn btn-danger">SAVE</button>
+                    <span>
+                        <button ng-click="reset()" ng-hide="isResetHidden()" class="btn btn-default" >CANCEL</button>
+                        <button ng-click="save()"  ng-hide="isSaveHidden()" ng-disabled="isSaveDisabled()" class="btn btn-danger">SAVE</button>
                     </span>
                 </div>
+            </div>
+
+        </div>
+
+        <!-- title-and-location  -->
+        <div class="row">
+            <div class="col-md-12">
+                
 
                 <div class="form-group">
                     <input type="text" ng-model="form.gemini.title" placeholder="Title" class="editor-title form-control"
-                        title="The title or name of the resource"
-                        required
-                        tc-focus-tip />
+                           title="The title or name of the resource"
+                           required
+                           tc-focus-tip />
                 </div>
 
                 <div class="well well-sm form-group">
@@ -29,17 +43,17 @@
                         <span class="input-group-addon well-input-group-addon"><span class="grey glyphicon glyphicon-th-large"></span></span>
 
                         <input id="form-gemini-resourceLocator" name="form.gemini.resourceLocator" ng-model="form.gemini.resourceLocator" 
-                            type="text" class="form-control" 
-                            placeholder="Location"
-                            tc-server-validation
-                            tc-focus-tip title="The path to the resource on the file share or the web"
-                            spellcheck="false" />
+                               type="text" class="form-control" 
+                               placeholder="Location"
+                               tc-server-validation
+                               tc-focus-tip title="The path to the resource on the file share or the web"
+                               spellcheck="false" />
 
                         <span class="input-group-btn">
                             <button class="btn btn-primary" type="button"
-                                ng-disabled="!form.gemini.resourceLocator"
-                                tc-copy-to-clipboard="form-gemini-resourceLocator"
-                                data-clipboard-target="form-gemini-resourceLocator">
+                                    ng-disabled="!form.gemini.resourceLocator"
+                                    tc-copy-to-clipboard="form-gemini-resourceLocator"
+                                    data-clipboard-target="form-gemini-resourceLocator">
                                 <span class="glyphicon glyphicon-new-window"></span>
                             </button>
                         </span>
@@ -95,10 +109,10 @@
                         <div class="col-md-3">
                             <div class="input-group">
                                 <input type="text" class="form-control date"
-                                    name="form.gemini.temporalExtent.begin" ng-model="form.gemini.temporalExtent.begin"
-                                    placeholder="yyyy-mm-dd"
-                                    tc-datepicker
-                                    tc-focus-tip title="The dates covered by the data resource" />
+                                       name="form.gemini.temporalExtent.begin" ng-model="form.gemini.temporalExtent.begin"
+                                       placeholder="yyyy-mm-dd"
+                                       tc-datepicker
+                                       tc-focus-tip title="The dates covered by the data resource" />
                                 <span class="input-group-addon"><span class="grey glyphicon glyphicon-calendar"></span></span>
                                 <span class="grey glyphicon glyphicon-chevron-right" style="margin-left: 2em;"></span>
                             </div>
@@ -106,10 +120,10 @@
                         <div class="col-md-3">
                             <div class="input-group">
                                 <input type="text" class="form-control date"
-                                    name="form.gemini.temporalExtent.end" ng-model="form.gemini.temporalExtent.end"
-                                    placeholder="yyyy-mm-dd"
-                                    tc-datepicker
-                                    tc-focus-tip title="The dates covered by the data resource" />
+                                       name="form.gemini.temporalExtent.end" ng-model="form.gemini.temporalExtent.end"
+                                       placeholder="yyyy-mm-dd"
+                                       tc-datepicker
+                                       tc-focus-tip title="The dates covered by the data resource" />
                                 <span class="input-group-addon"><span class="grey glyphicon glyphicon-calendar"></span></span>
                             </div>
                         </div>
@@ -121,26 +135,26 @@
 
 
                 <hr />
-<!--                <div class="well well-sm">-->
-<!---->
-<!--                    <div ng-repeat="contact in form.contacts" ng-animate=" 'animate' " class="form-inline form-group">-->
-<!--                        <select ng-model="contact.type" class="form-control" style="width: 140px">-->
-<!--                            <option>email</option>-->
-<!--                            <option>phone</option>-->
-<!--                            <option>pager</option>-->
-<!--                            <option>IM</option>-->
-<!--                        </select>-->
-<!--                        <input type="text" ng-model="contact.value" required placeholder="go on, go on" class="form-control" style="width: 140px" />-->
-<!--                        <a ng-click="removeContact(contact)" class="btn btn-primary">X</a>-->
-<!--                    </div>-->
-<!---->
-<!--                    <a ng-click="addContact()" class="btn btn-primary">ADD</a>-->
-<!---->
-<!--                </div>-->
+                <!--                <div class="well well-sm">-->
+                <!---->
+                <!--                    <div ng-repeat="contact in form.contacts" ng-animate=" 'animate' " class="form-inline form-group">-->
+                <!--                        <select ng-model="contact.type" class="form-control" style="width: 140px">-->
+                <!--                            <option>email</option>-->
+                <!--                            <option>phone</option>-->
+                <!--                            <option>pager</option>-->
+                <!--                            <option>IM</option>-->
+                <!--                        </select>-->
+                <!--                        <input type="text" ng-model="contact.value" required placeholder="go on, go on" class="form-control" style="width: 140px" />-->
+                <!--                        <a ng-click="removeContact(contact)" class="btn btn-primary">X</a>-->
+                <!--                    </div>-->
+                <!---->
+                <!--                    <a ng-click="addContact()" class="btn btn-primary">ADD</a>-->
+                <!---->
+                <!--                </div>-->
 
-                <div ng-hide="isSaveAndResetHidden()" class="form-group">
-                    <button ng-click="reset()" class="btn">CANCEL</button>
-                    <button ng-click="save()" ng-disabled="isSaveDisabled()" class="btn btn-danger">SAVE</button>
+                <div class="form-group">
+                    <button ng-click="reset()" ng-hide="isResetHidden()" class="btn btn-default" >CANCEL</button>
+                    <button ng-click="save()"  ng-hide="isSaveHidden()" ng-disabled="isSaveDisabled()" class="btn btn-danger">SAVE</button>
                 </div>
 
             </div>
@@ -167,7 +181,7 @@
                         </div>
                     </div>
 
-<!--                    <pre>form={{form}}</pre>-->
+                    <!--                    <pre>form={{form}}</pre>-->
 
                     <div class="form-group">
                         <textarea type="text" rows="4" tc-autosize class="form-control" placeholder="Notes" title="Notes to keep separate from the Gemini record"></textarea>

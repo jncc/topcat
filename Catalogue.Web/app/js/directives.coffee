@@ -30,6 +30,11 @@ qtipDefaults =
     style:
         classes: 'qtip-tipsy tag-tip'
 
+# basic tip
+# widget for tags (keywords)
+module.directive 'tcTip', () ->
+    link: (scope, elem, attrs) -> $(elem).qtip qtipDefaults
+
 # widget for tags (keywords)
 module.directive 'tcTag', () ->
     link: (scope, elem, attrs) ->

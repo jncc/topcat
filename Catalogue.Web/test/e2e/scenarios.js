@@ -76,8 +76,7 @@
     });
     return it('should not be editable', function() {
       input('form.gemini.title').enter('mwaa ha ha');
-      pause();
-      return expect(element('btn-danger:visible').count()).toBe(0);
+      return expect(element('.btn-danger:visible').count()).toBe(0);
     });
   });
 

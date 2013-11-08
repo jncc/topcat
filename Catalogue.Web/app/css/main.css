@@ -7,8 +7,18 @@
 .well-input-group-addon {
   background-color: white;
 }
+.cell-mixin {
+  display: table-cell;
+  vertical-align: middle;
+}
 .pointable {
   cursor: pointer;
+}
+.hoverable-glyphicon {
+  color: #666;
+}
+.hoverable-glyphicon:hover {
+  color: #444;
 }
 h2,
 h3 {
@@ -50,10 +60,6 @@ h3 {
   display: table;
   width: 100%;
   margin-top: 1.4em;
-}
-.header .cell-mixin {
-  display: table-cell;
-  vertical-align: middle;
 }
 .header .logo {
   display: table-cell;
@@ -121,6 +127,14 @@ h3 {
 }
 .tag-tip {
   max-width: 100%;
+}
+.editor-readonly .glyphicon {
+  font-size: larger;
+  margin: 0 2px 0 2px;
+  color: #666;
+}
+.editor-readonly .glyphicon:hover {
+  color: #444;
 }
 .editor-title {
   font-size: larger;

@@ -21,7 +21,8 @@ angular.module('app.controllers').controller 'EditorController',
 
 
         $scope.isClean = -> angular.equals($scope.form, record)
-        $scope.isSaveAndResetHidden = -> $scope.isClean() or record.readOnly
+        $scope.isSaveHidden = -> $scope.isClean() or record.readOnly
+        $scope.isResetHidden = -> $scope.isClean()
         $scope.isSaveDisabled = -> $scope.isClean() # || $scope.theForm.$invalid 
 
         
