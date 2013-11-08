@@ -47,7 +47,7 @@ namespace Catalogue.Data.Import
             {
                 var result = recordService.Insert(record);
 
-                if (!result.Succeeded)
+                if (!result.Success)
                 {
                     Failures.Add(result);
 
@@ -66,7 +66,7 @@ namespace Catalogue.Data.Import
         [SetUp]
         public void setup()
         {
-            recordService = Mock.Of<IRecordService>(rs => rs.Insert(It.IsAny<Record>()).Succeeded == true);
+            recordService = Mock.Of<IRecordService>(rs => rs.Insert(It.IsAny<Record>()).Success == true);
 
             string path = @"c:\some\path.csv";
             var fileSystem = Mock.Of<IFileSystem>(fs => fs.OpenReader(path) == new StringReader(testData));

@@ -23,10 +23,12 @@ namespace Catalogue.Data.Write
     public class RecordService : IRecordService
     {
         readonly IDocumentSession db;
+        readonly IRecordValidator validator;
 
-        public RecordService(IDocumentSession db)
+        public RecordService(IDocumentSession db, IRecordValidator validator)
         {
             this.db = db;
+            this.validator = validator;
         }
 
         public Record Load(Guid id)
@@ -36,42 +38,35 @@ namespace Catalogue.Data.Write
 
         public RecordValidationResult Insert(Record record)
         {
-            var result = this.Validate(record);
-            db.Store(record);
-            return result;
+            return Upsert(record);
         }
 
         public RecordValidationResult Update(Record record)
         {
+            // additional validation for updating
             if (record.ReadOnly)
                 return new RecordValidationResult { Message = "Cannot update ReadOnly record." };
 
-            var result = this.Validate(record);
+            return Upsert(record);
+        }
 
-            db.Store(record);
+        RecordValidationResult Upsert(Record record)
+        {
+            var result = validator.Validate(record);
+
+            if (result.Success)
+                db.Store(record);
+
             return result;
         }
-
-        RecordValidationResult Validate(Record record)
-        {
-            if (record.Gemini.ResourceLocator.IsBlank())
-                return new RecordValidationResult { Message = "ResourceLocator must not be blank." };
-
-            return new RecordValidationResult { Succeeded = true };
-        }
-    }
-
-    public class RecordValidationResult
-    {
-        public bool Succeeded { get; set; }
-        public string Message { get; set; }
     }
 
 
-    class when_inserting_a_record_with_blank_resource_locator
+    // this is really a test of the validator, so needs moving
+    class when_inserting_a_record
     {
         [Test]
-        public void should_not_succeed()
+        public void should_fail_if_resource_locator_is_blank()
         {
             var record = new Record
                 {
@@ -82,11 +77,26 @@ namespace Catalogue.Data.Write
                         }
                 };
 
-            var service = new RecordService(Mock.Of<IDocumentSession>());
+            var service = new RecordService(Mock.Of<IDocumentSession>(), new RecordValidator());
 
             var result = service.Insert(record);
-            result.Succeeded.Should().BeFalse();
+            result.Success.Should().BeFalse();
             result.Message.Should().StartWith("ResourceLocator must not be blank");
+        }
+    }
+
+    class when_updating_a_record
+    {
+        [Test]
+        public void should_fail_if_record_is_readonly()
+        {
+            var service = new RecordService(Mock.Of<IDocumentSession>(), new RecordValidator());
+
+            var record = new Record { ReadOnly = true };
+
+            var result = service.Update(record);
+            result.Success.Should().BeFalse();
+            result.Message.Should().StartWith("Cannot update ReadOnly record");
         }
     }
 }

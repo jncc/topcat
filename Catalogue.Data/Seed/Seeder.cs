@@ -42,7 +42,7 @@ namespace Catalogue.Data.Seed
 
             using (var reader = new StreamReader(s))
             {
-                var importer = new Importer<MeshMapping>(new FileSystem(), new RecordService(db));
+                var importer = new Importer<MeshMapping>(new FileSystem(), new RecordService(db, new RecordValidator()));
                 importer.SkipBadRecords = true; // todo remove when data export is finished
                 importer.Import(reader);
             }
