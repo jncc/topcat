@@ -20,8 +20,10 @@ angular.module('app.controllers').controller 'EditorController',
             ## todo use resource Record.update 
 
 
-        $scope.isSaveAndResetHidden = () -> angular.equals($scope.form, record)
-        $scope.isSaveDisabled = () -> angular.equals($scope.form, record) # || $scope.theForm.$invalid 
+        $scope.isSaveAndResetHidden = ->
+            angular.equals($scope.form, record) || $record.readOnly
+        $scope.isSaveDisabled = ->
+            angular.equals($scope.form, record) # || $scope.theForm.$invalid 
 
         # call reset() to initially set up form
         $scope.reset()

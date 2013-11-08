@@ -14,20 +14,23 @@ namespace Catalogue.Data.Seed
     public class Seeder
     {
         readonly IDocumentSession db;
+        readonly IRecordService recordService;
 
-        public Seeder(IDocumentSession db)
+        public Seeder(IDocumentSession db, IRecordService recordService)
         {
             this.db = db;
+            this.recordService = recordService;
         }
 
         public static void Seed(IDocumentStore store)
         {
             using (var db = store.OpenSession())
             {
-                var s = new Seeder(db);
+                var s = new Seeder(db, new RecordService(db, new RecordValidator()));
 
                 s.AddVocabularies();
                 s.AddMeshRecords();
+                s.AddReadOnlyRecord();
                 s.AddBboxes();
 
                 db.SaveChanges();
@@ -46,6 +49,23 @@ namespace Catalogue.Data.Seed
                 importer.SkipBadRecords = true; // todo remove when data export is finished
                 importer.Import(reader);
             }
+        }
+
+        void AddReadOnlyRecord()
+        {
+            var record = new Record
+                {
+                    Id = new Guid("b65d2914-cbac-4230-a7f3-08d13eea1e92"),
+                    Gemini = new Metadata
+                        {
+                            Title = "An example read-only record",
+                            Abstract = "This is an example read-only record.",
+                            ResourceLocator = @"X:\some\location",
+                        },
+                    ReadOnly = true,
+                };
+
+            recordService.Insert(record);
         }
 
         void AddBboxes()

@@ -5,4 +5,6 @@ angular.module('app.controllers').controller 'MainController',
 
         $scope.hashStringToColor = misc.hashStringToColor
 
+        $scope.notifications = [] # todo ....
+
         Account.then (user) -> $scope.user = user

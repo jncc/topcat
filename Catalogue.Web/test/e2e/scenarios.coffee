@@ -60,4 +60,12 @@ describe 'search results specifications', ->
         # todo
         #expect(repeater('.search-result').row(0)).toContain 'Bird' 
 
+describe 'when viewing a read-only record', ->
 
+    beforeEach ->
+        browser().navigateTo '../../app/#/editor/b65d2914-cbac-4230-a7f3-08d13eea1e92'
+
+    it 'should open the record', ->
+        expect(input('form.gemini.title').val()).toBe 'An example read-only record'
+    it 'should not be editable', ->
+        

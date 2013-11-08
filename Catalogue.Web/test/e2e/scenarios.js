@@ -67,4 +67,14 @@
     });
   });
 
+  describe('when viewing a read-only record', function() {
+    beforeEach(function() {
+      return browser().navigateTo('../../app/#/editor/b65d2914-cbac-4230-a7f3-08d13eea1e92');
+    });
+    it('should open the record', function() {
+      return expect(input('form.gemini.title').val()).toBe('An example read-only record');
+    });
+    return it('should not be editable', function() {});
+  });
+
 }).call(this);

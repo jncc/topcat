@@ -22,7 +22,7 @@
       };
     };
     $scope.isSaveAndResetHidden = function() {
-      return angular.equals($scope.form, record);
+      return angular.equals($scope.form, record) || $record.readOnly;
     };
     $scope.isSaveDisabled = function() {
       return angular.equals($scope.form, record);
