@@ -51,5 +51,5 @@ care of (most of?) the following manual steps:
 * `ICACLS e:\catalogue-deployments\Live\RavenDB\Web /grant "IIS AppPool\Catalogue.Data.Live":F`
 * C:\Windows\System32\inetsrv\config\applicationHost.config ensure startMode="AlwaysRunning". `<add name="Catalogue.Data.Live" managedRuntimeVersion="v4.0" startMode="AlwaysRunning" />`
 
-
+When creating a new database instance, the Versioning bundle needs to be enabled.
 
