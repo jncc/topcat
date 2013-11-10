@@ -144,6 +144,21 @@ h3 {
 textarea {
   max-height: 8em;
 }
+.layout-row {
+  display: table;
+  width: 100%;
+}
+.layout-row .layout-col {
+  display: table-cell;
+  vertical-align: middle;
+}
+.editor-internal {
+  padding-top: 1.5em;
+}
+.editor-internal hr {
+  margin-top: 1em;
+  margin-bottom: 1em;
+}
 form .ng-dirty.ng-invalid {
   border: 1px solid #FF1493;
   background-color: #f9f2f4;

@@ -160,29 +160,23 @@
             </div>
 
             <div class="col-md-3">
-                <div class="well well-sm">
-
-                    <!-- suspect this won't work with bootstrap's javascript - look at angular-ui (but ie8) -->
-                   
-                    <input type="radio" ng-model="form.topCopy" ng-value="true">
-                    <input type="radio" ng-model="form.topCopy" ng-value="false">
+                <div class="editor-internal well well-sm">
                     
-                    <div class="form-group">
-                        <div class="input-group">
-                                <span>Top copy</span>
-                            <div class="btn-group" data-toggle="buttons">
-                                <label class="btn btn-primary">
-                                    <input type="radio" ng-model="form.gemini.topCopy" name="topcopy">
-                                    Yes
-                                </label>
-                                <label class="btn btn-primary">
-                                    <input type="radio" ng-model="form.gemini.topCopy" name="topcopy"  value="false">
-                                    No
-                                </label>
-                            </div>
 
+                    <div class="layout-row">
+                        <div class="layout-col">
+                            <span>Top copy</span>
+                        </div>
+                        <div class="layout-col pull-right">
+                               <div class="btn-group">
+                                    <!-- omg angular ! -->
+                                    <label ng-click="form.topCopy = true" ng-class="{ 'btn-primary': form.topCopy, 'btn-default': !form.topCopy }" class="btn">Yes</label>
+                                    <label ng-click="form.topCopy = false" ng-class="{ 'btn-primary': !form.topCopy, 'btn-default': form.topCopy  }" class="btn">No</label>
+                                </div>
                         </div>
                     </div>
+                    
+                    <hr />
 
                     <div class="form-group">
                         <div class="input-group">
@@ -206,6 +200,21 @@
                     <div class="form-group">
                         <textarea type="text" rows="4" tc-autosize class="form-control" placeholder="Notes" title="Notes to keep separate from the Gemini record"></textarea>
                     </div>
+                    
+                    <hr />
+
+                    <div class="form-group">
+                        <button type="button" class="btn btn-primary">
+                            <span class="glyphicon glyphicon-repeat"></span> Yes
+                        </button>
+                    </div>
+
+                    <div class="form-group">
+                        
+                        <input type="radio" ng-model="form.topCopy" ng-value="true">
+                        <input type="radio" ng-model="form.topCopy" ng-value="false">
+                    </div>
+
 
                 </div>
 

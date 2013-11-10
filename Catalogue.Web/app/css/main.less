@@ -174,6 +174,27 @@ h2, h3 { color: #888; }
 // textareas should not grow beyond reasonable (they are autosized with a plugin)
 textarea { max-height: 8em; }
 
+
+// custom table-based layout possibly because i don't quite get boostrap
+.layout-row {
+    display: table;
+    width: 100%;
+    .layout-col {
+        .cell-mixin;
+    }
+}
+
+
+.editor-internal {
+    padding-top: 1.5em;
+    hr {
+        margin-top: 1em;
+        margin-bottom: 1em;
+    }
+}
+
+
+
 // validation styles. angular also puts these classes on the form so ignore that
 //.ng-dirty.ng-valid { border:1px solid Green; }
 form .ng-dirty.ng-invalid {
