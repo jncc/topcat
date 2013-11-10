@@ -80,4 +80,19 @@
     });
   });
 
+  describe('can edit top-copy status', function() {
+    beforeEach(function() {
+      return browser().navigateTo('../../app/#/editor/94f2c217-2e45-42be-8b48-c5075401e508');
+    });
+    it('should start as not top-copy', function() {
+      return expect(element('.editor-top-copy button:contains(\'No\')').attr('class')).toContain('btn-primary');
+    });
+    return it('should update to top-copy', function() {
+      using('.editor-top-copy');
+      element('button:contains(\'Yes\')').click();
+      expect(element('button:contains(\'Yes\')').attr('class')).toContain('btn-primary');
+      return expect(element('button:contains(\'No\')').attr('class')).toContain('btn-default');
+    });
+  });
+
 }).call(this);

@@ -31,6 +31,7 @@ namespace Catalogue.Data.Seed
                 s.AddVocabularies();
                 s.AddMeshRecords();
                 s.AddReadOnlyRecord();
+                s.AddNonTopCopyRecord();
                 s.AddBboxes();
 
                 db.SaveChanges();
@@ -63,6 +64,22 @@ namespace Catalogue.Data.Seed
                             ResourceLocator = @"X:\some\location",
                         },
                     ReadOnly = true,
+                };
+
+            recordService.Insert(record);
+        }
+
+        void AddNonTopCopyRecord()
+        {
+            var record = new Record
+                {
+                    Id = new Guid("94f2c217-2e45-42be-8b48-c5075401e508"),
+                    Gemini = new Metadata
+                        {
+                            Title = "An example record that is not top-copy",
+                            Abstract = "This is an example record that is not top-copy.",
+                            ResourceLocator = @"X:\some\kind\of\location",
+                        }
                 };
 
             recordService.Insert(record);

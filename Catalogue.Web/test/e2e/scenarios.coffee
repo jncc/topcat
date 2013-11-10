@@ -71,3 +71,21 @@ describe 'when viewing a read-only record', ->
         input('form.gemini.title').enter 'mwaa ha ha'
         expect(element('.btn-danger:visible').count()).toBe 0 # erm, assuming the only button with this class...
         
+describe 'can edit top-copy status', ->
+
+    beforeEach ->
+        browser().navigateTo '../../app/#/editor/94f2c217-2e45-42be-8b48-c5075401e508'
+
+    it 'should start as not top-copy', ->
+        expect(element('''.editor-top-copy button:contains('No')''').attr('class')).toContain 'btn-primary'
+
+    it 'should update to top-copy', ->
+        using '.editor-top-copy'
+        element('''button:contains('Yes')''').click();
+        expect(element('''button:contains('Yes')''').attr('class')).toContain 'btn-primary'
+        expect(element('''button:contains('No')''').attr('class')).toContain 'btn-default'
+
+
+
+
+        
