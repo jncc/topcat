@@ -202,7 +202,11 @@
                     <!--                    <pre>form={{form}}</pre>-->
 
                     <div class="form-group">
-                        <textarea type="text" rows="4" tc-autosize class="form-control" placeholder="Notes" title="Notes to keep separate from the Gemini record"></textarea>
+                        <textarea ng-model="form.notes" type="text" rows="4"
+                            tc-autosize
+                            class="form-control"
+                            placeholder="Notes"
+                            title="Notes to keep separate from the Gemini record"></textarea>
                     </div>
                     
                     <hr />
