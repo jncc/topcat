@@ -168,11 +168,15 @@
                             <span>Top copy</span>
                         </div>
                         <div class="layout-col pull-right">
-                               <div class="btn-group">
-                                    <!-- omg angular ! -->
-                                    <label ng-click="form.topCopy = true" ng-class="{ 'btn-primary': form.topCopy, 'btn-default': !form.topCopy }" class="btn">Yes</label>
-                                    <label ng-click="form.topCopy = false" ng-class="{ 'btn-primary': !form.topCopy, 'btn-default': form.topCopy  }" class="btn">No</label>
-                                </div>
+                            <div class="btn-group">
+                                <!-- omg angular ! -->
+                                <button ng-click="form.topCopy = true" ng-class="{ 'btn-primary': form.topCopy, 'btn-default': !form.topCopy }" class="btn">
+                                    <span class="glyphicon glyphicon-leaf"></span> Yes
+                                </button>
+                                <button ng-click="form.topCopy = false" ng-class="{ 'btn-primary': !form.topCopy, 'btn-default': form.topCopy  }" class="btn">
+                                    No
+                                </button>
+                            </div>
                         </div>
                     </div>
                     

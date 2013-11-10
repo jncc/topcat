@@ -159,6 +159,12 @@ textarea {
   margin-top: 1em;
   margin-bottom: 1em;
 }
+.editor-internal .btn .glyphicon {
+  margin-right: 0.3em;
+}
+.editor-internal .btn-default .glyphicon {
+  color: #666;
+}
 form .ng-dirty.ng-invalid {
   border: 1px solid #FF1493;
   background-color: #f9f2f4;
