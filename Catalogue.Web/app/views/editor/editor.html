@@ -5,10 +5,10 @@
         <!-- top row of buttons etc.  -->
         <div class="row">
             <div class="col-md-6">
-                <div class="form-group">
-                    <span ng-show="form.readOnly" class="editor-readonly">
+                <div ng-show="form.readOnly" class="editor-readonly form-group">
+                    <span class="well well-sm">
                         <span tc-tip class="dark glyphicon glyphicon-lock" title="This record is read-only"></span>
-                        <span ng-show="!isClean()">This record is read-only and can't be saved</span>
+                        <span ng-show="!isClean()"> This record is read-only and can't be saved</span>
                     </span>
                 </div>
             </div>
@@ -162,8 +162,6 @@
             <div class="col-md-3">
                 <div class="well well-sm">
 
-                    <h3>Internal</h3>
-
                     <!-- suspect this won't work with bootstrap's javascript - look at angular-ui (but ie8) -->
                    
                     <input type="radio" ng-model="form.topCopy" ng-value="true">
@@ -171,6 +169,7 @@
                     
                     <div class="form-group">
                         <div class="input-group">
+                                <span>Top copy</span>
                             <div class="btn-group" data-toggle="buttons">
                                 <label class="btn btn-primary">
                                     <input type="radio" ng-model="form.gemini.topCopy" name="topcopy">

@@ -128,8 +128,10 @@ h3 {
 .tag-tip {
   max-width: 100%;
 }
+.editor-readonly .well {
+  min-width: 3em;
+}
 .editor-readonly .glyphicon {
-  font-size: larger;
   margin: 0 2px 0 2px;
   color: #666;
 }

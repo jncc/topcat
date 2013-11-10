@@ -45,7 +45,7 @@ namespace Catalogue.Data.Write
         {
             // additional validation for updating
             if (record.ReadOnly)
-                return new RecordValidationResult { Message = "Cannot update ReadOnly record." };
+                return new RecordValidationResult { Message = "Cannot update read-only record." };
 
             return Upsert(record);
         }
@@ -96,7 +96,7 @@ namespace Catalogue.Data.Write
 
             var result = service.Update(record);
             result.Success.Should().BeFalse();
-            result.Message.Should().StartWith("Cannot update ReadOnly record");
+            result.Message.Should().StartWith("Cannot update read-only record");
         }
     }
 }
