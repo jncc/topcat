@@ -66,22 +66,19 @@ namespace Catalogue.Data.Write
     class when_inserting_a_record
     {
         [Test]
-        public void should_fail_if_resource_locator_is_blank()
+        public void should_fail_if_path_is_blank()
         {
             var record = new Record
                 {
-                    Gemini = new Metadata
-                        {
-                            Title = "A record without a ResourceLocator",
-                            ResourceLocator = null,
-                        }
+                    Path = null,
+                    Gemini = new Metadata { Title = "A record without a path" }
                 };
 
             var service = new RecordService(Mock.Of<IDocumentSession>(), new RecordValidator());
 
             var result = service.Insert(record);
             result.Success.Should().BeFalse();
-            result.Message.Should().StartWith("ResourceLocator must not be blank");
+            result.Message.Should().StartWith("Path must not be blank");
         }
     }
 

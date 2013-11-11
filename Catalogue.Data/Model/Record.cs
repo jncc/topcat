@@ -18,6 +18,7 @@ namespace Catalogue.Data.Model
         /// </summary>
         public string   Wkt      { get; set; }
 
+        public string   Path     { get; set; }
         public Status   Status   { get; set; }
         public bool     TopCopy  { get; set; }
         public string   Notes    { get; set; }

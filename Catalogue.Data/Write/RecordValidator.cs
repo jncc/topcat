@@ -17,8 +17,8 @@ namespace Catalogue.Data.Write
     {
         public RecordValidationResult Validate(Record record)
         {
-            if (record.Gemini.ResourceLocator.IsBlank())
-                return new RecordValidationResult { Message = "ResourceLocator must not be blank." };
+            if (record.Path.IsBlank())
+                return new RecordValidationResult { Message = "Path must not be blank." };
 
             return new RecordValidationResult { Success = true };
         }

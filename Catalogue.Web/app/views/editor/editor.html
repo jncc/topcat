@@ -42,7 +42,7 @@
                     <div class="input-group">
                         <span class="input-group-addon well-input-group-addon"><span class="grey glyphicon glyphicon-th-large"></span></span>
 
-                        <input id="form-gemini-resourceLocator" name="form.gemini.resourceLocator" ng-model="form.gemini.resourceLocator" 
+                        <input id="form-path" name="form.path" ng-model="form.path" 
                                type="text" class="form-control" 
                                placeholder="Location"
                                tc-server-validation
@@ -51,9 +51,9 @@
 
                         <span class="input-group-btn">
                             <button class="btn btn-primary" type="button"
-                                    ng-disabled="!form.gemini.resourceLocator"
-                                    tc-copy-to-clipboard="form-gemini-resourceLocator"
-                                    data-clipboard-target="form-gemini-resourceLocator">
+                                    ng-disabled="!form.path"
+                                    tc-copy-to-clipboard="form-path"
+                                    data-clipboard-target="form-path">
                                 <span class="glyphicon glyphicon-new-window"></span>
                             </button>
                         </span>
@@ -182,9 +182,12 @@
                     
                     <hr />
 
-                    <div class="form-group">
-                        <div class="input-group">
-
+                    <div class="editor-status layout-row">
+                        <div class="layout-col">
+                            <span>Status</span>
+                        </div>
+                        <div class="layout-col pull-right">
+                            
                             <div class="btn-group" data-toggle="buttons">
                                 <label class="btn btn-primary">
                                     <input type="radio" name="options" id="option1">
@@ -195,11 +198,11 @@
                                     Publishable
                                 </label>
                             </div>
-
                         </div>
                     </div>
 
-                    <!--                    <pre>form={{form}}</pre>-->
+                    <hr />
+
 
                     <div class="form-group">
                         <textarea ng-model="form.notes" type="text" rows="4"
@@ -217,20 +220,11 @@
                         </button>
                     </div>
 
-                    <div class="form-group">
-                        
-                        <input type="radio" ng-model="form.topCopy" ng-value="true">
-                        <input type="radio" ng-model="form.topCopy" ng-value="false">
-                    </div>
-
-
                 </div>
 
             </div>
-
+            
+            {{form}}
         </div>
-
-
     </form>
-
 </div>

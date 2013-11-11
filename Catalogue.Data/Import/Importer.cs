@@ -89,7 +89,7 @@ namespace Catalogue.Data.Import
         }
 
         string testData =
-@"Abstract,Notes,ResourceLocator,Blah
+@"Abstract,Notes,Path,Blah
 This is the abstract,These are the notes,Z:\some\location
 Another abstract,Some more notes,file:///z/some/location";
 
@@ -109,6 +109,7 @@ Another abstract,Some more notes,file:///z/some/location";
         {
             public override void CreateMap()
             {
+                this.Map(m => m.Path);
                 this.Map(m => m.Notes);
                 this.References<MetadataMap>(m => m.Gemini);
             }
@@ -119,7 +120,6 @@ Another abstract,Some more notes,file:///z/some/location";
             public override void CreateMap()
             {
                 this.Map(m => m.Abstract);
-                this.Map(m => m.ResourceLocator);
             }
         }
     }

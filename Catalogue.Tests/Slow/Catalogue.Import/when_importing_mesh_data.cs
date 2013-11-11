@@ -53,11 +53,11 @@ namespace Catalogue.Tests.Slow.Catalogue.Import
         }
 
         [Test]
-        public void all_records_should_have_valid_resource_location()
+        public void all_records_should_have_a_valid_path()
         {
             Uri uri; // need this for Uri.TryCreate; not actually using it
 
-            imported.Count(r => Uri.TryCreate(r.Gemini.ResourceLocator, UriKind.Absolute, out uri))
+            imported.Count(r => Uri.TryCreate(r.Path, UriKind.Absolute, out uri))
                     .Should().Be(183);
         }
 

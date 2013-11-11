@@ -61,8 +61,8 @@ namespace Catalogue.Data.Seed
                         {
                             Title = "An example read-only record",
                             Abstract = "This is an example read-only record.",
-                            ResourceLocator = @"X:\some\location",
                         },
+                    Path = @"X:\some\path",
                     ReadOnly = true,
                 };
 
@@ -78,8 +78,8 @@ namespace Catalogue.Data.Seed
                         {
                             Title = "An example record that is not top-copy",
                             Abstract = "This is an example record that is not top-copy.",
-                            ResourceLocator = @"X:\some\kind\of\location",
-                        }
+                        },
+                    Path = @"X:\some\kind\of\path",
                 };
 
             recordService.Insert(record);

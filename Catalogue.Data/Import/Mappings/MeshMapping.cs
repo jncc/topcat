@@ -28,6 +28,7 @@ namespace Catalogue.Data.Import.Mappings
         {
             public override void CreateMap()
             {
+                Map(m => m.Path).ConvertUsing(row => row.GetField("ResourceLocator"));
                 Map(m => m.TopCopy).ConvertUsing(_ => true); // all mesh data is top copy 
                 Map(m => m.Notes).Ignore();
                 Map(m => m.SourceIdentifier).Name("GUI");
@@ -56,7 +57,6 @@ namespace Catalogue.Data.Import.Mappings
                     });
                 Map(m => m.DatasetReferenceDate);
                 Map(m => m.Lineage);
-                Map(m => m.ResourceLocator);
                 Map(m => m.DataFormat);
                 //Map(m => m.ResponsibleOrganisation) todo
                 Map(m => m.LimitationsOnPublicAccess);

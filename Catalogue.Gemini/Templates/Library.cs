@@ -26,7 +26,7 @@ namespace Catalogue.Gemini.Templates
                 TemporalExtent = new TemporalExtent { Begin = "", End = "" },
                 DatasetReferenceDate = "",
                 Lineage = "",
-                ResourceLocator = @"Z:\some\file\share",
+                ResourceLocator = "",
                 DataFormat = new DataFormat { Name = "", Version = "" },
                 ResponsibleOrganisation = new ResponsibleParty
                     {
@@ -74,7 +74,7 @@ namespace Catalogue.Gemini.Templates
                 TemporalExtent = new TemporalExtent { Begin = "2001-01-13", End = "2010-01-25" },
                 DatasetReferenceDate = "2012-03-17",
                 Lineage = "This dataset was imagined by a developer.",
-                ResourceLocator = @"Z:\some\file\share\path.xsl",
+                ResourceLocator = @"http://data.example.com/some/resource.html",
                 DataFormat = new DataFormat { Name = "XLS" },
                 ResponsibleOrganisation = new ResponsibleParty
                     {
