@@ -119,14 +119,33 @@ namespace Catalogue.Data.Write
         public void gemini_id_field_should_be_set_to_be_the_same_as_record_id()
         {
             var database = Mock.Of<IDocumentSession>();
-            var service = new RecordService(database, Mock.Of<IRecordValidator>(v => v.Validate(It.IsAny<Record>()) == new RecordValidationResult { Success = true }));
+            var service = new RecordService(database, this.GetValidatorStub());
 
             var id = new Guid("60ff463c-8ba0-4a76-898f-6f896169dc1e");
-            var input = new Record { Id = id, Gemini = Library.Blank() };
+            var record = new Record { Id = id, Gemini = Library.Blank() };
 
-            service.Update(input);
+            service.Update(record);
 
             Mock.Get(database).Verify(db => db.Store(It.Is((Record r) => r.Gemini.Id == id)));
         }
+
+        [Test]
+        public void bounding_box_should_be_stored_as_wkt()
+        {
+            var database = Mock.Of<IDocumentSession>();
+            var service = new RecordService(database, this.GetValidatorStub());
+
+            var record = new Record { Gemini = Library.Example() };
+            service.Update(record);
+
+            string expectedWkt = BoundingBoxUtility.GetWkt(60.77m, 49.79m, 2.96m, -8.14m);
+            Mock.Get(database).Verify(db => db.Store(It.Is((Record r) => r.Wkt == expectedWkt)));
+        }
+
+        IRecordValidator GetValidatorStub()
+        {
+            return Mock.Of<IRecordValidator>(v => v.Validate(It.IsAny<Record>()) == new RecordValidationResult { Success = true });
+        }
+
     }
 }
