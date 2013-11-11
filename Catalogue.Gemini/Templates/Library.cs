@@ -18,7 +18,7 @@ namespace Catalogue.Gemini.Templates
         {
             return new Metadata
             {
-                FileIdentifier = Guid.Empty,
+                Id = Guid.Empty,
                 Title = "",
                 Abstract = "",
                 TopicCategory = "",
@@ -45,7 +45,6 @@ namespace Catalogue.Gemini.Templates
                         Email = "",
                         Role = "",
                     },
-                UniqueResourceIdentifier = "",
                 ResourceType = "",
                 BoundingBox = new BoundingBox
                 {
@@ -61,7 +60,7 @@ namespace Catalogue.Gemini.Templates
         {
             return new Metadata
             {
-                FileIdentifier = new Guid("5eb63655-d7fe-46af-88bc-71f7db243ad3"),
+                Id = new Guid("5eb63655-d7fe-46af-88bc-71f7db243ad3"),
                 Title = "Demo Dataset",
                 Abstract = "This is just a demo dataset.",
                 TopicCategory = "geoscientificInformation",
@@ -74,7 +73,7 @@ namespace Catalogue.Gemini.Templates
                 TemporalExtent = new TemporalExtent { Begin = "2001-01-13", End = "2010-01-25" },
                 DatasetReferenceDate = "2012-03-17",
                 Lineage = "This dataset was imagined by a developer.",
-                ResourceLocator = @"http://data.example.com/some/resource.html",
+                ResourceLocator = "http://data.jncc.gov.uk/5eb63655-d7fe-46af-88bc-71f7db243ad3",
                 DataFormat = new DataFormat { Name = "XLS" },
                 ResponsibleOrganisation = new ResponsibleParty
                     {
@@ -93,7 +92,6 @@ namespace Catalogue.Gemini.Templates
                         Email = "some.user@jncc.gov.uk",
                         Role = "pointOfContact",
                     },
-                UniqueResourceIdentifier = "http://data.jncc.gov.uk/5eb63655-d7fe-46af-88bc-71f7db243ad3",
                 ResourceType = "dataset",
                     BoundingBox = new BoundingBox
                     {

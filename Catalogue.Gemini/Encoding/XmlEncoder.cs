@@ -48,7 +48,7 @@ namespace Catalogue.Gemini.Encoding
                     MakeMetadataDate(m),
                     new XElement(gmd + "identificationInfo", 
                         new XElement(gmd + "MD_DataIdentification",
-                            new XAttribute("id", "_" + m.FileIdentifier),
+                            new XAttribute("id", "_" + m.Id),
                             new XElement(gmd + "citation",
                                 new XElement(gmd + "CI_Citation",
                                     MakeTitle(m),
@@ -84,7 +84,7 @@ namespace Catalogue.Gemini.Encoding
 
         XElement MakeFileIdentifier(Metadata metadata)
         {
-            return new XElement(gmd + "fileIdentifier", new XElement(gco + "CharacterString", metadata.FileIdentifier.ToString()));
+            return new XElement(gmd + "fileIdentifier", new XElement(gco + "CharacterString", metadata.Id));
         }
 
 
@@ -133,7 +133,7 @@ namespace Catalogue.Gemini.Encoding
             return new XElement(gmd + "identifier",
                 new XElement(gmd + "MD_Identifier",
                     new XElement(gmd + "code",
-                        new XElement(gco + "CharacterString", metadata.UniqueResourceIdentifier))));
+                        new XElement(gco + "CharacterString", metadata.Id))));
         }
 
         XElement MakeAbstract(Metadata metadata)
