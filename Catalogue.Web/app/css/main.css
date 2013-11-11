@@ -15,26 +15,17 @@
   cursor: pointer;
 }
 .hoverable-glyphicon {
-  color: #666;
+  color: #666666;
 }
 .hoverable-glyphicon:hover {
-  color: #444;
+  color: #444444;
 }
 h2,
 h3 {
   color: #888;
 }
-.grey {
-  color: #bbb;
-}
-.dark {
-  color: #666;
-}
-.white {
-  color: white;
-}
 .placeholder {
-  color: #bbb;
+  color: #bbbbbb;
 }
 .label-success {
   background-color: #35d926;
@@ -43,12 +34,12 @@ h3 {
   background-color: #d92687;
 }
 .btn-default {
-  background-color: #eee;
-  border-color: #eee;
+  background-color: #eeeeee;
+  border-color: #eeeeee;
 }
 .btn-default:hover {
-  background-color: #ddd;
-  border-color: #ddd;
+  background-color: #dddddd;
+  border-color: #dddddd;
 }
 .btn-danger {
   background-color: #d92687;
@@ -74,11 +65,11 @@ h3 {
   display: table-cell;
   vertical-align: middle;
   text-align: right;
-  color: #bbb;
+  color: #bbbbbb;
 }
 .header .user-info div:first-child {
   font-size: 123%;
-  color: #666;
+  color: #666666;
 }
 .welcome > ul > li {
   margin-bottom: 0.5em;
@@ -87,7 +78,7 @@ h3 {
   margin-top: 0.5em;
 }
 .roadmap {
-  border-left: 1px solid #eee;
+  border-left: 1px solid #eeeeee;
   padding-top: 0.5em;
   padding-left: 3em;
 }
@@ -102,10 +93,10 @@ h3 {
 }
 .search-result .search-title .glyphicon {
   margin-left: 0.2em;
-  color: #666;
+  color: #666666;
 }
 .search-result .search-title .glyphicon:hover {
-  color: #444;
+  color: #444444;
 }
 .search-result .search-tags {
   margin-top: 6px;
@@ -113,12 +104,12 @@ h3 {
 .tag {
   white-space: nowrap;
   display: inline-block;
-  background-color: #eee;
+  background-color: #eeeeee;
   padding-right: 0.4em;
   margin: 0 0.8em 0.3em 0;
 }
 .tag:hover {
-  background-color: #ddd;
+  background-color: #dddddd;
 }
 .tag > span {
   display: inline-block;
@@ -133,10 +124,10 @@ h3 {
 }
 .editor-readonly .glyphicon {
   margin: 0 2px 0 2px;
-  color: #666;
+  color: #666666;
 }
 .editor-readonly .glyphicon:hover {
-  color: #444;
+  color: #444444;
 }
 .editor-title {
   font-size: larger;
@@ -163,7 +154,7 @@ textarea {
   margin-right: 0.4em;
 }
 .editor-internal .btn-default .glyphicon {
-  color: #666;
+  color: #666666;
 }
 form .ng-dirty.ng-invalid {
   border: 1px solid #FF1493;

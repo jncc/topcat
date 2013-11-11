@@ -15,6 +15,17 @@ html { overflow-y: scroll; }
 // minimise the FOUC due to bootstrap-select resizing the select element 
 //.selectContainer { min-height: 34px; }
 
+// -------
+// colours
+// -------
+
+@darker: #444;
+@dark:   #666;
+@grey:   #bbb;
+@lesspale: #ddd;
+@pale:   #eee;
+@white:  #fff;
+
 // ---------
 // utilities
 // ---------
@@ -27,33 +38,25 @@ html { overflow-y: scroll; }
 .pointable { cursor: pointer; }
 
 .hoverable-glyphicon {
-    color: #666;
-    &:hover { color: #444; }
+    color: @dark;
+    &:hover { color: @darker; }
 }
-
-// -------
-// colours
-// -------
 
 h2, h3 { color: #888; }
 
-// general mixin colours
-.grey { color: #bbb; }
-.dark { color: #666; }
-.white { color: white; }
 
 // ie8 placeholder is a bit dark by default (jquery-placeholder plugin)
-.placeholder { .grey; }
+.placeholder { color: @grey; }
 
 // colours overriding bootstrap's classes (ouch)
 .label-success { background-color: rgb(53,217,38); }
 .label-danger { background-color: rgb(217, 38, 135); }
 .btn-default {
-    background-color: #eee;
-    border-color: #eee;
+    background-color: @pale;
+    border-color: @pale;
     &:hover {
-        background-color: #ddd;
-        border-color: #ddd;
+        background-color: @lesspale;
+        border-color: @lesspale;
     }
 }
 .btn-danger { background-color: rgb(217, 38, 135); }
@@ -67,7 +70,6 @@ h2, h3 { color: #888; }
     display: table;
     width: 100%;
     margin-top: 1.4em;
-    //td { vertical-align: middle; }
 
     .logo {
         .cell-mixin;
@@ -78,11 +80,10 @@ h2, h3 { color: #888; }
     .user-info {
         .cell-mixin;
         text-align: right;
-        .grey;
+        color: @grey;
         div:first-child {
-            //margin-right: 3px;
-            font-size:123%;
-            color: #666;
+            font-size: 123%;
+            color: @dark;
         }
     }
 }
@@ -98,7 +99,7 @@ h2, h3 { color: #888; }
 }
 
 .roadmap {
-    border-left: 1px solid #eee;
+    border-left: 1px solid @pale;
     padding-top: 0.5em; // keep it definitely below the main welcome heading 
     padding-left: 3em;
 }
@@ -137,11 +138,11 @@ h2, h3 { color: #888; }
 .tag {
     white-space:nowrap;
     display: inline-block;
-    background-color:#eee;
+    background-color: @pale;
     padding-right: 0.4em;
     margin: 0 0.8em 0.3em 0;
     &:hover {
-        background-color: #ddd;
+        background-color: @lesspale;
     }
     > span {
         display: inline-block;
@@ -192,7 +193,7 @@ textarea { max-height: 8em; }
         margin-bottom: 1em;
     }
     .btn .glyphicon { margin-right:0.4em; }
-    .btn-default .glyphicon { color: #666; }
+    .btn-default .glyphicon { color: @dark; }
 }
 
 
