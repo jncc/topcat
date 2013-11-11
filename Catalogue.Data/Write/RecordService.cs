@@ -135,10 +135,12 @@ namespace Catalogue.Data.Write
             var database = Mock.Of<IDocumentSession>();
             var service = new RecordService(database, this.GetValidatorStub());
 
-            var record = new Record { Gemini = Library.Example() };
+            var e = Library.Example();
+            var record = new Record { Gemini = e };
+            
             service.Update(record);
 
-            string expectedWkt = BoundingBoxUtility.GetWkt(60.77m, 49.79m, 2.96m, -8.14m);
+            string expectedWkt = BoundingBoxUtility.GetWkt(e.BoundingBox.North, e.BoundingBox.South, e.BoundingBox.East, e.BoundingBox.West);
             Mock.Get(database).Verify(db => db.Store(It.Is((Record r) => r.Wkt == expectedWkt)));
         }
 
