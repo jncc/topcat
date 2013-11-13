@@ -45,7 +45,13 @@ namespace Catalogue.Tests.Explicit
                      select new
                          {
                              File = Path.GetFileName(f),
-                             Wkt = BoundingBoxUtility.GetWkt(p.North, p.South, p.East, p.West)
+                             Wkt = BoundingBoxUtility.ToWkt(new BoundingBox
+                                 {
+                                     North = p.North,
+                                     South = p.South,
+                                     East = p.East,
+                                     West = p.West,
+                                 })
                          })
                          .ToList();
 
@@ -84,7 +90,13 @@ namespace Catalogue.Tests.Explicit
             var store = new DocumentStore { Url = RavenUrl }.Initialize();
             RavenUtility.WaitForIndexing(store);
 
-            string peakDistrictBbox = BoundingBoxUtility.GetWkt(53.6m, 53.0m, -1.52m, -2.14m);
+            string peakDistrictBbox = BoundingBoxUtility.ToWkt(new BoundingBox
+                {
+                    North = 53.6m,
+                    South = 53.0m,
+                    East = -1.52m,
+                    West = -2.14m
+                });
 
             var watch = Stopwatch.StartNew();
 

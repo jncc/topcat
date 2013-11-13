@@ -67,11 +67,7 @@ namespace Catalogue.Data.Write
         void SyncDenormalizations(Record record)
         {
             // we store the bounding box as wkt so we can index it
-            record.Wkt = BoundingBoxUtility.GetWkt(
-                record.Gemini.BoundingBox.North,
-                record.Gemini.BoundingBox.South,
-                record.Gemini.BoundingBox.East,
-                record.Gemini.BoundingBox.West);
+            record.Wkt = BoundingBoxUtility.ToWkt(record.Gemini.BoundingBox);
         }
     }
 
@@ -123,7 +119,7 @@ namespace Catalogue.Data.Write
             
             service.Update(record);
 
-            string expectedWkt = BoundingBoxUtility.GetWkt(e.BoundingBox.North, e.BoundingBox.South, e.BoundingBox.East, e.BoundingBox.West);
+            string expectedWkt = BoundingBoxUtility.ToWkt(e.BoundingBox);
             Mock.Get(database).Verify(db => db.Store(It.Is((Record r) => r.Wkt == expectedWkt)));
         }
 

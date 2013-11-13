@@ -87,7 +87,7 @@ namespace Catalogue.Data.Seed
 
         void AddBboxes()
         {
-            this.db.Store(SmallBox);
+           recordService.Insert(SmallBox);
         }
 
         void AddVocabularies()
@@ -120,8 +120,8 @@ namespace Catalogue.Data.Seed
                 {
                     Title = "Small Box",
                     DataFormat = new DataFormat {Name = "csv" },
+                    BoundingBox = new BoundingBox { North = 30, South = 20, East = 60, West = 50 },
                 },
-            Wkt = "POLYGON((50 20,60 20,60 30,50 30,50 20))",
         };
     }
 }
