@@ -8,11 +8,6 @@ namespace Catalogue.Gemini.Model
     /// </summary>
     public class Metadata
     {
-        /// <summary>
-        /// The "id" is not actually part of the metadata record itself, but is convenient to have available.
-        /// </summary>
-        public Guid Id { get; set; }
-
         public string Title { get; set; }
         public string Abstract { get; set; }
         public string TopicCategory { get; set; }

@@ -24,7 +24,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Gemini.Validation
             var metadata = Library.Example();
             
             // ...encode it into xml
-            var doc = new XmlEncoder().Create(metadata);
+            var doc = new XmlEncoder().Create(new Guid("b97aac01-5e5d-4209-b626-514e40245bc1"), metadata);
 
             // ...validate it with the CEH validator
             var result = new Validator().Validate(doc);

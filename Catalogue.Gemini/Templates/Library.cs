@@ -18,7 +18,6 @@ namespace Catalogue.Gemini.Templates
         {
             return new Metadata
             {
-                Id = Guid.Empty,
                 Title = "",
                 Abstract = "",
                 TopicCategory = "",
@@ -60,7 +59,6 @@ namespace Catalogue.Gemini.Templates
         {
             return new Metadata
             {
-                Id = new Guid("5eb63655-d7fe-46af-88bc-71f7db243ad3"),
                 Title = "Demo Dataset",
                 Abstract = "This is just a demo dataset.",
                 TopicCategory = "geoscientificInformation",

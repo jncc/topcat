@@ -1,4 +1,5 @@
-﻿using System.Xml.Linq;
+﻿using System;
+using System.Xml.Linq;
 using Catalogue.Gemini.Templates;
 using FluentAssertions;
 using NUnit.Framework;
@@ -14,7 +15,7 @@ namespace Catalogue.Gemini.Encoding
         public void set_up()
         {
             var metadata = Library.Example();
-            original = new XmlEncoder().Create(metadata);
+            original = new XmlEncoder().Create(Guid.NewGuid(), metadata);
 
             metadata.MetadataLanguage = "fin"; // set to finnish (probably the right code..?)
             updated = new XmlEncoder().Update(original, metadata);

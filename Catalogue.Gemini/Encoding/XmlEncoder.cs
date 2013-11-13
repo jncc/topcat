@@ -13,7 +13,7 @@ namespace Catalogue.Gemini.Encoding
         /// <summary>
         /// Creates an ISO XML metadata document using the given metadata.
         /// </summary>
-        XDocument Create(Metadata metadata);
+        XDocument Create(Guid id, Metadata metadata);
 
         /// <summary>
         /// Updates the ISO XML document using the given metadata.
@@ -31,7 +31,7 @@ namespace Catalogue.Gemini.Encoding
         public static readonly XNamespace gml = "http://www.opengis.net/gml/3.2";
         public static readonly XNamespace xlink = "http://www.w3.org/1999/xlink";
 
-        public XDocument Create(Metadata m)
+        public XDocument Create(Guid id, Metadata m)
         {
             // see http://data.gov.uk/sites/default/files/UK%20GEMINI%20Encoding%20Guidance%201.4.pdf
             // *please* don't mess up the indentation!
@@ -41,19 +41,19 @@ namespace Catalogue.Gemini.Encoding
                     new XAttribute(XNamespace.Xmlns + "gmd", gmd.NamespaceName),
                     new XAttribute(XNamespace.Xmlns + "gco", gco.NamespaceName),
                     new XAttribute(XNamespace.Xmlns + "gml", gml.NamespaceName),
-                    MakeFileIdentifier(m),
+                    MakeFileIdentifier(id),
                     MetadataLanguage.Make(m),
                     MakeResourceType(m),
                     MakeMetadataPointOfContact(m),
                     MakeMetadataDate(m),
                     new XElement(gmd + "identificationInfo", 
                         new XElement(gmd + "MD_DataIdentification",
-                            new XAttribute("id", "_" + m.Id),
+                            new XAttribute("id", "_" + id),
                             new XElement(gmd + "citation",
                                 new XElement(gmd + "CI_Citation",
                                     MakeTitle(m),
                                     MakeDatasetReferenceDate(m),
-                                    MakeUniqueResourceIdentifier(m))),
+                                    MakeUniqueResourceIdentifier(id))),
                             MakeAbstract(m),
                             MakeResponsibleOrganisation(m),
                             MakeKeywords(m),
@@ -82,9 +82,9 @@ namespace Catalogue.Gemini.Encoding
 
         #region Elements
 
-        XElement MakeFileIdentifier(Metadata metadata)
+        XElement MakeFileIdentifier(Guid id)
         {
-            return new XElement(gmd + "fileIdentifier", new XElement(gco + "CharacterString", metadata.Id));
+            return new XElement(gmd + "fileIdentifier", new XElement(gco + "CharacterString", id));
         }
 
 
@@ -128,12 +128,12 @@ namespace Catalogue.Gemini.Encoding
                             metadata.DatasetReferenceDate))));
         }
 
-        XElement MakeUniqueResourceIdentifier(Metadata metadata)
+        XElement MakeUniqueResourceIdentifier(Guid id)
         {
             return new XElement(gmd + "identifier",
                 new XElement(gmd + "MD_Identifier",
                     new XElement(gmd + "code",
-                        new XElement(gco + "CharacterString", metadata.Id))));
+                        new XElement(gco + "CharacterString", id))));
         }
 
         XElement MakeAbstract(Metadata metadata)

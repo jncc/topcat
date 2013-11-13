@@ -66,9 +66,6 @@ namespace Catalogue.Data.Write
 
         void SyncDenormalizations(Record record)
         {
-            // the guid is very useful to have available in the gemini record
-            record.Gemini.Id = record.Id;
-
             // we store the bounding box as wkt so we can index it
             record.Wkt = BoundingBoxUtility.GetWkt(
                 record.Gemini.BoundingBox.North,
@@ -113,20 +110,6 @@ namespace Catalogue.Data.Write
             var result = service.Update(record);
             result.Success.Should().BeFalse();
             result.Message.Should().StartWith("Cannot update read-only record");
-        }
-
-        [Test]
-        public void gemini_id_field_should_be_set_to_be_the_same_as_record_id()
-        {
-            var database = Mock.Of<IDocumentSession>();
-            var service = new RecordService(database, this.GetValidatorStub());
-
-            var id = new Guid("60ff463c-8ba0-4a76-898f-6f896169dc1e");
-            var record = new Record { Id = id, Gemini = Library.Blank() };
-
-            service.Update(record);
-
-            Mock.Get(database).Verify(db => db.Store(It.Is((Record r) => r.Gemini.Id == id)));
         }
 
         [Test]
