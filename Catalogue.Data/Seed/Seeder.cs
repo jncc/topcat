@@ -122,6 +122,7 @@ namespace Catalogue.Data.Seed
                     DataFormat = new DataFormat {Name = "csv" },
                     BoundingBox = new BoundingBox { North = 30, South = 20, East = 60, West = 50 },
                 },
+                Path = @"Z:\path\to\small\boz\record",
         };
     }
 }
