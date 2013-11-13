@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Text.RegularExpressions;
 using Catalogue.Data.Model;
 using Catalogue.Gemini.Model;
+using Catalogue.Utilities.Text;
 using CsvHelper.Configuration;
 using FluentAssertions;
 using NUnit.Framework;
@@ -21,22 +23,23 @@ namespace Catalogue.Data.Import.Mappings
 
             config.TrimFields = true;
             config.RegisterClassMap<RecordMap>();
-            config.RegisterClassMap<MetadataMap>();
+            config.RegisterClassMap<GeminiMap>();
         }
 
         public class RecordMap : CsvClassMap<Record>
         {
             public override void CreateMap()
             {
-                Map(m => m.Path).ConvertUsing(row => row.GetField("ResourceLocator"));
-                Map(m => m.TopCopy).ConvertUsing(_ => true); // all mesh data is top copy 
-                Map(m => m.Notes).Ignore();
-                Map(m => m.SourceIdentifier).Name("GUI");
-                References<MetadataMap>(m => m.Gemini);
+
+                Map(m => m.Path);
+                Map(m => m.TopCopy).ConvertUsing(row => true); // all mesh data is top copy
+                Map(m => m.SourceIdentifier).Name("AlternateTitle");
+
+                References<GeminiMap>(m => m.Gemini);
             }
         }
 
-        public class MetadataMap : CsvClassMap<Metadata>
+        public class GeminiMap : CsvClassMap<Metadata>
         {
             public override void CreateMap()
             {
@@ -57,13 +60,49 @@ namespace Catalogue.Data.Import.Mappings
                     });
                 Map(m => m.DatasetReferenceDate);
                 Map(m => m.Lineage);
+                Map(m => m.ResourceLocator);
+                Map(m => m.AdditionalInformationSource);
                 Map(m => m.DataFormat);
-                //Map(m => m.ResponsibleOrganisation) todo
+                Map(m => m.ResponsibleOrganisation).ConvertUsing(row =>
+                    {
+                        string name = row.GetField("ResponsibleOrganisationName");
+                        string email = RemoveAntiSpamCharacter(row.GetField("ResponsibleOrganisationEmail"));
+                        string role = row.GetField("ResponsibleOrganisationRole");
+
+                        return new ResponsibleParty { Name = name, Email = email, Role = role };
+                    });
                 Map(m => m.LimitationsOnPublicAccess);
                 Map(m => m.UseConstraints);
-                Map(m => m.SpatialReferenceSystem).Name("Spatial reference system");
+                Map(m => m.SpatialReferenceSystem);
+                Map(m => m.MetadataDate);
+                Map(m => m.MetadataLanguage);
+                Map(m => m.MetadataPointOfContact).ConvertUsing(row =>
+                {
+                    string name = row.GetField("MetadataPOCName");
+                    string email = RemoveAntiSpamCharacter(row.GetField("MetadataPOCEmail"));
+                    string role = row.GetField("ResponsibleOrganisationRole");
 
+                    return new ResponsibleParty { Name = name, Email = email, Role = role };
+                });
+                Map(m => m.ResourceType);
+                Map(m => m.BoundingBox).ConvertUsing(row =>
+                    {
+                        decimal north = Convert.ToDecimal(row.GetField("BBoxNorth"));
+                        decimal south = Convert.ToDecimal(row.GetField("BBoxSouth"));
+                        decimal east = Decimal.Parse(row.GetField("BBoxEast"), NumberStyles.Float);
+                        decimal west = Convert.ToDecimal(row.GetField("BBoxWest"));
 
+                        return new BoundingBox { North = north, South = south, East = east, West = west };
+                    });
+            }
+
+            string RemoveAntiSpamCharacter(string email)
+            {
+                // remove the anti-spam prepended 'x'
+                if (email.IsNotBlank() && email.StartsWith("x"))
+                    return email.Remove(0, 1);
+                else
+                    return email;
             }
         }
 
@@ -92,6 +131,7 @@ namespace Catalogue.Data.Import.Mappings
                 case "SeabedSurveyTechnique": return "http://vocab.jncc.gov.uk/seabed-survey-technique";
                 case "SeabedMapStatus": return "http://vocab.jncc.gov.uk/seabed-map-status";
                 case "OriginalSeabedClassificationSystem": return "http://vocab.jncc.gov.uk/original-seabed-classification-system";
+                case "MESH_GUI": return "http://vocab.jncc.gov.uk/mesh-gui";
                 default: throw new Exception("Unsupported vocab " + v);
             }
         }
@@ -100,6 +140,7 @@ namespace Catalogue.Data.Import.Mappings
         {
             switch (w)
             {
+                case "SeabedHabitatMaps": return "seabed-habitat-maps";
                 default: return w;
             }
         }

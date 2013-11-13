@@ -62,7 +62,7 @@ namespace Catalogue.Data.Seed
                             Title = "An example read-only record",
                             Abstract = "This is an example read-only record.",
                         },
-                    Path = @"X:\some\path",
+                    Path = @"X:\path\to\read\only\record\data",
                     ReadOnly = true,
                 };
 
@@ -79,7 +79,7 @@ namespace Catalogue.Data.Seed
                             Title = "An example record that is not top-copy",
                             Abstract = "This is an example record that is not top-copy.",
                         },
-                    Path = @"X:\some\kind\of\path",
+                    Path = @"X:\path\to\non\top\copy\record\data",
                 };
 
             recordService.Insert(record);
@@ -100,8 +100,8 @@ namespace Catalogue.Data.Seed
                     PublicationDate = "2013",
                     Values = new List<string>
                         {
-                            "marine-habitat-data",
-                            "marine-activities-pressures-data",
+                            "seabed-habitat-maps",
+                            "marine-human-activities",
                         }
                 };
             this.db.Store(jnccCategories);
@@ -122,7 +122,7 @@ namespace Catalogue.Data.Seed
                     DataFormat = new DataFormat {Name = "csv" },
                     BoundingBox = new BoundingBox { North = 30, South = 20, East = 60, West = 50 },
                 },
-                Path = @"Z:\path\to\small\boz\record",
+                Path = @"Z:\path\to\small\box",
         };
     }
 }
