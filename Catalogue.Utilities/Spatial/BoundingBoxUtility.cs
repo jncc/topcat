@@ -20,13 +20,18 @@ namespace Catalogue.Utilities.Spatial
                 box.West, box.North,
                 box.West, box.South);
         }
+
+        public static bool IsBlank(BoundingBox box)
+        {
+            return box.North == 0 && box.South == 0 && box.East == 0 && box.West == 0;
+        }
     }
 
 
     class bounding_box_utility_tests
     {
         [Test]
-        public void should_create_correct_wkt()
+        public void can_create_correct_wkt()
         {
             var box = new BoundingBox { North = 40, South = 10, East = 60, West = 20 };
             string wkt = BoundingBoxUtility.ToWkt(box);
@@ -34,10 +39,10 @@ namespace Catalogue.Utilities.Spatial
         }
 
         [Test]
-        public void blah()
+        public void can_identify_a_blank_box()
         {
-            var box = new BoundingBox {North = 30, South = 20, East = 60, West = 50};
-            BoundingBoxUtility.ToWkt(box).Should().Be("POLYGON((50 20,60 20,60 30,50 30,50 20))");
+            var box = new BoundingBox {North = 0, South = 0, East = 0, West = 0};
+            BoundingBoxUtility.IsBlank(box).Should().BeTrue();
         }
     }
 }

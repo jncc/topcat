@@ -52,7 +52,7 @@ namespace Catalogue.Data.Write
             return Upsert(record);
         }
 
-        RecordValidationResult Upsert(Record record)
+        internal RecordValidationResult Upsert(Record record)
         {
             this.SyncDenormalizations(record);
 
@@ -67,17 +67,19 @@ namespace Catalogue.Data.Write
         void SyncDenormalizations(Record record)
         {
             // we store the bounding box as wkt so we can index it
-            record.Wkt = BoundingBoxUtility.ToWkt(record.Gemini.BoundingBox);
+            if (!BoundingBoxUtility.IsBlank(record.Gemini.BoundingBox))
+                record.Wkt = BoundingBoxUtility.ToWkt(record.Gemini.BoundingBox);
         }
     }
 
 
-    // this is really a test of the validator, so needs moving
     class when_inserting_a_record
     {
         [Test]
         public void should_fail_if_path_is_blank()
         {
+            // this is really a test of the validator, so needs moving
+
             var record = new Record
                 {
                     Path = null,
@@ -92,7 +94,7 @@ namespace Catalogue.Data.Write
         }
     }
 
-    class when_updating_a_record
+    class when_upserting_a_record
     {
         [Test]
         public void should_fail_if_record_is_readonly()
@@ -112,21 +114,36 @@ namespace Catalogue.Data.Write
         public void bounding_box_should_be_stored_as_wkt()
         {
             var database = Mock.Of<IDocumentSession>();
-            var service = new RecordService(database, this.GetValidatorStub());
+            var service = new RecordService(database, GetValidatorStub());
 
             var e = Library.Example();
             var record = new Record { Gemini = e };
-            
-            service.Update(record);
+
+            service.Upsert(record);
 
             string expectedWkt = BoundingBoxUtility.ToWkt(e.BoundingBox);
             Mock.Get(database).Verify(db => db.Store(It.Is((Record r) => r.Wkt == expectedWkt)));
+        }
+
+        [Test]
+        public void empty_bounding_box_should_be_stored_as_null_wkt()
+        {
+            // (to avoid raven / lucene errors)
+
+            var database = Mock.Of<IDocumentSession>();
+            var service = new RecordService(database, GetValidatorStub());
+
+            var record = new Record { Gemini = Library.Blank() };
+
+            service.Upsert(record);
+
+            Mock.Get(database).Verify(db => db.Store(It.Is((Record r) => r.Wkt == null)));
+
         }
 
         IRecordValidator GetValidatorStub()
         {
             return Mock.Of<IRecordValidator>(v => v.Validate(It.IsAny<Record>()) == new RecordValidationResult { Success = true });
         }
-
     }
 }
