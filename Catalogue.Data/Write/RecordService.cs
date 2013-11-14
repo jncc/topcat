@@ -56,6 +56,9 @@ namespace Catalogue.Data.Write
         {
             this.SyncDenormalizations(record);
 
+            // currently only supporting dataset resource types
+            record.Gemini.ResourceType = "dataset";
+
             var result = validator.Validate(record);
 
             if (result.Success)
@@ -138,7 +141,20 @@ namespace Catalogue.Data.Write
             service.Upsert(record);
 
             Mock.Get(database).Verify(db => db.Store(It.Is((Record r) => r.Wkt == null)));
+        }
 
+        [Test]
+        public void resource_type_should_always_be_dataset()
+        {
+            var database = Mock.Of<IDocumentSession>();
+            var service = new RecordService(database, GetValidatorStub());
+
+            var record = new Record { Gemini = Library.Blank() };
+            record.Gemini.ResourceType = ""; // make sure it's blank
+
+            service.Upsert(record);
+
+            Mock.Get(database).Verify(db => db.Store(It.Is((Record r) => r.Gemini.ResourceType == "dataset")));
         }
 
         IRecordValidator GetValidatorStub()
