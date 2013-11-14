@@ -18,7 +18,7 @@ namespace Catalogue.Gemini.Model
 //      public decimal SpatialResolution { get; set; } // todo we'll probably need this https://wiki.ceh.ac.uk/display/cehigh/Spatial+resolution
         public string ResourceLocator { get; set; }
         public string AdditionalInformationSource { get; set; }
-        public string DataFormat { get; set; }
+        public string DataFormat { get; set; } // mesh uses MEDIN data format categories from http://vocab.ndg.nerc.ac.uk/client/vocabServer.jsp
         public ResponsibleParty ResponsibleOrganisation { get; set; }
         public string LimitationsOnPublicAccess { get; set; }
         public string UseConstraints { get; set; }
