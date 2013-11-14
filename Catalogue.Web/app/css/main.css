@@ -132,9 +132,6 @@ h3 {
 .editor-title {
   font-size: larger;
 }
-textarea {
-  max-height: 8em;
-}
 .layout-row {
   display: table;
   width: 100%;
@@ -155,6 +152,10 @@ textarea {
 }
 .editor-internal .btn-default .glyphicon {
   color: #666666;
+}
+.editor-abstract textarea {
+  resize: none;
+  max-height: 8em;
 }
 form .ng-dirty.ng-invalid {
   border: 1px solid #FF1493;

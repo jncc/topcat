@@ -172,10 +172,6 @@ h2, h3 { color: #888; }
 
 .editor-title { font-size:larger; }
 
-// textareas should not grow beyond reasonable (they are autosized with a plugin)
-textarea { max-height: 8em; }
-
-
 // custom table-based layout possibly because i don't quite get boostrap
 .layout-row {
     display: table;
@@ -196,6 +192,12 @@ textarea { max-height: 8em; }
     .btn-default .glyphicon { color: @dark; }
 }
 
+.editor-abstract {
+    textarea {
+        resize: none; // remove resize ability because it looks bad with scrollbar
+        max-height: 8em;
+    }
+}
 
 
 // validation styles. angular also puts these classes on the form so ignore that

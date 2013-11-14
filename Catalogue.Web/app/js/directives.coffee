@@ -42,6 +42,10 @@ module.directive 'tcTag', () ->
         # call qtip with options constructed from the defaults
         $(elem).qtip $.extend {}, qtipDefaults, content: text: scope.k.vocab
 
+module.directive 'tcTagDelete', () ->
+    link: (scope, elem, attrs) ->
+        
+
 # top-copy icon
 module.directive 'tcTopCopyIcon', () ->
     link: (scope, elem, attrs) ->
@@ -54,8 +58,10 @@ module.directive 'tcTopCopyIcon', () ->
 
 
 # use jquery autosize plugin to auto-expand textareas
-module.directive 'tcAutosize', () -> 
-    link: (scope, elem, attrs) -> $(elem).autosize()
+module.directive 'tcAutosize', ($timeout) -> 
+    link: (scope, elem, attrs) ->
+        # use $timeout(fn, 0) to get the box to resize properly on load
+        $timeout -> $(elem).autosize()
 
 module.directive 'tcBackButton', ($window) ->
     link: (scope, elem, attrs) ->

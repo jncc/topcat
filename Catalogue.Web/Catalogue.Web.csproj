@@ -249,9 +249,7 @@
     <Content Include="app\lib\angular-1.2.0-rc.3\angular-sanitize.min.js" />
     <Content Include="app\lib\angular-1.2.0-rc.3\angular.min.js" />
     <Content Include="app\lib\angular-strap-0.7.5\angular-strap-min.js" />
-    <Content Include="app\lib\autosize-1.17.2\demo.html" />
-    <Content Include="app\lib\autosize-1.17.2\jquery.autosize-min.js" />
-    <Content Include="app\lib\autosize-1.17.2\jquery.autosize.js" />
+    <Content Include="app\lib\autosize-1.8.1\jquery.autosize.min.js" />
     <Content Include="app\lib\bootstrap-3.0.0\css\bootstrap-theme.css" />
     <Content Include="app\lib\bootstrap-3.0.0\css\bootstrap-theme.min.css" />
     <Content Include="app\lib\bootstrap-3.0.0\css\bootstrap.css" />
@@ -315,10 +313,6 @@
     <Content Include="app\css\main.less" />
     <Content Include="app\lib\jquery-placeholder-2.0.7\README.md" />
     <Content Include="app\lib\respond-1.2.0\README.md" />
-    <Content Include="app\lib\autosize-1.17.2\autosize.jquery.json" />
-    <Content Include="app\lib\autosize-1.17.2\bower.json" />
-    <Content Include="app\lib\autosize-1.17.2\package.json" />
-    <Content Include="app\lib\autosize-1.17.2\readme.md" />
     <Content Include="app\lib\bootstrap-3.0.0\fonts\glyphicons-halflings-regular.eot" />
     <Content Include="app\lib\bootstrap-3.0.0\fonts\glyphicons-halflings-regular.svg" />
     <Content Include="app\lib\bootstrap-3.0.0\fonts\glyphicons-halflings-regular.ttf" />

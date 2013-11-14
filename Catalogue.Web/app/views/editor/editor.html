@@ -74,7 +74,7 @@
                     <div class="col-md-8">
                         
                         <div>
-                            <span ng-repeat="k in form.gemini.keywords" tc-tag>
+                            <span ng-repeat="k in form.gemini.keywords" tc-tag tc-tag-delete>
                                 <span ng-style="{ 'background-color': hashStringToColor(k.vocab) }">&nbsp;</span>
                                 {{ k.value }}
                             </span>
@@ -96,8 +96,9 @@
                 </div>
                 
                 <!-- abstract -->
-                <div class="form-group">
-                    <textarea type="text" ng-model="form.gemini.abstract" rows="2" class="form-control"
+                <div class="editor-abstract form-group">
+                    <textarea type="text" ng-model="form.gemini.abstract" class="form-control"
+                              rows="2"
                               placeholder="Abstract"
                               title="The abstract is a clear, brief summary of the resource's content"
                               tc-focus-tip tc-autosize></textarea>

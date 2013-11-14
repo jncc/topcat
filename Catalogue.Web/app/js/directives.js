@@ -69,6 +69,12 @@
     };
   });
 
+  module.directive('tcTagDelete', function() {
+    return {
+      link: function(scope, elem, attrs) {}
+    };
+  });
+
   module.directive('tcTopCopyIcon', function() {
     return {
       link: function(scope, elem, attrs) {
@@ -83,10 +89,12 @@
     };
   });
 
-  module.directive('tcAutosize', function() {
+  module.directive('tcAutosize', function($timeout) {
     return {
       link: function(scope, elem, attrs) {
-        return $(elem).autosize();
+        return $timeout(function() {
+          return $(elem).autosize();
+        });
       }
     };
   });
