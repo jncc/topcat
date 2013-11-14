@@ -14,7 +14,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Data.Indexes
         public void should_be_exactly_one_mesh_data_broad_category_result()
         {
             Db.Query<KeywordsSearchIndex.Result, KeywordsSearchIndex>()
-              .Where(k => k.Vocab == "http://vocab.jncc.gov.uk/jncc-broad-category" && k.Value == "SeabedHabitatMaps")
+              .Where(k => k.Vocab == "http://vocab.jncc.gov.uk/jncc-broad-category" && k.Value == "seabed-habitat-maps")
               .Count().Should().Be(1);
         }
 
@@ -28,7 +28,9 @@ namespace Catalogue.Tests.Slow.Catalogue.Data.Indexes
             results.GroupBy(r => r.Vocab).Select(g => g.Key).Should().ContainInOrder(new []
                 {
                     "http://vocab.jncc.gov.uk/jncc-broad-category",
+                    "http://vocab.jncc.gov.uk/mesh-gui",
                     "http://vocab.jncc.gov.uk/original-seabed-classification-system",
+                    "http://vocab.jncc.gov.uk/reference-manager-code",
                     "http://vocab.jncc.gov.uk/seabed-map-status",
                     "http://vocab.jncc.gov.uk/seabed-survey-purpose",
                     "http://vocab.jncc.gov.uk/seabed-survey-technique",
@@ -59,7 +61,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Data.Indexes
             // use the standard search field for exact matches
 
             Db.Query<KeywordsSearchIndex.Result, KeywordsSearchIndex>()
-              .Search(r => r.Value, "SeabedHabitatMaps")
+              .Search(r => r.Value, "seabed-habitat-maps")
               .Count().Should().Be(1);
         }
 

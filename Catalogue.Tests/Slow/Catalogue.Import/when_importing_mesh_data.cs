@@ -19,7 +19,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Import
             // the DatabaseTestFixture will already have done the import ..!
             // let's store everything in a list to allow standard linq-to-object queries
             // (all mesh records have a "GUI" field which seems to be unique and starts with 'GB')
-            imported = Db.Query<Record>().Take(200).ToList()
+            imported = Db.Query<Record>().Take(1000).ToList()
                 .Where(r => r.SourceIdentifier.IsNotBlank() && r.SourceIdentifier.StartsWith("GB"))
                 .ToList();
         }
@@ -27,29 +27,30 @@ namespace Catalogue.Tests.Slow.Catalogue.Import
         [Test]
         public void should_import_all_mesh_data()
         {
-            imported.Count().Should().Be(183);
+            imported.Count().Should().Be(248);
         }
 
         [Test]
         public void should_import_keywords()
         {
-            // mesh data is categorised as 'SeabedHabitatMaps'
+            // mesh data is categorised as 'seabed-habitat-maps'
             imported.Count(r => r.Gemini.Keywords
-                .Any(k => k.Vocab == "http://vocab.jncc.gov.uk/jncc-broad-category" && k.Value == "SeabedHabitatMaps"))
-                .Should().Be(183);
+                .Any(k => k.Vocab == "http://vocab.jncc.gov.uk/jncc-broad-category" && k.Value == "seabed-habitat-maps"))
+                .Should().Be(248);
         }
 
         [Test]
         public void should_import_topic_category()
         {
-            // all mesh records are "geoscientificInformation"
-            imported.Count(r => r.Gemini.TopicCategory == "geoscientificInformation").Should().Be(183);
+            imported.Count(r => r.Gemini.TopicCategory == "geoscientificInformation").Should().Be(6);
+            imported.Count(r => r.Gemini.TopicCategory == "biota").Should().Be(241);
+            imported.Count(r => r.Gemini.TopicCategory == "environment").Should().Be(1);
         }
 
         [Test]
         public void should_import_unique_source_identifiers()
         {
-            imported.Select(r => r.SourceIdentifier).Distinct().Count().Should().Be(183);
+            imported.Select(r => r.SourceIdentifier).Distinct().Count().Should().Be(248);
         }
 
         [Test]
@@ -58,12 +59,12 @@ namespace Catalogue.Tests.Slow.Catalogue.Import
             Uri uri; // need this for Uri.TryCreate; not actually using it
 
             imported.Count(r => Uri.TryCreate(r.Path, UriKind.Absolute, out uri))
-                    .Should().Be(183);
+                    .Should().Be(248);
         }
 
         [Test] public void all_records_should_be_marked_as_top_copy()
         {
-            imported.Count(r => r.TopCopy).Should().Be(183);
+            imported.Count(r => r.TopCopy).Should().Be(248);
         }
     }
 }

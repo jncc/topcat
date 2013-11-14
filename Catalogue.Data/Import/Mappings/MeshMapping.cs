@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Globalization;
 using System.Linq;
 using System.Text.RegularExpressions;
 using Catalogue.Data.Model;
@@ -89,7 +88,7 @@ namespace Catalogue.Data.Import.Mappings
                     {
                         decimal north = Convert.ToDecimal(row.GetField("BBoxNorth"));
                         decimal south = Convert.ToDecimal(row.GetField("BBoxSouth"));
-                        decimal east = Decimal.Parse(row.GetField("BBoxEast"), NumberStyles.Float);
+                        decimal east = Convert.ToDecimal(row.GetField("BBoxEast"));
                         decimal west = Convert.ToDecimal(row.GetField("BBoxWest"));
 
                         return new BoundingBox { North = north, South = south, East = east, West = west };
@@ -132,6 +131,7 @@ namespace Catalogue.Data.Import.Mappings
                 case "SeabedMapStatus": return "http://vocab.jncc.gov.uk/seabed-map-status";
                 case "OriginalSeabedClassificationSystem": return "http://vocab.jncc.gov.uk/original-seabed-classification-system";
                 case "MESH_GUI": return "http://vocab.jncc.gov.uk/mesh-gui";
+                case "reference-manager-code": return "http://vocab.jncc.gov.uk/reference-manager-code";
                 default: throw new Exception("Unsupported vocab " + v);
             }
         }
