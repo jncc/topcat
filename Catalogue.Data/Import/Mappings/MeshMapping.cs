@@ -168,7 +168,7 @@ namespace Catalogue.Data.Import.Mappings
                 });
             keywords.Select(k => k.Value).Should().ContainInOrder(new[]
                 {
-                    "SeabedHabitatMaps",
+                    "seabed-habitat-maps",
                     "Local",
                     "Show on webGIS",
                     "Translated to EUNIS",

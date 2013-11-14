@@ -23,7 +23,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Data.Indexes
         {
             var results = Db.Query<KeywordsSearchIndex.Result, KeywordsSearchIndex>()
                 .OrderBy(r => r.Vocab)
-                .Take(100).ToList();
+                .Take(1000).ToList();
 
             results.GroupBy(r => r.Vocab).Select(g => g.Key).Should().ContainInOrder(new []
                 {

@@ -45,6 +45,8 @@ namespace Catalogue.Tests.Slow.Catalogue.Import
             imported.Count(r => r.Gemini.TopicCategory == "geoscientificInformation").Should().Be(6);
             imported.Count(r => r.Gemini.TopicCategory == "biota").Should().Be(241);
             imported.Count(r => r.Gemini.TopicCategory == "environment").Should().Be(1);
+
+            (6 + 241 + 1).Should().Be(248); // lolz
         }
 
         [Test]
