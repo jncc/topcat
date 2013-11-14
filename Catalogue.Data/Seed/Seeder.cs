@@ -119,7 +119,7 @@ namespace Catalogue.Data.Seed
             Gemini = new Metadata
                 {
                     Title = "Small Box",
-                    DataFormat = new DataFormat {Name = "csv" },
+                    DataFormat = "csv",
                     BoundingBox = new BoundingBox { North = 30, South = 20, East = 60, West = 50 },
                 },
                 Path = @"Z:\path\to\small\box",

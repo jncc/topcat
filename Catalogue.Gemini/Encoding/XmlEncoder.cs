@@ -220,9 +220,9 @@ namespace Catalogue.Gemini.Encoding
             return new XElement(gmd + "distributionFormat",
                 new XElement(gmd + "MD_Format",
                     new XElement(gmd + "name",
-                        new XElement(gco + "CharacterString", metadata.DataFormat.Name)),
+                        new XElement(gco + "CharacterString", metadata.DataFormat)),
                     new XElement(gmd + "version",
-                        new XElement(gco + "CharacterString", metadata.DataFormat.Version))));
+                        new XElement(gco + "CharacterString", "Unknown")))); // i'm not supporting versions for data format
         }
 
         XElement MakeLineage(Metadata metadata)

@@ -18,7 +18,7 @@ namespace Catalogue.Gemini.Model
 //      public decimal SpatialResolution { get; set; } // todo we'll probably need this https://wiki.ceh.ac.uk/display/cehigh/Spatial+resolution
         public string ResourceLocator { get; set; }
         public string AdditionalInformationSource { get; set; }
-        public DataFormat DataFormat { get; set; }
+        public string DataFormat { get; set; }
         public ResponsibleParty ResponsibleOrganisation { get; set; }
         public string LimitationsOnPublicAccess { get; set; }
         public string UseConstraints { get; set; }
@@ -27,14 +27,13 @@ namespace Catalogue.Gemini.Model
         public string MetadataDate { get; set; }
         public string MetadataLanguage { get; set; }
         public ResponsibleParty MetadataPointOfContact { get; set; }
-        public string ResourceType { get; set; }
+        public string ResourceType { get; set; }  // dataset | series | service
         public BoundingBox BoundingBox { get; set; }
 
         public Metadata()
         {
             Keywords = new List<Keyword>();
             TemporalExtent = new TemporalExtent();
-            DataFormat = new DataFormat();
             ResponsibleOrganisation = new ResponsibleParty();
             MetadataPointOfContact = new ResponsibleParty();
             BoundingBox = new BoundingBox();
@@ -45,12 +44,6 @@ namespace Catalogue.Gemini.Model
     {
         public string Value { get; set; }
         public string Vocab { get; set; }
-    }
-
-    public class DataFormat
-    {
-        public string Name { get; set; }
-        public string Version { get; set; }
     }
 
     public class TemporalExtent

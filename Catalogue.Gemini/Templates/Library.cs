@@ -26,7 +26,7 @@ namespace Catalogue.Gemini.Templates
                 DatasetReferenceDate = "",
                 Lineage = "",
                 ResourceLocator = "",
-                DataFormat = new DataFormat { Name = "", Version = "" },
+                DataFormat = "",
                 ResponsibleOrganisation = new ResponsibleParty
                     {
                         Name = "Joint Nature Conservation Committee (JNCC)",
@@ -72,7 +72,7 @@ namespace Catalogue.Gemini.Templates
                 DatasetReferenceDate = "2012-03-17",
                 Lineage = "This dataset was imagined by a developer.",
                 ResourceLocator = "http://data.jncc.gov.uk/5eb63655-d7fe-46af-88bc-71f7db243ad3",
-                DataFormat = new DataFormat { Name = "XLS" },
+                DataFormat = "XLS",
                 ResponsibleOrganisation = new ResponsibleParty
                     {
                         Name = "Joint Nature Conservation Committee (JNCC)",

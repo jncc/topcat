@@ -50,7 +50,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Import
         }
 
         [Test]
-        public void should_import_unique_source_identifiers()
+        public void source_identifiers_should_be_unique()
         {
             imported.Select(r => r.SourceIdentifier).Distinct().Count().Should().Be(189);
         }
@@ -64,9 +64,16 @@ namespace Catalogue.Tests.Slow.Catalogue.Import
                     .Should().Be(189);
         }
 
-        [Test] public void all_records_should_be_marked_as_top_copy()
+        [Test]
+        public void all_records_should_be_marked_as_top_copy()
         {
             imported.Count(r => r.TopCopy).Should().Be(189);
+        }
+
+        [Test]
+        public void should_import_data_format()
+        {
+            imported.Count(r => r.Gemini.DataFormat == "Geographic Information System").Should().BeGreaterThan(100);
         }
     }
 }
