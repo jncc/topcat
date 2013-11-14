@@ -4,6 +4,7 @@ using Catalogue.Data.Indexes;
 using Catalogue.Tests.Utility;
 using FluentAssertions;
 using NUnit.Framework;
+using Raven.Abstractions.Extensions;
 using Raven.Client;
 
 namespace Catalogue.Tests.Slow.Catalogue.Data.Indexes
@@ -24,6 +25,8 @@ namespace Catalogue.Tests.Slow.Catalogue.Data.Indexes
             var results = Db.Query<KeywordsSearchIndex.Result, KeywordsSearchIndex>()
                 .OrderBy(r => r.Vocab)
                 .Take(1000).ToList();
+
+            results.Select(r => r.Value).ForEach(Console.WriteLine);
 
             results.GroupBy(r => r.Vocab).Select(g => g.Key).Should().ContainInOrder(new []
                 {
