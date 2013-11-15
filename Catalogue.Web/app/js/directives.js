@@ -159,28 +159,31 @@
     };
   });
 
-  module.directive('tcCopyToClipboard', function() {
+  module.directive('tcCopyToClipboard', function($timeout) {
     return {
       link: function(scope, elem, attrs) {
         var clip;
         clip = new ZeroClipboard($(elem));
         return clip.on('complete', function(client, args) {
-          var t;
+          var t, wrapper;
           t = $('#' + attrs.tcCopyToClipboard);
-          console.log(t);
-          t.tooltip('destroy');
           t.highlightInputSelectionRange(0, (t.val().length));
-          return setTimeout((function() {
-            t.tooltip({
-              html: 'Copied to clipboard!',
-              trigger: 'manual',
-              position: 'bottom'
-            });
-            t.tooltip('show');
-            return setTimeout((function() {
-              return t.tooltip('hide');
-            }), 2000);
-          }), 1000);
+          t.qtip('disable', true);
+          wrapper = $('.editor-path');
+          wrapper.qtip($.extend({}, qtipDefaults, {
+            content: {
+              text: 'Copied to clipboard!'
+            },
+            show: {
+              event: ''
+            }
+          }));
+          wrapper.qtip('show');
+          return $timeout((function() {
+            wrapper.qtip('hide');
+            wrapper.qtip('disable');
+            return t.qtip('disable', false);
+          }), 2000);
         });
       }
     };

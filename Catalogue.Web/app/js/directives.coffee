@@ -98,21 +98,19 @@ module.directive 'tcServerValidation', ($http) ->
                 .success (data) ->
                     ctrl.$setValidity('myErrorKey', data.valid)
 
-module.directive 'tcCopyToClipboard', () ->
+module.directive 'tcCopyToClipboard', ($timeout) ->
     link: (scope, elem, attrs) ->
         clip = new ZeroClipboard $(elem)
         clip.on 'complete', (client, args) ->
             t = $('#' + attrs.tcCopyToClipboard)
-            console.log t
-            t.tooltip 'destroy'
-            t.highlightInputSelectionRange 0, (t.val().length) 
-            setTimeout (() ->
-                t.tooltip
-                    html: 'Copied to clipboard!',
-                    trigger: 'manual',
-                    position: 'bottom',
-                    #container: 'body'
-                t.tooltip 'show'
-                setTimeout (() -> t.tooltip 'hide'), 2000 # angular $timeout is not working?!
-                ), 1000
-
+            t.highlightInputSelectionRange 0, (t.val().length)
+            t.qtip 'disable', true
+            wrapper = $('.editor-path')
+            wrapper.qtip $.extend {}, qtipDefaults,
+                content: text: 'Copied to clipboard!'
+                show: event: ''
+            wrapper.qtip 'show'
+            $timeout (->
+                wrapper.qtip 'hide'
+                wrapper.qtip 'disable'
+                t.qtip 'disable', false), 2000

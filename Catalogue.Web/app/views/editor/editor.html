@@ -49,11 +49,14 @@
                                tc-focus-tip title="The path to the resource on the file share or the web"
                                spellcheck="false" />
                         
-                        <span class="input-group-addon pointable"><span class="dark glyphicon glyphicon-folder-open"></span></span>
+                        <span class="input-group-addon pointable" tc-tip
+                                    title="Copy directory to clipboard"><span class="dark glyphicon glyphicon-folder-open"></span></span>
 
 
-                        <span class="input-group-btn">
+                        <span class="input-group-btn"  tc-tip
+                                    title="Copy path to clipboard" >
                             <button class="btn btn-primary" type="button" tabindex="-1"
+                                    
                                     ng-disabled="!form.path"
                                     tc-copy-to-clipboard="form-path"
                                     data-clipboard-target="form-path">
@@ -190,7 +193,10 @@
                             
                             <button type="button" class="btn"
                                 ng-click="form.status = (form.status + 1) % 2"
-                                ng-class="{ 'btn-default': form.status == 0, 'btn-primary': form.status == 1 }">
+                                ng-class="{ 'btn-default': form.status == 0, 'btn-primary': form.status == 1 }"
+                                title="Is the resource for internal use only, or is it for publishing externally?"
+                                tc-tip
+                                >
                                 <span class="glyphicon glyphicon-repeat" ng-class="{ 'dark': form.status == 0 }"></span>
                                 {{ form.status == 0 ? 'Internal' : 'Publishable' }}
                             </button>
@@ -205,7 +211,8 @@
                             tc-autosize
                             class="form-control"
                             placeholder="Notes"
-                            title="Notes to keep separate from the Gemini record"></textarea>
+                            title="Notes to keep separate from the Gemini record"
+                            tc-focus-tip></textarea>
                     </div>
                     
                 </div>
