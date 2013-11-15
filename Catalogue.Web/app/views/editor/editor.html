@@ -191,7 +191,8 @@
                             <button type="button" class="btn"
                                 ng-click="form.status = (form.status + 1) % 2"
                                 ng-class="{ 'btn-default': form.status == 0, 'btn-primary': form.status == 1 }">
-                                <span class="glyphicon glyphicon-repeat"></span>{{ form.status == 0 ? 'Internal' : 'Publishable' }}
+                                <span class="glyphicon glyphicon-repeat" ng-class="{ 'dark': form.status == 0 }"></span>
+                                {{ form.status == 0 ? 'Internal' : 'Publishable' }}
                             </button>
 
                         </div>
