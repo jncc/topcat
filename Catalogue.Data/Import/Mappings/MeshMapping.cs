@@ -32,6 +32,7 @@ namespace Catalogue.Data.Import.Mappings
 
                 Map(m => m.Path);
                 Map(m => m.TopCopy).ConvertUsing(row => true); // all mesh data is top copy
+                Map(m => m.Status).ConvertUsing(row => Status.Publishable); // all mesh data is publishable
                 Map(m => m.SourceIdentifier).Name("AlternateTitle");
 
                 References<GeminiMap>(m => m.Gemini);
