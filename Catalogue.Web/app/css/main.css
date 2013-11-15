@@ -24,6 +24,10 @@ h2,
 h3 {
   color: #888;
 }
+hr {
+  margin-top: 0.9em;
+  margin-bottom: 0.9em;
+}
 .placeholder {
   color: #bbbbbb;
 }
@@ -54,6 +58,7 @@ h3 {
   display: table;
   width: 100%;
   margin-top: 1.4em;
+  padding-bottom: 0.3em;
 }
 .header .logo {
   display: table-cell;
@@ -156,12 +161,8 @@ h3 {
 .editor-internal {
   padding-top: 1.1em;
 }
-.editor-internal hr {
-  margin-top: 1em;
-  margin-bottom: 1em;
-}
 .editor-internal .btn .glyphicon {
-  margin-right: 0.4em;
+  margin-right: 0.6em;
 }
 .editor-internal .btn-default .glyphicon {
   color: #666666;

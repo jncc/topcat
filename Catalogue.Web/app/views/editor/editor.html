@@ -18,7 +18,7 @@
                         <span class="dark glyphicon glyphicon-circle-arrow-left btn-glyphicon"></span>BACK
                     </button>
                     <span>
-                        <button ng-click="reset()" ng-hide="isResetHidden()" class="btn btn-default" >CANCEL</button>
+                        <button ng-click="reset()" ng-hide="isResetHidden()" class="btn btn-primary" >CANCEL</button>
                         <button ng-click="save()"  ng-hide="isSaveHidden()" ng-disabled="isSaveDisabled()" class="btn btn-danger">SAVE</button>
                     </span>
                 </div>
@@ -153,7 +153,7 @@
                 
 
                 <div class="form-group">
-                    <button ng-click="reset()" ng-hide="isResetHidden()" class="btn btn-default" >CANCEL</button>
+                    <button ng-click="reset()" ng-hide="isResetHidden()" class="btn btn-primary">CANCEL</button>
                     <button ng-click="save()"  ng-hide="isSaveHidden()" ng-disabled="isSaveDisabled()" class="btn btn-danger">SAVE</button>
                 </div>
 
@@ -188,21 +188,16 @@
                         </div>
                         <div class="layout-col pull-right">
                             
-                            <div class="btn-group" data-toggle="buttons">
-                                <label class="btn btn-primary">
-                                    <input type="radio" name="options" id="option1">
-                                    Internal
-                                </label>
-                                <label class="btn btn-success">
-                                    <input type="radio" name="options" id="option2">
-                                    Publishable
-                                </label>
-                            </div>
+                            <button type="button" class="btn"
+                                ng-click="form.status = (form.status + 1) % 2"
+                                ng-class="{ 'btn-default': form.status == 0, 'btn-primary': form.status == 1 }">
+                                <span class="glyphicon glyphicon-repeat"></span>{{ form.status == 0 ? 'Internal' : 'Publishable' }}
+                            </button>
+
                         </div>
                     </div>
 
                     <hr />
-
 
                     <div class="form-group">
                         <textarea ng-model="form.notes" type="text" rows="4"
@@ -212,14 +207,6 @@
                             title="Notes to keep separate from the Gemini record"></textarea>
                     </div>
                     
-                    <hr />
-
-                    <div class="form-group">
-                        <button type="button" class="btn btn-primary">
-                            <span class="glyphicon glyphicon-repeat"></span> Yes
-                        </button>
-                    </div>
-
                 </div>
 
             </div>
