@@ -100,7 +100,7 @@ namespace Catalogue.Data.Seed
                     PublicationDate = "2013",
                     Values = new List<string>
                         {
-                            "seabed-habitat-maps",
+                            "Seabed-Habitat-Maps",
                             "marine-human-activities",
                         }
                 };

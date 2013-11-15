@@ -15,7 +15,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Data.Indexes
         public void should_be_exactly_one_mesh_data_broad_category_result()
         {
             Db.Query<KeywordsSearchIndex.Result, KeywordsSearchIndex>()
-              .Where(k => k.Vocab == "http://vocab.jncc.gov.uk/jncc-broad-category" && k.Value == "seabed-habitat-maps")
+              .Where(k => k.Vocab == "http://vocab.jncc.gov.uk/jncc-broad-category" && k.Value == "Seabed-Habitat-Maps")
               .Count().Should().Be(1);
         }
 
@@ -64,7 +64,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Data.Indexes
             // use the standard search field for exact matches
 
             Db.Query<KeywordsSearchIndex.Result, KeywordsSearchIndex>()
-              .Search(r => r.Value, "seabed-habitat-maps")
+              .Search(r => r.Value, "Seabed-Habitat-Maps")
               .Count().Should().Be(1);
         }
 
