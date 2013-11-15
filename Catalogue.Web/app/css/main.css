@@ -143,12 +143,18 @@ h3 {
 .editor-title {
   font-size: larger;
 }
+.editor-path input {
+  border-right: white;
+}
+.editor-path .input-group-addon.pointable:hover {
+  background-color: #dddddd;
+}
 .editor-abstract textarea {
   resize: none;
   max-height: 8em;
 }
 .editor-internal {
-  padding-top: 1.3em;
+  padding-top: 1.1em;
 }
 .editor-internal hr {
   margin-top: 1em;

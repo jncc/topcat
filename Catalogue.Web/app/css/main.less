@@ -183,6 +183,13 @@ h2, h3 { color: #888; }
 
 .editor-title { font-size:larger; }
 
+.editor-path {
+    input { border-right: white; } // looks better next to the copy-to-clipboard icon
+    .input-group-addon.pointable:hover { // style the copy-to-clipboard icon
+            background-color: @lesspale;
+    }
+}
+
 .editor-abstract {
     textarea {
         resize: none; // resize ability looks bad with scrollbar
@@ -191,7 +198,7 @@ h2, h3 { color: #888; }
 }
 
 .editor-internal {
-    padding-top: 1.3em;
+    padding-top: 1.1em;
     hr {
         margin-top: 1em;
         margin-bottom: 1em;

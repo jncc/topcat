@@ -39,7 +39,7 @@
                 </div>
 
                 <div class="well well-sm form-group">
-                    <div class="input-group">
+                    <div class="editor-path input-group">
                         <span class="input-group-addon well-input-group-addon"><span class="dark glyphicon glyphicon-th-large"></span></span>
 
                         <input id="form-path" name="form.path" ng-model="form.path" 
@@ -48,6 +48,9 @@
                                tc-server-validation
                                tc-focus-tip title="The path to the resource on the file share or the web"
                                spellcheck="false" />
+                        
+                        <span class="input-group-addon pointable"><span class="dark glyphicon glyphicon-folder-open"></span></span>
+
 
                         <span class="input-group-btn">
                             <button class="btn btn-primary" type="button"
@@ -70,30 +73,14 @@
 
 
                 <!-- tags and topic  -->
-                <div class="row form-group">
-                    <div class="col-md-8">
                         
-                        <div>
+                        <div class="form-group">
                             <span ng-repeat="k in form.gemini.keywords" tc-tag tc-tag-delete>
                                 <span ng-style="{ 'background-color': hashStringToColor(k.vocab) }">&nbsp;</span>
                                 {{ k.value }}
                             </span>
                         </div>
-                    </div>
-                    <div class="col-md-4 text-right">
-                        <div class="form-inline">
-                            <div class="form-group text-left selectContainer">
-                                <select
-                                    ng-model="form.topic"
-                                    ng-options="topic.key for topic in lookups.topics"
-                                    class="form-control"
-                                    title="The main theme of the data resource">
-                                    <option value="" disabled selected style="display: none">Topic</option>
-                                </select>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+
                 
                 <!-- abstract -->
                 <div class="editor-abstract form-group">
@@ -152,6 +139,18 @@
                 <!--                    <a ng-click="addContact()" class="btn btn-primary">ADD</a>-->
                 <!---->
                 <!--                </div>-->
+                
+                
+                            <div class="form-group text-left selectContainer">
+                                <select
+                                    ng-model="form.topic"
+                                    ng-options="topic.key for topic in lookups.topics"
+                                    class="form-control"
+                                    title="The main theme of the data resource">
+                                    <option value="" disabled selected style="display: none">Topic</option>
+                                </select>
+                            </div>
+                
 
                 <div class="form-group">
                     <button ng-click="reset()" ng-hide="isResetHidden()" class="btn btn-default" >CANCEL</button>
