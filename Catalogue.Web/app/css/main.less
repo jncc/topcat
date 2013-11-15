@@ -48,6 +48,8 @@ h2, h3 { color: #888; }
 // ie8 placeholder is a bit dark by default (jquery-placeholder plugin)
 .placeholder { color: @grey; }
 
+.dark { color: @dark; }
+
 // colours overriding bootstrap's classes (ouch)
 .label-success { background-color: rgb(53,217,38); }
 .label-danger { background-color: rgb(217, 38, 135); }
@@ -160,6 +162,15 @@ h2, h3 { color: #888; }
 // editor
 // ------
 
+// custom table-based layout possibly because i don't quite get boostrap
+.layout-row {
+    display: table;
+    width: 100%;
+    .layout-col {
+        .cell-mixin;
+    }
+}
+
 .editor-readonly {
     .well {
     min-width: 3em;
@@ -172,15 +183,12 @@ h2, h3 { color: #888; }
 
 .editor-title { font-size:larger; }
 
-// custom table-based layout possibly because i don't quite get boostrap
-.layout-row {
-    display: table;
-    width: 100%;
-    .layout-col {
-        .cell-mixin;
+.editor-abstract {
+    textarea {
+        resize: none; // resize ability looks bad with scrollbar
+        max-height: 8em;
     }
 }
-
 
 .editor-internal {
     padding-top: 1.3em;
@@ -192,12 +200,6 @@ h2, h3 { color: #888; }
     .btn-default .glyphicon { color: @dark; }
 }
 
-.editor-abstract {
-    textarea {
-        resize: none; // remove resize ability because it looks bad with scrollbar
-        max-height: 8em;
-    }
-}
 
 
 // validation styles. angular also puts these classes on the form so ignore that

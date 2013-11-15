@@ -7,7 +7,7 @@
             <div class="col-md-6">
                 <div ng-show="form.readOnly" class="editor-readonly form-group">
                     <span class="well well-sm">
-                        <span tc-tip class="dark glyphicon glyphicon-lock" title="This record is read-only"></span>
+                        <span tc-tip class="glyphicon glyphicon-lock hoverable-glyphicon" title="This record is read-only"></span>
                         <span ng-show="!isClean()"> This record is read-only and can't be saved</span>
                     </span>
                 </div>
@@ -15,7 +15,7 @@
             <div class="col-md-6">
                 <div class="form-group pull-right">
                     <button class="btn btn-default" tc-back-button>
-                        <span class="white glyphicon glyphicon-circle-arrow-left btn-glyphicon"></span>BACK
+                        <span class="dark glyphicon glyphicon-circle-arrow-left btn-glyphicon"></span>BACK
                     </button>
                     <span>
                         <button ng-click="reset()" ng-hide="isResetHidden()" class="btn btn-default" >CANCEL</button>
@@ -26,7 +26,7 @@
 
         </div>
 
-        <!-- title-and-location  -->
+        <!-- title-and-path  -->
         <div class="row">
             <div class="col-md-12">
                 
@@ -40,7 +40,7 @@
 
                 <div class="well well-sm form-group">
                     <div class="input-group">
-                        <span class="input-group-addon well-input-group-addon"><span class="grey glyphicon glyphicon-th-large"></span></span>
+                        <span class="input-group-addon well-input-group-addon"><span class="dark glyphicon glyphicon-th-large"></span></span>
 
                         <input id="form-path" name="form.path" ng-model="form.path" 
                                type="text" class="form-control" 
@@ -114,8 +114,8 @@
                                        placeholder="yyyy-mm-dd"
                                        tc-datepicker
                                        tc-focus-tip title="The dates covered by the data resource" />
-                                <span class="input-group-addon"><span class="grey glyphicon glyphicon-calendar"></span></span>
-                                <span class="grey glyphicon glyphicon-chevron-right" style="margin-left: 2em;"></span>
+                                <span class="input-group-addon"><span class="dark glyphicon glyphicon-calendar"></span></span>
+                                <span class="dark glyphicon glyphicon-chevron-right" style="margin-left: 2em;"></span>
                             </div>
                         </div>
                         <div class="col-md-3">
@@ -125,7 +125,7 @@
                                        placeholder="yyyy-mm-dd"
                                        tc-datepicker
                                        tc-focus-tip title="The dates covered by the data resource" />
-                                <span class="input-group-addon"><span class="grey glyphicon glyphicon-calendar"></span></span>
+                                <span class="input-group-addon"><span class="dark glyphicon glyphicon-calendar"></span></span>
                             </div>
                         </div>
                         <div class="col-md-6">

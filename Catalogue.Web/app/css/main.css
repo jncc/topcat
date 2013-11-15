@@ -27,6 +27,9 @@ h3 {
 .placeholder {
   color: #bbbbbb;
 }
+.dark {
+  color: #666666;
+}
 .label-success {
   background-color: #35d926;
 }
@@ -119,6 +122,14 @@ h3 {
 .tag-tip {
   max-width: 100%;
 }
+.layout-row {
+  display: table;
+  width: 100%;
+}
+.layout-row .layout-col {
+  display: table-cell;
+  vertical-align: middle;
+}
 .editor-readonly .well {
   min-width: 3em;
 }
@@ -132,13 +143,9 @@ h3 {
 .editor-title {
   font-size: larger;
 }
-.layout-row {
-  display: table;
-  width: 100%;
-}
-.layout-row .layout-col {
-  display: table-cell;
-  vertical-align: middle;
+.editor-abstract textarea {
+  resize: none;
+  max-height: 8em;
 }
 .editor-internal {
   padding-top: 1.3em;
@@ -152,10 +159,6 @@ h3 {
 }
 .editor-internal .btn-default .glyphicon {
   color: #666666;
-}
-.editor-abstract textarea {
-  resize: none;
-  max-height: 8em;
 }
 form .ng-dirty.ng-invalid {
   border: 1px solid #FF1493;
