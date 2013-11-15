@@ -111,6 +111,7 @@ namespace Catalogue.Data.Import.Mappings
                     let pair = m.Groups.Cast<Group>().Select(g => g.Value).Skip(1).First().Split(',')
                     let vocab = pair.ElementAt(0).Trim().Trim('"').Trim()
                     let keyword = pair.ElementAt(1).Trim().Trim('"').Trim()
+                    where keyword.IsNotBlank()
                     select new Keyword
                     {
                         // todo: map the source vocab IDs to "real" ones
