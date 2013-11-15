@@ -58,7 +58,7 @@ hr {
   display: table;
   width: 100%;
   margin-top: 1.4em;
-  padding-bottom: 0.3em;
+  padding-bottom: 0.4em;
 }
 .header .logo {
   display: table-cell;
@@ -114,7 +114,7 @@ hr {
   display: inline-block;
   background-color: #eeeeee;
   padding-right: 0.4em;
-  margin: 0 0.8em 0.3em 0;
+  margin: 0 0.8em 0.45em 0;
 }
 .tag:hover {
   background-color: #dddddd;
@@ -147,6 +147,7 @@ hr {
 }
 .editor-title {
   font-size: larger;
+  height: 32px;
 }
 .editor-path input {
   border-right: white;
@@ -154,9 +155,13 @@ hr {
 .editor-path .input-group-addon.pointable:hover {
   background-color: #dddddd;
 }
+.editor-abstract {
+  padding-top: 0.3em;
+}
 .editor-abstract textarea {
   resize: none;
   max-height: 8em;
+  padding-right: 2em;
 }
 .editor-internal {
   padding-top: 1.1em;
