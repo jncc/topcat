@@ -124,8 +124,14 @@ hr {
   width: 7px;
   margin-right: 2px;
 }
-.tag-tip {
+.tip {
   max-width: 100%;
+  color: #fff;
+  font-size: 11px;
+  font-family: 'Lucida Grande', sans-serif;
+  font-weight: 700;
+  line-height: 16px;
+  text-shadow: 0 1px #000;
 }
 .layout-row {
   display: table;

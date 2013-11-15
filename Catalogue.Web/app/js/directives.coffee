@@ -28,12 +28,22 @@ qtipDefaults =
         fixed: true,
         delay: 100,
     style:
-        classes: 'qtip-tipsy tag-tip'
+        classes: 'qtip-dark qtip-rounded tip'
 
 # basic tip
-# widget for tags (keywords)
 module.directive 'tcTip', () ->
     link: (scope, elem, attrs) -> $(elem).qtip qtipDefaults
+
+# focus tip (used for editor fields)
+module.directive 'tcFocusTip', () ->
+    link: (scope, elem, attrs) ->
+        $(elem).qtip $.extend {}, qtipDefaults,
+            show: event: 'focus'
+            hide: event: 'blur'
+            position:
+                my: 'bottom center'
+                at: 'top center'
+
 
 # widget for tags (keywords)
 module.directive 'tcTag', () ->
@@ -87,12 +97,6 @@ module.directive 'tcServerValidation', ($http) ->
             scope.$apply () -> $http.post('../api/validator', "value": elem.val())
                 .success (data) ->
                     ctrl.$setValidity('myErrorKey', data.valid)
-
-module.directive 'tcFocusTip', () ->
-    link: (scope, elem, attrs) -> $(elem).tooltip 
-        trigger: 'focus',
-        placement: 'top',
-        delay: show: 0, hide: 100
 
 module.directive 'tcCopyToClipboard', () ->
     link: (scope, elem, attrs) ->
