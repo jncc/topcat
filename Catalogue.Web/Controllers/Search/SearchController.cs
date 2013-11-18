@@ -58,7 +58,7 @@ namespace Catalogue.Web.Controllers.Search
                             {
                                 Id = x.result.Id,
                                 Title = x.titleFragments.Select(f => f.TruncateNicely(200)).FirstOrDefault()
-                                    ?? x.result.Gemini.Title.TruncateNicely(200),
+                                    ?? x.result.Gemini.Title.TruncateNicely(200), // could be better. always want the whole title, highlighted
                                 Snippet = x.abstractFragments.Select(f => f.TruncateNicely(200)).FirstOrDefault()
                                     ?? x.result.Gemini.Abstract.TruncateNicely(200),
                                 Keywords = x.result.Gemini.Keywords.OrderBy(k => k.Vocab).ToList(),

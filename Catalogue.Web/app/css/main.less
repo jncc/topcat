@@ -55,8 +55,11 @@ hr {
 .dark { color: @dark; }
 
 // colours overriding bootstrap's classes (ouch)
-.label-success { background-color: rgb(53,217,38); }
-.label-danger { background-color: rgb(217, 38, 135); }
+@green: rgb(53,217,38);
+@pink: rgb(217, 38, 135);
+
+.label-success { background-color: @green; }
+.label-danger { background-color: @pink; }
 .btn-default {
     background-color: @pale;
     border-color: @pale;
@@ -65,8 +68,8 @@ hr {
         border-color: @lesspale;
     }
 }
-.btn-danger { background-color: rgb(217, 38, 135); }
-.btn-danger[disabled] { background-color: rgb(217, 38, 135); }
+.btn-danger { background-color: @pink; }
+.btn-danger[disabled] { background-color: @pink; }
 
 // ---------
 // head/foot
