@@ -6,9 +6,7 @@ angular.module('app.controllers').controller 'SearchController',
         # slightly hacky way of triggering animations on startup
         # to work around angular skipping the initial animation
         $scope.app = { starting: true };
-        $timeout(
-            -> $scope.app.starting = false,
-            500)
+        $timeout (-> $scope.app.starting = false), 500
 
         # note: $location.search is the angular api for the querystring value
         
@@ -23,7 +21,7 @@ angular.module('app.controllers').controller 'SearchController',
                         # don't overwrite with old slow results!
                         if angular.equals result.query, $scope.query
                             $scope.result = result
-                    .error () -> $rootScope.busy = { value: false }
+                    .error -> $rootScope.busy = { value: false }
             else
                 $scope.result = {}
 

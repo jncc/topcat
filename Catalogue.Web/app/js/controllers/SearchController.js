@@ -5,9 +5,9 @@
     $scope.app = {
       starting: true
     };
-    $timeout(function() {
+    $timeout((function() {
       return $scope.app.starting = false;
-    }, 500);
+    }), 500);
     doSearch = function(query) {
       $location.search('q', query.q);
       if (query.q) {

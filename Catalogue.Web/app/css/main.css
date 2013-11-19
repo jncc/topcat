@@ -179,6 +179,13 @@ hr {
 .editor-internal .btn-default .glyphicon {
   color: #666666;
 }
+.editor-internal hr {
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+.editor-notes {
+  margin-top: 2em;
+}
 form .ng-dirty.ng-invalid {
   border: 1px solid #FF1493;
   background-color: #f9f2f4;

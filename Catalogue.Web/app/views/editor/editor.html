@@ -46,7 +46,7 @@
                                type="text" class="form-control" 
                                placeholder="Location"
                                tc-server-validation
-                               tc-focus-tip title="The path to the resource on the file share or the web"
+                               tc-focus-tip title="The path to the resource on the file share"
                                spellcheck="false" />
                         
                         <span class="input-group-addon pointable"
@@ -186,6 +186,25 @@
                     
                     <hr />
 
+                    <div class="editor-validation layout-row">
+                        <div class="layout-col">
+                            <span>Validation</span>
+                        </div>
+                        <div class="layout-col pull-right">
+                            
+                            <button type="button" class="btn"
+                                    title="The level of validation to perform on the record"
+                                    tc-tip
+                                >
+                                <span class="dark glyphicon glyphicon-repeat"></span>
+                                None
+                            </button>
+
+                        </div>
+                    </div>
+
+                    <hr />
+
                     <div class="editor-status layout-row">
                         <div class="layout-col">
                             <span>Status</span>
@@ -207,26 +226,7 @@
 
                     <hr />
 
-                    <div class="editor-validation layout-row">
-                        <div class="layout-col">
-                            <span>Validation</span>
-                        </div>
-                        <div class="layout-col pull-right">
-                            
-                            <button type="button" class="btn"
-                                    title="The level of validation to perform on the record"
-                                    tc-tip
-                                >
-                                <span class="dark glyphicon glyphicon-repeat"></span>
-                                None
-                            </button>
-
-                        </div>
-                    </div>
-
-                    <hr />
-
-                    <div class="form-group">
+                    <div class="editor-notes form-group">
                         <textarea ng-model="form.notes" type="text" rows="4"
                             tc-autosize
                             class="form-control"
