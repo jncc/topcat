@@ -5,9 +5,9 @@
         <!-- top row of buttons etc.  -->
         <div class="row">
             <div class="col-md-6">
-                <div ng-show="form.readOnly" class="editor-readonly form-group">
-                    <span class="well well-sm">
-                        <span tc-tip class="glyphicon glyphicon-lock hoverable-glyphicon" title="This record is read-only"></span>
+                <div ng-show="form.readOnly" class="form-group editor-readonly">
+                    <span class="well well-sm" tc-tip title="This record is read-only">
+                        <span class="glyphicon glyphicon-lock hoverable-glyphicon"></span>
                         <span ng-show="!isClean()"> This record is read-only and can't be saved</span>
                     </span>
                 </div>
@@ -49,20 +49,21 @@
                                tc-focus-tip title="The path to the resource on the file share or the web"
                                spellcheck="false" />
                         
-                        <span class="input-group-addon pointable" tc-tip
-                                    title="Copy directory to clipboard"><span class="dark glyphicon glyphicon-folder-open"></span></span>
-
-
-                        <span class="input-group-btn"  tc-tip
-                                    title="Copy path to clipboard" >
-                            <button class="btn btn-primary" type="button" tabindex="-1"
-                                    
-                                    ng-disabled="!form.path"
-                                    tc-copy-to-clipboard="form-path"
-                                    data-clipboard-target="form-path">
-                                <span class="glyphicon glyphicon-new-window"></span>
-                            </button>
+                        <span class="input-group-addon pointable"
+                                ng-disabled="!form.path"
+                                tc-copy-path-to-clipboard="form-path"
+                                data-clipboard-target="form-path">
+                            <span class="dark glyphicon glyphicon-folder-open"></span>
                         </span>
+
+<!--                        <span class="input-group-btn">-->
+<!--                            <button class="btn btn-primary" type="button" tabindex="-1"-->
+<!--                                    ng-disabled="!form.path"-->
+<!--                                    tc-copy-path-to-clipboard="form-path"-->
+<!--                                    data-clipboard-target="form-path">-->
+<!--                                <span class="glyphicon glyphicon-new-window"></span>-->
+<!--                            </button>-->
+<!--                        </span>-->
                     </div>
                 </div>
 

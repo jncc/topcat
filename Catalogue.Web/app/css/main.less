@@ -193,8 +193,11 @@ hr {
 }
 
 .editor-readonly {
+    padding-top: 7px; // hack to counteract .well-sm padding
     .well {
-    min-width: 3em;
+        padding-top: 7px;
+        padding-bottom: 7px;
+        min-width: 3em;
     }
     .glyphicon {
         margin: 0 2px 0 2px;
@@ -204,15 +207,15 @@ hr {
 
 .editor-title {
     font-size:larger;
-    height:32px; // random fix after copy-to-clipboard button
 }
 
 .editor-path {
-    input { border-right: white; } // looks better next to the copy-to-clipboard icon
-    .input-group-addon.pointable:hover { // style the copy-to-clipboard icon
-            background-color: @lesspale;
+    //input { border-right: white; } // looks better next to the copy-to-clipboard icon
+    .zeroclipboard-is-hover {
+        background-color: @lesspale;
     }
 }
+
 
 .editor-abstract {
     padding-top: 0.3em; // feels like it needs a bit of space

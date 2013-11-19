@@ -98,19 +98,39 @@ module.directive 'tcServerValidation', ($http) ->
                 .success (data) ->
                     ctrl.$setValidity('myErrorKey', data.valid)
 
-module.directive 'tcCopyToClipboard', ($timeout) ->
+module.directive 'tcCopyPathToClipboard', ($timeout) ->
     link: (scope, elem, attrs) ->
         clip = new ZeroClipboard $(elem)
+        $(clip.htmlBridge).qtip $.extend {}, qtipDefaults, content: text: 'Copy path to clipboard'
+        $(clip.htmlBridge).addClass 'hover-fix'
         clip.on 'complete', (client, args) ->
-            t = $('#' + attrs.tcCopyToClipboard)
+            t = $('#' + attrs.tcCopyPathToClipboard)
             t.highlightInputSelectionRange 0, (t.val().length)
             t.qtip 'disable', true
             wrapper = $('.editor-path')
             wrapper.qtip $.extend {}, qtipDefaults,
                 content: text: 'Copied to clipboard!'
-                show: event: ''
             wrapper.qtip 'show'
             $timeout (->
                 wrapper.qtip 'hide'
                 wrapper.qtip 'disable'
                 t.qtip 'disable', false), 2000
+
+
+# currently not working because i don't know quite how to have multiple zero clipboards
+#module.directive 'tcCopyDirectoryToClipboard', ($timeout) ->
+#    link: (scope, elem, attrs) ->
+#        clip = new ZeroClipboard $(elem)
+        #$(clip.htmlBridge).qtip $.extend {}, qtipDefaults, content: text: 'XXCopy directory to clipboard'
+#        clip.on 'complete', (client, args) ->
+#            t = $('#' + attrs.tcCopyDirectoryToClipboard)
+#            t.highlightInputSelectionRange 0, (t.val().length)
+#            t.qtip 'disable', true
+#            wrapper = $('.editor-path')
+#            wrapper.qtip $.extend {}, qtipDefaults,
+#                content: text: 'Copied to clipboard!'
+#            wrapper.qtip 'show'
+#            $timeout (->
+#                wrapper.qtip 'hide'
+#                wrapper.qtip 'disable'
+#                t.qtip 'disable', false), 2000

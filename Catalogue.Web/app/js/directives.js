@@ -159,23 +159,26 @@
     };
   });
 
-  module.directive('tcCopyToClipboard', function($timeout) {
+  module.directive('tcCopyPathToClipboard', function($timeout) {
     return {
       link: function(scope, elem, attrs) {
         var clip;
         clip = new ZeroClipboard($(elem));
+        $(clip.htmlBridge).qtip($.extend({}, qtipDefaults, {
+          content: {
+            text: 'Copy path to clipboard'
+          }
+        }));
+        $(clip.htmlBridge).addClass('hover-fix');
         return clip.on('complete', function(client, args) {
           var t, wrapper;
-          t = $('#' + attrs.tcCopyToClipboard);
+          t = $('#' + attrs.tcCopyPathToClipboard);
           t.highlightInputSelectionRange(0, (t.val().length));
           t.qtip('disable', true);
           wrapper = $('.editor-path');
           wrapper.qtip($.extend({}, qtipDefaults, {
             content: {
               text: 'Copied to clipboard!'
-            },
-            show: {
-              event: ''
             }
           }));
           wrapper.qtip('show');

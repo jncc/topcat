@@ -141,7 +141,12 @@ hr {
   display: table-cell;
   vertical-align: middle;
 }
+.editor-readonly {
+  padding-top: 7px;
+}
 .editor-readonly .well {
+  padding-top: 7px;
+  padding-bottom: 7px;
   min-width: 3em;
 }
 .editor-readonly .glyphicon {
@@ -153,12 +158,8 @@ hr {
 }
 .editor-title {
   font-size: larger;
-  height: 32px;
 }
-.editor-path input {
-  border-right: white;
-}
-.editor-path .input-group-addon.pointable:hover {
+.editor-path .zeroclipboard-is-hover {
   background-color: #dddddd;
 }
 .editor-abstract {
