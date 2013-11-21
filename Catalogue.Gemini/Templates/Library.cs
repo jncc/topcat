@@ -21,7 +21,7 @@ namespace Catalogue.Gemini.Templates
                 Title = "",
                 Abstract = "",
                 TopicCategory = "",
-                Keywords = new Dictionary<string, string>().ToKeywordsList(),
+                Keywords = new Dictionary<string, string>().ToKeywordList(),
                 TemporalExtent = new TemporalExtent { Begin = "", End = "" },
                 DatasetReferenceDate = "",
                 Lineage = "",
@@ -36,6 +36,7 @@ namespace Catalogue.Gemini.Templates
                 LimitationsOnPublicAccess = "",
                 UseConstraints = "",
                 SpatialReferenceSystem = "",
+                Extents = new List<Extent>(),
                 MetadataDate = "",
                 MetadataLanguage = "",
                 MetadataPointOfContact = new ResponsibleParty
@@ -67,7 +68,7 @@ namespace Catalogue.Gemini.Templates
                         { "", "sounding" },
                         { "http://vocab.ndg.nerc.ac.uk/list/C751/220", "Bermuda Institute of Ocean Sciences" },
                     }
-                    .ToKeywordsList(),
+                    .ToKeywordList(),
                 TemporalExtent = new TemporalExtent { Begin = "2001-01-13", End = "2010-01-25" },
                 DatasetReferenceDate = "2012-03-17",
                 Lineage = "This dataset was imagined by a developer.",
@@ -82,6 +83,7 @@ namespace Catalogue.Gemini.Templates
                 LimitationsOnPublicAccess = "no limitations",
                 UseConstraints = "no conditions apply",
                 SpatialReferenceSystem = "http://www.opengis.net/def/crs/EPSG/0/4326",
+                Extents = new Dictionary<string, string> { { null, "Bermuda" } }.ToExtentList(),
                 MetadataDate = "2013-07-16",
                 MetadataLanguage = "eng",
                 MetadataPointOfContact = new ResponsibleParty

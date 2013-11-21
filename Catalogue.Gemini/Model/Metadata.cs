@@ -23,7 +23,7 @@ namespace Catalogue.Gemini.Model
         public string LimitationsOnPublicAccess { get; set; }
         public string UseConstraints { get; set; }
         public string SpatialReferenceSystem { get; set; }
-//      public string Extent { get; set; } todo i think we need this for Known Locations
+        public List<Extent> Extents { get; set; } // support multiple locations; use same UI as keywords
         public string MetadataDate { get; set; }
         public string MetadataLanguage { get; set; }
         public ResponsibleParty MetadataPointOfContact { get; set; }
@@ -44,6 +44,12 @@ namespace Catalogue.Gemini.Model
     {
         public string Value { get; set; }
         public string Vocab { get; set; }
+    }
+
+    public class Extent
+    {
+        public string Value { get; set; }
+        public string Authority { get; set; }
     }
 
     public class TemporalExtent

@@ -6,10 +6,17 @@ namespace Catalogue.Gemini.Helpers
 {
     public static class Extensions
     {
-        public static List<Keyword> ToKeywordsList(this Dictionary<string, string> source)
+        public static List<Keyword> ToKeywordList(this Dictionary<string, string> source)
         {
             return source
                 .Select((pair => new Keyword { Vocab = pair.Key, Value = pair.Value }))
+                .ToList();
+        }
+
+        public static List<Extent> ToExtentList(this Dictionary<string, string> source)
+        {
+            return source
+                .Select((pair => new Extent { Authority = pair.Key, Value = pair.Value }))
                 .ToList();
         }
     }
