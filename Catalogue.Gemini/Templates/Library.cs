@@ -83,7 +83,7 @@ namespace Catalogue.Gemini.Templates
                 LimitationsOnPublicAccess = "no limitations",
                 UseConstraints = "no conditions apply",
                 SpatialReferenceSystem = "http://www.opengis.net/def/crs/EPSG/0/4326",
-                Extents = new Dictionary<string, string> { { null, "Bermuda" } }.ToExtentList(),
+                Extents = new Dictionary<string, string> { { "", "Bermuda" } }.ToExtentList(),
                 MetadataDate = "2013-07-16",
                 MetadataLanguage = "eng",
                 MetadataPointOfContact = new ResponsibleParty
