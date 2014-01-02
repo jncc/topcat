@@ -101,6 +101,7 @@
     <Compile Include="Slow\Catalogue.Data\Indexes\keywords_search_index_specs.cs" />
     <Compile Include="Slow\Catalogue.Data\Indexes\records_search_index_specs.cs" />
     <Compile Include="Slow\Catalogue.Data\Seed\when_seeding.cs" />
+    <Compile Include="Slow\Catalogue.Data\Versioning\versioning_specs.cs" />
     <Compile Include="Slow\Catalogue.Gemini\Validation\when_validating_the_example_document.cs" />
     <Compile Include="Slow\Catalogue.Import\when_importing_mesh_data.cs" />
     <Compile Include="Slow\Spatial\when_querying_spatial_test_data.cs" />
