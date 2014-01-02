@@ -29,5 +29,10 @@ namespace Catalogue.Data.Model
         /// used for spatial indexing.
         /// </summary>
         public string Wkt { get; set; }
+
+        /// <summary>
+        /// Used by the infrastructure when representing a particular revision of the record.
+        /// </summary>
+        public int Revision { get; internal set; }
     }
 }

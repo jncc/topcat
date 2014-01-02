@@ -15,26 +15,7 @@ namespace Catalogue.Tests.Explicit
 {
     class versioning_proof_of_concept : DatabaseTestFixture
     {
-        [Test, Explicit]
-        public void try_out_versioning()
-        {
-            using (var db = ReusableDocumentStore.OpenSession())
-            {
-                var record = db.Query<Record>().Customize(x => x.WaitForNonStaleResults())
-                    .First(r => r.Gemini.Title == "St Tudwal's Islands (Tremadoc Bay) lifeforms map");
 
-                record.Notes = "a revision";
-                db.SaveChanges();
-            }
-
-            using (var db = ReusableDocumentStore.OpenSession())
-            {
-                var record = db.Query<Record>().Customize(x => x.WaitForNonStaleResults()).First();
-                var revisions = db.Advanced.GetRevisionsFor<Record>("records/" + record.Id, 0, 10);
-
-                revisions.Should().NotBeEmpty();
-            }
-        }
 
         
         [Test, Explicit]

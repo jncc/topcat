@@ -58,7 +58,7 @@ namespace Catalogue.Web
             {
                 // use in-memory database for development
 
-                var helper = new InMemoryDatabaseHelper
+                DocumentStore = new InMemoryDatabaseHelper
                     {
                         PreInitializationAction = store =>
                             {
@@ -68,17 +68,17 @@ namespace Catalogue.Web
                                 store.UseEmbeddedHttpServer = true;
                             },
                         PostInitializationAction = Seeder.Seed
-                    };
-
-                DocumentStore = helper.Create();
+                    }.Create();
             }
             else
             {
+                // todo enable versioning for non-dev environments
+                // todo (extract the versioning configuration from the InMemoryDatabaseHelper somehow)
+
                 DocumentStore = new DocumentStore { ConnectionStringName = "Data" };
                 DocumentStore.Initialize();
+                IndexCreation.CreateIndexes(typeof(Record).Assembly, DocumentStore);
             }
-
-            IndexCreation.CreateIndexes(typeof(Record).Assembly, DocumentStore);
         }
     }
 }
