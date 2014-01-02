@@ -13,8 +13,8 @@ namespace Catalogue.Tests.Utility
         {
             // initialise the ResusableDocumentStore once, in this static constructor
 
-            var store = DatabaseHelper.CreateInMemoryStore(Seeder.Seed); // seed with test data
-            ReusableDocumentStore = store;
+            var helper = new InMemoryDatabaseHelper { PostInitializationAction = Seeder.Seed };
+            ReusableDocumentStore = helper.Create();
         }
 
         /// <summary>

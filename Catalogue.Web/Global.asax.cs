@@ -5,6 +5,7 @@ using System.Web.Mvc;
 using System.Web.Routing;
 using Catalogue.Data.Model;
 using Catalogue.Data.Seed;
+using Catalogue.Data.Test;
 using Newtonsoft.Json.Serialization;
 using Raven.Client;
 using Raven.Client.Document;
@@ -56,20 +57,20 @@ namespace Catalogue.Web
             if (ConfigurationManager.AppSettings["Environment"] == "Dev")
             {
                 // use in-memory database for development
-                var s = new EmbeddableDocumentStore();
-                const int port = 8888;
-                s.Configuration.Port = port;
-                NonAdminHttp.EnsureCanListenToWhenInNonAdminContext(port);
-                s.RunInMemory = true;
-                s.UseEmbeddedHttpServer = true;
 
-                s.Configuration.Settings.Add("Raven/ActiveBundles", "Versioning");
+                var helper = new InMemoryDatabaseHelper
+                    {
+                        PreInitializationAction = store =>
+                            {
+                                const int port = 8888;
+                                store.Configuration.Port = port;
+                                NonAdminHttp.EnsureCanListenToWhenInNonAdminContext(port);
+                                store.UseEmbeddedHttpServer = true;
+                            },
+                        PostInitializationAction = Seeder.Seed
+                    };
 
-                s.Initialize();
-                // seed the database with dev-time data
-                Seeder.Seed(s);
-
-                DocumentStore = s;
+                DocumentStore = helper.Create();
             }
             else
             {

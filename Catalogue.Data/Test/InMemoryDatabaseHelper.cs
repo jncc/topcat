@@ -7,15 +7,21 @@ using Raven.Client.Indexes;
 
 namespace Catalogue.Data.Test
 {
-    public static class DatabaseHelper
+    public class InMemoryDatabaseHelper
     {
-        public static IDocumentStore CreateInMemoryStore(Action<IDocumentStore> populate)
+        public Action<EmbeddableDocumentStore> PreInitializationAction { get; set; }
+        public Action<IDocumentStore> PostInitializationAction { get; set; }
+
+        public IDocumentStore Create()
         {
             var store = new EmbeddableDocumentStore { RunInMemory = true };
             
             // activate versioning feature bundle
             store.Configuration.Settings.Add("Raven/ActiveBundles", "Versioning");
-            
+
+            if (PreInitializationAction != null)
+                PreInitializationAction(store);
+
             store.Initialize();
 
             // apparently we need to configure versioning explicity per document type when running in-memory
@@ -31,14 +37,15 @@ namespace Catalogue.Data.Test
                 db.SaveChanges();
             }
 
-            populate(store);
+            if (PostInitializationAction != null)
+                PostInitializationAction(store);
             
             IndexCreation.CreateIndexes(typeof(Record).Assembly, store);
             RavenUtility.WaitForIndexing(store);
 
             using (var db = store.OpenSession())
             {
-                db.Store(new Raven.Bundles.Versioning.Data.VersioningConfiguration
+                db.Store(new VersioningConfiguration
                 {
                     Exclude = false,
                     Id = "Raven/Versioning/DefaultConfiguration",
