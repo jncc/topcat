@@ -24,8 +24,8 @@ namespace Catalogue.Tests.Explicit.Catalogue.Import
 
             using (var db = store.OpenSession())
             {
-                var importer = new Importer<MeshMapping>(new FileSystem(), new RecordService(db, new RecordValidator()));
-                importer.Import(@"C:\Users\Pete\Desktop\mesh.csv");
+                var importer = new Importer<ActivitiesMapping>(new FileSystem(), new RecordService(db, new RecordValidator()));
+                importer.Import(@"C:\Work\pressures-data\Human_Activities_Metadata_Catalogue.csv");
             }
         }
     }

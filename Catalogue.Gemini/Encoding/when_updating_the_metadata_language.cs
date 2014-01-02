@@ -19,7 +19,6 @@ namespace Catalogue.Gemini.Encoding
 
             metadata.MetadataLanguage = "fin"; // set to finnish (probably the right code..?)
             updated = new XmlEncoder().Update(original, metadata);
-            
         }
 
         [Test]

@@ -1,11 +1,7 @@
-using Catalogue.Data;
-using Catalogue.Data.Model;
 using Catalogue.Data.Seed;
+using Catalogue.Data.Test;
 using NUnit.Framework;
-using Raven.Bundles.Versioning.Data;
 using Raven.Client;
-using Raven.Client.Embedded;
-using Raven.Client.Indexes;
 
 namespace Catalogue.Tests.Utility
 {
@@ -17,33 +13,7 @@ namespace Catalogue.Tests.Utility
         {
             // initialise the ResusableDocumentStore once, in this static constructor
 
-            var store = new EmbeddableDocumentStore { RunInMemory = true };
-            
-            // activate versioning feature bundle
-            store.Configuration.Settings.Add("Raven/ActiveBundles", "Versioning");
-            
-            store.Initialize();
-
-            // apparently we need to configure versioning explicity per document type when running in-memory
-            using (var db = store.OpenSession())
-            {
-                db.Store(new VersioningConfiguration
-                    {
-                        Exclude = false,
-                        Id = "Raven/Versioning/Records",
-                        MaxRevisions = int.MaxValue
-
-                    });
-                db.SaveChanges();
-            }
-
-            // seed with test data and wait for indexing
-            Seeder.Seed(store);
-            IndexCreation.CreateIndexes(typeof(Record).Assembly, store);
-            RavenUtility.WaitForIndexing(store);
-            
-            // todo: is it possible to make the database read-only to prevent accidental mutation of test data?
-
+            var store = DatabaseHelper.CreateInMemoryStore(Seeder.Seed); // seed with test data
             ReusableDocumentStore = store;
         }
 
@@ -55,17 +25,7 @@ namespace Catalogue.Tests.Utility
         [TestFixtureSetUp]
         public void TestFixtureSetUp()
         {
-
             Db = ReusableDocumentStore.OpenSession();
-
-            Db.Store(new Raven.Bundles.Versioning.Data.VersioningConfiguration
-            {
-                Exclude = false,
-                Id = "Raven/Versioning/DefaultConfiguration",
-                MaxRevisions = 50
-            }, "Raven/Versioning/DefaultConfiguration");
-            Db.SaveChanges();
-
         }
 
         [TestFixtureTearDown]

@@ -106,12 +106,13 @@
     <Compile Include="Slow\Spatial\when_querying_spatial_test_data.cs" />
     <Compile Include="Slow\when_testing_this_application.cs" />
     <Compile Include="Utility\DatabaseTestFixture.cs" />
-    <Compile Include="Utility\RavenUtility.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Explicit\Catalogue.Data\" />
+  </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Catalogue.Data\Catalogue.Data.csproj">
       <Project>{3ad6b61c-cab1-4cc4-8895-ba2dd3b58c59}</Project>

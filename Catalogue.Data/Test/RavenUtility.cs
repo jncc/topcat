@@ -1,9 +1,9 @@
 ﻿using System.Threading;
 using Raven.Client;
 
-namespace Catalogue.Tests.Utility
+namespace Catalogue.Data.Test
 {
-    public class RavenUtility
+    public static class RavenUtility
     {
         public static void WaitForIndexing(IDocumentSession session)
         {
