@@ -225,6 +225,27 @@
                     </div>
 
                     <hr />
+                    
+                    <div class="editor-review layout-row">
+                        <div class="layout-col">
+                            <span>Review</span>
+                        </div>
+                        <div class="layout-col pull-right">
+                            
+                            <div class="input-group date-container">
+                                <input type="text" class="form-control"
+                                        ng-model="form.review"
+                                        placeholder="yyyy-mm-dd"
+                                        tc-datepicker
+                                        tc-focus-tip title="The date for reviewing this record" />
+                                <span class="input-group-addon"><span class="dark glyphicon glyphicon-calendar"></span></span>
+                            </div>
+
+
+                        </div>
+                    </div>
+
+                    <hr />
 
                     <div class="editor-notes form-group">
                         <textarea ng-model="form.notes" type="text" rows="4"

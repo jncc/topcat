@@ -141,6 +141,9 @@ hr {
   display: table-cell;
   vertical-align: middle;
 }
+.date-container {
+  width: 11em;
+}
 .editor-readonly {
   padding-top: 7px;
 }

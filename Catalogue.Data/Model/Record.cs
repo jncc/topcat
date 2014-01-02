@@ -12,15 +12,10 @@ namespace Catalogue.Data.Model
         /// </summary>
         public Metadata Gemini  { get; set; }
 
-        /// <summary>
-        /// A 'well known text' representation of the bounding box in the Gemini record
-        /// used for spatial indexing.
-        /// </summary>
-        public string   Wkt      { get; set; }
-
         public string   Path     { get; set; }
-        public Status   Status   { get; set; }
         public bool     TopCopy  { get; set; }
+        public Status   Status   { get; set; }
+        public DateTime Review   { get; set; }
         public string   Notes    { get; set; }
 
         /// <summary>
@@ -28,5 +23,11 @@ namespace Catalogue.Data.Model
         /// </summary>
         public string SourceIdentifier { get; set; }
         public bool   ReadOnly         { get; set; } // for imported records
+
+        /// <summary>
+        /// A 'well known text' representation of the bounding box in the Gemini record
+        /// used for spatial indexing.
+        /// </summary>
+        public string Wkt { get; set; }
     }
 }
