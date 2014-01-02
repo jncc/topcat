@@ -43,6 +43,8 @@ namespace Catalogue.Data.Import
 
             var records = csv.GetRecords<Record>();
 
+            int n = 1;
+
             foreach (var record in records)
             {
                 var result = recordService.Insert(record);
@@ -52,8 +54,13 @@ namespace Catalogue.Data.Import
                     Failures.Add(result);
 
                     if (!SkipBadRecords)
-                        throw new Exception("Import failed. " + result.Message);
+                    {
+                        throw new Exception(String.Format("Import failed due to validation error at record {0}: {1}",
+                            n, result.Message));
+                    }
                 }
+
+                n++;
             }
         }
     }
