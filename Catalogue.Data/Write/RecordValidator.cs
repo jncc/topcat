@@ -74,8 +74,7 @@ namespace Catalogue.Data.Write
         [Test]
         public void should_pass_validation_for_null_topic_category()
         {
-            var record = validBlankRecord.With(r => r.Gemini.TopicCategory = null);
-            var result = new RecordValidator().Validate(record);
+            var result = new RecordValidator().Validate(validBlankRecord.With(r => r.Gemini.TopicCategory = null));
             result.Success.Should().BeTrue();
         }
 

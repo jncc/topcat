@@ -50,11 +50,12 @@ namespace Catalogue.Data.Import.Mappings
                     .ConvertUsing(row => row.GetField("Topic Category")
                         .FirstCharToLower()); // correct capitalisation
 
-//                Map(m => m.Keywords).ConvertUsing(row =>
-//                {
-//                    string input = row.GetField("Keywords");
-//                    return ParseMeshKeywords(input);
-//                });
+                Map(m => m.Keywords).ConvertUsing(row =>
+                {
+                    string input = row.GetField("Keyword");
+                    return ParseKeywords(input);
+                });
+
 //                Map(m => m.TemporalExtent).ConvertUsing(row =>
 //                {
 //                    string beg = row.GetField("TemporalExtentBegin");
@@ -101,49 +102,57 @@ namespace Catalogue.Data.Import.Mappings
             }
         }
 
-        public static List<Keyword> ParseMeshKeywords(string input)
+        public static List<Keyword> ParseKeywords(string input)
         {
-            var q = from m in Regex.Matches(input, @"\{(.*?)\}").Cast<Match>()
-                    let pair = m.Groups.Cast<Group>().Select(g => g.Value).Skip(1).First().Split(',')
-                    let vocab = pair.ElementAt(0).Trim().Trim('"').Trim()
-                    let keyword = pair.ElementAt(1).Trim().Trim('"').Trim()
-                    where keyword.IsNotBlank()
-                    select new Keyword
-                    {
-                        // todo: map the source vocab IDs to "real" ones
-                        Vocab = MapSourceVocabToRealVocab(vocab),
-                        Value = MapSourceKeywordToRealKeyword(keyword),
-                    };
+            var keywords = (from each in input.Split(',') // keywords are separated by commas
+                            select ParseKeywordHelper(each)).ToList();
+            
+            // add the broad category for activities (not included in the source data)
+            keywords.Insert(0, new Keyword
+                {
+                   Vocab = "http://vocab.jncc.gov.uk/jncc-broad-category",
+                   Value = "marine-human-activities"
+                });
 
-            return q.ToList();
+            return keywords;
+        }
+
+        static Keyword ParseKeywordHelper(string s)
+        {
+            var vocabAndValue = (from x in s.Trim().Split(new [] {"::"}, StringSplitOptions.None)
+                                 select x.Trim()).ToList(); // vocab::value pairs are separated by two colons
+
+            if (vocabAndValue.Count == 1) // no vocab (just a value)
+            {
+                return new Keyword
+                    {
+                        Value = vocabAndValue.Single(),
+                    };
+            }
+            else
+            {
+                return new Keyword
+                    {
+                        Vocab = MapSourceVocabToRealVocab(vocabAndValue.ElementAt(0)),
+                        Value = vocabAndValue.ElementAt(1),
+                    };
+            }
         }
 
         public static string MapSourceVocabToRealVocab(string v)
         {
             switch (v)
             {
-//                case "jncc-broad-category": return "http://vocab.jncc.gov.uk/jncc-broad-category";
 //                case "SeabedSurveyPurpose": return "http://vocab.jncc.gov.uk/seabed-survey-purpose";
 //                case "SeabedSurveyTechnique": return "http://vocab.jncc.gov.uk/seabed-survey-technique";
 //                case "SeabedMapStatus": return "http://vocab.jncc.gov.uk/seabed-map-status";
 //                case "OriginalSeabedClassificationSystem": return "http://vocab.jncc.gov.uk/original-seabed-classification-system";
 //                case "MESH_GUI": return "http://vocab.jncc.gov.uk/mesh-gui";
 //                case "reference-manager-code": return "http://vocab.jncc.gov.uk/reference-manager-code";
-                default: throw new Exception("Unsupported vocab " + v);
+                default:
+                    return v; // throw new Exception("Unsupported vocab " + v);
             }
         }
-
-        public static string MapSourceKeywordToRealKeyword(string w)
-        {
-            switch (w)
-            {
-//                case "SeabedHabitatMaps": return "Seabed-Habitat-Maps";
-                default: return w;
-            }
-        }
-
-
-
     }
 
     [Explicit] // this data isn't seed data so these tests are/were only used for the "one-off" import
@@ -151,7 +160,7 @@ namespace Catalogue.Data.Import.Mappings
     {
         List<Record> imported;
 
-        [SetUp]
+        [TestFixtureSetUp]
         public void SetUp()
         {
             var store = new InMemoryDatabaseHelper().Create();
@@ -159,6 +168,7 @@ namespace Catalogue.Data.Import.Mappings
             using (var db = store.OpenSession())
             {
                 var importer = new Importer<ActivitiesMapping>(new FileSystem(), new RecordService(db, new RecordValidator()));
+                importer.SkipBadRecords = true; // todo remove this
                 importer.Import(@"C:\Work\pressures-data\Human_Activities_Metadata_Catalogue.csv");
                 db.SaveChanges();
 
@@ -166,11 +176,10 @@ namespace Catalogue.Data.Import.Mappings
                              .Customize(x => x.WaitForNonStaleResults())
                              .Take(1000).ToList();
             }
-            
         }
 
         [Test]
-        public void should_import_all_records()
+        public void should_import_every_record()
         {
             imported.Count().Should().Be(95);
         }
@@ -190,7 +199,7 @@ namespace Catalogue.Data.Import.Mappings
         [Test]
         public void should_import_notes()
         {
-            imported.Any(r => r.Notes.Contains("For more informaiton")).Should().BeTrue();
+            imported.Any(r => r.Notes.Contains("Further information can be found here")).Should().BeTrue();
         }
 
         [Test]
@@ -216,21 +225,34 @@ namespace Catalogue.Data.Import.Mappings
         [Test]
         public void should_import_topic_category()
         {
-            imported.Count(r => r.Gemini.TopicCategory == "geoscientificInformation").Should().Be(6);
-            imported.Count(r => r.Gemini.TopicCategory == "biota").Should().Be(182);
-            imported.Count(r => r.Gemini.TopicCategory == "environment").Should().Be(1);
-
-            (6 + 182 + 1).Should().Be(189); // lolz
+            imported.Count(r => r.Gemini.TopicCategory == "utilitiesCommunication").Should().BeGreaterThan(3);
+            imported.Count(r => r.Gemini.TopicCategory == "transportation").Should().BeGreaterThan(3);
+            imported.Count(r => r.Gemini.TopicCategory == "structure").Should().BeGreaterThan(3);
         }
 
+        [Test]
+        public void should_import_broad_category_keyword()
+        {
+            // activities data is categorised as 'marine-human-activities'
+            imported.Count(r => r.Gemini.Keywords
+                .Any(k => k.Vocab == "http://vocab.jncc.gov.uk/jncc-broad-category" && k.Value == "marine-human-activities"))
+                .Should().Be(93);
+        }
 
         [Test]
         public void should_import_keywords()
         {
-//            // mesh data is categorised as 'Seabed-Habitat-Maps'
-//            imported.Count(r => r.Gemini.Keywords
-//                .Any(k => k.Vocab == "http://vocab.jncc.gov.uk/jncc-broad-category" && k.Value == "Seabed-Habitat-Maps"))
-//                .Should().Be(189);
+            imported.Count(r => r.Gemini.Keywords
+                .Any(k => k.Vocab == "Wiki List" && k.Value == "Marina"))
+                .Should().BeGreaterThan(1);
+        }
+
+        [Test]
+        public void should_import_keywords_that_have_no_vocab_namespace()
+        {
+            imported.Count(r => r.Gemini.Keywords
+                .Any(k => k.Vocab.IsBlank() && k.Value == "Extraction"))
+                .Should().BeGreaterThan(1);
         }
 
 
