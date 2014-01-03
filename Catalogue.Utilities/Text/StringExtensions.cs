@@ -69,5 +69,14 @@ namespace Catalogue.Utilities.Text
             int iNextSpace = input.LastIndexOf(" ", length);
             return string.Format("{0}...", input.Substring(0, (iNextSpace > 0) ? iNextSpace : length).Trim());
         }
+
+        public static string FirstCharToLower(this string s)
+        {
+            if (String.IsNullOrEmpty(s))
+                return s;
+            if (s.Length == 1)
+                return s.ToLowerInvariant();
+            return s.Remove(1).ToLowerInvariant() + s.Substring(1);
+        }
     }
 }

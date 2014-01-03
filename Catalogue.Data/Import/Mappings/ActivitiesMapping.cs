@@ -32,10 +32,9 @@ namespace Catalogue.Data.Import.Mappings
             {
 
                 Map(m => m.Path).Name("JNCC Location");
-//                Map(m => m.TopCopy).ConvertUsing(row => true); // all mesh data is top copy
-//                Map(m => m.Status).ConvertUsing(row => Status.Publishable); // all mesh data is publishable
-//                Map(m => m.SourceIdentifier).Name("AlternateTitle"); // the mesh "GUI"
-//                Map(m => m.Notes);
+                Map(m => m.TopCopy).ConvertUsing(row => true); // all activities data is top copy
+                Map(m => m.Status).ConvertUsing(row => Status.Publishable); // all activities data is publishable
+                Map(m => m.Notes).Name("JNCC Notes");
 
                 References<GeminiMap>(m => m.Gemini);
             }
@@ -46,8 +45,11 @@ namespace Catalogue.Data.Import.Mappings
             public override void CreateMap()
             {
                 Map(m => m.Title).Name("Resource Title");
-//                Map(m => m.Abstract);
-//                Map(m => m.TopicCategory);
+                Map(m => m.Abstract).Name("Resource Abstract");
+                Map(m => m.TopicCategory)
+                    .ConvertUsing(row => row.GetField("Topic Category")
+                        .FirstCharToLower()); // correct capitalisation
+
 //                Map(m => m.Keywords).ConvertUsing(row =>
 //                {
 //                    string input = row.GetField("Keywords");
@@ -140,6 +142,8 @@ namespace Catalogue.Data.Import.Mappings
             }
         }
 
+
+
     }
 
     [Explicit] // this data isn't seed data so these tests are/were only used for the "one-off" import
@@ -172,11 +176,53 @@ namespace Catalogue.Data.Import.Mappings
         }
 
         [Test]
-        public void should_import_titles()
+        public void should_import_all_records_as_top_copy()
+        {
+            imported.All(r => r.TopCopy).Should().BeTrue();
+        }
+
+        [Test]
+        public void should_import_all_records_as_publishable()
+        {
+            imported.All(r => r.Status == Status.Publishable).Should().BeTrue();
+        }
+
+        [Test]
+        public void should_import_notes()
+        {
+            imported.Any(r => r.Notes.Contains("For more informaiton")).Should().BeTrue();
+        }
+
+        [Test]
+        public void should_import_gemini_records_for_all_records()
+        {
+            imported.All(r => r.Gemini != null).Should().BeTrue();
+        }
+
+        [Test]
+        public void should_import_title()
         {
             imported.First().Gemini.Title.Should().Be("Marine Aggregate Application Areas");
             imported.Last().Gemini.Title.Should().Be("Human Activities Geodatabase");
         }
+
+        [Test]
+        public void should_import_abstract()
+        {
+            imported.Select(r => r.Gemini.Abstract)
+                .Should().Contain(a => a != null && a.Contains("This dataset displays the location of marinas"));
+        }
+
+        [Test]
+        public void should_import_topic_category()
+        {
+            imported.Count(r => r.Gemini.TopicCategory == "geoscientificInformation").Should().Be(6);
+            imported.Count(r => r.Gemini.TopicCategory == "biota").Should().Be(182);
+            imported.Count(r => r.Gemini.TopicCategory == "environment").Should().Be(1);
+
+            (6 + 182 + 1).Should().Be(189); // lolz
+        }
+
 
         [Test]
         public void should_import_keywords()
@@ -187,15 +233,6 @@ namespace Catalogue.Data.Import.Mappings
 //                .Should().Be(189);
         }
 
-        [Test]
-        public void should_import_topic_category()
-        {
-//            imported.Count(r => r.Gemini.TopicCategory == "geoscientificInformation").Should().Be(6);
-//            imported.Count(r => r.Gemini.TopicCategory == "biota").Should().Be(182);
-//            imported.Count(r => r.Gemini.TopicCategory == "environment").Should().Be(1);
-//
-//            (6 + 182 + 1).Should().Be(189); // lolz
-        }
 
         [Test]
         public void source_identifiers_should_be_unique()
@@ -210,12 +247,6 @@ namespace Catalogue.Data.Import.Mappings
 //
 //            imported.Count(r => Uri.TryCreate(r.Path, UriKind.Absolute, out uri))
 //                    .Should().Be(189);
-        }
-
-        [Test]
-        public void all_records_should_be_marked_as_top_copy()
-        {
-            imported.Count(r => r.TopCopy).Should().Be(189);
         }
 
         [Test]
