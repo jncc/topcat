@@ -9,6 +9,7 @@ using CsvHelper;
 using CsvHelper.Configuration;
 using Moq;
 using NUnit.Framework;
+using Raven.Client;
 
 namespace Catalogue.Data.Import
 {
@@ -62,6 +63,17 @@ namespace Catalogue.Data.Import
 
                 n++;
             }
+        }
+    }
+
+    /// <summary>
+    /// Helper to conveniently create an importer instance.
+    /// </summary>
+    public static class Importer
+    {
+        public static Importer<T> CreateImporter<T>(IDocumentSession db) where T : IMapping, new()
+        {
+            return new Importer<T>(new FileSystem(), new RecordService(db, new RecordValidator()));
         }
     }
 
@@ -130,7 +142,5 @@ Another abstract,Some more notes,file:///z/some/location";
             }
         }
     }
-
-
 }
 

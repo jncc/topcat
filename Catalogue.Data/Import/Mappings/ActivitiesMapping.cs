@@ -51,18 +51,33 @@ namespace Catalogue.Data.Import.Mappings
                         .FirstCharToLower()); // correct capitalisation
 
                 Map(m => m.Keywords).ConvertUsing(row =>
-                {
-                    string input = row.GetField("Keyword");
-                    return ParseKeywords(input);
-                });
+                    {
+                        string input = row.GetField("Keyword");
+                        return ParseKeywords(input);
+                    });
 
-//                Map(m => m.TemporalExtent).ConvertUsing(row =>
-//                {
-//                    string beg = row.GetField("TemporalExtentBegin");
-//                    string end = row.GetField("TemporalExtentEnd");
-//
-//                    return new TemporalExtent { Begin = beg, End = end };
-//                });
+                Map(m => m.TemporalExtent).ConvertUsing(row =>
+                    {
+                        var raw = row.GetField("Temporal Extent");
+
+                        // todo this parsing code needs moving somewhere and testing
+
+                        if (raw.Contains("/"))
+                        {
+                            var parsed = Regex.Match(raw, @"(.*)/(.*)") // 'from-date/to-date' or just 'single-date'
+                                .Groups.Cast<Group>()
+                                .Select(g => g.Value)
+                                .ToList(); // should be either a single value, or a the value followed by two (possibly empty) from/to values
+
+                            if (parsed.Count == 3)
+                                return new TemporalExtent { Begin = parsed.ElementAt(1), End = parsed.ElementAt(2) };
+                        }
+
+                        // let's put the single date in both - gemini actually allows for a single date,
+                        // but we haven't allowed that in our profile (does it really make much sense?)
+                        return new TemporalExtent { Begin = raw, End = raw };
+                    });
+
 //                Map(m => m.DatasetReferenceDate);
 //                Map(m => m.Lineage);
 //                Map(m => m.ResourceLocator);
@@ -124,10 +139,7 @@ namespace Catalogue.Data.Import.Mappings
 
             if (vocabAndValue.Count == 1) // no vocab (just a value)
             {
-                return new Keyword
-                    {
-                        Value = vocabAndValue.Single(),
-                    };
+                return new Keyword { Value = vocabAndValue.Single() };
             }
             else
             {
@@ -167,7 +179,7 @@ namespace Catalogue.Data.Import.Mappings
 
             using (var db = store.OpenSession())
             {
-                var importer = new Importer<ActivitiesMapping>(new FileSystem(), new RecordService(db, new RecordValidator()));
+                var importer = Importer.CreateImporter<ActivitiesMapping>(db);
                 importer.SkipBadRecords = true; // todo remove this
                 importer.Import(@"C:\Work\pressures-data\Human_Activities_Metadata_Catalogue.csv");
                 db.SaveChanges();
@@ -242,24 +254,46 @@ namespace Catalogue.Data.Import.Mappings
         [Test]
         public void should_import_keywords()
         {
-            imported.Count(r => r.Gemini.Keywords
-                .Any(k => k.Vocab == "Wiki List" && k.Value == "Marina"))
-                .Should().BeGreaterThan(1);
+            imported.SelectMany(r => r.Gemini.Keywords)
+                .Should().Contain(k => k.Vocab == "Wiki List" && k.Value == "Marina");
         }
 
         [Test]
         public void should_import_keywords_that_have_no_vocab_namespace()
         {
-            imported.Count(r => r.Gemini.Keywords
-                .Any(k => k.Vocab.IsBlank() && k.Value == "Extraction"))
-                .Should().BeGreaterThan(1);
+            imported.SelectMany(r => r.Gemini.Keywords)
+                .Should().Contain(k => k.Vocab.IsBlank() && k.Value == "Extraction");
+        }
+
+        [Test]
+        public void should_import_temporal_extent()
+        {
+            imported.Should().Contain(r =>
+                r.Gemini.TemporalExtent.Begin == "2006" && r.Gemini.TemporalExtent.End == "2010");
+        }
+
+        [Test]
+        public void should_import_temporal_extent_with_single_date()
+        {
+            imported.Should().Contain(r =>
+                r.Gemini.TemporalExtent.Begin == "2010" && r.Gemini.TemporalExtent.End == "2010");
+        }
+
+        [Test]
+        public void should_not_import_temporal_extent_with_multiple_dates()
+        {
+            // todo remove https://github.com/JNCC-dev-team/catalogue/issues/18
+            imported.Should().NotContain(r => r.Gemini.TemporalExtent.Begin == "Jan, Mar, Jun, Sep 2010");
         }
 
 
+
+
         [Test]
-        public void source_identifiers_should_be_unique()
+        public void source_identifiers_should_be_empty()
         {
-//            imported.Select(r => r.SourceIdentifier).Distinct().Count().Should().Be(189);
+            // activities records have no IDs other than the ones we generate
+            imported.All(r => r.SourceIdentifier == null).Should().BeTrue();
         }
 
         [Test]
