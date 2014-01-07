@@ -137,7 +137,7 @@ namespace Catalogue.Data.Import.Mappings
             var vocabAndValue = (from x in s.Trim().Split(new [] {"::"}, StringSplitOptions.None)
                                  select x.Trim()).ToList(); // vocab::value pairs are separated by two colons
 
-            if (vocabAndValue.Count == 1) // no vocab (just a value)
+            if (vocabAndValue.Count <= 1) // no vocab (just a value)
             {
                 return new Keyword { Value = vocabAndValue.Single() };
             }
@@ -151,18 +151,48 @@ namespace Catalogue.Data.Import.Mappings
             }
         }
 
-        public static string MapSourceVocabToRealVocab(string v)
+        public static string MapSourceVocabToRealVocab(string vocab)
         {
-            switch (v)
+            var map = new Dictionary<string, string>
+                {
+                    { "BMAPA",  "http://www.bmapa.org/documents/BMAPA_Glossary.pdf" },
+                    { "FAO",  "http://www.fao.org/fi/glossary/aquaculture/" },
+                    { "General Cable",  "http://www.generalcable.com/GeneralCable/en-US/Resources/Glossary/" },
+                    { "SNH",  "http://www.snh.org.uk/publications/on-line/heritagemanagement/erosion/7.1.shtml" },
+                    { "EA",  "http://evidence.environment-agency.gov.uk/FCERM/Libraries/Fluvial_Documents/Glossary.sflb.ashx" },
+                    { "BGS",  "http://www.bgs.ac.uk/mineralsUK/glossary.html" },
+                    { "Wiki",  "http://en.wikipedia.org/wiki/Glossary_of_nautical_terms" },
+                    { "DOD",  "http://www.dtic.mil/doctrine/dod_dictionary/" },
+                    { "Oil&GasUK",  "http://www.oilandgasuk.co.uk/glossary.cfm" },
+                    { "WikiFish",  "http://en.wikipedia.org/wiki/Glossary_of_fishery_terms" },
+                    { "Energy",  "http://www.enchantedlearning.com/wordlist/energy.shtml" },
+                };
+
+            var real = (from p in map
+                        let a = p.Key.ToLower()
+                        let b = vocab.ToLower()
+                        where a == b || a + " list" == b || a + "-list" == b
+                        select p.Value).SingleOrDefault();
+
+            if (real == null)
+                throw new Exception("Unsupported vocab " + vocab);
+
+            return real;
+            switch (vocab)
             {
-//                case "SeabedSurveyPurpose": return "http://vocab.jncc.gov.uk/seabed-survey-purpose";
-//                case "SeabedSurveyTechnique": return "http://vocab.jncc.gov.uk/seabed-survey-technique";
-//                case "SeabedMapStatus": return "http://vocab.jncc.gov.uk/seabed-map-status";
-//                case "OriginalSeabedClassificationSystem": return "http://vocab.jncc.gov.uk/original-seabed-classification-system";
-//                case "MESH_GUI": return "http://vocab.jncc.gov.uk/mesh-gui";
-//                case "reference-manager-code": return "http://vocab.jncc.gov.uk/reference-manager-code";
+                case "BMAPA": return "http://www.bmapa.org/documents/BMAPA_Glossary.pdf";
+                case "FAO": return "http://www.fao.org/fi/glossary/aquaculture/";
+                case "General Cable": return "http://www.generalcable.com/GeneralCable/en-US/Resources/Glossary/";
+                case "SNH": return "http://www.snh.org.uk/publications/on-line/heritagemanagement/erosion/7.1.shtml";
+                case "EH": return "http://evidence.environment-agency.gov.uk/FCERM/Libraries/Fluvial_Documents/Glossary.sflb.ashx";
+                case "BGS": return "http://www.bgs.ac.uk/mineralsUK/glossary.html";
+                case "Wiki": return "http://en.wikipedia.org/wiki/Glossary_of_nautical_terms";
+                case "DOD": return "http://www.dtic.mil/doctrine/dod_dictionary/";
+                case "Oil&GasUK": return "http://www.oilandgasuk.co.uk/glossary.cfm";
+                case "WikiFish": return "http://en.wikipedia.org/wiki/Glossary_of_fishery_terms";
+                case "Energy": return "http://www.enchantedlearning.com/wordlist/energy.shtml";
                 default:
-                    return v; // throw new Exception("Unsupported vocab " + v);
+                    throw new Exception("Unsupported vocab " + vocab);
             }
         }
     }
@@ -264,6 +294,24 @@ namespace Catalogue.Data.Import.Mappings
             imported.SelectMany(r => r.Gemini.Keywords)
                 .Should().Contain(k => k.Vocab.IsBlank() && k.Value == "Extraction");
         }
+
+        [Test]
+        public void should_import_keywords_with_either_an_http_namespace_or_no_namespace()
+        {
+            // a test to check that we're converting the short vocab list names to a suitable http namespace 
+            imported.SelectMany(r => r.Gemini.Keywords)
+                .All(k => k.Vocab.IsBlank() || k.Vocab.StartsWith("http://"))
+                .Should().BeTrue();
+        }
+
+        [Test]
+        public void should_import_keywords_with_wikipedia_glossary_of_nautical_terms_namespace()
+        {
+            // just check one particular known namespace 
+            imported.SelectMany(r => r.Gemini.Keywords)
+                    .Should().Contain(k => k.Vocab == "http://en.wikipedia.org/wiki/Glossary_of_nautical_terms");
+        }
+
 
         [Test]
         public void should_import_temporal_extent()
