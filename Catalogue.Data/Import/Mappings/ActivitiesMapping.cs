@@ -78,7 +78,8 @@ namespace Catalogue.Data.Import.Mappings
                         return new TemporalExtent { Begin = raw, End = raw };
                     });
 
-//                Map(m => m.DatasetReferenceDate);
+                Map(m => m.DatasetReferenceDate).Name("Dataset reference date");
+
 //                Map(m => m.Lineage);
 //                Map(m => m.ResourceLocator);
 //                Map(m => m.AdditionalInformationSource);
@@ -168,36 +169,20 @@ namespace Catalogue.Data.Import.Mappings
                     { "Energy",  "http://www.enchantedlearning.com/wordlist/energy.shtml" },
                 };
 
-            var real = (from p in map
-                        let a = p.Key.ToLower()
-                        let b = vocab.ToLower()
-                        where a == b || a + " list" == b || a + "-list" == b
-                        select p.Value).SingleOrDefault();
+            string real = (from p in map
+                           let a = p.Key.ToLower()
+                           let b = vocab.ToLower()
+                           where a == b || a + " list" == b || a + "-list" == b
+                           select p.Value).SingleOrDefault();
 
             if (real == null)
                 throw new Exception("Unsupported vocab " + vocab);
 
             return real;
-            switch (vocab)
-            {
-                case "BMAPA": return "http://www.bmapa.org/documents/BMAPA_Glossary.pdf";
-                case "FAO": return "http://www.fao.org/fi/glossary/aquaculture/";
-                case "General Cable": return "http://www.generalcable.com/GeneralCable/en-US/Resources/Glossary/";
-                case "SNH": return "http://www.snh.org.uk/publications/on-line/heritagemanagement/erosion/7.1.shtml";
-                case "EH": return "http://evidence.environment-agency.gov.uk/FCERM/Libraries/Fluvial_Documents/Glossary.sflb.ashx";
-                case "BGS": return "http://www.bgs.ac.uk/mineralsUK/glossary.html";
-                case "Wiki": return "http://en.wikipedia.org/wiki/Glossary_of_nautical_terms";
-                case "DOD": return "http://www.dtic.mil/doctrine/dod_dictionary/";
-                case "Oil&GasUK": return "http://www.oilandgasuk.co.uk/glossary.cfm";
-                case "WikiFish": return "http://en.wikipedia.org/wiki/Glossary_of_fishery_terms";
-                case "Energy": return "http://www.enchantedlearning.com/wordlist/energy.shtml";
-                default:
-                    throw new Exception("Unsupported vocab " + vocab);
-            }
         }
     }
 
-    [Explicit] // this data isn't seed data so these tests are/were only used for the "one-off" import
+    [Explicit] // this isn't seed data, so these tests are (were) only used for the "one-off" import
     class when_importing_activities_data
     {
         List<Record> imported;
@@ -282,13 +267,6 @@ namespace Catalogue.Data.Import.Mappings
         }
 
         [Test]
-        public void should_import_keywords()
-        {
-            imported.SelectMany(r => r.Gemini.Keywords)
-                .Should().Contain(k => k.Vocab == "Wiki List" && k.Value == "Marina");
-        }
-
-        [Test]
         public void should_import_keywords_that_have_no_vocab_namespace()
         {
             imported.SelectMany(r => r.Gemini.Keywords)
@@ -307,9 +285,8 @@ namespace Catalogue.Data.Import.Mappings
         [Test]
         public void should_import_keywords_with_wikipedia_glossary_of_nautical_terms_namespace()
         {
-            // just check one particular known namespace 
             imported.SelectMany(r => r.Gemini.Keywords)
-                    .Should().Contain(k => k.Vocab == "http://en.wikipedia.org/wiki/Glossary_of_nautical_terms");
+                .Should().Contain(k => k.Vocab == "http://en.wikipedia.org/wiki/Glossary_of_nautical_terms");
         }
 
 
@@ -334,6 +311,12 @@ namespace Catalogue.Data.Import.Mappings
             imported.Should().NotContain(r => r.Gemini.TemporalExtent.Begin == "Jan, Mar, Jun, Sep 2010");
         }
 
+        [Test]
+        public void should_import_dataset_reference_date()
+        {
+            imported.Should().Contain(r => r.Gemini.DatasetReferenceDate == "2011-07");
+            imported.Should().Contain(r => r.Gemini.DatasetReferenceDate == "2012-08-15");
+        }
 
 
 
