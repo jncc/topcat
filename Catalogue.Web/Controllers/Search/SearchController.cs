@@ -62,13 +62,15 @@ namespace Catalogue.Web.Controllers.Search
                                     ?? x.result.Gemini.Title.TruncateNicely(200), // could be better. always want the whole title, highlighted
                                 Snippet = x.abstractFragments.Select(f => f.TruncateNicely(200)).FirstOrDefault()
                                     ?? x.result.Gemini.Abstract.TruncateNicely(200),
-                                Format = new FormatOutputModel
-                                    {
-                                        Glyph = (from g in DataFormats.Known
-                                                 from f in g.Formats
-                                                 where f.Name == x.result.Gemini.DataFormat
-                                                 select g.Glyph).FirstOrDefault() // todo this is quick and dirty 
-                                    },
+                                Format = (from g in DataFormats.Known
+                                          from f in g.Formats
+                                          where f.Name == x.result.Gemini.DataFormat
+                                          select new FormatOutputModel
+                                              {
+                                                  Group = g.Name,
+                                                  Glyph = g.Glyph,
+                                                  Name = f.Name
+                                              }).FirstOrDefault(),
                                 Keywords = x.result.Gemini.Keywords.OrderBy(k => k.Vocab).ToList(),
                                 TopCopy = x.result.TopCopy,
                             })
