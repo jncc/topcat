@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Catalogue.Data.Model;
+using Catalogue.Gemini.DataFormats;
 using Catalogue.Tests.Utility;
 using Catalogue.Utilities.Text;
 using FluentAssertions;
@@ -74,6 +75,13 @@ namespace Catalogue.Tests.Slow.Catalogue.Import
         public void should_import_data_format()
         {
             imported.Count(r => r.Gemini.DataFormat == "Geographic Information System").Should().BeGreaterThan(100);
+        }
+
+        [Test]
+        public void should_import_only_known_data_formats()
+        {
+            imported.Select(r => r.Gemini.DataFormat)
+                .Should().OnlyContain(x => DataFormats.Known.SelectMany(g => g.Formats).Any(f => f.Name == x));
         }
     }
 }

@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using Catalogue.Data.Model;
 using Catalogue.Data.Test;
 using Catalogue.Data.Write;
+using Catalogue.Gemini.DataFormats;
 using Catalogue.Gemini.Model;
 using Catalogue.Utilities.Text;
 using CsvHelper.Configuration;
@@ -336,10 +337,16 @@ namespace Catalogue.Data.Import.Mappings
         }
 
         [Test]
-        public void should_import_data_format()
+        public void should_import__data_format()
         {
-            var pronomFormats = new List<string> { "ESRI Arc/View ShapeFile", "InterBase Database" };
-            imported.Should().OnlyContain(r => pronomFormats.Contains(r.Gemini.DataFormat));
+            imported.Should().Contain(r => r.Gemini.DataFormat == "ESRI Arc/View ShapeFile");
+        }
+
+        [Test]
+        public void should_import_only_known_data_formats()
+        {
+            imported.Select(r => r.Gemini.DataFormat)
+                .Should().OnlyContain(x => DataFormats.Known.SelectMany(g => g.Formats).Any(f => f.Name == x));
         }
 
 
