@@ -34,17 +34,23 @@
     <hr />
 </div>
 
-<div ng-repeat="r in result.results" class="search-result">
-    <div class="search-title">
-        <a ng-href="#/editor/{{r.id}}" ng-bind-html="r.title"></a>
-        <span tc-top-copy-icon ng-show="r.topCopy" title="Top copy"></span>
+<div ng-repeat="r in result.results" class="layout-row search-result">
+    <div class="layout-col search-format">
+        <span class="dark glyphicon {{r.format.glyph}}"></span>
     </div>
-    <div ng-bind-html="r.snippet"></div>
-    <div class="search-tags">
-        <span ng-repeat="k in r.keywords" tc-tag>
-            <span ng-style="{ 'background-color': hashStringToColor(k.vocab) }">&nbsp;</span>
-            {{ k.value }}
-        </span>
+    <div class="layout-col">
+        <div class="search-title">
+            <a ng-href="#/editor/{{r.id}}" ng-bind-html="r.title"></a>
+            <span tc-top-copy-icon ng-show="r.topCopy" title="Top copy"></span>
+        </div>
+        <div ng-bind-html="r.snippet"></div>
+        <div class="search-tags">
+            <span ng-repeat="k in r.keywords" tc-tag>
+                <span ng-style="{ 'background-color': hashStringToColor(k.vocab) }">&nbsp;</span>
+                {{ k.value }}
+            </span>
+        </div>
+        
     </div>
 </div>
 

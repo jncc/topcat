@@ -11,6 +11,14 @@
   display: table-cell;
   vertical-align: middle;
 }
+.layout-row {
+  display: table;
+  width: 100%;
+}
+.layout-row .layout-col {
+  display: table-cell;
+  vertical-align: middle;
+}
 .pointable {
   cursor: pointer;
 }
@@ -91,16 +99,30 @@ hr {
   padding-left: 3em;
 }
 .search-result {
-  margin-bottom: 1.7em;
+  padding-bottom: 0.8em;
+  border-bottom: 1px solid #eee;
+  margin-bottom: 0.8em;
 }
 .search-result p b {
   color: #555;
+}
+.search-result .search-format {
+  width: 1px;
+  vertical-align: top;
+  padding-right: 0.4em;
+  font-size: x-large;
+}
+.search-result .search-format .glyphicon {
+  color: #666666;
+}
+.search-result .search-format .glyphicon:hover {
+  color: #444444;
 }
 .search-result .search-title a {
   font-size: larger;
 }
 .search-result .search-title .glyphicon {
-  margin-left: 0.2em;
+  margin-left: 0.3em;
   color: #666666;
 }
 .search-result .search-title .glyphicon:hover {
@@ -110,6 +132,7 @@ hr {
   margin-top: 6px;
 }
 .tag {
+  font-size: small;
   white-space: nowrap;
   display: inline-block;
   background-color: #eeeeee;
@@ -132,14 +155,6 @@ hr {
   font-weight: 700;
   line-height: 16px;
   text-shadow: 0 1px #000;
-}
-.layout-row {
-  display: table;
-  width: 100%;
-}
-.layout-row .layout-col {
-  display: table-cell;
-  vertical-align: middle;
 }
 .date-container {
   width: 11em;

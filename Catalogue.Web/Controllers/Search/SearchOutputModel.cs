@@ -19,6 +19,7 @@ namespace Catalogue.Web.Controllers.Search
     {
         public Guid Id { get; set; }
         public string Title { get; set; }
+        public FormatOutputModel Format { get; set; }
         public string Snippet { get; set; }
         public List<Keyword> Keywords { get; set; }
         public bool TopCopy { get; set; }
@@ -30,5 +31,12 @@ namespace Catalogue.Web.Controllers.Search
     {
         public string Q { get; set; }
         public int    P { get; set; }
+    }
+
+    public class FormatOutputModel
+    {
+        public string Name { get; set; }
+        public string Group { get; set; }
+        public string Glyph { get; set; }
     }
 }

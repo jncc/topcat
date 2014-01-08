@@ -35,6 +35,15 @@ html { overflow-y: scroll; }
     vertical-align: middle;
 }
 
+// custom table-based layout possibly because i don't quite get boostrap
+.layout-row {
+    display: table;
+    width: 100%;
+    .layout-col {
+        .cell-mixin;
+    }
+}
+
 .pointable { cursor: pointer; }
 
 .hoverable-glyphicon {
@@ -124,13 +133,25 @@ hr {
         color: #555;
     }
     // spacing between each result
-    margin-bottom: 1.7em;
+    padding-bottom: 0.8em;
+    border-bottom: 1px solid #eee;
+    margin-bottom: 0.8em;
+
+    .search-format {
+        width: 1px; // as small as necessary
+        vertical-align: top;
+        padding-right: 0.4em;
+        font-size: x-large;
+        .glyphicon {
+            .hoverable-glyphicon;
+        }
+    }
 
     .search-title {
         a { font-size: larger; }
 
         .glyphicon {
-            margin-left: 0.2em;
+            margin-left: 0.3em;
             .hoverable-glyphicon;
         }
     }
@@ -146,6 +167,7 @@ hr {
 // ----
 
 .tag {
+    font-size: small;
     white-space:nowrap;
     display: inline-block;
     background-color: @pale;
@@ -182,15 +204,6 @@ hr {
 // ------
 // editor
 // ------
-
-// custom table-based layout possibly because i don't quite get boostrap
-.layout-row {
-    display: table;
-    width: 100%;
-    .layout-col {
-        .cell-mixin;
-    }
-}
 
 .date-container { width: 11em; } // consistent widths for date fields
 
