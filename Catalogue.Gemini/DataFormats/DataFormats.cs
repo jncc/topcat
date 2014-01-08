@@ -10,6 +10,8 @@ namespace Catalogue.Gemini.DataFormats
     {
         public static readonly DataFormatGroupCollection Known = new DataFormatGroupCollection
             {
+                 { "Default", "glyphicon-th", new DataFormatInfoCollection()
+                 },
                  { "Spreadsheet", "glyphicon-list", new DataFormatInfoCollection
                      {
                          { "xls", "Microsoft Excel for Windows" },
@@ -22,7 +24,7 @@ namespace Catalogue.Gemini.DataFormats
                          { "???", "Microsoft SQL Server Database" }, // not apparently in pronom
                      }
                  },
-                 { "Text", "glyphicon-font", new DataFormatInfoCollection // glyphicon-align-left ?
+                 { "Text", "glyphicon-font", new DataFormatInfoCollection
                      {
                          { "csv", "Comma Separated Values" },
                          { "tsv", "Tab-separated values" }, // nice consistency, pronom (!)
@@ -30,19 +32,25 @@ namespace Catalogue.Gemini.DataFormats
                  },
                  { "Geospatial", "glyphicon-map-marker", new DataFormatInfoCollection
                      {
-                         { "", "" },
+                         { "shp", "ESRI Arc/View ShapeFile" },
+                     }
+                 },
+                 { "Image", "glyphicon-picture", new DataFormatInfoCollection
+                     {
+                         { "png", "Portable Network Graphics" },
+                     }
+                 },
+                 { "Audio", "glyphicon-volume-up", new DataFormatInfoCollection 
+                     {
+                         { "mp3", "MPEG 1/2 Audio Layer 3" },
+                     }
+                 },
+                 { "Video", "glyphicon-facetime-video", new DataFormatInfoCollection // or  glyphicon-film?
+                     {
+                         { "mpg", "MPEG-2 Video Format" },
                      }
                  },
             };
-
-        // spreadsheet: glyphicon-list
-        // database: glyphicon-hdd
-        // csv, tsv: glyphicon-align-left glyphicon-font
-        // spatial: glyphicon-map-marker
-        // audio: glyphicon-music glyphicon-volume-up
-        // image: glyphicon-picture glyphicon-eye-open glyphicon-tree-deciduous (?)
-        // video: glyphicon-facetime-video glyphicon-film
-        // default: glyphicon-th
     }
 
     public class DataFormatInfo

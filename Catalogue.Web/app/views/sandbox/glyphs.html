@@ -1,11 +1,17 @@
 ﻿
+<br />
 
+<div ng-repeat="g in formats"> <!-- formats come in groups -->
 
-<div ng-repeat="g in formats" style="font-size: larger">
-    <span class="glyphicon {{g.glyph}}"></span> {{g.name}}
-
-    <div ng-repeat="f in g.formats">
-        <div>{{f.name}}</div>
+    <div style="font-size: large">
+        <span class="glyphicon {{g.glyph}}"></span> {{g.name}}
     </div>
 
+    <div ng-repeat="f in g.formats">
+        <div>
+            <b>{{f.code}}</b> {{f.name}}
+        </div>
+    </div>
+    <br />
 </div>
+

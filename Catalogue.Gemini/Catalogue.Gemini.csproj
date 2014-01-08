@@ -49,7 +49,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="DataFormats\DataFormatInfo.cs" />
+    <Compile Include="DataFormats\DataFormats.cs" />
     <Compile Include="Encoding\Ns.cs" />
     <Compile Include="Encoding\when_creating_document_from_blank_record.cs" />
     <Compile Include="Encoding\when_updating_the_metadata_language.cs" />
