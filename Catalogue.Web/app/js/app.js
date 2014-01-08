@@ -32,6 +32,9 @@
       }).when('/sandbox/colours', {
         controller: 'SandboxController',
         templateUrl: 'views/sandbox/colours.html'
+      }).when('/sandbox/glyphs', {
+        controller: 'SandboxController',
+        templateUrl: 'views/sandbox/glyphs.html'
       }).otherwise({
         redirectTo: '/'
       });

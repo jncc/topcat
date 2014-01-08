@@ -165,6 +165,7 @@
     <Compile Include="Code\Account\UserContext.cs" />
     <Compile Include="Code\Settings.cs" />
     <Compile Include="Controllers\Account\AccountController.cs" />
+    <Compile Include="Controllers\Formats\FormatsController.cs" />
     <Compile Include="Controllers\Home\HomeController.cs" />
     <Compile Include="Controllers\Items\ItemsController.cs" />
     <Compile Include="Controllers\Keywords\KeywordsController.cs" />
@@ -218,7 +219,13 @@
     <Content Include="app\js\controllers\MainController.min.js">
       <DependentUpon>MainController.coffee</DependentUpon>
     </Content>
-    <Content Include="app\js\controllers\SandboxController.js" />
+    <Content Include="app\js\controllers\SandboxController.js">
+      <DependentUpon>SandboxController.coffee</DependentUpon>
+    </Content>
+    <Content Include="app\js\controllers\SandboxController.min.js">
+      <DependentUpon>SandboxController.coffee</DependentUpon>
+    </Content>
+    <Content Include="app\js\controllers\SandboxControllerx.js" />
     <Content Include="app\js\controllers\SearchController.js">
       <DependentUpon>SearchController.coffee</DependentUpon>
     </Content>
@@ -292,6 +299,7 @@
     <Content Include="app\views\editor\tags-and-topic.html" />
     <Content Include="app\views\editor\title-and-location.html" />
     <Content Include="app\views\sandbox\colours.html" />
+    <Content Include="app\views\sandbox\glyphs.html" />
     <Content Include="app\views\search\search.html" />
     <Content Include="favicon.ico" />
     <Content Include="Global.asax" />
@@ -370,6 +378,9 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="app\js\controllers\MainController.coffee" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="app\js\controllers\SandboxController.coffee" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

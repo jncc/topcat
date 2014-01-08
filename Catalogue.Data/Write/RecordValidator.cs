@@ -84,5 +84,9 @@ namespace Catalogue.Data.Write
             var result = new RecordValidator().Validate(validBlankRecord.With(r => r.Gemini.TopicCategory = ""));
             result.Success.Should().BeTrue();
         }
+
+        // todo
+
+        // publishable records must have a resourcelocator, which must be a public url
     }
 }

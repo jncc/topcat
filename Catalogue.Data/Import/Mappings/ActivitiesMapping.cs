@@ -79,11 +79,10 @@ namespace Catalogue.Data.Import.Mappings
                     });
 
                 Map(m => m.DatasetReferenceDate).Name("Dataset reference date");
-
-//                Map(m => m.Lineage);
-//                Map(m => m.ResourceLocator);
-//                Map(m => m.AdditionalInformationSource);
-//                Map(m => m.DataFormat);
+                Map(m => m.Lineage);
+//              Map(m => m.ResourceLocator); // not present
+//              Map(m => m.AdditionalInformationSource); // not present
+                Map(m => m.DataFormat).Name("Data format");
 //                Map(m => m.ResponsibleOrganisation).ConvertUsing(row =>
 //                {
 //                    string name = row.GetField("ResponsibleOrganisationName");
@@ -318,6 +317,33 @@ namespace Catalogue.Data.Import.Mappings
             imported.Should().Contain(r => r.Gemini.DatasetReferenceDate == "2012-08-15");
         }
 
+        [Test]
+        public void should_import_lineage()
+        {
+            imported.Should().Contain(r => r.Gemini.Lineage == "Anchorage areas provided by Chamber of Shipping.");
+        }
+
+        [Test]
+        public void should_not_import_resource_locator()
+        {
+            imported.Should().NotContain(r => r.Gemini.ResourceLocator != null);
+        }
+
+        [Test]
+        public void should_not_import_additional_information_source()
+        {
+            imported.Should().NotContain(r => r.Gemini.AdditionalInformationSource != null);
+        }
+
+        [Test]
+        public void should_import_data_format()
+        {
+            var pronomFormats = new List<string> { "ESRI Arc/View ShapeFile", "InterBase Database" };
+            imported.Should().OnlyContain(r => pronomFormats.Contains(r.Gemini.DataFormat));
+        }
+
+
+
 
 
         [Test]
@@ -334,12 +360,6 @@ namespace Catalogue.Data.Import.Mappings
 //
 //            imported.Count(r => Uri.TryCreate(r.Path, UriKind.Absolute, out uri))
 //                    .Should().Be(189);
-        }
-
-        [Test]
-        public void should_import_data_format()
-        {
-//            imported.Count(r => r.Gemini.DataFormat == "Geographic Information System").Should().BeGreaterThan(100);
         }
     }
 

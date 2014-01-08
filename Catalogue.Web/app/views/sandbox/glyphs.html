@@ -1,0 +1,11 @@
+﻿
+
+
+<div ng-repeat="g in formats" style="font-size: larger">
+    <span class="glyphicon {{g.glyph}}"></span> {{g.name}}
+
+    <div ng-repeat="f in g.formats">
+        <div>{{f.name}}</div>
+    </div>
+
+</div>

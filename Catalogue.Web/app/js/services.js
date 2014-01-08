@@ -61,6 +61,15 @@
     };
   });
 
+  module.factory('Formats', function($http, $q) {
+    var d;
+    d = $q.defer();
+    $http.get('../api/formats').success(function(data) {
+      return d.resolve(data);
+    });
+    return d.promise;
+  });
+
   module.factory('defaults', function() {
     return {
       name: 'John Smit',

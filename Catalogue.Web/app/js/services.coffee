@@ -32,6 +32,15 @@ module.factory 'misc', ->
             rgb = hslToRgb(hue, 0.7, 0.5)
             'rgb(' + rgb[0].toFixed(0) + ',' + rgb[1].toFixed(0) + ',' + rgb[2].toFixed(0) + ')';
 
+
+# just currently using this for a spike in SandboxController
+module.factory 'Formats', ($http, $q) ->
+    d = $q.defer()
+    $http.get('../api/formats').success (data) ->
+        d.resolve data
+    d.promise
+
+
 module.factory 'defaults', ->
     name: 'John Smit',
     line1: '123 Main St.',
