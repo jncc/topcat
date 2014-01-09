@@ -89,8 +89,8 @@ namespace Catalogue.Data.Write
 
         // publishable records must have a resourcelocator, which must be a public url
         // responsible party role should be one of code list in ResponsiblePartyRoles.Allowed
-        
-        
-
+        // warning for blank use constraints - could be "no conditions apply" if that's what's meant
+        // warning for unknown data format
+        // valid email addresses, dates, ...
     }
 }

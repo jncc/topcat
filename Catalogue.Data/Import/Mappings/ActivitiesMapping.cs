@@ -93,8 +93,8 @@ namespace Catalogue.Data.Import.Mappings
                     });
 
                 Map(m => m.LimitationsOnPublicAccess).Name("Limitations on public access");
-//                Map(m => m.UseConstraints);
-//                Map(m => m.SpatialReferenceSystem);
+                Map(m => m.UseConstraints).Name("Use constraints");
+                Map(m => m.SpatialReferenceSystem).Name("Spatial reference system");
 //                Map(m => m.MetadataDate);
 //                Map(m => m.MetadataLanguage);
 //                Map(m => m.MetadataPointOfContact).ConvertUsing(row =>
@@ -364,6 +364,19 @@ namespace Catalogue.Data.Import.Mappings
                 .Should().Contain("Data publically available on the Crown Estate website");
         }
 
+        [Test]
+        public void should_import_use_contraints()
+        {
+            imported.Select(r => r.Gemini.UseConstraints)
+                .Should().Contain(s => s.StartsWith("By using the data you agree to the following terms & conditions"));
+        }
+
+        [Test]
+        public void should_import_spatial_reference_system()
+        {
+            imported.Select(r => r.Gemini.SpatialReferenceSystem)
+                .Should().Contain("todo");
+        }
 
 
 
