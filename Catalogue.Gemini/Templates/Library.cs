@@ -78,7 +78,7 @@ namespace Catalogue.Gemini.Templates
                     {
                         Name = "Joint Nature Conservation Committee (JNCC)",
                         Email = "data@jncc.gov.uk",
-                        Role = "distributor",
+                        Role = "owner",
                     },
                 LimitationsOnPublicAccess = "no limitations",
                 UseConstraints = "no conditions apply",
