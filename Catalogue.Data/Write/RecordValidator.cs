@@ -88,5 +88,9 @@ namespace Catalogue.Data.Write
         // todo
 
         // publishable records must have a resourcelocator, which must be a public url
+        // responsible party role should be one of code list in ResponsiblePartyRoles.Allowed
+        
+        
+
     }
 }

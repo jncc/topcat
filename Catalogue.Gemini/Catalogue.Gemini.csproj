@@ -59,6 +59,7 @@
     <Compile Include="Model\Metadata.cs" />
     <Compile Include="Model\Vocabulary.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Roles\ResponsiblePartyRoles.cs" />
     <Compile Include="Templates\Library.cs" />
     <Compile Include="Validation\ValidationResultSet.cs" />
     <Compile Include="Validation\Validator.cs" />

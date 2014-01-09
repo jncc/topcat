@@ -33,8 +33,8 @@ namespace Catalogue.Data.Import.Mappings
             {
 
                 Map(m => m.Path).Name("JNCC Location");
-                Map(m => m.TopCopy).ConvertUsing(row => true); // all activities data is top copy
-                Map(m => m.Status).ConvertUsing(row => Status.Publishable); // all activities data is publishable
+                Map(m => m.TopCopy).ConvertUsing(row => false); // activities data is not top copy
+                Map(m => m.Status).ConvertUsing(row => Status.Internal); // activities data is not publishable
                 Map(m => m.Notes).Name("JNCC Notes");
 
                 References<GeminiMap>(m => m.Gemini);
@@ -84,15 +84,15 @@ namespace Catalogue.Data.Import.Mappings
 //              Map(m => m.ResourceLocator); // not present
 //              Map(m => m.AdditionalInformationSource); // not present
                 Map(m => m.DataFormat).Name("Data format");
-//                Map(m => m.ResponsibleOrganisation).ConvertUsing(row =>
-//                {
-//                    string name = row.GetField("ResponsibleOrganisationName");
-//                    string email = row.GetField("ResponsibleOrganisationEmail");
-//                    string role = row.GetField("ResponsibleOrganisationRole");
-//
-//                    return new ResponsibleParty { Name = name, Email = email, Role = role };
-//                });
-//                Map(m => m.LimitationsOnPublicAccess);
+
+                Map(m => m.ResponsibleOrganisation).ConvertUsing(row => new ResponsibleParty
+                    {
+                        Name = row.GetField("Responsible party"),
+                        Email = row.GetField("Email Address"),
+                        Role = "Owner"
+                    });
+
+                Map(m => m.LimitationsOnPublicAccess).Name("Limitations on public access");
 //                Map(m => m.UseConstraints);
 //                Map(m => m.SpatialReferenceSystem);
 //                Map(m => m.MetadataDate);
@@ -214,7 +214,7 @@ namespace Catalogue.Data.Import.Mappings
         [Test]
         public void should_import_all_records_as_top_copy()
         {
-            imported.All(r => r.TopCopy).Should().BeTrue();
+            imported.All(r => r.TopCopy).Should().BeFalse();
         }
 
         [Test]
@@ -349,6 +349,20 @@ namespace Catalogue.Data.Import.Mappings
                 .Should().OnlyContain(x => DataFormats.Known.SelectMany(g => g.Formats).Any(f => f.Name == x));
         }
 
+        [Test]
+        public void should_import_responsible_organisation()
+        {
+            imported.Select(r => r.Gemini.ResponsibleOrganisation)
+                .Should().Contain(o => o.Name == "The Crown Estate"
+                    && o.Email.EndsWith("@thecrownestate.co.uk") && o.Role == "Owner");
+        }
+
+        [Test]
+        public void should_import_limitations_on_public_access()
+        {
+            imported.Select(r => r.Gemini.LimitationsOnPublicAccess)
+                .Should().Contain("Data publically available on the Crown Estate website");
+        }
 
 
 
