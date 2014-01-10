@@ -23,6 +23,7 @@ namespace Catalogue.Web.Controllers.Search
         public string Snippet { get; set; }
         public List<Keyword> Keywords { get; set; }
         public bool TopCopy { get; set; }
+        public string Date { get; set; }
         public string TemporalExtentFrom { get; set; }
         public string TemporalExtentTo { get; set; }
     }

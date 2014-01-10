@@ -28,7 +28,7 @@
 
 
 <div ng-show="query.q"> 
-    Showing {{result.results.length || 0 }} of {{result.total || 0}} results
+    {{result.results.length || 0 }} of {{result.total || 0}} results
     <span ng-show="result.speed">({{(result.speed / 1000) | number:2}} seconds)</span>
     <hr />
 </div>
@@ -40,6 +40,7 @@
     <div class="layout-col">
         <div class="search-title">
             <a ng-href="#/editor/{{r.id}}" ng-bind-html="r.title"></a>
+            <span class="search-date" ng-show="r.date">{{ r.date }}</span>
             <span tc-top-copy-icon ng-show="r.topCopy" title="Top copy"></span>
         </div>
         <div ng-bind-html="r.snippet"></div>

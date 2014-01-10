@@ -67,6 +67,7 @@ namespace Catalogue.Web.Controllers.Search
                                             },
                                         Keywords = x.result.Gemini.Keywords.OrderBy(k => k.Vocab).ToList(),
                                         TopCopy = x.result.TopCopy,
+                                        Date = x.result.Gemini.DatasetReferenceDate.Truncate(4),
                                     })
                                 .ToList(),
                     Speed = stats.DurationMilliseconds,

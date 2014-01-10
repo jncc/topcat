@@ -128,6 +128,11 @@ hr {
 .search-result .search-title .glyphicon:hover {
   color: #444444;
 }
+.search-result .search-title .search-date {
+  font-size: larger;
+  color: #666666;
+  margin-left: 0.1em;
+}
 .search-result .search-tags {
   margin-top: 6px;
 }
@@ -136,7 +141,7 @@ hr {
   white-space: nowrap;
   display: inline-block;
   background-color: #eeeeee;
-  padding-right: 0.4em;
+  padding-right: 0.5em;
   margin: 0 0.8em 0.45em 0;
 }
 .tag:hover {

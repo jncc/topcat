@@ -60,6 +60,16 @@ namespace Catalogue.Utilities.Text
             return b.ToString();
         }
 
+        public static string Truncate(this string input, int length)
+        {
+            if (input.IsBlank())
+                return String.Empty;
+            else if (input.Length <= length)
+                return input;
+            else
+                return input.Substring(0, length);
+        }
+
         public static string TruncateNicely(this string input, int length)
         {
             // http://stackoverflow.com/questions/1613896/truncate-string-on-whole-words-in-net-c-sharp
