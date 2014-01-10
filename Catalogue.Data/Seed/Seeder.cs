@@ -57,38 +57,47 @@ namespace Catalogue.Data.Seed
             }
         }
 
+        Record MakeExampleSeedRecord()
+        {
+            return new Record
+            {
+                Gemini = Library.Blank().With(m =>
+                {
+                    m.Keywords.Add(new Keyword { Vocab = "http://vocab.jncc.gov.uk/jncc-broad-category", Value = "Example Records" });
+                    m.Keywords.Add(new Keyword { Vocab = "http://vocab.jncc.gov.uk/example", Value = "example" });
+                }),
+            };
+        }
         void AddReadOnlyRecord()
         {
-            var record = new Record
+            var record = MakeExampleSeedRecord().With(r =>
                 {
-                    Id = new Guid("b65d2914-cbac-4230-a7f3-08d13eea1e92"),
-                    Path = @"X:\path\to\read\only\record\data",
-                    ReadOnly = true,
-                    Gemini = Library.Blank().With(m =>
+                    r.Id = new Guid("b65d2914-cbac-4230-a7f3-08d13eea1e92");
+                    r.Path = @"X:\path\to\read\only\record\data";
+                    r.ReadOnly = true;
+                    r.Gemini = r.Gemini.With(m =>
                         {
                             m.Title = "An example read-only record";
                             m.Abstract = "This is an example read-only record.";
-                            m.Keywords.Add(new Keyword { Vocab = "http://vocab.jncc.gov.uk/example", Value = "Example" });
-                        }),
-                };
+                        });
+                });
 
             recordService.Insert(record);
         }
 
         void AddNonTopCopyRecord()
         {
-            var record = new Record
+            var record = MakeExampleSeedRecord().With(r =>
                 {
-                    Id = new Guid("94f2c217-2e45-42be-8b48-c5075401e508"),
-                    Path = @"X:\path\to\non\top\copy\record\data",
-                    TopCopy = false,
-                    Gemini = Library.Blank().With(m =>
+                    r.Id = new Guid("94f2c217-2e45-42be-8b48-c5075401e508");
+                    r.Path = @"X:\path\to\non\top\copy\record\data";
+                    r.TopCopy = false;
+                    r.Gemini = r.Gemini.With(m =>
                         {
                             m.Title = "An example record that is not top-copy";
                             m.Abstract = "This is an example record that is not top-copy.";
-                            m.Keywords.Add(new Keyword { Vocab = "http://vocab.jncc.gov.uk/example", Value = "Example" });
-                        }),
-                };
+                        });
+                });
 
             recordService.Insert(record);
         }
@@ -101,19 +110,18 @@ namespace Catalogue.Data.Seed
             {
                 string n = g.Name.ToLower();
 
-                var record = new Record
+                var record = MakeExampleSeedRecord().With(r =>
                     {
-                        Path = @"X:\path\to\" + n + @"\record\data",
-                        TopCopy = true,
-                        Gemini = Library.Blank().With(m =>
+                        r.Path = @"X:\path\to\" + n + @"\record\data";
+                        r.TopCopy = true;
+                        r.Gemini = r.Gemini.With(m =>
                             {
                                 m.Title = "An example " + n + " record";
                                 m.Abstract = "This is an example record for some " + n + " data";
                                 m.DataFormat = (from f in g.Formats select f.Name).FirstOrDefault();
-                                m.Keywords.Add(new Keyword { Vocab = "http://vocab.jncc.gov.uk/example", Value = "Example" });
                                 m.DatasetReferenceDate = "2012";
-                            }),
-                    };
+                            });
+                    });
 
                 recordService.Insert(record);
             }

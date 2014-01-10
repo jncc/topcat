@@ -65,7 +65,9 @@ namespace Catalogue.Web.Controllers.Search
                                                 Glyph = format.Glyph,
                                                 Name = format.Name,
                                             },
-                                        Keywords = x.result.Gemini.Keywords.OrderBy(k => k.Vocab).ToList(),
+                                        Keywords = x.result.Gemini.Keywords
+                                            .OrderBy(k => k.Vocab != "http://vocab.jncc.gov.uk/jncc-broad-category") // show first
+                                            .ThenBy(k => k.Vocab).ToList(),
                                         TopCopy = x.result.TopCopy,
                                         Date = x.result.Gemini.DatasetReferenceDate.Truncate(4),
                                     })
