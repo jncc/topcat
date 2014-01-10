@@ -1,16 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Threading;
-using System.Web;
+﻿using System.Linq;
 using System.Web.Http;
-using Catalogue.Data.Indexes;
 using Catalogue.Data.Model;
 using Catalogue.Gemini.DataFormats;
-using Catalogue.Utilities.Html;
 using Catalogue.Utilities.Text;
-using Raven.Abstractions.Data;
 using Raven.Client;
 
 namespace Catalogue.Web.Controllers.Search
@@ -27,8 +19,6 @@ namespace Catalogue.Web.Controllers.Search
         // GET api/search?q=blah
         public SearchOutputModel Get(string q, int p = 1)
         {
-        var watch = Stopwatch.StartNew();
-
             RavenQueryStatistics stats;
             FieldHighlightings titleLites;
             FieldHighlightings titleNLites;
@@ -79,7 +69,7 @@ namespace Catalogue.Web.Controllers.Search
                                         TopCopy = x.result.TopCopy,
                                     })
                                 .ToList(),
-                    Speed = watch.ElapsedMilliseconds,
+                    Speed = stats.DurationMilliseconds,
                     Query = new QueryOutputModel { Q = q, P = p, }
                 };
         }
