@@ -104,12 +104,14 @@ namespace Catalogue.Data.Seed
                 var record = new Record
                     {
                         Path = @"X:\path\to\" + n + @"\record\data",
+                        TopCopy = true,
                         Gemini = Library.Blank().With(m =>
                             {
                                 m.Title = "An example " + n + " record";
                                 m.Abstract = "This is an example record for some " + n + " data";
                                 m.DataFormat = (from f in g.Formats select f.Name).FirstOrDefault();
                                 m.Keywords.Add(new Keyword { Vocab = "http://vocab.jncc.gov.uk/example", Value = "Example" });
+                                m.DatasetReferenceDate = "2012";
                             }),
                     };
 
