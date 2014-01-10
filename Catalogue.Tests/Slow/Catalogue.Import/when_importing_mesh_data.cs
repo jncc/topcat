@@ -34,9 +34,9 @@ namespace Catalogue.Tests.Slow.Catalogue.Import
         [Test]
         public void should_import_keywords()
         {
-            // mesh data is categorised as 'Seabed-Habitat-Maps'
+            // mesh data is categorised as 'Seabed Habitat Maps'
             imported.Count(r => r.Gemini.Keywords
-                .Any(k => k.Vocab == "http://vocab.jncc.gov.uk/jncc-broad-category" && k.Value == "Seabed-Habitat-Maps"))
+                .Any(k => k.Vocab == "http://vocab.jncc.gov.uk/jncc-broad-category" && k.Value == "Seabed Habitat Maps"))
                 .Should().Be(189);
         }
 

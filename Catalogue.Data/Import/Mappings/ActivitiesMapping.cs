@@ -127,7 +127,7 @@ namespace Catalogue.Data.Import.Mappings
             keywords.Insert(0, new Keyword
                 {
                    Vocab = "http://vocab.jncc.gov.uk/jncc-broad-category",
-                   Value = "marine-human-activities"
+                   Value = "Marine Human Activities"
                 });
 
             return keywords;
@@ -260,9 +260,9 @@ namespace Catalogue.Data.Import.Mappings
         [Test]
         public void should_import_broad_category_keyword()
         {
-            // activities data is categorised as 'marine-human-activities'
+            // activities data is categorised as 'Marine Human Activities'
             imported.Count(r => r.Gemini.Keywords
-                .Any(k => k.Vocab == "http://vocab.jncc.gov.uk/jncc-broad-category" && k.Value == "marine-human-activities"))
+                .Any(k => k.Vocab == "http://vocab.jncc.gov.uk/jncc-broad-category" && k.Value == "Marine Human Activities"))
                 .Should().Be(93);
         }
 

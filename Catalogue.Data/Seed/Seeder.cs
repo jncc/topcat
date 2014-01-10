@@ -132,8 +132,8 @@ namespace Catalogue.Data.Seed
                     PublicationDate = "2013",
                     Values = new List<string>
                         {
-                            "Seabed-Habitat-Maps",
-                            "marine-human-activities",
+                            "Seabed Habitat Maps",
+                            "Marine Human Activities",
                         }
                 };
             this.db.Store(jnccCategories);

@@ -4,6 +4,7 @@ using Catalogue.Data.Model;
 using Lucene.Net.Analysis;
 using Raven.Abstractions.Indexing;
 using Raven.Client.Indexes;
+using Raven.Database.Indexing;
 
 namespace Catalogue.Data.Indexes
 {
@@ -45,11 +46,11 @@ namespace Catalogue.Data.Indexes
                                ValueN = g.First().Value,
                            };
 
-            Analyze(x => x.Vocab, typeof(KeywordAnalyzer).AssemblyQualifiedName);
+//            Analyze(x => x.Vocab, typeof(LowerCaseKeywordAnalyzer).AssemblyQualifiedName);
             Stores.Add(x => x.Vocab, FieldStorage.Yes);
 
-            Analyze(x => x.Value, typeof(KeywordAnalyzer).AssemblyQualifiedName);
-            Stores.Add(x => x.Value, FieldStorage.Yes);
+//            Analyze(x => x.Value, typeof(LowerCaseKeywordAnalyzer).AssemblyQualifiedName);
+            Stores.Add(x => x.Value, FieldStorage.Yes); 
 
             Analyze(x => x.ValueN, typeof(CustomKeywordAnalyzer).AssemblyQualifiedName);
         }

@@ -143,7 +143,7 @@ namespace Catalogue.Data.Import.Mappings
         {
             switch (w)
             {
-                case "SeabedHabitatMaps": return "Seabed-Habitat-Maps";
+                case "SeabedHabitatMaps": return "Seabed Habitat Maps";
                 default: return w;
             }
         }
@@ -171,7 +171,7 @@ namespace Catalogue.Data.Import.Mappings
                 });
             keywords.Select(k => k.Value).Should().ContainInOrder(new[]
                 {
-                    "Seabed-Habitat-Maps",
+                    "Seabed Habitat Maps",
                     "Local",
                     "Show on webGIS",
                     "Translated to EUNIS",
