@@ -1,12 +1,16 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Reflection;
 using Catalogue.Data.Import;
 using Catalogue.Data.Import.Mappings;
 using Catalogue.Data.Model;
 using Catalogue.Data.Write;
+using Catalogue.Gemini.DataFormats;
 using Catalogue.Gemini.Model;
+using Catalogue.Gemini.Templates;
+using Catalogue.Utilities.Clone;
 using Raven.Client;
 
 namespace Catalogue.Data.Seed
@@ -32,6 +36,7 @@ namespace Catalogue.Data.Seed
                 s.AddMeshRecords();
                 s.AddReadOnlyRecord();
                 s.AddNonTopCopyRecord();
+                s.AddVariousDataFormatRecords();
                 s.AddBboxes();
 
                 db.SaveChanges();
@@ -57,13 +62,14 @@ namespace Catalogue.Data.Seed
             var record = new Record
                 {
                     Id = new Guid("b65d2914-cbac-4230-a7f3-08d13eea1e92"),
-                    Gemini = new Metadata
-                        {
-                            Title = "An example read-only record",
-                            Abstract = "This is an example read-only record.",
-                        },
                     Path = @"X:\path\to\read\only\record\data",
                     ReadOnly = true,
+                    Gemini = Library.Blank().With(m =>
+                        {
+                            m.Title = "An example read-only record";
+                            m.Abstract = "This is an example read-only record.";
+                            m.Keywords.Add(new Keyword { Vocab = "http://vocab.jncc.gov.uk/example", Value = "Example" });
+                        }),
                 };
 
             recordService.Insert(record);
@@ -74,15 +80,41 @@ namespace Catalogue.Data.Seed
             var record = new Record
                 {
                     Id = new Guid("94f2c217-2e45-42be-8b48-c5075401e508"),
-                    Gemini = new Metadata
-                        {
-                            Title = "An example record that is not top-copy",
-                            Abstract = "This is an example record that is not top-copy.",
-                        },
                     Path = @"X:\path\to\non\top\copy\record\data",
+                    TopCopy = false,
+                    Gemini = Library.Blank().With(m =>
+                        {
+                            m.Title = "An example record that is not top-copy";
+                            m.Abstract = "This is an example record that is not top-copy.";
+                            m.Keywords.Add(new Keyword { Vocab = "http://vocab.jncc.gov.uk/example", Value = "Example" });
+                        }),
                 };
 
             recordService.Insert(record);
+        }
+
+        void AddVariousDataFormatRecords()
+        {
+            // add one record per data format group
+
+            foreach (var g in DataFormats.Known)
+            {
+                string n = g.Name.ToLower();
+
+                var record = new Record
+                    {
+                        Path = @"X:\path\to\" + n + @"\record\data",
+                        Gemini = Library.Blank().With(m =>
+                            {
+                                m.Title = "An example " + n + " record";
+                                m.Abstract = "This is an example record for some " + n + " data";
+                                m.DataFormat = (from f in g.Formats select f.Name).FirstOrDefault();
+                                m.Keywords.Add(new Keyword { Vocab = "http://vocab.jncc.gov.uk/example", Value = "Example" });
+                            }),
+                    };
+
+                recordService.Insert(record);
+            }
         }
 
         void AddBboxes()

@@ -11,7 +11,7 @@ namespace Catalogue.Gemini.DataFormats
         /// </summary>
         public static readonly DataFormatGroupCollection Known = new DataFormatGroupCollection
         {
-                { "Database", "glyphicon-hdd", new DataFormatInfoCollection
+                { "Database", "glyphicon-hdd", new DataFormatCollection
                     {
                         { "medin", "Database" }, // http://vocab.ndg.nerc.ac.uk/term/M010/1/DB
                         { "mdb", "Microsoft Access Database" },
@@ -19,7 +19,7 @@ namespace Catalogue.Gemini.DataFormats
                         { "gdb", "InterBase Database" },
                     }
                 },
-                { "Spreadsheet", "glyphicon-list", new DataFormatInfoCollection
+                { "Spreadsheet", "glyphicon-list", new DataFormatCollection
                     {
                         { "medin", "Delimited" }, // http://vocab.ndg.nerc.ac.uk/term/M010/1/DEL
                         { "csv", "Comma Separated Values" },
@@ -28,7 +28,7 @@ namespace Catalogue.Gemini.DataFormats
                         { "xlsx", "Microsoft Excel for Windows" },
                     }
                 },
-                { "Documents", "glyphicon-font", new DataFormatInfoCollection
+                { "Documents", "glyphicon-font", new DataFormatCollection
                     {
                         { "medin", "Documents"}, // http://vocab.ndg.nerc.ac.uk/term/M010/1/DOC
                         { "medin", "Text" }, // http://vocab.ndg.nerc.ac.uk/term/M010/1/TXT
@@ -36,14 +36,14 @@ namespace Catalogue.Gemini.DataFormats
                         { "pdf", "Acrobat Portable Document Format" } // made up - pronom only appears to contain specific versions
                     }
                 },
-                { "Geospatial", "glyphicon-map-marker", new DataFormatInfoCollection
+                { "Geospatial", "glyphicon-map-marker", new DataFormatCollection
                     {
                         { "medin", "Geographic Information System" }, // http://vocab.ndg.nerc.ac.uk/term/M010/1/GIS
                         { "medin", "Google Earth and Oceans" }, // http://vocab.ndg.nerc.ac.uk/term/M010/1/KMX
                         { "shp", "ESRI Arc/View ShapeFile" },
                     }
                 },
-                { "Image", "glyphicon-picture", new DataFormatInfoCollection
+                { "Image", "glyphicon-picture", new DataFormatCollection
                     {
                         { "medin", "Image" }, // http://vocab.ndg.nerc.ac.uk/term/M010/1/IMG
                         { "png", "Portable Network Graphics" },
@@ -51,18 +51,18 @@ namespace Catalogue.Gemini.DataFormats
                         { "tiff", "Tagged Image File Format" },
                     }
                 },
-                { "Audio", "glyphicon-volume-up", new DataFormatInfoCollection 
+                { "Audio", "glyphicon-volume-up", new DataFormatCollection 
                     {
                         { "mp3", "MPEG 1/2 Audio Layer 3" },
                     }
                 },
-                { "Video", "glyphicon-facetime-video", new DataFormatInfoCollection
+                { "Video", "glyphicon-facetime-video", new DataFormatCollection
                     {
                         { "medin", "Movie" }, // http://vocab.ndg.nerc.ac.uk/term/M010/1/MOV
                         { "mpg", "MPEG-2 Video Format" },
                     }
                 },
-                { "Other", "glyphicon-th", new DataFormatInfoCollection()
+                { "Other", "glyphicon-th", new DataFormatCollection()
                     // this provides the fall-through default glyph
                 },
         };
@@ -72,10 +72,10 @@ namespace Catalogue.Gemini.DataFormats
     {
         public string Name { get; set; }
         public string Glyph { get; set; }
-        public DataFormatInfoCollection Formats { get; set; }
+        public DataFormatCollection Formats { get; set; }
     }
 
-    public class DataFormatInfo
+    public class DataFormat
     {
         public string Code { get; set; }
         public string Name { get; set; }
@@ -87,17 +87,17 @@ namespace Catalogue.Gemini.DataFormats
 
     public class DataFormatGroupCollection : List<DataFormatGroup>
     {
-        public void Add(string name, string glyph, DataFormatInfoCollection formats)
+        public void Add(string name, string glyph, DataFormatCollection formats)
         {
             Add(new DataFormatGroup { Name = name, Glyph = glyph, Formats = formats });
         }
     }
 
-    public class DataFormatInfoCollection : List<DataFormatInfo>
+    public class DataFormatCollection : List<DataFormat>
     {
         public void Add(string code, string name)
         {
-            Add(new DataFormatInfo { Code= code, Name = name });
+            Add(new DataFormat { Code= code, Name = name });
         }
     }
 }
