@@ -134,3 +134,23 @@ module.directive 'tcCopyPathToClipboard', ($timeout) ->
 #                wrapper.qtip 'hide'
 #                wrapper.qtip 'disable'
 #                t.qtip 'disable', false), 2000
+
+# http://stackoverflow.com/a/20086923/40759
+module.directive "tcDebounce", ($timeout) ->
+  restrict: "A"
+  require: "ngModel"
+  priority: 99
+  link: (scope, elm, attr, ngModelCtrl) ->
+    return  if attr.type is "radio" or attr.type is "checkbox"
+    elm.unbind "input"
+    debounce = undefined
+    elm.bind "input", ->
+      $timeout.cancel debounce
+      debounce = $timeout(->
+        scope.$apply ->
+          ngModelCtrl.$setViewValue elm.val()
+      , 500)
+    elm.bind "blur", ->
+      scope.$apply ->
+        ngModelCtrl.$setViewValue elm.val()
+

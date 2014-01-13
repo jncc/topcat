@@ -192,4 +192,33 @@
     };
   });
 
+  module.directive("tcDebounce", function($timeout) {
+    return {
+      restrict: "A",
+      require: "ngModel",
+      priority: 99,
+      link: function(scope, elm, attr, ngModelCtrl) {
+        var debounce;
+        if (attr.type === "radio" || attr.type === "checkbox") {
+          return;
+        }
+        elm.unbind("input");
+        debounce = void 0;
+        elm.bind("input", function() {
+          $timeout.cancel(debounce);
+          return debounce = $timeout(function() {
+            return scope.$apply(function() {
+              return ngModelCtrl.$setViewValue(elm.val());
+            });
+          }, 500);
+        });
+        return elm.bind("blur", function() {
+          return scope.$apply(function() {
+            return ngModelCtrl.$setViewValue(elm.val());
+          });
+        });
+      }
+    };
+  });
+
 }).call(this);
