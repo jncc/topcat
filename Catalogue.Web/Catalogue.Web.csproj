@@ -250,11 +250,11 @@
     <Content Include="app\js\utilities.min.js">
       <DependentUpon>utilities.coffee</DependentUpon>
     </Content>
-    <Content Include="app\lib\angular-1.2.0-rc.3\angular-animate.min.js" />
-    <Content Include="app\lib\angular-1.2.0-rc.3\angular-resource.min.js" />
-    <Content Include="app\lib\angular-1.2.0-rc.3\angular-route.min.js" />
-    <Content Include="app\lib\angular-1.2.0-rc.3\angular-sanitize.min.js" />
-    <Content Include="app\lib\angular-1.2.0-rc.3\angular.min.js" />
+    <Content Include="app\lib\angular-1.2.8\angular-animate.min.js" />
+    <Content Include="app\lib\angular-1.2.8\angular-resource.min.js" />
+    <Content Include="app\lib\angular-1.2.8\angular-route.min.js" />
+    <Content Include="app\lib\angular-1.2.8\angular-sanitize.min.js" />
+    <Content Include="app\lib\angular-1.2.8\angular.min.js" />
     <Content Include="app\lib\angular-strap-0.7.5\angular-strap-min.js" />
     <Content Include="app\lib\autosize-1.8.1\jquery.autosize.min.js" />
     <Content Include="app\lib\bootstrap-3.0.0\css\bootstrap-theme.css" />
@@ -367,13 +367,6 @@
     <Content Include="app\js\utilities.coffee" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="app\lib\angular-1.2.0-rc.3\angular-animate.min.js.map" />
-    <Content Include="app\lib\angular-1.2.0-rc.3\angular-resource.min.js.map" />
-    <Content Include="app\lib\angular-1.2.0-rc.3\angular-route.min.js.map" />
-    <Content Include="app\lib\angular-1.2.0-rc.3\angular-sanitize.min.js.map" />
-    <Content Include="app\lib\angular-1.2.0-rc.3\angular.min.js.map" />
-  </ItemGroup>
-  <ItemGroup>
     <Content Include="test\e2e\scenarios.coffee" />
   </ItemGroup>
   <ItemGroup>
@@ -381,6 +374,13 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="app\js\controllers\SandboxController.coffee" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="app\lib\angular-1.2.8\angular-animate.min.js.map" />
+    <Content Include="app\lib\angular-1.2.8\angular-resource.min.js.map" />
+    <Content Include="app\lib\angular-1.2.8\angular-route.min.js.map" />
+    <Content Include="app\lib\angular-1.2.8\angular-sanitize.min.js.map" />
+    <Content Include="app\lib\angular-1.2.8\angular.min.js.map" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
