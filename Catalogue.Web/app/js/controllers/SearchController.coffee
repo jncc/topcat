@@ -12,6 +12,7 @@ angular.module('app.controllers').controller 'SearchController',
         
         doSearch = (query) ->
             $location.search('q', query.q) # update the url
+            $rootScope.page = { title: ' - ' + query.q } # update the page title
             if query.q
                 $rootScope.busy = { value: true }
                 # search the server
@@ -36,3 +37,4 @@ angular.module('app.controllers').controller 'SearchController',
             ()  -> $location.search()['q'] #todo watch and update whole querystring
             (q) -> $scope.query.q = q || ''
         )
+

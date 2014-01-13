@@ -19,6 +19,10 @@ describe 'when searching for "underwater"', ->
     
     beforeEach ->
         input('query.q').enter 'underwater'
+# possibly do something like this to force the blur event speed up the tests??
+#        element('#queryq').query( (elements, done) ->
+#            elements.trigger 'blur'
+#            done())
     
     it 'should return 3 results', ->
         expect(repeater('.search-result').count()).toBe 3 

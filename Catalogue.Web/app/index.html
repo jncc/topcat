@@ -1,7 +1,7 @@
 <!DOCTYPE html>
-<html ng-app="app" id="ng-app">
+<html ng-app="app" id="ng-app" ng-controller="MainController">
 <head>
-    <title>Catalogue</title>
+    <title>Topcat {{page.title}}</title>
     <meta name="viewport" content="width=device-width">
 
     <link href="lib/bootstrap-3.0.0/css/bootstrap.min.css" rel="stylesheet">
@@ -37,13 +37,13 @@
         ZeroClipboard.setDefaults({ moviePath: 'lib/zeroclipboard-1.1.7/ZeroClipboard.swf' });
     </script>
 </head>
-<body ng-controller="MainController">
+<body>
  
     <div class="container">
         
         <div class="header">
                 <div class="logo">
-                    <h1 title="Catalogue">
+                    <h1 title="Topcat">
                         <a href="#">
                             <img src="img/logo.gif" alt="logo" height="50" width="80">
                             <span tc-spinner ng-show="busy.value"><img src="img/spinner.gif"/></span>
