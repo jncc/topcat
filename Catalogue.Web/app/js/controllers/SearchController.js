@@ -11,7 +11,7 @@
     doSearch = function(query) {
       $location.search('q', query.q);
       $rootScope.page = {
-        title: ' - ' + query.q
+        title: query.q ? ' - ' + query.q : ''
       };
       if (query.q) {
         $rootScope.busy = {
