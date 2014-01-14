@@ -87,9 +87,9 @@ namespace Catalogue.Data.Import.Mappings
 
                 Map(m => m.ResponsibleOrganisation).ConvertUsing(row => new ResponsibleParty
                     {
-                        Name = row.GetField("Responsible party"),
+                        Name = row.GetField("Organisation Name"),
                         Email = row.GetField("Email Address"),
-                        Role = "Owner"
+                        Role = row.GetField("Responsible Party Role"),
                     });
 
                 Map(m => m.LimitationsOnPublicAccess).Name("Limitations on public access");
@@ -105,7 +105,7 @@ namespace Catalogue.Data.Import.Mappings
 //
 //                    return new ResponsibleParty { Name = name, Email = email, Role = role };
 //                });
-//                Map(m => m.ResourceType);
+//                Map(m => m.ResourceType); // should always be dataset i think - "Multiple Datasets" isn't surely isn't allowed
 //                Map(m => m.BoundingBox).ConvertUsing(row =>
 //                {
 //                    decimal north = Convert.ToDecimal(row.GetField("BBoxNorth"));
@@ -208,19 +208,19 @@ namespace Catalogue.Data.Import.Mappings
         [Test]
         public void should_import_every_record()
         {
-            imported.Count().Should().Be(95);
+            imported.Count().Should().Be(96);
         }
 
         [Test]
-        public void should_import_all_records_as_top_copy()
+        public void should_import_all_records_as_non_top_copy()
         {
             imported.All(r => r.TopCopy).Should().BeFalse();
         }
 
         [Test]
-        public void should_import_all_records_as_publishable()
+        public void should_import_all_records_as_non_publishable()
         {
-            imported.All(r => r.Status == Status.Publishable).Should().BeTrue();
+            imported.All(r => r.Status == Status.Publishable).Should().BeFalse();
         }
 
         [Test]
@@ -239,7 +239,7 @@ namespace Catalogue.Data.Import.Mappings
         public void should_import_title()
         {
             imported.First().Gemini.Title.Should().Be("Marine Aggregate Application Areas");
-            imported.Last().Gemini.Title.Should().Be("Human Activities Geodatabase");
+            imported.Last().Gemini.Title.Should().Be("MMO Legacy Food and Environment Protection Agency (FEPA) license");
         }
 
         [Test]
@@ -263,7 +263,7 @@ namespace Catalogue.Data.Import.Mappings
             // activities data is categorised as 'Marine Human Activities'
             imported.Count(r => r.Gemini.Keywords
                 .Any(k => k.Vocab == "http://vocab.jncc.gov.uk/jncc-broad-category" && k.Value == "Marine Human Activities"))
-                .Should().Be(93);
+                .Should().Be(96);
         }
 
         [Test]
@@ -337,9 +337,11 @@ namespace Catalogue.Data.Import.Mappings
         }
 
         [Test]
-        public void should_import__data_format()
+        public void should_import_data_format()
         {
-            imported.Should().Contain(r => r.Gemini.DataFormat == "ESRI Arc/View ShapeFile");
+            imported.Should().Contain(r => r.Gemini.DataFormat == "Geospatial (vector polygon)");
+            imported.Should().Contain(r => r.Gemini.DataFormat == "Geospatial (vector line)");
+            imported.Should().Contain(r => r.Gemini.DataFormat == "Microsoft Excel for Windows");
         }
 
         [Test]
@@ -369,6 +371,12 @@ namespace Catalogue.Data.Import.Mappings
         {
             imported.Select(r => r.Gemini.UseConstraints)
                 .Should().Contain(s => s.StartsWith("By using the data you agree to the following terms & conditions"));
+
+            imported.Select(r => r.Gemini.UseConstraints)
+                .Should().Contain("no conditions apply");
+
+            imported.Select(r => r.Gemini.UseConstraints).Any(s => s.IsBlank())
+                .Should().BeFalse();
         }
 
         [Test]

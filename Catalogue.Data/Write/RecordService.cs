@@ -59,12 +59,21 @@ namespace Catalogue.Data.Write
             // currently only supporting dataset resource types
             record.Gemini.ResourceType = "dataset";
 
+            NormalizeUseConstraints(record);
+
             var result = validator.Validate(record);
 
             if (result.Success)
                 db.Store(record);
 
             return result;
+        }
+
+        void NormalizeUseConstraints(Record record)
+        {
+            const string none = "no conditions apply";
+            if (record.Gemini.UseConstraints.ToLowerInvariant().Trim() == none)
+                record.Gemini.UseConstraints = none;
         }
 
         void SyncDenormalizations(Record record)
@@ -155,6 +164,20 @@ namespace Catalogue.Data.Write
             service.Upsert(record);
 
             Mock.Get(database).Verify(db => db.Store(It.Is((Record r) => r.Gemini.ResourceType == "dataset")));
+        }
+
+        [Test]
+        public void should_normalise_use_constraints()
+        {
+            var database = Mock.Of<IDocumentSession>();
+            var service = new RecordService(database, GetValidatorStub());
+
+            var record = new Record { Gemini = Library.Blank() };
+            record.Gemini.UseConstraints = "   No conditions APPLY";
+
+            service.Upsert(record);
+
+            Mock.Get(database).Verify(db => db.Store(It.Is((Record r) => r.Gemini.UseConstraints == "no conditions apply")));
         }
 
         IRecordValidator GetValidatorStub()
