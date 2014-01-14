@@ -72,7 +72,8 @@ namespace Catalogue.Data.Write
         void NormalizeUseConstraints(Record record)
         {
             const string none = "no conditions apply";
-            if (record.Gemini.UseConstraints.ToLowerInvariant().Trim() == none)
+
+            if (record.Gemini.UseConstraints.IsNotBlank() && record.Gemini.UseConstraints.ToLowerInvariant().Trim() == none)
                 record.Gemini.UseConstraints = none;
         }
 
