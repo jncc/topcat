@@ -39,8 +39,11 @@ namespace Catalogue.Gemini.DataFormats
                 { "Geospatial", "glyphicon-map-marker", new DataFormatCollection
                     {
                         { "medin", "Geographic Information System" }, // http://vocab.ndg.nerc.ac.uk/term/M010/1/GIS
-                        { "medin", "Google Earth and Oceans" }, // http://vocab.ndg.nerc.ac.uk/term/M010/1/KMX
                         { "shp", "ESRI Arc/View ShapeFile" },
+                        { "", "Geospatial (raster)" },
+                        { "", "Geospatial (vector polygon)" },
+                        { "", "Geospatial (vector line)" },
+                        { "", "Geospatial (vector point)" },
                     }
                 },
                 { "Image", "glyphicon-picture", new DataFormatCollection
