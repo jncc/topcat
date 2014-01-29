@@ -34,7 +34,9 @@ namespace Catalogue.Data.Seed
 
                 s.AddVocabularies();
                 s.AddMeshRecords();
+                s.AddSimpleExampleRecord();
                 s.AddReadOnlyRecord();
+                s.AddSecureRecords();
                 s.AddNonTopCopyRecord();
                 s.AddVariousDataFormatRecords();
                 s.AddBboxes();
@@ -68,6 +70,23 @@ namespace Catalogue.Data.Seed
                 }),
             };
         }
+        
+        void AddSimpleExampleRecord()
+        {
+            var record = MakeExampleSeedRecord().With(r =>
+            {
+                r.Id = new Guid("679434f5-baab-47b9-98e4-81c8e3a1a6f9");
+                r.Path = @"X:\path\to\record\record\data";
+                r.Gemini = r.Gemini.With(m =>
+                {
+                    m.Title = "A simple example record";
+                    m.Abstract = "This is a simple example record.";
+                });
+            });
+
+            recordService.Insert(record);
+        }
+
         void AddReadOnlyRecord()
         {
             var record = MakeExampleSeedRecord().With(r =>
@@ -79,6 +98,23 @@ namespace Catalogue.Data.Seed
                         {
                             m.Title = "An example read-only record";
                             m.Abstract = "This is an example read-only record.";
+                        });
+                });
+
+            recordService.Insert(record);
+        }
+
+        void AddSecureRecords()
+        {
+            var record = this.MakeExampleSeedRecord().With(r =>
+                {
+                    r.Id = new Guid("89136d54-d383-4d4d-a385-ac9687596b01");
+                    r.Path = @"X:\path\to\restricted\record\data";
+                    r.Security = Security.Restricted;
+                    r.Gemini = r.Gemini.With(m =>
+                        {
+                            m.Title = "An example restricted record";
+                            m.Abstract = "This is an example restricted record.";
                         });
                 });
 

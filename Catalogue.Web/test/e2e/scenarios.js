@@ -95,4 +95,18 @@
     });
   });
 
+  describe('can edit security level', function() {
+    beforeEach(function() {
+      return browser().navigateTo('../../app/#/editor/679434f5-baab-47b9-98e4-81c8e3a1a6f9');
+    });
+    it('should start as "open"', function() {
+      return expect(element('.editor-security button').attr('class')).toContain('btn-default');
+    });
+    return it('should update to restricted', function() {
+      using('.editor-security');
+      element('button:contains(\'Open\')').click();
+      return expect(element('button').attr('class')).toContain('btn-warning');
+    });
+  });
+
 }).call(this);

@@ -181,6 +181,19 @@ namespace Catalogue.Data.Write
             Mock.Get(database).Verify(db => db.Store(It.Is((Record r) => r.Gemini.UseConstraints == "no conditions apply")));
         }
 
+        [Test]
+        public void should_be_open_security_by_default()
+        {
+            var database = Mock.Of<IDocumentSession>();
+            var service = new RecordService(database, GetValidatorStub());
+
+            var record = new Record { Gemini = Library.Blank() };
+
+            service.Upsert(record);
+
+            Mock.Get(database).Verify(db => db.Store(It.Is((Record r) => r.Security == Security.Open)));
+        }
+
         IRecordValidator GetValidatorStub()
         {
             return Mock.Of<IRecordValidator>(v => v.Validate(It.IsAny<Record>()) == new RecordValidationResult { Success = true });

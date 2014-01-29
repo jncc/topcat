@@ -7,6 +7,16 @@
     });
     $scope.state = /^\w\w$/;
     $scope.zip = /^\d\d\d\d\d$/;
+    $scope.getSecurityText = function(n) {
+      switch (n) {
+        case 0:
+          return 'Open';
+        case 1:
+          return 'Restricted';
+        case 2:
+          return 'Classified';
+      }
+    };
     $scope.reset = function() {
       return $scope.form = angular.copy(record);
     };

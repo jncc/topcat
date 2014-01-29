@@ -16,6 +16,7 @@ namespace Catalogue.Data.Model
         public bool     TopCopy  { get; set; }
         public Status   Status   { get; set; }
         public DateTime Review   { get; set; }
+        public Security Security { get; set; }
         public string   Notes    { get; set; }
 
         /// <summary>

@@ -8,6 +8,11 @@ angular.module('app.controllers').controller 'EditorController',
         $scope.state = /^\w\w$/
         $scope.zip = /^\d\d\d\d\d$/
 
+        $scope.getSecurityText = (n) ->
+            switch n
+              when 0 then 'Open'
+              when 1 then 'Restricted'
+              when 2 then 'Classified'
         
         $scope.reset = () -> $scope.form = angular.copy(record)
 

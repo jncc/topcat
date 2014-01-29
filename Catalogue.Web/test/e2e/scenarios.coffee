@@ -89,6 +89,23 @@ describe 'can edit top-copy status', ->
         expect(element('''button:contains('Yes')''').attr('class')).toContain 'btn-primary'
         expect(element('''button:contains('No')''').attr('class')).toContain 'btn-default'
 
+describe 'can edit security level', ->
+
+    beforeEach ->
+        browser().navigateTo '../../app/#/editor/679434f5-baab-47b9-98e4-81c8e3a1a6f9'
+
+    it 'should start as "open"', ->
+        expect(element('.editor-security button').attr('class')).toContain 'btn-default'
+
+    it 'should update to restricted', ->
+        using '.editor-security'
+        # this isn't right - i think it's that the using is not really scoping it
+        #element('button').click();
+        element('''button:contains('Open')''').click();
+        expect(element('button').attr('class')).toContain 'btn-warning'
+        # todo...
+
+
 
 
 
