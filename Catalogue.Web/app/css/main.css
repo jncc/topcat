@@ -182,6 +182,10 @@ hr {
 .editor-title {
   font-size: larger;
 }
+.editor-format {
+  background-color: white;
+  font-size: x-large;
+}
 .editor-path .zeroclipboard-is-hover {
   background-color: #dddddd;
 }

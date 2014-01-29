@@ -26,7 +26,7 @@
 
         </div>
 
-        <!-- title-and-path  -->
+        <!-- title -->
         <div class="row">
             <div class="col-md-12">
                 
@@ -38,9 +38,27 @@
                            tc-focus-tip />
                 </div>
 
+
+            </div>
+        </div>
+
+        <!-- format and path -->
+        <div class="row">
+            
+            <div class="col-md-1">
+                <div class="editor-format well well-sm">
+                    <div class="">
+                            <span class="dark glyphicon glyphicon-hdd"></span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-11">
                 <div class="well well-sm form-group">
                     <div class="editor-path input-group">
-                        <span class="input-group-addon well-input-group-addon"><span class="dark glyphicon glyphicon-th-large"></span></span>
+                        <span class="input-group-addon well-input-group-addon">
+                            <span class="dark glyphicon glyphicon-th-large"></span>
+                        </span>
 
                         <input id="form-path" name="form.path" ng-model="form.path" 
                                type="text" class="form-control" 
@@ -50,20 +68,20 @@
                                spellcheck="false" />
                         
                         <span class="input-group-addon pointable"
-                                ng-disabled="!form.path"
-                                tc-copy-path-to-clipboard="form-path"
-                                data-clipboard-target="form-path">
+                              ng-disabled="!form.path"
+                              tc-copy-path-to-clipboard="form-path"
+                              data-clipboard-target="form-path">
                             <span class="dark glyphicon glyphicon-folder-open"></span>
                         </span>
 
-<!--                        <span class="input-group-btn">-->
-<!--                            <button class="btn btn-primary" type="button" tabindex="-1"-->
-<!--                                    ng-disabled="!form.path"-->
-<!--                                    tc-copy-path-to-clipboard="form-path"-->
-<!--                                    data-clipboard-target="form-path">-->
-<!--                                <span class="glyphicon glyphicon-new-window"></span>-->
-<!--                            </button>-->
-<!--                        </span>-->
+                        <!--                        <span class="input-group-btn">-->
+                        <!--                            <button class="btn btn-primary" type="button" tabindex="-1"-->
+                        <!--                                    ng-disabled="!form.path"-->
+                        <!--                                    tc-copy-path-to-clipboard="form-path"-->
+                        <!--                                    data-clipboard-target="form-path">-->
+                        <!--                                <span class="glyphicon glyphicon-new-window"></span>-->
+                        <!--                            </button>-->
+                        <!--                        </span>-->
                     </div>
                 </div>
 
