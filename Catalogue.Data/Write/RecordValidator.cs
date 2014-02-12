@@ -87,6 +87,7 @@ namespace Catalogue.Data.Write
 
         // todo
 
+        // non_open_records_should_have_non_empty_limitations_on_public_access
         // publishable records must have a resourcelocator, which must be a public url
         // responsible party role should be one of code list in ResponsiblePartyRoles.Allowed
         // warning for blank use constraints - could be "no conditions apply" if that's what's meant

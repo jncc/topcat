@@ -23,7 +23,7 @@ namespace Catalogue.Gemini.Model
         public string LimitationsOnPublicAccess { get; set; }
         public string UseConstraints { get; set; }
         public string SpatialReferenceSystem { get; set; }
-        public List<Extent> Extents { get; set; } // support multiple locations; use same UI as keywords
+        public List<Extent> Extent { get; set; } // support multiple locations; use same UI as keywords
         public string MetadataDate { get; set; }
         public string MetadataLanguage { get; set; }
         public ResponsibleParty MetadataPointOfContact { get; set; }
