@@ -182,12 +182,26 @@ hr {
 .editor-title {
   font-size: larger;
 }
-.editor-format {
-  background-color: white;
+.editor-format div {
+  height: 54px;
+  width: 3em;
   font-size: x-large;
+  margin-right: 0.6em;
+  text-align: center;
+}
+.editor-format div span {
+  padding-top: 11px;
+  color: #666666;
+  cursor: pointer;
+}
+.editor-format div span:hover {
+  color: #444444;
 }
 .editor-path .zeroclipboard-is-hover {
   background-color: #dddddd;
+}
+.editor-tags {
+  margin-top: 5px;
 }
 .editor-abstract {
   padding-top: 0.3em;

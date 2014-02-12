@@ -231,8 +231,18 @@ hr {
 }
 
 .editor-format {
-    background-color: white;
-    font-size: x-large;
+    div {
+        height: 54px; // set equal to what the editor-path height happens to be
+        width: 3em;
+        font-size: x-large;
+        margin-right: 0.6em;
+        text-align: center;
+        span {
+            padding-top: 11px;
+            .hoverable-glyphicon;
+            .pointable
+        }
+    }
 }
 
 .editor-path {
@@ -242,6 +252,10 @@ hr {
     }
 }
 
+.editor-tags {
+    margin-top: 5px;
+
+}
 
 .editor-abstract {
     padding-top: 0.3em; // feels like it needs a bit of space

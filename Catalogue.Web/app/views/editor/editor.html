@@ -41,19 +41,15 @@
 
             </div>
         </div>
-
+        
         <!-- format and path -->
-        <div class="row">
-            
-            <div class="col-md-1">
-                <div class="editor-format well well-sm">
-                    <div class="">
-                            <span class="dark glyphicon glyphicon-hdd"></span>
-                    </div>
+        <div class="layout-row">
+            <div class="layout-col editor-format">
+                <div class="panel panel-default">
+                        <span class="dark glyphicon glyphicon-hdd"></span>
                 </div>
             </div>
-
-            <div class="col-md-11">
+            <div class="layout-col">
                 <div class="well well-sm form-group">
                     <div class="editor-path input-group">
                         <span class="input-group-addon well-input-group-addon">
@@ -84,24 +80,22 @@
                         <!--                        </span>-->
                     </div>
                 </div>
-
             </div>
-
         </div>
+
 
         <div class="row">
 
             <div class="col-md-9">
 
-
-                <!-- tags and topic  -->
+                <!-- tags -->
                         
-                        <div class="form-group">
-                            <span ng-repeat="k in form.gemini.keywords" tc-tag tc-tag-delete>
-                                <span ng-style="{ 'background-color': hashStringToColor(k.vocab) }">&nbsp;</span>
-                                {{ k.value }}
-                            </span>
-                        </div>
+                <div class="editor-tags form-group">
+                    <span ng-repeat="k in form.gemini.keywords" tc-tag tc-tag-delete>
+                        <span ng-style="{ 'background-color': hashStringToColor(k.vocab) }">&nbsp;</span>
+                        {{ k.value }}
+                    </span>
+                </div>
 
                 
                 <!-- abstract -->
@@ -210,7 +204,7 @@
                         </div>
                         <div class="layout-col pull-right">
                             
-                            <button type="button" class="btn"
+                            <button type="button" class="btn btn-default"
                                     title="The level of validation to perform on the record"
                                     tc-tip
                                 >
