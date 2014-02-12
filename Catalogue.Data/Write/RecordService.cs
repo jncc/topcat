@@ -194,6 +194,10 @@ namespace Catalogue.Data.Write
             Mock.Get(database).Verify(db => db.Store(It.Is((Record r) => r.Security == Security.Open)));
         }
 
+        // todo should save keywords in correct order - 
+        // first http://vocab.jncc.gov.uk/jncc-broad-category
+        // then sort by vocab, then value
+
         IRecordValidator GetValidatorStub()
         {
             return Mock.Of<IRecordValidator>(v => v.Validate(It.IsAny<Record>()) == new RecordValidationResult { Success = true });

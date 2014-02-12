@@ -51,7 +51,16 @@
   module.directive('tcTip', function() {
     return {
       link: function(scope, elem, attrs) {
-        return $(elem).qtip(qtipDefaults);
+        if (attrs.tcTip === 'top') {
+          return $(elem).qtip($.extend({}, qtipDefaults, {
+            position: {
+              my: 'bottom center',
+              at: 'top center'
+            }
+          }));
+        } else {
+          return $(elem).qtip(qtipDefaults);
+        }
       }
     };
   });

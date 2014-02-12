@@ -69,6 +69,8 @@ hr {
 
 .label-success { background-color: @green; }
 .label-danger { background-color: @pink; }
+
+// cheesily override bootstrap btn properties
 .btn-default {
     background-color: @pale;
     border-color: @pale;
@@ -77,8 +79,21 @@ hr {
         border-color: @lesspale;
     }
 }
+.btn-dialogue {
+    background-color: @dark;
+    border-color: @dark;
+    color: white;
+    padding: 0 0.7em;
+    &:hover {
+        background-color: @darker;
+        border-color: @darker;
+        color: white;
+    }
+    &:focus { color: white; }
+}
 .btn-danger { background-color: @pink; }
 .btn-danger[disabled] { background-color: @pink; }
+// end cheese
 
 // ---------
 // head/foot
@@ -240,7 +255,7 @@ hr {
         span {
             padding-top: 11px;
             .hoverable-glyphicon;
-            .pointable
+
         }
     }
 }
@@ -252,9 +267,12 @@ hr {
     }
 }
 
-.editor-tags {
+.editor-keywords {
     margin-top: 5px;
-
+    button {
+        font-size: x-small;
+        margin-top: -2px; // tweak to vertical align better
+    }
 }
 
 .editor-abstract {

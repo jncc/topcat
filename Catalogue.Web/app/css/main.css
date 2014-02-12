@@ -56,6 +56,20 @@ hr {
   background-color: #dddddd;
   border-color: #dddddd;
 }
+.btn-dialogue {
+  background-color: #666666;
+  border-color: #666666;
+  color: white;
+  padding: 0 0.7em;
+}
+.btn-dialogue:hover {
+  background-color: #444444;
+  border-color: #444444;
+  color: white;
+}
+.btn-dialogue:focus {
+  color: white;
+}
 .btn-danger {
   background-color: #d92687;
 }
@@ -192,7 +206,6 @@ hr {
 .editor-format div span {
   padding-top: 11px;
   color: #666666;
-  cursor: pointer;
 }
 .editor-format div span:hover {
   color: #444444;
@@ -200,8 +213,12 @@ hr {
 .editor-path .zeroclipboard-is-hover {
   background-color: #dddddd;
 }
-.editor-tags {
+.editor-keywords {
   margin-top: 5px;
+}
+.editor-keywords button {
+  font-size: x-small;
+  margin-top: -2px;
 }
 .editor-abstract {
   padding-top: 0.3em;

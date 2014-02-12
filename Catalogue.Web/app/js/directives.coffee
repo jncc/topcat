@@ -32,7 +32,14 @@ qtipDefaults =
 
 # basic tip
 module.directive 'tcTip', () ->
-    link: (scope, elem, attrs) -> $(elem).qtip qtipDefaults
+    link: (scope, elem, attrs) ->
+        if (attrs.tcTip == 'top') # optionally accept a position argument
+            $(elem).qtip $.extend {}, qtipDefaults, position:
+                my: 'bottom center',
+                at: 'top center',
+        else
+            $(elem).qtip qtipDefaults
+            
 
 # focus tip (used for editor fields)
 module.directive 'tcFocusTip', () ->
