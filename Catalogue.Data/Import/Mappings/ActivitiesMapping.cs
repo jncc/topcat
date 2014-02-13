@@ -214,13 +214,13 @@ namespace Catalogue.Data.Import.Mappings
         [Test]
         public void should_import_all_records_as_non_top_copy()
         {
-            imported.All(r => r.TopCopy).Should().BeFalse();
+            imported.Any(r => r.TopCopy).Should().BeFalse();
         }
 
         [Test]
         public void should_import_all_records_as_non_publishable()
         {
-            imported.All(r => r.Status == Status.Publishable).Should().BeFalse();
+            imported.Any(r => r.Status == Status.Publishable).Should().BeFalse();
         }
 
         [Test]

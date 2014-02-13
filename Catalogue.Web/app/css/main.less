@@ -6,8 +6,8 @@
 // always have a scroll bar to avoid layout jumps
 html { overflow-y: scroll; }
 
-// fix spacing when a gylphicon is used inside a btn
-.btn-glyphicon { margin-right: 0.5em; }
+// extra spacing when abtn has a gylphicon and text
+.icon-and-text-btn > span { margin-right: 0.5em; }
 
 // make these look better when in a bootstrap well
 .well-input-group-addon { background-color: white; }
@@ -143,14 +143,14 @@ hr {
 // ------
 
 .search-result {
+    a {
+        text-decoration: underline;
+    }
     // bold snippet highlights look too black
     p b {
         color: #555;
     }
-    // spacing between each result
-    padding-bottom: 0.7em;
-    border-bottom: 1px solid #eee;
-    margin-bottom: 0.8em;
+    margin: 1.2em 0;
 
     .search-format {
         width: 1px; // as small as necessary
@@ -188,7 +188,6 @@ hr {
 // ----
 
 .tag {
-    font-size: small;
     white-space:nowrap;
     display: inline-block;
     background-color: @pale;
@@ -268,10 +267,20 @@ hr {
 }
 
 .editor-keywords {
-    margin-top: 5px;
+    margin-top: 0.5em;
     button {
         font-size: x-small;
         margin-top: -2px; // tweak to vertical align better
+    }
+}
+
+.editor-keywords-editor {
+    margin-bottom: 1em;
+    > div {
+        margin-bottom: 0.3em;
+    }
+    > .btn-primary { // the new keyword button
+        margin-top:0.5em;
     }
 }
 

@@ -18,8 +18,8 @@ module.directive 'tcEatClick', () ->
 # default qtip options
 qtipDefaults = 
     position:
-        my: 'top center',
-        at: 'bottom center',
+        my: 'bottom center',
+        at: 'top center',
         viewport: $(window) # but keep in the viewport if poss
     show:
         event: 'click mouseenter',
@@ -33,10 +33,10 @@ qtipDefaults =
 # basic tip
 module.directive 'tcTip', () ->
     link: (scope, elem, attrs) ->
-        if (attrs.tcTip == 'top') # optionally accept a position argument
+        if (attrs.tcTip == 'bottom') # optionally accept a position argument
             $(elem).qtip $.extend {}, qtipDefaults, position:
-                my: 'bottom center',
-                at: 'top center',
+                my: 'top center',
+                at: 'bottom center',
         else
             $(elem).qtip qtipDefaults
             
@@ -47,9 +47,6 @@ module.directive 'tcFocusTip', () ->
         $(elem).qtip $.extend {}, qtipDefaults,
             show: event: 'focus'
             hide: event: 'blur'
-            position:
-                my: 'bottom center'
-                at: 'top center'
 
 
 # widget for tags (keywords)
@@ -57,7 +54,11 @@ module.directive 'tcTag', () ->
     link: (scope, elem, attrs) ->
         $(elem).addClass('tag')
         # call qtip with options constructed from the defaults
-        $(elem).qtip $.extend {}, qtipDefaults, content: text: scope.k.vocab
+        $(elem).qtip $.extend {}, qtipDefaults,
+            content: text: scope.k.vocab
+            position:
+                my: 'top center'
+                at: 'bottom center'
 
 module.directive 'tcTagDelete', () ->
     link: (scope, elem, attrs) ->
@@ -108,7 +109,11 @@ module.directive 'tcServerValidation', ($http) ->
 module.directive 'tcCopyPathToClipboard', ($timeout) ->
     link: (scope, elem, attrs) ->
         clip = new ZeroClipboard $(elem)
-        $(clip.htmlBridge).qtip $.extend {}, qtipDefaults, content: text: 'Copy path to clipboard'
+        $(clip.htmlBridge).qtip $.extend {}, qtipDefaults,
+            content: text: 'Copy path to clipboard'
+            position:
+                my: 'top center'
+                at: 'bottom center'
         $(clip.htmlBridge).addClass 'hover-fix'
         clip.on 'complete', (client, args) ->
             t = $('#' + attrs.tcCopyPathToClipboard)

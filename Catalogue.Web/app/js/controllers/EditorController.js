@@ -43,6 +43,18 @@
     $scope.isSaveDisabled = function() {
       return $scope.isClean();
     };
+    $scope.keywordEditorOpen = true;
+    $scope.removeKeyword = function(keyword) {
+      var i;
+      i = $scope.form.gemini.keywords.indexOf(keyword);
+      return $scope.form.gemini.keywords.splice(i, 1);
+    };
+    $scope.addKeyword = function() {
+      return $scope.form.gemini.keywords.push({
+        vocab: '',
+        value: ''
+      });
+    };
     $scope.reset();
   });
 

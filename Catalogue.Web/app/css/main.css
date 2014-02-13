@@ -1,7 +1,7 @@
 ﻿html {
   overflow-y: scroll;
 }
-.btn-glyphicon {
+.icon-and-text-btn > span {
   margin-right: 0.5em;
 }
 .well-input-group-addon {
@@ -113,9 +113,10 @@ hr {
   padding-left: 3em;
 }
 .search-result {
-  padding-bottom: 0.7em;
-  border-bottom: 1px solid #eee;
-  margin-bottom: 0.8em;
+  margin: 1.2em 0;
+}
+.search-result a {
+  text-decoration: underline;
 }
 .search-result p b {
   color: #555;
@@ -151,7 +152,6 @@ hr {
   margin-top: 6px;
 }
 .tag {
-  font-size: small;
   white-space: nowrap;
   display: inline-block;
   background-color: #eeeeee;
@@ -214,11 +214,20 @@ hr {
   background-color: #dddddd;
 }
 .editor-keywords {
-  margin-top: 5px;
+  margin-top: 0.5em;
 }
 .editor-keywords button {
   font-size: x-small;
   margin-top: -2px;
+}
+.editor-keywords-editor {
+  margin-bottom: 1em;
+}
+.editor-keywords-editor > div {
+  margin-bottom: 0.3em;
+}
+.editor-keywords-editor > .btn-primary {
+  margin-top: 0.5em;
 }
 .editor-abstract {
   padding-top: 0.3em;

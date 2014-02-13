@@ -31,8 +31,8 @@
 
   qtipDefaults = {
     position: {
-      my: 'top center',
-      at: 'bottom center',
+      my: 'bottom center',
+      at: 'top center',
       viewport: $(window)
     },
     show: {
@@ -51,11 +51,11 @@
   module.directive('tcTip', function() {
     return {
       link: function(scope, elem, attrs) {
-        if (attrs.tcTip === 'top') {
+        if (attrs.tcTip === 'bottom') {
           return $(elem).qtip($.extend({}, qtipDefaults, {
             position: {
-              my: 'bottom center',
-              at: 'top center'
+              my: 'top center',
+              at: 'bottom center'
             }
           }));
         } else {
@@ -74,10 +74,6 @@
           },
           hide: {
             event: 'blur'
-          },
-          position: {
-            my: 'bottom center',
-            at: 'top center'
           }
         }));
       }
@@ -91,6 +87,10 @@
         return $(elem).qtip($.extend({}, qtipDefaults, {
           content: {
             text: scope.k.vocab
+          },
+          position: {
+            my: 'top center',
+            at: 'bottom center'
           }
         }));
       }
@@ -176,6 +176,10 @@
         $(clip.htmlBridge).qtip($.extend({}, qtipDefaults, {
           content: {
             text: 'Copy path to clipboard'
+          },
+          position: {
+            my: 'top center',
+            at: 'bottom center'
           }
         }));
         $(clip.htmlBridge).addClass('hover-fix');
