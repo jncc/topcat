@@ -14,7 +14,7 @@ namespace Catalogue.Web.Code
     {
         public string Domain
         {
-            get { return "jncc-boss.green.jncc.gov.uk"; }
+            get { return "jncc-dc08.green.jncc.gov.uk"; }
         }
     }
 }
