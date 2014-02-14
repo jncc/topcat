@@ -43,7 +43,6 @@
     $scope.isSaveDisabled = function() {
       return $scope.isClean();
     };
-    $scope.keywordEditorOpen = true;
     $scope.removeKeyword = function(keyword) {
       var i;
       i = $scope.form.gemini.keywords.indexOf(keyword);

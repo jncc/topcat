@@ -103,8 +103,8 @@
                 
                 <div ng-show="keywordEditorOpen" class="editor-keywords-editor form-inline">
                     <div ng-repeat="k in form.gemini.keywords">
-                        <input type="text" ng-model="k.vocab" placeholder="Vocab (namespace)" class="form-control" style="width:45%"  />
-                        <input type="text" ng-model="k.value" placeholder="Value (keyword)" class="form-control" style="width:45%" />
+                        <input type="text" ng-model="k.vocab" placeholder="Vocab (namespace)" class="form-control" style="width:55%" />
+                        <input type="text" ng-model="k.value" placeholder="Value (keyword)" class="form-control" style="width:35%" />
                         <button class="btn btn-sm btn-primary" ng-click="removeKeyword(k)">
                             <span style="font-size: small" class="glyphicon glyphicon-remove-sign"></span>
                         </button>
