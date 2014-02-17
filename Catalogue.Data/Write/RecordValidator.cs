@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 using Catalogue.Data.Model;
@@ -15,29 +17,24 @@ namespace Catalogue.Data.Write
 {
     public interface IRecordValidator
     {
-        RecordValidationResult Validate(Record record);
+        RecordValidationErrorSet Validate(Record record);
     }
 
     public class RecordValidator : IRecordValidator
     {
-        public RecordValidationResult Validate(Record record)
+        public RecordValidationErrorSet Validate(Record record)
         {
+            var results = new RecordValidationErrorSet();
+
             if (record.Path.IsBlank())
-                return MakeFailureResult("Path must not be blank.");
+                results.Add("Path must not be blank.", r => r.Path);
 
             if (!IsTopicCategoryValid(record.Gemini.TopicCategory))
-                return MakeFailureResult("Topic Category '{0}' is not valid.", record.Gemini.TopicCategory);
+                results.Add(
+                    String.Format("Topic Category '{0}' is not valid.", record.Gemini.TopicCategory),
+                    r => r.Gemini.TopicCategory);
 
-            return new RecordValidationResult { Success = true };
-        }
-
-        static RecordValidationResult MakeFailureResult(string message, params object[] args)
-        {
-            return new RecordValidationResult
-                {
-                    Message = String.Format(message, args),
-                    Success = false,
-                };
+            return results;
         }
 
         static bool IsTopicCategoryValid(string s)
@@ -47,10 +44,18 @@ namespace Catalogue.Data.Write
     }
 
 
-    public class RecordValidationResult
+    public class RecordValidationError
     {
-        public bool Success { get; set; }
         public string Message { get; set; }
+        public List<Expression<Func<Record, object>>> Fields { get; set; }
+    }
+
+    public class RecordValidationErrorSet : Collection<RecordValidationError>
+    {
+        public void Add(string message, params Expression<Func<Record, object>>[] fields)
+        {
+            this.Add(new RecordValidationError { Message = message, Fields = fields.ToList() });
+        }
     }
 
     class validator_specs
@@ -62,28 +67,51 @@ namespace Catalogue.Data.Write
             };
 
         [Test]
-        public void should_fail_validation_for_invalid_topic_category()
+        public void should_fail_when_path_is_empty()
+        {
+            var errors = new RecordValidator().Validate(validBlankRecord.With(r => r.Path = ""));
+            errors.Should().NotBeEmpty();
+            errors.First().Message.Should().StartWith("Path must not be blank");
+        }
+
+        [Test]
+        public void should_fail_when_path_is_null()
+        {
+            var errors = new RecordValidator().Validate(validBlankRecord.With(r => r.Path = null));
+            errors.Should().NotBeEmpty();
+        }
+
+        [Test]
+        public void should_fail_when_path_is_whitespace()
+        {
+            var errors = new RecordValidator().Validate(validBlankRecord.With(r => r.Path = " "));
+            errors.Should().NotBeEmpty();
+        }
+
+        [Test]
+        public void should_fail_when_topic_category_not_valid()
         {
             var record = validBlankRecord.With(r => r.Gemini.TopicCategory = "anInvalidTopicCategory");
-            var result = new RecordValidator().Validate(record);
+            var errors = new RecordValidator().Validate(record);
 
-            result.Success.Should().BeFalse();
-            result.Message.Should().Contain("Topic Category 'anInvalidTopicCategory' is not valid.");
+            errors.Should().NotBeEmpty();
+            errors.First().Message.Should().Contain("Topic Category 'anInvalidTopicCategory' is not valid.");
         }
 
         [Test]
-        public void should_pass_validation_for_null_topic_category()
+        public void should_pass_when_topic_category_is_null()
         {
-            var result = new RecordValidator().Validate(validBlankRecord.With(r => r.Gemini.TopicCategory = null));
-            result.Success.Should().BeTrue();
+            var errors = new RecordValidator().Validate(validBlankRecord.With(r => r.Gemini.TopicCategory = null));
+            errors.Should().BeEmpty();
         }
 
         [Test]
-        public void should_pass_validation_for_empty_topic_category()
+        public void should_pass_when_topic_category_is_empty()
         {
-            var result = new RecordValidator().Validate(validBlankRecord.With(r => r.Gemini.TopicCategory = ""));
-            result.Success.Should().BeTrue();
+            var errors = new RecordValidator().Validate(validBlankRecord.With(r => r.Gemini.TopicCategory = ""));
+            errors.Should().BeEmpty();
         }
+
 
         // todo
 

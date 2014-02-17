@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Catalogue.Data.Model;
+using Catalogue.Data.Test;
 using Catalogue.Gemini.Model;
 using Catalogue.Gemini.Templates;
 using Catalogue.Utilities.Spatial;
@@ -18,8 +19,8 @@ namespace Catalogue.Data.Write
     public interface IRecordService
     {
         Record Load(Guid id);
-        RecordValidationResult Insert(Record record);
-        RecordValidationResult Update(Record record);
+        RecordServiceResult Insert(Record record);
+        RecordServiceResult Update(Record record);
     }
 
     public class RecordService : IRecordService
@@ -38,21 +39,20 @@ namespace Catalogue.Data.Write
             return db.Load<Record>(id);
         }
 
-        public RecordValidationResult Insert(Record record)
+        public RecordServiceResult Insert(Record record)
         {
             return Upsert(record);
         }
 
-        public RecordValidationResult Update(Record record)
+        public RecordServiceResult Update(Record record)
         {
-            // additional validation for updating
             if (record.ReadOnly)
-                return new RecordValidationResult { Message = "Cannot update read-only record." };
+                throw new InvalidOperationException("Cannot update a read-only record.");
 
             return Upsert(record);
         }
 
-        internal RecordValidationResult Upsert(Record record)
+        internal RecordServiceResult Upsert(Record record)
         {
             this.SyncDenormalizations(record);
 
@@ -61,12 +61,12 @@ namespace Catalogue.Data.Write
 
             NormalizeUseConstraints(record);
 
-            var result = validator.Validate(record);
+            var errors = validator.Validate(record);
 
-            if (result.Success)
+            if (!errors.Any())
                 db.Store(record);
 
-            return result;
+            return new RecordServiceResult { Errors = errors };
         }
 
         void NormalizeUseConstraints(Record record)
@@ -85,43 +85,42 @@ namespace Catalogue.Data.Write
         }
     }
 
+    /// <summary>
+    /// Information about the result of an operation of the RecordService.
+    /// </summary>
+    public class RecordServiceResult
+    {
+        public RecordValidationErrorSet Errors { get; internal set; }
+        public bool Success { get { return !Errors.Any(); } }
+    }
+
 
     class when_inserting_a_record
     {
         [Test]
-        public void should_fail_if_path_is_blank()
+        public void should_create_a_new_guid()
         {
-            // this is really a test of the validator, so needs moving
+            // todo
+        }
+    }
 
-            var record = new Record
-                {
-                    Path = null,
-                    Gemini = new Metadata { Title = "A record without a path" }
-                };
+    class when_updating_a_record
+    {
+        [Test]
+        public void should_fail_when_record_is_readonly()
+        {
+            var service = new RecordService(Mock.Of<IDocumentSession>(), Mock.Of<IRecordValidator>());
+            var record = new Record { ReadOnly = true };
 
-            var service = new RecordService(Mock.Of<IDocumentSession>(), new RecordValidator());
-
-            var result = service.Insert(record);
-            result.Success.Should().BeFalse();
-            result.Message.Should().StartWith("Path must not be blank");
+            service.Invoking(s => s.Update(record))
+                .ShouldThrow<InvalidOperationException>()
+                .WithMessage("Cannot update a read-only record.");
         }
     }
 
     class when_upserting_a_record
     {
-        [Test]
-        public void should_fail_if_record_is_readonly()
-        {
-            // erm, this is really testing the validator now
-
-            var service = new RecordService(Mock.Of<IDocumentSession>(), new RecordValidator());
-
-            var record = new Record { ReadOnly = true };
-
-            var result = service.Update(record);
-            result.Success.Should().BeFalse();
-            result.Message.Should().StartWith("Cannot update read-only record");
-        }
+        // todo: should store the record in the db
 
         [Test]
         public void bounding_box_should_be_stored_as_wkt()
@@ -182,7 +181,7 @@ namespace Catalogue.Data.Write
         }
 
         [Test]
-        public void should_be_open_security_by_default()
+        public void should_set_security_to_open_by_default()
         {
             var database = Mock.Of<IDocumentSession>();
             var service = new RecordService(database, GetValidatorStub());
@@ -200,7 +199,7 @@ namespace Catalogue.Data.Write
 
         IRecordValidator GetValidatorStub()
         {
-            return Mock.Of<IRecordValidator>(v => v.Validate(It.IsAny<Record>()) == new RecordValidationResult { Success = true });
+            return Mock.Of<IRecordValidator>(v => v.Validate(It.IsAny<Record>()) == new RecordValidationErrorSet());
         }
     }
 }

@@ -29,11 +29,16 @@ namespace Catalogue.Web.Controllers.Records
 
         // PUT api/records/57d34691-9064-4c1e-90a7-7b0c112daa8d (update/replace a record)
 
-        public void Put(Guid id, [FromBody]Record record)
+        public RecordServiceResult Put(Guid id, [FromBody]Record record)
         {
             // todo should check ID in record is the same as being PUT to
-            service.Update(record);
-            db.SaveChanges();
+
+            var result = service.Update(record);
+
+            if (result.Success)
+                db.SaveChanges();
+
+            return result;
         }
 
     }

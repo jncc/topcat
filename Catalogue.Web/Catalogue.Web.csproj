@@ -381,6 +381,9 @@
     <Content Include="app\lib\angular-1.2.8\angular-sanitize.min.js.map" />
     <Content Include="app\lib\angular-1.2.8\angular.min.js.map" />
   </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Code\Validation\" />
+  </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
