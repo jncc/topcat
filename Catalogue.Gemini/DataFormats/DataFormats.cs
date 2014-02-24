@@ -90,6 +90,9 @@ namespace Catalogue.Gemini.DataFormats
 
     public class DataFormatGroupCollection : List<DataFormatGroup>
     {
+        public DataFormatGroupCollection() { }
+        public DataFormatGroupCollection(IEnumerable<DataFormatGroup> source) : base(source) { }
+
         public void Add(string name, string glyph, DataFormatCollection formats)
         {
             Add(new DataFormatGroup { Name = name, Glyph = glyph, Formats = formats });
@@ -98,6 +101,9 @@ namespace Catalogue.Gemini.DataFormats
 
     public class DataFormatCollection : List<DataFormat>
     {
+        public DataFormatCollection() { }
+        public DataFormatCollection(IEnumerable<DataFormat> source) : base(source) { }
+
         public void Add(string code, string name)
         {
             Add(new DataFormat { Code= code, Name = name });
