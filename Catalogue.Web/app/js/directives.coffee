@@ -166,3 +166,23 @@ module.directive "tcDebounce", ($timeout) ->
       scope.$apply ->
         ngModelCtrl.$setViewValue elm.val()
 
+
+module.directive 'tcDropdown', ($timeout) ->
+    restrict: 'E'
+    transclude: true
+    replace: true
+    template: '<div>
+                    <form>
+                        <input type="text" ng-model="term" ng-change="query()" autocomplete="off" />
+                    </form>
+                    <div ng-transclude></div>
+                </div>'
+    scope:
+        search: '&'
+        select: '&'
+        items:  '='
+        term:   '='
+    controller: ($scope) ->
+        $scope.items = []
+        $scope.hide = false
+        this.activate = (item) -> $scope.active = item

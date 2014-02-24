@@ -234,4 +234,31 @@
     };
   });
 
+  module.directive('tcDropdown', function($timeout) {
+    return {
+      restrict: 'E',
+      transclude: true,
+      replace: true,
+      template: '<div>\
+                    <form>\
+                        <input type="text" ng-model="term" ng-change="query()" autocomplete="off" />\
+                    </form>\
+                    <div ng-transclude></div>\
+                </div>',
+      scope: {
+        search: '&',
+        select: '&',
+        items: '=',
+        term: '='
+      },
+      controller: function($scope) {
+        $scope.items = [];
+        $scope.hide = false;
+        return this.activate = function(item) {
+          return $scope.active = item;
+        };
+      }
+    };
+  });
+
 }).call(this);

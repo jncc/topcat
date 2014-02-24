@@ -25,12 +25,15 @@ module.config ['$routeProvider', ($routeProvider) ->
             controller:     'EditorController',
             templateUrl:    'views/editor/editor.html',
             resolve:        'record': (RecordLoader) -> RecordLoader()
-        .when '/sandbox/colours', # currently broken because i got rid of SandboxController.js
+        .when '/sandbox/colours',
             controller:     'SandboxController',
             templateUrl:    'views/sandbox/colours.html'
         .when '/sandbox/glyphs',
             controller:     'SandboxController',
             templateUrl:    'views/sandbox/glyphs.html'
+        .when '/sandbox/dropdown',
+            controller:     'SandboxController',
+            templateUrl:    'views/sandbox/dropdown.html'
         .otherwise
             redirectTo:     '/'
     ]

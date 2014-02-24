@@ -31,6 +31,9 @@
       }).when('/sandbox/glyphs', {
         controller: 'SandboxController',
         templateUrl: 'views/sandbox/glyphs.html'
+      }).when('/sandbox/dropdown', {
+        controller: 'SandboxController',
+        templateUrl: 'views/sandbox/dropdown.html'
       }).otherwise({
         redirectTo: '/'
       });

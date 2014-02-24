@@ -296,9 +296,8 @@
     <Content Include="app\lib\zeroclipboard-1.1.7\ZeroClipboard.min.js" />
     <Content Include="app\lib\zeroclipboard-1.1.7\ZeroClipboard.swf" />
     <Content Include="app\views\editor\editor.html" />
-    <Content Include="app\views\editor\tags-and-topic.html" />
-    <Content Include="app\views\editor\title-and-location.html" />
     <Content Include="app\views\sandbox\colours.html" />
+    <Content Include="app\views\sandbox\dropdown.html" />
     <Content Include="app\views\sandbox\glyphs.html" />
     <Content Include="app\views\search\search.html" />
     <Content Include="favicon.ico" />
