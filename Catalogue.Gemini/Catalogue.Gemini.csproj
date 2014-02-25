@@ -61,6 +61,7 @@
     <Compile Include="Model\Vocabulary.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Roles\ResponsiblePartyRoles.cs" />
+    <Compile Include="Spatial\BoundingBoxUtility.cs" />
     <Compile Include="Templates\Library.cs" />
     <Compile Include="Validation\ValidationResultSet.cs" />
     <Compile Include="Validation\Validator.cs" />
@@ -68,6 +69,12 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Catalogue.Utilities\Catalogue.Utilities.csproj">
+      <Project>{b6b90aa2-bf70-4460-a975-5192ab5ecdca}</Project>
+      <Name>Catalogue.Utilities</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

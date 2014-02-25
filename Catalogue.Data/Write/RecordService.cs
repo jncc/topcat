@@ -1,14 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Catalogue.Data.Model;
-using Catalogue.Data.Test;
+using Catalogue.Gemini.Helpers;
 using Catalogue.Gemini.Model;
+using Catalogue.Gemini.Spatial;
 using Catalogue.Gemini.Templates;
 using Catalogue.Utilities.Clone;
-using Catalogue.Utilities.Spatial;
+using Catalogue.Utilities.Collections;
 using Catalogue.Utilities.Text;
 using FluentAssertions;
 using Moq;
@@ -55,11 +54,12 @@ namespace Catalogue.Data.Write
 
         internal RecordServiceResult Upsert(Record record)
         {
-            this.SyncDenormalizations(record);
+            SyncDenormalizations(record);
 
             // currently only supporting dataset resource types
             record.Gemini.ResourceType = "dataset";
 
+            CorrectlyOrderKeywords(record);
             NormalizeUseConstraints(record);
 
             var errors = validator.Validate(record);
@@ -70,12 +70,14 @@ namespace Catalogue.Data.Write
             return new RecordServiceResult { Errors = errors };
         }
 
-        void NormalizeUseConstraints(Record record)
+        void CorrectlyOrderKeywords(Record record)
         {
-            const string none = "no conditions apply";
-
-            if (record.Gemini.UseConstraints.IsNotBlank() && record.Gemini.UseConstraints.ToLowerInvariant().Trim() == none)
-                record.Gemini.UseConstraints = none;
+            record.Gemini.Keywords = record.Gemini.Keywords
+                .OrderByDescending(k => k.Vocab == "http://vocab.jncc.gov.uk/jncc-broad-category")
+                .ThenByDescending(k => k.Vocab.IsNotBlank())
+                .ThenBy(k => k.Vocab)
+                .ThenBy(k => k.Value)
+                .ToList();
         }
 
         void SyncDenormalizations(Record record)
@@ -83,6 +85,14 @@ namespace Catalogue.Data.Write
             // we store the bounding box as wkt so we can index it
             if (!BoundingBoxUtility.IsBlank(record.Gemini.BoundingBox))
                 record.Wkt = BoundingBoxUtility.ToWkt(record.Gemini.BoundingBox);
+        }
+
+        void NormalizeUseConstraints(Record record)
+        {
+            const string none = "no conditions apply";
+
+            if (record.Gemini.UseConstraints.IsNotBlank() && record.Gemini.UseConstraints.ToLowerInvariant().Trim() == none)
+                record.Gemini.UseConstraints = none;
         }
     }
 
@@ -118,23 +128,23 @@ namespace Catalogue.Data.Write
 
     class when_upserting_a_record
     {
-        Record BlankRecord()
-        {
-            return new Record { Path = @"X:\some\path", Gemini = Library.Blank() };
-        }
-
         [Test]
         public void should_store_record_in_the_database()
         {
-            // todo: 
-            
+            var database = Mock.Of<IDocumentSession>();
+            var service = new RecordService(database, ValidatorStub());
+
+            var record = BlankRecord();
+            service.Upsert(record);
+
+            Mock.Get(database).Verify(db => db.Store(record));
         }
         
         [Test]
-        public void bounding_box_should_be_stored_as_wkt()
+        public void should_store_bounding_box_as_wkt()
         {
             var database = Mock.Of<IDocumentSession>();
-            var service = new RecordService(database, GetValidatorStub());
+            var service = new RecordService(database, ValidatorStub());
             
             var e = Library.Example();
             var record = new Record { Gemini = e };
@@ -151,10 +161,9 @@ namespace Catalogue.Data.Write
             // to avoid raven / lucene indexing errors
 
             var database = Mock.Of<IDocumentSession>();
-            var service = new RecordService(database, GetValidatorStub());
+            var service = new RecordService(database, ValidatorStub());
 
-            var record = BlankRecord();
-            service.Upsert(record);
+            service.Upsert(BlankRecord());
 
             Mock.Get(database).Verify(db => db.Store(It.Is((Record r) => r.Wkt == null)));
         }
@@ -163,7 +172,7 @@ namespace Catalogue.Data.Write
         public void should_always_set_resource_type_to_dataset()
         {
             var database = Mock.Of<IDocumentSession>();
-            var service = new RecordService(database, GetValidatorStub());
+            var service = new RecordService(database, ValidatorStub());
 
             var record = BlankRecord().With(r => r.Gemini.ResourceType = "");
             service.Upsert(record);
@@ -175,7 +184,7 @@ namespace Catalogue.Data.Write
         public void should_normalise_use_constraints()
         {
             var database = Mock.Of<IDocumentSession>();
-            var service = new RecordService(database, GetValidatorStub());
+            var service = new RecordService(database, ValidatorStub());
 
             var record = BlankRecord().With(r => r.Gemini.UseConstraints = "   No conditions APPLY");
             service.Upsert(record);
@@ -187,19 +196,60 @@ namespace Catalogue.Data.Write
         public void should_set_security_to_open_by_default()
         {
             var database = Mock.Of<IDocumentSession>();
-            var service = new RecordService(database, GetValidatorStub());
+            var service = new RecordService(database, ValidatorStub());
 
-            var record = BlankRecord();
-            service.Upsert(record);
+            service.Upsert(BlankRecord());
 
             Mock.Get(database).Verify(db => db.Store(It.Is((Record r) => r.Security == Security.Open)));
         }
 
-        // todo should save keywords in correct order - 
-        // first http://vocab.jncc.gov.uk/jncc-broad-category
-        // then sort by vocab, then value
+        [Test]
+        public void should_save_keywords_in_correct_order()
+        {
+            // should be sorted by vocab, then value, but with distinguished vocab "jncc broad category" first!
+            // finally, keywords with no namespace should be last
 
-        IRecordValidator GetValidatorStub()
+            var database = Mock.Of<IDocumentSession>();
+            var service = new RecordService(database, ValidatorStub());
+
+            var record = BlankRecord().With(r =>
+                {
+                    r.Gemini.Keywords = new StringPairList
+                        {
+                            { "a-vocab-beginning-with-a", "bravo" },
+                            { "boring-vocab-beginning-with-b", "some-keyword" },
+                            { "a-vocab-beginning-with-a", "alpha" },
+                            { "http://vocab.jncc.gov.uk/jncc-broad-category", "bravo" },
+                            { "http://vocab.jncc.gov.uk/jncc-broad-category", "alpha" },
+                            { "", "some-keyword" },
+                        }.ToKeywordList();
+                });
+
+            service.Upsert(record);
+
+            var expected = new StringPairList
+                {
+                    { "http://vocab.jncc.gov.uk/jncc-broad-category", "alpha" },
+                    { "http://vocab.jncc.gov.uk/jncc-broad-category", "bravo" },
+                    { "a-vocab-beginning-with-a", "alpha" },
+                    { "a-vocab-beginning-with-a", "bravo" },
+                    { "boring-vocab-beginning-with-b", "some-keyword" },
+                    { "", "some-keyword" },
+                }.ToKeywordList();
+
+            Mock.Get(database).Verify(db => db.Store(It.Is((Record r) => r.Gemini.Keywords.IsEqualTo(expected))));
+        }
+
+
+        Record BlankRecord()
+        {
+            return new Record { Path = @"X:\some\path", Gemini = Library.Blank() };
+        }
+
+        /// <summary>
+        /// A validator stub which returns no validation errors.
+        /// </summary>
+        IRecordValidator ValidatorStub()
         {
             return Mock.Of<IRecordValidator>(v => v.Validate(It.IsAny<Record>()) == new RecordValidationErrorSet());
         }

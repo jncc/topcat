@@ -7,7 +7,7 @@ using Catalogue.Gemini.Model;
 using FluentAssertions;
 using NUnit.Framework;
 
-namespace Catalogue.Utilities.Spatial
+namespace Catalogue.Gemini.Spatial
 {
     public class BoundingBoxUtility
     {
@@ -41,8 +41,9 @@ namespace Catalogue.Utilities.Spatial
         [Test]
         public void can_identify_a_blank_box()
         {
-            var box = new BoundingBox {North = 0, South = 0, East = 0, West = 0};
+            var box = new BoundingBox { North = 0, South = 0, East = 0, West = 0 };
             BoundingBoxUtility.IsBlank(box).Should().BeTrue();
         }
     }
+
 }

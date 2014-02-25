@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Catalogue.Gemini.Model;
 using Catalogue.Gemini.Helpers;
+using Catalogue.Utilities.Collections;
 
 namespace Catalogue.Gemini.Templates
 {
@@ -21,7 +22,7 @@ namespace Catalogue.Gemini.Templates
                 Title = "",
                 Abstract = "",
                 TopicCategory = "",
-                Keywords = new Dictionary<string, string>().ToKeywordList(),
+                Keywords = new StringPairList().ToKeywordList(),
                 TemporalExtent = new TemporalExtent { Begin = "", End = "" },
                 DatasetReferenceDate = "",
                 Lineage = "",
@@ -63,7 +64,7 @@ namespace Catalogue.Gemini.Templates
                 Title = "Demo Dataset",
                 Abstract = "This is just a demo dataset.",
                 TopicCategory = "geoscientificInformation",
-                Keywords = new Dictionary<string, string>
+                Keywords = new StringPairList
                     {
                         { "", "sounding" },
                         { "http://vocab.ndg.nerc.ac.uk/list/C751/220", "Bermuda Institute of Ocean Sciences" },
@@ -83,7 +84,7 @@ namespace Catalogue.Gemini.Templates
                 LimitationsOnPublicAccess = "no limitations",
                 UseConstraints = "no conditions apply",
                 SpatialReferenceSystem = "http://www.opengis.net/def/crs/EPSG/0/4326",
-                Extent = new Dictionary<string, string> { { "", "Bermuda" } }.ToExtentList(),
+                Extent = new StringPairList { { "", "Bermuda" } }.ToExtentList(),
                 MetadataDate = "2013-07-16",
                 MetadataLanguage = "eng",
                 MetadataPointOfContact = new ResponsibleParty
