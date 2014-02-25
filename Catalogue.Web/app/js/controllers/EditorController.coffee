@@ -35,9 +35,8 @@ angular.module('app.controllers').controller 'EditorController',
             i = $scope.form.gemini.keywords.indexOf keyword # indexOf doesn't work in ie7!
             $scope.form.gemini.keywords.splice i, 1
         $scope.addKeyword = -> $scope.form.gemini.keywords.push({ vocab: '', value: '' })
-        
-        # call reset() to initially set up form
-        $scope.reset()
+                
+        $scope.reset() # initially set up form
         return
     
 

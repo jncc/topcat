@@ -60,16 +60,15 @@ namespace Catalogue.Data.Write
 
     class validator_specs
     {
-        Record validBlankRecord = new Record
-            {
-                Path = @"X:\some\path",
-                Gemini = Library.Blank()
-            };
+        Record BlankRecord()
+        {
+            return new Record { Path = @"X:\some\path", Gemini = Library.Blank() };
+        }
 
         [Test]
         public void should_fail_when_path_is_empty()
         {
-            var errors = new RecordValidator().Validate(validBlankRecord.With(r => r.Path = ""));
+            var errors = new RecordValidator().Validate(BlankRecord().With(r => r.Path = ""));
             errors.Should().NotBeEmpty();
             errors.First().Message.Should().StartWith("Path must not be blank");
         }
@@ -77,21 +76,21 @@ namespace Catalogue.Data.Write
         [Test]
         public void should_fail_when_path_is_null()
         {
-            var errors = new RecordValidator().Validate(validBlankRecord.With(r => r.Path = null));
+            var errors = new RecordValidator().Validate(BlankRecord().With(r => r.Path = null));
             errors.Should().NotBeEmpty();
         }
 
         [Test]
         public void should_fail_when_path_is_whitespace()
         {
-            var errors = new RecordValidator().Validate(validBlankRecord.With(r => r.Path = " "));
+            var errors = new RecordValidator().Validate(BlankRecord().With(r => r.Path = " "));
             errors.Should().NotBeEmpty();
         }
 
         [Test]
         public void should_fail_when_topic_category_not_valid()
         {
-            var record = validBlankRecord.With(r => r.Gemini.TopicCategory = "anInvalidTopicCategory");
+            var record = BlankRecord().With(r => r.Gemini.TopicCategory = "anInvalidTopicCategory");
             var errors = new RecordValidator().Validate(record);
 
             errors.Should().NotBeEmpty();
@@ -101,14 +100,14 @@ namespace Catalogue.Data.Write
         [Test]
         public void should_pass_when_topic_category_is_null()
         {
-            var errors = new RecordValidator().Validate(validBlankRecord.With(r => r.Gemini.TopicCategory = null));
+            var errors = new RecordValidator().Validate(BlankRecord().With(r => r.Gemini.TopicCategory = null));
             errors.Should().BeEmpty();
         }
 
         [Test]
         public void should_pass_when_topic_category_is_empty()
         {
-            var errors = new RecordValidator().Validate(validBlankRecord.With(r => r.Gemini.TopicCategory = ""));
+            var errors = new RecordValidator().Validate(BlankRecord().With(r => r.Gemini.TopicCategory = ""));
             errors.Should().BeEmpty();
         }
 

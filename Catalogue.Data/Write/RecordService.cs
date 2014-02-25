@@ -7,6 +7,7 @@ using Catalogue.Data.Model;
 using Catalogue.Data.Test;
 using Catalogue.Gemini.Model;
 using Catalogue.Gemini.Templates;
+using Catalogue.Utilities.Clone;
 using Catalogue.Utilities.Spatial;
 using Catalogue.Utilities.Text;
 using FluentAssertions;
@@ -85,13 +86,10 @@ namespace Catalogue.Data.Write
         }
     }
 
-    /// <summary>
-    /// Information about the result of an operation of the RecordService.
-    /// </summary>
     public class RecordServiceResult
     {
-        public RecordValidationErrorSet Errors { get; internal set; }
-        public bool Success { get { return !Errors.Any(); } }
+        public RecordValidationErrorSet Errors { get; set; }
+        public bool Success { get { return Errors == null || !Errors.Any(); } }
     }
 
 
@@ -120,14 +118,24 @@ namespace Catalogue.Data.Write
 
     class when_upserting_a_record
     {
-        // todo: should store the record in the db
+        Record BlankRecord()
+        {
+            return new Record { Path = @"X:\some\path", Gemini = Library.Blank() };
+        }
 
+        [Test]
+        public void should_store_record_in_the_database()
+        {
+            // todo: 
+            
+        }
+        
         [Test]
         public void bounding_box_should_be_stored_as_wkt()
         {
             var database = Mock.Of<IDocumentSession>();
             var service = new RecordService(database, GetValidatorStub());
-
+            
             var e = Library.Example();
             var record = new Record { Gemini = e };
 
@@ -138,29 +146,26 @@ namespace Catalogue.Data.Write
         }
 
         [Test]
-        public void empty_bounding_box_should_be_stored_as_null_wkt()
+        public void should_store_empty_bounding_box_as_null_wkt()
         {
-            // (to avoid raven / lucene errors)
+            // to avoid raven / lucene indexing errors
 
             var database = Mock.Of<IDocumentSession>();
             var service = new RecordService(database, GetValidatorStub());
 
-            var record = new Record { Gemini = Library.Blank() };
-
+            var record = BlankRecord();
             service.Upsert(record);
 
             Mock.Get(database).Verify(db => db.Store(It.Is((Record r) => r.Wkt == null)));
         }
 
         [Test]
-        public void resource_type_should_always_be_dataset()
+        public void should_always_set_resource_type_to_dataset()
         {
             var database = Mock.Of<IDocumentSession>();
             var service = new RecordService(database, GetValidatorStub());
 
-            var record = new Record { Gemini = Library.Blank() };
-            record.Gemini.ResourceType = ""; // make sure it's blank
-
+            var record = BlankRecord().With(r => r.Gemini.ResourceType = "");
             service.Upsert(record);
 
             Mock.Get(database).Verify(db => db.Store(It.Is((Record r) => r.Gemini.ResourceType == "dataset")));
@@ -172,9 +177,7 @@ namespace Catalogue.Data.Write
             var database = Mock.Of<IDocumentSession>();
             var service = new RecordService(database, GetValidatorStub());
 
-            var record = new Record { Gemini = Library.Blank() };
-            record.Gemini.UseConstraints = "   No conditions APPLY";
-
+            var record = BlankRecord().With(r => r.Gemini.UseConstraints = "   No conditions APPLY");
             service.Upsert(record);
 
             Mock.Get(database).Verify(db => db.Store(It.Is((Record r) => r.Gemini.UseConstraints == "no conditions apply")));
@@ -186,8 +189,7 @@ namespace Catalogue.Data.Write
             var database = Mock.Of<IDocumentSession>();
             var service = new RecordService(database, GetValidatorStub());
 
-            var record = new Record { Gemini = Library.Blank() };
-
+            var record = BlankRecord();
             service.Upsert(record);
 
             Mock.Get(database).Verify(db => db.Store(It.Is((Record r) => r.Security == Security.Open)));
