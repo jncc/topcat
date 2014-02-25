@@ -67,7 +67,18 @@ namespace Catalogue.Data.Write
             if (!errors.Any())
                 db.Store(record);
 
-            return new RecordServiceResult { Errors = errors };
+            return new RecordServiceResult
+                {
+                    Record = record,
+                    Errors = errors,
+                };
+        }
+
+        void SyncDenormalizations(Record record)
+        {
+            // we store the bounding box as wkt so we can index it
+            if (!BoundingBoxUtility.IsBlank(record.Gemini.BoundingBox))
+                record.Wkt = BoundingBoxUtility.ToWkt(record.Gemini.BoundingBox);
         }
 
         void CorrectlyOrderKeywords(Record record)
@@ -78,13 +89,6 @@ namespace Catalogue.Data.Write
                 .ThenBy(k => k.Vocab)
                 .ThenBy(k => k.Value)
                 .ToList();
-        }
-
-        void SyncDenormalizations(Record record)
-        {
-            // we store the bounding box as wkt so we can index it
-            if (!BoundingBoxUtility.IsBlank(record.Gemini.BoundingBox))
-                record.Wkt = BoundingBoxUtility.ToWkt(record.Gemini.BoundingBox);
         }
 
         void NormalizeUseConstraints(Record record)
@@ -100,6 +104,11 @@ namespace Catalogue.Data.Write
     {
         public RecordValidationErrorSet Errors { get; set; }
         public bool Success { get { return Errors == null || !Errors.Any(); } }
+
+        /// <summary>
+        /// The (possibly modified) record that was submitted.
+        /// </summary>
+        public Record Record { get; set; }
     }
 
 
@@ -139,7 +148,22 @@ namespace Catalogue.Data.Write
 
             Mock.Get(database).Verify(db => db.Store(record));
         }
-        
+
+        [Test]
+        public void should_return_record_in_result()
+        {
+            // so we can pass the possibly modified record back to the client
+            // without an unnecessary fetch from the database
+
+            var database = Mock.Of<IDocumentSession>();
+            var service = new RecordService(database, ValidatorStub());
+
+            var record = BlankRecord();
+            var result = service.Upsert(record);
+
+            result.Record.Should().Be(record);
+        }
+
         [Test]
         public void should_store_bounding_box_as_wkt()
         {
@@ -239,7 +263,6 @@ namespace Catalogue.Data.Write
 
             Mock.Get(database).Verify(db => db.Store(It.Is((Record r) => r.Gemini.Keywords.IsEqualTo(expected))));
         }
-
 
         Record BlankRecord()
         {

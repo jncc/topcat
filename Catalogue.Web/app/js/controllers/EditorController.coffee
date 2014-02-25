@@ -17,13 +17,12 @@ angular.module('app.controllers').controller 'EditorController',
         $scope.reset = () -> $scope.form = angular.copy(record)
 
         $scope.save = () ->
-            record = $scope.form # oo-er, is updating the parameter a good idea?
-            $scope.reset()
             $rootScope.busy = { value: true }
-            $http.put('../api/records/' + record.id, record)
-            $rootScope.busy = { value: false }
-            ## todo use resource Record.update 
-
+            $http.put('../api/records/' + record.id, $scope.form).then (response) ->
+                record = response.data.record # oo-er, is updating a param a good idea?
+                $scope.reset()
+                $rootScope.busy = { value: false }
+                # todo use resource Record.update ?
 
         $scope.isClean = -> angular.equals($scope.form, record)
         $scope.isSaveHidden = -> $scope.isClean() or record.readOnly

@@ -21,15 +21,16 @@
       return $scope.form = angular.copy(record);
     };
     $scope.save = function() {
-      record = $scope.form;
-      $scope.reset();
       $rootScope.busy = {
         value: true
       };
-      $http.put('../api/records/' + record.id, record);
-      return $rootScope.busy = {
-        value: false
-      };
+      return $http.put('../api/records/' + record.id, $scope.form).then(function(response) {
+        record = response.data.record;
+        $scope.reset();
+        return $rootScope.busy = {
+          value: false
+        };
+      });
     };
     $scope.isClean = function() {
       return angular.equals($scope.form, record);
