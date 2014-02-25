@@ -25,11 +25,15 @@
         value: true
       };
       return $http.put('../api/records/' + record.id, $scope.form).then(function(response) {
-        record = response.data.record;
-        $scope.reset();
-        return $rootScope.busy = {
-          value: false
-        };
+        if (response.data.success) {
+          record = response.data.record;
+          $scope.reset();
+          return $rootScope.busy = {
+            value: false
+          };
+        } else {
+
+        }
       });
     };
     $scope.isClean = function() {

@@ -18,11 +18,14 @@ angular.module('app.controllers').controller 'EditorController',
 
         $scope.save = () ->
             $rootScope.busy = { value: true }
+            # todo use resource Record.update ?
             $http.put('../api/records/' + record.id, $scope.form).then (response) ->
-                record = response.data.record # oo-er, is updating a param a good idea?
-                $scope.reset()
-                $rootScope.busy = { value: false }
-                # todo use resource Record.update ?
+                if response.data.success
+                    record = response.data.record # oo-er, is updating a param a good idea?
+                    $scope.reset()
+                    $rootScope.busy = { value: false }
+                else
+                    # show the validation errors
 
         $scope.isClean = -> angular.equals($scope.form, record)
         $scope.isSaveHidden = -> $scope.isClean() or record.readOnly
