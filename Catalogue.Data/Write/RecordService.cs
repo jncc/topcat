@@ -138,7 +138,7 @@ namespace Catalogue.Data.Write
     class when_upserting_a_record
     {
         [Test]
-        public void should_store_record_in_the_database()
+        public void should_store_valid_record_in_the_database()
         {
             var database = Mock.Of<IDocumentSession>();
             var service = new RecordService(database, ValidatorStub());
@@ -147,6 +147,18 @@ namespace Catalogue.Data.Write
             service.Upsert(record);
 
             Mock.Get(database).Verify(db => db.Store(record));
+        }
+
+        [Test]
+        public void should_not_store_invalid_record_in_the_database()
+        {
+            var database = Mock.Of<IDocumentSession>();
+            var validatorThatFails = Mock.Of<IRecordValidator>(v => v.Validate(It.IsAny<Record>()) == new RecordValidationErrorSet { new RecordValidationError() });
+            var service = new RecordService(database, validatorThatFails);
+
+            service.Upsert(BlankRecord());
+
+            Mock.Get(database).Verify(db => db.Store(It.IsAny<Record>()), Times.Never);
         }
 
         [Test]
