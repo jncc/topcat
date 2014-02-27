@@ -10,6 +10,7 @@ using Catalogue.Data.Model;
 using Catalogue.Gemini.Templates;
 using Catalogue.Gemini.Vocabs;
 using Catalogue.Utilities.Clone;
+using Catalogue.Utilities.Expressions;
 using Catalogue.Utilities.Text;
 using FluentAssertions;
 using NUnit.Framework;
@@ -27,13 +28,21 @@ namespace Catalogue.Data.Write
         {
             var results = new RecordValidationErrorSet();
 
+            // path_must_not_be_blank
             if (record.Path.IsBlank())
                 results.Add("Path must not be blank.", r => r.Path);
 
+            // topic_category_must_be_valid
             if (!IsTopicCategoryValid(record.Gemini.TopicCategory))
                 results.Add(
                     String.Format("Topic Category '{0}' is not valid.", record.Gemini.TopicCategory),
                     r => r.Gemini.TopicCategory);
+
+            // non_open_records_must_describe_their_limitations_on_public_access
+            if (record.Security != Security.Open && record.Gemini.LimitationsOnPublicAccess.IsBlank())
+                results.Add(
+                    String.Format("Non-open records must describe their limitations on public access"),
+                    r => r.Security, r => r.Gemini.LimitationsOnPublicAccess);
 
             return results;
         }
@@ -64,12 +73,14 @@ namespace Catalogue.Data.Write
             get
             {
                 return (from e in FieldExpressions
-                        let fullDottedPath = e.Body.ToString().Replace("r.", String.Empty)
+                        let expression = e.Body.RemoveUnary()
+                        let fullDottedPath = expression.ToString().Replace("r.", String.Empty)
                         let camelCasedProperties = fullDottedPath.Split('.').Select(StringUtility.ToCamelCase)
                         select String.Join(".", camelCasedProperties))
                        .ToList();
             }
         }
+
     }
 
     public class RecordValidationErrorSet : Collection<RecordValidationError>
@@ -88,34 +99,16 @@ namespace Catalogue.Data.Write
         }
 
         [Test]
-        public void should_fail_when_path_is_empty()
+        public void path_must_not_be_blank([Values("", " ", null)] string path)
         {
-            var errors = new RecordValidator().Validate(BlankRecord().With(r => r.Path = ""));
+            var errors = new RecordValidator().Validate(BlankRecord().With(r => r.Path = path));
 
             errors.Single().Message.Should().StartWith("Path must not be blank");
             errors.Single().Fields.Single().Should().Be("path");
         }
 
         [Test]
-        public void should_fail_when_path_is_null()
-        {
-            var errors = new RecordValidator().Validate(BlankRecord().With(r => r.Path = null));
-
-            errors.Single().Message.Should().StartWith("Path must not be blank");
-            errors.Single().Fields.Single().Should().Be("path");
-        }
-
-        [Test]
-        public void should_fail_when_path_is_whitespace()
-        {
-            var errors = new RecordValidator().Validate(BlankRecord().With(r => r.Path = " "));
-
-            errors.Single().Message.Should().StartWith("Path must not be blank");
-            errors.Single().Fields.Single().Should().Be("path");
-        }
-
-        [Test]
-        public void should_fail_when_topic_category_not_valid()
+        public void topic_category_must_be_valid()
         {
             var record = BlankRecord().With(r => r.Gemini.TopicCategory = "anInvalidTopicCategory");
             var errors = new RecordValidator().Validate(record);
@@ -125,23 +118,33 @@ namespace Catalogue.Data.Write
         }
 
         [Test]
-        public void should_pass_when_topic_category_is_null()
+        public void topic_category_may_be_blank([Values("", null)] string topicCategory)
         {
-            var errors = new RecordValidator().Validate(BlankRecord().With(r => r.Gemini.TopicCategory = null));
+            var record = BlankRecord().With(r => r.Gemini.TopicCategory = topicCategory);
+            var errors = new RecordValidator().Validate(record);
             errors.Should().BeEmpty();
         }
 
         [Test]
-        public void should_pass_when_topic_category_is_empty()
+        public void non_open_records_must_describe_their_limitations_on_public_access(
+            [Values(Security.Classified, Security.Restricted)] Security security,
+            [Values("", " ", null)] string limitationsOnPublicAccess)
         {
-            var errors = new RecordValidator().Validate(BlankRecord().With(r => r.Gemini.TopicCategory = ""));
-            errors.Should().BeEmpty();
-        }
+            var record = BlankRecord().With(r =>
+                {
+                    r.Security = security;
+                    r.Gemini.LimitationsOnPublicAccess = limitationsOnPublicAccess;
+                });
 
+            var errors = new RecordValidator().Validate(record);
+            
+            errors.Single().Fields.Should().Contain("security");
+            errors.Single().Fields.Should().Contain("gemini.limitationsOnPublicAccess");
+        }
 
         // todo
 
-        // non_open_records_should_have_non_empty_limitations_on_public_access
+        // 
         // publishable records must have a resourcelocator, which must be a public url
         // responsible party role should be one of code list in ResponsiblePartyRoles.Allowed
         // warning for blank use constraints - could be "no conditions apply" if that's what's meant

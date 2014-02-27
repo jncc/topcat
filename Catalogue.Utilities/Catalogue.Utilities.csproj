@@ -52,6 +52,7 @@
     <Compile Include="Clone\CloneExtensions.cs" />
     <Compile Include="Collections\StringPairList.cs" />
     <Compile Include="Diagnostics\ObjectDumper.cs" />
+    <Compile Include="Expressions\ExpressionUtility.cs" />
     <Compile Include="Html\Linky.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Text\StringUtility.cs" />
