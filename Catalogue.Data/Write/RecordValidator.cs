@@ -26,36 +26,71 @@ namespace Catalogue.Data.Write
     {
         public RecordValidationErrorSet Validate(Record record)
         {
-            var results = new RecordValidationErrorSet();
+            var errors = new RecordValidationErrorSet();
 
             // path_must_not_be_blank
             if (record.Path.IsBlank())
-                results.Add("Path must not be blank.", r => r.Path);
+            {
+                errors.Add("Path must not be blank.", r => r.Path);
+            }
 
-            // topic_category_must_be_valid
-            if (!IsTopicCategoryValid(record.Gemini.TopicCategory))
-                results.Add(
-                    String.Format("Topic Category '{0}' is not valid.", record.Gemini.TopicCategory),
-                    r => r.Gemini.TopicCategory);
+            ValidateTopicCategory(record, errors);
 
             // non_open_records_must_describe_their_limitations_on_public_access
             if (record.Security != Security.Open && record.Gemini.LimitationsOnPublicAccess.IsBlank())
-                results.Add(
-                    String.Format("Non-open records must describe their limitations on public access."),
-                    r => r.Security, r => r.Gemini.LimitationsOnPublicAccess);
+            {
+                errors.Add("Non-open records must describe their limitations on public access.",
+                    r => r.Security,
+                    r => r.Gemini.LimitationsOnPublicAccess);
+            }
 
             // publishable_records_must_have_a_resource_locator
             if (record.Status == Status.Publishable && record.Gemini.ResourceLocator.IsBlank())
-                results.Add(
-                    String.Format("Publishable records must have a resource locator."),
+            {
+                errors.Add("Publishable records must have a resource locator.",
                     r => r.Status, r => r.Gemini.ResourceLocator);
+            }
 
-            return results;
+            ValidateResourceLocator(record, errors);
+
+
+            return errors;
         }
 
-        static bool IsTopicCategoryValid(string s)
+        void ValidateResourceLocator(Record record, RecordValidationErrorSet errors)
         {
-            return s.IsBlank() || TopicCategories.Values.Keys.Any(k => k == s);
+            // resource_locator_must_be_a_well_formed_http_url
+            if (record.Gemini.ResourceLocator.IsNotBlank())
+            {
+                Uri url;
+
+                if (Uri.TryCreate(record.Gemini.ResourceLocator, UriKind.Absolute, out url))
+                {
+                    if (url.Scheme != Uri.UriSchemeHttp)
+                    {
+                        errors.Add("Resource locator must be an http url",
+                            r => r.Gemini.ResourceLocator);
+                    }
+                }
+                else
+                {
+                    errors.Add("Resource locator must be a valid url",
+                        r => r.Gemini.ResourceLocator);
+                }
+            }
+        }
+
+        void ValidateTopicCategory(Record record, RecordValidationErrorSet errors)
+        {
+            // topic_category_must_be_valid
+
+            string s = record.Gemini.TopicCategory;
+
+            if(s.IsNotBlank() && !TopicCategories.Values.Keys.Any(k => k == s))
+            {
+                errors.Add(String.Format("Topic Category '{0}' is not valid.", record.Gemini.TopicCategory),
+                    r => r.Gemini.TopicCategory);
+            }
         }
     }
 
@@ -133,12 +168,12 @@ namespace Catalogue.Data.Write
 
         [Test]
         public void non_open_records_must_describe_their_limitations_on_public_access(
-            [Values(Security.Classified, Security.Restricted)] Security security,
+            [Values(Security.Classified, Security.Restricted)] Security nonOpen,
             [Values("", " ", null)] string blank)
         {
             var record = BlankRecord().With(r =>
                 {
-                    r.Security = security;
+                    r.Security = nonOpen;
                     r.Gemini.LimitationsOnPublicAccess = blank;
                 });
 
@@ -164,18 +199,28 @@ namespace Catalogue.Data.Write
         }
 
         [Test]
-        public void resource_locator_must_be_a_public_url()
+        public void resource_locator_must_be_a_well_formed_http_url([Values(@"Z:\some\path", "utter rubbish")] string nonHttpUrl)
         {
-            
+            var record = BlankRecord().With(r => r.Gemini.ResourceLocator = nonHttpUrl);
+            var errors = new RecordValidator().Validate(record);
+            errors.Single().Fields.Should().Contain("gemini.resourceLocator");
         }
 
         // todo
 
+        [Test]
+        public void responsible_party_role_must_be_allowed()
+        {
+
+            //ResponsiblePartyRoles.Allowed
+        }
+
+
+
         // 
-        // 
-        // responsible party role should be one of code list in ResponsiblePartyRoles.Allowed
         // warning for blank use constraints - could be "no conditions apply" if that's what's meant
         // warning for unknown data format
         // valid email addresses, dates, ...
+        // resource_locator_must_be_a_public_url (validator might need an http service)
     }
 }
