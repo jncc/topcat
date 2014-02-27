@@ -50,12 +50,11 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Clone\CloneExtensions.cs" />
-    <Compile Include="Collections\DictionaryExtensions.cs" />
     <Compile Include="Collections\StringPairList.cs" />
     <Compile Include="Diagnostics\ObjectDumper.cs" />
     <Compile Include="Html\Linky.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Text\StringExtensions.cs" />
+    <Compile Include="Text\StringUtility.cs" />
     <Compile Include="Versioning\VersionStamp.cs" />
   </ItemGroup>
   <ItemGroup>

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using Catalogue.Data.Model;
 using Catalogue.Gemini.Helpers;
 using Catalogue.Gemini.Model;
@@ -54,8 +55,6 @@ namespace Catalogue.Data.Write
 
         internal RecordServiceResult Upsert(Record record)
         {
-            SyncDenormalizations(record);
-
             // currently only supporting dataset resource types
             record.Gemini.ResourceType = "dataset";
 
@@ -65,7 +64,10 @@ namespace Catalogue.Data.Write
             var errors = validator.Validate(record);
 
             if (!errors.Any())
+            {
+                SyncDenormalizations(record);
                 db.Store(record);
+            }
 
             return new RecordServiceResult
                 {
@@ -153,7 +155,7 @@ namespace Catalogue.Data.Write
         public void should_not_store_invalid_record_in_the_database()
         {
             var database = Mock.Of<IDocumentSession>();
-            var validatorThatFails = Mock.Of<IRecordValidator>(v => v.Validate(It.IsAny<Record>()) == new RecordValidationErrorSet { new RecordValidationError() });
+            var validatorThatFails = Mock.Of<IRecordValidator>(v => v.Validate(It.IsAny<Record>()) == new RecordValidationErrorSet { new RecordValidationError("There's a problem!", new List<Expression<Func<Record, object>>>() ) });
             var service = new RecordService(database, validatorThatFails);
 
             service.Upsert(BlankRecord());

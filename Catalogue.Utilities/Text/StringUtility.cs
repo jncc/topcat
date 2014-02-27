@@ -1,12 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using NUnit.Framework;
 
 namespace Catalogue.Utilities.Text
 {
-    public static class StringExtensions
+    public static class StringUtility
     {
         public static bool IsBlank(this string s)
         {
@@ -87,6 +90,57 @@ namespace Catalogue.Utilities.Text
             if (s.Length == 1)
                 return s.ToLowerInvariant();
             return s.Remove(1).ToLowerInvariant() + s.Substring(1);
+        }
+
+        public static string ToCamelCase(string s)
+        {
+            // https://github.com/JamesNK/Newtonsoft.Json/blob/master/Src/Newtonsoft.Json/Utilities/StringUtils.cs
+
+            if (string.IsNullOrEmpty(s))
+                return s;
+
+            if (!char.IsUpper(s[0]))
+                return s;
+
+            var sb = new StringBuilder();
+            
+            for (int i = 0; i < s.Length; i++)
+            {
+                bool hasNext = (i + 1 < s.Length);
+
+                if ((i == 0 || !hasNext) || char.IsUpper(s[i + 1]))
+                {
+                    char lowerCase = char.ToLower(s[i], CultureInfo.InvariantCulture);
+                    sb.Append(lowerCase);
+                }
+                else
+                {
+                    sb.Append(s.Substring(i));
+                    break;
+                }
+            }
+
+            return sb.ToString();
+        }
+    }
+
+    class string_utility_tests
+    {
+        [Test]
+        public void test_to_camel_case()
+        {
+            // https://github.com/JamesNK/Newtonsoft.Json/blob/master/Src/Newtonsoft.Json.Tests/Utilities/StringUtilsTests.cs
+            Assert.AreEqual("urlValue", StringUtility.ToCamelCase("URLValue"));
+            Assert.AreEqual("url", StringUtility.ToCamelCase("URL"));
+            Assert.AreEqual("id", StringUtility.ToCamelCase("ID"));
+            Assert.AreEqual("i", StringUtility.ToCamelCase("I"));
+            Assert.AreEqual("", StringUtility.ToCamelCase(""));
+            Assert.AreEqual(null, StringUtility.ToCamelCase(null));
+            Assert.AreEqual("iPhone", StringUtility.ToCamelCase("iPhone"));
+            Assert.AreEqual("person", StringUtility.ToCamelCase("Person"));
+            Assert.AreEqual("iPhone", StringUtility.ToCamelCase("IPhone"));
+            Assert.AreEqual("i Phone", StringUtility.ToCamelCase("I Phone"));
+            Assert.AreEqual(" IPhone", StringUtility.ToCamelCase(" IPhone"));            
         }
     }
 }

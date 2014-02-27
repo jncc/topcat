@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Dynamic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Text;
@@ -46,15 +47,36 @@ namespace Catalogue.Data.Write
 
     public class RecordValidationError
     {
-        public string Message { get; set; }
-        public List<Expression<Func<Record, object>>> Fields { get; set; }
+        public RecordValidationError(string message, List<Expression<Func<Record, object>>> fields)
+        {
+            Message = message;
+            FieldExpressions = fields;
+        }
+
+        public string Message { get; private set; }
+        List<Expression<Func<Record, object>>> FieldExpressions { get; set; }
+
+        /// <summary>
+        /// A representation of the property accessor expression(s) suitable for eg a json client.
+        /// </summary>
+        public List<string> Fields
+        {
+            get
+            {
+                return (from e in FieldExpressions
+                        let fullDottedPath = e.Body.ToString().Replace("r.", String.Empty)
+                        let camelCasedProperties = fullDottedPath.Split('.').Select(StringUtility.ToCamelCase)
+                        select String.Join(".", camelCasedProperties))
+                       .ToList();
+            }
+        }
     }
 
     public class RecordValidationErrorSet : Collection<RecordValidationError>
     {
         public void Add(string message, params Expression<Func<Record, object>>[] fields)
         {
-            this.Add(new RecordValidationError { Message = message, Fields = fields.ToList() });
+            this.Add(new RecordValidationError(message, fields.ToList()));
         }
     }
 
@@ -69,22 +91,27 @@ namespace Catalogue.Data.Write
         public void should_fail_when_path_is_empty()
         {
             var errors = new RecordValidator().Validate(BlankRecord().With(r => r.Path = ""));
-            errors.Should().NotBeEmpty();
-            errors.First().Message.Should().StartWith("Path must not be blank");
+
+            errors.Single().Message.Should().StartWith("Path must not be blank");
+            errors.Single().Fields.Single().Should().Be("path");
         }
 
         [Test]
         public void should_fail_when_path_is_null()
         {
             var errors = new RecordValidator().Validate(BlankRecord().With(r => r.Path = null));
-            errors.Should().NotBeEmpty();
+
+            errors.Single().Message.Should().StartWith("Path must not be blank");
+            errors.Single().Fields.Single().Should().Be("path");
         }
 
         [Test]
         public void should_fail_when_path_is_whitespace()
         {
             var errors = new RecordValidator().Validate(BlankRecord().With(r => r.Path = " "));
-            errors.Should().NotBeEmpty();
+
+            errors.Single().Message.Should().StartWith("Path must not be blank");
+            errors.Single().Fields.Single().Should().Be("path");
         }
 
         [Test]
@@ -93,8 +120,8 @@ namespace Catalogue.Data.Write
             var record = BlankRecord().With(r => r.Gemini.TopicCategory = "anInvalidTopicCategory");
             var errors = new RecordValidator().Validate(record);
 
-            errors.Should().NotBeEmpty();
-            errors.First().Message.Should().Contain("Topic Category 'anInvalidTopicCategory' is not valid.");
+            errors.Single().Message.Should().Contain("Topic Category 'anInvalidTopicCategory' is not valid.");
+            errors.Single().Fields.Single().Should().Be("gemini.topicCategory");
         }
 
         [Test]
