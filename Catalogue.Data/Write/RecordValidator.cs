@@ -41,8 +41,14 @@ namespace Catalogue.Data.Write
             // non_open_records_must_describe_their_limitations_on_public_access
             if (record.Security != Security.Open && record.Gemini.LimitationsOnPublicAccess.IsBlank())
                 results.Add(
-                    String.Format("Non-open records must describe their limitations on public access"),
+                    String.Format("Non-open records must describe their limitations on public access."),
                     r => r.Security, r => r.Gemini.LimitationsOnPublicAccess);
+
+            // publishable_records_must_have_a_resource_locator
+            if (record.Status == Status.Publishable && record.Gemini.ResourceLocator.IsBlank())
+                results.Add(
+                    String.Format("Publishable records must have a resource locator."),
+                    r => r.Status, r => r.Gemini.ResourceLocator);
 
             return results;
         }
@@ -91,7 +97,7 @@ namespace Catalogue.Data.Write
         }
     }
 
-    class validator_specs
+    class record_validator_tests
     {
         Record BlankRecord()
         {
@@ -99,9 +105,9 @@ namespace Catalogue.Data.Write
         }
 
         [Test]
-        public void path_must_not_be_blank([Values("", " ", null)] string path)
+        public void path_must_not_be_blank([Values("", " ", null)] string blank)
         {
-            var errors = new RecordValidator().Validate(BlankRecord().With(r => r.Path = path));
+            var errors = new RecordValidator().Validate(BlankRecord().With(r => r.Path = blank));
 
             errors.Single().Message.Should().StartWith("Path must not be blank");
             errors.Single().Fields.Single().Should().Be("path");
@@ -118,9 +124,9 @@ namespace Catalogue.Data.Write
         }
 
         [Test]
-        public void topic_category_may_be_blank([Values("", null)] string topicCategory)
+        public void topic_category_may_be_blank([Values("", null)] string blank)
         {
-            var record = BlankRecord().With(r => r.Gemini.TopicCategory = topicCategory);
+            var record = BlankRecord().With(r => r.Gemini.TopicCategory = blank);
             var errors = new RecordValidator().Validate(record);
             errors.Should().BeEmpty();
         }
@@ -128,12 +134,12 @@ namespace Catalogue.Data.Write
         [Test]
         public void non_open_records_must_describe_their_limitations_on_public_access(
             [Values(Security.Classified, Security.Restricted)] Security security,
-            [Values("", " ", null)] string limitationsOnPublicAccess)
+            [Values("", " ", null)] string blank)
         {
             var record = BlankRecord().With(r =>
                 {
                     r.Security = security;
-                    r.Gemini.LimitationsOnPublicAccess = limitationsOnPublicAccess;
+                    r.Gemini.LimitationsOnPublicAccess = blank;
                 });
 
             var errors = new RecordValidator().Validate(record);
@@ -142,10 +148,31 @@ namespace Catalogue.Data.Write
             errors.Single().Fields.Should().Contain("gemini.limitationsOnPublicAccess");
         }
 
+        [Test]
+        public void publishable_records_must_have_a_resource_locator([Values("", " ", null)] string blank)
+        {
+            var record = BlankRecord().With(r =>
+                {
+                    r.Status = Status.Publishable;
+                    r.Gemini.ResourceLocator = blank;
+                });
+
+            var errors = new RecordValidator().Validate(record);
+
+            errors.Single().Fields.Should().Contain("status");
+            errors.Single().Fields.Should().Contain("gemini.resourceLocator");
+        }
+
+        [Test]
+        public void resource_locator_must_be_a_public_url()
+        {
+            
+        }
+
         // todo
 
         // 
-        // publishable records must have a resourcelocator, which must be a public url
+        // 
         // responsible party role should be one of code list in ResponsiblePartyRoles.Allowed
         // warning for blank use constraints - could be "no conditions apply" if that's what's meant
         // warning for unknown data format
