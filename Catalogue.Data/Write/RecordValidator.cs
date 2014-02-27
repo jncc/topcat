@@ -7,6 +7,7 @@ using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 using Catalogue.Data.Model;
+using Catalogue.Gemini.Roles;
 using Catalogue.Gemini.Templates;
 using Catalogue.Gemini.Vocabs;
 using Catalogue.Utilities.Clone;
@@ -204,6 +205,14 @@ namespace Catalogue.Data.Write
             var record = BlankRecord().With(r => r.Gemini.ResourceLocator = nonHttpUrl);
             var errors = new RecordValidator().Validate(record);
             errors.Single().Fields.Should().Contain("gemini.resourceLocator");
+        }
+
+        [Test]
+        public void resource_locator_may_be_set()
+        {
+            var record = BlankRecord().With(r => r.Gemini.ResourceLocator = "http://example.org/resource/locator");
+            var errors = new RecordValidator().Validate(record);
+            errors.Should().BeEmpty();
         }
 
         // todo
