@@ -51,13 +51,13 @@ namespace Catalogue.Tests.Slow.Catalogue.Import
         }
 
         [Test]
-        public void source_identifiers_should_be_unique()
+        public void should_all_have_unique_source_identifiers()
         {
             imported.Select(r => r.SourceIdentifier).Distinct().Count().Should().Be(189);
         }
 
         [Test]
-        public void all_records_should_have_a_valid_path()
+        public void should_all_have_a_valid_path()
         {
             Uri uri; // need this for Uri.TryCreate; not actually using it
 
@@ -66,7 +66,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Import
         }
 
         [Test]
-        public void all_records_should_be_marked_as_top_copy()
+        public void should_all_be_top_copy()
         {
             imported.Count(r => r.TopCopy).Should().Be(189);
         }

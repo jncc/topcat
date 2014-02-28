@@ -47,7 +47,7 @@ namespace Catalogue.Data.Write
             ValidateResponsibleOrganisation(record, result);
             ValidateMetadataPointOfContact(record, result);
 
-            // non_open_records_must_describe_their_limitations_on_public_access
+            // non_open_records_must_have_limitations_on_public_access
             if (record.Security != Security.Open && record.Gemini.LimitationsOnPublicAccess.IsBlank())
             {
                 result.Errors.Add("Non-open records must describe their limitations on public access.",
@@ -60,6 +60,13 @@ namespace Catalogue.Data.Write
             {
                 result.Errors.Add("Publishable records must have a resource locator.",
                     r => r.Status, r => r.Gemini.ResourceLocator);
+            }
+
+            // blank_use_constraints_could_be_a_mistake
+            if (record.Gemini.UseConstraints.IsBlank())
+            {
+                result.Warnings.Add("Use Constraints is empty; did you mean 'no conditions apply'?",
+                    r => r.Gemini.UseConstraints);
             }
 
             return result;
@@ -152,7 +159,6 @@ namespace Catalogue.Data.Write
                        .ToList();
             }
         }
-
     }
 
     public class RecordValidationProblemSet : Collection<RecordValidationProblem>
@@ -219,9 +225,7 @@ namespace Catalogue.Data.Write
         }
 
         [Test]
-        public void non_open_records_must_describe_their_limitations_on_public_access(
-            [Values(Security.Classified, Security.Restricted)] Security nonOpen,
-            [Values("", " ", null)] string blank)
+        public void non_open_records_must_have_limitations_on_public_access([Values(Security.Classified, Security.Restricted)] Security nonOpen, [Values("", " ", null)] string blank)
         {
             var record = BasicRecord().With(r =>
                 {
@@ -293,6 +297,16 @@ namespace Catalogue.Data.Write
         }
 
         // todo
+        
+        [Test]
+        public void blank_use_constraints_could_be_a_mistake([Values("", " ", null)] string blank)
+        {
+            var result = new RecordValidator().Validate(BasicRecord().With(r => r.Gemini.UseConstraints = blank));
+
+            result.Warnings.Single().Message.Should().Be("Use Constraints is empty; did you mean 'no conditions apply'?");
+            result.Warnings.Single().Fields.Single().Should().Be("gemini.useConstraints");
+        }
+        
         // 
         // warning for blank use constraints - could be "no conditions apply" if that's what's meant
         // warning for unknown data format
