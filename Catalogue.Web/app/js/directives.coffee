@@ -147,6 +147,16 @@ module.directive 'tcCopyPathToClipboard', ($timeout) ->
 #                wrapper.qtip 'disable'
 #                t.qtip 'disable', false), 2000
 
+module.directive 'tcServerValidated', ->
+    restrict: 'A'
+    require: '?ngModel'
+    link: (scope, elem, attrs, ctrl) ->
+      elem.on 'change', ->
+        scope.$apply ->
+          console.log 'change'
+          ctrl.$setValidity('server', true)
+
+
 # http://stackoverflow.com/a/20086923/40759
 module.directive "tcDebounce", ($timeout) ->
   restrict: "A"

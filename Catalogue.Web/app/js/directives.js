@@ -205,6 +205,21 @@
     };
   });
 
+  module.directive('tcServerValidated', function() {
+    return {
+      restrict: 'A',
+      require: '?ngModel',
+      link: function(scope, elem, attrs, ctrl) {
+        return elem.on('change', function() {
+          return scope.$apply(function() {
+            console.log('change');
+            return ctrl.$setValidity('server', true);
+          });
+        });
+      }
+    };
+  });
+
   module.directive("tcDebounce", function($timeout) {
     return {
       restrict: "A",

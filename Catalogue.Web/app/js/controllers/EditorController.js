@@ -24,16 +24,21 @@
       $rootScope.busy = {
         value: true
       };
+      $scope.errors = {};
       return $http.put('../api/records/' + record.id, $scope.form).then(function(response) {
         if (response.data.success) {
           record = response.data.record;
           $scope.reset();
-          return $rootScope.busy = {
-            value: false
-          };
         } else {
-
+          angular.forEach(response.data.validation.errors, function(error) {
+            return angular.forEach(error.fields, function(field) {
+              return $scope.theForm[field].$setValidity('server', false);
+            });
+          });
         }
+        return $rootScope.busy = {
+          value: false
+        };
       });
     };
     $scope.isClean = function() {

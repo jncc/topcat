@@ -2,6 +2,7 @@
 
 angular.module('app.controllers').controller 'SandboxController', 
 
-    ($scope, Formats) -> 
+    ($scope) ->  #, Formats
 
-        Formats.then (formats) -> $scope.formats = formats
+        $scope.x = 3;
+#        Formats.then (formats) -> $scope.formats = formats

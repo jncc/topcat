@@ -1,9 +1,7 @@
 ﻿(function() {
 
-  angular.module('app.controllers').controller('SandboxController', function($scope, Formats) {
-    return Formats.then(function(formats) {
-      return $scope.formats = formats;
-    });
+  angular.module('app.controllers').controller('SandboxController', function($scope) {
+    return $scope.x = 3;
   });
 
 }).call(this);
