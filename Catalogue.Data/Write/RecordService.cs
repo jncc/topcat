@@ -59,11 +59,11 @@ namespace Catalogue.Data.Write
             record.Gemini.ResourceType = "dataset";
 
             CorrectlyOrderKeywords(record);
-            NormalizeUseConstraints(record);
+            StandardiseUnconditionalUseConstraints(record);
 
-            var errors = validator.Validate(record);
+            var validation = validator.Validate(record);
 
-            if (!errors.Any())
+            if (!validation.Errors.Any())
             {
                 SyncDenormalizations(record);
                 db.Store(record);
@@ -72,7 +72,7 @@ namespace Catalogue.Data.Write
             return new RecordServiceResult
                 {
                     Record = record,
-                    Errors = errors,
+                    Validation = validation,
                 };
         }
 
@@ -93,19 +93,19 @@ namespace Catalogue.Data.Write
                 .ToList();
         }
 
-        void NormalizeUseConstraints(Record record)
+        void StandardiseUnconditionalUseConstraints(Record record)
         {
-            const string none = "no conditions apply";
+            const string unconditional = "no conditions apply";
 
-            if (record.Gemini.UseConstraints.IsNotBlank() && record.Gemini.UseConstraints.ToLowerInvariant().Trim() == none)
-                record.Gemini.UseConstraints = none;
+            if (record.Gemini.UseConstraints.IsNotBlank() && record.Gemini.UseConstraints.ToLowerInvariant().Trim() == unconditional)
+                record.Gemini.UseConstraints = unconditional;
         }
     }
 
     public class RecordServiceResult
     {
-        public RecordValidationErrorSet Errors { get; set; }
-        public bool Success { get { return Errors == null || !Errors.Any(); } }
+        public RecordValidationResult Validation { get; set; }
+        public bool Success { get { return !Validation.Errors.Any(); } }
 
         /// <summary>
         /// The (possibly modified) record that was submitted.
@@ -145,7 +145,7 @@ namespace Catalogue.Data.Write
             var database = Mock.Of<IDocumentSession>();
             var service = new RecordService(database, ValidatorStub());
 
-            var record = BlankRecord();
+            var record = BasicRecord();
             service.Upsert(record);
 
             Mock.Get(database).Verify(db => db.Store(record));
@@ -155,10 +155,9 @@ namespace Catalogue.Data.Write
         public void should_not_store_invalid_record_in_the_database()
         {
             var database = Mock.Of<IDocumentSession>();
-            var validatorThatFails = Mock.Of<IRecordValidator>(v => v.Validate(It.IsAny<Record>()) == new RecordValidationErrorSet { new RecordValidationError("There's a problem!", new List<Expression<Func<Record, object>>>() ) });
-            var service = new RecordService(database, validatorThatFails);
+            var service = new RecordService(database, FailingValidatorStub());
 
-            service.Upsert(BlankRecord());
+            service.Upsert(BasicRecord());
 
             Mock.Get(database).Verify(db => db.Store(It.IsAny<Record>()), Times.Never);
         }
@@ -172,7 +171,7 @@ namespace Catalogue.Data.Write
             var database = Mock.Of<IDocumentSession>();
             var service = new RecordService(database, ValidatorStub());
 
-            var record = BlankRecord();
+            var record = BasicRecord();
             var result = service.Upsert(record);
 
             result.Record.Should().Be(record);
@@ -201,7 +200,7 @@ namespace Catalogue.Data.Write
             var database = Mock.Of<IDocumentSession>();
             var service = new RecordService(database, ValidatorStub());
 
-            service.Upsert(BlankRecord());
+            service.Upsert(BasicRecord());
 
             Mock.Get(database).Verify(db => db.Store(It.Is((Record r) => r.Wkt == null)));
         }
@@ -212,19 +211,19 @@ namespace Catalogue.Data.Write
             var database = Mock.Of<IDocumentSession>();
             var service = new RecordService(database, ValidatorStub());
 
-            var record = BlankRecord().With(r => r.Gemini.ResourceType = "");
+            var record = BasicRecord().With(r => r.Gemini.ResourceType = "");
             service.Upsert(record);
 
             Mock.Get(database).Verify(db => db.Store(It.Is((Record r) => r.Gemini.ResourceType == "dataset")));
         }
 
         [Test]
-        public void should_normalise_use_constraints()
+        public void should_standardise_unconditional_use_constraints()
         {
             var database = Mock.Of<IDocumentSession>();
             var service = new RecordService(database, ValidatorStub());
 
-            var record = BlankRecord().With(r => r.Gemini.UseConstraints = "   No conditions APPLY");
+            var record = BasicRecord().With(r => r.Gemini.UseConstraints = "   No conditions APPLY");
             service.Upsert(record);
 
             Mock.Get(database).Verify(db => db.Store(It.Is((Record r) => r.Gemini.UseConstraints == "no conditions apply")));
@@ -236,7 +235,7 @@ namespace Catalogue.Data.Write
             var database = Mock.Of<IDocumentSession>();
             var service = new RecordService(database, ValidatorStub());
 
-            service.Upsert(BlankRecord());
+            service.Upsert(BasicRecord());
 
             Mock.Get(database).Verify(db => db.Store(It.Is((Record r) => r.Security == Security.Open)));
         }
@@ -250,7 +249,7 @@ namespace Catalogue.Data.Write
             var database = Mock.Of<IDocumentSession>();
             var service = new RecordService(database, ValidatorStub());
 
-            var record = BlankRecord().With(r =>
+            var record = BasicRecord().With(r =>
                 {
                     r.Gemini.Keywords = new StringPairList
                         {
@@ -278,17 +277,31 @@ namespace Catalogue.Data.Write
             Mock.Get(database).Verify(db => db.Store(It.Is((Record r) => r.Gemini.Keywords.IsEqualTo(expected))));
         }
 
-        Record BlankRecord()
+        Record BasicRecord()
         {
-            return new Record { Path = @"X:\some\path", Gemini = Library.Blank() };
+            return new Record
+                {
+                    Path = @"X:\some\path",
+                    Gemini = Library.Blank().With(m => m.Title = "Some title")
+                };
         }
 
         /// <summary>
-        /// A validator stub which returns no validation errors.
+        /// A validator stub which returns a result with no validation errors.
         /// </summary>
         IRecordValidator ValidatorStub()
         {
-            return Mock.Of<IRecordValidator>(v => v.Validate(It.IsAny<Record>()) == new RecordValidationErrorSet());
+            return Mock.Of<IRecordValidator>(v => v.Validate(It.IsAny<Record>()) == new RecordValidationResult());
+        }
+
+        /// <summary>
+        /// A validator stub which returns a result containing a validation error.
+        /// </summary>
+        IRecordValidator FailingValidatorStub()
+        {
+            var r = new RecordValidationResult();
+            r.Errors.Add("Don't be silly!");
+            return Mock.Of<IRecordValidator>(v => v.Validate(It.IsAny<Record>()) == r);
         }
     }
 }

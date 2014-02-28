@@ -21,7 +21,7 @@ namespace Catalogue.Data.Import
         readonly IRecordService recordService;
 
         public bool SkipBadRecords { get; set; }
-        public readonly RecordValidationErrorSet Failures = new RecordValidationErrorSet();
+        public readonly RecordValidationProblemSet Failures = new RecordValidationProblemSet();
 
         public Importer(IFileSystem fileSystem, IRecordService recordService)
         {
@@ -57,7 +57,7 @@ namespace Catalogue.Data.Import
                     if (!SkipBadRecords)
                     {
                         throw new Exception(String.Format("Import failed due to validation errors at record {0}: {1}",
-                            n, result.Errors.ToConcatenatedString(e => e.Message, "; ")));
+                            n, result.Validation.Errors.ToConcatenatedString(e => e.Message, "; ")));
                     }
                 }
 
@@ -85,7 +85,7 @@ namespace Catalogue.Data.Import
         [SetUp]
         public void setup()
         {
-            recordService = Mock.Of<IRecordService>(rs => rs.Insert(It.IsAny<Record>()) == new RecordServiceResult());
+            recordService = Mock.Of<IRecordService>(rs => rs.Insert(It.IsAny<Record>()) == new RecordServiceResult { Validation = new RecordValidationResult()});
 
             string path = @"c:\some\path.csv";
             var fileSystem = Mock.Of<IFileSystem>(fs => fs.OpenReader(path) == new StringReader(testData));
