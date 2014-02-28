@@ -8,19 +8,21 @@ namespace Catalogue.Gemini.Roles
 {
     public static class ResponsiblePartyRoles
     {
+        // https://wiki.ceh.ac.uk/display/cehigh/Responsible+organisation
+
         public static List<string> Allowed = new List<string>
             {
-                "Resource provider",
-                "Custodian",
-                "Owner",
-                "User",
-                "Distributor",
-                "Originator",
-                "Point of Contact",
-                "Principle Investigator",
-                "Processor",
-                "Publisher",
-                "Author",
+                "resourceProvider",
+                "custodian",
+                "owner",
+                "user",
+                "distributor",
+                "originator",
+                "pointOfContact",
+                "principalInvestigator",
+                "processor",
+                "publisher",
+                "author",
             };
     }
 }

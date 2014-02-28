@@ -7,6 +7,7 @@ using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 using Catalogue.Data.Model;
+using Catalogue.Gemini.Model;
 using Catalogue.Gemini.Roles;
 using Catalogue.Gemini.Templates;
 using Catalogue.Gemini.Vocabs;
@@ -35,7 +36,16 @@ namespace Catalogue.Data.Write
                 errors.Add("Path must not be blank.", r => r.Path);
             }
 
+            // title_must_not_be_blank
+            if (record.Gemini.Title.IsBlank())
+            {
+                errors.Add("Title must not be blank.", r => r.Gemini.Title);
+            }
+
             ValidateTopicCategory(record, errors);
+            ValidateResourceLocator(record, errors);
+            ValidateResponsibleOrganisation(record, errors);
+            ValidateMetadataPointOfContact(record, errors);
 
             // non_open_records_must_describe_their_limitations_on_public_access
             if (record.Security != Security.Open && record.Gemini.LimitationsOnPublicAccess.IsBlank())
@@ -51,9 +61,6 @@ namespace Catalogue.Data.Write
                 errors.Add("Publishable records must have a resource locator.",
                     r => r.Status, r => r.Gemini.ResourceLocator);
             }
-
-            ValidateResourceLocator(record, errors);
-
 
             return errors;
         }
@@ -87,10 +94,32 @@ namespace Catalogue.Data.Write
 
             string s = record.Gemini.TopicCategory;
 
-            if(s.IsNotBlank() && !TopicCategories.Values.Keys.Any(k => k == s))
+            if (s.IsNotBlank() && !TopicCategories.Values.Keys.Any(k => k == s))
             {
                 errors.Add(String.Format("Topic Category '{0}' is not valid.", record.Gemini.TopicCategory),
                     r => r.Gemini.TopicCategory);
+            }
+        }
+
+        void ValidateResponsibleOrganisation(Record record, RecordValidationErrorSet errors)
+        {
+            // responsible_organisation_role_must_be_an_allowed_role
+            string role = record.Gemini.ResponsibleOrganisation.Role;
+            if (role.IsNotBlank() && !ResponsiblePartyRoles.Allowed.Contains(role))
+            {
+                errors.Add(String.Format("Responsible Organisation Role '{0}' is not valid.", role),
+                    r => r.Gemini.ResponsibleOrganisation.Role);
+            }
+        }
+
+        void ValidateMetadataPointOfContact(Record record, RecordValidationErrorSet errors)
+        {
+            // metadata_point_of_contact_role_must_be_an_allowed_role
+            string role = record.Gemini.MetadataPointOfContact.Role;
+            if (role.IsNotBlank() && !ResponsiblePartyRoles.Allowed.Contains(role))
+            {
+                errors.Add(String.Format("Metadata Point of Contact Role '{0}' is not valid.", role),
+                    r => r.Gemini.MetadataPointOfContact.Role);
             }
         }
     }
@@ -135,15 +164,28 @@ namespace Catalogue.Data.Write
 
     class record_validator_tests
     {
-        Record BlankRecord()
+        Record BasicRecord()
         {
-            return new Record { Path = @"X:\some\path", Gemini = Library.Blank() };
+            return new Record
+                {
+                    Path = @"X:\some\path",
+                    Gemini = Library.Blank().With(m => m.Title = "Some title"),
+                };
+        }
+
+        [Test]
+        public void title_must_not_be_blank([Values("", " ", null)] string blank)
+        {
+            var errors = new RecordValidator().Validate(BasicRecord().With(r => r.Gemini.Title = blank));
+
+            errors.Single().Message.Should().StartWith("Title must not be blank");
+            errors.Single().Fields.Single().Should().Be("gemini.title");
         }
 
         [Test]
         public void path_must_not_be_blank([Values("", " ", null)] string blank)
         {
-            var errors = new RecordValidator().Validate(BlankRecord().With(r => r.Path = blank));
+            var errors = new RecordValidator().Validate(BasicRecord().With(r => r.Path = blank));
 
             errors.Single().Message.Should().StartWith("Path must not be blank");
             errors.Single().Fields.Single().Should().Be("path");
@@ -152,7 +194,7 @@ namespace Catalogue.Data.Write
         [Test]
         public void topic_category_must_be_valid()
         {
-            var record = BlankRecord().With(r => r.Gemini.TopicCategory = "anInvalidTopicCategory");
+            var record = BasicRecord().With(r => r.Gemini.TopicCategory = "anInvalidTopicCategory");
             var errors = new RecordValidator().Validate(record);
 
             errors.Single().Message.Should().Contain("Topic Category 'anInvalidTopicCategory' is not valid.");
@@ -162,7 +204,7 @@ namespace Catalogue.Data.Write
         [Test]
         public void topic_category_may_be_blank([Values("", null)] string blank)
         {
-            var record = BlankRecord().With(r => r.Gemini.TopicCategory = blank);
+            var record = BasicRecord().With(r => r.Gemini.TopicCategory = blank);
             var errors = new RecordValidator().Validate(record);
             errors.Should().BeEmpty();
         }
@@ -172,7 +214,7 @@ namespace Catalogue.Data.Write
             [Values(Security.Classified, Security.Restricted)] Security nonOpen,
             [Values("", " ", null)] string blank)
         {
-            var record = BlankRecord().With(r =>
+            var record = BasicRecord().With(r =>
                 {
                     r.Security = nonOpen;
                     r.Gemini.LimitationsOnPublicAccess = blank;
@@ -187,7 +229,7 @@ namespace Catalogue.Data.Write
         [Test]
         public void publishable_records_must_have_a_resource_locator([Values("", " ", null)] string blank)
         {
-            var record = BlankRecord().With(r =>
+            var record = BasicRecord().With(r =>
                 {
                     r.Status = Status.Publishable;
                     r.Gemini.ResourceLocator = blank;
@@ -202,7 +244,7 @@ namespace Catalogue.Data.Write
         [Test]
         public void resource_locator_must_be_a_well_formed_http_url([Values(@"Z:\some\path", "utter rubbish")] string nonHttpUrl)
         {
-            var record = BlankRecord().With(r => r.Gemini.ResourceLocator = nonHttpUrl);
+            var record = BasicRecord().With(r => r.Gemini.ResourceLocator = nonHttpUrl);
             var errors = new RecordValidator().Validate(record);
             errors.Single().Fields.Should().Contain("gemini.resourceLocator");
         }
@@ -210,22 +252,38 @@ namespace Catalogue.Data.Write
         [Test]
         public void resource_locator_may_be_set()
         {
-            var record = BlankRecord().With(r => r.Gemini.ResourceLocator = "http://example.org/resource/locator");
+            var record = BasicRecord().With(r => r.Gemini.ResourceLocator = "http://example.org/resource/locator");
             var errors = new RecordValidator().Validate(record);
             errors.Should().BeEmpty();
         }
 
-        // todo
-
         [Test]
-        public void responsible_party_role_must_be_allowed()
+        public void responsible_party_role_must_be_an_allowed_role()
         {
-
-            //ResponsiblePartyRoles.Allowed
+            var record = BasicRecord().With(r => r.Gemini.ResponsibleOrganisation = new ResponsibleParty
+                {
+                    Email = "a.mann@example.com",
+                    Name = "A. Mann",
+                    Role = "some role that isn't allowed",
+                });
+            var errors = new RecordValidator().Validate(record);
+            errors.Single().Fields.Should().Contain("gemini.responsibleOrganisation.role");
         }
 
+        [Test]
+        public void metadata_point_of_contact_role_must_be_an_allowed_role()
+        {
+            var record = BasicRecord().With(r => r.Gemini.MetadataPointOfContact = new ResponsibleParty
+                {
+                    Email = "a.mann@example.com",
+                    Name = "A. Mann",
+                    Role = "some role that isn't allowed",
+                });
+            var errors = new RecordValidator().Validate(record);
+            errors.Single().Fields.Should().Contain("gemini.metadataPointOfContact.role");
+        }
 
-
+        // todo
         // 
         // warning for blank use constraints - could be "no conditions apply" if that's what's meant
         // warning for unknown data format

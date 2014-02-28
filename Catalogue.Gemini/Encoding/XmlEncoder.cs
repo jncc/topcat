@@ -14,13 +14,6 @@ namespace Catalogue.Gemini.Encoding
         /// Creates an ISO XML metadata document using the given metadata.
         /// </summary>
         XDocument Create(Guid id, Metadata metadata);
-
-        /// <summary>
-        /// Updates the ISO XML document using the given metadata.
-        /// The input document is not mutated.
-        /// </summary>
-        XDocument Update(XDocument doc, Metadata metadata);
-
     }
 
     public class XmlEncoder : IXmlEncoder
@@ -258,11 +251,14 @@ namespace Catalogue.Gemini.Encoding
                         new XElement(gmd + "CI_RoleCode",
                             new XAttribute("codeList", "http://standards.iso.org/ittf/PubliclyAvailableStandards/ISO_19139_Schemas/resources/codelist/gmxCodelists.xml#CI_RoleCode"),
                             new XAttribute("codeListValue", c.Role),
-                            c.Role)));
+                            c.Role))); // todo should ideally store the human-readable meaning as the element value, but for now using the codeListValue
             }
         }
 
         #endregion
+
+
+        // experimental.. seeing how we could update the xml document if necessary
 
         static class MetadataLanguage
         {
