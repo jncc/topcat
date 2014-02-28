@@ -22,11 +22,17 @@ namespace Catalogue.Data.Write
     public interface IRecordValidator
     {
         RecordValidationResult Validate(Record record);
+        RecordValidationResult Validate(Record record, RecordValidationLevel level);
     }
 
     public class RecordValidator : IRecordValidator
     {
         public RecordValidationResult Validate(Record record)
+        {
+            return Validate(record, RecordValidationLevel.Basic);
+        }
+
+        public RecordValidationResult Validate(Record record, RecordValidationLevel level)
         {
             var result = new RecordValidationResult();
 
@@ -62,11 +68,14 @@ namespace Catalogue.Data.Write
                     r => r.Status, r => r.Gemini.ResourceLocator);
             }
 
-            // blank_use_constraints_could_be_a_mistake
-            if (record.Gemini.UseConstraints.IsBlank())
+            if (level > RecordValidationLevel.Basic)
             {
-                result.Warnings.Add("Use Constraints is empty; did you mean 'no conditions apply'?",
-                    r => r.Gemini.UseConstraints);
+                // blank_use_constraints_could_be_a_mistake
+                if (record.Gemini.UseConstraints.IsBlank())
+                {
+                    result.Warnings.Add("Use Constraints is empty; did you mean 'no conditions apply'?",
+                        r => r.Gemini.UseConstraints);
+                }
             }
 
             return result;
@@ -131,10 +140,14 @@ namespace Catalogue.Data.Write
         }
     }
 
-
-    public class RecordValidationProblem
+    public enum RecordValidationLevel
     {
-        public RecordValidationProblem(string message, List<Expression<Func<Record, object>>> fields)
+        Basic = 0, Strict = 1
+    }
+
+    public class RecordValidationIssue
+    {
+        public RecordValidationIssue(string message, List<Expression<Func<Record, object>>> fields)
         {
             Message = message;
             FieldExpressions = fields;
@@ -161,21 +174,22 @@ namespace Catalogue.Data.Write
         }
     }
 
-    public class RecordValidationProblemSet : Collection<RecordValidationProblem>
+    public class RecordValidationIssueSet : Collection<RecordValidationIssue>
     {
         public void Add(string message, params Expression<Func<Record, object>>[] fields)
         {
-            this.Add(new RecordValidationProblem(message, fields.ToList()));
+            this.Add(new RecordValidationIssue(message, fields.ToList()));
         }
     }
 
     public class RecordValidationResult
     {
-        public RecordValidationResult() { Errors = new RecordValidationProblemSet(); Warnings = new RecordValidationProblemSet(); }
+        public RecordValidationResult() { Errors = new RecordValidationIssueSet(); Warnings = new RecordValidationIssueSet(); }
 
-        public RecordValidationProblemSet Errors { get; private set; }
-        public RecordValidationProblemSet Warnings { get; private set; }
+        public RecordValidationIssueSet Errors { get; private set; }
+        public RecordValidationIssueSet Warnings { get; private set; }
     }
+
 
     class record_validator_tests
     {
@@ -186,6 +200,15 @@ namespace Catalogue.Data.Write
                     Path = @"X:\some\path",
                     Gemini = Library.Blank().With(m => m.Title = "Some title"),
                 };
+        }
+
+        [Test]
+        public void should_produce_no_warnings_by_default()
+        {
+            // the basic level of validation shouldn't produce warnings - that would be too annoying
+
+            var result = new RecordValidator().Validate(BasicRecord() /* no Level argument */);
+            result.Warnings.Should().BeEmpty();
         }
 
         [Test]
@@ -296,17 +319,21 @@ namespace Catalogue.Data.Write
             result.Errors.Single().Fields.Should().Contain("gemini.metadataPointOfContact.role");
         }
 
-        // todo
-        
+
+        // strict validation tests
+
         [Test]
         public void blank_use_constraints_could_be_a_mistake([Values("", " ", null)] string blank)
         {
-            var result = new RecordValidator().Validate(BasicRecord().With(r => r.Gemini.UseConstraints = blank));
+            var record = BasicRecord().With(r => r.Gemini.UseConstraints = blank);
+            var result = new RecordValidator().Validate(record, RecordValidationLevel.Strict);
 
             result.Warnings.Single().Message.Should().Be("Use Constraints is empty; did you mean 'no conditions apply'?");
             result.Warnings.Single().Fields.Single().Should().Be("gemini.useConstraints");
         }
-        
+
+        // todo
+
         // 
         // warning for blank use constraints - could be "no conditions apply" if that's what's meant
         // warning for unknown data format

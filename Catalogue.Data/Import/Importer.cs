@@ -21,7 +21,7 @@ namespace Catalogue.Data.Import
         readonly IRecordService recordService;
 
         public bool SkipBadRecords { get; set; }
-        public readonly RecordValidationProblemSet Failures = new RecordValidationProblemSet();
+        public readonly RecordValidationIssueSet Failures = new RecordValidationIssueSet();
 
         public Importer(IFileSystem fileSystem, IRecordService recordService)
         {
