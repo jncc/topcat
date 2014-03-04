@@ -14,15 +14,14 @@ angular.module('app.controllers').controller 'SearchController',
             $location.search('q', query.q) # update the url
             $rootScope.page = { title: if query.q then ' - ' + query.q else '' } # update the page title
             if query.q
-                $rootScope.busy = { value: true }
+                $scope.busy.start()
                 # search the server
                 $http.get('../api/search?' + $.param query)
                     .success (result) ->
-                        $rootScope.busy = { value: false }
                         # don't overwrite with old slow results!
                         if angular.equals result.query, $scope.query
                             $scope.result = result
-                    .error -> $rootScope.busy = { value: false }
+                    .finally -> $scope.busy.stop()
             else
                 $scope.result = {}
 

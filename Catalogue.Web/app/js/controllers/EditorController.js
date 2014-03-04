@@ -1,7 +1,7 @@
 ﻿(function() {
   var fakeValidationData;
 
-  angular.module('app.controllers').controller('EditorController', function($scope, $rootScope, $http, record, Record) {
+  angular.module('app.controllers').controller('EditorController', function($scope, $http, record, Record) {
     $scope.lookups = {};
     $http.get('../api/topics').success(function(result) {
       return $scope.lookups.topics = result;
@@ -22,9 +22,7 @@
       return $scope.form = angular.copy(record);
     };
     $scope.save = function() {
-      $rootScope.busy = {
-        value: true
-      };
+      $scope.busy.start();
       $scope.validation = {};
       return $http.put('../api/records/' + record.id, $scope.form).then(function(response) {
         var e, field, _i, _j, _len, _len1, _ref, _ref1;
@@ -43,9 +41,7 @@
             }
           }
         }
-        return $rootScope.busy = {
-          value: false
-        };
+        return $scope.busy.stop();
       });
     };
     $scope.isClean = function() {

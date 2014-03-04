@@ -1,7 +1,7 @@
 ﻿
 angular.module('app.controllers').controller 'EditorController', 
 
-    ($scope, $rootScope, $http, record, Record) -> 
+    ($scope, $http, record, Record) -> 
 
         $scope.lookups = {}
         $http.get('../api/topics').success (result) -> $scope.lookups.topics = result
@@ -17,7 +17,7 @@ angular.module('app.controllers').controller 'EditorController',
         $scope.reset = () -> $scope.form = angular.copy(record)
 
         $scope.save = () ->
-            $rootScope.busy = { value: true }
+            $scope.busy.start()
             $scope.validation = {}
             # todo use resource Record.update ?
             $http.put('../api/records/' + record.id, $scope.form).then (response) ->
@@ -30,7 +30,7 @@ angular.module('app.controllers').controller 'EditorController',
                     for e in response.data.validation.errors
                         for field in e.fields
                             $scope.theForm[field].$setValidity('server', false)
-                $rootScope.busy = { value: false }
+                $scope.busy.stop()
 
         $scope.isClean = -> angular.equals($scope.form, record)
         $scope.isSaveHidden = -> $scope.isClean() or record.readOnly

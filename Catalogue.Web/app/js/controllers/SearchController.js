@@ -14,20 +14,13 @@
         title: query.q ? ' - ' + query.q : ''
       };
       if (query.q) {
-        $rootScope.busy = {
-          value: true
-        };
+        $scope.busy.start();
         return $http.get('../api/search?' + $.param(query)).success(function(result) {
-          $rootScope.busy = {
-            value: false
-          };
           if (angular.equals(result.query, $scope.query)) {
             return $scope.result = result;
           }
-        }).error(function() {
-          return $rootScope.busy = {
-            value: false
-          };
+        })["finally"](function() {
+          return $scope.busy.stop();
         });
       } else {
         return $scope.result = {};
