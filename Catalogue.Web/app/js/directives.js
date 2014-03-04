@@ -207,14 +207,10 @@
 
   module.directive('tcServerValidated', function() {
     return {
-      restrict: 'A',
-      require: '?ngModel',
-      link: function(scope, elem, attrs, ctrl) {
-        return elem.on('change', function() {
-          return scope.$apply(function() {
-            console.log('change');
-            return ctrl.$setValidity('server', true);
-          });
+      require: 'ngModel',
+      link: function(scope, elem, attrs, modelCtrl) {
+        return modelCtrl.$viewChangeListeners.push(function() {
+          return modelCtrl.$setValidity('server', true);
         });
       }
     };

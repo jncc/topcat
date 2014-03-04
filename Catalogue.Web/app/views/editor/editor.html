@@ -1,5 +1,5 @@
 ﻿<div>
-
+    
     <form name="theForm" novalidate>
         
         <!-- top row of buttons etc.  -->
@@ -24,6 +24,13 @@
                 </div>
             </div>
 
+        </div>
+
+        <!-- validation summary -->
+        <div ng-show="validation.errors" class="editor-validation-summary">
+            <div ng-repeat="e in validation.errors" class="editor-validation-summary-item">
+                {{e.message}}
+            </div>
         </div>
 
         <!-- title -->

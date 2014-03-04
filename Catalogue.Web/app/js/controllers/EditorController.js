@@ -1,4 +1,5 @@
 ﻿(function() {
+  var fakeValidationData;
 
   angular.module('app.controllers').controller('EditorController', function($scope, $rootScope, $http, record, Record) {
     $scope.lookups = {};
@@ -24,17 +25,23 @@
       $rootScope.busy = {
         value: true
       };
-      $scope.errors = {};
+      $scope.validation = {};
       return $http.put('../api/records/' + record.id, $scope.form).then(function(response) {
+        var e, field, _i, _j, _len, _len1, _ref, _ref1;
         if (response.data.success) {
           record = response.data.record;
           $scope.reset();
         } else {
-          angular.forEach(response.data.validation.errors, function(error) {
-            return angular.forEach(error.fields, function(field) {
-              return $scope.theForm[field].$setValidity('server', false);
-            });
-          });
+          $scope.validation = response.data.validation;
+          _ref = response.data.validation.errors;
+          for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+            e = _ref[_i];
+            _ref1 = e.fields;
+            for (_j = 0, _len1 = _ref1.length; _j < _len1; _j++) {
+              field = _ref1[_j];
+              $scope.theForm[field].$setValidity('server', false);
+            }
+          }
         }
         return $rootScope.busy = {
           value: false
@@ -65,6 +72,17 @@
       });
     };
     $scope.reset();
+    $scope.validation = fakeValidationData;
   });
+
+  fakeValidationData = {
+    errors: [
+      {
+        message: 'There was an error'
+      }, {
+        message: 'There was another error'
+      }
+    ]
+  };
 
 }).call(this);

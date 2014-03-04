@@ -147,15 +147,13 @@ module.directive 'tcCopyPathToClipboard', ($timeout) ->
 #                wrapper.qtip 'disable'
 #                t.qtip 'disable', false), 2000
 
+# this directive simply sets the control's "server" validity key to true so that
+# the controls stops showing as invalid as soon as the user starts to correct it
 module.directive 'tcServerValidated', ->
-    restrict: 'A'
-    require: '?ngModel'
-    link: (scope, elem, attrs, ctrl) ->
-      elem.on 'change', ->
-        scope.$apply ->
-          console.log 'change'
-          ctrl.$setValidity('server', true)
-
+    require: 'ngModel'
+    link: (scope, elem, attrs, modelCtrl) ->
+        modelCtrl.$viewChangeListeners.push ->
+            modelCtrl.$setValidity('server', true)
 
 # http://stackoverflow.com/a/20086923/40759
 module.directive "tcDebounce", ($timeout) ->

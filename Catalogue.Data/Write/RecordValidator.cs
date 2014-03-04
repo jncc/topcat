@@ -39,13 +39,13 @@ namespace Catalogue.Data.Write
             // path_must_not_be_blank
             if (record.Path.IsBlank())
             {
-                result.Errors.Add("Path must not be blank.", r => r.Path);
+                result.Errors.Add("Path must not be blank", r => r.Path);
             }
 
             // title_must_not_be_blank
             if (record.Gemini.Title.IsBlank())
             {
-                result.Errors.Add("Title must not be blank.", r => r.Gemini.Title);
+                result.Errors.Add("Title must not be blank", r => r.Gemini.Title);
             }
 
             ValidateTopicCategory(record, result);
@@ -56,7 +56,7 @@ namespace Catalogue.Data.Write
             // non_open_records_must_have_limitations_on_public_access
             if (record.Security != Security.Open && record.Gemini.LimitationsOnPublicAccess.IsBlank())
             {
-                result.Errors.Add("Non-open records must describe their limitations on public access.",
+                result.Errors.Add("Non-open records must describe their limitations on public access",
                     r => r.Security,
                     r => r.Gemini.LimitationsOnPublicAccess);
             }
@@ -64,7 +64,7 @@ namespace Catalogue.Data.Write
             // publishable_records_must_have_a_resource_locator
             if (record.Status == Status.Publishable && record.Gemini.ResourceLocator.IsBlank())
             {
-                result.Errors.Add("Publishable records must have a resource locator.",
+                result.Errors.Add("Publishable records must have a resource locator",
                     r => r.Status, r => r.Gemini.ResourceLocator);
             }
 
@@ -112,7 +112,7 @@ namespace Catalogue.Data.Write
 
             if (s.IsNotBlank() && !TopicCategories.Values.Keys.Any(k => k == s))
             {
-                result.Errors.Add(String.Format("Topic Category '{0}' is not valid.", record.Gemini.TopicCategory),
+                result.Errors.Add(String.Format("Topic Category '{0}' is not valid", record.Gemini.TopicCategory),
                     r => r.Gemini.TopicCategory);
             }
         }
@@ -123,7 +123,7 @@ namespace Catalogue.Data.Write
             string role = record.Gemini.ResponsibleOrganisation.Role;
             if (role.IsNotBlank() && !ResponsiblePartyRoles.Allowed.Contains(role))
             {
-                result.Errors.Add(String.Format("Responsible Organisation Role '{0}' is not valid.", role),
+                result.Errors.Add(String.Format("Responsible Organisation Role '{0}' is not valid", role),
                     r => r.Gemini.ResponsibleOrganisation.Role);
             }
         }
@@ -134,7 +134,7 @@ namespace Catalogue.Data.Write
             string role = record.Gemini.MetadataPointOfContact.Role;
             if (role.IsNotBlank() && !ResponsiblePartyRoles.Allowed.Contains(role))
             {
-                result.Errors.Add(String.Format("Metadata Point of Contact Role '{0}' is not valid.", role),
+                result.Errors.Add(String.Format("Metadata Point of Contact Role '{0}' is not valid", role),
                     r => r.Gemini.MetadataPointOfContact.Role);
             }
         }
@@ -235,7 +235,7 @@ namespace Catalogue.Data.Write
             var record = BasicRecord().With(r => r.Gemini.TopicCategory = "anInvalidTopicCategory");
             var result = new RecordValidator().Validate(record);
 
-            result.Errors.Single().Message.Should().Contain("Topic Category 'anInvalidTopicCategory' is not valid.");
+            result.Errors.Single().Message.Should().Contain("Topic Category 'anInvalidTopicCategory' is not valid");
             result.Errors.Single().Fields.Single().Should().Be("gemini.topicCategory");
         }
 

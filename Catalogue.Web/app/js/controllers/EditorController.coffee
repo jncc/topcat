@@ -18,19 +18,17 @@ angular.module('app.controllers').controller 'EditorController',
 
         $scope.save = () ->
             $rootScope.busy = { value: true }
-            $scope.errors = {}
+            $scope.validation = {}
             # todo use resource Record.update ?
             $http.put('../api/records/' + record.id, $scope.form).then (response) ->
                 if response.data.success
                     record = response.data.record # oo-er, is updating a param a good idea?
                     $scope.reset()
                 else
-                    # show the validation errors
-                    angular.forEach response.data.validation.errors, (error) ->
-                        # show the error messages
-                        #$scope.errors[field] = errors.join(', ')
-                        angular.forEach error.fields, (field) ->
-                            # tell the form that fields are invalid
+                    $scope.validation = response.data.validation
+                    # tell the form that fields are invalid
+                    for e in response.data.validation.errors
+                        for field in e.fields
                             $scope.theForm[field].$setValidity('server', false)
                 $rootScope.busy = { value: false }
 
@@ -46,6 +44,12 @@ angular.module('app.controllers').controller 'EditorController',
         $scope.addKeyword = -> $scope.form.gemini.keywords.push({ vocab: '', value: '' })
                 
         $scope.reset() # initially set up form
+
+        $scope.validation = fakeValidationData
         return
     
-
+fakeValidationData =
+    errors: [
+        { message: 'There was an error' }
+        { message: 'There was another error' } ]
+        

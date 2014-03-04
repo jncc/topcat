@@ -26,6 +26,9 @@ html { overflow-y: scroll; }
 @pale:   #eee;
 @white:  #fff;
 
+@errorForeground: #FF1493;
+@errorBackground: #f9f2f4;
+
 // ---------
 // utilities
 // ---------
@@ -304,11 +307,28 @@ hr {
     margin-top: 2em;
 }
 
-// validation styles. angular also puts these classes on the form so ignore that
+// validation
+
+.editor-validation-summary {
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.editor-validation-summary-item {
+    display: inline-block;
+    background-color: rgb(217, 38, 135);
+    color: white;
+    padding: 5px;
+    border-radius: 4px;
+    margin-bottom: 4px;
+    margin-right: 4px;
+}
+
+// angular also puts these classes on the form so ignore that
 //.ng-dirty.ng-valid { border:1px solid Green; }
 form .ng-dirty.ng-invalid {
-    border:1px solid #FF1493;
-    background-color: #f9f2f4;
+    border:1px solid @errorForeground;
+    background-color: @errorBackground;
 }
 
 // ---------

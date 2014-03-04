@@ -76,12 +76,12 @@ namespace Catalogue.Data.Seed
             var record = MakeExampleSeedRecord().With(r =>
             {
                 r.Id = new Guid("679434f5-baab-47b9-98e4-81c8e3a1a6f9");
-                r.Path = @"X:\path\to\record\record\data";
+                r.Path = @"X:\path\to\record\data";
                 r.Gemini = r.Gemini.With(m =>
-                {
-                    m.Title = "A simple example record";
-                    m.Abstract = "This is a simple example record.";
-                });
+                    {
+                        m.Title = "A simple example record";
+                        m.Abstract = "This is a simple example record.";
+                    });
             });
 
             recordService.Insert(record);

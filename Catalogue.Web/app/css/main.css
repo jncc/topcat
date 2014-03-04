@@ -253,8 +253,21 @@ hr {
 .editor-notes {
   margin-top: 2em;
 }
+.editor-validation-summary {
+  margin-bottom: 20px;
+  text-align: center;
+}
+.editor-validation-summary-item {
+  display: inline-block;
+  background-color: #d92687;
+  color: white;
+  padding: 5px;
+  border-radius: 4px;
+  margin-bottom: 4px;
+  margin-right: 4px;
+}
 form .ng-dirty.ng-invalid {
-  border: 1px solid #FF1493;
+  border: 1px solid #ff1493;
   background-color: #f9f2f4;
 }
 .fade-in-with-delay.ng-hide-remove {
