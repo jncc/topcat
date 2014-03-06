@@ -37,8 +37,17 @@ This is an corporate / intranet application and user account details and authent
 Active Directory and Windows authentication which gives us a great user experience in Chrome and IE.
 
 ###RavenDB
-You can deploy Raven in various ways; the recommended is using IIS using the new Windows installer which should take
-care of (most of?) the following manual steps:
+You can deploy Raven in various ways; the recommended is using the Windows installer:
+
+* Download the correct version from https://ravendb.net/download (see packages folder for the version number currently in use) 
+* Supply the license file when requested
+* Set up as an IIS-hosted application
+** Web site name: Topcat.Raven
+** Port: 8090
+** Path: C:\topcat\RavenDB
+* Browse to http://localhost:8090/ to check the installation succeeded
+* In the Create a New Database dialogue, create e.g. Catalogue.Data.Beta with Versioning Bundle
+
 
 [http://ravendb.net/docs/server/deployment/as-iis-application]()
 
