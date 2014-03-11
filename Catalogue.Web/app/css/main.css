@@ -270,6 +270,23 @@ form .ng-dirty.ng-invalid {
   border: 1px solid #ff1493;
   background-color: #f9f2f4;
 }
+.notification-summary {
+  position: fixed;
+  top: 2.5em;
+  text-align: center;
+  width: 100%;
+  z-index: 1000;
+}
+.notification-summary > span {
+  margin: 0 0 4px 4px;
+  border: 8px solid white;
+}
+.notification-summary > span > span {
+  background-color: #d92687;
+  color: white;
+  padding: 5px;
+  border-radius: 4px;
+}
 .fade-in-with-delay.ng-hide-remove {
   transition: all cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.5s;
   transition-delay: 1s;

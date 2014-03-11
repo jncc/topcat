@@ -331,6 +331,31 @@ form .ng-dirty.ng-invalid {
     background-color: @errorBackground;
 }
 
+// -------------
+// notifications
+// -------------
+
+.notification-summary { // appears fixed at the top of the page
+    position: fixed;
+    top: 2.5em;
+    text-align: center;
+    width: 100%;
+    z-index: 1000; // show in front of other elements
+}
+
+.notification-summary > span { // the white surrounding a notification 
+    margin: 0 0 4px 4px;
+    border: 8px solid white;
+}
+
+.notification-summary > span > span { // the pink notification itself
+    background-color: rgb(217, 38, 135);
+    color: white;
+    padding: 5px;
+    border-radius: 4px;
+}
+
+
 // ---------
 // animation
 // ---------

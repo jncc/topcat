@@ -1,8 +1,7 @@
 ﻿(function() {
 
   angular.module('app.controllers').controller('MainController', function($scope, $timeout, Account, misc) {
-    var busyCount;
-    $scope.hashStringToColor = misc.hashStringToColor;
+    var busyCount, notifications;
     busyCount = 0;
     $scope.busy = {
       start: function() {
@@ -15,10 +14,25 @@
         return busyCount > 0;
       }
     };
-    $scope.notifications = [];
-    return Account.then(function(user) {
+    notifications = [];
+    $scope.notifications = {
+      current: notifications,
+      add: function(message) {
+        var n, remove;
+        n = {
+          message: message
+        };
+        notifications.push(n);
+        remove = function() {
+          return notifications.splice($.inArray(n, notifications));
+        };
+        return $timeout(remove, 4000);
+      }
+    };
+    Account.then(function(user) {
       return $scope.user = user;
     });
+    return $scope.hashStringToColor = misc.hashStringToColor;
   });
 
 }).call(this);

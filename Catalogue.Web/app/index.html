@@ -38,25 +38,31 @@
     </script>
 </head>
 <body>
- 
+    
+    <div ng-show="notifications.current.length" class="notification-summary">
+        <span ng-repeat="n in notifications.current">
+            <span>{{ n.message }}</span>
+        </span>
+    </div>
+        
     <div class="container">
         
         <div class="header">
-                <div class="logo">
-                    <h1 title="Topcat">
-                        <a href="#">
-                            <img src="img/logo.gif" alt="logo" height="50" width="80">
-                            <span tc-spinner ng-show="busy.value()"><img src="img/spinner.gif"/></span>
-                        </a>
-                    </h1>
-                </div>
-                <div class="user-info">
-                    <div>{{user.displayName}}</div>
-                    <div>{{user.email}}</div>
-                </div>
+            <div class="logo">
+                <h1 title="Topcat">
+                    <a href="#">
+                        <img src="img/logo.gif" alt="logo" height="50" width="80">
+                        <span tc-spinner ng-show="busy.value()"><img src="img/spinner.gif"/></span>
+                    </a>
+                </h1>
+            </div>
+            <div class="user-info">
+                <div>{{user.displayName}}</div>
+                <div>{{user.email}}</div>
+            </div>
         </div>
         <hr />
-
+        
         <div ng-view></div>
           
         <br class="clearfix" />

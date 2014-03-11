@@ -1,23 +1,12 @@
 ﻿(function() {
-  var fakeValidationData;
+  var fakeValidationData, getSecurityText;
 
   angular.module('app.controllers').controller('EditorController', function($scope, $http, record, Record) {
     $scope.lookups = {};
     $http.get('../api/topics').success(function(result) {
       return $scope.lookups.topics = result;
     });
-    $scope.state = /^\w\w$/;
-    $scope.zip = /^\d\d\d\d\d$/;
-    $scope.getSecurityText = function(n) {
-      switch (n) {
-        case 0:
-          return 'Open';
-        case 1:
-          return 'Restricted';
-        case 2:
-          return 'Classified';
-      }
-    };
+    $scope.getSecurityText = getSecurityText;
     $scope.reset = function() {
       return $scope.form = angular.copy(record);
     };
@@ -25,18 +14,21 @@
       $scope.busy.start();
       $scope.validation = {};
       return $http.put('../api/records/' + record.id, $scope.form).then(function(response) {
-        var e, field, _i, _j, _len, _len1, _ref, _ref1;
+        var e, errors, field, _i, _j, _len, _len1, _ref;
         if (response.data.success) {
           record = response.data.record;
           $scope.reset();
         } else {
           $scope.validation = response.data.validation;
-          _ref = response.data.validation.errors;
-          for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-            e = _ref[_i];
-            _ref1 = e.fields;
-            for (_j = 0, _len1 = _ref1.length; _j < _len1; _j++) {
-              field = _ref1[_j];
+          errors = response.data.validation.errors;
+          if (errors.length > 0) {
+            $scope.notifications.add('There were errors');
+          }
+          for (_i = 0, _len = errors.length; _i < _len; _i++) {
+            e = errors[_i];
+            _ref = e.fields;
+            for (_j = 0, _len1 = _ref.length; _j < _len1; _j++) {
+              field = _ref[_j];
               $scope.theForm[field].$setValidity('server', false);
             }
           }
@@ -57,9 +49,7 @@
       return $scope.isClean();
     };
     $scope.removeKeyword = function(keyword) {
-      var i;
-      i = $scope.form.gemini.keywords.indexOf(keyword);
-      return $scope.form.gemini.keywords.splice(i, 1);
+      return $scope.form.gemini.keywords.splice($.inArray(keyword, $scope.form.gemini.keywords), 1);
     };
     $scope.addKeyword = function() {
       return $scope.form.gemini.keywords.push({
@@ -70,6 +60,17 @@
     $scope.reset();
     $scope.validation = fakeValidationData;
   });
+
+  getSecurityText = function(n) {
+    switch (n) {
+      case 0:
+        return 'Open';
+      case 1:
+        return 'Restricted';
+      case 2:
+        return 'Classified';
+    }
+  };
 
   fakeValidationData = {
     errors: [
