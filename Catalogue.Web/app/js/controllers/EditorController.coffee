@@ -9,17 +9,20 @@ angular.module('app.controllers').controller 'EditorController',
 
         # helper functions for UI
         $scope.getSecurityText = getSecurityText
-        
-        $scope.reset = () -> $scope.form = angular.copy(record)
 
-        $scope.save = () ->
+        $scope.cancel = ->
+            $scope.reset()
+            $scope.notifications.add 'Edits cancelled'
+        
+        $scope.save = ->
             $scope.busy.start()
-            $scope.validation = {}
             # todo use resource Record.update ?
             $http.put('../api/records/' + record.id, $scope.form).then (response) ->
                 if response.data.success
                     record = response.data.record # oo-er, is updating a param a good idea?
+                    $scope.validation = {}
                     $scope.reset()
+                    $scope.notifications.add 'Edits saved'
                 else
                     $scope.validation = response.data.validation
                     # tell the form that fields are invalid
@@ -31,9 +34,10 @@ angular.module('app.controllers').controller 'EditorController',
                             $scope.theForm[field].$setValidity('server', false)
                 $scope.busy.stop()
 
+        $scope.reset = -> $scope.form = angular.copy(record)
         $scope.isClean = -> angular.equals($scope.form, record)
         $scope.isSaveHidden = -> $scope.isClean() or record.readOnly
-        $scope.isResetHidden = -> $scope.isClean()
+        $scope.isCancelHidden = -> $scope.isClean()
         $scope.isSaveDisabled = -> $scope.isClean() # || $scope.theForm.$invalid 
 
         #$scope.keywordEditorOpen = true
@@ -42,7 +46,8 @@ angular.module('app.controllers').controller 'EditorController',
         $scope.addKeyword = ->
             $scope.form.gemini.keywords.push({ vocab: '', value: '' })
                 
-        $scope.reset() # initially set up form
+        # initially set up form
+        $scope.reset()
 
         $scope.validation = fakeValidationData
         return

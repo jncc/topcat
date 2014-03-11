@@ -18,7 +18,7 @@
                         <span class="dark glyphicon glyphicon-circle-arrow-left"></span>BACK
                     </button>
                     <span>
-                        <button ng-click="reset()" ng-hide="isResetHidden()" class="btn btn-primary" >CANCEL</button>
+                        <button ng-click="cancel()" ng-hide="isCancelHidden()" class="btn btn-primary" >CANCEL</button>
                         <button ng-click="save()"  ng-hide="isSaveHidden()" ng-disabled="isSaveDisabled()" class="btn btn-danger">SAVE</button>
                     </span>
                 </div>
@@ -192,7 +192,7 @@
                 
 
                 <div class="form-group">
-                    <button ng-click="reset()" ng-hide="isResetHidden()" class="btn btn-primary">CANCEL</button>
+                    <button ng-click="cancel()" ng-hide="isCancelHidden()" class="btn btn-primary">CANCEL</button>
                     <button ng-click="save()"  ng-hide="isSaveHidden()" ng-disabled="isSaveDisabled()" class="btn btn-danger">SAVE</button>
                 </div>
 
