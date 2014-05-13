@@ -50,6 +50,7 @@ You can deploy Raven in various ways; the recommended is using the Windows insta
 * Browse to http://localhost:8090/ to check the installation succeeded
 * In the Create a New Database dialogue, create e.g. Catalogue.Data.Beta with Versioning Bundle
 
+The Windows installer should replace most of the following manual steps - but here they are just in case:
 
 [http://ravendb.net/docs/server/deployment/as-iis-application]()
 
@@ -62,5 +63,5 @@ You can deploy Raven in various ways; the recommended is using the Windows insta
 * `ICACLS e:\catalogue-deployments\Live\RavenDB\Web /grant "IIS AppPool\Catalogue.Data.Live":F`
 * C:\Windows\System32\inetsrv\config\applicationHost.config ensure startMode="AlwaysRunning". `<add name="Catalogue.Data.Live" managedRuntimeVersion="v4.0" startMode="AlwaysRunning" />`
 
-When creating a new database instance, the Versioning bundle needs to be enabled.
+When creating a new database instance, the **Versioning bundle** needs to be enabled.
 
