@@ -1,6 +1,6 @@
 
-JNCC Datasets Catalogue
-=======================
+Topcat - the JNCC Datasets Catalogue
+====================================
 
 A simple data resource catalogue supporting a sensible profile of UK Gemini.
 
@@ -31,6 +31,8 @@ Currently best to disable Resharper > Options > Tools > Unit Testing > Javascrip
 
 Deployment
 ----------
+
+Topcat should run with no special setup on a vanilla Visual Studio installation for local development. 
 
 ###Windows Authentication
 This is an corporate / intranet application and user account details and authentication rely on
