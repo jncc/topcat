@@ -1,7 +1,7 @@
 ﻿
 angular.module('app.controllers').controller 'EditorController', 
 
-    ($scope, $http, record, Record) -> 
+    ($scope, $http, $routeParams, $location, record, Record) -> 
 
         # todo lookups should be injected
         $scope.lookups = {}
@@ -15,24 +15,33 @@ angular.module('app.controllers').controller 'EditorController',
             $scope.notifications.add 'Edits cancelled'
         
         $scope.save = ->
+            dealWithIt = (response) ->
+                    if response.data.success
+                        record = response.data.record # oo-er, is updating a param a good idea?
+                        $scope.validation = {}
+                        $scope.reset()
+                        $scope.notifications.add 'Edits saved'
+                        $location.path('/editor/' + record.id)
+                    else
+                        $scope.validation = response.data.validation
+                        # tell the form that fields are invalid
+                        errors = response.data.validation.errors
+                        if errors.length > 0
+                            $scope.notifications.add 'There were errors'
+                        for e in errors
+                            for field in e.fields
+                                $scope.theForm[field].$setValidity('server', false)
+                    $scope.busy.stop()
+
             $scope.busy.start()
-            # todo use resource Record.update ?
-            $http.put('../api/records/' + record.id, $scope.form).then (response) ->
-                if response.data.success
-                    record = response.data.record # oo-er, is updating a param a good idea?
-                    $scope.validation = {}
-                    $scope.reset()
-                    $scope.notifications.add 'Edits saved'
-                else
-                    $scope.validation = response.data.validation
-                    # tell the form that fields are invalid
-                    errors = response.data.validation.errors
-                    if errors.length > 0
-                        $scope.notifications.add 'There were errors'
-                    for e in errors
-                        for field in e.fields
-                            $scope.theForm[field].$setValidity('server', false)
-                $scope.busy.stop()
+            if $routeParams.recordId isnt '00000000-0000-0000-0000-000000000000'
+                # todo use resource Record.update ??
+                $http.put('../api/records/' + record.id, $scope.form).then dealWithIt
+            else
+                $http.post('../api/records', $scope.form).then dealWithIt
+                #console.log $scope.form
+                #if $.isEmptyObject $scope.validation # succeeded
+                #    $location.path('#/editor/' + $scope.form.id);
 
         $scope.reset = -> $scope.form = angular.copy(record)
         $scope.isClean = -> angular.equals($scope.form, record)
@@ -49,7 +58,7 @@ angular.module('app.controllers').controller 'EditorController',
         # initially set up form
         $scope.reset()
 
-        $scope.validation = fakeValidationData
+        #$scope.validation = fakeValidationData
         return
     
 getSecurityText = (n) -> switch n
