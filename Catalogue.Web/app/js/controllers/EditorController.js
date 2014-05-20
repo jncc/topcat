@@ -12,8 +12,8 @@
       return $scope.notifications.add('Edits cancelled');
     };
     $scope.save = function() {
-      var dealWithIt;
-      dealWithIt = function(response) {
+      var processResult;
+      processResult = function(response) {
         var e, errors, field, _i, _j, _len, _len1, _ref;
         if (response.data.success) {
           record = response.data.record;
@@ -40,9 +40,9 @@
       };
       $scope.busy.start();
       if ($routeParams.recordId !== '00000000-0000-0000-0000-000000000000') {
-        return $http.put('../api/records/' + record.id, $scope.form).then(dealWithIt);
+        return $http.put('../api/records/' + record.id, $scope.form).then(processResult);
       } else {
-        return $http.post('../api/records', $scope.form).then(dealWithIt);
+        return $http.post('../api/records', $scope.form).then(processResult);
       }
     };
     $scope.reset = function() {

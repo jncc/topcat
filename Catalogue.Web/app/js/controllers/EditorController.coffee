@@ -15,7 +15,7 @@ angular.module('app.controllers').controller 'EditorController',
             $scope.notifications.add 'Edits cancelled'
         
         $scope.save = ->
-            dealWithIt = (response) ->
+            processResult = (response) ->
                     if response.data.success
                         record = response.data.record # oo-er, is updating a param a good idea?
                         $scope.validation = {}
@@ -36,12 +36,9 @@ angular.module('app.controllers').controller 'EditorController',
             $scope.busy.start()
             if $routeParams.recordId isnt '00000000-0000-0000-0000-000000000000'
                 # todo use resource Record.update ??
-                $http.put('../api/records/' + record.id, $scope.form).then dealWithIt
+                $http.put('../api/records/' + record.id, $scope.form).then processResult
             else
-                $http.post('../api/records', $scope.form).then dealWithIt
-                #console.log $scope.form
-                #if $.isEmptyObject $scope.validation # succeeded
-                #    $location.path('#/editor/' + $scope.form.id);
+                $http.post('../api/records', $scope.form).then processResult
 
         $scope.reset = -> $scope.form = angular.copy(record)
         $scope.isClean = -> angular.equals($scope.form, record)
