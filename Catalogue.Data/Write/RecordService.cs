@@ -111,6 +111,11 @@ namespace Catalogue.Data.Write
         /// The (possibly modified) record that was submitted.
         /// </summary>
         public Record Record { get; set; }
+
+        /// <summary>
+        /// A convenience result for tests, etc.
+        /// </summary>
+        public static readonly RecordServiceResult SuccessfulResult = new RecordServiceResult { Validation = new RecordValidationResult() };
     }
 
 
