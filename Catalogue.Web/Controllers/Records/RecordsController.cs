@@ -4,8 +4,11 @@ using System.Linq;
 using System.Web.Http;
 using Catalogue.Data.Model;
 using Catalogue.Data.Write;
+using Catalogue.Gemini.Templates;
+using FluentAssertions;
+using Moq;
+using NUnit.Framework;
 using Raven.Client;
-using Raven.Client.Bundles.Versioning;
 
 namespace Catalogue.Web.Controllers.Records
 {
@@ -24,7 +27,18 @@ namespace Catalogue.Web.Controllers.Records
 
         public Record Get(Guid id)
         {
-            return service.Load(id);
+            if (id == Guid.Empty) // a nice empty record for making a new one
+            {
+                return new Record
+                    {
+                        Id = Guid.Empty,
+                        Gemini = Library.Blank(),
+                    };
+            }
+            else
+            {
+                return service.Load(id);
+            }
         }
 
         // PUT api/records/57d34691-9064-4c1e-90a7-7b0c112daa8d (update/replace a record)
@@ -40,7 +54,19 @@ namespace Catalogue.Web.Controllers.Records
 
             return result;
         }
+    }
 
+    public class records_controllers_tests
+    {
+        [Test]
+        public void should_return_blank_record_for_empty_guid()
+        {
+            var controller = new RecordsController(Mock.Of<IRecordService>(), Mock.Of<IDocumentSession>());
+            var record = controller.Get(Guid.Empty);
+
+            record.Gemini.Title.Should().BeBlank();
+            record.Path.Should().BeBlank();
+        }
     }
 }
 

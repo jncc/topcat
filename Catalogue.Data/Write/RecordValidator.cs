@@ -294,7 +294,7 @@ namespace Catalogue.Data.Write
         }
 
         [Test]
-        public void responsible_party_role_must_be_an_allowed_role()
+        public void responsible_organisation_role_must_be_an_allowed_role()
         {
             var record = BasicRecord().With(r => r.Gemini.ResponsibleOrganisation = new ResponsibleParty
                 {
