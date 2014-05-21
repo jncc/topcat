@@ -32,7 +32,7 @@ Currently best to disable Resharper > Options > Tools > Unit Testing > Javascrip
 Deployment
 ----------
 
-Topcat should run with no special setup on a vanilla Visual Studio installation for local development. 
+Topcat should run with no special setup on a vanilla Visual Studio installation for local development. Here's what you need to do to create a production instance.
 
 ###Windows Authentication
 This is an corporate / intranet application and user account details and authentication rely on
@@ -63,3 +63,4 @@ The Windows installer should replace most of the following manual steps - but [h
 
 When creating a new database instance, the **Versioning bundle** needs to be enabled.
 
+The Catalogue.Data.dll must be copied into Raven/Analyzers folder because RavenDB needs to be able to load the custom Lucene analyzer we use.  
