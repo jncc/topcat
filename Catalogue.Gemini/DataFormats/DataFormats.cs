@@ -32,7 +32,7 @@ namespace Catalogue.Gemini.DataFormats
                 {
                     { "medin", "Documents"}, // http://vocab.ndg.nerc.ac.uk/term/M010/1/DOC
                     { "medin", "Text" }, // http://vocab.ndg.nerc.ac.uk/term/M010/1/TXT
-                    { "docx", "Microsoft Word for Windows "},
+                    { "docx", "Microsoft Word for Windows"},
                     { "pdf", "Acrobat Portable Document Format" } // made up - pronom only appears to contain specific versions
                 }
             },

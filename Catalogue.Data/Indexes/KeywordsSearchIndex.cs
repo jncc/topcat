@@ -48,11 +48,10 @@ namespace Catalogue.Data.Indexes
 
 //            Analyze(x => x.Vocab, typeof(LowerCaseKeywordAnalyzer).AssemblyQualifiedName);
             Stores.Add(x => x.Vocab, FieldStorage.Yes);
-
 //            Analyze(x => x.Value, typeof(LowerCaseKeywordAnalyzer).AssemblyQualifiedName);
-            Stores.Add(x => x.Value, FieldStorage.Yes); 
-
-            Analyze(x => x.ValueN, typeof(CustomKeywordAnalyzer).AssemblyQualifiedName);
+            Stores.Add(x => x.Value, FieldStorage.Yes);
+            Analyze(x => x.ValueN, typeof(CustomKeywordAnalyzer).AssemblyQualifiedName); 
+          
         }
     }
 }

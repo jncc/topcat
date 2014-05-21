@@ -5,6 +5,7 @@ using System.Web.Http;
 using Catalogue.Data.Model;
 using Catalogue.Data.Write;
 using Catalogue.Gemini.Templates;
+using Catalogue.Utilities.Clone;
 using FluentAssertions;
 using Moq;
 using NUnit.Framework;
@@ -54,6 +55,19 @@ namespace Catalogue.Web.Controllers.Records
 
             return result;
         }
+
+        public RecordServiceResult Post([FromBody] Record record)
+        {
+            record.Id = Guid.NewGuid();
+
+            var result = service.Insert(record);
+
+            if (result.Success)
+                db.SaveChanges();
+
+            return result;
+        }
+
     }
 
     public class records_controllers_tests
@@ -66,6 +80,23 @@ namespace Catalogue.Web.Controllers.Records
 
             record.Gemini.Title.Should().BeBlank();
             record.Path.Should().BeBlank();
+        }
+
+        [Test]
+        public void should_give_new_record_a_new_guid()
+        {
+            var record = new Record
+                {
+                    Path = @"X:\some\path",
+                    Gemini = Library.Blank().With(m => m.Title = "Some new record!")
+                };
+            var rsr = RecordServiceResult.SuccessfulResult.With(r => r.Record = record);
+            var service = Mock.Of<IRecordService>(s => s.Insert(It.IsAny<Record>()) == rsr);
+            var controller = new RecordsController(service, Mock.Of<IDocumentSession>());
+            
+            var result = controller.Post(record);
+
+            result.Record.Id.Should().NotBeEmpty();
         }
     }
 }

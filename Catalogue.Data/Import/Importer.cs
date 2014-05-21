@@ -85,7 +85,7 @@ namespace Catalogue.Data.Import
         [SetUp]
         public void setup()
         {
-            recordService = Mock.Of<IRecordService>(rs => rs.Insert(It.IsAny<Record>()) == new RecordServiceResult { Validation = new RecordValidationResult()});
+            recordService = Mock.Of<IRecordService>(rs => rs.Insert(It.IsAny<Record>()) == RecordServiceResult.SuccessfulResult);
 
             string path = @"c:\some\path.csv";
             var fileSystem = Mock.Of<IFileSystem>(fs => fs.OpenReader(path) == new StringReader(testData));

@@ -317,6 +317,14 @@
       <DependentUpon>Web.config</DependentUpon>
       <SubType>Designer</SubType>
     </Content>
+    <Content Include="Web.Beta.config">
+      <DependentUpon>Web.config</DependentUpon>
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="Web.Live.config">
+      <DependentUpon>Web.config</DependentUpon>
+      <SubType>Designer</SubType>
+    </Content>
     <Content Include="app\css\main.less" />
     <Content Include="app\lib\jquery-placeholder-2.0.7\README.md" />
     <Content Include="app\lib\respond-1.2.0\README.md" />

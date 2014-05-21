@@ -61,11 +61,15 @@ namespace Catalogue.Tests.Slow.Catalogue.Data.Indexes
         [Test]
         public void can_search_exact_matches()
         {
-            // use the standard search field for exact matches
+            Db.Query<KeywordsSearchIndex.Result, KeywordsSearchIndex>()
+              .Where(r => r.Value.Equals("seabed habitat maps"))
+              .Count().Should().Be(1);
 
             Db.Query<KeywordsSearchIndex.Result, KeywordsSearchIndex>()
-              .Search(r => r.Value, "Seabed Habitat Maps")
+              .Where(r => r.Value.Equals("Seabed Habitat Maps"))
               .Count().Should().Be(1);
+            // use the standard search field for exact matches
+            // why ? raven docs show simple queries with vanilla linq as fine
         }
 
         [Test, Explicit]

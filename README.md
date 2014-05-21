@@ -17,12 +17,12 @@ These are essential if you want to edit the application's Javascript or CSS.
 There are no build-time or run-time steps used to compile Coffeescript and LESS - the Visual Studio extensions are simpler.
 The application will expect the correct .js and .css files to have been design-time generated.
 
-[http://visualstudiogallery.msdn.microsoft.com/07d54d12-7133-4e15-becb-6f451ea3bea6]()
+[VS plugin] (http://visualstudiogallery.msdn.microsoft.com/07d54d12-7133-4e15-becb-6f451ea3bea6).
 
 This support might be built-in to Visual Studio 2013.
 
 ###AngularJS
-There is (allegedly) Resharper support. [http://blogs.jetbrains.com/dotnet/2013/02/angularjs-support-for-resharper/]()
+There is (allegedly) [Resharper support](http://blogs.jetbrains.com/dotnet/2013/02/angularjs-support-for-resharper/).
 
 ###Resharper
 Currently best to disable Resharper > Options > Tools > Unit Testing > Javascript Tests > 
@@ -50,9 +50,7 @@ You can deploy Raven in various ways; the recommended is using the Windows insta
 * Browse to http://localhost:8090/ to check the installation succeeded
 * In the Create a New Database dialogue, create e.g. Catalogue.Data.Beta with Versioning Bundle
 
-The Windows installer should replace most of the following manual steps - but here they are just in case:
-
-[http://ravendb.net/docs/server/deployment/as-iis-application]()
+The Windows installer should replace most of the following manual steps - but [here they are just in case] (http://ravendb.net/docs/server/deployment/as-iis-application])
 
 * Download, unblock and unzip, and copy Web folder to e.g. e:\catalogue-deployments\Live\RavenDB\Web folder
 * `<add key="Raven/AnonymousAccess" value="All"/>`
