@@ -38,6 +38,8 @@ Topcat should run with no special setup on a vanilla Visual Studio installation 
 This is an corporate / intranet application and user account details and authentication rely on
 Active Directory and Windows authentication which gives us a great user experience in Chrome and IE.
 
+You need to disable Anonymous Authentication and enable Windows Authentication in the IIS website hosting Topcat.
+
 ###RavenDB
 You can deploy Raven in various ways; the recommended is using the Windows installer:
 
