@@ -7,6 +7,10 @@ namespace Catalogue.Utilities.Clone
 {
     public static class CloneExtensions
     {
+        /// <summary>
+        /// Returns a copy (with certain semantics) of the object
+        /// with the supplied function applied to it. Very useful for tests. 
+        /// </summary>
         public static T With<T>(this T original, Action<T> f)
         {
             var o = original.Copy();
