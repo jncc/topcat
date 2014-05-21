@@ -69,19 +69,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Data.Indexes
               .Where(r => r.Value.Equals("Seabed Habitat Maps"))
               .Count().Should().Be(1);
             // use the standard search field for exact matches
-            // why use search method the raven docs say for simple queries vanilla linq is fine
-             
-             /* var results = Db.Query<KeywordsSearchIndex.Result, KeywordsSearchIndex>()
-              .Search(r => r.Value, "seabed habitat map").ToList();*/
-            /*var results = Db.Query<KeywordsSearchIndex.Result, KeywordsSearchIndex>()
-                .Where(r => r.Value.Equals("Seabed Habitat Map")).ToList();*/
-
-/*            foreach (var result in results)
-            {
-                Console.WriteLine(result.Vocab);
-                Console.WriteLine(result.Value);
-                Console.WriteLine();
-            }*/
+            // why ? raven docs show simple queries with vanilla linq as fine
         }
 
         [Test, Explicit]
@@ -96,10 +84,6 @@ namespace Catalogue.Tests.Slow.Catalogue.Data.Indexes
             {
                 Console.WriteLine(result.Vocab);
                 Console.WriteLine(result.Value);
-                if (result.Value.Equals("Seabed Habitat Maps"))
-                {
-                    Console.WriteLine(" MATCHED");
-                }
                 Console.WriteLine();
             }
         }
