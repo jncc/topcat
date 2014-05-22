@@ -49,7 +49,8 @@ namespace Catalogue.Data.Import.Mappings
                 Map(m => m.Abstract).Name("Resource Abstract");
                 Map(m => m.TopicCategory)
                     .ConvertUsing(row => row.GetField("Topic Category")
-                        .FirstCharToLower()); // correct capitalisation
+                        .FirstCharToLower() // correct capitalisation
+                        .Replace("structures", "structure"));
 
                 Map(m => m.Keywords).ConvertUsing(row =>
                     {
@@ -89,7 +90,7 @@ namespace Catalogue.Data.Import.Mappings
                     {
                         Name = row.GetField("Organisation Name"),
                         Email = row.GetField("Email Address"),
-                        Role = row.GetField("Responsible Party Role"),
+                        Role = row.GetField("Responsible Party Role").FirstCharToLower(),
                     });
 
                 Map(m => m.LimitationsOnPublicAccess).Name("Limitations on public access");
@@ -195,7 +196,7 @@ namespace Catalogue.Data.Import.Mappings
             using (var db = store.OpenSession())
             {
                 var importer = Importer.CreateImporter<ActivitiesMapping>(db);
-                importer.SkipBadRecords = true; // todo remove this
+                //importer.SkipBadRecords = true; // todo remove this
                 importer.Import(@"C:\Work\pressures-data\Human_Activities_Metadata_Catalogue.csv");
                 db.SaveChanges();
 
@@ -208,7 +209,7 @@ namespace Catalogue.Data.Import.Mappings
         [Test]
         public void should_import_every_record()
         {
-            imported.Count().Should().Be(96);
+            imported.Count().Should().Be(97);
         }
 
         [Test]
@@ -263,7 +264,7 @@ namespace Catalogue.Data.Import.Mappings
             // activities data is categorised as 'Marine Human Activities'
             imported.Count(r => r.Gemini.Keywords
                 .Any(k => k.Vocab == "http://vocab.jncc.gov.uk/jncc-broad-category" && k.Value == "Marine Human Activities"))
-                .Should().Be(96);
+                .Should().Be(97);
         }
 
         [Test]
