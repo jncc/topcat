@@ -58,7 +58,6 @@ namespace Catalogue.Data.Seed
                 importer.Import(reader);
             }
         }
-
         Record MakeExampleSeedRecord()
         {
             return new Record

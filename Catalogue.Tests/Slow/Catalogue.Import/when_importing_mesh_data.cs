@@ -74,7 +74,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Import
         [Test]
         public void should_import_data_format()
         {
-            imported.Count(r => r.Gemini.DataFormat == "Geographic Information System").Should().BeGreaterThan(100);
+            imported.Count(r => r.Gemini.DataFormat.StartsWith("Geo")).Should().BeGreaterThan(100);
         }
 
         [Test]
