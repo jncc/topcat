@@ -20,6 +20,9 @@ namespace Catalogue.Tests.Slow.Catalogue.Gemini.Validation
         [Test]
         public void should_be_valid_gemini()
         {
+            // without this we get an error message 417
+            // http://stackoverflow.com/questions/566437/http-post-returns-the-error-417-expectation-failed-c
+            System.Net.ServicePointManager.Expect100Continue = false;
             // start with the example document
             var metadata = Library.Example();
             
