@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Catalogue.Data.Model;
 using Catalogue.Gemini.Model;
+using Catalogue.Gemini.ResourceType;
 using Catalogue.Gemini.Roles;
 using Catalogue.Gemini.Templates;
 using Catalogue.Gemini.Vocabs;
@@ -52,6 +53,7 @@ namespace Catalogue.Data.Write
             ValidateResourceLocator(record, result);
             ValidateResponsibleOrganisation(record, result);
             ValidateMetadataPointOfContact(record, result);
+            //ValidateResourceType(record, result);
 
             // non_open_records_must_have_limitations_on_public_access
             if (record.Security != Security.Open && record.Gemini.LimitationsOnPublicAccess.IsBlank())
@@ -136,6 +138,20 @@ namespace Catalogue.Data.Write
             {
                 result.Errors.Add(String.Format("Metadata Point of Contact Role '{0}' is not valid", role),
                     r => r.Gemini.MetadataPointOfContact.Role);
+            }
+        }
+
+        void ValidateResourceType(Record record, RecordValidationResult result)
+        {
+            string resourceType = record.Gemini.ResourceType;
+            if (resourceType.IsBlank())
+            {
+                result.Errors.Add("Resource Type is required", r => r.Gemini.ResourceType);
+            } 
+            else if (!ResourceTypes.Allowed.Contains(resourceType))
+            {
+                result.Errors.Add(String.Format("Resource Type '{0}' is not valid", resourceType),
+                                  r => r.Gemini.ResourceType);
             }
         }
     }
