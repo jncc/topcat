@@ -96,26 +96,39 @@ namespace Catalogue.Data.Import.Mappings
                 Map(m => m.LimitationsOnPublicAccess).Name("Limitations on public access");
                 Map(m => m.UseConstraints).Name("Use constraints");
                 Map(m => m.SpatialReferenceSystem).Name("Spatial reference system");
-//                Map(m => m.MetadataDate);
-//                Map(m => m.MetadataLanguage);
-//                Map(m => m.MetadataPointOfContact).ConvertUsing(row =>
-//                {
-//                    string name = row.GetField("MetadataPOCName");
-//                    string email = row.GetField("MetadataPOCEmail");
-//                    string role = row.GetField("ResponsibleOrganisationRole");
-//
-//                    return new ResponsibleParty { Name = name, Email = email, Role = role };
-//                });
-//                Map(m => m.ResourceType); // should always be dataset i think - "Multiple Datasets" isn't surely isn't allowed
-//                Map(m => m.BoundingBox).ConvertUsing(row =>
-//                {
-//                    decimal north = Convert.ToDecimal(row.GetField("BBoxNorth"));
-//                    decimal south = Convert.ToDecimal(row.GetField("BBoxSouth"));
-//                    decimal east = Convert.ToDecimal(row.GetField("BBoxEast"));
-//                    decimal west = Convert.ToDecimal(row.GetField("BBoxWest"));
-//
-//                    return new BoundingBox { North = north, South = south, East = east, West = west };
-//                });
+                Map(m => m.MetadataDate).Name("Metadata date");
+                Map(m => m.ResourceType).Name("Resource type "); // should always be dataset i think - "Multiple Datasets" isn't surely isn't allowed
+//                Map(m => m.MetadataLanguage); // Not available
+                Map(m => m.MetadataPointOfContact).ConvertUsing(row =>
+                {
+                    string name = row.GetField("Metadata point of contact");
+                    string email = "April.Eassom@jnccc.gov.uk";
+                    string role = "pointOfContact";
+                    return new ResponsibleParty { Name = name, Email = email, Role = role };
+                });
+                
+                Map(m => m.BoundingBox).ConvertUsing(row =>
+                {
+                    
+                    String strNorth = row.GetField("North");
+                    String strEast = row.GetField("East");
+                    String strWest = row.GetField("West");
+                    String strSouth = row.GetField("South");
+
+                    /*if a bounding box co ordinate is missing don't attempt to convert*/
+                    if (String.IsNullOrEmpty(strNorth) || String.IsNullOrEmpty(strEast) ||
+                        String.IsNullOrEmpty(strSouth) || String.IsNullOrEmpty(strWest))
+                    {
+                        return null;
+                    }
+                    
+                    decimal north = Convert.ToDecimal(strNorth);
+                    decimal south = Convert.ToDecimal(strSouth);
+                    decimal east = Convert.ToDecimal(strEast);
+                    decimal west = Convert.ToDecimal(strWest);
+
+                    return new BoundingBox { North = north, South = south, East = east, West = west };
+                });
             }
         }
 
