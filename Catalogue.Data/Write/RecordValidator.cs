@@ -53,7 +53,7 @@ namespace Catalogue.Data.Write
             ValidateResourceLocator(record, result);
             ValidateResponsibleOrganisation(record, result);
             ValidateMetadataPointOfContact(record, result);
-            //ValidateResourceType(record, result);
+            ValidateResourceType(record, result);
 
             // non_open_records_must_have_limitations_on_public_access
             if (record.Security != Security.Open && record.Gemini.LimitationsOnPublicAccess.IsBlank())
@@ -143,12 +143,9 @@ namespace Catalogue.Data.Write
 
         void ValidateResourceType(Record record, RecordValidationResult result)
         {
+            // resource type must be a valid Gemini resource type if not blank
             string resourceType = record.Gemini.ResourceType;
-            if (resourceType.IsBlank())
-            {
-                result.Errors.Add("Resource Type is required", r => r.Gemini.ResourceType);
-            } 
-            else if (!ResourceTypes.Allowed.Contains(resourceType))
+            if (resourceType.IsNotBlank() && !ResourceTypes.Allowed.Contains(resourceType))
             {
                 result.Errors.Add(String.Format("Resource Type '{0}' is not valid", resourceType),
                                   r => r.Gemini.ResourceType);
