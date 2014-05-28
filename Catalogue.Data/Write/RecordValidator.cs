@@ -23,17 +23,11 @@ namespace Catalogue.Data.Write
     public interface IRecordValidator
     {
         RecordValidationResult Validate(Record record);
-        RecordValidationResult Validate(Record record, RecordValidationLevel level);
     }
 
     public class RecordValidator : IRecordValidator
     {
         public RecordValidationResult Validate(Record record)
-        {
-            return Validate(record, RecordValidationLevel.Basic);
-        }
-
-        public RecordValidationResult Validate(Record record, RecordValidationLevel level)
         {
             var result = new RecordValidationResult();
 
@@ -70,13 +64,20 @@ namespace Catalogue.Data.Write
                     r => r.Status, r => r.Gemini.ResourceLocator);
             }
 
-            if (level > RecordValidationLevel.Basic)
+            if (record.Validation == Validation.Gemini)
             {
                 // blank_use_constraints_could_be_a_mistake
                 if (record.Gemini.UseConstraints.IsBlank())
                 {
                     result.Warnings.Add("Use Constraints is empty; did you mean 'no conditions apply'?",
                         r => r.Gemini.UseConstraints);
+                }
+
+                // topic_category_must_not_be_blank
+                if (record.Gemini.TopicCategory.IsBlank())
+                {
+                    result.Errors.Add("Topic Category must not be blank.", 
+                        r => r.Gemini.TopicCategory);
                 }
             }
 
@@ -153,11 +154,6 @@ namespace Catalogue.Data.Write
         }
     }
 
-    public enum RecordValidationLevel
-    {
-        Basic = 0, Strict = 1
-    }
-
     public class RecordValidationIssue
     {
         public RecordValidationIssue(string message, List<Expression<Func<Record, object>>> fields)
@@ -204,9 +200,9 @@ namespace Catalogue.Data.Write
     }
 
 
-    class record_validator_tests
+    class when_validating_at_basic_level
     {
-        Record BasicRecord()
+        Record SimpleRecord()
         {
             return new Record
                 {
@@ -220,14 +216,14 @@ namespace Catalogue.Data.Write
         {
             // the basic level of validation shouldn't produce warnings - that would be too annoying
 
-            var result = new RecordValidator().Validate(BasicRecord() /* no Level argument */);
+            var result = new RecordValidator().Validate(SimpleRecord() /* no Level argument */);
             result.Warnings.Should().BeEmpty();
         }
 
         [Test]
         public void title_must_not_be_blank([Values("", " ", null)] string blank)
         {
-            var result = new RecordValidator().Validate(BasicRecord().With(r => r.Gemini.Title = blank));
+            var result = new RecordValidator().Validate(SimpleRecord().With(r => r.Gemini.Title = blank));
 
             result.Errors.Single().Message.Should().StartWith("Title must not be blank");
             result.Errors.Single().Fields.Single().Should().Be("gemini.title");
@@ -236,7 +232,7 @@ namespace Catalogue.Data.Write
         [Test]
         public void path_must_not_be_blank([Values("", " ", null)] string blank)
         {
-            var result = new RecordValidator().Validate(BasicRecord().With(r => r.Path = blank));
+            var result = new RecordValidator().Validate(SimpleRecord().With(r => r.Path = blank));
 
             result.Errors.Single().Message.Should().StartWith("Path must not be blank");
             result.Errors.Single().Fields.Single().Should().Be("path");
@@ -245,7 +241,7 @@ namespace Catalogue.Data.Write
         [Test]
         public void topic_category_must_be_valid()
         {
-            var record = BasicRecord().With(r => r.Gemini.TopicCategory = "anInvalidTopicCategory");
+            var record = SimpleRecord().With(r => r.Gemini.TopicCategory = "anInvalidTopicCategory");
             var result = new RecordValidator().Validate(record);
 
             result.Errors.Single().Message.Should().Contain("Topic Category 'anInvalidTopicCategory' is not valid");
@@ -255,7 +251,7 @@ namespace Catalogue.Data.Write
         [Test]
         public void topic_category_may_be_blank([Values("", null)] string blank)
         {
-            var record = BasicRecord().With(r => r.Gemini.TopicCategory = blank);
+            var record = SimpleRecord().With(r => r.Gemini.TopicCategory = blank);
             var result = new RecordValidator().Validate(record);
             result.Errors.Should().BeEmpty();
         }
@@ -263,7 +259,7 @@ namespace Catalogue.Data.Write
         [Test]
         public void non_open_records_must_have_limitations_on_public_access([Values(Security.Classified, Security.Restricted)] Security nonOpen, [Values("", " ", null)] string blank)
         {
-            var record = BasicRecord().With(r =>
+            var record = SimpleRecord().With(r =>
                 {
                     r.Security = nonOpen;
                     r.Gemini.LimitationsOnPublicAccess = blank;
@@ -278,7 +274,7 @@ namespace Catalogue.Data.Write
         [Test]
         public void publishable_records_must_have_a_resource_locator([Values("", " ", null)] string blank)
         {
-            var record = BasicRecord().With(r =>
+            var record = SimpleRecord().With(r =>
                 {
                     r.Status = Status.Publishable;
                     r.Gemini.ResourceLocator = blank;
@@ -293,7 +289,7 @@ namespace Catalogue.Data.Write
         [Test]
         public void resource_locator_must_be_a_well_formed_http_url([Values(@"Z:\some\path", "utter rubbish")] string nonHttpUrl)
         {
-            var record = BasicRecord().With(r => r.Gemini.ResourceLocator = nonHttpUrl);
+            var record = SimpleRecord().With(r => r.Gemini.ResourceLocator = nonHttpUrl);
             var result = new RecordValidator().Validate(record);
             result.Errors.Single().Fields.Should().Contain("gemini.resourceLocator");
         }
@@ -301,7 +297,7 @@ namespace Catalogue.Data.Write
         [Test]
         public void resource_locator_may_be_set()
         {
-            var record = BasicRecord().With(r => r.Gemini.ResourceLocator = "http://example.org/resource/locator");
+            var record = SimpleRecord().With(r => r.Gemini.ResourceLocator = "http://example.org/resource/locator");
             var result = new RecordValidator().Validate(record);
             result.Errors.Should().BeEmpty();
         }
@@ -309,7 +305,7 @@ namespace Catalogue.Data.Write
         [Test]
         public void responsible_organisation_role_must_be_an_allowed_role()
         {
-            var record = BasicRecord().With(r => r.Gemini.ResponsibleOrganisation = new ResponsibleParty
+            var record = SimpleRecord().With(r => r.Gemini.ResponsibleOrganisation = new ResponsibleParty
                 {
                     Email = "a.mann@example.com",
                     Name = "A. Mann",
@@ -322,7 +318,7 @@ namespace Catalogue.Data.Write
         [Test]
         public void metadata_point_of_contact_role_must_be_an_allowed_role()
         {
-            var record = BasicRecord().With(r => r.Gemini.MetadataPointOfContact = new ResponsibleParty
+            var record = SimpleRecord().With(r => r.Gemini.MetadataPointOfContact = new ResponsibleParty
                 {
                     Email = "a.mann@example.com",
                     Name = "A. Mann",
@@ -333,17 +329,20 @@ namespace Catalogue.Data.Write
         }
 
 
-        // strict validation tests
+        // gemini validation tests
 
         [Test]
         public void blank_use_constraints_could_be_a_mistake([Values("", " ", null)] string blank)
         {
-            var record = BasicRecord().With(r => r.Gemini.UseConstraints = blank);
-            var result = new RecordValidator().Validate(record, RecordValidationLevel.Strict);
+            var record = SimpleRecord().With(r => r.Gemini.UseConstraints = blank);
+            var result = new RecordValidator().Validate(record);
 
             result.Warnings.Single().Message.Should().Be("Use Constraints is empty; did you mean 'no conditions apply'?");
             result.Warnings.Single().Fields.Single().Should().Be("gemini.useConstraints");
         }
+
+
+
 
         // todo
 
@@ -352,5 +351,27 @@ namespace Catalogue.Data.Write
         // warning for unknown data format
         // valid email addresses, dates, ...
         // resource_locator_must_be_a_public_url (validator might need an http service)
+
+        class when_validating_at_gemini_level
+        {
+            Record SimpleRecord()
+            {
+                return new Record
+                {
+                    Path = @"X:\some\path",
+                    Gemini = Library.Example(),
+                    Validation = Validation.Gemini,
+                };
+            }
+
+            [Test]
+            public void topic_category_must_not_be_blank([Values("", " ", null)] string blank)
+            {
+                var record = SimpleRecord().With(r => r.Gemini.TopicCategory = blank);
+                var result = new RecordValidator().Validate(record);
+                result.Errors.Single().Fields.Should().Contain("gemini.topicCategory");
+            }
+
+        }
     }
 }

@@ -249,10 +249,10 @@
                         <div class="layout-col pull-right">
                             
                             <button type="button" class="btn"
-                                ng-click="form.security = (form.security + 1) % 3"
-                                ng-class="{ 'btn-default': form.security == 0, 'btn-warning': form.security == 1, 'btn-danger': form.security == 2  }"
-                                title="The resource's security level"
-                                tc-tip
+                                    ng-click="form.security = (form.security + 1) % 3"
+                                    ng-class="{ 'btn-default': form.security == 0, 'btn-warning': form.security == 1, 'btn-danger': form.security == 2  }"
+                                    title="The resource's security level"
+                                    tc-tip
                                 >
                                 <span class="glyphicon glyphicon-repeat" ng-class="{ 'dark': form.status == 0 }"></span>
                                 {{ getSecurityText(form.security) }}
