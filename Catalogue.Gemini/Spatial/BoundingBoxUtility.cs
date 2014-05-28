@@ -23,6 +23,10 @@ namespace Catalogue.Gemini.Spatial
 
         public static bool IsBlank(BoundingBox box)
         {
+            if (box == null)
+            {
+                return true;
+            }
             return box.North == 0 && box.South == 0 && box.East == 0 && box.West == 0;
         }
     }

@@ -15,6 +15,7 @@ namespace Catalogue.Data.Model
         public string   Path     { get; set; }
         public bool     TopCopy  { get; set; }
         public Status   Status   { get; set; }
+        public Validation Validation { get; set; }
         public Security Security { get; set; }
         public DateTime Review   { get; set; }
         public string   Notes    { get; set; }

@@ -108,6 +108,7 @@
     <Compile Include="Model\Record.cs" />
     <Compile Include="Model\Security.cs" />
     <Compile Include="Model\Status.cs" />
+    <Compile Include="Model\Validation.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Seed\Seeder.cs" />
     <Compile Include="Test\InMemoryDatabaseHelper.cs" />

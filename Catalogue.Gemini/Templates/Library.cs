@@ -29,11 +29,11 @@ namespace Catalogue.Gemini.Templates
                 ResourceLocator = "",
                 DataFormat = "",
                 ResponsibleOrganisation = new ResponsibleParty
-                    {
-                        Name = "Joint Nature Conservation Committee (JNCC)",
-                        Email = "data@jncc.gov.uk",
-                        Role = "distributor",
-                    },
+                {
+                    Name = "Joint Nature Conservation Committee (JNCC)",
+                    Email = "data@jncc.gov.uk",
+                    Role = "distributor",
+                },
                 LimitationsOnPublicAccess = "",
                 UseConstraints = "",
                 SpatialReferenceSystem = "",
@@ -41,11 +41,11 @@ namespace Catalogue.Gemini.Templates
                 MetadataDate = "",
                 MetadataLanguage = "",
                 MetadataPointOfContact = new ResponsibleParty
-                    {
-                        Name = "",
-                        Email = "",
-                        Role = "",
-                    },
+                {
+                    Name = "",
+                    Email = "",
+                    Role = "",
+                },
                 ResourceType = "",
                 BoundingBox = new BoundingBox
                 {
@@ -66,8 +66,8 @@ namespace Catalogue.Gemini.Templates
                 TopicCategory = "geoscientificInformation",
                 Keywords = new StringPairList
                     {
-                        { "", "sounding" },
-                        { "http://vocab.ndg.nerc.ac.uk/list/C751/220", "Bermuda Institute of Ocean Sciences" },
+                       /* { "", "NDGO0001" },*/
+                        { "http://jncc.gov.uk", "Bermuda Institute of Ocean Sciences" },
                     }
                     .ToKeywordList(),
                 TemporalExtent = new TemporalExtent { Begin = "2001-01-13", End = "2010-01-25" },
@@ -76,11 +76,11 @@ namespace Catalogue.Gemini.Templates
                 ResourceLocator = "http://data.jncc.gov.uk/5eb63655-d7fe-46af-88bc-71f7db243ad3",
                 DataFormat = "XLS",
                 ResponsibleOrganisation = new ResponsibleParty
-                    {
-                        Name = "Joint Nature Conservation Committee (JNCC)",
-                        Email = "data@jncc.gov.uk",
-                        Role = "owner",
-                    },
+                {
+                    Name = "Joint Nature Conservation Committee (JNCC)",
+                    Email = "data@jncc.gov.uk",
+                    Role = "owner",
+                },
                 LimitationsOnPublicAccess = "no limitations",
                 UseConstraints = "no conditions apply",
                 SpatialReferenceSystem = "http://www.opengis.net/def/crs/EPSG/0/4326",
@@ -88,19 +88,19 @@ namespace Catalogue.Gemini.Templates
                 MetadataDate = "2013-07-16",
                 MetadataLanguage = "eng",
                 MetadataPointOfContact = new ResponsibleParty
-                    {
-                        Name = "Joint Nature Conservation Committee (JNCC)",
-                        Email = "some.user@jncc.gov.uk",
-                        Role = "pointOfContact",
-                    },
+                {
+                    Name = "Joint Nature Conservation Committee (JNCC)",
+                    Email = "some.user@jncc.gov.uk",
+                    Role = "pointOfContact",
+                },
                 ResourceType = "dataset",
-                    BoundingBox = new BoundingBox
-                    {
-                        North = 60.77m,
-                        South = 49.79m,
-                        East = 2.96m,
-                        West = -8.14m,
-                    }
+                BoundingBox = new BoundingBox
+                {
+                    North = 60.77m,
+                    South = 49.79m,
+                    East = 2.96m,
+                    West = -8.14m,
+                }
             };
         }
     }

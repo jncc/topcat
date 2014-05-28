@@ -6,6 +6,7 @@ using System.Web.Routing;
 using Catalogue.Data.Model;
 using Catalogue.Data.Seed;
 using Catalogue.Data.Test;
+using Newtonsoft.Json.Converters;
 using Newtonsoft.Json.Serialization;
 using Raven.Client;
 using Raven.Client.Document;
@@ -24,7 +25,8 @@ namespace Catalogue.Web
             AreaRegistration.RegisterAllAreas();
             ConfigWebApi(GlobalConfiguration.Configuration);
             RegisterRoutes(RouteTable.Routes);
-
+            // serialize enums using their strings, not ordinals
+//            GlobalConfiguration.Configuration.Formatters.JsonFormatter.SerializerSettings.Converters.Add(new StringEnumConverter());
             // we want to serialize PascalCase .NET properties with camelCase in json responses
             GlobalConfiguration.Configuration.Formatters.JsonFormatter.SerializerSettings.ContractResolver =
                 new CamelCasePropertyNamesContractResolver();

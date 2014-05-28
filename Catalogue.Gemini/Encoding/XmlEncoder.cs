@@ -143,11 +143,27 @@ namespace Catalogue.Gemini.Encoding
 
         XElement MakeKeywords(Metadata metadata)
         {
+            String vocab = metadata.Keywords.FirstOrDefault().Vocab;
+
             return new XElement(gmd + "descriptiveKeywords",
                 new XElement(gmd + "MD_Keywords",
                     from keyword in metadata.Keywords
                     select new XElement(gmd + "keyword",
-                        new XElement(gco + "CharacterString", keyword)))); // todo encode the vocab? see Gemini spec
+                        new XElement(gco + "CharacterString", keyword.Value))
+                        , new XElement(gmd + "thesaurusName",
+                new XElement(gmd + "CI_Citation",
+                    new XElement(gmd + "title",
+                        new XElement(gco + "CharacterString", vocab)),
+                        new XElement(gmd+"date", 
+                            new XElement(gmd+"CI_Date", 
+                                new XElement(gmd+"date",
+                                    new XElement(gco + "Date", metadata.DatasetReferenceDate)), 
+                                    new XElement(gmd+"dateType", 
+                                        new XElement(gmd + "CI_DateTypeCode",
+                            new XAttribute("codeList", "http://standards.iso.org/ittf/PubliclyAvailableStandards/ISO_19139_Schemas/resources/codelist/gmxCodelists.xml#CI_DateTypeCode"),
+                            new XAttribute("codeListValue", "publication")))))))));
+
+            // writing massiviely nested iso compatible xml documents by hand, bleurgh
         }
 
         XElement MakeLimitationsOnPublicAccessAndUseConstraints(Metadata metadata)
@@ -215,7 +231,8 @@ namespace Catalogue.Gemini.Encoding
                     new XElement(gmd + "name",
                         new XElement(gco + "CharacterString", metadata.DataFormat)),
                     new XElement(gmd + "version",
-                        new XElement(gco + "CharacterString", "Unknown")))); // i'm not supporting versions for data format
+                        new XElement(gco + "CharacterString", "Unknown")))); 
+            // not supporting versions for data format
         }
 
         XElement MakeLineage(Metadata metadata)
