@@ -11,6 +11,11 @@
       $scope.reset();
       return $scope.notifications.add('Edits cancelled');
     };
+    $scope.open = function($event, elem) {
+      $event.preventDefault();
+      $event.stopPropagation();
+      $scope[elem] = true;
+    };
     $scope.save = function() {
       var processResult;
       processResult = function(response) {

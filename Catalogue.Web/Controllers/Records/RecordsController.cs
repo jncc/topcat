@@ -34,6 +34,7 @@ namespace Catalogue.Web.Controllers.Records
                     {
                         Id = Guid.Empty,
                         Gemini = Library.Blank(),
+                        Review = DateTime.Now
                     };
             }
             else

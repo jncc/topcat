@@ -93,10 +93,11 @@ module.directive 'tcSpinner', ($rootScope) ->
         $rootScope.$on '$routeChangeSuccess', () ->
             elem.addClass 'ng-hide'
 
-#module.directive 'tcDatepicker', () ->
-#    link: (scope, elem, attrs) ->
-#        $(elem).datepicker
-#            format: 'yyyy-dd-mm'
+### module.directive 'tcDatepicker', () ->
+  link: (scope, elem, attrs) ->
+        $(elem).datepicker
+            format: 'yyyy-dd-mm'
+            ###
 
 module.directive 'tcServerValidation', ($http) ->
     require: 'ngModel',

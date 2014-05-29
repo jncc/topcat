@@ -6,7 +6,7 @@ angular.module('app.controllers').controller 'EditorController',
         # todo lookups should be injected
         $scope.lookups = {}
         $http.get('../api/topics').success (result) -> $scope.lookups.topics = result
-
+    
         # helper functions for UI
         $scope.getSecurityText = getSecurityText
 
@@ -14,6 +14,12 @@ angular.module('app.controllers').controller 'EditorController',
             $scope.reset()
             $scope.notifications.add 'Edits cancelled'
         
+        $scope.open = ($event, elem) ->
+            $event.preventDefault();
+            $event.stopPropagation();
+            $scope[elem] = true;
+            return
+    
         $scope.save = ->
             processResult = (response) ->
                     if response.data.success
@@ -57,7 +63,9 @@ angular.module('app.controllers').controller 'EditorController',
 
         #$scope.validation = fakeValidationData
         return
-    
+
+
+
 getSecurityText = (n) -> switch n
     when 0 then 'Open'
     when 1 then 'Restricted'

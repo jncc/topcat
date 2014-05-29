@@ -255,6 +255,7 @@
     <Content Include="app\lib\angular-1.2.8\angular-route.min.js" />
     <Content Include="app\lib\angular-1.2.8\angular-sanitize.min.js" />
     <Content Include="app\lib\angular-1.2.8\angular.min.js" />
+    <Content Include="app\lib\angular-1.2.8\ui-bootstrap-tpls-0.11.0.min.js" />
     <Content Include="app\lib\angular-strap-0.7.5\angular-strap-min.js" />
     <Content Include="app\lib\autosize-1.8.1\jquery.autosize.min.js" />
     <Content Include="app\lib\bootstrap-3.0.0\css\bootstrap-theme.css" />

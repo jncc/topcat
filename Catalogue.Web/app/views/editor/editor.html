@@ -133,28 +133,48 @@
 
                 <div class="form-group">
                     <div class="row">
-                        <div class="col-md-3">
-                            <div class="input-group">
-                                <input type="text" class="form-control date"
-                                       name="gemini.temporalExtent.begin" ng-model="form.gemini.temporalExtent.begin"
-                                       placeholder="yyyy-mm-dd"
-                                       tc-datepicker
-                                       tc-focus-tip title="The dates covered by the data resource" />
-                                <span class="input-group-addon"><span class="dark glyphicon glyphicon-calendar"></span></span>
-                                <span class="dark glyphicon glyphicon-chevron-right" style="margin-left: 2em;"></span>
-                            </div>
+                        <div class="col-md-2">
                         </div>
                         <div class="col-md-3">
                             <div class="input-group">
-                                <input type="text" class="form-control date"
-                                       name="gemini.temporalExtent.end" ng-model="form.gemini.temporalExtent.end"
+                                <input type="text" class="form-control"
+                                       name="gemini.temporalExtent.begin" 
+                                       ng-model="form.gemini.temporalExtent.begin"
                                        placeholder="yyyy-mm-dd"
-                                       tc-datepicker
-                                       tc-focus-tip title="The dates covered by the data resource" />
-                                <span class="input-group-addon"><span class="dark glyphicon glyphicon-calendar"></span></span>
+                                       datepicker-popup="yyyy-MM-dd"
+                                       tc-focus-tip 
+                                       is-open="extentBegin"
+                                       close-text="Close"
+                                       ng-focus="open($event, 'extentBegin')"
+                                       ng-click="open($event,'extentBegin')"
+                                       title="The dates covered by the data resource" />
+                                <span class="input-group-addon" ng-click="open($event,'extentBegin')">
+                                    <span class="dark glyphicon glyphicon-calendar"></span>
+                                </span>
                             </div>
                         </div>
-                        <div class="col-md-6">
+                        <div class="col-md-1">
+                            <span class="glyphicon glyphicon-chevron-right" style="margin-left: 1em;padding-top: 5px;"></span>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="input-group">
+                                <input type="text" class="form-control"
+                                       name="gemini.temporalExtent.end" 
+                                       ng-model="form.gemini.temporalExtent.end"
+                                       placeholder="yyyy-mm-dd"
+                                       datepicker-popup="yyyy-MM-dd"
+                                       tc-focus-tip 
+                                       is-open="extentEnd"
+                                       close-text="Close"
+                                       ng-focus="open($event,'extentEnd')"
+                                       ng-click="open($event,'extentEnd')"
+                                       title="The dates covered by the data resource" />
+                                <span class="input-group-addon" ng-click="open($event,'extentEnd')">
+                                    <span class="dark glyphicon glyphicon-calendar"></span>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="col-md-2">
                         </div>
                     </div>
                 </div>
@@ -288,17 +308,22 @@
                             <span>Review</span>
                         </div>
                         <div class="layout-col pull-right">
-                            
-                            <div class="input-group date-container">
+                           <div class="input-group date-container hackyhack">
                                 <input type="text" class="form-control"
-                                        ng-model="form.review"
-                                        placeholder="yyyy-mm-dd"
-                                        tc-datepicker
-                                        tc-focus-tip title="The date for reviewing this record" />
-                                <span class="input-group-addon"><span class="dark glyphicon glyphicon-calendar"></span></span>
+                                       name="gemini.temporalExtent.end" 
+                                       ng-model="form.review"
+                                       placeholder="yyyy-mm-dd"
+                                       datepicker-popup="yyyy-MM-dd"
+                                       tc-focus-tip 
+                                       is-open="review"
+                                       close-text="Close"
+                                       ng-focus="open($event,'review')"
+                                       ng-click="open($event,'review')"
+                                       title="The date for reviewing this record" />
+                                <span class="input-group-addon" ng-click="open($event,'review')">
+                                    <span class="dark glyphicon glyphicon-calendar"></span>
+                                </span>
                             </div>
-
-
                         </div>
                     </div>
 

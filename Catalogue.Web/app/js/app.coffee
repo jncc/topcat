@@ -9,9 +9,9 @@ module = angular.module 'app', [
     'app.services',
     'app.controllers',
     ]
-
+        
 angular.module 'app.utilities', []
-angular.module 'app.directives', []
+angular.module 'app.directives', ['ui.bootstrap']
 angular.module 'app.services', ['ngResource']
 angular.module 'app.controllers', []
 

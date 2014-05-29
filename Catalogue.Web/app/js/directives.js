@@ -1,4 +1,4 @@
-﻿(function() {
+(function() {
   var module, qtipDefaults;
 
   module = angular.module('app.directives');
@@ -150,6 +150,13 @@
       }
     };
   });
+
+  /* module.directive 'tcDatepicker', () ->
+    link: (scope, elem, attrs) ->
+          $(elem).datepicker
+              format: 'yyyy-dd-mm'
+  */
+
 
   module.directive('tcServerValidation', function($http) {
     return {
