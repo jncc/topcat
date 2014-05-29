@@ -39,7 +39,15 @@ File.WriteAllText(Path, content);
     <PropertyGroup>
         <MSBuildCommunityTasksLib>MSBuild.Community.Tasks.dll</MSBuildCommunityTasksLib>
     </PropertyGroup>
-
+    
+	<!-- Run Unit tests -->  
+   <!-- <Target Name="RunTests">  
+   <CreateItem Include="$(MSBuildProjectDirectory)\output\$(OutDir)*.Tests.dll">  
+      <Output TaskParameter="Include" ItemName="TestAssembly" />  
+    </CreateItem>  
+    <NUnit ToolPath="..\Tools\NUnit" DisableShadowCopy="true" Assemblies="@(TestAssembly)" />  
+  </Target>-->
+  
 	<Target Name="Build">
 	
 		       <Message Text="=== $(MSBuildToolsPath)" Importance="high" />

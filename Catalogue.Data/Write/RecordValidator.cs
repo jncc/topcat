@@ -327,9 +327,18 @@ namespace Catalogue.Data.Write
             var result = new RecordValidator().Validate(record);
             result.Errors.Single().Fields.Should().Contain("gemini.metadataPointOfContact.role");
         }
-
-
-        // gemini validation tests
+    }
+    class when_validating_at_gemini_level
+    {
+        Record SimpleRecord()
+        {
+            return new Record
+            {
+                Path = @"X:\some\path",
+                Gemini = Library.Example(),
+                Validation = Validation.Gemini,
+            };
+        }
 
         [Test]
         public void blank_use_constraints_could_be_a_mistake([Values("", " ", null)] string blank)
@@ -341,37 +350,13 @@ namespace Catalogue.Data.Write
             result.Warnings.Single().Fields.Single().Should().Be("gemini.useConstraints");
         }
 
-
-
-
-        // todo
-
-        // 
-        // warning for blank use constraints - could be "no conditions apply" if that's what's meant
-        // warning for unknown data format
-        // valid email addresses, dates, ...
-        // resource_locator_must_be_a_public_url (validator might need an http service)
-
-        class when_validating_at_gemini_level
+        [Test]
+        public void topic_category_must_not_be_blank([Values("", " ", null)] string blank)
         {
-            Record SimpleRecord()
-            {
-                return new Record
-                {
-                    Path = @"X:\some\path",
-                    Gemini = Library.Example(),
-                    Validation = Validation.Gemini,
-                };
-            }
-
-            [Test]
-            public void topic_category_must_not_be_blank([Values("", " ", null)] string blank)
-            {
-                var record = SimpleRecord().With(r => r.Gemini.TopicCategory = blank);
-                var result = new RecordValidator().Validate(record);
-                result.Errors.Single().Fields.Should().Contain("gemini.topicCategory");
-            }
-
+            var record = SimpleRecord().With(r => r.Gemini.TopicCategory = blank);
+            var result = new RecordValidator().Validate(record);
+            result.Errors.Single().Fields.Should().Contain("gemini.topicCategory");
         }
+
     }
 }

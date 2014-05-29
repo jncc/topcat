@@ -143,14 +143,15 @@ namespace Catalogue.Gemini.Encoding
 
         XElement MakeKeywords(Metadata metadata)
         {
-            String vocab = metadata.Keywords.FirstOrDefault().Vocab;
-
             return new XElement(gmd + "descriptiveKeywords",
                 new XElement(gmd + "MD_Keywords",
                     from keyword in metadata.Keywords
                     select new XElement(gmd + "keyword",
-                        new XElement(gco + "CharacterString", keyword.Value))
-                        , new XElement(gmd + "thesaurusName",
+                        new XElement(gco + "CharacterString", keyword.Value))));
+
+            // String vocab = metadata.Keywords.FirstOrDefault().Vocab;
+            // a half implemented attempt to encode the vocab along with keywords
+                        /*, new XElement(gmd + "thesaurusName",
                 new XElement(gmd + "CI_Citation",
                     new XElement(gmd + "title",
                         new XElement(gco + "CharacterString", vocab)),
@@ -161,7 +162,7 @@ namespace Catalogue.Gemini.Encoding
                                     new XElement(gmd+"dateType", 
                                         new XElement(gmd + "CI_DateTypeCode",
                             new XAttribute("codeList", "http://standards.iso.org/ittf/PubliclyAvailableStandards/ISO_19139_Schemas/resources/codelist/gmxCodelists.xml#CI_DateTypeCode"),
-                            new XAttribute("codeListValue", "publication")))))))));
+                            new XAttribute("codeListValue", "publication")))))))));*/
 
             // writing massiviely nested iso compatible xml documents by hand, bleurgh
         }

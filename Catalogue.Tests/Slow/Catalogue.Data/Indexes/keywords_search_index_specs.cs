@@ -65,11 +65,10 @@ namespace Catalogue.Tests.Slow.Catalogue.Data.Indexes
               .Where(r => r.Value.Equals("seabed habitat maps"))
               .Count().Should().Be(1);
 
+            // just make sures the linq query is case insensitive
             Db.Query<KeywordsSearchIndex.Result, KeywordsSearchIndex>()
               .Where(r => r.Value.Equals("Seabed Habitat Maps"))
               .Count().Should().Be(1);
-            // use the standard search field for exact matches
-            // why ? raven docs show simple queries with vanilla linq as fine
         }
 
         [Test, Explicit]
