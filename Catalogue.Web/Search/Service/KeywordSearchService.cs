@@ -22,7 +22,7 @@ namespace Catalogue.Web.Search.Service
 
         public SearchOutputModel find(string query)
         {
-            return _keywordSearchRepository.find(query)
+            return _keywordSearchRepository.find(query);
         }
     }
 }
