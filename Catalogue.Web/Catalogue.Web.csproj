@@ -161,25 +161,25 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Code\Account\User.cs" />
-    <Compile Include="Code\Account\UserContext.cs" />
-    <Compile Include="Code\Settings.cs" />
-    <Compile Include="Controllers\Account\AccountController.cs" />
-    <Compile Include="Controllers\Formats\FormatsController.cs" />
-    <Compile Include="Controllers\Home\HomeController.cs" />
-    <Compile Include="Controllers\Items\ItemsController.cs" />
-    <Compile Include="Controllers\Keywords\KeywordsController.cs" />
-    <Compile Include="Controllers\Records\RecordsController.cs" />
-    <Compile Include="Controllers\Sandbox\SandboxController.cs" />
-    <Compile Include="Controllers\Search\SearchController.cs" />
-    <Compile Include="Controllers\Search\SearchOutputModel.cs" />
-    <Compile Include="Controllers\Seed\SeedController.cs" />
-    <Compile Include="Controllers\Topics\TopicModel.cs" />
-    <Compile Include="Controllers\Topics\TopicsController.cs" />
-    <Compile Include="Controllers\Validator\ValidatorController.cs" />
-    <Compile Include="Controllers\Validator\ValidatorInputModel.cs" />
-    <Compile Include="Controllers\Validator\ValidatorResult.cs" />
-    <Compile Include="Code\Environment.cs" />
+    <Compile Include="Account\User.cs" />
+    <Compile Include="Account\UserContext.cs" />
+    <Compile Include="Search\KeywordSearchRepository.cs" />
+    <Compile Include="Search\Service\KeywordSearchService.cs" />
+    <Compile Include="Settings.cs" />
+    <Compile Include="Account\AccountController.cs" />
+    <Compile Include="Controllers\FormatsController.cs" />
+    <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\RecordsController.cs" />
+    <Compile Include="Controllers\SandboxController.cs" />
+    <Compile Include="Search\Controllers\SearchController.cs" />
+    <Compile Include="Search\Controllers\SearchKeywordController.cs" />
+    <Compile Include="Search\SearchOutputModel.cs" />
+    <Compile Include="Topics\TopicModel.cs" />
+    <Compile Include="Topics\TopicsController.cs" />
+    <Compile Include="Validator\ValidatorController.cs" />
+    <Compile Include="Validator\ValidatorInputModel.cs" />
+    <Compile Include="Validator\ValidatorResult.cs" />
+    <Compile Include="Environment.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -391,7 +391,7 @@
     <Content Include="app\lib\angular-1.2.8\angular.min.js.map" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Code\Validation\" />
+    <Folder Include="Search\Repository\" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
