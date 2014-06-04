@@ -163,6 +163,7 @@
   <ItemGroup>
     <Compile Include="Account\User.cs" />
     <Compile Include="Account\UserContext.cs" />
+    <Compile Include="Admin\AdminController.cs" />
     <Compile Include="Search\KeywordSearchRepository.cs" />
     <Compile Include="Search\Service\KeywordSearchService.cs" />
     <Compile Include="Settings.cs" />
@@ -206,6 +207,12 @@
     </Content>
     <Content Include="app\js\app.min.js">
       <DependentUpon>app.coffee</DependentUpon>
+    </Content>
+    <Content Include="app\js\controllers\AdminController.js">
+      <DependentUpon>AdminController.coffee</DependentUpon>
+    </Content>
+    <Content Include="app\js\controllers\AdminController.min.js">
+      <DependentUpon>AdminController.coffee</DependentUpon>
     </Content>
     <Content Include="app\js\controllers\EditorController.js">
       <DependentUpon>EditorController.coffee</DependentUpon>
@@ -296,6 +303,7 @@
     <Content Include="app\lib\silviomoreto-bootstrap-select-aeb60b3\test.html" />
     <Content Include="app\lib\zeroclipboard-1.1.7\ZeroClipboard.min.js" />
     <Content Include="app\lib\zeroclipboard-1.1.7\ZeroClipboard.swf" />
+    <Content Include="app\views\admin\admin.html" />
     <Content Include="app\views\editor\editor.html" />
     <Content Include="app\views\sandbox\colours.html" />
     <Content Include="app\views\sandbox\dropdown.html" />
@@ -392,6 +400,9 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Search\Repository\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="app\js\controllers\AdminController.coffee" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

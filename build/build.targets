@@ -1,24 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
-<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project DefaultTargets="DefaultRun" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
 
     <PropertyGroup>
         <BuildOutputPath>$(MSBuildProjectDirectory)\output</BuildOutputPath>
         <!-- default build configuration and environment -->
         <Configuration>Debug</Configuration>
         <Environment>Dev</Environment>
+		<NUnitResultsFile>$(BuildOutputPath)\nunit-result.xml</NUnitResultsFile>
     </PropertyGroup>
-
-    <ItemGroup>
-	    <ZipFiles Include="output\**\*.*" />
-    </ItemGroup>
-
+	
     <!-- import tasks -->
-
-    <Import Project="MSBuild.Community.Tasks\MSBuild.Community.Tasks.Targets" />
+	<Import Project="MSBuild.Community.Tasks\MSBuild.Community.Tasks.Targets" />
     <Import Project="Monty.Infrastructure.MSBuild.Tasks\Monty.Infrastructure.MSBuild.Tasks.targets" />
     
     <!-- define an inline task to replace strings in files -->
-	  <UsingTask TaskName="ReplaceStringInFile" TaskFactory="CodeTaskFactory" AssemblyFile="$(MSBuildToolsPath)\Microsoft.Build.Tasks.v4.0.dll">
+	<UsingTask TaskName="ReplaceStringInFile" TaskFactory="CodeTaskFactory" AssemblyFile="$(MSBuildToolsPath)\Microsoft.Build.Tasks.v4.0.dll">
     <ParameterGroup>
       <Path ParameterType="System.String" Required="true" />
       <Token ParameterType="System.String" Required="true" />
@@ -34,23 +30,17 @@ File.WriteAllText(Path, content);
     </Task>
   </UsingTask>
 
-	
     <!-- override property defined in MSBuild.Community.Tasks.targets to reference relatively  -->
     <PropertyGroup>
         <MSBuildCommunityTasksLib>MSBuild.Community.Tasks.dll</MSBuildCommunityTasksLib>
     </PropertyGroup>
-    
-	<!-- Run Unit tests -->  
-   <!-- <Target Name="RunTests">  
-   <CreateItem Include="$(MSBuildProjectDirectory)\output\$(OutDir)*.Tests.dll">  
-      <Output TaskParameter="Include" ItemName="TestAssembly" />  
-    </CreateItem>  
-    <NUnit ToolPath="..\Tools\NUnit" DisableShadowCopy="true" Assemblies="@(TestAssembly)" />  
-  </Target>-->
+  <Target Name="DefaultRun">
+	<CallTarget Targets="Build" />
+    <!-- <CallTarget Targets="Test" /> -->
+  </Target>
   
 	<Target Name="Build">
-	
-		       <Message Text="=== $(MSBuildToolsPath)" Importance="high" />
+		<Message Text="=== $(MSBuildToolsPath)" Importance="high" />
 
         <!-- version-->
         <Time Format="yyyyMMddHHmmss">
@@ -146,13 +136,13 @@ File.WriteAllText(Path, content);
 			-->
 		</ItemGroup>
 		<Delete Files="@(UnwantedRavenFiles)" />
-          
-        <!-- zip -->
-        <!--
-        -->
-		<Zip Files="@(ZipFiles)" WorkingDirectory="output" ZipFileName="output.zip" />
-        
-       
-	</Target>
+  </Target>
+ 
+  <Target Name="Test">
+    <CreateItem Include="$(BuildOutputPath)Catalogue.*.dll">
+      <Output TaskParameter="Include" ItemName="TestAssembly" />
+    </CreateItem>
+    <NUnit Assemblies="@(TestAssembly)" ToolPath="C:\Program Files (x86)\NUnit 2.6.2\bin" OutputXmlFile="$(NUnitResultsFile)" />
+  </Target>
 
 </Project>
