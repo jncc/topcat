@@ -25,13 +25,21 @@ namespace Catalogue.Data.Seed
             this.db = db;
             this.recordService = recordService;
         }
-
+         public static void importMesh(IDocumentStore store)
+        {
+            using (var db = store.OpenSession())
+            {
+                var s = new Seeder(db, new RecordService(db, new RecordValidator()));
+                s.AddVocabularies();
+                s.AddMeshRecords();
+                db.SaveChanges();
+            }
+        }
         public static void Seed(IDocumentStore store)
         {
             using (var db = store.OpenSession())
             {
                 var s = new Seeder(db, new RecordService(db, new RecordValidator()));
-
                 s.AddVocabularies();
                 s.AddMeshRecords();
                 s.AddSimpleExampleRecord();
@@ -40,7 +48,6 @@ namespace Catalogue.Data.Seed
                 s.AddNonTopCopyRecord();
                 s.AddVariousDataFormatRecords();
                 s.AddBboxes();
-
                 db.SaveChanges();
             }
         }

@@ -3,9 +3,12 @@ using System.Web;
 using System.Web.Http;
 using System.Web.Mvc;
 using System.Web.Routing;
+using Catalogue.Data.Import;
+using Catalogue.Data.Import.Mappings;
 using Catalogue.Data.Model;
 using Catalogue.Data.Seed;
 using Catalogue.Data.Test;
+using Catalogue.Web.Admin;
 using Newtonsoft.Json.Converters;
 using Newtonsoft.Json.Serialization;
 using Raven.Client;
@@ -41,6 +44,12 @@ namespace Catalogue.Web
                 routeTemplate: "api/{controller}/{id}",
                 defaults: new { id = RouteParameter.Optional }
             );
+            // Controllers with Actions
+            // To handle routes like `/api/Admin/import`
+           /* config.Routes.MapHttpRoute(
+                name: "ControllerAndAction",
+                routeTemplate: "api/{controller}/{action}"
+            );*/
         }
 
         static void RegisterRoutes(RouteCollection routes)
