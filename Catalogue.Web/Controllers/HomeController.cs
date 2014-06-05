@@ -1,4 +1,5 @@
-﻿using System.Web.Mvc;
+﻿using System.IO;
+using System.Web.Mvc;
 
 namespace Catalogue.Web.Controllers.Home
 {
@@ -8,5 +9,7 @@ namespace Catalogue.Web.Controllers.Home
         {
             return RedirectPermanent("~/app");
         }
+
+        
     }
 }

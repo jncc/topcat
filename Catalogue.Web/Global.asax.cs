@@ -9,6 +9,7 @@ using Catalogue.Data.Model;
 using Catalogue.Data.Seed;
 using Catalogue.Data.Test;
 using Catalogue.Web.Admin;
+using Catalogue.Web.Logging;
 using Newtonsoft.Json.Converters;
 using Newtonsoft.Json.Serialization;
 using Raven.Client;
@@ -22,7 +23,11 @@ namespace Catalogue.Web
     public class WebApiApplication : HttpApplication
     {
         public static IDocumentStore DocumentStore { get; private set; }
-
+        public static void RegisterGlobalFilters(GlobalFilterCollection filters)
+        {
+            filters.Add(new ElmahHandledErrorLoggerFilter());
+        
+        }
         protected void Application_Start()
         {
             AreaRegistration.RegisterAllAreas();
@@ -35,6 +40,7 @@ namespace Catalogue.Web
                 new CamelCasePropertyNamesContractResolver();
 
             InitializeDataStore();
+            RegisterGlobalFilters(GlobalFilters.Filters);
         }
 
         static void ConfigWebApi(HttpConfiguration config)

@@ -40,6 +40,12 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Elmah">
+      <HintPath>..\packages\elmah.corelibrary.1.2.2\lib\Elmah.dll</HintPath>
+    </Reference>
+    <Reference Include="Elmah.RavenDB">
+      <HintPath>..\packages\Elmah.RavenDB.2.1.0\lib\net40\Elmah.RavenDB.dll</HintPath>
+    </Reference>
     <Reference Include="FluentAssertions">
       <HintPath>..\packages\FluentAssertions.2.0.1\lib\net45\FluentAssertions.dll</HintPath>
     </Reference>
@@ -164,6 +170,7 @@
     <Compile Include="Account\User.cs" />
     <Compile Include="Account\UserContext.cs" />
     <Compile Include="Admin\AdminController.cs" />
+    <Compile Include="Logging\ElmahHandledErrorLoggerFilter.cs" />
     <Compile Include="Search\KeywordSearchRepository.cs" />
     <Compile Include="Search\Service\KeywordSearchService.cs" />
     <Compile Include="Settings.cs" />

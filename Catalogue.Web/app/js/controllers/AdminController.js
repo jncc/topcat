@@ -8,11 +8,13 @@
         return $scope.myBool = result;
       });
     };
-    data = "=C:\\topcat\\import_data\\Human_Activities_Metadata_Catalogue.csv";
+    data = {
+      "path": "C:\\topcat\\import_data\\Human_Activities_Metadata_Catalogue.csv"
+    };
     header = {
       headers: {
         'Accept': 'application/json',
-        'Content-Type': 'application/x-www-form-urlencoded'
+        'Content-Type': 'application/json'
       }
     };
     return $scope["import"] = function() {

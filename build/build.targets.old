@@ -1,0 +1,177 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+
+    <PropertyGroup>
+        <BuildOutputPath>$(MSBuildProjectDirectory)\output</BuildOutputPath>
+        <!-- default build configuration and environment -->
+        <Configuration>Debug</Configuration>
+        <Environment>Dev</Environment>
+    </PropertyGroup>
+
+    <ItemGroup>
+	    <ZipFiles Include="output\**\*.*" />
+    </ItemGroup>
+
+    <!-- import tasks -->
+
+    <Import Project="MSBuild.Community.Tasks\MSBuild.Community.Tasks.Targets" />
+    <Import Project="Monty.Infrastructure.MSBuild.Tasks\Monty.Infrastructure.MSBuild.Tasks.targets" />
+    
+    <!-- define an inline task to replace strings in files -->
+	  <UsingTask TaskName="ReplaceStringInFile" TaskFactory="CodeTaskFactory" AssemblyFile="$(MSBuildToolsPath)\Microsoft.Build.Tasks.v4.0.dll">
+    <ParameterGroup>
+      <Path ParameterType="System.String" Required="true" />
+      <Token ParameterType="System.String" Required="true" />
+      <Replacement ParameterType="System.String" Required="true" />
+    </ParameterGroup>
+    <Task>
+      <Code Type="Fragment" Language="cs"><![CDATA[
+string content = File.ReadAllText(Path);
+content = content.Replace(Token, Replacement);
+File.WriteAllText(Path, content);
+
+]]></Code>
+    </Task>
+  </UsingTask>
+
+	
+    <!-- override property defined in MSBuild.Community.Tasks.targets to reference relatively  -->
+    <PropertyGroup>
+        <MSBuildCommunityTasksLib>MSBuild.Community.Tasks.dll</MSBuildCommunityTasksLib>
+    </PropertyGroup>
+    
+	<!-- Run Unit tests -->  
+   <!--<Target Name="RunTests">  
+   <CreateItem Include="$(MSBuildProjectDirectory)\output\$(OutDir)*.Tests.dll">  
+      <Output TaskParameter="Include" ItemName="TestAssembly" />  
+    </CreateItem>  
+    <NUnit ToolPath="..\Tools\NUnit" DisableShadowCopy="true" Assemblies="@(TestAssembly)" />  
+  </Target>-->
+  
+	<Target Name="Build">
+	
+		       <Message Text="=== $(MSBuildToolsPath)" Importance="high" />
+
+        <!-- version-->
+        <Time Format="yyyyMMddHHmmss">
+            <Output PropertyName="TimeStamp" TaskParameter="FormattedTime" />
+        </Time>
+
+        <!-- get the Git revision of the working copy that is being built -->
+       <Message Text="=== Getting the Git revision being built." Importance="high" />
+		
+		<GitVersion LocalPath="$(MSBuildProjectDirectory)" ToolPath="C:\Program Files (x86)\Git\bin" >
+			<Output TaskParameter="CommitHash" PropertyName="CommitHash" />
+    	</GitVersion>
+		<Message Text="GitVersion: '$(CommitHash)' " />
+        
+        <!-- create the version stamp -->
+        <!-- build label - default to timestamp if not passed from build server -->
+        <CreateProperty Value="$(TimeStamp)">
+            <Output PropertyName="BuildLabel" TaskParameter="Value" />
+        </CreateProperty>
+        <CreateProperty Value="$(CCNetLabel)" Condition=" '$(CCNetLabel)' != '' ">
+            <Output PropertyName="BuildLabel" TaskParameter="Value" />
+        </CreateProperty>
+        <CreateProperty Value="1.0.$(CommitHash)">
+            <Output PropertyName="VersionStamp" TaskParameter="Value" />
+        </CreateProperty>
+        <Message Text="=== Computed version stamp: '$(VersionStamp)'." Importance="high" />
+
+        <!-- construct the assembly version 
+        <CreateProperty Value="$(VersionStamp)">
+            <Output PropertyName="AssemblyVersion" TaskParameter="Value" />
+        </CreateProperty>
+        <Message Text="=== Computed assembly version: '$(AssemblyVersion)'." Importance="high" />
+        -->
+        
+        <!-- create AssemblyInfo.cs file -->
+        <Message
+            Condition=" '$(Version)' == 'true' "
+            Text="=== Creating '..\SharedAssemblyInfo.cs' with version stamp '$(VersionStamp)'."
+            Importance="high" />
+
+        <AssemblyInfo
+            Condition=" '$(Version)' == 'true' "
+            CodeLanguage="CS" 
+            OutputFile="..\SharedAssemblyInfo.cs" 
+            AssemblyDescription="Catalogue" 
+            AssemblyCompany="Catalogue" 
+            AssemblyCopyright="Catalogue" 
+            AssemblyVersion="0.0.0.0" 
+            AssemblyFileVersion="0.0.0.0"
+            AssemblyInformationalVersion="$(VersionStamp)"
+            AssemblyConfiguration="$(Environment)"    
+            />                  
+
+        <!-- put the version stamp into the static index.html page -->    
+		<ReplaceStringInFile Path="..\Catalogue.Web\app\index.html" Token="#version" Replacement="$(VersionStamp)"/>
+            
+        <!-- clean -->
+		<Message Text="=== Ensuring clean output directory $(BuildOutputPath)" Importance="High" />
+		<RemoveDir Directories="$(BuildOutputPath)" Condition=" Exists('$(BuildOutputPath)') " />
+		
+		<!-- build the whole solution first for good measure -->
+		<MSBuild Projects="..\Catalogue.sln" Properties="Configuration=$(Configuration)" />
+
+		<!-- build Catalogue.Web -->
+        <MSBuild
+            Projects="..\Catalogue.Web\Catalogue.Web.csproj"
+            Properties="WebProjectOutputDir=$(MSBuildProjectDirectory)\output\Catalogue.Web;OutputPath=$(MSBuildProjectDirectory)\output\Catalogue.Web\bin;Configuration=$(Configuration);Environment=$(Environment);MvcBuildViews=true"
+            />
+        <TransformXml
+            OriginalDocumentPath="..\Catalogue.Web\Web.config"
+            TransformDocumentPath="..\Catalogue.Web\Web.$(Environment).config"
+            OutputDocumentPath="$(MSBuildProjectDirectory)\output\Catalogue.Web\Web.config"
+            DeleteTransformDocuments="$(MSBuildProjectDirectory)\output\Catalogue.Web\Web.*.config"
+            />
+							
+		<!-- todo: build any other app projects -->
+		<!-- todo: run the tests -->
+		  
+
+		<!-- hack: delete stuff causing problems in nsb scanning -->
+		<ItemGroup>
+			<UnwantedRavenFiles Include="$(MSBuildProjectDirectory)\output\Catalogue.Web\bin\Raven.Backup*"/>
+			<!--
+			<UnwantedRavenFiles Include="$(MSBuildProjectDirectory)\output\Catalogue.Web\bin\BouncyCastle*"/>
+			<UnwantedRavenFiles Include="$(MSBuildProjectDirectory)\output\Catalogue.Web\bin\Esent*"/>
+			<UnwantedRavenFiles Include="$(MSBuildProjectDirectory)\output\Catalogue.Web\bin\Lucene*"/>
+			<UnwantedRavenFiles Include="$(MSBuildProjectDirectory)\output\Catalogue.Web\bin\Raven.Client.Embedded*"/>
+			<UnwantedRavenFiles Include="$(MSBuildProjectDirectory)\output\Catalogue.Web\bin\Raven.Database*"/>
+			<UnwantedRavenFiles Include="$(MSBuildProjectDirectory)\output\Catalogue.Web\bin\Raven.Munin*"/>
+			<UnwantedRavenFiles Include="$(MSBuildProjectDirectory)\output\Catalogue.Web\bin\Raven.Smuggler*"/>
+			<UnwantedRavenFiles Include="$(MSBuildProjectDirectory)\output\Catalogue.Web\bin\Raven.Storage*"/>
+			<UnwantedRavenFiles Include="$(MSBuildProjectDirectory)\output\Catalogue.Web\bin\Spatial4n*"/>
+			-->
+		</ItemGroup>
+		<Delete Files="@(UnwantedRavenFiles)" />
+        <!-- zip -->
+        <!--<Zip Files="@(ZipFiles)" WorkingDirectory="output" ZipFileName="output.zip" />-->
+        <CallTarget Targets="RunTests" />
+ 
+  </Target>
+ 
+  <PropertyGroup>
+    <NUnitResultsFile>$(OutDir)\nunit-result.xml</NUnitResultsFile>
+  </PropertyGroup>
+ 
+ 
+ 
+  <Target Name="BuildSolution">
+    <Message Text="BuildSolution called." />
+    <MSBuild Projects="@(Solution)"/>
+  </Target>
+ 
+ 
+  <Target Name="RunTests">
+    <CreateItem Include="$(OutDir)*.Tests.dll">
+      <Output TaskParameter="Include" ItemName="TestAssembly" />
+    </CreateItem>
+    <NUnit   Assemblies="@(TestAssembly)"
+        ToolPath="C:\Program Files (x86)\NUnit 2.6.2\bin"
+        OutputXmlFile="$(NUnitResultsFile)"
+    />
+  </Target>
+
+</Project>
