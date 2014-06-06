@@ -2,7 +2,9 @@
 
   angular.module('app.controllers').controller('AdminController', function($scope, $http) {
     var data, header;
-    $scope.myBool = false;
+    $scope.myBool = {};
+    $scope.myBool["import"] = false;
+    $scope.myBool.seedMesh = false;
     $scope.getBool = function() {
       return $http.get('../api/admin/bool').success(function(result) {
         return $scope.myBool = result;
@@ -17,9 +19,14 @@
         'Content-Type': 'application/json'
       }
     };
-    return $scope["import"] = function() {
-      return $http.post('../api/admin/import', data, header).success(function(result) {
-        return $scope.myBool = result;
+    $scope["import"] = function() {
+      return $http.post('../api/admin', data, header).success(function(result) {
+        return $scope.myBool["import"] = result;
+      });
+    };
+    return $scope.seedMesh = function() {
+      return $http.put('../api/admin').success(function(result) {
+        return $scope.myBool.seedMesh = result;
       });
     };
   });

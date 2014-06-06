@@ -49,7 +49,9 @@ namespace Catalogue.Web
         }
 
         static void ConfigWebApi(HttpConfiguration config)
-        {
+        { /*
+           * this allows only request method type per controller
+           */
             config.Routes.MapHttpRoute(
                 name: "DefaultApi",
                 routeTemplate: "api/{controller}/{id}",

@@ -12,6 +12,7 @@ using Raven.Client;
 
 namespace Catalogue.Web.Admin
 {
+    /*Slightly weird controller, should only be used once in live system, when importing the data*/
     public class AdminController : ApiController
     {
 
@@ -20,7 +21,7 @@ namespace Catalogue.Web.Admin
             public string Path { get; set; }         
         }
 
-        public Boolean PostImport(FileSpec file)
+        public Boolean Post(FileSpec file)
         {
 
             using (var db = WebApiApplication.DocumentStore.OpenSession())
@@ -33,17 +34,15 @@ namespace Catalogue.Web.Admin
             return true;
         }
 
-        
-       /* [HttpPost]
-        [ActionName("seedMesh")]
-        public void PostSeedMesh()
+        /*using put as is convenient*/
+        public Boolean Put()
         {
             Seeder.Seed(WebApiApplication.DocumentStore);
+            return true;
         }
-        * */
-
-        [ActionName("bool")]
-        public void GetBool()
+        
+        /*used for testing excpetion handling*/
+        public void Get()
         {
             IDocumentStore documentStore = WebApiApplication.DocumentStore;
             
