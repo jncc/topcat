@@ -8,8 +8,7 @@ namespace Catalogue.Web.Controllers.Home
     {
         public ActionResult Index()
         {
-            throw new Exception();
-          //  return RedirectPermanent("~/app");
+            return RedirectPermanent("~/app");
         }
 
         
