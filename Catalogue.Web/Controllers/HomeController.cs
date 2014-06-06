@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using System.Web.Mvc;
 
 namespace Catalogue.Web.Controllers.Home
@@ -7,7 +8,8 @@ namespace Catalogue.Web.Controllers.Home
     {
         public ActionResult Index()
         {
-            return RedirectPermanent("~/app");
+            throw new Exception();
+          //  return RedirectPermanent("~/app");
         }
 
         
