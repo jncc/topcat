@@ -25,22 +25,14 @@ namespace Catalogue.Web
     {
         public static IDocumentStore DocumentStore { get; private set; }
         
+     
+
         public static void RegisterGlobalFilters(GlobalFilterCollection filters)
-        {
-            filters.Add(new HandleErrorAttribute());
-        }
-
-        public static void RegisterHttpFilters(HttpFilterCollection filters)
-        {
-            filters.Add(new ElmahHandledErrorLoggerFilter());
-        }
-
-        /*public static void RegisterGlobalFilters(GlobalFilterCollection filters)
         {
             filters.Add(new ElmahHandledErrorLoggerFilter());
             filters.Add(new HandleErrorAttribute());
         
-        }*/
+        }
         protected void Application_Start()
         {
             AreaRegistration.RegisterAllAreas();
@@ -54,7 +46,6 @@ namespace Catalogue.Web
 
             InitializeDataStore();
             RegisterGlobalFilters(GlobalFilters.Filters);
-            RegisterHttpFilters(GlobalConfiguration.Configuration.Filters);
         }
 
         static void ConfigWebApi(HttpConfiguration config)
@@ -64,12 +55,7 @@ namespace Catalogue.Web
                 routeTemplate: "api/{controller}/{id}",
                 defaults: new { id = RouteParameter.Optional }
             );
-            // Controllers with Actions
-            // To handle routes like `/api/Admin/import`
-           /* config.Routes.MapHttpRoute(
-                name: "ControllerAndAction",
-                routeTemplate: "api/{controller}/{action}"
-            );*/
+            config.Filters.Add(new UnhandledExceptionFilter());
         }
 
         static void RegisterRoutes(RouteCollection routes)
