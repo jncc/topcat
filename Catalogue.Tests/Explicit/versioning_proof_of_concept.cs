@@ -1,61 +1,52 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Catalogue.Data.Model;
-using Catalogue.Tests.Utility;
+﻿using System.Linq;
 using FluentAssertions;
 using NUnit.Framework;
 using Raven.Bundles.Versioning.Data;
+using Raven.Client;
 using Raven.Client.Bundles.Versioning;
 using Raven.Client.Embedded;
 
 namespace Catalogue.Tests.Explicit
 {
-    class versioning_proof_of_concept : DatabaseTestFixture
+    internal class versioning_proof_of_concept : DatabaseTestFixture
     {
-
-
-        
         [Test, Explicit]
         public void versioning_should_work()
         {
-            var store = new EmbeddableDocumentStore { RunInMemory = true };
+            var store = new EmbeddableDocumentStore {RunInMemory = true};
 
             store.Configuration.Settings.Add("Raven/ActiveBundles", "Versioning");
             store.Initialize();
 
-            using (var db = store.OpenSession())
+            using (IDocumentSession db = store.OpenSession())
             {
                 db.Store(new VersioningConfiguration
                 {
                     Exclude = false,
                     Id = "Raven/Versioning/Items",
                     MaxRevisions = int.MaxValue
-
                 });
                 db.SaveChanges();
             }
 
-            using (var db = store.OpenSession())
+            using (IDocumentSession db = store.OpenSession())
             {
-                db.Store(new Item { Value = "first revision" });
+                db.Store(new Item {Value = "first revision"});
                 db.SaveChanges();
             }
 
-            using (var db = store.OpenSession())
+            using (IDocumentSession db = store.OpenSession())
             {
-                var item = db.Query<Item>().Customize(x => x.WaitForNonStaleResults()).First();
+                Item item = db.Query<Item>().Customize(x => x.WaitForNonStaleResults()).First();
                 item.Value = "second revision";
                 db.SaveChanges();
             }
 
-            using (var db = store.OpenSession())
+            using (IDocumentSession db = store.OpenSession())
             {
-                var item = db.Query<Item>().Customize(x => x.WaitForNonStaleResults()).First();
+                Item item = db.Query<Item>().Customize(x => x.WaitForNonStaleResults()).First();
                 string id = db.Advanced.GetDocumentId(item);
-                var revisions = db.Advanced.GetRevisionsFor<Item>(id, 0, 10);
+                Item[] revisions = db.Advanced.GetRevisionsFor<Item>(id, 0, 10);
 
                 revisions.Should().NotBeEmpty();
             }

@@ -6,10 +6,10 @@ using NUnit.Framework;
 
 namespace Catalogue.Tests.Web
 {
-    internal class KeywordSearchServiceTest
+    internal class KeywordSearchTest : DatabaseTestFixture
     {
         [Test]
-        public void ExpectRepositoryCall()
+        public void ExpectRepositoryCallInService()
         {
             const string testStr = "test";
             var mock = new Mock<IKeywordSearchRepository>();
@@ -17,6 +17,26 @@ namespace Catalogue.Tests.Web
             var keywordSearchService = new KeywordSearchService(mock.Object);
             keywordSearchService.find(testStr);
             mock.Verify(m => m.find(It.Is<String>(s => s.Equals(testStr))), Times.Once);
+        }
+
+        [Test]
+        public void ExpectSerivceCallInController()
+        {
+        }
+
+        [Test]
+        public void ControllerAcceptesStringReturnsSearchModel()
+        {
+        }
+        
+        [Test]
+        public void WhenSearchForKeywordWithSpacesReturnCorrectData()
+        {
+        }
+
+        [Test]
+        public void WhenSearchForKeywordReturnOnlyRecordsWithKeywordNotTextMatch()
+        {
         }
     }
 }

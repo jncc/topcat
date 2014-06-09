@@ -4,7 +4,6 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Catalogue.Data.Model;
-using Catalogue.Tests.Utility;
 using FluentAssertions;
 using NUnit.Framework;
 

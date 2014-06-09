@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Linq;
 using Catalogue.Data.Indexes;
-using Catalogue.Tests.Utility;
 using FluentAssertions;
 using NUnit.Framework;
 using Raven.Abstractions.Extensions;

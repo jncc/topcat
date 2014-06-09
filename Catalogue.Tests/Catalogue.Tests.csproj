@@ -106,8 +106,8 @@
     <Compile Include="Slow\Catalogue.Import\when_importing_mesh_data.cs" />
     <Compile Include="Slow\Spatial\when_querying_spatial_test_data.cs" />
     <Compile Include="Slow\when_testing_this_application.cs" />
-    <Compile Include="Utility\DatabaseTestFixture.cs" />
-    <Compile Include="Web\KeywordSearchServiceTest.cs" />
+    <Compile Include="DatabaseTestFixture.cs" />
+    <Compile Include="Web\KeywordSearchTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />

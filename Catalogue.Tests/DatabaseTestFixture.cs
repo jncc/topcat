@@ -3,8 +3,12 @@ using Catalogue.Data.Test;
 using NUnit.Framework;
 using Raven.Client;
 
-namespace Catalogue.Tests.Utility
+namespace Catalogue.Tests
 {
+    /// <summary>
+    /// Extend this class for tests that require an instance of in-memory database
+    /// use the Db references
+    /// </summary>
     public class DatabaseTestFixture
     {
         public static IDocumentStore ReusableDocumentStore { get; set; }

@@ -1,12 +1,8 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 using Catalogue.Data.Model;
-using Catalogue.Data.Test;
-using Catalogue.Gemini.Templates;
-using Catalogue.Tests.Utility;
 using FluentAssertions;
 using NUnit.Framework;
-using Raven.Client.Bundles.Versioning;
+using Raven.Client;
 
 namespace Catalogue.Tests.Slow
 {
@@ -15,7 +11,7 @@ namespace Catalogue.Tests.Slow
         [Test]
         public void should_be_able_to_query_test_data()
         {
-            using (var db = ReusableDocumentStore.OpenSession())
+            using (IDocumentSession db = ReusableDocumentStore.OpenSession())
             {
                 db.Query<Record>().Count().Should().BePositive();
             }

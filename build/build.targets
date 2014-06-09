@@ -6,7 +6,6 @@
         <!-- default build configuration and environment -->
         <Configuration>Debug</Configuration>
         <Environment>Dev</Environment>
-		<NUnitResultsFile>$(BuildOutputPath)\nunit-result.xml</NUnitResultsFile>
     </PropertyGroup>
 	
     <!-- import tasks -->
@@ -36,7 +35,7 @@ File.WriteAllText(Path, content);
     </PropertyGroup>
   <Target Name="DefaultRun">
 	<CallTarget Targets="Build" />
-    <!-- <CallTarget Targets="Test" /> -->
+     <CallTarget Targets="Test" />
   </Target>
   
 	<Target Name="Build">
@@ -102,7 +101,8 @@ File.WriteAllText(Path, content);
 		<RemoveDir Directories="$(BuildOutputPath)" Condition=" Exists('$(BuildOutputPath)') " />
 		
 		<!-- build the whole solution first for good measure -->
-		<MSBuild Projects="..\Catalogue.sln" Properties="Configuration=$(Configuration)" />
+		<!-- why ? -->
+		<!-- <MSBuild Projects="..\Catalogue.sln" Properties="Configuration=$(Configuration)" /> -->
 
 		<!-- build Catalogue.Web -->
         <MSBuild
@@ -139,10 +139,18 @@ File.WriteAllText(Path, content);
   </Target>
  
   <Target Name="Test">
-    <CreateItem Include="$(BuildOutputPath)Catalogue.*.dll">
+	
+		<Message Text="=== Running tests in Catalogue" Importance="High" />
+		<MSBuild Projects="..\Catalogue.Tests\Catalogue.Tests.csproj"/>
+		<NUnit Assemblies="Catalogue.Tests.dll" WorkingDirectory="..\Catalogue.Tests\bin\Release" 
+		  ToolPath="C:\Program Files (x86)\NUnit 2.6.3\bin"
+		  OutputXmlFile="$(BuildOutputPath)\..\TestResults.xml"
+		  />
+		  
+   <!-- <CreateItem Include="$(BuildOutputPath)Catalogue.*.dll">
       <Output TaskParameter="Include" ItemName="TestAssembly" />
     </CreateItem>
-    <NUnit Assemblies="@(TestAssembly)" ToolPath="C:\Program Files (x86)\NUnit 2.6.2\bin" OutputXmlFile="$(NUnitResultsFile)" />
+    <NUnit Assemblies="@(TestAssembly)" ToolPath="C:\Program Files (x86)\NUnit 2.6.2\bin" OutputXmlFile="$(NUnitResultsFile)" />-->
   </Target>
 
 </Project>

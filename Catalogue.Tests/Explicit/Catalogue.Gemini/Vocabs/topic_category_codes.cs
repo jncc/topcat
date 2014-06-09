@@ -1,29 +1,15 @@
-﻿using System.IO;
+﻿using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Xml.Linq;
 using NUnit.Framework;
 
 namespace Catalogue.Tests.Explicit.Catalogue.Gemini.Vocabs
 {
-    class topic_category_codes
+    internal class topic_category_codes
     {
-        [Explicit]
-        [Test]
-        public void extract_topic_category_codes_from_xml()
-        {
-            var p = XElement.Parse(xml);
-            var q = from e in p.Element("CodeListDictionary").Elements("codeEntry")
-                    let f = e.Element("CodeDefinition")
-                    let description = f.Element("description").Value
-                    let identifier = f.Element("identifier").Value
-                    orderby identifier
-                    select string.Format("                {{ \"{0}\", \"{1}\" }},", identifier, description);
-
-            File.WriteAllLines(@"c:\work\file.txt", q);
-        }
-
         // from http://www.isotc211.org/2005/resources/Codelist/gmxCodelists.xml
-        string xml = @"<codelistItem>
+        private string xml = @"<codelistItem>
 <CodeListDictionary id=""MD_TopicCategoryCode"">
 <description>
 high-level geographic data thematic classification to assist in the grouping and search of available geographic data sets. Can be used to group keywords as well. Listed examples are not exhaustive.
@@ -184,5 +170,20 @@ energy, water and waste systems and communications infrastructure and services. 
 </CodeListDictionary>
 </codelistItem>
         ";
+
+        [Explicit]
+        [Test]
+        public void extract_topic_category_codes_from_xml()
+        {
+            XElement p = XElement.Parse(xml);
+            IEnumerable<string> q = from e in p.Element("CodeListDictionary").Elements("codeEntry")
+                let f = e.Element("CodeDefinition")
+                let description = f.Element("description").Value
+                let identifier = f.Element("identifier").Value
+                orderby identifier
+                select string.Format("                {{ \"{0}\", \"{1}\" }},", identifier, description);
+
+            File.WriteAllLines(@"c:\work\file.txt", q);
+        }
     }
 }

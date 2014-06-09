@@ -2,20 +2,22 @@
 using Catalogue.Data.Indexes;
 using Catalogue.Data.Model;
 using Catalogue.Data.Seed;
-using Catalogue.Tests.Utility;
 using FluentAssertions;
 using NUnit.Framework;
 using Raven.Abstractions.Indexing;
 
 namespace Catalogue.Tests.Slow.Spatial
 {
-    class when_querying_spatial_test_data : DatabaseTestFixture
+    internal class when_querying_spatial_test_data : DatabaseTestFixture
     {
         [Test]
         public void non_intersecting_boxes_should_not_intersect()
         {
             Db.Query<Record, Records_SpatialIndex>()
-                .Customize(x => x.RelatesToShape(FieldNames.Spatial, Seeder.BoundingBoxContainingNothing, SpatialRelation.Intersects))
+                .Customize(
+                    x =>
+                        x.RelatesToShape(FieldNames.Spatial, Seeder.BoundingBoxContainingNothing,
+                            SpatialRelation.Intersects))
                 .Count().Should().Be(0);
         }
 
@@ -23,7 +25,10 @@ namespace Catalogue.Tests.Slow.Spatial
         public void intersecting_boxes_should_intersect()
         {
             Db.Query<Record, Records_SpatialIndex>()
-                .Customize(x => x.RelatesToShape(FieldNames.Spatial, Seeder.BoundingBoxContainingSmallBox, SpatialRelation.Intersects))
+                .Customize(
+                    x =>
+                        x.RelatesToShape(FieldNames.Spatial, Seeder.BoundingBoxContainingSmallBox,
+                            SpatialRelation.Intersects))
                 .Count().Should().Be(1);
         }
 
@@ -31,7 +36,10 @@ namespace Catalogue.Tests.Slow.Spatial
         public void inner_box_should_be_within_outer_box()
         {
             Db.Query<Record, Records_SpatialIndex>()
-                .Customize(x => x.RelatesToShape(FieldNames.Spatial, Seeder.BoundingBoxContainingSmallBox, SpatialRelation.Within))
+                .Customize(
+                    x =>
+                        x.RelatesToShape(FieldNames.Spatial, Seeder.BoundingBoxContainingSmallBox,
+                            SpatialRelation.Within))
                 .Count().Should().Be(1);
         }
 
@@ -52,4 +60,3 @@ namespace Catalogue.Tests.Slow.Spatial
 //        }
     }
 }
-

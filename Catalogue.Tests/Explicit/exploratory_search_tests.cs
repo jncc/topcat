@@ -1,22 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
-using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
-using Catalogue.Data.Import;
-using Catalogue.Data.Import.Mappings;
 using Catalogue.Data.Model;
-using Catalogue.Data.Write;
-using Catalogue.Tests.Utility;
 using FluentAssertions;
 using NUnit.Framework;
 using Raven.Client;
 
 namespace Catalogue.Tests.Explicit
 {
-    class exploratory_search_tests : DatabaseTestFixture
+    internal class exploratory_search_tests : DatabaseTestFixture
     {
         [Explicit, Test]
         public void can_search()
@@ -25,11 +17,11 @@ namespace Catalogue.Tests.Explicit
             Db.Query<Record>().Count().Should().BeGreaterThan(100);
 
             string q = "broad bio";
-            var list = Db.Advanced.LuceneQuery<Record>("Records/Search")
+            List<Record> list = Db.Advanced.LuceneQuery<Record>("Records/Search")
                 .Search("Title", q + "*").Boost(10)
                 .ToList();
 
-            foreach (var record in list)
+            foreach (Record record in list)
             {
                 Console.WriteLine(record.Gemini.Title);
             }
@@ -42,17 +34,19 @@ namespace Catalogue.Tests.Explicit
         {
             FieldHighlightings lites;
 
-            var results = Db.Advanced.LuceneQuery<Record>("Records/Search")
-                                .Highlight("Title", 128, 2, out lites)
-                                .SetHighlighterTags("<strong>", "</strong>")
-                                .Search("Title", "north").Boost(10)
-                                .Take(10)
-                                .ToList();
+            List<Record> results = Db.Advanced.LuceneQuery<Record>("Records/Search")
+                .Highlight("Title", 128, 2, out lites)
+                .SetHighlighterTags("<strong>", "</strong>")
+                .Search("Title", "north").Boost(10)
+                .Take(10)
+                .ToList();
 
             results.Count.Should().Be(10);
             lites.FieldName.Should().Be("Title");
-            lites.GetFragments("records/" + results.First().Id).First().Should().ContainEquivalentOf("<strong>north</strong>");
-
+            lites.GetFragments("records/" + results.First().Id)
+                .First()
+                .Should()
+                .ContainEquivalentOf("<strong>north</strong>");
         }
     }
 }

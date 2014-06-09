@@ -3,16 +3,15 @@ using System.Collections.Generic;
 using System.Linq;
 using Catalogue.Data.Model;
 using Catalogue.Gemini.DataFormats;
-using Catalogue.Tests.Utility;
 using Catalogue.Utilities.Text;
 using FluentAssertions;
 using NUnit.Framework;
 
 namespace Catalogue.Tests.Slow.Catalogue.Import
 {
-    class when_importing_mesh_data : DatabaseTestFixture
+    internal class when_importing_mesh_data : DatabaseTestFixture
     {
-        List<Record> imported;
+        private List<Record> imported;
 
         [SetUp]
         public void SetUp()
@@ -62,7 +61,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Import
             Uri uri; // need this for Uri.TryCreate; not actually using it
 
             imported.Count(r => Uri.TryCreate(r.Path, UriKind.Absolute, out uri))
-                    .Should().Be(189);
+                .Should().Be(189);
         }
 
         [Test]
