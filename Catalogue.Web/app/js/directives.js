@@ -83,10 +83,10 @@
   module.directive('tcQtipTitle', function() {
     return {
       link: function(scope, elem, attrs) {
-        return scope.$watch('lookups.currentDataFormat', function() {
+        return scope.$watch('lookups.currentDataFormat.text', function() {
           return $(elem).qtip($.extend({}, qtipDefaults, {
             content: {
-              text: scope.lookups.currentDataFormat
+              text: scope.lookups.currentDataFormat.text
             },
             show: {
               event: 'mouseenter'

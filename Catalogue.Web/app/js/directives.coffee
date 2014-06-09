@@ -50,10 +50,10 @@ module.directive 'tcFocusTip', () ->
 
 module.directive 'tcQtipTitle', () ->
     link: (scope, elem, attrs) ->
-        scope.$watch 'lookups.currentDataFormat', ->
+        scope.$watch 'lookups.currentDataFormat.text', ->
             $(elem).qtip $.extend {}, qtipDefaults, 
                 content:
-                    text: scope.lookups.currentDataFormat
+                    text: scope.lookups.currentDataFormat.text
                 show:
                     event: 'mouseenter'
                 position:

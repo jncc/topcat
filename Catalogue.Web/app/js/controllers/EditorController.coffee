@@ -5,13 +5,15 @@ angular.module('app.controllers').controller 'EditorController',
 
         # todo lookups should be injected
         $scope.lookups = {}
+        $scope.lookups.currentDataFormat = {}
+        
         $http.get('../api/topics').success (result) -> $scope.lookups.topics = result
         $http.get('../api/formats?q=').success (result) -> 
-            $scope.lookups.currentDataGlyph = getDataFormatIcon $scope.form.gemini.dataFormat, result
+            $scope.lookups.currentDataFormat.glyph = getDataFormatIcon $scope.form.gemini.dataFormat, result
             if $scope.form.gemini.dataFormat == null || $scope.form.gemini.dataFormat == ''
-                $scope.lookups.currentDataFormat = 'None Selected'
+                $scope.lookups.currentDataFormat.text = 'None Selected'
             else
-                $scope.lookups.currentDataFormat = $scope.form.gemini.dataFormat
+                $scope.lookups.currentDataFormat.text = $scope.form.gemini.dataFormat
             $scope.lookups.formats = result
             
         # helper functions for UI

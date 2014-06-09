@@ -8,12 +8,18 @@ module = angular.module 'app', [
     'app.directives',
     'app.services',
     'app.controllers',
+    'filters'
     ]
         
 angular.module 'app.utilities', []
 angular.module 'app.directives', ['ui.bootstrap']
 angular.module 'app.services', ['ngResource']
 angular.module 'app.controllers', []
+
+angular.module('filters', []).filter('camelCaseFilter', () -> 
+    (input) -> 
+        input.charAt(0).toUpperCase() + input.substr(1).replace(/[A-Z]/g, ' $&')
+)
 
 module.config ['$routeProvider', ($routeProvider) ->
     $routeProvider

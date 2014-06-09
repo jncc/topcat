@@ -52,8 +52,7 @@
         <div class="layout-row">
             <div class="layout-col editor-format">
                 <div class="panel panel-default">
-                    <span tabindex="0" class="dark glyphicon" ng-class="lookups.currentDataGlyph"
-                        tc-qtip-title="{{lookups.currentDataFormat}}"></span>
+                    <span tabindex="0" class="dark glyphicon" ng-class="lookups.currentDataFormat.glyph" tc-qtip-title></span>
                 </div>
             </div>
             <div class="layout-col">
@@ -203,8 +202,8 @@
                 
                             <div class="form-group text-left selectContainer">
                                 <select
-                                    ng-model="form.topic"
-                                    ng-options="topic.key for topic in lookups.topics"
+                                    ng-model="form.gemini.topicCategory"
+                                    ng-options="topic.key as topic.key|camelCaseFilter for topic in lookups.topics"
                                     class="form-control"
                                     title="The main theme of the data resource">
                                     <option value="" disabled selected style="display: none">Topic</option>
