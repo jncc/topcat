@@ -80,6 +80,25 @@
     };
   });
 
+  module.directive('tcQtipTitle', function() {
+    return {
+      link: function(scope, elem, attrs) {
+        return $(elem).qtip($.extend({}, qtipDefaults, {
+          content: {
+            text: attrs.tcQtipTitle
+          },
+          show: {
+            event: 'mouseenter'
+          },
+          position: {
+            my: 'top center',
+            at: 'bottom center'
+          }
+        }));
+      }
+    };
+  });
+
   module.directive('tcTag', function() {
     return {
       link: function(scope, elem, attrs) {

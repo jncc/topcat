@@ -6,9 +6,13 @@ angular.module('app.controllers').controller 'EditorController',
         # todo lookups should be injected
         $scope.lookups = {}
         $http.get('../api/topics').success (result) -> $scope.lookups.topics = result
-    
+        $http.get('../api/formats?q=').success (result) -> 
+            $scope.lookups.currentDataGlyph = getDataFormatIcon $scope.form.gemini.dataFormat, result
+            $scope.lookups.formats = result
+            
         # helper functions for UI
         $scope.getSecurityText = getSecurityText
+        $scope.getDataFormatIcon = getDataFormatIcon
 
         $scope.cancel = ->
             $scope.reset()
@@ -70,6 +74,13 @@ getSecurityText = (n) -> switch n
     when 0 then 'Open'
     when 1 then 'Restricted'
     when 2 then 'Classified'
+    
+getDataFormatIcon = (name, formats) ->
+    for format in formats
+        for dataType in format.formats
+            if dataType.name == name
+                return format.glyph
+            
 
 fakeValidationData = errors: [
     { message: 'There was an error' }
