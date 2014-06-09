@@ -22,13 +22,14 @@ namespace Catalogue.Tests.Web
         [Test]
         public void ExpectSerivceCallInController()
         {
+            Assert.True(false);
         }
 
         [Test]
         public void ControllerAcceptesStringReturnsSearchModel()
         {
         }
-        
+
         [Test]
         public void WhenSearchForKeywordWithSpacesReturnCorrectData()
         {

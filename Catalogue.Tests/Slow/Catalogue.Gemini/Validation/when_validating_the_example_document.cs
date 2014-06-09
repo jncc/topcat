@@ -1,8 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Net;
+using System.Xml.Linq;
 using Catalogue.Gemini.Encoding;
 using Catalogue.Gemini.Model;
 using Catalogue.Gemini.Templates;
@@ -13,52 +12,50 @@ using NUnit.Framework;
 namespace Catalogue.Tests.Slow.Catalogue.Gemini.Validation
 {
     /// <summary>
-    /// This is an end-to-end style test that exercises several bits of the system
-    /// and depends on an external web service.
+    ///     This is an end-to-end style test that exercises several bits of the system
+    ///     and depends on an external web service.
     /// </summary>
-    class when_validating_the_example_document
+    internal class when_validating_the_example_document
     {
         [Test]
         public void should_be_valid_gemini()
         {
             // without this we get an error message 417
             // http://stackoverflow.com/questions/566437/http-post-returns-the-error-417-expectation-failed-c
-            System.Net.ServicePointManager.Expect100Continue = false;
+            ServicePointManager.Expect100Continue = false;
             // start with the example document
-            var metadata = Library.Example();
-            
+            Metadata metadata = Library.Example();
+
             // ...encode it into xml
-            var doc = new XmlEncoder().Create(new Guid("b97aac01-5e5d-4209-b626-514e40245bc1"), metadata);
+            XDocument doc = new XmlEncoder().Create(new Guid("b97aac01-5e5d-4209-b626-514e40245bc1"), metadata);
 
             // ...validate it with the CEH validator
-            var result = new Validator().Validate(doc);
+            ValidationResultSet result = new Validator().Validate(doc);
             // IGNORE MEDIN VALIDATION ERRORS
             result.Results.Single(r => r.Validation.StartsWith("GEMINI2"))
                 .Valid
                 .Should().BeTrue();
-
-
         }
-        
+
         /// <summary>
-        /// This doesn't do anything yet, nto sure if it should as we have topcat specific validation
-        /// Ceh just checks for gemini compatible xsd ? Not actual values afaik so far.
+        ///     This doesn't do anything yet, nto sure if it should as we have topcat specific validation
+        ///     Ceh just checks for gemini compatible xsd ? Not actual values afaik so far.
         /// </summary>
         [Test]
         public void should_not_be_valid_gemini()
         {
             // without this we get an error message 417
             // http://stackoverflow.com/questions/566437/http-post-returns-the-error-417-expectation-failed-c
-            System.Net.ServicePointManager.Expect100Continue = false;
+            ServicePointManager.Expect100Continue = false;
             // start with the example document
-            var metadata = Library.Example();
-            
+            Metadata metadata = Library.Example();
+
             // ...encode it into xml
-            var doc = new XmlEncoder().Create(new Guid("b97aac01-5e5d-4209-b626-514e40245bc1"), metadata);
+            XDocument doc = new XmlEncoder().Create(new Guid("b97aac01-5e5d-4209-b626-514e40245bc1"), metadata);
 
             // ...validate it with the CEH validator
 //            var result = new Validator().Validate(doc);
-            
+
 //            result.Results.Single(r => r.Validation.StartsWith("GEMINI2"))
 //                .Valid
 //                .Should().BeFalse();
