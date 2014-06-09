@@ -1,6 +1,7 @@
 ﻿using System.Configuration;
 using System.Web;
 using System.Web.Http;
+using System.Web.Http.Filters;
 using System.Web.Mvc;
 using System.Web.Routing;
 using Catalogue.Data.Import;
@@ -23,9 +24,13 @@ namespace Catalogue.Web
     public class WebApiApplication : HttpApplication
     {
         public static IDocumentStore DocumentStore { get; private set; }
+        
+     
+
         public static void RegisterGlobalFilters(GlobalFilterCollection filters)
         {
             filters.Add(new ElmahHandledErrorLoggerFilter());
+            filters.Add(new HandleErrorAttribute());
         
         }
         protected void Application_Start()
@@ -44,18 +49,15 @@ namespace Catalogue.Web
         }
 
         static void ConfigWebApi(HttpConfiguration config)
-        {
+        { /*
+           * this allows only request method type per controller
+           */
             config.Routes.MapHttpRoute(
                 name: "DefaultApi",
                 routeTemplate: "api/{controller}/{id}",
                 defaults: new { id = RouteParameter.Optional }
             );
-            // Controllers with Actions
-            // To handle routes like `/api/Admin/import`
-           /* config.Routes.MapHttpRoute(
-                name: "ControllerAndAction",
-                routeTemplate: "api/{controller}/{action}"
-            );*/
+            config.Filters.Add(new UnhandledExceptionFilter());
         }
 
         static void RegisterRoutes(RouteCollection routes)

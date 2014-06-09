@@ -171,6 +171,7 @@
     <Compile Include="Account\UserContext.cs" />
     <Compile Include="Admin\AdminController.cs" />
     <Compile Include="Logging\ElmahHandledErrorLoggerFilter.cs" />
+    <Compile Include="Logging\UnhandledExceptionFilter.cs" />
     <Compile Include="Search\KeywordSearchRepository.cs" />
     <Compile Include="Search\Service\KeywordSearchService.cs" />
     <Compile Include="Settings.cs" />
@@ -429,7 +430,7 @@
           <AutoAssignPort>True</AutoAssignPort>
           <DevelopmentServerPort>55466</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
-          <IISUrl>http://localhost:61393/</IISUrl>
+          <IISUrl>http://localhost:55466/</IISUrl>
           <NTLMAuthentication>False</NTLMAuthentication>
           <UseCustomServer>False</UseCustomServer>
           <CustomServerUrl>

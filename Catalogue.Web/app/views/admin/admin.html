@@ -2,6 +2,11 @@
     <h3>ADMIN </h3>
     <div>
         <button ng-click="import()">Import Activities Data</button>
-        <div>{{myBool ? 'Imported Succesfully' : 'Not imported'}}</div>
-      </div>
+        <div>{{myBool.import ? 'Activities Imported Succesfully' : 'Not imported'}}</div>
+    </div>
+        <div>
+        <button ng-click="seedMesh()">Import Mesh Data</button>
+        <div>{{myBool.seedMesh ? 'Mesh Imported Succesfully' : 'Not imported'}}</div>
+    </div>
+
 </div>

@@ -2,15 +2,17 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
+using System.Web.Http.Filters;
 using System.Web.Mvc;
 using Elmah;
+using IExceptionFilter = System.Web.Mvc.IExceptionFilter;
 
 namespace Catalogue.Web.Logging
 {
     /// <summary>
     /// http://stackoverflow.com/questions/766610/how-to-get-elmah-to-work-with-asp-net-mvc-handleerror-attribute
     /// </summary>
-    public class ElmahHandledErrorLoggerFilter : IExceptionFilter
+    public class ElmahHandledErrorLoggerFilter : IExceptionFilter, IFilter
     {
         public void OnException(ExceptionContext context)
         {
@@ -18,5 +20,7 @@ namespace Catalogue.Web.Logging
             if (context.ExceptionHandled)
                 ErrorSignal.FromCurrentContext().Raise(context.Exception);
         }
+
+        public bool AllowMultiple { get; private set; }
     }
 }
