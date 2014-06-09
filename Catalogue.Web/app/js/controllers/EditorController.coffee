@@ -8,6 +8,10 @@ angular.module('app.controllers').controller 'EditorController',
         $http.get('../api/topics').success (result) -> $scope.lookups.topics = result
         $http.get('../api/formats?q=').success (result) -> 
             $scope.lookups.currentDataGlyph = getDataFormatIcon $scope.form.gemini.dataFormat, result
+            if $scope.form.gemini.dataFormat == null || $scope.form.gemini.dataFormat == ''
+                $scope.lookups.currentDataFormat = 'None Selected'
+            else
+                $scope.lookups.currentDataFormat = $scope.form.gemini.dataFormat
             $scope.lookups.formats = result
             
         # helper functions for UI
@@ -80,6 +84,7 @@ getDataFormatIcon = (name, formats) ->
         for dataType in format.formats
             if dataType.name == name
                 return format.glyph
+    return 'glyphicon-th'
             
 
 fakeValidationData = errors: [

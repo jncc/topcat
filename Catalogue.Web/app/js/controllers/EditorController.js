@@ -8,6 +8,11 @@
     });
     $http.get('../api/formats?q=').success(function(result) {
       $scope.lookups.currentDataGlyph = getDataFormatIcon($scope.form.gemini.dataFormat, result);
+      if ($scope.form.gemini.dataFormat === null || $scope.form.gemini.dataFormat === '') {
+        $scope.lookups.currentDataFormat = 'None Selected';
+      } else {
+        $scope.lookups.currentDataFormat = $scope.form.gemini.dataFormat;
+      }
       return $scope.lookups.formats = result;
     });
     $scope.getSecurityText = getSecurityText;
@@ -105,6 +110,7 @@
         }
       }
     }
+    return 'glyphicon-th';
   };
 
   fakeValidationData = {
