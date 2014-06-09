@@ -1,4 +1,5 @@
 ﻿using System;
+using Catalogue.Web.Controllers.Search;
 using Catalogue.Web.Search;
 using Catalogue.Web.Search.Service;
 using Moq;
@@ -8,27 +9,36 @@ namespace Catalogue.Tests.Web
 {
     internal class KeywordSearchTest : DatabaseTestFixture
     {
+        private const string TestStr = "test";
+
+        private readonly SearchOutputModel _searchOutputModel = new SearchOutputModel()
+        {
+            Total = 1,
+            Speed = 100l
+        };
+
         [Test]
         public void ExpectRepositoryCallInService()
         {
-            const string testStr = "test";
-            var mock = new Mock<IKeywordSearchRepository>();
-            mock.Setup(m => m.find(It.Is<String>(s => s.Equals(testStr))));
-            var keywordSearchService = new KeywordSearchService(mock.Object);
-            keywordSearchService.find(testStr);
-            mock.Verify(m => m.find(It.Is<String>(s => s.Equals(testStr))), Times.Once);
+            
+            var mock = new Mock<ISearchRepository>();
+
+            mock.Setup(m => m.FindBykeyword(It.Is<String>(s => s.Equals(TestStr)))).Returns(_searchOutputModel);
+            var keywordSearchService = new SearchService(mock.Object);
+           var searchOutputModel = keywordSearchService.Find(TestStr);
+            mock.Verify(m => m.FindBykeyword(It.Is<String>(s => s.Equals(TestStr))), Times.Once);
+            Assert.Equals(searchOutputModel, _searchOutputModel);
         }
 
         [Test]
-        public void ExpectSerivceCallInController()
+        public void ExpectServiceCallInController()
         {
-            Assert.True(true);
-        }
-
-        [Test]
-        public void ControllerAcceptesStringReturnsSearchModel()
-        {
-            Assert.True(true);
+            var mock = new Mock<ISearchService>();
+            mock.Setup(m => m.Find(It.Is<String>(s => s.Equals(TestStr)), It.Is<int>(p => p.Equals(1)))).Returns(_searchOutputModel);
+            var keywordSearchController = new KeywordSearchController(mock.Object);
+            var searchOutputModel = keywordSearchController.Get(TestStr);
+            mock.Verify(m => m.Find(It.Is<String>(s => s.Equals(TestStr)), It.Is<int>(p => p.Equals(1))), Times.Once);
+            Assert.Equals(searchOutputModel, _searchOutputModel);
         }
 
         [Test]

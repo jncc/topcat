@@ -172,8 +172,8 @@
     <Compile Include="Admin\AdminController.cs" />
     <Compile Include="Logging\ElmahHandledErrorLoggerFilter.cs" />
     <Compile Include="Logging\UnhandledExceptionFilter.cs" />
-    <Compile Include="Search\KeywordSearchRepository.cs" />
-    <Compile Include="Search\Service\KeywordSearchService.cs" />
+    <Compile Include="Search\SearchRepository.cs" />
+    <Compile Include="Search\Service\SearchService.cs" />
     <Compile Include="Settings.cs" />
     <Compile Include="Account\AccountController.cs" />
     <Compile Include="Controllers\FormatsController.cs" />
@@ -181,7 +181,7 @@
     <Compile Include="Controllers\RecordsController.cs" />
     <Compile Include="Controllers\SandboxController.cs" />
     <Compile Include="Search\Controllers\SearchController.cs" />
-    <Compile Include="Search\Controllers\SearchKeywordController.cs" />
+    <Compile Include="Search\Controllers\KeywordSearchController.cs" />
     <Compile Include="Search\SearchOutputModel.cs" />
     <Compile Include="Topics\TopicModel.cs" />
     <Compile Include="Topics\TopicsController.cs" />

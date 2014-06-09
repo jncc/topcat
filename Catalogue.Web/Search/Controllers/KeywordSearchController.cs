@@ -10,18 +10,18 @@ using Raven.Client;
 
 namespace Catalogue.Web.Controllers.Search
 {
-    public class SearchKeywordController : ApiController
+    public class KeywordSearchController : ApiController
     {
-        private readonly IKeywordSearchService _keywordSearchService;
+        private readonly ISearchService _keywordSearchService;
 
-        public SearchKeywordController(IKeywordSearchService keywordSearchService)
+        public KeywordSearchController(ISearchService keywordSearchService)
         {
             _keywordSearchService = keywordSearchService;
         }
 
         public SearchOutputModel Get(string keyword)
         {
-            return _keywordSearchService.find(keyword);
+            return _keywordSearchService.Find(keyword);
         }
     }
 }
