@@ -5,10 +5,20 @@ angular.module('app.controllers').controller 'EditorController',
 
         # todo lookups should be injected
         $scope.lookups = {}
+        $scope.lookups.currentDataFormat = {}
+        
         $http.get('../api/topics').success (result) -> $scope.lookups.topics = result
-    
+        $http.get('../api/formats?q=').success (result) -> 
+            $scope.lookups.currentDataFormat.glyph = getDataFormatIcon $scope.form.gemini.dataFormat, result
+            if $scope.form.gemini.dataFormat == null || $scope.form.gemini.dataFormat == ''
+                $scope.lookups.currentDataFormat.text = 'None Selected'
+            else
+                $scope.lookups.currentDataFormat.text = $scope.form.gemini.dataFormat
+            $scope.lookups.formats = result
+            
         # helper functions for UI
         $scope.getSecurityText = getSecurityText
+        $scope.getDataFormatIcon = getDataFormatIcon
 
         $scope.cancel = ->
             $scope.reset()
@@ -70,6 +80,14 @@ getSecurityText = (n) -> switch n
     when 0 then 'Open'
     when 1 then 'Restricted'
     when 2 then 'Classified'
+    
+getDataFormatIcon = (name, formats) ->
+    for format in formats
+        for dataType in format.formats
+            if dataType.name == name
+                return format.glyph
+    return 'glyphicon-th'
+            
 
 fakeValidationData = errors: [
     { message: 'There was an error' }

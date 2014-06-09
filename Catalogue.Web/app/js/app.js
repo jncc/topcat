@@ -1,7 +1,7 @@
 (function() {
   var module;
 
-  module = angular.module('app', ['ngAnimate', 'ngRoute', 'ngSanitize', 'app.utilities', 'app.directives', 'app.services', 'app.controllers']);
+  module = angular.module('app', ['ngAnimate', 'ngRoute', 'ngSanitize', 'app.utilities', 'app.directives', 'app.services', 'app.controllers', 'filters']);
 
   angular.module('app.utilities', []);
 
@@ -10,6 +10,12 @@
   angular.module('app.services', ['ngResource']);
 
   angular.module('app.controllers', []);
+
+  angular.module('filters', []).filter('camelCaseFilter', function() {
+    return function(input) {
+      return input.charAt(0).toUpperCase() + input.substr(1).replace(/[A-Z]/g, ' $&');
+    };
+  });
 
   module.config([
     '$routeProvider', function($routeProvider) {

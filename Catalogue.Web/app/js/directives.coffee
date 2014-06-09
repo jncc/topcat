@@ -48,6 +48,17 @@ module.directive 'tcFocusTip', () ->
             show: event: 'focus'
             hide: event: 'blur'
 
+module.directive 'tcQtipTitle', () ->
+    link: (scope, elem, attrs) ->
+        scope.$watch 'lookups.currentDataFormat.text', ->
+            $(elem).qtip $.extend {}, qtipDefaults, 
+                content:
+                    text: scope.lookups.currentDataFormat.text
+                show:
+                    event: 'mouseenter'
+                position:
+                    my: 'top center',
+                    at: 'bottom center'                  
 
 # widget for tags (keywords)
 module.directive 'tcTag', () ->

@@ -1,12 +1,23 @@
 (function() {
-  var fakeValidationData, getSecurityText;
+  var fakeValidationData, getDataFormatIcon, getSecurityText;
 
   angular.module('app.controllers').controller('EditorController', function($scope, $http, $routeParams, $location, record, Record) {
     $scope.lookups = {};
+    $scope.lookups.currentDataFormat = {};
     $http.get('../api/topics').success(function(result) {
       return $scope.lookups.topics = result;
     });
+    $http.get('../api/formats?q=').success(function(result) {
+      $scope.lookups.currentDataFormat.glyph = getDataFormatIcon($scope.form.gemini.dataFormat, result);
+      if ($scope.form.gemini.dataFormat === null || $scope.form.gemini.dataFormat === '') {
+        $scope.lookups.currentDataFormat.text = 'None Selected';
+      } else {
+        $scope.lookups.currentDataFormat.text = $scope.form.gemini.dataFormat;
+      }
+      return $scope.lookups.formats = result;
+    });
     $scope.getSecurityText = getSecurityText;
+    $scope.getDataFormatIcon = getDataFormatIcon;
     $scope.cancel = function() {
       $scope.reset();
       return $scope.notifications.add('Edits cancelled');
@@ -86,6 +97,21 @@
       case 2:
         return 'Classified';
     }
+  };
+
+  getDataFormatIcon = function(name, formats) {
+    var dataType, format, _i, _j, _len, _len1, _ref;
+    for (_i = 0, _len = formats.length; _i < _len; _i++) {
+      format = formats[_i];
+      _ref = format.formats;
+      for (_j = 0, _len1 = _ref.length; _j < _len1; _j++) {
+        dataType = _ref[_j];
+        if (dataType.name === name) {
+          return format.glyph;
+        }
+      }
+    }
+    return 'glyphicon-th';
   };
 
   fakeValidationData = {

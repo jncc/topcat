@@ -80,6 +80,27 @@
     };
   });
 
+  module.directive('tcQtipTitle', function() {
+    return {
+      link: function(scope, elem, attrs) {
+        return scope.$watch('lookups.currentDataFormat.text', function() {
+          return $(elem).qtip($.extend({}, qtipDefaults, {
+            content: {
+              text: scope.lookups.currentDataFormat.text
+            },
+            show: {
+              event: 'mouseenter'
+            },
+            position: {
+              my: 'top center',
+              at: 'bottom center'
+            }
+          }));
+        });
+      }
+    };
+  });
+
   module.directive('tcTag', function() {
     return {
       link: function(scope, elem, attrs) {
