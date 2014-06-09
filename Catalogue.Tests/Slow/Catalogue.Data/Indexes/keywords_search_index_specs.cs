@@ -27,7 +27,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Data.Indexes
                 .OrderBy(r => r.Vocab)
                 .Take(1000).ToList();
 
-            results.Select(r => r.Value).ForEach(Console.WriteLine);
+           // results.Select(r => r.Value).ForEach(Console.WriteLine);
 
             results.GroupBy(r => r.Vocab).Select(g => g.Key).Should().ContainInOrder(new[]
             {
@@ -79,13 +79,13 @@ namespace Catalogue.Tests.Slow.Catalogue.Data.Indexes
                 .OrderBy(r => r.Vocab).ThenBy(r => r.Value)
                 .Take(1000)
                 .ToList();
-
+            /*
             foreach (KeywordsSearchIndex.Result result in results)
             {
                 Console.WriteLine(result.Vocab);
                 Console.WriteLine(result.Value);
                 Console.WriteLine();
-            }
+            }*/
         }
     }
 }
