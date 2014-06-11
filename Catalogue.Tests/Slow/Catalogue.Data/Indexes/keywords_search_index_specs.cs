@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Catalogue.Data.Indexes;
+using Catalogue.Data.Model;
 using FluentAssertions;
 using NUnit.Framework;
 using Raven.Abstractions.Extensions;
@@ -62,6 +63,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Data.Indexes
         [Test]
         public void can_search_exact_matches()
         {
+            // have to use vanilla linq
             Db.Query<KeywordsSearchIndex.Result, KeywordsSearchIndex>()
                 .Where(r => r.Value.Equals("seabed habitat maps"))
                 .Count().Should().Be(1);
@@ -70,6 +72,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Data.Indexes
             Db.Query<KeywordsSearchIndex.Result, KeywordsSearchIndex>()
                 .Where(r => r.Value.Equals("Seabed Habitat Maps"))
                 .Count().Should().Be(1);
+            
         }
 
         [Test, Explicit]

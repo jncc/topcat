@@ -19,9 +19,9 @@ namespace Catalogue.Web.Controllers.Search
             _keywordSearchService = keywordSearchService;
         }
 
-        public SearchOutputModel Get(string keyword)
+        public SearchOutputModel Get(string keyword, int n = 0, int page = 1)
         {
-            return _keywordSearchService.Find(keyword);
+            return _keywordSearchService.Find(keyword, n, page);
         }
     }
 }

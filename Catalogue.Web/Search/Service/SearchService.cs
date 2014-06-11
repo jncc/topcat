@@ -8,8 +8,8 @@ namespace Catalogue.Web.Search.Service
 {
     public interface ISearchService
     {
-        SearchOutputModel FindByKeyword(string query);
-        SearchOutputModel Find(string q, int p = 1);
+        SearchOutputModel FindByKeyword(string searchTerm, int n, int page);
+        SearchOutputModel Find(string searchTerm, int n,int page );
     }
 
     public class SearchService : ISearchService
@@ -21,13 +21,25 @@ namespace Catalogue.Web.Search.Service
             _searchRepository = searchRepository;
         }
 
-        public SearchOutputModel FindByKeyword(string query)
+        public SearchOutputModel FindByKeyword(string searchTerm,int n = 0, int page =1)
         {
-            return _searchRepository.FindBykeyword(query);
+            return _searchRepository.FindByKeyword(searchTerm, n, page);
         }
-        public SearchOutputModel Find(string q, int p =1)
+        
+        public SearchOutputModel Find(string searchTerm,int n = 0, int page =1)
         {
-            return _searchRepository.Find(q, p);
+            return _searchRepository.Find(searchTerm,n , page);
+        }
+
+        public SearchOutputModel FindByFullTextAndKeyword(string searchTerm, int n= 0, int page = 1)
+        {
+            var keywordOutputModel = FindByKeyword(searchTerm, n,  page);
+            var defaultOutputModel = Find(searchTerm,n, page);
+            var unioned = defaultOutputModel.Results.Union(keywordOutputModel.Results);
+            defaultOutputModel.Results = unioned.ToList();
+            defaultOutputModel.Total = defaultOutputModel.Results.Count;
+            return defaultOutputModel;
+
         }
     }
 }

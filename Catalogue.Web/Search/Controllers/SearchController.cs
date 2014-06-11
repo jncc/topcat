@@ -20,9 +20,9 @@ namespace Catalogue.Web.Controllers.Search
         }
 
         // GET api/search?q=blah
-        public SearchOutputModel Get(string q, int p = 1)
+        public SearchOutputModel Get(string q, int n = 0, int p = 1)
         {
-            return _searchService.Find(q, p);
+            return _searchService.Find(q,n, p);
         }
     }
 }

@@ -42,6 +42,37 @@ namespace Catalogue.Gemini.Model
 
     public class Keyword
     {
+        public Keyword()
+        {
+        }
+
+        public Keyword(string value, string vocab)
+        {
+            Value = value;
+            Vocab = vocab;
+        }
+
+        protected bool Equals(Keyword other)
+        {
+            return string.Equals(Value, other.Value) && string.Equals(Vocab, other.Vocab);
+        }
+
+        public override bool Equals(object obj)
+        {
+            if (ReferenceEquals(null, obj)) return false;
+            if (ReferenceEquals(this, obj)) return true;
+            if (obj.GetType() != this.GetType()) return false;
+            return Equals((Keyword) obj);
+        }
+
+        public override int GetHashCode()
+        {
+            unchecked
+            {
+                return (Value.GetHashCode()*397) ^ Vocab.GetHashCode();
+            }
+        }
+
         public string Value { get; set; }
         public string Vocab { get; set; }
     }
