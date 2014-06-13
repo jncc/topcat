@@ -21,7 +21,7 @@ namespace Catalogue.Web.Controllers.Search
 
         public SearchOutputModel Get(string keyword, int n = 0, int page = 1)
         {
-            return _keywordSearchService.Find(keyword, n, page);
+            return _keywordSearchService.FindByKeyword(keyword, n, page);
         }
     }
 }
