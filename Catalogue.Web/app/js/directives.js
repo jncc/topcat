@@ -84,9 +84,15 @@
     return {
       link: function(scope, elem, attrs) {
         return scope.$watch('lookups.currentDataFormat.text', function() {
+          var text;
+          text = scope.lookups.currentDataFormat.text;
+          if (scope.lookups.currentDataFormat.code !== void 0 && scope.lookups.currentDataFormat.code !== '') {
+            text = text + ' (' + scope.lookups.currentDataFormat.code + ')';
+          }
           return $(elem).qtip($.extend({}, qtipDefaults, {
+            overwrite: true,
             content: {
-              text: scope.lookups.currentDataFormat.text
+              text: text
             },
             show: {
               event: 'mouseenter'

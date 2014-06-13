@@ -1,5 +1,5 @@
 (function() {
-  var fakeValidationData, getDataFormatIcon, getSecurityText;
+  var fakeValidationData, getDataFormatObj, getSecurityText, updateDataFormatObj;
 
   angular.module('app.controllers').controller('EditorController', function($scope, $http, $routeParams, $location, record, Record) {
     $scope.lookups = {};
@@ -8,18 +8,17 @@
       return $scope.lookups.topics = result;
     });
     $http.get('../api/formats?q=').success(function(result) {
-      $scope.lookups.currentDataFormat.glyph = getDataFormatIcon($scope.form.gemini.dataFormat, result);
-      if ($scope.form.gemini.dataFormat === null || $scope.form.gemini.dataFormat === '') {
-        $scope.lookups.currentDataFormat.text = 'None Selected';
-      } else {
-        $scope.lookups.currentDataFormat.text = $scope.form.gemini.dataFormat;
-      }
+      $scope.lookups.currentDataFormat = getDataFormatObj($scope.form.gemini.dataFormat, result);
       return $scope.lookups.formats = result;
     });
+    $scope.collapseDataFormatSelector = true;
+    $scope.collapseDateFormat = true;
     $scope.getSecurityText = getSecurityText;
-    $scope.getDataFormatIcon = getDataFormatIcon;
+    $scope.getDataFormatObj = getDataFormatObj;
+    $scope.updateDataFormatObj = updateDataFormatObj;
     $scope.cancel = function() {
       $scope.reset();
+      $scope.lookups.currentDataFormat = getDataFormatObj($scope.form.gemini.dataFormat, $scope.lookups.formats);
       return $scope.notifications.add('Edits cancelled');
     };
     $scope.open = function($event, elem) {
@@ -99,19 +98,39 @@
     }
   };
 
-  getDataFormatIcon = function(name, formats) {
+  getDataFormatObj = function(name, formats) {
     var dataType, format, _i, _j, _len, _len1, _ref;
-    for (_i = 0, _len = formats.length; _i < _len; _i++) {
-      format = formats[_i];
-      _ref = format.formats;
-      for (_j = 0, _len1 = _ref.length; _j < _len1; _j++) {
-        dataType = _ref[_j];
-        if (dataType.name === name) {
-          return format.glyph;
+    if (name !== void 0 && formats !== void 0) {
+      for (_i = 0, _len = formats.length; _i < _len; _i++) {
+        format = formats[_i];
+        _ref = format.formats;
+        for (_j = 0, _len1 = _ref.length; _j < _len1; _j++) {
+          dataType = _ref[_j];
+          if (dataType.name === name) {
+            return {
+              type: format.name,
+              text: dataType.name,
+              code: dataType.code,
+              glyph: format.glyph
+            };
+          }
         }
       }
+      return {
+        text: 'None Selected',
+        glyph: 'glyphicon-th'
+      };
+    } else {
+      return {
+        text: "Other",
+        glyph: 'glyphicon-th'
+      };
     }
-    return 'glyphicon-th';
+  };
+
+  updateDataFormatObj = function(name, formats, form) {
+    form.gemini.dataFormat = name;
+    return getDataFormatObj(name, formats);
   };
 
   fakeValidationData = {

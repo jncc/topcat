@@ -288,6 +288,8 @@
     <Content Include="app\lib\jquery-ui-1.10.3\jquery-ui.min.js" />
     <Content Include="app\lib\qtip2-2.1.1\jquery.qtip.min.css" />
     <Content Include="app\lib\qtip2-2.1.1\jquery.qtip.min.js" />
+    <Content Include="app\lib\qtip2-2.2.0\jquery.qtip.min.css" />
+    <Content Include="app\lib\qtip2-2.2.0\jquery.qtip.min.js" />
     <Content Include="app\lib\respond-1.2.0\cross-domain\example.html" />
     <Content Include="app\lib\respond-1.2.0\cross-domain\respond-proxy.html" />
     <Content Include="app\lib\respond-1.2.0\cross-domain\respond.proxy.gif" />
