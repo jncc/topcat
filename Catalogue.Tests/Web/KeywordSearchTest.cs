@@ -48,10 +48,10 @@ namespace Catalogue.Tests.Web
         public void ExpectServiceCallInController()
         {
             var mock = new Mock<ISearchService>();
-            mock.Setup(m => m.Find(It.Is<String>(s => s.Equals(TestStr)), It.Is<int>(s => s.Equals(0)), It.Is<int>(p => p.Equals(1)))).Returns(_searchOutputModel);
+            mock.Setup(m => m.FindByKeyword(It.Is<String>(s => s.Equals(TestStr)), It.Is<int>(s => s.Equals(0)), It.Is<int>(p => p.Equals(1)))).Returns(_searchOutputModel);
             var keywordSearchController = new KeywordSearchController(mock.Object);
             var searchOutputModel = keywordSearchController.Get(TestStr);
-            mock.Verify(m => m.Find(It.Is<String>(s => s.Equals(TestStr)), It.Is<int>(s => s.Equals(0)), It.Is<int>(p => p.Equals(1))), Times.Once);
+            mock.Verify(m => m.FindByKeyword(It.Is<String>(s => s.Equals(TestStr)), It.Is<int>(s => s.Equals(0)), It.Is<int>(p => p.Equals(1))), Times.Once);
             Assert.AreEqual(searchOutputModel, _searchOutputModel);
         }
 
