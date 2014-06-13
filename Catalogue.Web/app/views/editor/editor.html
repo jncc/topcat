@@ -36,8 +36,6 @@
         <!-- title -->
         <div class="row">
             <div class="col-md-12">
-                
-
                 <div class="form-group">
                     <input type="text" ng-model="form.gemini.title" name="gemini.title" placeholder="Title" class="editor-title form-control"
                            title="The title or name of the resource"
@@ -51,8 +49,8 @@
         <!-- format and path -->
         <div class="layout-row">
             <div class="layout-col editor-format">
-                <div class="panel panel-default">
-                    <span tabindex="0" class="dark glyphicon" ng-class="lookups.currentDataFormat.glyph" tc-qtip-title></span>
+                <div class="panel panel-default" tc-qtip-title id="testSt" ng-click="collapseDataFormatSelector = !collapseDataFormatSelector">
+                    <span tabindex="0" class="dark glyphicon" ng-class="lookups.currentDataFormat.glyph"></span>
                 </div>
             </div>
             <div class="layout-col">
@@ -88,6 +86,37 @@
                 </div>
             </div>
         </div>
+        
+        <div collapse="collapseDataFormatSelector" class="form-group">
+            <div style="display:block;">
+                <div class="well">
+                    <span>Currently Selected: <span class="dark glyphicon" ng-class="lookups.currentDataFormat.glyph"></span><span> {{lookups.currentDataFormat.type}} - {{lookups.currentDataFormat.text}}<span ng-show="lookups.currentDataFormat.code">{{'(' + lookups.currentDataFormat.code + ')'}}</span></span></span>
+                    <span style="float:right;"><button type="button" class="close" aria-hidden="true" ng-click="collapseDataFormatSelector = !collapseDataFormatSelector">&times;</button></span>
+                </div>
+                <div>
+                    <tabset>
+                        <tab ng-repeat="format in lookups.formats">
+                            <tab-heading class="tab-heading">
+                                <i class="glyphicon {{format.glyph}}"></i> {{format.name}}
+                            </tab-heading>
+                            <ul ng-if="format.formats.length > 0" class="list-inline">
+                                <li ng-repeat="type in format.formats" class="data-format-list-item" ng-click="lookups.currentDataFormat = updateDataFormatObj(type.name, lookups.formats, form)">
+                                    <span class="glyphicon {{format.glyph}} data-format-list-item-glyph"></span>
+                                    <span class="data-format-list-item-text">{{type.name}} <span ng-show="type.code">{{'(' + type.code + ')'}}</span></span>                                
+                                </li>
+                            </ul>
+                            <ul ng-if="format.formats.length == 0" class="list-inline">
+                                <li class="data-format-list-item" ng-click="lookups.currentDataFormat = updateDataFormatObj(undefined, undefined, form)">
+                                    <span class="glyphicon {{format.glyph}} data-format-list-item-glyph"></span>
+                                    <span class="data-format-list-item-text">{{format.name}}</span>                                                            
+                                </li>
+                            </ul>
+                        </tab>
+                    </tabset>
+                </div>
+            </div>
+        </div>
+        <div class="layout-row"></div>
 
 
         <div class="row">

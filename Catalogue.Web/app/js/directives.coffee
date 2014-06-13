@@ -49,16 +49,21 @@ module.directive 'tcFocusTip', () ->
             hide: event: 'blur'
 
 module.directive 'tcQtipTitle', () ->
-    link: (scope, elem, attrs) ->
+    link: (scope, elem, attrs) ->                     
         scope.$watch 'lookups.currentDataFormat.text', ->
+            text = scope.lookups.currentDataFormat.text
+            if scope.lookups.currentDataFormat.code != undefined && scope.lookups.currentDataFormat.code != ''
+                text = text + ' (' + scope.lookups.currentDataFormat.code + ')'
             $(elem).qtip $.extend {}, qtipDefaults, 
+                overwrite: true
                 content:
-                    text: scope.lookups.currentDataFormat.text
+                    text: text
                 show:
                     event: 'mouseenter'
                 position:
                     my: 'top center',
-                    at: 'bottom center'                  
+                    at: 'bottom center'        
+
 
 # widget for tags (keywords)
 module.directive 'tcTag', () ->

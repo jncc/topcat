@@ -9,19 +9,20 @@ angular.module('app.controllers').controller 'EditorController',
         
         $http.get('../api/topics').success (result) -> $scope.lookups.topics = result
         $http.get('../api/formats?q=').success (result) -> 
-            $scope.lookups.currentDataFormat.glyph = getDataFormatIcon $scope.form.gemini.dataFormat, result
-            if $scope.form.gemini.dataFormat == null || $scope.form.gemini.dataFormat == ''
-                $scope.lookups.currentDataFormat.text = 'None Selected'
-            else
-                $scope.lookups.currentDataFormat.text = $scope.form.gemini.dataFormat
+            $scope.lookups.currentDataFormat = getDataFormatObj $scope.form.gemini.dataFormat, result
             $scope.lookups.formats = result
-            
+
+        $scope.collapseDataFormatSelector = true    
+        $scope.collapseDateFormat = true
+                                    
         # helper functions for UI
         $scope.getSecurityText = getSecurityText
-        $scope.getDataFormatIcon = getDataFormatIcon
+        $scope.getDataFormatObj = getDataFormatObj
+        $scope.updateDataFormatObj = updateDataFormatObj
 
         $scope.cancel = ->
             $scope.reset()
+            $scope.lookups.currentDataFormat = getDataFormatObj $scope.form.gemini.dataFormat, $scope.lookups.formats
             $scope.notifications.add 'Edits cancelled'
         
         $scope.open = ($event, elem) ->
@@ -81,13 +82,30 @@ getSecurityText = (n) -> switch n
     when 1 then 'Restricted'
     when 2 then 'Classified'
     
-getDataFormatIcon = (name, formats) ->
-    for format in formats
-        for dataType in format.formats
-            if dataType.name == name
-                return format.glyph
-    return 'glyphicon-th'
-            
+getDataFormatObj = (name, formats) ->
+    if (name != undefined && formats != undefined)
+        for format in formats
+            for dataType in format.formats
+                if dataType.name == name
+                    return {
+                        type: format.name,
+                        text: dataType.name,
+                        code: dataType.code,
+                        glyph: format.glyph
+                    }
+        return {
+            text: 'None Selected',
+            glyph: 'glyphicon-th'
+        }
+    else 
+        return {
+            text: "Other",
+            glyph: 'glyphicon-th'
+        }
+
+updateDataFormatObj = (name, formats, form) ->
+    form.gemini.dataFormat = name
+    getDataFormatObj(name, formats)
 
 fakeValidationData = errors: [
     { message: 'There was an error' }

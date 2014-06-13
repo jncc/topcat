@@ -303,3 +303,39 @@ form .ng-dirty.ng-invalid {
 .fade-in-with-delay.ng-hide-remove.ng-hide-remove-active {
   opacity: 1;
 }
+.data-format-list-item {
+  float: left;
+  padding: 10px;
+  line-height: 1.4;
+  text-align: center;
+  border: 1px solid #fff;
+  background-color: #f9f9f9;
+  color: #666666;
+  width: 10%;
+  height: 115px;
+}
+.data-format-list-item:hover {
+  background-color: white;
+}
+.data-format-list-item:active {
+  color: white;
+  background-color: #666;
+}
+.data-format-list-item-glyph {
+  margin-top: 5px;
+  margin-bottom: 10px;
+  font-size: 24px;
+}
+.data-format-list-item-text {
+  display: block;
+  text-align: center;
+  -ms-word-wrap: break-word;
+  word-wrap: break-word;
+  font-size: 10pt;
+}
+.nav > li > a:hover {
+  color: #666666;
+}
+.nav > li > a {
+  color: #666666;
+}
