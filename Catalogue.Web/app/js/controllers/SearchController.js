@@ -1,4 +1,4 @@
-﻿(function() {
+(function() {
 
   angular.module('app.controllers').controller('SearchController', function($scope, $rootScope, $location, $http, $timeout) {
     var doSearch;
@@ -25,6 +25,16 @@
       } else {
         return $scope.result = {};
       }
+    };
+    $scope.doKeywordSearch = function(keyword) {
+      $scope.busy.start();
+      return $http.post('../api/keywordSearch', keyword).success(function(result) {
+        $scope.result = result;
+        $scope.busy.stop();
+        return $rootScope.page = {
+          title: keyword
+        };
+      });
     };
     $scope.query = {
       q: $location.search()['q'] || '',

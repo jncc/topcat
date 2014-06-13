@@ -54,7 +54,7 @@ namespace Catalogue.Gemini.Model
 
         protected bool Equals(Keyword other)
         {
-            return string.Equals(Value, other.Value) && string.Equals(Vocab, other.Vocab);
+            return string.Equals(Value.ToLower(), other.Value.ToLower()) && string.Equals(Vocab.ToLower(), other.Vocab.ToLower());
         }
 
         public override bool Equals(object obj)
@@ -69,7 +69,7 @@ namespace Catalogue.Gemini.Model
         {
             unchecked
             {
-                return (Value.GetHashCode()*397) ^ Vocab.GetHashCode();
+                return (Value.ToLower().GetHashCode()*397) ^ Vocab.ToLower().GetHashCode();
             }
         }
 

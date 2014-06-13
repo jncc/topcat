@@ -9,7 +9,7 @@ angular.module('app.controllers').controller 'SearchController',
         $timeout (-> $scope.app.starting = false), 500
 
         # note: $location.search is the angular api for the querystring value
-        
+                
         doSearch = (query) ->
             $location.search('q', query.q) # update the url
             $rootScope.page = { title: if query.q then ' - ' + query.q else '' } # update the page title
@@ -24,7 +24,21 @@ angular.module('app.controllers').controller 'SearchController',
                     .finally -> $scope.busy.stop()
             else
                 $scope.result = {}
-
+                
+         $scope.doKeywordSearch = (keyword) ->
+            $scope.busy.start()
+            # $http.get('../api/keywordSearch?value=' + keyword.value+'&vocab='+keyword.value)
+            $http.post('../api/keywordSearch', keyword).success (result) ->
+                    $scope.result = result; 
+                    $scope.busy.stop();
+                   # $location.url($location.path());
+                   # $location.search('keyword', keyword); # update the url
+                    $rootScope.page = { title:keyword}; # update the page title#.finally -> 
+                    # don't overwrite with old slow results!
+                    #if angular.equals result.query, $scope.query
+                     #   $scope.result = result.finally -> 
+                      #      $scope.busy.stop()
+            
         # initial values
         $scope.query = { q: $location.search()['q'] || '', p: 1 }
 

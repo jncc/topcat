@@ -2,13 +2,14 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
+using Catalogue.Gemini.Model;
 using Catalogue.Web.Controllers.Search;
 
 namespace Catalogue.Web.Search.Service
 {
     public interface ISearchService
     {
-        SearchOutputModel FindByKeyword(string searchTerm, int n, int page);
+        SearchOutputModel FindByKeyword(Keyword searchTerm, int n, int page);
         SearchOutputModel Find(string searchTerm, int n,int page );
     }
 
@@ -21,7 +22,7 @@ namespace Catalogue.Web.Search.Service
             _searchRepository = searchRepository;
         }
 
-        public SearchOutputModel FindByKeyword(string searchTerm,int n = 0, int page =1)
+        public SearchOutputModel FindByKeyword(Keyword searchTerm, int n =0, int page=1)
         {
             return _searchRepository.FindByKeyword(searchTerm, n, page);
         }
@@ -33,12 +34,13 @@ namespace Catalogue.Web.Search.Service
 
         public SearchOutputModel FindByFullTextAndKeyword(string searchTerm, int n= 0, int page = 1)
         {
-            var keywordOutputModel = FindByKeyword(searchTerm, n,  page);
+            throw new NotImplementedException();
+            /*var keywordOutputModel = FindByKeyword(searchTerm, n,  page);
             var defaultOutputModel = Find(searchTerm,n, page);
             var unioned = defaultOutputModel.Results.Union(keywordOutputModel.Results);
             defaultOutputModel.Results = unioned.ToList();
             defaultOutputModel.Total = defaultOutputModel.Results.Count;
-            return defaultOutputModel;
+            return defaultOutputModel;*/
 
         }
     }

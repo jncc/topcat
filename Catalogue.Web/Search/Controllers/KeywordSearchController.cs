@@ -1,12 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using System.Web.Http;
-using System.Web.Mvc;
-using Catalogue.Gemini.Spatial;
+﻿using System.Web.Http;
+using Catalogue.Gemini.Model;
 using Catalogue.Web.Search.Service;
-using Raven.Client;
 
 namespace Catalogue.Web.Controllers.Search
 {
@@ -19,7 +13,7 @@ namespace Catalogue.Web.Controllers.Search
             _keywordSearchService = keywordSearchService;
         }
 
-        public SearchOutputModel Get(string keyword, int n = 0, int page = 1)
+        public SearchOutputModel Post(Keyword keyword, int n = 0, int page = 1)
         {
             return _keywordSearchService.FindByKeyword(keyword, n, page);
         }
