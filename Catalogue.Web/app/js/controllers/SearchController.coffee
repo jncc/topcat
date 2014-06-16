@@ -11,7 +11,9 @@ angular.module('app.controllers').controller 'SearchController',
         # note: $location.search is the angular api for the querystring value
                 
         doSearch = (query) ->
-            $location.search('q', query.q) # update the url
+            # update the url
+            $location.search('q', query.q) 
+            $location.search('p', query.p) 
             $rootScope.page = { title: if query.q then appTitlePrefix + query.q else appTitlePrefix } # update the page title
             if query.q
                 $scope.busy.start()

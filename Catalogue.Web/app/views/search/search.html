@@ -37,8 +37,8 @@
 <br />
 
 
-<div ng-show="query.q"> 
-    {{result.results.length || 0 }} of {{result.total || 0}} results
+<div ng-show="query.q">
+    {{result.results.length + ((query.p-1) * 25) || 0}} of {{result.total || 0}} results
     <span ng-show="result.speed">({{(result.speed / 1000) | number:2}} seconds)</span>
     <hr />
 </div>
@@ -69,12 +69,19 @@
 <div class="text-center" ng-show="result.total > result.results.length">
      <ul class="pagination">
         <li class="disabled"><a href="">&laquo;</a></li>
-        <li class="active"><a href="">1 <span class="sr-only">(current)</span></a></li>
+         <!--<li class="active"><a href="">1 <span class="sr-only">(current)</span></a></li>-->
+         <!--<li><a href="#/?q=se&p=1"ng-click="query.p = 1">1</a></li>
         <li><a href="#/?q=se&p=2" ng-click="query.p = 2">2</a></li>
-        <li><a href="#" ng-click="query.p = 2">3</a></li>
-        <li><a href="#">4</a></li>
-        <li><a href="#">5</a></li>
-         <li><a href="#">&raquo;</a></li>
+        <li><a href="#/?q=se&p=3" ng-click="query.p = 3">3</a></li>
+        <li><a href="#/?q=se&p=4" ng-click="query.p = 4">4</a></li>
+         <li><a href="#/?q=se&p=5" ng-click="query.p = 5">5</a></li>-->
+         
+        <li><span ng-click="query.p = 1">1</span></li>
+        <li><span ng-click="query.p = 2">2</span></li>
+        <li><span  ng-click="query.p = 3">3</span></li>
+        <li><span  ng-click="query.p = 4">4</span></li>
+        <li><span  ng-click="query.p = 5">5</span></li>
+         <li><span href="#">&raquo;</span></li>
          {{query}}
     </ul>
 </div>

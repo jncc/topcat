@@ -11,6 +11,7 @@
     }), 500);
     doSearch = function(query) {
       $location.search('q', query.q);
+      $location.search('p', query.p);
       $rootScope.page = {
         title: query.q ? appTitlePrefix + query.q : appTitlePrefix
       };

@@ -46,7 +46,10 @@ namespace Catalogue.Web.Search
            
             if (searchInputModel.NumberOfRecords > 0)
             {
-                results = query.Take(searchInputModel.NumberOfRecords).ToList();
+                int skipNumber = searchInputModel.PageNumber > 1 ? searchInputModel.PageNumber * searchInputModel.NumberOfRecords : 0;
+                results = query
+                    .Skip(skipNumber)
+                    .Take(searchInputModel.NumberOfRecords).ToList();
             }
             else
             {
@@ -107,7 +110,10 @@ namespace Catalogue.Web.Search
 
             if (searchInputModel.NumberOfRecords > 0)
             {
-                results = query.Take(searchInputModel.NumberOfRecords).ToList();
+                int skipNumber = searchInputModel.PageNumber > 1 ? searchInputModel.PageNumber * searchInputModel.NumberOfRecords:0;
+                results = query
+                    .Skip(skipNumber)
+                    .Take(searchInputModel.NumberOfRecords).ToList();
             }
             else
             {
