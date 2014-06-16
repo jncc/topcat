@@ -11,6 +11,7 @@ angular.module('app.controllers').controller 'EditorController',
         $http.get('../api/formats?q=').success (result) -> 
             $scope.lookups.currentDataFormat = getDataFormatObj $scope.form.gemini.dataFormat, result
             $scope.lookups.formats = result
+        $http.get('../api/roles?q=').success (result) -> $scope.lookups.roles = result            
 
         $scope.collapseDataFormatSelector = true    
         $scope.collapseDateFormat = true

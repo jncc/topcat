@@ -11,6 +11,9 @@
       $scope.lookups.currentDataFormat = getDataFormatObj($scope.form.gemini.dataFormat, result);
       return $scope.lookups.formats = result;
     });
+    $http.get('../api/roles?q=').success(function(result) {
+      return $scope.lookups.roles = result;
+    });
     $scope.collapseDataFormatSelector = true;
     $scope.collapseDateFormat = true;
     $scope.getSecurityText = getSecurityText;

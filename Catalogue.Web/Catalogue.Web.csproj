@@ -170,6 +170,7 @@
     <Compile Include="Account\User.cs" />
     <Compile Include="Account\UserContext.cs" />
     <Compile Include="Admin\AdminController.cs" />
+    <Compile Include="Controllers\RolesController.cs" />
     <Compile Include="Logging\ElmahHandledErrorLoggerFilter.cs" />
     <Compile Include="Logging\UnhandledExceptionFilter.cs" />
     <Compile Include="Search\Repository\SearchRepository.cs" />
