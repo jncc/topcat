@@ -58,7 +58,7 @@
             <span ng-repeat="k in r.keywords" tc-tag>
                 <span ng-style="{ 'background-color': hashStringToColor(k.vocab) }">&nbsp;</span>
                 {{ k.value }}
-                <span ng-click="doKeywordSearch(k)" class="glyphicon glyphicon-search"></span>
+                <span ng-click="doKeywordSearch(k,1)" class="glyphicon glyphicon-search"></span>
             </span>
             
         </div>
@@ -70,8 +70,8 @@
      <ul class="pagination">
         <li class="disabled"><a href="">&laquo;</a></li>
         <li class="active"><a href="">1 <span class="sr-only">(current)</span></a></li>
-        <li><a href="#">2</a></li>
-        <li><a href="#">3</a></li>
+        <li><a href="#/?q=se&p=2" ng-click="query.p = 2">2</a></li>
+        <li><a href="#" ng-click="query.p = 2">3</a></li>
         <li><a href="#">4</a></li>
         <li><a href="#">5</a></li>
          <li><a href="#">&raquo;</a></li>

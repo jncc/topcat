@@ -12,6 +12,7 @@ namespace Catalogue.Web.Search
         {
             PageNumber = pageNumber;
             Query = query;
+            NumberOfRecords = numberOfRecords;
             SearchType = SearchType.FullText;
         }
 

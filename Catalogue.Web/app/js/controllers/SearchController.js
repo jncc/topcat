@@ -27,9 +27,14 @@
         return $scope.result = {};
       }
     };
-    $scope.doKeywordSearch = function(keyword) {
+    $scope.doKeywordSearch = function(keyword, pageNumber) {
+      var searchInputModel;
+      searchInputModel = {};
+      searchInputModel.keyword = keyword;
+      searchInputModel.pageNumber = pageNumber;
+      searchInputModel.numberOfRecords = 25;
       $scope.busy.start();
-      return $http.post('../api/keywordSearch', keyword).success(function(result) {
+      return $http.post('../api/keywordSearch', searchInputModel).success(function(result) {
         $scope.result = result;
         $scope.busy.stop();
         return $rootScope.page = {

@@ -25,11 +25,15 @@ angular.module('app.controllers').controller 'SearchController',
             else
                 $scope.result = {}
                 
-         $scope.doKeywordSearch = (keyword) ->
+         $scope.doKeywordSearch = (keyword, pageNumber) ->
+            searchInputModel = {};
+            searchInputModel.keyword = keyword;
+            searchInputModel.pageNumber = pageNumber;
+            searchInputModel.numberOfRecords = 25;
             $scope.busy.start()
             # good morning stephen
             # optimize and do this propery, using watch and setting location, which then effects routing ?
-            $http.post('../api/keywordSearch', keyword).success (result) ->
+            $http.post('../api/keywordSearch', searchInputModel).success (result) ->
                     $scope.result = result; 
                     $scope.busy.stop();
                     # $location.url($location.path());
