@@ -364,7 +364,42 @@
                                 </select>    
                             </div>
                         </div>
+                        <div class="layout-row">
+                            <div class="col-md-6">
+                                <label for="metadataDate" class="col-md-2 control-label" style="text-align:left;">Metadata Date</label>
+                                <div id="metadataDate" class="col-md-10 input-group">
+                                    <input type="text" class="form-control"
+                                           name="gemini.metadataDate" 
+                                           ng-model="form.gemini.metadataDate"
+                                           placeholder="yyyy-mm-dd"
+                                           datepicker-popup="yyyy-MM-dd"
+                                           tc-focus-tip 
+                                           is-open="metadataDate"
+                                           close-text="Close"
+                                           ng-click="open($event,'metadataDate')"
+                                           title="The dates covered by the data resource" />
+                                    <span class="input-group-addon" ng-click="open($event,'metadataDate')">
+                                        <span class="dark glyphicon glyphicon-calendar"></span>
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="language" class="col-md-2 control-label" style="text-align:left;">Metadata Language</label>
+                                <div id="language" class="col-md-10">
+                                    <div class="form-group text-left selectContainer">
+                                        <select
+                                            ng-model="form.gemini.metadataLanguage"
+                                            ng-options="language.code as language.text for language in lookups.languages"
+                                            class="form-control"
+                                            title="Language used for documenting the metadata">
+                                            <option value="" disabled selected style="display: none">Metadata Language</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
+
                 </div>
                 
                 <hr />               

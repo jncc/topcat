@@ -4,6 +4,27 @@
   angular.module('app.controllers').controller('EditorController', function($scope, $http, $routeParams, $location, record, Record) {
     $scope.lookups = {};
     $scope.lookups.currentDataFormat = {};
+    $scope.lookups.languages = [
+      {
+        code: 'eng',
+        text: 'English'
+      }, {
+        code: 'cym',
+        text: 'Welsh'
+      }, {
+        code: 'gle',
+        text: 'Gaelic (Irish)'
+      }, {
+        code: 'gla',
+        text: 'Gaelic (Scottish)'
+      }, {
+        code: 'cor',
+        text: 'Cornish'
+      }, {
+        code: 'sco',
+        text: 'Ulster Scots'
+      }
+    ];
     $http.get('../api/topics').success(function(result) {
       return $scope.lookups.topics = result;
     });

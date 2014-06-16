@@ -6,6 +6,14 @@ angular.module('app.controllers').controller 'EditorController',
         # todo lookups should be injected
         $scope.lookups = {}
         $scope.lookups.currentDataFormat = {}
+        $scope.lookups.languages = [ 
+            {code:'eng', text:'English'},
+            {code:'cym', text:'Welsh'},
+            {code:'gle', text:'Gaelic (Irish)'},
+            {code:'gla', text:'Gaelic (Scottish)'},
+            {code:'cor', text:'Cornish'},
+            {code:'sco', text:'Ulster Scots'}
+        ];
         
         $http.get('../api/topics').success (result) -> $scope.lookups.topics = result
         $http.get('../api/formats?q=').success (result) -> 
