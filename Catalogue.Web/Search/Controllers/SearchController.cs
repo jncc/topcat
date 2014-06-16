@@ -1,4 +1,5 @@
 ﻿using System.Web.Http;
+using Catalogue.Web.Search;
 using Catalogue.Web.Search.Service;
 
 namespace Catalogue.Web.Controllers.Search
@@ -13,9 +14,10 @@ namespace Catalogue.Web.Controllers.Search
         }
 
         // GET api/search?q=blah
-        public SearchOutputModel Get(string q, int n = 0, int p = 1)
+        public SearchOutputModel Get(string q, int n = 25, int p = 1)
         {
-            return _searchService.Find(q, n, p);
+            SearchInputModel searchInputModel =  new SearchInputModel(pageNumber:p, query:q, numberOfRecords:n);
+            return _searchService.Find(searchInputModel);
         }
     }
 }

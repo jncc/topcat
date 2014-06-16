@@ -9,8 +9,8 @@ namespace Catalogue.Web.Search.Service
 {
     public interface ISearchService
     {
-        SearchOutputModel FindByKeyword(Keyword searchTerm, int n, int page);
-        SearchOutputModel Find(string searchTerm, int n,int page );
+        SearchOutputModel FindByKeyword(SearchInputModel searchInputModel);
+        SearchOutputModel Find(SearchInputModel searchInputModel);
     }
 
     public class SearchService : ISearchService
@@ -22,17 +22,17 @@ namespace Catalogue.Web.Search.Service
             _searchRepository = searchRepository;
         }
 
-        public SearchOutputModel FindByKeyword(Keyword searchTerm, int n =0, int page=1)
+        public SearchOutputModel FindByKeyword(SearchInputModel searchInputModel)
         {
-            return _searchRepository.FindByKeyword(searchTerm, n, page);
-        }
-        
-        public SearchOutputModel Find(string searchTerm,int n = 0, int page =1)
-        {
-            return _searchRepository.Find(searchTerm,n , page);
+            return _searchRepository.FindByKeyword(searchInputModel);
         }
 
-        public SearchOutputModel FindByFullTextAndKeyword(string searchTerm, int n= 0, int page = 1)
+        public SearchOutputModel Find(SearchInputModel searchInputModel)
+        {
+            return _searchRepository.Find(searchInputModel);
+        }
+
+        public SearchOutputModel FindByFullTextAndKeyword(SearchInputModel searchInputModel)
         {
             throw new NotImplementedException();
             /*var keywordOutputModel = FindByKeyword(searchTerm, n,  page);

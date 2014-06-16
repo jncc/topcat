@@ -2,7 +2,7 @@
 
 angular.module('app.controllers').controller 'SearchController',
     ($scope, $rootScope, $location, $http, $timeout) ->
-
+        appTitlePrefix = "Topcat - ";
         # slightly hacky way of triggering animations on startup
         # to work around angular skipping the initial animation
         $scope.app = { starting: true };
@@ -12,7 +12,7 @@ angular.module('app.controllers').controller 'SearchController',
                 
         doSearch = (query) ->
             $location.search('q', query.q) # update the url
-            $rootScope.page = { title: if query.q then ' - ' + query.q else '' } # update the page title
+            $rootScope.page = { title: if query.q then appTitlePrefix + query.q else appTitlePrefix } # update the page title
             if query.q
                 $scope.busy.start()
                 # search the server
@@ -27,17 +27,18 @@ angular.module('app.controllers').controller 'SearchController',
                 
          $scope.doKeywordSearch = (keyword) ->
             $scope.busy.start()
-            # $http.get('../api/keywordSearch?value=' + keyword.value+'&vocab='+keyword.value)
+            # good morning stephen
+            # optimize and do this propery, using watch and setting location, which then effects routing ?
             $http.post('../api/keywordSearch', keyword).success (result) ->
                     $scope.result = result; 
                     $scope.busy.stop();
-                   # $location.url($location.path());
-                   # $location.search('keyword', keyword); # update the url
-                    $rootScope.page = { title:keyword}; # update the page title#.finally -> 
+                    # $location.url($location.path());
+                    # $location.search('keyword', keyword); # update the url
+                    $rootScope.page = { title:appTitlePrefix+keyword}; # update the page title#.finally -> 
                     # don't overwrite with old slow results!
                     #if angular.equals result.query, $scope.query
-                     #   $scope.result = result.finally -> 
-                      #      $scope.busy.stop()
+                    #   $scope.result = result.finally -> 
+                    #      $scope.busy.stop()
             
         # initial values
         $scope.query = { q: $location.search()['q'] || '', p: 1 }

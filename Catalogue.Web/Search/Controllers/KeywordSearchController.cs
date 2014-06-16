@@ -1,5 +1,6 @@
 ﻿using System.Web.Http;
 using Catalogue.Gemini.Model;
+using Catalogue.Web.Search;
 using Catalogue.Web.Search.Service;
 
 namespace Catalogue.Web.Controllers.Search
@@ -13,9 +14,9 @@ namespace Catalogue.Web.Controllers.Search
             _keywordSearchService = keywordSearchService;
         }
 
-        public SearchOutputModel Post(Keyword keyword, int n = 0, int page = 1)
+        public SearchOutputModel Post(SearchInputModel searchInputModel)
         {
-            return _keywordSearchService.FindByKeyword(keyword, n, page);
+            return _keywordSearchService.FindByKeyword(searchInputModel);
         }
     }
 }

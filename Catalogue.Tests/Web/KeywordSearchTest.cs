@@ -14,7 +14,7 @@ namespace Catalogue.Tests.Web
     internal class KeywordSearchTest : DatabaseTestFixture
     {
         private const string TestStr = "test";
-        private Keyword keyword = new Keyword("Seabed Habitat Maps", "http://vocab.jncc.gov.uk/jncc-broad-category");
+        private readonly static Keyword Keyword = new Keyword("Seabed Habitat Maps", "http://vocab.jncc.gov.uk/jncc-broad-category");
         private SearchRepository _searchRepository;
         private SearchService _searchService;
 
@@ -31,6 +31,9 @@ namespace Catalogue.Tests.Web
             Total = 1,
             Speed = 100L
         };
+
+        private readonly SearchInputModel _searchInputModel = new SearchInputModel(keyword:Keyword, numberOfRecords:0, pageNumber:1 );
+
       
         [Test]
         public void ExpectRepositoryCallInService()
@@ -38,10 +41,10 @@ namespace Catalogue.Tests.Web
             
             var mock = new Mock<ISearchRepository>();
 
-            mock.Setup(m => m.FindByKeyword(It.Is<Keyword>(s => s.Equals(keyword)),It.Is<int>(s => s.Equals(0)) , It.Is<int>(s => s.Equals(1) ))).Returns(_searchOutputModel);
+            mock.Setup(m => m.FindByKeyword(It.Is<SearchInputModel>(s => s.Equals(_searchInputModel)))).Returns(_searchOutputModel);
             var keywordSearchService = new SearchService(mock.Object);
-           var searchOutputModel = keywordSearchService.FindByKeyword(keyword);
-           mock.Verify(m => m.FindByKeyword(It.Is<Keyword>(s => s.Equals(keyword)), It.Is<int>(s => s.Equals(0)), It.Is<int>(s => s.Equals(1))), Times.Once);
+            var searchOutputModel = keywordSearchService.FindByKeyword(_searchInputModel);
+            mock.Verify(m => m.FindByKeyword(It.Is<SearchInputModel>(s => s.Equals(_searchInputModel))), Times.Once);
             Assert.AreEqual(searchOutputModel, _searchOutputModel);
         }
 
@@ -49,10 +52,10 @@ namespace Catalogue.Tests.Web
         public void ExpectServiceCallInController()
         {
             var mock = new Mock<ISearchService>();
-            mock.Setup(m => m.FindByKeyword(It.Is<Keyword>(s => s.Equals(keyword)), It.Is<int>(s => s.Equals(0)), It.Is<int>(p => p.Equals(1)))).Returns(_searchOutputModel);
+            mock.Setup(m => m.FindByKeyword(It.Is<SearchInputModel>(s => s.Equals(_searchInputModel)))).Returns(_searchOutputModel);
             var keywordSearchController = new KeywordSearchController(mock.Object);
-            var searchOutputModel = keywordSearchController.Get(keyword);
-            mock.Verify(m => m.FindByKeyword(It.Is<Keyword>(s => s.Equals(keyword)), It.Is<int>(s => s.Equals(0)), It.Is<int>(p => p.Equals(1))), Times.Once);
+            var searchOutputModel = keywordSearchController.Post(_searchInputModel);
+            mock.Verify(m => m.FindByKeyword(It.Is<SearchInputModel>(s => s.Equals(_searchInputModel))), Times.Once);
             Assert.AreEqual(searchOutputModel, _searchOutputModel);
         }
 
@@ -60,7 +63,7 @@ namespace Catalogue.Tests.Web
         public void WhenSearchForKeywordWithSpacesReturnCorrectData()
         {
             // do not perform a full text search, so should be fewer results
-            var results = _searchService.FindByKeyword(keyword);
+            var results = _searchService.FindByKeyword(_searchInputModel);
             Assert.AreEqual(results.Total, 189);
             
         }

@@ -12,8 +12,8 @@ namespace Catalogue.Web.Search
 {
     public interface ISearchRepository
     {
-        SearchOutputModel FindByKeyword(Keyword keyword, int n, int page);
-        SearchOutputModel Find(string searchTerm, int n, int page);
+        SearchOutputModel FindByKeyword(SearchInputModel searchInputModel);
+        SearchOutputModel Find(SearchInputModel searchInputModel);
     }
 
     public class SearchRepository : ISearchRepository
@@ -26,7 +26,7 @@ namespace Catalogue.Web.Search
             _db = db;
         }
 
-        public SearchOutputModel FindByKeyword(Keyword keyword, int n, int page)
+        public SearchOutputModel FindByKeyword(SearchInputModel searchInputModel)
         {
             RavenQueryStatistics stats;
             FieldHighlightings titleLites;
@@ -40,13 +40,13 @@ namespace Catalogue.Web.Search
             
             IQueryable<Record> query = _db.Query<Record>()
                 .Statistics(out stats)
-                .Where(r => r.Gemini.Keywords.Any(k => k.Equals(keyword)));
+                .Where(r => r.Gemini.Keywords.Any(k => k.Equals(searchInputModel.Keyword)));
             
             List<Record> results;
            
-            if (n > 0)
+            if (searchInputModel.NumberOfRecords > 0)
             {
-                results = query.Take(n).ToList();
+                results = query.Take(searchInputModel.NumberOfRecords).ToList();
             }
             else
             {
@@ -79,11 +79,11 @@ namespace Catalogue.Web.Search
                     })
                     .ToList(),
                 Speed = stats.DurationMilliseconds,
-                Query = new QueryOutputModel {Q = keyword.Value, P = page,}
+                Query = new QueryOutputModel {Q = searchInputModel.Keyword.Value, P = searchInputModel.PageNumber,}
             };
         }
 
-        public SearchOutputModel Find(string searchTerm, int n = 0, int page = 1)
+        public SearchOutputModel Find(SearchInputModel searchInputModel)
         {
             RavenQueryStatistics stats;
             FieldHighlightings titleLites;
@@ -98,16 +98,16 @@ namespace Catalogue.Web.Search
                 .Highlight("Abstract", 202, 1, out abstractLites)
                 .Highlight("AbstractN", 202, 1, out abstractNLites)
                 .SetHighlighterTags("<b>", "</b>")
-                .Search("Title", searchTerm).Boost(10)
-                .Search("TitleN", searchTerm)
-                .Search("Abstract", searchTerm)
-                .Search("AbstractN", searchTerm);
+                .Search("Title", searchInputModel.Query).Boost(10)
+                .Search("TitleN", searchInputModel.Query)
+                .Search("Abstract", searchInputModel.Query)
+                .Search("AbstractN", searchInputModel.Query);
 
             List<Record> results;
 
-            if (n > 0)
+            if (searchInputModel.NumberOfRecords > 0)
             {
-                results = query.Take(25).ToList();
+                results = query.Take(searchInputModel.NumberOfRecords).ToList();
             }
             else
             {
@@ -152,7 +152,7 @@ namespace Catalogue.Web.Search
                     })
                     .ToList(),
                 Speed = stats.DurationMilliseconds,
-                Query = new QueryOutputModel {Q = searchTerm, P = page,}
+                Query = new QueryOutputModel { Q = searchInputModel.Query, P = searchInputModel.PageNumber, }
             };
         }
     }

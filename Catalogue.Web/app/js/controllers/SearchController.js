@@ -1,7 +1,8 @@
 (function() {
 
   angular.module('app.controllers').controller('SearchController', function($scope, $rootScope, $location, $http, $timeout) {
-    var doSearch;
+    var appTitlePrefix, doSearch;
+    appTitlePrefix = "Topcat - ";
     $scope.app = {
       starting: true
     };
@@ -11,7 +12,7 @@
     doSearch = function(query) {
       $location.search('q', query.q);
       $rootScope.page = {
-        title: query.q ? ' - ' + query.q : ''
+        title: query.q ? appTitlePrefix + query.q : appTitlePrefix
       };
       if (query.q) {
         $scope.busy.start();
@@ -32,7 +33,7 @@
         $scope.result = result;
         $scope.busy.stop();
         return $rootScope.page = {
-          title: keyword
+          title: appTitlePrefix + keyword
         };
       });
     };
