@@ -13,7 +13,7 @@ namespace Catalogue.Gemini.Model
         public string TopicCategory { get; set; }
         public List<Keyword> Keywords { get; set; }
         public TemporalExtent TemporalExtent { get; set; }
-        public string DatasetReferenceDate { get; set; }
+        public DateTime DatasetReferenceDate { get; set; }
         public string Lineage { get; set; }
 //      public decimal SpatialResolution { get; set; } // todo we'll probably need this https://wiki.ceh.ac.uk/display/cehigh/Spatial+resolution
         public string ResourceLocator { get; set; }
@@ -85,8 +85,8 @@ namespace Catalogue.Gemini.Model
 
     public class TemporalExtent
     {
-        public string Begin { get; set; }
-        public string End { get; set; }
+        public DateTime Begin { get; set; }
+        public DateTime End { get; set; }
     }
 
     public class ResponsibleParty
