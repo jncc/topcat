@@ -65,10 +65,10 @@
         </div>
         <div ng-bind-html="r.snippet"></div>
         <div class="search-tags">
-            <span ng-repeat="k in r.keywords" tc-tag>
-                <span ng-style="{ 'background-color': hashStringToColor(k.vocab) }">&nbsp;</span>
+            <span class="tag" ng-repeat="k in r.keywords"  style="cursor: pointer; cursor: hand;" ng-click="doKeywordSearch(k,1)">
+                <span tc-tag style="width:15px;" ng-style="{ 'background-color': hashStringToColor(k.vocab) }"><span class="glyphicon glyphicon-info-sign"></span></span>
                 {{ k.value }}
-                <span ng-click="doKeywordSearch(k,1)" class="glyphicon glyphicon-search"></span>
+                <span class="glyphicon glyphicon-search"></span>
             </span>
             
         </div>

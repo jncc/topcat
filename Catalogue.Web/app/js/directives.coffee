@@ -68,7 +68,6 @@ module.directive 'tcQtipTitle', () ->
 # widget for tags (keywords)
 module.directive 'tcTag', () ->
     link: (scope, elem, attrs) ->
-        $(elem).addClass('tag')
         # call qtip with options constructed from the defaults
         $(elem).qtip $.extend {}, qtipDefaults,
             content: text: scope.k.vocab
