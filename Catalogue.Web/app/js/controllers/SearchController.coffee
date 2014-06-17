@@ -5,6 +5,8 @@ angular.module('app.controllers').controller 'SearchController',
         appTitlePrefix = "Topcat - ";
          # initial values
         $scope.query = { q: $location.search()['q'] || '', p: 0 , n:25}
+        $scope.keyword = {};
+        $scope.keyword.flag = false;
         # slightly hacky way of triggering animations on startup
         # to work around angular skipping the initial animation
         $scope.app = { starting: true };
@@ -20,12 +22,14 @@ angular.module('app.controllers').controller 'SearchController',
         
         # search term changed, reset to page 1
         doDefaultSearch = (q) ->
+            $scope.keywordFlag = false;
             $scope.query.p = 0;
             $scope.query.q = q;
             doSearch();            
                        
         doSearch = () ->
-            if $scope.query.q
+            alert(JSON.stringify($scope.keyword));
+            if not $scope.keyword.flag
                 # update the url
                 $location.search('q', $scope.query.q) 
                 $location.search('p', $scope.query.p) 
@@ -39,14 +43,19 @@ angular.module('app.controllers').controller 'SearchController',
                         if angular.equals result.query, $scope.query
                             $scope.result = result
                     .finally -> $scope.busy.stop()
-            else
-                $scope.result = {}
+            else 
+                alert("correct place");
+                doKeywordSearch($scope.keyword.value, $scope.query.p);
+            
                 
          $scope.doKeywordSearch = (keyword, pageNumber) ->
+            $scope.keyword.flag = true;
+            $scope.keyword.value = keyword.value;
             searchInputModel = {};
+            delete keyword.$$hashKey;
             searchInputModel.keyword = keyword;
-            searchInputModel.pageNumber = query.p;
-            searchInputModel.numberOfRecords = query.n;
+            searchInputModel.pageNumber = pageNumber;
+            searchInputModel.numberOfRecords = $scope.query.n;            
             $scope.busy.start()
             # good morning stephen
             # optimize and do this propery, using watch and setting location, which then effects routing ?
@@ -55,7 +64,7 @@ angular.module('app.controllers').controller 'SearchController',
                     $scope.busy.stop();
                     # $location.url($location.path());
                     # $location.search('keyword', keyword); # update the url
-                    $rootScope.page = { title:appTitlePrefix+keyword}; # update the page title#.finally -> 
+                    $rootScope.page = { title:appTitlePrefix+keyword.value}; # update the page title#.finally -> 
                     # don't overwrite with old slow results!
                     #if angular.equals result.query, $scope.query
                     #   $scope.result = result.finally -> 

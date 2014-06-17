@@ -38,8 +38,8 @@
 
 
 <div ng-show="query.q">
-    {{(query.p) * 25 || 0}} to {{result.results.length + ((query.p) * 25) || 0}}, of {{result.total || 0}} results
-    <span ng-show="result.speed">({{(result.speed / 1000) | number:2}} seconds).</span>
+    {{query.p * 25 || 0}} to {{result.results.length + (query.p * 25) || 0}}, of {{result.total || 0}} results
+    <span ng-show="result.speed">{{(result.speed / 1000) | number:2}} seconds.</span>
     <hr />
 </div>
 <div class="text-center" ng-show="result.total > result.results.length">

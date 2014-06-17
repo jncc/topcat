@@ -12,7 +12,12 @@ namespace Catalogue.Tests.Web.Search
 {
     internal class SearchTest : DatabaseTestFixture
     {
-        private readonly SearchInputModel _searchInputModel = new SearchInputModel(query: "se", numberOfRecords: 25, pageNumber: 0);
+        private readonly SearchInputModel _searchInputModel = new SearchInputModel()
+        {
+            Query = "se", 
+            NumberOfRecords= 25,
+            PageNumber= 0
+        };
         private SearchRepository _searchRepository;
         private SearchService _searchService;
         private const int PageSize = 25;

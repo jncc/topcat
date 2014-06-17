@@ -8,6 +8,8 @@
       p: 0,
       n: 25
     };
+    $scope.keyword = {};
+    $scope.keyword.flag = false;
     $scope.app = {
       starting: true
     };
@@ -28,12 +30,14 @@
       return Math.ceil(total / pageLength) - 1;
     };
     doDefaultSearch = function(q) {
+      $scope.keywordFlag = false;
       $scope.query.p = 0;
       $scope.query.q = q;
       return doSearch();
     };
     doSearch = function() {
-      if ($scope.query.q) {
+      alert(JSON.stringify($scope.keyword));
+      if (!$scope.keyword.flag) {
         $location.search('q', $scope.query.q);
         $location.search('p', $scope.query.p);
         $location.search('n', $scope.query.n);
@@ -49,21 +53,25 @@
           return $scope.busy.stop();
         });
       } else {
-        return $scope.result = {};
+        alert("correct place");
+        return doKeywordSearch($scope.keyword.value, $scope.query.p);
       }
     };
     $scope.doKeywordSearch = function(keyword, pageNumber) {
       var searchInputModel;
+      $scope.keyword.flag = true;
+      $scope.keyword.value = keyword.value;
       searchInputModel = {};
+      delete keyword.$$hashKey;
       searchInputModel.keyword = keyword;
-      searchInputModel.pageNumber = query.p;
-      searchInputModel.numberOfRecords = query.n;
+      searchInputModel.pageNumber = pageNumber;
+      searchInputModel.numberOfRecords = $scope.query.n;
       $scope.busy.start();
       return $http.post('../api/keywordSearch', searchInputModel).success(function(result) {
         $scope.result = result;
         $scope.busy.stop();
         return $rootScope.page = {
-          title: appTitlePrefix + keyword
+          title: appTitlePrefix + keyword.value
         };
       });
     };
