@@ -107,7 +107,8 @@
     <Compile Include="Slow\Spatial\when_querying_spatial_test_data.cs" />
     <Compile Include="Slow\when_testing_this_application.cs" />
     <Compile Include="DatabaseTestFixture.cs" />
-    <Compile Include="Web\KeywordSearchTest.cs" />
+    <Compile Include="Web\Search\KeywordSearchTest.cs" />
+    <Compile Include="Web\Search\SearchTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />

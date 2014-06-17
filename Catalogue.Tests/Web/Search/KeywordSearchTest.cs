@@ -9,7 +9,7 @@ using Catalogue.Web.Search.Service;
 using Moq;
 using NUnit.Framework;
 
-namespace Catalogue.Tests.Web
+namespace Catalogue.Tests.Web.Search
 {
     internal class KeywordSearchTest : DatabaseTestFixture
     {
@@ -18,7 +18,7 @@ namespace Catalogue.Tests.Web
         private SearchRepository _searchRepository;
         private SearchService _searchService;
 
-        // this isn't working
+       
         [TestFixtureSetUp]
         public void setUp()
         {
