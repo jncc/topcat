@@ -28,7 +28,6 @@ angular.module('app.controllers').controller 'SearchController',
             doSearch();            
                        
         doSearch = () ->
-            alert(JSON.stringify($scope.keyword));
             if not $scope.keyword.flag
                 # update the url
                 $location.search('q', $scope.query.q) 
@@ -44,13 +43,11 @@ angular.module('app.controllers').controller 'SearchController',
                             $scope.result = result
                     .finally -> $scope.busy.stop()
             else 
-                alert("correct place");
-                doKeywordSearch($scope.keyword.value, $scope.query.p);
+                $scope.doKeywordSearch($scope.keyword, $scope.query.p);
             
-                
-         $scope.doKeywordSearch = (keyword, pageNumber) ->
+        $scope.doKeywordSearch = (keyword, pageNumber) ->
+            $scope.keyword = keyword;
             $scope.keyword.flag = true;
-            $scope.keyword.value = keyword.value;
             searchInputModel = {};
             delete keyword.$$hashKey;
             searchInputModel.keyword = keyword;
@@ -59,19 +56,12 @@ angular.module('app.controllers').controller 'SearchController',
             $scope.busy.start()
             # good morning stephen
             # optimize and do this propery, using watch and setting location, which then effects routing ?
-            $http.post('../api/keywordSearch', searchInputModel).success (result) ->
+            $http.post('../api/keywordSearch', searchInputModel)
+                .success (result) ->
                     $scope.result = result; 
-                    $scope.busy.stop();
-                    # $location.url($location.path());
-                    # $location.search('keyword', keyword); # update the url
                     $rootScope.page = { title:appTitlePrefix+keyword.value}; # update the page title#.finally -> 
-                    # don't overwrite with old slow results!
-                    #if angular.equals result.query, $scope.query
-                    #   $scope.result = result.finally -> 
-                    #      $scope.busy.stop()
-            
+                .finally -> $scope.busy.stop()
        
-
         # when the model query value is updated, do the search
         $scope.$watch 'query.q', doDefaultSearch, true
         $scope.$watch 'query.p', doSearch, true

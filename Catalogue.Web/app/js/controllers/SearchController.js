@@ -36,7 +36,6 @@
       return doSearch();
     };
     doSearch = function() {
-      alert(JSON.stringify($scope.keyword));
       if (!$scope.keyword.flag) {
         $location.search('q', $scope.query.q);
         $location.search('p', $scope.query.p);
@@ -53,14 +52,13 @@
           return $scope.busy.stop();
         });
       } else {
-        alert("correct place");
-        return doKeywordSearch($scope.keyword.value, $scope.query.p);
+        return $scope.doKeywordSearch($scope.keyword, $scope.query.p);
       }
     };
     $scope.doKeywordSearch = function(keyword, pageNumber) {
       var searchInputModel;
+      $scope.keyword = keyword;
       $scope.keyword.flag = true;
-      $scope.keyword.value = keyword.value;
       searchInputModel = {};
       delete keyword.$$hashKey;
       searchInputModel.keyword = keyword;
@@ -69,10 +67,11 @@
       $scope.busy.start();
       return $http.post('../api/keywordSearch', searchInputModel).success(function(result) {
         $scope.result = result;
-        $scope.busy.stop();
         return $rootScope.page = {
           title: appTitlePrefix + keyword.value
         };
+      })["finally"](function() {
+        return $scope.busy.stop();
       });
     };
     $scope.$watch('query.q', doDefaultSearch, true);
