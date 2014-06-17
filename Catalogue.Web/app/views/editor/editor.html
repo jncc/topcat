@@ -364,44 +364,46 @@
                                 </select>    
                             </div>
                         </div>
-                        <div class="layout-row">
-                            <div class="col-md-6">
-                                <label for="metadataDate" class="col-md-2 control-label" style="text-align:left;">Metadata Date</label>
-                                <div id="metadataDate" class="col-md-10 input-group">
-                                    <input type="text" class="form-control"
-                                           name="gemini.metadataDate" 
-                                           ng-model="form.gemini.metadataDate"
-                                           placeholder="yyyy-mm-dd"
-                                           datepicker-popup="yyyy-MM-dd"
-                                           tc-focus-tip 
-                                           is-open="metadataDate"
-                                           close-text="Close"
-                                           ng-click="open($event,'metadataDate')"
-                                           title="The dates covered by the data resource" />
-                                    <span class="input-group-addon" ng-click="open($event,'metadataDate')">
-                                        <span class="dark glyphicon glyphicon-calendar"></span>
-                                    </span>
-                                </div>
-                            </div>
-                            <div class="col-md-6">
-                                <label for="language" class="col-md-2 control-label" style="text-align:left;">Metadata Language</label>
-                                <div id="language" class="col-md-10">
-                                    <div class="form-group text-left selectContainer">
-                                        <select
-                                            ng-model="form.gemini.metadataLanguage"
-                                            ng-options="language.code as language.text for language in lookups.languages"
-                                            class="form-control"
-                                            title="Language used for documenting the metadata">
-                                            <option value="" disabled selected style="display: none">Metadata Language</option>
-                                        </select>
-                                    </div>
-                                </div>
+                    </div>
+                </div>
+                
+                <hr />
+                
+                <div class="layout-row form-horizontal">
+                    <div class="col-md-6">
+                        <label for="metadataDate" class="col-md-6 control-label" style="text-align:left;">Metadata Date</label>
+                        <div id="metadataDate" class="col-md-6 input-group">
+                            <input type="text" class="form-control"
+                                   name="gemini.metadataDate" 
+                                   ng-model="form.gemini.metadataDate"
+                                   placeholder="yyyy-mm-dd"
+                                   datepicker-popup="yyyy-MM-dd"
+                                   tc-focus-tip 
+                                   is-open="metadataDate"
+                                   close-text="Close"
+                                   ng-click="open($event,'metadataDate')"
+                                   title="The dates covered by the data resource" />
+                            <span class="input-group-addon" ng-click="open($event,'metadataDate')">
+                                <span class="dark glyphicon glyphicon-calendar"></span>
+                            </span>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <label for="language" class="col-md-6 control-label" style="text-align:left;">Metadata Language</label>
+                        <div id="language" class="col-md-6">
+                            <div class="form-group text-left selectContainer">
+                                <select
+                                    ng-model="form.gemini.metadataLanguage"
+                                    ng-options="language.code as language.text for language in lookups.languages"
+                                    class="form-control"
+                                    title="Language used for documenting the metadata">
+                                    <option value="" disabled selected style="display: none">Metadata Language</option>
+                                </select>
                             </div>
                         </div>
                     </div>
-
                 </div>
-                
+
                 <hr />               
                 <div class="row">
                     <div class="form-horizontal">
@@ -416,19 +418,25 @@
 
                 <div>
                     <label for="spatialDataDiv">Spatial Data</label>
-                    <div id="spatialDataDiv">
+                    <div id="spatialDataDiv" class="form-horizontal">
+                        <label for="extent" class="col-md-2" style="text-align:left; padding-left:0;">Spatial Extents</label>
                         <div id="extent">
                             <div class="editor-keywords form-group">
-                                <span ng-repeat="extent in form.gemini.extent">
-                                    <span ng-style="{ 'background-color': hashStringToColor(extent.authority) }">&nbsp;</span>
-                                    {{ extent.authority }} - {{ extent.code }}
-                                </span>
-                    
-                                <button class="btn btn-sm btn-dialogue" tc-tip title="Edit Extents"
-                                        ng-click="extentEditorOpen = !extentEditorOpen">&bull;&bull;&bull;</button>                    
+                                <div style="float:left;" ng-if="form.gemini.extent == null || form.gemini.extent.length == 0">
+                                    <span>No Extents Provided</span>
+                                </div>
+                                <div style="float:left;" ng-if="form.gemini.extent.length > 0">
+                                    <span ng-repeat="extent in form.gemini.extent" title="{{extent.authority}}" tc-focus-tip  tc-tag="" tc-tag-delete="" class="ng-scope ng-binding tag">
+                                        <span ng-style="{ 'background-color': hashStringToColor(extent.authority) }">&nbsp;</span>
+                                        {{ extent.authority }} - {{ extent.code }}
+                                    </span>                 
+                                </div>
+                                <div style="padding-left:20px; float: left;">
+                                    <button class="btn btn-sm btn-dialogue" tc-tip title="Edit Extents"
+                                            ng-click="extentEditorOpen = !extentEditorOpen">&bull;&bull;&bull;</button>   
+                                </div>
                             </div>
-                
-                            <div ng-show="extentEditorOpen" class="editor-keywords-editor form-inline">
+                            <div ng-show="extentEditorOpen" class="editor-keywords-editor form-inline" style="clear:both; padding-top: 10px;">
                                 <div ng-repeat="extent in form.gemini.extent">
                                     <input type="text" ng-model="extent.authority" placeholder="Authority (optional)" class="form-control" style="width:40%" />
                                     <input type="text" ng-model="extent.code" placeholder="Extent Identification Code" class="form-control" style="width:40%" />

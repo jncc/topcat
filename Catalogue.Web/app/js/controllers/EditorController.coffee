@@ -77,6 +77,13 @@ angular.module('app.controllers').controller 'EditorController',
             $scope.form.gemini.keywords.splice ($.inArray keyword, $scope.form.gemini.keywords), 1
         $scope.addKeyword = ->
             $scope.form.gemini.keywords.push({ vocab: '', value: '' })
+            
+        $scope.removeExtent = (extent) ->
+            $scope.form.gemini.extent.splice ($.inArray extent, $scope.form.gemini.extent), 1
+        $scope.addExtent = ->
+            if ($scope.form.gemini.extent == null)
+                $scope.form.gemini.extent = []
+            $scope.form.gemini.extent.push({ authority: '', code: '' })            
                 
         # initially set up form
         $scope.reset()
