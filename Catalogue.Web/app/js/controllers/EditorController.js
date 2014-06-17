@@ -108,6 +108,18 @@
         value: ''
       });
     };
+    $scope.removeExtent = function(extent) {
+      return $scope.form.gemini.extent.splice($.inArray(extent, $scope.form.gemini.extent), 1);
+    };
+    $scope.addExtent = function() {
+      if ($scope.form.gemini.extent === null) {
+        $scope.form.gemini.extent = [];
+      }
+      return $scope.form.gemini.extent.push({
+        authority: '',
+        code: ''
+      });
+    };
     $scope.reset();
   });
 
