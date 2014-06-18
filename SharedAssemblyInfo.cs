@@ -19,7 +19,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyCopyright("Catalogue")]
 [assembly: AssemblyVersion("0.0.0.0")]
 [assembly: AssemblyFileVersion("0.0.0.0")]
-[assembly: AssemblyInformationalVersion("1.0.0ef7fa5")]
+[assembly: AssemblyInformationalVersion("1.0.4ed991b")]
 [assembly: AssemblyConfiguration("Test")]
 
 
