@@ -9,7 +9,7 @@ using Catalogue.Web.Search.Service;
 using Moq;
 using NUnit.Framework;
 
-namespace Catalogue.Tests.Web
+namespace Catalogue.Tests.Web.Search
 {
     internal class KeywordSearchTest : DatabaseTestFixture
     {
@@ -18,7 +18,7 @@ namespace Catalogue.Tests.Web
         private SearchRepository _searchRepository;
         private SearchService _searchService;
 
-        // this isn't working
+       
         [TestFixtureSetUp]
         public void setUp()
         {
@@ -32,7 +32,12 @@ namespace Catalogue.Tests.Web
             Speed = 100L
         };
 
-        private readonly SearchInputModel _searchInputModel = new SearchInputModel(keyword:Keyword, numberOfRecords:0, pageNumber:1 );
+        private readonly SearchInputModel _searchInputModel = new SearchInputModel()
+        {
+            Keyword = Keyword,
+            NumberOfRecords = 0,
+            PageNumber = 1
+        };
 
       
         [Test]

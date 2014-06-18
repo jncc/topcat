@@ -72,12 +72,12 @@ namespace Catalogue.Data.Import.Mappings
                                 .ToList(); // should be either a single value, or a the value followed by two (possibly empty) from/to values
 
                             if (parsed.Count == 3)
-                                return new TemporalExtent { Begin = parsed.ElementAt(1), End = parsed.ElementAt(2) };
+                                return new TemporalExtent { Begin = Convert.ToDateTime(parsed.ElementAt(1)), End = Convert.ToDateTime(parsed.ElementAt(2)) };
                         }
 
                         // let's put the single date in both - gemini actually allows for a single date,
                         // but we haven't allowed that in our profile (does it really make much sense?)
-                        return new TemporalExtent { Begin = raw, End = raw };
+                        return new TemporalExtent { Begin = Convert.ToDateTime(raw), End = Convert.ToDateTime(raw) };
                     });
 
                 Map(m => m.DatasetReferenceDate).Name("Dataset reference date");
@@ -308,7 +308,7 @@ namespace Catalogue.Data.Import.Mappings
         public void should_import_temporal_extent()
         {
             imported.Should().Contain(r =>
-                r.Gemini.TemporalExtent.Begin == "2006" && r.Gemini.TemporalExtent.End == "2010");
+                r.Gemini.TemporalExtent.Begin. == "2006" && r.Gemini.TemporalExtent.End == "2010");
         }
 
         [Test]

@@ -38,14 +38,24 @@
 
 
 <div ng-show="query.q">
-    {{result.results.length + ((query.p-1) * 25) || 0}} of {{result.total || 0}} results
-    <span ng-show="result.speed">({{(result.speed / 1000) | number:2}} seconds)</span>
+    {{query.p * 25 || 0}} to {{result.results.length + (query.p * 25) || 0}}, of {{result.total || 0}} results
+    <span ng-show="result.speed">{{(result.speed / 1000) | number:2}} seconds.</span>
     <hr />
 </div>
-
+<div class="text-center" ng-show="result.total > result.results.length">
+    
+    <ul class="pagination">
+     <!--   <li class="disabled"><a href="">&laquo;</a></li>-->
+        <li style="cursor: pointer; cursor: hand;" ng-repeat="n in range(0,maxPages(result.total, 25))" ng-class="(n===query.p+1) ? 'active' : ''">
+            <span ng-click="query.p = n-1"><span ng-bind="n">n</span></span>
+        </li>
+        <!--<li><span href="#">&raquo;</span></li>-->
+    </ul>
+</div>
 <div ng-repeat="r in result.results" class="layout-row search-result">
     <div class="layout-col search-format">
         <span class="dark glyphicon {{r.format.glyph}}" title="{{r.format.group}} "></span>
+        <!--<span class="label label-default">{{($index + (25*(query.p)))+1}}</span>-->
     </div>
     <div class="layout-col">
         <div class="search-title">
@@ -55,10 +65,10 @@
         </div>
         <div ng-bind-html="r.snippet"></div>
         <div class="search-tags">
-            <span ng-repeat="k in r.keywords" tc-tag>
-                <span ng-style="{ 'background-color': hashStringToColor(k.vocab) }">&nbsp;</span>
+            <span class="tag" ng-repeat="k in r.keywords"  style="cursor: pointer; cursor: hand;" ng-click="doKeywordSearch(k,1)">
+                <span tc-tag style="width:15px;" ng-style="{ 'background-color': hashStringToColor(k.vocab) }"><span class="glyphicon glyphicon-info-sign"></span></span>
                 {{ k.value }}
-                <span ng-click="doKeywordSearch(k,1)" class="glyphicon glyphicon-search"></span>
+                <span class="glyphicon glyphicon-search"></span>
             </span>
             
         </div>
@@ -67,22 +77,13 @@
 </div>
 
 <div class="text-center" ng-show="result.total > result.results.length">
-     <ul class="pagination">
-        <li class="disabled"><a href="">&laquo;</a></li>
-         <!--<li class="active"><a href="">1 <span class="sr-only">(current)</span></a></li>-->
-         <!--<li><a href="#/?q=se&p=1"ng-click="query.p = 1">1</a></li>
-        <li><a href="#/?q=se&p=2" ng-click="query.p = 2">2</a></li>
-        <li><a href="#/?q=se&p=3" ng-click="query.p = 3">3</a></li>
-        <li><a href="#/?q=se&p=4" ng-click="query.p = 4">4</a></li>
-         <li><a href="#/?q=se&p=5" ng-click="query.p = 5">5</a></li>-->
-         
-        <li><span ng-click="query.p = 1">1</span></li>
-        <li><span ng-click="query.p = 2">2</span></li>
-        <li><span  ng-click="query.p = 3">3</span></li>
-        <li><span  ng-click="query.p = 4">4</span></li>
-        <li><span  ng-click="query.p = 5">5</span></li>
-         <li><span href="#">&raquo;</span></li>
-         {{query}}
+    
+    <ul class="pagination">
+        <!--<li class="disabled"><a href="">&laquo;</a></li>-->
+        <li style="cursor: pointer; cursor: hand;" ng-repeat="n in range(0,maxPages(result.total, 25))" ng-class="(n===query.p+1) ? 'active' : ''">
+            <span ng-click="query.p = n-1"><span ng-bind="n">n</span></span>
+        </li>
+        <!--<li><span href="#">&raquo;</span></li>-->
     </ul>
 </div>
 

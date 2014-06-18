@@ -57,7 +57,7 @@ namespace Catalogue.Data.Import.Mappings
                         string beg = row.GetField("TemporalExtentBegin");
                         string end = row.GetField("TemporalExtentEnd");
 
-                        return new TemporalExtent { Begin = beg, End = end };
+                        return new TemporalExtent { Begin = Convert.ToDateTime(beg), End = Convert.ToDateTime(end) };
                     });
                 Map(m => m.DatasetReferenceDate);
                 Map(m => m.Lineage);

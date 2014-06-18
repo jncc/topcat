@@ -110,7 +110,6 @@
   module.directive('tcTag', function() {
     return {
       link: function(scope, elem, attrs) {
-        $(elem).addClass('tag');
         return $(elem).qtip($.extend({}, qtipDefaults, {
           content: {
             text: scope.k.vocab

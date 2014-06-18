@@ -42,19 +42,13 @@ namespace Catalogue.Web.Search
                 .Statistics(out stats)
                 .Where(r => r.Gemini.Keywords.Any(k => k.Equals(searchInputModel.Keyword)));
             
-            List<Record> results;
            
-            if (searchInputModel.NumberOfRecords > 0)
-            {
-                int skipNumber = searchInputModel.PageNumber > 1 ? searchInputModel.PageNumber * searchInputModel.NumberOfRecords : 0;
-                results = query
+           
+            int skipNumber = searchInputModel.PageNumber * searchInputModel.NumberOfRecords;
+            List<Record> results = query
                     .Skip(skipNumber)
                     .Take(searchInputModel.NumberOfRecords).ToList();
-            }
-            else
-            {
-                results = query.ToList();
-            }
+           
 
 
             return new SearchOutputModel
@@ -82,7 +76,7 @@ namespace Catalogue.Web.Search
                     })
                     .ToList(),
                 Speed = stats.DurationMilliseconds,
-                Query = new QueryOutputModel {Q = searchInputModel.Keyword.Value, P = searchInputModel.PageNumber,}
+                Query = new QueryOutputModel {Q = searchInputModel.Keyword.Value, P = searchInputModel.PageNumber, N = searchInputModel.NumberOfRecords}
             };
         }
 
@@ -105,20 +99,14 @@ namespace Catalogue.Web.Search
                 .Search("TitleN", searchInputModel.Query)
                 .Search("Abstract", searchInputModel.Query)
                 .Search("AbstractN", searchInputModel.Query);
-
-            List<Record> results;
-
-            if (searchInputModel.NumberOfRecords > 0)
-            {
-                int skipNumber = searchInputModel.PageNumber > 1 ? searchInputModel.PageNumber * searchInputModel.NumberOfRecords:0;
-                results = query
+            
+            int skipNumber = searchInputModel.PageNumber * searchInputModel.NumberOfRecords;
+            
+            List<Record> results = query
                     .Skip(skipNumber)
                     .Take(searchInputModel.NumberOfRecords).ToList();
-            }
-            else
-            {
-                results = query.ToList();
-            }
+        
+          
 
             var xs = from r in results
                 select new
@@ -158,7 +146,7 @@ namespace Catalogue.Web.Search
                     })
                     .ToList(),
                 Speed = stats.DurationMilliseconds,
-                Query = new QueryOutputModel { Q = searchInputModel.Query, P = searchInputModel.PageNumber, }
+                Query = new QueryOutputModel { Q = searchInputModel.Query, P = searchInputModel.PageNumber, N = searchInputModel.NumberOfRecords}
             };
         }
     }

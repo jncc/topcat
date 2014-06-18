@@ -16,7 +16,8 @@ namespace Catalogue.Web.Controllers.Search
 
         public SearchOutputModel Post(SearchInputModel searchInputModel)
         {
-            return _keywordSearchService.FindByKeyword(searchInputModel);
+            var output = _keywordSearchService.FindByKeyword(searchInputModel);
+            return output;
         }
     }
 }
