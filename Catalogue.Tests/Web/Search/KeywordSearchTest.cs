@@ -12,7 +12,7 @@ using NUnit.Framework;
 namespace Catalogue.Tests.Web.Search
 {
     internal class KeywordSearchTest : DatabaseTestFixture
-    {
+    {/*
         private const string TestStr = "test";
         private readonly static Keyword Keyword = new Keyword("Seabed Habitat Maps", "http://vocab.jncc.gov.uk/jncc-broad-category");
         private SearchRepository _searchRepository;
@@ -71,9 +71,9 @@ namespace Catalogue.Tests.Web.Search
 
         public void WhenSearchForTextReturnKeywordAlso()
         {
-         /*   var results = _searchService.FindByFullTextAndKeyword(keyword);
-            Assert.AreEqual(results.Total, 256);*/
+           var results = _searchService.FindByFullTextAndKeyword(keyword);
+            Assert.AreEqual(results.Total, 256);
             throw new NotImplementedException();
-        }
+        }*/
     }
 }   
