@@ -36,7 +36,8 @@ namespace Catalogue.Data.Write
             {
                 result.Errors.Add("Path must not be blank", r => r.Path);
             }
-
+            
+            // also part of gemini spec
             // title_must_not_be_blank
             if (record.Gemini.Title.IsBlank())
             {
@@ -73,11 +74,31 @@ namespace Catalogue.Data.Write
 
         private RecordValidationResult GeminiValidation(Record record, RecordValidationResult recordValidationResult)
         {
+            // structured to match the gemini doc
+            
+            // 1 title, checked even if not gemini. But repeating here to be explicit and ease refactoring
+            if (record.Gemini.Title.IsBlank())
+            {
+                recordValidationResult.Errors.Add("Title must not be blank", r => r.Gemini.Title);
+            }
+            
+            // 2 alternative title not used as optional
+            
+            // 3 Dataset language, conditional - data resource contains textual information, check it is a UK language
+            // assume all data resources contain text
+            // todo if (record.Gemini.MetadataLanguage.Equals(CultureInfo))
 
+            // mandatory fields from gemini spec, see page 10 of spec doc pdf, part of code repository
             // abstract is mandatory
             if (record.Gemini.Abstract.IsBlank())
             {
                 recordValidationResult.Errors.Add("Abstract must not be blank.", r => r.Gemini.Abstract);
+            }
+            // topic_category_must_not_be_blank
+            if (record.Gemini.TopicCategory.IsBlank())
+            {
+                recordValidationResult.Errors.Add("Topic Category must not be blank.",
+                    r => r.Gemini.TopicCategory);
             }
             // keywords mandatory
             if (record.Gemini.Keywords.Count > 0)
@@ -85,17 +106,19 @@ namespace Catalogue.Data.Write
                 recordValidationResult.Errors.Add("Keywords must be present.", r => r.Gemini.Keywords);
             }
             // temporal extent is mandoatory and must be logical
-            if (record.Gemini.TemporalExtent.Begin < record.Gemini.TemporalExtent.End)
+            if (record.Gemini.TemporalExtent.Begin > record.Gemini.TemporalExtent.End)
             {
                 recordValidationResult.Errors.Add("Temporal extent is malformed (must begin before it ends).", r => r.Gemini.TemporalExtent);
             }
+            
             // DatasetReferenceDate mandoatory, but how to test ?
-            if (record.Gemini.DatasetReferenceDate.IsBlank())
+            if (record.Gemini.DatasetReferenceDate == null)
             {
                 recordValidationResult.Errors.Add("Dataset Reference Date must be present.", r => r.Gemini.DatasetReferenceDate);
-            }*/
+            }
+
             // temporal extent is mandoatory and must be logical
-            if (record.Gemini.TemporalExtent.Begin < record.Gemini.TemporalExtent.End)
+            if (record.Gemini.TemporalExtent.Begin > record.Gemini.TemporalExtent.End)
             {
                 recordValidationResult.Errors.Add("Temporal extent is malformed (must begin before it ends).", r => r.Gemini.TemporalExtent);
             }
@@ -103,6 +126,10 @@ namespace Catalogue.Data.Write
             {
                 recordValidationResult.Errors.Add("Lineage.", r => r.Gemini.TemporalExtent);
             }
+
+            // conditional fields from gemini spec
+
+            // our application specific checks and warnings
             // blank_use_constraints_could_be_a_mistake
             if (record.Gemini.UseConstraints.IsBlank())
             {
@@ -110,12 +137,7 @@ namespace Catalogue.Data.Write
                     r => r.Gemini.UseConstraints);
             }
 
-            // topic_category_must_not_be_blank
-            if (record.Gemini.TopicCategory.IsBlank())
-            {
-                recordValidationResult.Errors.Add("Topic Category must not be blank.",
-                    r => r.Gemini.TopicCategory);
-            }
+           
 
             
 
