@@ -409,7 +409,16 @@
                     <div class="form-horizontal">
                         <label for="resourceTypeDiv" class="col-md-2 control-label" style="text-align:left">Resource Type</label>
                         <div id="resourceTypeDiv" class="col-md-10">
-                            <input class="form-control" type="text" ng-model="form.gemini.resourceType" placeholder="Type of Resource" title="The type of resource described by this metadata" tc-focus-tip />
+                                <select
+                                    data-ng-model="form.gemini.resourceType"
+                                    class="form-control"
+                                    title="The type of resource described by this metadata"
+                                    tc-focus-tip>
+                                    <option value="dataset" selected>Dataset</option>
+                                    <option value="series" disabled selected>Dataset Series (Not Available)</option>
+                                    <option value="service" disabled selected>Service (Not Available)</option>
+                                </select>                            
+                            <!--<input class="form-control" type="text" ng-model="form.gemini.resourceType" placeholder="Type of Resource" title="The type of resource described by this metadata" tc-focus-tip />-->
                         </div>
                     </div>
                 </div>
@@ -452,7 +461,7 @@
                         </div>
                         
                         <div class="layout-row form-horizontal">
-                            <label for="spatialReferenceDiv" class="col-md-3 control-label" style="padding-left:0; text-align:left;">Spatial Refrence System</label>
+                            <label for="spatialReferenceDiv" class="col-md-3 control-label" style="padding-left:0; text-align:left;">Spatial Reference System</label>
                             <div id="spatialReferenceDiv" class="col-md-9" style="padding-left:0; padding-right:0;">
                                 <input class="form-control" type="text" ng-model="form.gemini.spatialReferenceSystem" title="Identifier of the system of spatial referencing, whether by coordiantes or geographic identifiers used in the data resource" tc-focus-tip />
                             </div>
@@ -492,6 +501,8 @@
                         </div>
                     </div>
                 </div>
+                
+                <br /><br />
 
                 <div class="form-group">
                     <button ng-click="cancel()" ng-hide="isCancelHidden()" class="btn btn-primary">CANCEL</button>
@@ -510,7 +521,6 @@
                         </div>
                         <div class="layout-col pull-right">
                             <div class="btn-group">
-                                <!-- omg angular ! -->
                                 <button ng-click="form.topCopy = true" ng-class="{ 'btn-primary': form.topCopy, 'btn-default': !form.topCopy }" class="btn">
                                     <span class="glyphicon glyphicon-leaf"></span>Yes
                                 </button>
@@ -623,7 +633,7 @@
 
             </div>
             
-            {{form}}
+            <!--{{form}}-->
         </div>
     </form>
 </div>
