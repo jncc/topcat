@@ -49,7 +49,8 @@ namespace Catalogue.Gemini.Model
     {
         eng = 1,
         deu =2,
-        fra =3
+        fra =3,
+        fin = 4
     }
 
     public class Keyword

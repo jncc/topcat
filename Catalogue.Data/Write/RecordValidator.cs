@@ -101,7 +101,7 @@ namespace Catalogue.Data.Write
                     r => r.Gemini.TopicCategory);
             }
             // keywords mandatory
-            if (record.Gemini.Keywords.Count > 0)
+            if (record.Gemini.Keywords.Count == 0)
             {
                 recordValidationResult.Errors.Add("Keywords must be present.", r => r.Gemini.Keywords);
             }

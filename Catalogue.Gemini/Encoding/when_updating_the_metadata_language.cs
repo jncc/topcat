@@ -18,8 +18,7 @@ namespace Catalogue.Gemini.Encoding
         {
             Metadata metadata = Library.Example();
             original = new XmlEncoder().Create(Guid.NewGuid(), metadata);
-
-           // todo metadata.MetadataLanguage = CultureInfo.GetCultures();
+            metadata.MetadataLanguage = SupportedLanguage.fin;
             updated = new XmlEncoder().Update(original, metadata);
         }
 

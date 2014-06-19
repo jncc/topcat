@@ -91,7 +91,7 @@ namespace Catalogue.Gemini.Templates
                 SpatialReferenceSystem = "http://www.opengis.net/def/crs/EPSG/0/4326",
                 Extent = new StringPairList { { "", "Bermuda" } }.ToExtentList(),
                 MetadataDate = Convert.ToDateTime("2013-07-16"),
-               // todo MetadataLanguage = "eng",
+                MetadataLanguage = SupportedLanguage.eng,
                 MetadataPointOfContact = new ResponsibleParty
                 {
                     Name = "Joint Nature Conservation Committee (JNCC)",
