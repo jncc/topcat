@@ -16,7 +16,7 @@ using NUnit.Framework;
 
 namespace Catalogue.Data.Import.Mappings
 {
-    public class ActivitiesMapping : IMapping
+    public class ActivitiesMapping : BaseMapper, IMapping
     {
         public void Apply(CsvConfiguration config)
         {
@@ -62,8 +62,6 @@ namespace Catalogue.Data.Import.Mappings
                     {
                         var raw = row.GetField("Temporal Extent");
 
-                        // todo this parsing code needs moving somewhere and testing
-
                         if (raw.Contains("/"))
                         {
                             var parsed = Regex.Match(raw, @"(.*)/(.*)") // 'from-date/to-date' or just 'single-date'
@@ -72,15 +70,18 @@ namespace Catalogue.Data.Import.Mappings
                                 .ToList(); // should be either a single value, or a the value followed by two (possibly empty) from/to values
 
                             if (parsed.Count == 3)
-                                return new TemporalExtent { Begin = Convert.ToDateTime(parsed.ElementAt(1)), End = Convert.ToDateTime(parsed.ElementAt(2)) };
+                                return new TemporalExtent { Begin = ConvertStrToDate(parsed.ElementAt(1)), End = ConvertStrToDate(parsed.ElementAt(2)) };
                         }
 
                         // let's put the single date in both - gemini actually allows for a single date,
                         // but we haven't allowed that in our profile (does it really make much sense?)
-                        return new TemporalExtent { Begin = Convert.ToDateTime(raw), End = Convert.ToDateTime(raw) };
+                        return new TemporalExtent { Begin = ConvertStrToDate(raw), End = ConvertStrToDate(raw) };
                     });
 
-                Map(m => m.DatasetReferenceDate).Name("Dataset reference date");
+                Map(m => m.DatasetReferenceDate).ConvertUsing(row =>
+                {
+                    return ConvertStrToDate(row.GetField("Dataset reference date"));
+                }); ;
                 Map(m => m.Lineage);
 //              Map(m => m.ResourceLocator); // not present
 //              Map(m => m.AdditionalInformationSource); // not present
@@ -96,8 +97,11 @@ namespace Catalogue.Data.Import.Mappings
                 Map(m => m.LimitationsOnPublicAccess).Name("Limitations on public access");
                 Map(m => m.UseConstraints).Name("Use constraints");
                 Map(m => m.SpatialReferenceSystem).Name("Spatial reference system");
-                Map(m => m.MetadataDate).Name("Metadata date");
-                Map(m => m.ResourceType).Name("Resource type "); // should always be dataset i think - "Multiple Datasets" isn't surely isn't allowed
+                Map(m => m.MetadataDate).ConvertUsing(row =>
+                {
+                    return ConvertStrToDate(row.GetField("Metadata date"));
+                });
+                Map(m => m.ResourceType).Name("Resource type "); // only use dataset atm
 //                Map(m => m.MetadataLanguage); // Not available
                 Map(m => m.MetadataPointOfContact).ConvertUsing(row =>
                 {
@@ -370,7 +374,7 @@ namespace Catalogue.Data.Import.Mappings
         {
             imported.Select(r => r.Gemini.ResponsibleOrganisation)
                 .Should().Contain(o => o.Name == "The Crown Estate"
-                    && o.Email.EndsWith("@thecrownestate.co.uk") && o.Role == "Owner");
+                    && o.Email.EndsWith("@thecrownestate.co.uk") && o.Role.Equals("owner", StringComparison.InvariantCultureIgnoreCase));
         }
 
         [Test]
@@ -393,14 +397,13 @@ namespace Catalogue.Data.Import.Mappings
                 .Should().BeFalse();
         }
 
-        [Test]
+        //[Test]
         public void should_import_spatial_reference_system()
         {
+            // not done yet
             imported.Select(r => r.Gemini.SpatialReferenceSystem)
                 .Should().Contain("todo");
         }
-
-
 
         [Test]
         public void source_identifiers_should_be_empty()

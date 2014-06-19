@@ -15,7 +15,7 @@ namespace Catalogue.Data.Import.Mappings
     /// <summary>
     ///     The mappings for importing the Marine Habitat (MESH) data.
     /// </summary>
-    public class MeshMapping : IMapping
+    public class MeshMapping :BaseMapper, IMapping
     {
         public void Apply(CsvConfiguration config)
         {
@@ -76,27 +76,6 @@ namespace Catalogue.Data.Import.Mappings
                     return w;
             }
         }
-
-        public static DateTime ConvertStrToDate(string str)
-        {
-            try
-            {
-                return str.IsNotBlank() ? Convert.ToDateTime(str) : DateTime.MinValue;
-            }
-            catch (System.FormatException formatException)
-            {
-                try
-                {
-                    return DateTime.ParseExact(str, "yyyy-dd-MM", CultureInfo.InvariantCulture);
-                }
-                catch (System.FormatException)
-                {
-                    throw new Exception("Conversion of date failed for : " + str);
-                }
-            }
-            
-        }
-
         public class GeminiMap : CsvClassMap<Metadata>
         {
             public override void CreateMap()

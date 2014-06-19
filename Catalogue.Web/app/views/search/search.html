@@ -60,7 +60,7 @@
     <div class="layout-col">
         <div class="search-title">
             <a ng-href="#/editor/{{r.id}}" ng-bind-html="r.title"></a>
-            <span class="search-date" ng-show="r.date">{{ r.date }}</span>
+            <span class="search-date" ng-show="r.date">{{r.date.substring(0, 4)}}</span><!-- .net doesn't serialzie datetime as a javascript date ! can't use getUTCFullYear()-->
             <span tc-top-copy-icon ng-show="r.topCopy" title="Top copy"></span>
         </div>
         <div ng-bind-html="r.snippet"></div>
