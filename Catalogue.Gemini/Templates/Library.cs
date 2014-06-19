@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using Catalogue.Gemini.DataFormats;
 using Catalogue.Gemini.Model;
 using Catalogue.Gemini.Helpers;
 using Catalogue.Utilities.Collections;
@@ -18,13 +19,16 @@ namespace Catalogue.Gemini.Templates
         /// </summary>
         public static Metadata Blank()
         {
+        
             return new Metadata
             {
                 Title = "",
                 Abstract = "",
                 TopicCategory = "",
                 Keywords = new StringPairList().ToKeywordList(),
-                TemporalExtent = new TemporalExtent { Begin = System.DateTime.Now, End = System.DateTime.Now },
+
+
+                TemporalExtent = new TemporalExtent { Begin = new DateTime(), End = new DateTime() },
                 DatasetReferenceDate = System.DateTime.Now,
                 Lineage = "",
                 ResourceLocator = "",
@@ -39,7 +43,7 @@ namespace Catalogue.Gemini.Templates
                 UseConstraints = "",
                 SpatialReferenceSystem = "",
                 Extent = new List<Extent>(),
-                MetadataDate = null,
+                MetadataDate = new DateTime(),
 //TODO                MetadataLanguage = new CultureInfo.Get,
                 MetadataPointOfContact = new ResponsibleParty
                 {
@@ -71,8 +75,8 @@ namespace Catalogue.Gemini.Templates
                         { "http://jncc.gov.uk", "Bermuda Institute of Ocean Sciences" },
                     }
                     .ToKeywordList(),
-                TemporalExtent = new TemporalExtent { Begin = null, End = null },
-                DatasetReferenceDate = null,
+                TemporalExtent = new TemporalExtent { Begin = new DateTime(), End = new DateTime() },
+                DatasetReferenceDate = new DateTime(),
                 Lineage = "This dataset was imagined by a developer.",
                 ResourceLocator = "http://data.jncc.gov.uk/5eb63655-d7fe-46af-88bc-71f7db243ad3",
                 DataFormat = "XLS",

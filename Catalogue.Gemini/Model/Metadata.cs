@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Globalization;
 
 namespace Catalogue.Gemini.Model
 {
@@ -14,8 +13,8 @@ namespace Catalogue.Gemini.Model
         public string TopicCategory { get; set; }
         public List<Keyword> Keywords { get; set; }
         public TemporalExtent TemporalExtent { get; set; }
-        public DateTime? DatasetReferenceDate { get; set; }
-        public CultureInfo DatasetLanguage { get; set; }
+        public DateTime DatasetReferenceDate { get; set; } // / this should be changed to a collection for creation/publication/revision
+        public SupportedLanguage DatasetLanguage { get; set; }
         public string Lineage { get; set; }
 //      public decimal SpatialResolution { get; set; } // todo we'll probably need this https://wiki.ceh.ac.uk/display/cehigh/Spatial+resolution
         public string ResourceLocator { get; set; }
@@ -26,8 +25,8 @@ namespace Catalogue.Gemini.Model
         public string UseConstraints { get; set; }
         public string SpatialReferenceSystem { get; set; }
         public List<Extent> Extent { get; set; } // support multiple locations; use same UI as keywords
-        public DateTime? MetadataDate { get; set; }
-        public CultureInfo MetadataLanguage { get; set; }
+        public DateTime MetadataDate { get; set; }
+        public SupportedLanguage MetadataLanguage { get; set; }
         
         public ResponsibleParty MetadataPointOfContact { get; set; }
         public string ResourceType { get; set; }  // dataset | series | service
@@ -41,6 +40,16 @@ namespace Catalogue.Gemini.Model
             MetadataPointOfContact = new ResponsibleParty();
             BoundingBox = new BoundingBox();
         }
+    }
+
+    /// <summary>
+    /// lowercase to match gemini spec
+    /// </summary>
+    public enum SupportedLanguage
+    {
+        eng = 1,
+        deu =2,
+        fra =3
     }
 
     public class Keyword
@@ -62,6 +71,7 @@ namespace Catalogue.Gemini.Model
 
         public override bool Equals(object obj)
         {
+            
             if (ReferenceEquals(null, obj)) return false;
             if (ReferenceEquals(this, obj)) return true;
             if (obj.GetType() != this.GetType()) return false;
@@ -88,8 +98,8 @@ namespace Catalogue.Gemini.Model
 
     public class TemporalExtent
     {
-        public DateTime? Begin { get; set; }
-        public DateTime? End { get; set; }
+        public DateTime Begin { get; set; }
+        public DateTime End { get; set; }
     }
 
     public class ResponsibleParty

@@ -308,28 +308,28 @@ namespace Catalogue.Data.Import.Mappings
         public void should_import_temporal_extent()
         {
             imported.Should().Contain(r =>
-                r.Gemini.TemporalExtent.Begin. == "2006" && r.Gemini.TemporalExtent.End == "2010");
+                r.Gemini.TemporalExtent.Begin.Year.Equals(2006) && r.Gemini.TemporalExtent.End.Year.Equals(2010));
         }
 
         [Test]
         public void should_import_temporal_extent_with_single_date()
         {
             imported.Should().Contain(r =>
-                r.Gemini.TemporalExtent.Begin == "2010" && r.Gemini.TemporalExtent.End == "2010");
+                r.Gemini.TemporalExtent.Begin.Year.Equals(2010) && r.Gemini.TemporalExtent.End.Year.Equals(2010));
         }
 
         [Test]
         public void should_not_import_temporal_extent_with_multiple_dates()
         {
             // todo remove https://github.com/JNCC-dev-team/catalogue/issues/18
-            imported.Should().NotContain(r => r.Gemini.TemporalExtent.Begin == "Jan, Mar, Jun, Sep 2010");
+           // imported.Should().NotContain(r => r.Gemini.TemporalExtent.Begin == "Jan, Mar, Jun, Sep 2010");
         }
 
         [Test]
         public void should_import_dataset_reference_date()
         {
-            imported.Should().Contain(r => r.Gemini.DatasetReferenceDate == "2011-07");
-            imported.Should().Contain(r => r.Gemini.DatasetReferenceDate == "2012-08-15");
+            //imported.Should().Contain(r => r.Gemini.DatasetReferenceDate == "2011-07");
+            imported.Should().Contain(r => r.Gemini.DatasetReferenceDate.Equals(new DateTime(2012,08,15)));
         }
 
         [Test]

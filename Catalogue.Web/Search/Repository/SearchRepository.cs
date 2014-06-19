@@ -72,7 +72,7 @@ namespace Catalogue.Web.Search
                             .OrderBy(k => k.Vocab != "http://vocab.jncc.gov.uk/jncc-broad-category") // show first
                             .ThenBy(k => k.Vocab).ToList(),
                         TopCopy = x.TopCopy,
-                        Date = x.Gemini.DatasetReferenceDate.Truncate(4),
+                        Date = x.Gemini.DatasetReferenceDate,
                     })
                     .ToList(),
                 Speed = stats.DurationMilliseconds,
@@ -142,7 +142,7 @@ namespace Catalogue.Web.Search
                             .OrderBy(k => k.Vocab != "http://vocab.jncc.gov.uk/jncc-broad-category") // show first
                             .ThenBy(k => k.Vocab).ToList(),
                         TopCopy = x.result.TopCopy,
-                        Date = x.result.Gemini.DatasetReferenceDate.Truncate(4),
+                        Date = x.result.Gemini.DatasetReferenceDate,
                     })
                     .ToList(),
                 Speed = stats.DurationMilliseconds,

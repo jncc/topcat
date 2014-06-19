@@ -1,9 +1,85 @@
 ﻿using System;
-using System.Globalization;
-using NUnit.Framework;
+using System.Collections.Generic;
+using System.IO;
 
 namespace Catalogue.Tests
-{/*
+{
+    public class ISOLanguage
+    {
+        private static List<ISOLanguage> _isoLanguages;
+        private static List<ISOLanguage> _supportedIsoLanguages;
+
+        public enum LanguageClassification
+        {
+            Living = 1,
+            Historical = 2,
+            Ancient = 3,
+            Constructed = 4
+        }
+
+        public enum LanguageScope
+        {
+            Individual = 1,
+            Collection = 2,
+            Macrolanguage = 3
+        }
+
+
+        private static Dictionary<string, ISOLanguage> _isoLanguageDictionary;
+        public string Code3 { get; set; }
+        public string Code2 { get; set; }
+        public string EnglishName { get; set; }
+        public LanguageScope Scope { get; set; }
+        public LanguageClassification Classification { get; set; }
+        public byte Rank { get; set; } // 0 = not used, 1 > 2 etc.
+
+        public static void Builder()
+        {
+            var reader = new StreamReader(File.OpenRead(@"C:\test.csv"));
+            _isoLanguages = new List<ISOLanguage>(555);
+            _isoLanguageDictionary = new Dictionary<string, ISOLanguage>(555);
+            _supportedIsoLanguages = new List<ISOLanguage>(3); //only supporting three at the moment
+            while (!reader.EndOfStream)
+            {
+                string line = reader.ReadLine();
+                string[] values = line.Split('\t');
+
+                var language = new ISOLanguage
+                {
+                    Code3 = values[1],
+                    Code2 = values[2],
+                    EnglishName = values[3],
+                    Scope = (LanguageScope) Enum.Parse(typeof (LanguageScope), values[4]),
+                    Classification = (LanguageClassification) Enum.Parse(typeof (LanguageClassification), values[5]),
+                    Rank = RankLookup(values[1])
+                };
+                _isoLanguages.Add(language);
+                _isoLanguageDictionary.Add(language.Code3, language);
+                if (language.Rank > 0)
+                {
+                    _supportedIsoLanguages.Add(language);
+                }
+            }
+        }
+
+
+        public static byte RankLookup(string code)
+        {
+            switch (code)
+            {
+                case "eng":
+                case "deu":
+                case "fra":
+                case "cym":
+                    return 1; // supporting german french and english
+                default:
+                    return 0; // not supported in this application
+            }
+        }
+    }
+}
+//http://en.wikipedia.org/wiki/List_of_ISO_639-2_codes
+/*
     aar	aar	aa	Afar	Individual	Living
 aav			Austro-Asiatic languages	Collective	
 abk	abk	ab	Abkhazian	Individual	Living
@@ -559,4 +635,4 @@ zul	zul	zu	Zulu	Individual	Living
 zun	zun		Zuni	Individual	Living
 zxx	zxx		No linguistic content	Special	
 zza	zza		Zaza	Macrolanguage	Living*/
-}
+ 
