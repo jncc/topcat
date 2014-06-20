@@ -56,7 +56,8 @@ angular.module('app.controllers').controller 'EditorController',
                             $scope.notifications.add 'There were errors'
                         for e in errors
                             for field in e.fields
-                                $scope.theForm[field].$setValidity('server', false)
+                                $scope.theForm[field].$setValidity('server', false)                                
+                                
                     $scope.busy.stop()
 
             $scope.busy.start()
@@ -66,7 +67,11 @@ angular.module('app.controllers').controller 'EditorController',
             else
                 $http.post('../api/records', $scope.form).then processResult
 
-        $scope.reset = -> $scope.form = angular.copy(record)
+        $scope.reset = -> 
+            record.gemini.metadataPointOfContact.name = $scope.user.displayName
+            record.gemini.metadataPointOfContact.email = $scope.user.email
+            $scope.form = angular.copy(record)
+            
         $scope.isClean = -> angular.equals($scope.form, record)
         $scope.isSaveHidden = -> $scope.isClean() or record.readOnly
         $scope.isCancelHidden = -> $scope.isClean()

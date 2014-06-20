@@ -1,6 +1,4 @@
-﻿
-
-angular.module('app.controllers').controller 'SearchController',
+﻿angular.module('app.controllers').controller 'SearchController',
     ($scope, $rootScope, $location, $http, $timeout) ->
         appTitlePrefix = "Topcat - ";
          # initial values
@@ -25,23 +23,25 @@ angular.module('app.controllers').controller 'SearchController',
             $scope.keywordFlag = false;
             $scope.query.p = 0;
             $scope.query.q = q;
-            doSearch();            
+            doSearch();
+            
                        
         doSearch = () ->
             if not $scope.keyword.flag
-                # update the url
-                $location.search('q', $scope.query.q) 
-                $location.search('p', $scope.query.p) 
-                $location.search('n', $scope.query.n)
-                $rootScope.page = { title: if $scope.query.q then appTitlePrefix + $scope.query.q else appTitlePrefix } # update the page title
-                $scope.busy.start()
-                # search the server
-                $http.get('../api/search?' + $.param $scope.query)
-                    .success (result) ->
-                        # don't overwrite with old slow results!
-                        if angular.equals result.query, $scope.query
-                            $scope.result = result
-                    .finally -> $scope.busy.stop()
+                if $scope.query.q 
+                    # update the url
+                    $location.search('q', $scope.query.q) 
+                    $location.search('p', $scope.query.p) 
+                    $location.search('n', $scope.query.n)
+                    $rootScope.page = { title: if $scope.query.q then appTitlePrefix + $scope.query.q else appTitlePrefix } # update the page title
+                    $scope.busy.start()
+                    # search the server
+                    $http.get('../api/search?' + $.param $scope.query)
+                        .success (result) ->
+                            # don't overwrite with old slow results!
+                            if angular.equals result.query, $scope.query
+                                $scope.result = result
+                        .finally -> $scope.busy.stop()
             else 
                 $scope.doKeywordSearch($scope.keyword, $scope.query.p);
             

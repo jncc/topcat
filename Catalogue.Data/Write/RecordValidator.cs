@@ -24,6 +24,8 @@ namespace Catalogue.Data.Write
 
     public class RecordValidator : IRecordValidator
     {
+        private const string GeminiSuffix =  " (Gemini Compatibility).";
+
         public RecordValidationResult Validate(Record record)
         {
             var result = new RecordValidationResult();
@@ -31,7 +33,7 @@ namespace Catalogue.Data.Write
             // path_must_not_be_blank
             if (record.Path.IsBlank())
             {
-                result.Errors.Add("Path must not be blank", r => r.Path);
+                result.Errors.Add("Location Path must not be blank", r => r.Path);
             }
 
             // also part of gemini spec
@@ -41,6 +43,7 @@ namespace Catalogue.Data.Write
                 result.Errors.Add("Title must not be blank", r => r.Gemini.Title);
             }
 
+            // the below perform app specific checks, not gemini
             ValidateTopicCategory(record, result);
             ValidateResourceLocator(record, result);
             ValidateResponsibleOrganisation(record, result);
@@ -63,20 +66,20 @@ namespace Catalogue.Data.Write
             }
             if (record.Validation == Validation.Gemini)
             {
-                result = GeminiValidation(record, result);
+                GeminiValidation(record, result);
             }
 
             return result;
         }
 
-        private RecordValidationResult GeminiValidation(Record record, RecordValidationResult recordValidationResult)
+        private void GeminiValidation(Record record, RecordValidationResult recordValidationResult)
         {
             // structured to match the gemini doc
 
             // 1 title, checked even if not gemini. But repeating here to be explicit and ease refactoring
             if (record.Gemini.Title.IsBlank())
             {
-                recordValidationResult.Errors.Add("Title must not be blank", r => r.Gemini.Title);
+                recordValidationResult.Errors.Add("Title must be provided" + GeminiSuffix, r => r.Gemini.Title);
             }
 
             // 2 alternative title not used as optional
@@ -88,16 +91,20 @@ namespace Catalogue.Data.Write
             // 4 abstract is mandatory
             if (record.Gemini.Abstract.IsBlank())
             {
-                recordValidationResult.Errors.Add("Abstract must not be blank.", r => r.Gemini.Abstract);
+                recordValidationResult.Errors.Add("Abstract must be provided" , r => r.Gemini.Abstract);
             }
 
             // 5 topic_category_must_not_be_blank
-            ValidateTopicCategory(record, recordValidationResult);
+            if (record.Gemini.TopicCategory.IsBlank())
+            {
+                recordValidationResult.Errors.Add(String.Format("Topic Category must be provided"+GeminiSuffix),
+                    r => r.Gemini.TopicCategory);
+            }
 
             // 6 keywords mandatory
             if (record.Gemini.Keywords.Count == 0)
             {
-                recordValidationResult.Errors.Add("Keywords must be present.", r => r.Gemini.Keywords);
+                recordValidationResult.Errors.Add("Keywords must be provided"+GeminiSuffix, r => r.Gemini.Keywords);
             }
 
             // 7 temporal extent is mandatory (so not DateTime.minvalue) and must be logical (they can be the same)
@@ -105,21 +112,21 @@ namespace Catalogue.Data.Write
                 record.Gemini.TemporalExtent.Begin.Equals(DateTime.MinValue) ||
                 record.Gemini.TemporalExtent.End.Equals(DateTime.MinValue))
             {
-                recordValidationResult.Errors.Add("Temporal extent must be supplied, and must begin before it ends.",
+                recordValidationResult.Errors.Add("Temporal extent must be provided, and must begin before it ends"+GeminiSuffix,
                     r => r.Gemini.TemporalExtent);
             }
 
             // 8 DatasetReferenceDate mandatory
             if (record.Gemini.DatasetReferenceDate.Equals(DateTime.MinValue))
             {
-                recordValidationResult.Errors.Add("Dataset Reference Date must be present.",
+                recordValidationResult.Errors.Add("Dataset Reference Date must be provided"+GeminiSuffix,
                     r => r.Gemini.DatasetReferenceDate);
             }
 
             // 10 Lineage is mandatory
             if (record.Gemini.Lineage.IsBlank())
             {
-                recordValidationResult.Errors.Add("Lineage.", r => r.Gemini.TemporalExtent);
+                recordValidationResult.Errors.Add("Lineage msut be provided"+GeminiSuffix, r => r.Gemini.TemporalExtent);
             }
 
             // 15 extent is optional and not used
@@ -136,53 +143,104 @@ namespace Catalogue.Data.Write
 
             // 19 resource location, conditional
             // when online access is availble, should be a valid url
-            ValidateResourceLocator(record, recordValidationResult);
+            // resource_locator_must_be_a_well_formed_http_url
+            // when do not yet perform a get request and get a 200 response, the only true way to validate a url
+            if (record.Gemini.ResourceLocator.IsBlank())
+            {
+                recordValidationResult.Errors.Add("Resource locator must be provided" + GeminiSuffix,
+                      r => r.Gemini.ResourceLocator);
+            }else{
+                Uri url;
+
+                if (Uri.TryCreate(record.Gemini.ResourceLocator, UriKind.Absolute, out url))
+                {
+                    if (url.Scheme != Uri.UriSchemeHttp)
+                    {
+                        recordValidationResult.Errors.Add("Resource locator must be an http url",
+                            r => r.Gemini.ResourceLocator);
+                    }
+                }
+                else
+                {
+                    recordValidationResult.Errors.Add("Resource locator must be a valid url",
+                        r => r.Gemini.ResourceLocator);
+                }
+            }
 
 
             // 21 DataFormat optional 
             // deliberately not implmented
 
             // 23 reponsible Organisation
-            ValidateResponsibleOrganisation(record, recordValidationResult);
+            if (record.Gemini.ResponsibleOrganisation.Email.IsBlank())
+            {
+                recordValidationResult.Errors.Add("Email address for responsible organisation must be provided"+GeminiSuffix,
+                        r => r.Gemini.ResponsibleOrganisation.Email);
+            }
+            if (record.Gemini.ResponsibleOrganisation.Name.IsBlank())
+            {
+                recordValidationResult.Errors.Add("Name of responsible organisation must be provided" + GeminiSuffix,
+                        r => r.Gemini.ResponsibleOrganisation.Name);
+            }
+            if (!record.Gemini.ResponsibleOrganisation.Role.Equals("distributor"))
+            {
+                recordValidationResult.Errors.Add("Distributor must be provided" + GeminiSuffix,
+                        r => r.Gemini.ResponsibleOrganisation.Role);
+            }
 
             // 24 frequency of update is optional
             // deliberatley not implemented
-
+             
             // 25 limitations on publci access is mandatory
             if (record.Gemini.LimitationsOnPublicAccess.IsBlank())
             {
-                recordValidationResult.Errors.Add("Limitations On Publi cAccess must be definied for Gemini.",
+                recordValidationResult.Errors.Add("Limitations On Public Access must be provided"+GeminiSuffix,
                     r => r.Gemini.LimitationsOnPublicAccess);
             }
 
             // 26 use constraints are mandatory
             if (record.Gemini.UseConstraints.IsBlank())
             {
-                recordValidationResult.Errors.Add("Use Constraints is empty; did you mean 'no conditions apply'?",
+                recordValidationResult.Errors.Add("Use Constraints must be provided if there are none, leave as 'no conditions apply'",
                     r => r.Gemini.UseConstraints);
             }
 
             // 27 Additional information source is optional
-            // adeliebrately not implemeted
+            // deliebrately not implemeted
 
             // 30 metadatadate is mandatory
             if (record.Gemini.MetadataDate.Equals(DateTime.MinValue))
             {
-                recordValidationResult.Errors.Add("A reference date must be defined for gemini compatibility",
+                recordValidationResult.Errors.Add("A metadata reference date must be provided"+GeminiSuffix,
                     r => r.Gemini.MetadataDate);
             }
 
             // 33 Metadatalanguage
             // deliberaretly not implemented, only supporting english
 
-            // 35 POint of contacts
-            ValidateMetadataPointOfContact(record, recordValidationResult);
+            // 35 Point of contacts
+            // org name and email contact mandatory
+            if (record.Gemini.MetadataPointOfContact.Email.IsBlank())
+            {
+                recordValidationResult.Errors.Add("A metadata point of contact email address must be provided" + GeminiSuffix,
+                    r => r.Gemini.MetadataPointOfContact.Email);
+            }
+            if (record.Gemini.MetadataPointOfContact.Name.IsBlank())
+            {
+                recordValidationResult.Errors.Add("A metadata point of contact organisation name must be provided" + GeminiSuffix,
+                    r => r.Gemini.MetadataPointOfContact.Name);
+            }
 
             // 36 Uniuque resource identifier
             // not yet implemented need code and codespace
 
             // 39 resource type is mandatory
-            ValidateResourceType(record, recordValidationResult);
+            if (record.Gemini.ResourceType.IsBlank())
+            {
+                recordValidationResult.Errors.Add("A resource type must be provided" + GeminiSuffix,
+                    r => r.Gemini.ResourceType);
+            }
+            
 
             // Conformity, required if claiming conformity to INSPIRE
             // not yet implemented
@@ -199,9 +257,6 @@ namespace Catalogue.Data.Write
                     "A bounding box must be supplied to conform to the Gemini specification",
                     r => r.Gemini.BoundingBox);
             }
-
-
-            return recordValidationResult;
         }
 
         private void ValidateResourceLocator(Record record, RecordValidationResult result)

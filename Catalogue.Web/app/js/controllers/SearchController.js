@@ -37,20 +37,22 @@
     };
     doSearch = function() {
       if (!$scope.keyword.flag) {
-        $location.search('q', $scope.query.q);
-        $location.search('p', $scope.query.p);
-        $location.search('n', $scope.query.n);
-        $rootScope.page = {
-          title: $scope.query.q ? appTitlePrefix + $scope.query.q : appTitlePrefix
-        };
-        $scope.busy.start();
-        return $http.get('../api/search?' + $.param($scope.query)).success(function(result) {
-          if (angular.equals(result.query, $scope.query)) {
-            return $scope.result = result;
-          }
-        })["finally"](function() {
-          return $scope.busy.stop();
-        });
+        if ($scope.query.q) {
+          $location.search('q', $scope.query.q);
+          $location.search('p', $scope.query.p);
+          $location.search('n', $scope.query.n);
+          $rootScope.page = {
+            title: $scope.query.q ? appTitlePrefix + $scope.query.q : appTitlePrefix
+          };
+          $scope.busy.start();
+          return $http.get('../api/search?' + $.param($scope.query)).success(function(result) {
+            if (angular.equals(result.query, $scope.query)) {
+              return $scope.result = result;
+            }
+          })["finally"](function() {
+            return $scope.busy.stop();
+          });
+        }
       } else {
         return $scope.doKeywordSearch($scope.keyword, $scope.query.p);
       }

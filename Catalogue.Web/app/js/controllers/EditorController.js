@@ -85,6 +85,8 @@
       }
     };
     $scope.reset = function() {
+      record.gemini.metadataPointOfContact.name = $scope.user.displayName;
+      record.gemini.metadataPointOfContact.email = $scope.user.email;
       return $scope.form = angular.copy(record);
     };
     $scope.isClean = function() {
