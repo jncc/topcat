@@ -27,8 +27,7 @@ namespace Catalogue.Gemini.Encoding
         public XDocument Create(Guid id, Metadata m)
         {
             // see http://data.gov.uk/sites/default/files/UK%20GEMINI%20Encoding%20Guidance%201.4.pdf
-            // *please* don't mess up the indentation!
-
+            
             return new XDocument(
                 new XElement(gmd + "MD_Metadata",
                     new XAttribute(XNamespace.Xmlns + "gmd", gmd.NamespaceName),
@@ -105,7 +104,7 @@ namespace Catalogue.Gemini.Encoding
         XElement MakeMetadataDate(Metadata metadata)
         {
             return new XElement(gmd + "dateStamp",
-                new XElement(gco + "Date", metadata.MetadataDate));
+                new XElement(gco + "Date",metadata.MetadataDate.ToString(@"yyyy-MM-dd")));
         }
 
         XElement MakeDatasetReferenceDate(Metadata metadata)
@@ -113,12 +112,12 @@ namespace Catalogue.Gemini.Encoding
             return new XElement(gmd + "date",
                 new XElement(gmd + "CI_Date",
                     new XElement(gmd + "date",
-                        new XElement(gco + "Date", metadata.DatasetReferenceDate)),
+                        new XElement(gco + "Date", metadata.DatasetReferenceDate.ToString(@"yyyy-MM-dd"))),
                     new XElement(gmd + "dateType",
                         new XElement(gmd + "CI_DateTypeCode",
                             new XAttribute("codeList", "http://standards.iso.org/ittf/PubliclyAvailableStandards/ISO_19139_Schemas/resources/codelist/gmxCodelists.xml#CI_DateTypeCode"),
                             new XAttribute("codeListValue", "publication"),
-                            metadata.DatasetReferenceDate))));
+                            metadata.DatasetReferenceDate.ToString(@"yyyy-MM-dd")))));
         }
 
         XElement MakeUniqueResourceIdentifier(Guid id)
@@ -221,8 +220,8 @@ namespace Catalogue.Gemini.Encoding
                     new XElement(gmd + "extent",
                         new XElement(gml + "TimePeriod",
                             new XAttribute(gml + "id", "t1"),
-                            new XElement(gml + "beginPosition", metadata.TemporalExtent.Begin),
-                            new XElement(gml + "endPosition", metadata.TemporalExtent.End)))));
+                            new XElement(gml + "beginPosition", metadata.TemporalExtent.Begin.ToString(@"yyyy-MM-dd")),
+                            new XElement(gml + "endPosition", metadata.TemporalExtent.End.Date.ToString(@"yyyy-MM-dd"))))));
         }
 
         XElement MakeDataFormat(Metadata metadata)
@@ -285,7 +284,7 @@ namespace Catalogue.Gemini.Encoding
                 return new XElement(gmd + "language",
                     new XElement(gmd + "LanguageCode",
                         new XAttribute("codeList", "http://www.loc.gov/standards/iso639-2/php/code_list.php"),
-                        new XAttribute("codeListValue", m.MetadataLanguage),
+                        new XAttribute("codeListValue", m.MetadataLanguage.ToString()),
                         m.MetadataLanguage));
             }
 

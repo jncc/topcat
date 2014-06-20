@@ -32,7 +32,12 @@ namespace Catalogue.Tests.Web.Search
             Speed = 100L
         };
 
-        private readonly SearchInputModel _searchInputModel = new SearchInputModel(keyword:Keyword, numberOfRecords:0, pageNumber:1 );
+        private readonly SearchInputModel _searchInputModel = new SearchInputModel()
+        {
+            Keyword = Keyword,
+            NumberOfRecords = 0,
+            PageNumber = 1
+        };
 
       
         [Test]

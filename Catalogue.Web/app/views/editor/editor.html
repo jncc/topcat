@@ -38,9 +38,7 @@
             <div class="col-md-12">
                 <div class="form-group">
                     <input type="text" ng-model="form.gemini.title" name="gemini.title" placeholder="Title" class="editor-title form-control"
-                           title="The title or name of the resource"
-                           tc-server-validated
-                           tc-focus-tip />
+                           title="The title or name of the resource" tc-focus-tip />
                 </div>
 
             </div>
@@ -63,7 +61,6 @@
                         <input id="form-path" name="path" ng-model="form.path" 
                                type="text" class="form-control" 
                                placeholder="Location"
-                               tc-server-validation
                                tc-focus-tip title="The path to the resource on the file share"
                                spellcheck="false" />
                         
@@ -87,6 +84,7 @@
             </div>
         </div>
         
+        <!-- date format selector -->
         <div collapse="collapseDataFormatSelector" class="form-group">
             <div style="display:block;">
                 <div class="well">
@@ -116,23 +114,21 @@
                 </div>
             </div>
         </div>
-        <div class="layout-row"></div>
-
-
+            
         <div class="row">
-
-            <div class="col-md-9">
+           
+            <div id="keywordsArea" class="col-md-9">
 
                 <!-- keywords -->
-                        
+              
 
                 <div class="editor-keywords form-group">
                     <span ng-repeat="k in form.gemini.keywords" tc-tag tc-tag-delete>
                         <span ng-style="{ 'background-color': hashStringToColor(k.vocab) }">&nbsp;</span>
                         {{ k.value }}
                     </span>
-                    
-                    <button class="btn btn-sm btn-dialogue" tc-tip title="Edit tags (keywords)"
+                      <label for="keywordsBtn">Keywords</label>      
+                    <button id="keywordsBtn" class="btn btn-sm btn-dialogue" tc-tip title="Edit tags (keywords)"
                             ng-click="keywordEditorOpen = !keywordEditorOpen">&bull;&bull;&bull;</button>                    
                 </div>
                 
@@ -200,7 +196,8 @@
                     </div>
                     <div class="col-md-2"></div>
                 </div>
-
+                
+                <!-- datesetreferecne date -->
                 <div class="form-horizontal">
                     <div class="form-group">
                         <label for="datasetReferenceDateDiv" class="col-md-2">Dataset Reference Date</label>
@@ -221,139 +218,123 @@
                                 </span>
                             </div>
                         </div>
-                    </div>
-                </div>
 
-                <!--                <div class="well well-sm">-->
-                <!---->
-                <!--                    <div ng-repeat="contact in form.contacts" ng-animate=" 'animate' " class="form-inline form-group">-->
-                <!--                        <select ng-model="contact.type" class="form-control" style="width: 140px">-->
-                <!--                            <option>email</option>-->
-                <!--                            <option>phone</option>-->
-                <!--                            <option>pager</option>-->
-                <!--                            <option>IM</option>-->
-                <!--                        </select>-->
-                <!--                        <input type="text" ng-model="contact.value" required placeholder="go on, go on" class="form-control" style="width: 140px" />-->
-                <!--                        <a ng-click="removeContact(contact)" class="btn btn-primary">X</a>-->
-                <!--                    </div>-->
-                <!---->
-                <!--                    <a ng-click="addContact()" class="btn btn-primary">ADD</a>-->
-                <!---->
-                <!--                </div>-->
-                
-                
-                <div class="form-horizontal">
-                    <div class="form-group">
-                        <label for="categoryDiv" class="col-md-2 control-label">Topic Category</label>
-                        <div id="categoryDiv" class="col-md-10">
-                            <select
-                                data-ng-model="form.gemini.topicCategory"
-                                data-ng-options="topic.key as topic.key|camelCaseFilter for topic in lookups.topics"
-                                class="form-control"
-                                title="The main theme of the data resource">
-                                <option value="" disabled selected style="display: none">Topic</option>
-                            </select>
-                        </div>
                     </div>
                 </div>
                 
-                <div class="form-horizontal">
+                <!-- topic cateogy and resource locator -->
+                <div class="form-horizontal ">
                     <div class="form-group">
-                        <label for="resourceLocatorDiv" class="col-md-2 control-label">Resource Locator</label>
-                        <div id="resourceLocatorDiv" class="col-md-10 input-group">
-                            <input name="resourceLocator" ng-model="form.gemini.resourceLocator" 
-                                   type="text" class="form-control" 
-                                   placeholder="Published Resource Location"
-                                   tc-focus-tip title="Location (Address) for on-line access using a Uniform Resource Locator (URL) address or similar addressing scheme"
-                                   spellcheck="false" />
-                        
-                            <a href="{{form.gemini.resourceLocator}}" target="_blank" class="input-group-addon pointable">
-                                <span class="dark glyphicon glyphicon-folder-open" title="Go to resource" tc-focus-tip></span>
-                            </a>
+                        <div class="col-sm-12">
+                            <label for="categoryDiv" class="col-md-2 control-label">Topic Category</label>
+                            <div id="categoryDiv" class="col-md-3">
+                                <select
+                                    data-ng-model="form.gemini.topicCategory"
+                                    data-ng-options="topic.key as topic.key|camelCaseFilter for topic in lookups.topics"
+                                    class="form-control"
+                                    title="The main theme of the data resource">
+                                    <option value="" disabled selected style="display: none">Topic</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-sm-12">
+                            <label for="resourceLocatorDiv" class="col-sm-2 control-label">Resource Locator</label>
+                            <div id="resourceLocatorDiv" class="col-sm-4 input-group">
+                                <input name="resourceLocator" ng-model="form.gemini.resourceLocator" 
+                                       type="text" class="form-control" 
+                                       placeholder="Published Resource Location"
+                                       tc-focus-tip title="Location (Address) for on-line access using a Uniform Resource Locator (URL) address or similar addressing scheme"
+                                       spellcheck="false" />
+                                <a href="{{form.gemini.resourceLocator}}" target="_blank" class="input-group-addon pointable">
+                                    <span class="dark glyphicon glyphicon-folder-open" title="Go to resource" tc-focus-tip></span>
+                                </a>
+                            </div>
                         </div>
                     </div>
                 </div>
                 
                 <hr />
-                
-                <div class="editor-abstract form-group">
-                    <label for="lineageArea">Lineage</label>
-                    <textarea id="Textarea1" type="text" ng-model="form.gemini.lineage" class="form-control"
-                              rows="2"
-                              placeholder="Lineage"
-                              title="Information about the events or source data used in the construction of the data resource"
-                              tc-focus-tip tc-autosize></textarea>
-                </div>
-                <div class="editor-abstract form-group">
-                    <label for="publicAccessArea">Limitations on Public Access</label>
-                    <textarea id="publicAccessArea" type="text" ng-model="form.gemini.limitationsOnPublicAccess" class="form-control"
-                              rows="2"
-                              placeholder="no limitations"
-                              title="Restrictions imposed on the data resource for security and other reasons"
-                              tc-focus-tip tc-autosize></textarea>
-                </div>
-                <div class="editor-abstract form-group">
-                    <label for="useConstraintsArea">Use Constraints</label>
-                    <textarea id="useConstraintsArea" type="text" ng-model="form.gemini.useConstraints" class="form-control"
-                              rows="2"
-                              placeholder="no conditions apply"
-                              title="Restrictions and legal restraints on using the data resource"
-                              tc-focus-tip tc-autosize></textarea>
-                </div>
-                
-                <hr/>
-                
-                <div>
-                    <label for="responsibleOrgDiv">Responsible Organisation</label>
-                    <div id="responsibleOrgDiv" class="form-horizontal">
-                        <div class="form-group">
-                            <label for="responsibleOrgNameDiv" class="col-md-1 control-label">Name</label>
-                            <div id="responsibleOrgNameDiv" class="col-sm-11">
-                                <input class="form-control" type="text" ng-model="form.gemini.responsibleOrganisation.name" placeholder="Responsible Organisation Name" title="The name of the organisation responsible for this resource" tc-focus-tip />
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label for="responsibleOrgEmailDiv" class="col-md-1 control-label">Email</label>
-                            <div id="responsibleOrgEmailDiv" class="col-sm-11">
-                                <input class="form-control" type="text" ng-model="form.gemini.responsibleOrganisation.email" placeholder="Responsible Organisation Email" title="An email for the point of contact in this responsible organisation" tc-focus-tip />
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label for="responsibleOrgRoleDiv" class="col-md-1 control-label">Role</label>
-                            <div id="responsibleOrgRoleDiv" class="col-sm-11">
-                                <select
-                                    data-ng-model="form.gemini.responsibleOrganisation.role"
-                                    data-ng-options="role as role|camelCaseFilter for role in lookups.roles"
-                                    class="form-control"
-                                    title="The role of the responsible organisation with this resource"
-                                    tc-focus-tip>
-                                    <option value="" disabled selected style="display: none">Responsible Organisation Role</option>
-                                </select>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                
-                <hr/>
 
+                <!-- lieage , public access and use contraints-->
+                <div class="col-md-12" >
+                    <div class="editor-abstract form-group col-md-4 pull-left">
+                        <label for="lineageArea">Lineage</label>
+                        <textarea id="Textarea1" type="text" ng-model="form.gemini.lineage" class="form-control"
+                                  rows="2"
+                                  placeholder="Lineage"
+                                  title="Information about the events or source data used in the construction of the data resource"
+                                  tc-focus-tip tc-autosize></textarea>
+                    </div>
+                    <div class="editor-abstract form-group col-md-4">
+                        <label for="publicAccessArea">Limitations on Public Access</label>
+                        <textarea id="publicAccessArea" type="text" ng-model="form.gemini.limitationsOnPublicAccess" class="form-control"
+                                  rows="2"
+                                  placeholder="no limitations"
+                                  title="Restrictions imposed on the data resource for security and other reasons"
+                                  tc-focus-tip tc-autosize></textarea>
+                    </div>
+                        <div class="editor-abstract form-group col-md-4 pull-right">
+                            <label for="useConstraintsArea">Use Constraints</label>
+                            <textarea id="useConstraintsArea" type="text" ng-model="form.gemini.useConstraints" class="form-control"
+                                      rows="2"
+                                      placeholder="no conditions apply"
+                                      title="Restrictions and legal restraints on using the data resource"
+                                      tc-focus-tip tc-autosize></textarea>
+                        </div>
+                </div>
+                
+                <hr/>
+                
+                <!-- reposible organisation and point of contact -->
                 <div>
-                    <label for="metadataPointOfContactDiv">Metadata Point of Contact</label>
-                    <div id="metadataPointOfContactDiv" class="form-horizontal">
+                    <span class="col-md-5" >
+                        <label for="responsibleOrgDiv"><h4>Responsible Organisation</h4></label>
+                        <div id="responsibleOrgDiv" class="form-horizontal ">
+                            <div class="form-group">
+                                <label for="responsibleOrgNameDiv" class="col-md-2 control-label">Name</label>
+                                <div id="responsibleOrgNameDiv" class="col-md-10">
+                                    <input disabled class="form-control" type="text" ng-model="form.gemini.responsibleOrganisation.name" placeholder="Responsible Organisation Name" title="The name of the organisation responsible for this resource" tc-focus-tip />
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="responsibleOrgEmailDiv" class="col-md-2 control-label">Email</label>
+                                <div id="responsibleOrgEmailDiv" class="col-md-10">
+                                    <input disabled class="form-control" type="text" ng-model="form.gemini.responsibleOrganisation.email" placeholder="Responsible Organisation Email" title="An email for the point of contact in this responsible organisation" tc-focus-tip />
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="responsibleOrgRoleDiv" class="col-md-2 control-label">Role</label>
+                                <div id="responsibleOrgRoleDiv" class="col-md-10">
+                                    <select disabled
+                                            data-ng-model="form.gemini.responsibleOrganisation.role"
+                                            data-ng-options="role as role|camelCaseFilter for role in lookups.roles"
+                                            class="form-control"
+                                            title="The role of the responsible organisation with this resource"
+                                            tc-focus-tip>
+                                        <option value="" disabled selected style="display: none">Responsible Organisation Role</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </span>
+                    <span class="pull-right col-md-5">
+                    <label for="metadataPointOfContactDiv"><h4>Metadata Point of Contact</h4></label>
+                    <div id="metadataPointOfContactDiv" class="form-horizontal ">
                         <div class="form-group">
-                            <label for="metadataPointofContactNameDiv" class="col-md-1 control-label">Name</label>
-                            <div id="metadataPointofContactNameDiv" class="col-md-11">
+                            <label for="metadataPointofContactNameDiv" class="col-md-2 control-label">Name</label>
+                            <div id="metadataPointofContactNameDiv" class="col-md-10">
                                 <input class="form-control" type="text" ng-model="form.gemini.metadataPointOfContact.name" placeholder="Metadata Point of Contact Name" title="The name of the point of contact responsible for this metadata" tc-focus-tip />
                             </div>
                         </div>
                         <div class="form-group">
-                            <label for="metadataPointofContactEmailDiv" class="col-md-1 control-label">Email</label>
-                            <div id="metadataPointofContactEmailDiv" class="col-md-11">
-                                <input class="form-control" type="text" ng-model="form.gemini.metadataPointOfContact.email" placeholder="Metadata Point of Contact Email" title="An email for the point of contact for this metadata" tc-focus-tip />
+                            <label for="metadataPointofContactEmailDiv" class="col-md-2 control-label">Email</label>
+                            <div id="metadataPointofContactEmailDiv" class="col-md-10">
+                                <input class="form-control" type="text" ng-model="form.gemini.metadataPointOfContact.email" title="An email for the point of contact for this metadata" tc-focus-tip />
                             </div>
                         </div>
                         <div class="form-group">
-                            <label for="metadataPointofContactRoleDiv" class="col-md-1 control-label">Role</label>
-                            <div id="metadataPointofContactRoleDiv" class="col-md-11">
+                            <label for="metadataPointofContactRoleDiv" class="col-md-2 control-label">Role</label>
+                            <div id="metadataPointofContactRoleDiv" class="col-md-10">
                                 <select
                                     data-ng-model="form.gemini.metadataPointOfContact.role"
                                     data-ng-options="role as role|camelCaseFilter for role in lookups.roles"
@@ -365,10 +346,12 @@
                             </div>
                         </div>
                     </div>
+                </span>
                 </div>
                 
                 <hr />
-                
+                <div class="layout-row"></div>
+                <hr />
                 <div class="layout-row form-horizontal">
                     <div class="col-md-6">
                         <label for="metadataDate" class="col-md-6 control-label" style="text-align:left;">Metadata Date</label>
@@ -408,8 +391,17 @@
                 <div class="row">
                     <div class="form-horizontal">
                         <label for="resourceTypeDiv" class="col-md-2 control-label" style="text-align:left">Resource Type</label>
-                        <div id="resourceTypeDiv" class="col-md-10">
-                            <input class="form-control" type="text" ng-model="form.gemini.resourceType" placeholder="Type of Resource" title="The type of resource described by this metadata" tc-focus-tip />
+                        <div id="resourceTypeDiv" class="col-md-2">
+                                <select data-ng-model="form.gemini.resourceType"
+                                    class="form-control"
+                                        title="The type of resource described by this metadata"
+                                    value="Dataset"
+                                    tc-focus-tip>
+                                    <option value="dataset" selected>Dataset</option>
+                                    <option value="series" disabled selected>Dataset Series (Not Available)</option>
+                                    <option value="service" disabled selected>Service (Not Available)</option>
+                                </select>                            
+                            <!--<input class="form-control" type="text" ng-model="form.gemini.resourceType" placeholder="Type of Resource" title="The type of resource described by this metadata" tc-focus-tip />-->
                         </div>
                     </div>
                 </div>
@@ -417,7 +409,7 @@
                 <hr />
 
                 <div>
-                    <label for="spatialDataDiv">Spatial Data</label>
+                    <label for="spatialDataDiv"><h4>Spatial Data</h4></label>
                     <div id="spatialDataDiv" class="form-horizontal">
                         <label for="extent" class="col-md-2" style="text-align:left; padding-left:0;">Spatial Extents</label>
                         <div id="extent">
@@ -452,7 +444,7 @@
                         </div>
                         
                         <div class="layout-row form-horizontal">
-                            <label for="spatialReferenceDiv" class="col-md-3 control-label" style="padding-left:0; text-align:left;">Spatial Refrence System</label>
+                            <label for="spatialReferenceDiv" class="col-md-3 control-label" style="padding-left:0; text-align:left;">Spatial Reference System</label>
                             <div id="spatialReferenceDiv" class="col-md-9" style="padding-left:0; padding-right:0;">
                                 <input class="form-control" type="text" ng-model="form.gemini.spatialReferenceSystem" title="Identifier of the system of spatial referencing, whether by coordiantes or geographic identifiers used in the data resource" tc-focus-tip />
                             </div>
@@ -492,6 +484,8 @@
                         </div>
                     </div>
                 </div>
+                
+                <br /><br />
 
                 <div class="form-group">
                     <button ng-click="cancel()" ng-hide="isCancelHidden()" class="btn btn-primary">CANCEL</button>
@@ -500,6 +494,7 @@
 
             </div>
 
+          
             <div class="col-md-3">
                 <div class="editor-internal well well-sm">
                     
@@ -510,7 +505,6 @@
                         </div>
                         <div class="layout-col pull-right">
                             <div class="btn-group">
-                                <!-- omg angular ! -->
                                 <button ng-click="form.topCopy = true" ng-class="{ 'btn-primary': form.topCopy, 'btn-default': !form.topCopy }" class="btn">
                                     <span class="glyphicon glyphicon-leaf"></span>Yes
                                 </button>
@@ -621,9 +615,8 @@
                     
                 </div>
 
-            </div>
-            
-            {{form}}
+            </div>            
+            <!--{{form}}-->
         </div>
     </form>
 </div>

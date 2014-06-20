@@ -1,4 +1,4 @@
-﻿(function() {
+(function() {
   var hslToRgb, module;
 
   module = angular.module('app.services');

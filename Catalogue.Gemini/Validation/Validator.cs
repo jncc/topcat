@@ -23,7 +23,7 @@ namespace Catalogue.Gemini.Validation
         public ValidationResultSet Validate(XDocument doc)
         {
             // see http://metacheck.nerc-lancaster.ac.uk/validator
-
+//            System.Console.WriteLine(doc);
             string result = ExecuteCehRequest(doc);
             return ParseCehResult(result);
         }
@@ -45,7 +45,7 @@ namespace Catalogue.Gemini.Validation
             // so there's no guarantee it's exhaustive - if in doubt, debug the actual XML.
             
             // ReSharper disable PossibleNullReferenceException
-
+//            System.Console.WriteLine(doc);
             return new ValidationResultSet
                 {
                     FileIdentifier = doc.Root.Element("fileIdentifier").Value,
