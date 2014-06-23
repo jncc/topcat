@@ -20,14 +20,21 @@
         
         # search term changed, reset to page 1
         doDefaultSearch = (q) ->
-            $scope.keywordFlag = false;
-            $scope.query.p = 0;
-            $scope.query.q = q;
-            doSearch();
-            
-                       
+            $scope.query.p = 0; 
+            if q.substr(0,7) is 'keyword:'
+                $scope.keywordFlag = true;     
+                keywordLength = q.length();
+                $scope.keyword.value = q.substr(8, keywordLength);
+                # vocab ignored server side, might have to change this
+                $scope.keyword.vocab = "not used yet, a user not expected to type in url";
+                $scope.doKeywordSearch($scope.keyword,  $scope.query.p)
+            else
+                $scope.keywordFlag = false;  
+                $scope.query.q = q;
+                doSearch();              
+                                   
         doSearch = () ->
-            if not $scope.keyword.flag
+            if not $scope.keyword.flag 
                 if $scope.query.q 
                     # update the url
                     $location.search('q', $scope.query.q) 
@@ -46,24 +53,24 @@
                 $scope.doKeywordSearch($scope.keyword, $scope.query.p);
             
         $scope.doKeywordSearch = (keyword, pageNumber) ->
-            $scope.keyword = keyword;
-            $scope.keyword.flag = true;
-            searchInputModel = {};
-            delete keyword.$$hashKey;
-            searchInputModel.keyword = keyword;
-            searchInputModel.pageNumber = pageNumber;
-            searchInputModel.numberOfRecords = $scope.query.n;            
+            $location.url($location.path())
+            $location.search('value', keyword.value) 
+            $location.search('vocab', keyword.vocab) 
+            $location.search('p', $scope.query.p)
+            $location.search('n', $scope.query.n)
+            $scope.query.q = "keyword:"+keyword.value 
+            $scope.keyword = keyword
+            $scope.keyword.flag = true
             $scope.busy.start()
-            # good morning stephen
-            # optimize and do this propery, using watch and setting location, which then effects routing ?
-            $http.post('../api/keywordSearch', searchInputModel)
+            $http.get("../api/keywordSearch?value="+ keyword.value+"&vocab="+keyword.vocab+"&p="+pageNumber+"&n="+$scope.query.n)          
                 .success (result) ->
                     $scope.result = result; 
                     $rootScope.page = { title:appTitlePrefix+keyword.value}; # update the page title#.finally -> 
                 .finally -> $scope.busy.stop()
        
-        # when the model query value is updated, do the search
+        # when the model query value is updated, do the search, and reset page to zero
         $scope.$watch 'query.q', doDefaultSearch, true
+        # when the model page value is updated just do search with existing scope params
         $scope.$watch 'query.p', doSearch, true
 
         # when the querystring changes, update the model query value

@@ -30,10 +30,19 @@
       return Math.ceil(total / pageLength) - 1;
     };
     doDefaultSearch = function(q) {
-      $scope.keywordFlag = false;
+      var keywordLength;
       $scope.query.p = 0;
-      $scope.query.q = q;
-      return doSearch();
+      if (q.substr(0, 7) === 'keyword:') {
+        $scope.keywordFlag = true;
+        keywordLength = q.length();
+        $scope.keyword.value = q.substr(8, keywordLength);
+        $scope.keyword.vocab = "not used yet, a user not expected to type in url";
+        return $scope.doKeywordSearch($scope.keyword, $scope.query.p);
+      } else {
+        $scope.keywordFlag = false;
+        $scope.query.q = q;
+        return doSearch();
+      }
     };
     doSearch = function() {
       if (!$scope.keyword.flag) {
@@ -58,16 +67,16 @@
       }
     };
     $scope.doKeywordSearch = function(keyword, pageNumber) {
-      var searchInputModel;
+      $location.url($location.path());
+      $location.search('value', keyword.value);
+      $location.search('vocab', keyword.vocab);
+      $location.search('p', $scope.query.p);
+      $location.search('n', $scope.query.n);
+      $scope.query.q = "keyword:" + keyword.value;
       $scope.keyword = keyword;
       $scope.keyword.flag = true;
-      searchInputModel = {};
-      delete keyword.$$hashKey;
-      searchInputModel.keyword = keyword;
-      searchInputModel.pageNumber = pageNumber;
-      searchInputModel.numberOfRecords = $scope.query.n;
       $scope.busy.start();
-      return $http.post('../api/keywordSearch', searchInputModel).success(function(result) {
+      return $http.get("../api/keywordSearch?value=" + keyword.value + "&vocab=" + keyword.vocab + "&p=" + pageNumber + "&n=" + $scope.query.n).success(function(result) {
         $scope.result = result;
         return $rootScope.page = {
           title: appTitlePrefix + keyword.value

@@ -14,8 +14,20 @@ namespace Catalogue.Web.Controllers.Search
             _keywordSearchService = keywordSearchService;
         }
 
-        public SearchOutputModel Post(SearchInputModel searchInputModel)
+        public SearchOutputModel Get(string value, string vocab, int n = 25, int p = 0)
         {
+            var keyword = new Keyword()
+            {
+                Value = value,
+                Vocab = vocab
+            };
+            var searchInputModel = new SearchInputModel()
+            {
+                Keyword = keyword,
+                NumberOfRecords = n,
+                PageNumber = p,
+                SearchType = SearchType.Keyword
+            };
             var output = _keywordSearchService.FindByKeyword(searchInputModel);
             return output;
         }
