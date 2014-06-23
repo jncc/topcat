@@ -132,3 +132,6 @@ packages/Newtonsoft.Json.4.5.11/lib/sl4/Newtonsoft.Json.dll
 packages/Newtonsoft.Json.4.5.11/lib/sl4/Newtonsoft.Json.xml
 packages/Newtonsoft.Json.4.5.11/lib/winrt45/Newtonsoft.Json.dll
 packages/Newtonsoft.Json.4.5.11/lib/winrt45/Newtonsoft.Json.xml
+Catalogue.Web/app/.idea/
+Catalogue.Web/app/js/controllers/AdminController.map
+Catalogue.Web/app/js/controllers/SearchController.map

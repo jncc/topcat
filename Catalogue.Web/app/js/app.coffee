@@ -1,6 +1,4 @@
-﻿
-
-module = angular.module 'app', [
+﻿module = angular.module 'app', [
     'ngAnimate',
     'ngRoute',
     'ngSanitize',

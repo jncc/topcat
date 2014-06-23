@@ -1,5 +1,4 @@
-﻿
-angular.module('app.controllers').controller 'AdminController', 
+﻿angular.module('app.controllers').controller 'AdminController',
 
     ($scope, $http) -> 
         $scope.myBool = {};
