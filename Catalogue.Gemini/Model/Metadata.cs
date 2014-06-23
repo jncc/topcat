@@ -67,7 +67,7 @@ namespace Catalogue.Gemini.Model
 
         protected bool Equals(Keyword other)
         {
-            return string.Equals(Value.ToLower(), other.Value.ToLower()) && string.Equals(Vocab.ToLower(), other.Vocab.ToLower());
+            return string.Equals(Value, other.Value, StringComparison.InvariantCultureIgnoreCase) && string.Equals(Vocab, other.Vocab, StringComparison.InvariantCultureIgnoreCase);
         }
 
         public override bool Equals(object obj)

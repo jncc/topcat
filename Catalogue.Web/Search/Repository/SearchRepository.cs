@@ -41,10 +41,11 @@ namespace Catalogue.Web.Search
             IQueryable<Record> query = _db.Query<Record>()
                 .Statistics(out stats)
                 .Where(r => r.Gemini.Keywords.Any(k => k.Equals(searchInputModel.Keyword)));
-            
-           
+
+            var malistofstuff = query.ToList();
            
             int skipNumber = searchInputModel.PageNumber * searchInputModel.NumberOfRecords;
+
             List<Record> results = query
                     .Skip(skipNumber)
                     .Take(searchInputModel.NumberOfRecords).ToList();
