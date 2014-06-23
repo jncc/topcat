@@ -42,7 +42,7 @@ namespace Catalogue.Web.Search
                 .Statistics(out stats)
                 .Where(r => r.Gemini.Keywords.Any(k => k.Equals(searchInputModel.Keyword)));
 
-            var malistofstuff = query.ToList();
+           // var malistofstuff = query.ToList(); // for debug
            
             int skipNumber = searchInputModel.PageNumber * searchInputModel.NumberOfRecords;
 
@@ -50,8 +50,6 @@ namespace Catalogue.Web.Search
                     .Skip(skipNumber)
                     .Take(searchInputModel.NumberOfRecords).ToList();
            
-
-
             return new SearchOutputModel
             {
                 Total = stats.TotalResults,
