@@ -1,6 +1,4 @@
-﻿
-
-angular.module('app.controllers').controller 'SandboxController', 
+﻿angular.module('app.controllers').controller 'SandboxController',
 
     ($scope) ->  #, Formats
 

@@ -1,7 +1,6 @@
-﻿
-angular.module('app.controllers').controller 'MainController', 
+﻿angular.module('app.controllers').controller 'MainController',
 
-    ($scope, $timeout, Account, misc) -> 
+    ($scope, $timeout, Account, misc) ->
 
         # implement busy spinner feature
         busyCount = 0

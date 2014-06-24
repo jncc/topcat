@@ -1,6 +1,4 @@
-﻿
-
-# from http://programanddesign.com/js/jquery-select-text-range/
+﻿# from http://programanddesign.com/js/jquery-select-text-range/
 $.fn.highlightInputSelectionRange = (start, end) ->
     this.each () ->
         if this.setSelectionRange # non-IE

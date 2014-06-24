@@ -1,5 +1,4 @@
-﻿
-module = angular.module 'app.services'
+﻿module = angular.module 'app.services'
 
 module.factory 'Account', ($http, $q) ->
     d = $q.defer()

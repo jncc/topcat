@@ -1,8 +1,6 @@
-﻿
-angular.module('app.controllers').controller 'EditorController', 
+﻿angular.module('app.controllers').controller 'EditorController',
 
     ($scope, $http, $routeParams, $location, record, Record) -> 
-
         # todo lookups should be injected
         $scope.lookups = {}
         $scope.lookups.currentDataFormat = {}
@@ -95,8 +93,6 @@ angular.module('app.controllers').controller 'EditorController',
 
         #$scope.validation = fakeValidationData
         return
-
-
 
 getSecurityText = (n) -> switch n
     when 0 then 'Open'
