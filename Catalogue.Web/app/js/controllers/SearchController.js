@@ -1,7 +1,7 @@
 (function() {
 
   angular.module('app.controllers').controller('SearchController', function($scope, $rootScope, $location, $http, $timeout) {
-    var appTitlePrefix, changePageNumber, decideWhichSearch, doKeywordSearch, doTextSearch;
+    var appTitlePrefix, doKeywordSearch, doTextSearch;
     appTitlePrefix = "Topcat:";
     $scope.query = {
       q: $location.search()['q'] || '',
@@ -10,11 +10,18 @@
     };
     $scope.model = {
       keyword: {
-        value: '',
+        value: $location.search()['value'] || '',
         vocab: ''
       }
     };
-    $scope.model.keywordFlag = false;
+    if ($scope.model.keyword.value === '') {
+      console.log("false");
+      $scope.model.keywordFlag = false;
+    } else {
+      console.log("true");
+      $scope.model.keywordFlag = true;
+      $scope.query.q = $scope.model.keyword.value;
+    }
     $scope.app = {
       starting: true
     };
@@ -43,19 +50,14 @@
       $scope.model.keywordFlag = true;
       return $scope.query.q = keyword.value;
     };
-    changePageNumber = function() {
+    $scope.changePageNumber = function() {
       if ($scope.model.keywordFlag) {
         return doKeywordSearch();
       } else {
-        console.log("page number fun");
         return doTextSearch();
       }
     };
-    $scope.decideWhichSearchFlag = function() {
-      return decideWhichSearch();
-    };
-    decideWhichSearch = function() {
-      console.log("In decide which search, q is  : " + $scope.query.q);
+    $scope.decideWhichSearch = function() {
       $scope.query.p = 0;
       if ($scope.model.keywordFlag) {
         $scope.model.keyword.value = $scope.query.q;
@@ -67,13 +69,21 @@
     };
     doTextSearch = function() {
       if ($scope.query.q) {
+        $location.url($location.path());
+        $location.search('q', $scope.query.q);
+        $location.search('p', $scope.query.p);
+        $location.search('n', $scope.query.n);
         $rootScope.page = {
           title: appTitlePrefix + $scope.query.q
         };
         $scope.busy.start();
         return $http.get('../api/search?' + $.param($scope.query)).success(function(result) {
           if (angular.equals(result.query, $scope.query)) {
-            return $scope.result = result;
+            if (result.total === 0) {
+              return $scope.result = {};
+            } else {
+              return $scope.result = result;
+            }
           }
         })["finally"](function() {
           return $scope.busy.stop();
@@ -83,13 +93,16 @@
     doKeywordSearch = function() {
       $location.url($location.path());
       $location.search('value', $scope.model.keyword.value);
-      $location.search('vocab', $scope.model.keyword.vocab);
       $location.search('p', $scope.query.p);
       $location.search('n', $scope.query.n);
       $scope.busy.start();
       return $http.get("../api/keywordSearch?value=" + $scope.model.keyword.value + "&vocab=" + $scope.model.keyword.vocab + "&p=" + $scope.query.p + "&n=" + $scope.query.n).success(function(result) {
         if (angular.equals(result.query, $scope.query)) {
-          return $scope.result = result;
+          if (result.total === 0) {
+            return $scope.result = {};
+          } else {
+            return $scope.result = result;
+          }
         }
       })["finally"](function() {
         $scope.busy.stop();
@@ -98,7 +111,7 @@
         };
       });
     };
-    return $scope.$watch('query.q', decideWhichSearch, true);
+    return $scope.$watch('query.q', $scope.decideWhichSearch, true);
   });
 
 }).call(this);

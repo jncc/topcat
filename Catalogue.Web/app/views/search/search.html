@@ -19,7 +19,8 @@
             </div>
             <div class="row text-center ">
                     <label>
-                        <input type="checkbox" ng-click="model.keywordFlag = !model.keywordFlag; decideWhichSearchFlag()"> Keywords only.
+                        <!--<input type="checkbox" ng-change="model.keywordFlag = !model.keywordFlag; decideWhichSearch()"> Keywords only.-->
+                        <input type="checkbox"  ng-model="model.keywordFlag" ng-change="decideWhichSearch()"> Keywords only.
                     </label>
                     </div>
         </div>
@@ -51,7 +52,7 @@
     <ul class="pagination">
      <!--   <li class="disabled"><a href="">&laquo;</a></li>-->
     <li style="cursor: pointer; cursor: hand;" ng-repeat="n in range(0,maxPages(result.total, 25))" ng-class="(n===query.p+1) ? 'active' : ''">
-            <span ng-click="query.p = n-1"><span ng-bind="n">n</span></span>
+            <span ng-click="query.p = n-1; changePageNumber();"><span ng-bind="n">n</span></span>
         </li>
         <!--<li><span href="#">&raquo;</span></li>-->
     </ul>
