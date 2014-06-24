@@ -21,13 +21,14 @@
         # search term changed, reset to page 1
         doDefaultSearch = (q) ->
             $scope.query.p = 0; 
-            if q.substr(0,7) is 'keyword:'
-                $scope.keywordFlag = true;     
-                keywordLength = q.length();
-                $scope.keyword.value = q.substr(8, keywordLength);
-                # vocab ignored server side, might have to change this
-                $scope.keyword.vocab = "not used yet, a user not expected to type in url";
-                $scope.doKeywordSearch($scope.keyword,  $scope.query.p)
+            if q.substr(0,8) is 'keyword:' 
+                if $scope.keyword.value isnt q.substr(8, keywordLength)  # infinite loop without this check
+                    $scope.keywordFlag = true;     
+                    keywordLength = q.length;
+                    $scope.keyword.value = q.substr(8, keywordLength);
+                    # vocab ignored server side, might have to change this
+                    $scope.keyword.vocab = "not used yet, a user not expected to type in url";
+                    $scope.doKeywordSearch($scope.keyword,  $scope.query.p)
             else
                 $scope.keywordFlag = false;  
                 $scope.query.q = q;
@@ -57,8 +58,7 @@
             $location.search('value', keyword.value) 
             $location.search('vocab', keyword.vocab) 
             $location.search('p', $scope.query.p)
-            $location.search('n', $scope.query.n)
-            $scope.query.q = "keyword:"+keyword.value 
+            $location.search('n', $scope.query.n)           
             $scope.keyword = keyword
             $scope.keyword.flag = true
             $scope.busy.start()
@@ -70,12 +70,13 @@
        
         # when the model query value is updated, do the search, and reset page to zero
         $scope.$watch 'query.q', doDefaultSearch, true
+        
         # when the model page value is updated just do search with existing scope params
         $scope.$watch 'query.p', doSearch, true
 
         # when the querystring changes, update the model query value
-        $scope.$watch(
-            ()  -> $location.search()['q'] #todo watch and update whole querystring
-            (q) -> $scope.query.q = q || ''
-        )
+        # $scope.$watch(
+        #    ()  -> $location.search()['q'] #todo watch and update whole querystring
+        #    (q) -> $scope.query.q = q || ''
+        #)
 

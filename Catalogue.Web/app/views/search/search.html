@@ -66,7 +66,7 @@
         <div ng-bind-html="r.snippet"></div>
         <div class="search-tags">
             <span class="tag" ng-repeat="k in r.keywords"  style="cursor: pointer; cursor: hand;" ng-click="doKeywordSearch(k,0)">
-                <span tc-tag style="width:15px;" ng-style="{ 'background-color': hashStringToColor(k.vocab) }"><span class="glyphicon glyphicon-info-sign"></span></span>
+                <span tc-tag style="width:15px;" ng-style="{ 'background-color': hashStringToColor(k.vocab) }">&nbsp;<!--<span class="glyphicon glyphicon-info-sign"></span>--></span>
                 {{ k.value }}
                 <span class="glyphicon glyphicon-search"></span>
             </span>
@@ -132,13 +132,13 @@
                     <li>Authenticate without passwords <span class="label label-success">Done</span></li>
                     <li>Import MESH metadata <span class="label label-success">Done</span></li>
                     <li>Import Pressures metadata <span class="label label-success">Done</span></li>
-                    <li>Metadata editor <span class="label label-danger">Started</span></li>
-                    <li>Keyword selection <span class="label label-danger">Started</span></li>
-                    <li>Download</li>
-                    <li>Validation <span class="label label-danger">Started</span></li>
+                    <li>Metadata editor <span class="label label-danger">Done</span></li>
+                    <li>Keyword selection <span class="label label-danger">Done</span></li>
+                    <li>Validation <span class="label label-danger">Done</span></li>
                 </ul>
                 <h3>Wishlist</h3>
                 <ul>
+                    <li>Download results</li>
                     <li>Spatial search</li>
                     <li>Bounding box editor UI</li>
                     <li>Advanced search</li>
