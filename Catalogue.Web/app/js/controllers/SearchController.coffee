@@ -66,7 +66,6 @@
                 # search the server
                 $http.get('../api/search?' + $.param $scope.query)
                     .success (result) ->
-                        console.log("text success handler")
                         # don't overwrite with old slow results!
                         if angular.equals result.query, $scope.query
                             $scope.result = result
@@ -82,10 +81,11 @@
             $scope.busy.start()
             $http.get("../api/keywordSearch?value="+ $scope.model.keyword.value+"&vocab="+$scope.model.keyword.vocab+"&p="+$scope.query.p+"&n="+$scope.query.n)          
                 .success (result) ->
-                    $scope.result = result; 
-                    $rootScope.page = { title:appTitlePrefix+$scope.model.keyword.value} 
+                    if angular.equals result.query, $scope.query
+                        $scope.result = result;                         
                 .finally -> 
-                    $scope.busy.stop()                
+                    $scope.busy.stop()          
+                    $rootScope.page = { title:appTitlePrefix+$scope.model.keyword.value}       
        
         #  register the three listners
         $scope.$watch 'query.q', decideWhichSearch, true # coul dbe either text or keyword

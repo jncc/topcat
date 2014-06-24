@@ -72,7 +72,6 @@
         };
         $scope.busy.start();
         return $http.get('../api/search?' + $.param($scope.query)).success(function(result) {
-          console.log("text success handler");
           if (angular.equals(result.query, $scope.query)) {
             return $scope.result = result;
           }
@@ -89,12 +88,14 @@
       $location.search('n', $scope.query.n);
       $scope.busy.start();
       return $http.get("../api/keywordSearch?value=" + $scope.model.keyword.value + "&vocab=" + $scope.model.keyword.vocab + "&p=" + $scope.query.p + "&n=" + $scope.query.n).success(function(result) {
-        $scope.result = result;
+        if (angular.equals(result.query, $scope.query)) {
+          return $scope.result = result;
+        }
+      })["finally"](function() {
+        $scope.busy.stop();
         return $rootScope.page = {
           title: appTitlePrefix + $scope.model.keyword.value
         };
-      })["finally"](function() {
-        return $scope.busy.stop();
       });
     };
     return $scope.$watch('query.q', decideWhichSearch, true);
