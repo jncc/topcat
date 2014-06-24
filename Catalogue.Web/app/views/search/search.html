@@ -19,7 +19,7 @@
             </div>
             <div class="row text-center ">
                     <label>
-                        <input type="checkbox" ng-model="model.keywordFlag"> Keywords only.
+                        <input type="checkbox" ng-click="model.keywordFlag = !model.keywordFlag; decideWhichSearchFlag()"> Keywords only.
                     </label>
                     </div>
         </div>
@@ -64,7 +64,7 @@
     <div class="layout-col">
         <div class="search-title">
             <a ng-href="#/editor/{{r.id}}" ng-bind-html="r.title"></a>
-            <span class="search-date" ng-show="r.date">{{r.date.substring(0, 4)}}</span><!-- .net doesn't serialzie datetime as a javascript date ! can't use getUTCFullYear()-->
+            <span class="search-date" ng-show="r.date">{{r.date.substring(0, 4)}}</span><!-- json handles dates as strings, so  can't use getUTCFullYear()-->
             <span tc-top-copy-icon ng-show="r.topCopy" title="Top copy"></span>
         </div>
         <div ng-bind-html="r.snippet"></div>

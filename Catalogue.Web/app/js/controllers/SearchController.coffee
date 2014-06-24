@@ -34,11 +34,15 @@
             if $scope.model.keywordFlag
                 doKeywordSearch();
             else
+                console.log("page number fun")
                 doTextSearch();              
-        
+        $scope.decideWhichSearchFlag = () ->
+            decideWhichSearch()
+            
         # listener for when text entered into search box, either calls textSearch, or updates the model keyword
         decideWhichSearch = () ->
             # if $scope.query.q and $scope.query.q.substr(0,8) is 'keyword:' 
+            console.log("In decide which search, q is  : "+$scope.query.q)
             $scope.query.p = 0 # it must be a new search                
             if $scope.model.keywordFlag
                 # this updates the model keyword, which then fires the actual search                
@@ -53,15 +57,16 @@
         doTextSearch = () ->
             if $scope.query.q 
                 # update the url
-                $location.url($location.path())
-                $location.search('q', $scope.query.q) 
-                $location.search('p', $scope.query.p) 
-                $location.search('n', $scope.query.n)
-                $rootScope.page = { title: if $scope.query.q then appTitlePrefix + $scope.query.q else appTitlePrefix } # update the page title
+                #$location.url($location.path())
+                #$location.search('q', $scope.query.q) 
+                #$location.search('p', $scope.query.p) 
+                #$location.search('n', $scope.query.n)
+                $rootScope.page = {title: appTitlePrefix + $scope.query.q} # update the page title
                 $scope.busy.start()
                 # search the server
                 $http.get('../api/search?' + $.param $scope.query)
                     .success (result) ->
+                        console.log("text success handler")
                         # don't overwrite with old slow results!
                         if angular.equals result.query, $scope.query
                             $scope.result = result
@@ -75,24 +80,22 @@
             $location.search('p', $scope.query.p)            
             $location.search('n', $scope.query.n)                       
             $scope.busy.start()
-            
             $http.get("../api/keywordSearch?value="+ $scope.model.keyword.value+"&vocab="+$scope.model.keyword.vocab+"&p="+$scope.query.p+"&n="+$scope.query.n)          
                 .success (result) ->
-                    console.log("here")
                     $scope.result = result; 
                     $rootScope.page = { title:appTitlePrefix+$scope.model.keyword.value} 
                 .finally -> 
-                    $scope.busy.stop()
-                    console.log("stoped and flag : "+ JSON.stringify($scope.query))
+                    $scope.busy.stop()                
        
         #  register the three listners
         $scope.$watch 'query.q', decideWhichSearch, true # coul dbe either text or keyword
-        #$scope.$watch 'model.keyword.value', doKeywordSearch, true # only keyword
-        $scope.$watch 'query.p', changePageNumber, true # coul dbe text or keyword
-        $scope.$watch 'model.keywordFlag', decideWhichSearch, true # coul dbe text or keyword
+        # $scope.$watch 'model.keyword.value', doKeywordSearch, true # only keyword
+        # $scope.$watch 'query.p', changePageNumber, true # coul dbe text or keyword
+        # $scope.$watch 'model.keywordFlag', decideWhichSearch, true # coul dbe text or keyword
 
         # when the querystring changes, update the model query value
-        $scope.$watch(
-            ()  -> $location.search()['q'] 
-            (q) -> $scope.query.q = q || ''       
+        #$scope.$watch(
+        #    ()  -> $location.search()['q'] #todo watch and update whole querystring
+        #    (q) -> $scope.query.q = q || ''
+        #)
 

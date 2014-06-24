@@ -47,10 +47,15 @@
       if ($scope.model.keywordFlag) {
         return doKeywordSearch();
       } else {
+        console.log("page number fun");
         return doTextSearch();
       }
     };
+    $scope.decideWhichSearchFlag = function() {
+      return decideWhichSearch();
+    };
     decideWhichSearch = function() {
+      console.log("In decide which search, q is  : " + $scope.query.q);
       $scope.query.p = 0;
       if ($scope.model.keywordFlag) {
         $scope.model.keyword.value = $scope.query.q;
@@ -62,15 +67,12 @@
     };
     doTextSearch = function() {
       if ($scope.query.q) {
-        $location.url($location.path());
-        $location.search('q', $scope.query.q);
-        $location.search('p', $scope.query.p);
-        $location.search('n', $scope.query.n);
         $rootScope.page = {
-          title: $scope.query.q ? appTitlePrefix + $scope.query.q : appTitlePrefix
+          title: appTitlePrefix + $scope.query.q
         };
         $scope.busy.start();
         return $http.get('../api/search?' + $.param($scope.query)).success(function(result) {
+          console.log("text success handler");
           if (angular.equals(result.query, $scope.query)) {
             return $scope.result = result;
           }
@@ -87,25 +89,15 @@
       $location.search('n', $scope.query.n);
       $scope.busy.start();
       return $http.get("../api/keywordSearch?value=" + $scope.model.keyword.value + "&vocab=" + $scope.model.keyword.vocab + "&p=" + $scope.query.p + "&n=" + $scope.query.n).success(function(result) {
-        console.log("here");
         $scope.result = result;
         return $rootScope.page = {
           title: appTitlePrefix + $scope.model.keyword.value
         };
       })["finally"](function() {
-        $scope.busy.stop();
-        return console.log("stoped and flag : " + JSON.stringify($scope.query));
+        return $scope.busy.stop();
       });
     };
-    $scope.$watch('query.q', decideWhichSearch, true);
-    $scope.$watch('query.p', changePageNumber, true);
-    $scope.$watch('model.keywordFlag', decideWhichSearch, true);
-    return $rootScope.$on('$locationChangeStart', function() {
-      alert("locaiton changed");
-      $scope.query.q = $location.search()['q'];
-      $scope.query.p = $location.search()['p'];
-      return $scope.query.n = $location.search()['n'];
-    });
+    return $scope.$watch('query.q', decideWhichSearch, true);
   });
 
 }).call(this);
