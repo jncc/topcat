@@ -4,6 +4,7 @@
          # initial values
         $scope.query = { q: $location.search()['q'] || '', p: 0 , n:25}
         $scope.model = { keyword : { value:'', vocab:''};}
+        $scope.model.keywordFlag = false
         # $scope.model.keyword = {};
         # slightly hacky way of triggering animations on startup
         # to work around angular skipping the initial animation
@@ -20,29 +21,33 @@
             
         $rootScope.page = { title:appTitlePrefix } 
         
-        # page number changed, don't fire any listeners jsut call seach with new model (only p will have changed)
+        # update flag, then fire listner
         $scope.changeKeywordResetPageNumber = (keyword) ->
             $scope.model.keyword = keyword
             $scope.query.p = 0;
-            # no need to call keyword search directly as listner registerd
+            $scope.model.keywordFlag = true
+            $scope.query.q = keyword.value
+            # no need to call keyword search directly as listner registerd for query q change
         
+        # page number changed, don't fire any listeners jsut call seach with new model (only p will have changed)
         changePageNumber = () ->
-            if $scope.query.q.substr(0,8) is 'keyword:' 
+            if $scope.model.keywordFlag
                 doKeywordSearch();
             else
                 doTextSearch();              
         
         # listener for when text entered into search box, either calls textSearch, or updates the model keyword
         decideWhichSearch = () ->
-            if $scope.query.q and $scope.query.q.substr(0,8) is 'keyword:' 
+            # if $scope.query.q and $scope.query.q.substr(0,8) is 'keyword:' 
+            $scope.query.p = 0 # it must be a new search                
+            if $scope.model.keywordFlag
                 # this updates the model keyword, which then fires the actual search                
-                keywordLength = q.length;
-                $scope.model.keyword.value = q.substr(8, keywordLength);
+                $scope.model.keyword.value = $scope.query.q
                 # vocab ignored server side, might have to change this
                 $scope.model.keyword.vocab = "not used yet, a user not expected to type in url";
-                # no need to call doKeywordSearch as it will done by the listener
+                doKeywordSearch()
             else
-                doTextSearch();              
+                doTextSearch()              
         
         # not called by a listener, invoked by from changePageNumber or decideWhichSearch
         doTextSearch = () ->
@@ -64,28 +69,30 @@
 
         # listner for model Keyword changed, also invoked by changePageNumber and decideWhichsearch
         doKeywordSearch = () ->
-            if $scope.model.keyword.value
-                $location.url($location.path())
-                $location.search('value', $scope.model.keyword.value) 
-                $location.search('vocab', $scope.model.keyword.vocab) 
-                $location.search('p', $scope.query.p)
-                $scope.query.q = "keyword:"+$scope.model.keyword.value
-                $location.search('n', $scope.query.n)                       
-                $scope.busy.start()
-                $http.get("../api/keywordSearch?value="+ $scope.model.keyword.value+"&vocab="+$scope.model.keyword.vocab+"&p="+$scope.query.p+"&n="+$scope.query.n)          
-                    .success (result) ->
-                        $scope.result = result; 
-                        $rootScope.page = { title:appTitlePrefix+$scope.model.keyword.value}; # update the page title#.finally -> 
-                    .finally -> $scope.busy.stop()
+            $location.url($location.path())
+            $location.search('value', $scope.model.keyword.value) 
+            $location.search('vocab', $scope.model.keyword.vocab) 
+            $location.search('p', $scope.query.p)            
+            $location.search('n', $scope.query.n)                       
+            $scope.busy.start()
+            
+            $http.get("../api/keywordSearch?value="+ $scope.model.keyword.value+"&vocab="+$scope.model.keyword.vocab+"&p="+$scope.query.p+"&n="+$scope.query.n)          
+                .success (result) ->
+                    console.log("here")
+                    $scope.result = result; 
+                    $rootScope.page = { title:appTitlePrefix+$scope.model.keyword.value} 
+                .finally -> 
+                    $scope.busy.stop()
+                    console.log("stoped and flag : "+ JSON.stringify($scope.query))
        
         #  register the three listners
         $scope.$watch 'query.q', decideWhichSearch, true # coul dbe either text or keyword
-        $scope.$watch 'model.keyword.value', doKeywordSearch, true # only keyword
+        #$scope.$watch 'model.keyword.value', doKeywordSearch, true # only keyword
         $scope.$watch 'query.p', changePageNumber, true # coul dbe text or keyword
+        $scope.$watch 'model.keywordFlag', decideWhichSearch, true # coul dbe text or keyword
 
         # when the querystring changes, update the model query value
-        # $scope.$watch(
-        #    ()  -> $location.search()['q'] #todo watch and update whole querystring
-        #    (q) -> $scope.query.q = q || ''
-        #)
+        $scope.$watch(
+            ()  -> $location.search()['q'] 
+            (q) -> $scope.query.q = q || ''       
 

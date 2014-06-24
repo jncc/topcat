@@ -40,11 +40,17 @@ namespace Catalogue.Web.Search
             
             IQueryable<Record> query = _db.Query<Record>()
                 .Statistics(out stats)
-                .Where(r => r.Gemini.Keywords.Any(k => k.Equals(searchInputModel.Keyword)));
+                .Where(r => r.Gemini.Keywords.Any(k => k.Value.Equals(searchInputModel.Keyword.Value)));
 
-           // var malistofstuff = query.ToList(); // for debug
-           
-            int skipNumber = searchInputModel.PageNumber * searchInputModel.NumberOfRecords;
+//            why doesn't this work ?
+//            IQueryable<Record> queryBorked = _db.Query<Record>()
+//            .Statistics(out stats)
+//            .Where(r => r.Gemini.Keywords.Any(k => k.Equals(searchInputModel.Keyword)));
+
+//           var malistofstuff = query.ToList(); // for debug
+//           var borkedlistofstuff = queryBorked.ToList(); // for debug
+
+           int skipNumber = searchInputModel.PageNumber * searchInputModel.NumberOfRecords;
 
             List<Record> results = query
                     .Skip(skipNumber)

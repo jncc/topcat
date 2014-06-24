@@ -14,6 +14,7 @@
         vocab: ''
       }
     };
+    $scope.model.keywordFlag = false;
     $scope.app = {
       starting: true
     };
@@ -38,21 +39,23 @@
     };
     $scope.changeKeywordResetPageNumber = function(keyword) {
       $scope.model.keyword = keyword;
-      return $scope.query.p = 0;
+      $scope.query.p = 0;
+      $scope.model.keywordFlag = true;
+      return $scope.query.q = keyword.value;
     };
     changePageNumber = function() {
-      if ($scope.query.q.substr(0, 8) === 'keyword:') {
+      if ($scope.model.keywordFlag) {
         return doKeywordSearch();
       } else {
         return doTextSearch();
       }
     };
     decideWhichSearch = function() {
-      var keywordLength;
-      if ($scope.query.q && $scope.query.q.substr(0, 8) === 'keyword:') {
-        keywordLength = q.length;
-        $scope.model.keyword.value = q.substr(8, keywordLength);
-        return $scope.model.keyword.vocab = "not used yet, a user not expected to type in url";
+      $scope.query.p = 0;
+      if ($scope.model.keywordFlag) {
+        $scope.model.keyword.value = $scope.query.q;
+        $scope.model.keyword.vocab = "not used yet, a user not expected to type in url";
+        return doKeywordSearch();
       } else {
         return doTextSearch();
       }
@@ -77,27 +80,32 @@
       }
     };
     doKeywordSearch = function() {
-      if ($scope.model.keyword.value) {
-        $location.url($location.path());
-        $location.search('value', $scope.model.keyword.value);
-        $location.search('vocab', $scope.model.keyword.vocab);
-        $location.search('p', $scope.query.p);
-        $scope.query.q = "keyword:" + $scope.model.keyword.value;
-        $location.search('n', $scope.query.n);
-        $scope.busy.start();
-        return $http.get("../api/keywordSearch?value=" + $scope.model.keyword.value + "&vocab=" + $scope.model.keyword.vocab + "&p=" + $scope.query.p + "&n=" + $scope.query.n).success(function(result) {
-          $scope.result = result;
-          return $rootScope.page = {
-            title: appTitlePrefix + $scope.model.keyword.value
-          };
-        })["finally"](function() {
-          return $scope.busy.stop();
-        });
-      }
+      $location.url($location.path());
+      $location.search('value', $scope.model.keyword.value);
+      $location.search('vocab', $scope.model.keyword.vocab);
+      $location.search('p', $scope.query.p);
+      $location.search('n', $scope.query.n);
+      $scope.busy.start();
+      return $http.get("../api/keywordSearch?value=" + $scope.model.keyword.value + "&vocab=" + $scope.model.keyword.vocab + "&p=" + $scope.query.p + "&n=" + $scope.query.n).success(function(result) {
+        console.log("here");
+        $scope.result = result;
+        return $rootScope.page = {
+          title: appTitlePrefix + $scope.model.keyword.value
+        };
+      })["finally"](function() {
+        $scope.busy.stop();
+        return console.log("stoped and flag : " + JSON.stringify($scope.query));
+      });
     };
     $scope.$watch('query.q', decideWhichSearch, true);
-    $scope.$watch('model.keyword.value', doKeywordSearch, true);
-    return $scope.$watch('query.p', changePageNumber, true);
+    $scope.$watch('query.p', changePageNumber, true);
+    $scope.$watch('model.keywordFlag', decideWhichSearch, true);
+    return $rootScope.$on('$locationChangeStart', function() {
+      alert("locaiton changed");
+      $scope.query.q = $location.search()['q'];
+      $scope.query.p = $location.search()['p'];
+      return $scope.query.n = $location.search()['n'];
+    });
   });
 
 }).call(this);
