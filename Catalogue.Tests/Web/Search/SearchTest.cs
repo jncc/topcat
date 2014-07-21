@@ -34,16 +34,22 @@ namespace Catalogue.Tests.Web.Search
             // do not perform a full text search, so should be fewer results
             var results = _searchService.Find(_searchInputModel);
             Assert.AreEqual(results.Results.Count, 25);
-            var TotalReturned = results.Results.Count;
+            var totalReturned = results.Results.Count;
             // loop through each page
             int pages = (results.Total + PageSize - 1) / PageSize;
             for (int i = 1; i <= pages; i++)
             {
                 _searchInputModel.PageNumber = i;
                 results = _searchService.Find(_searchInputModel);
-                TotalReturned += results.Results.Count;
+                totalReturned += results.Results.Count;
             }
-            Assert.AreEqual(results.Total,TotalReturned);
+            Assert.AreEqual(results.Total,totalReturned);
+        }
+
+        [Test]
+        public void OutputKeywordsForExample()
+        {
+            
         }
     }
 }

@@ -1,19 +1,15 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Web;
 using System.Web.Http;
 using Catalogue.Data.Import;
 using Catalogue.Data.Import.Mappings;
 using Catalogue.Data.Seed;
-using NUnit.Framework.Constraints;
 using Raven.Client;
 
-namespace Catalogue.Web.Admin
+namespace Catalogue.Web.Import
 {
     /*Slightly weird controller, should only be used once in live system, when importing the data*/
-    public class AdminController : ApiController
+    public class ImportController : ApiController
     {
 
         public class FileSpec

@@ -41,7 +41,7 @@
         controller: 'SandboxController',
         templateUrl: 'views/sandbox/dropdown.html'
       }).when('/admin/minty1$', {
-        controller: 'AdminController',
+        controller: 'ImportController',
         templateUrl: 'views/admin/admin.html'
       }).otherwise({
         redirectTo: '/'

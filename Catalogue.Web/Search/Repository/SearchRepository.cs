@@ -34,21 +34,9 @@ namespace Catalogue.Web.Search
             FieldHighlightings abstractLites;
             FieldHighlightings abstractNLites;
             
-            /*KeywordsSearchIndex.Result keywordResults =
-                _db.Query<KeywordsSearchIndex.Result, KeywordsSearchIndex>()
-                    .FirstOrDefault(r => r.Value.Equals(searchTerm));*/
-            
             IQueryable<Record> query = _db.Query<Record>()
                 .Statistics(out stats)
                 .Where(r => r.Gemini.Keywords.Any(k => k.Value.Equals(searchInputModel.Keyword.Value)));
-
-//            why doesn't this work ?
-//            IQueryable<Record> queryBorked = _db.Query<Record>()
-//            .Statistics(out stats)
-//            .Where(r => r.Gemini.Keywords.Any(k => k.Equals(searchInputModel.Keyword)));
-
-//           var malistofstuff = query.ToList(); // for debug
-//           var borkedlistofstuff = queryBorked.ToList(); // for debug
 
            int skipNumber = searchInputModel.PageNumber * searchInputModel.NumberOfRecords;
 

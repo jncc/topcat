@@ -1,4 +1,4 @@
-﻿angular.module('app.controllers').controller 'AdminController',
+﻿angular.module('app.controllers').controller 'ImportController',
 
     ($scope, $http) -> 
         $scope.myBool = {};
