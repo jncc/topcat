@@ -52,8 +52,19 @@ namespace Catalogue.Web.Admin.Keywords
 
         public List<Keyword> ReadAll()
         {
-            IQueryable<Keyword> query = _db.Query<Keyword>();
-            return query.ToList();
+            int start = 0;
+            var allKeywords = new List<Keyword>();
+            while (true)
+            {
+                var current = _db.Query<Keyword>("KeywordIndex").Take(1024).Skip(start).ToList();
+                if (current.Count == 0)
+                    break;
+
+                start += current.Count;
+                allKeywords.AddRange(current);
+
+            }
+            return allKeywords;
         }
     }
 }

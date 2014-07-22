@@ -6,6 +6,7 @@ using System.Web.Mvc;
 using System.Web.Routing;
 using Catalogue.Data.Import;
 using Catalogue.Data.Import.Mappings;
+using Catalogue.Data.Indexes;
 using Catalogue.Data.Model;
 using Catalogue.Data.Seed;
 using Catalogue.Data.Test;
@@ -97,6 +98,7 @@ namespace Catalogue.Web
                 DocumentStore = new DocumentStore { ConnectionStringName = "Data" };
                 DocumentStore.Initialize();
                 IndexCreation.CreateIndexes(typeof(Record).Assembly, DocumentStore);
+                IndexCreation.CreateIndexes(typeof(KeywordIndex).Assembly, DocumentStore);
             }
         }
     }

@@ -170,8 +170,11 @@
   <ItemGroup>
     <Compile Include="Account\User.cs" />
     <Compile Include="Account\UserContext.cs" />
-    <Compile Include="Admin\AdminController.cs" />
+    <Compile Include="Admin\Keywords\KeywordsController.cs" />
+    <Compile Include="Admin\Keywords\KeywordsRepository.cs" />
+    <Compile Include="Admin\Keywords\KeywordsService.cs" />
     <Compile Include="Controllers\RolesController.cs" />
+    <Compile Include="Import\ImportController.cs" />
     <Compile Include="Logging\ElmahHandledErrorLoggerFilter.cs" />
     <Compile Include="Logging\UnhandledExceptionFilter.cs" />
     <Compile Include="Search\Repository\SearchRepository.cs" />
@@ -220,17 +223,17 @@
     <Content Include="app\js\app.min.js">
       <DependentUpon>app.coffee</DependentUpon>
     </Content>
-    <Content Include="app\js\controllers\AdminController.js">
-      <DependentUpon>AdminController.coffee</DependentUpon>
-    </Content>
-    <Content Include="app\js\controllers\AdminController.min.js">
-      <DependentUpon>AdminController.coffee</DependentUpon>
-    </Content>
     <Content Include="app\js\controllers\EditorController.js">
       <DependentUpon>EditorController.coffee</DependentUpon>
     </Content>
     <Content Include="app\js\controllers\EditorController.min.js">
       <DependentUpon>EditorController.coffee</DependentUpon>
+    </Content>
+    <Content Include="app\js\controllers\ImportController.js">
+      <DependentUpon>ImportController.coffee</DependentUpon>
+    </Content>
+    <Content Include="app\js\controllers\ImportController.min.js">
+      <DependentUpon>ImportController.coffee</DependentUpon>
     </Content>
     <Content Include="app\js\controllers\MainController.js">
       <DependentUpon>MainController.coffee</DependentUpon>
@@ -414,7 +417,7 @@
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
-    <Content Include="app\js\controllers\AdminController.coffee" />
+    <Content Include="app\js\controllers\ImportController.coffee" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
