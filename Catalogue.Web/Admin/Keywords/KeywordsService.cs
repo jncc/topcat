@@ -8,7 +8,7 @@ using Catalogue.Gemini.Model;
 namespace Catalogue.Web.Admin.Keywords
 { public interface IKeywordsService
     {
-        List<Gemini.Model.Keyword> Read(String value = null, String vocab = null);
+        ICollection<Gemini.Model.Keyword> Read(String value = null, String vocab = null);
         /*Gemini.Model.Keyword Read();
         void Delete();*/
 
@@ -23,12 +23,12 @@ namespace Catalogue.Web.Admin.Keywords
             _keywordsRepository = keywordsRepository;
         }
 
-        public List<Keyword> ReadAll()
+        public ICollection<Keyword> ReadAll()
         {
             return _keywordsRepository.ReadAll();
         }
 
-        public List<Keyword> Read(string value = null, string vocab = null)
+        public ICollection<Keyword> Read(string value = null, string vocab = null)
         {
             if (String.IsNullOrEmpty(value) && String.IsNullOrEmpty(vocab))
             {

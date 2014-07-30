@@ -15,7 +15,7 @@ namespace Catalogue.Tests.Web.Admin.Keywords
     {
         private IKeywordsRepository _keywordsRepository;
         private IKeywordsService _keywordsService;
-        private const int TotalExpectedKeywords = 10;
+        private const int TotalExpectedKeywords = 312;
 
         [TestFixtureSetUp]
         public void SetUp()
@@ -27,14 +27,16 @@ namespace Catalogue.Tests.Web.Admin.Keywords
         [Test]
         public void ReadAllKeywords()
         {
-            List<Keyword> keywords = _keywordsService.Read();
+            ICollection<Keyword> keywords = _keywordsService.Read();
+            List<Keyword> keywordList = keywords.ToList();
+            keywordList.Sort();
+            Assert.AreEqual(TotalExpectedKeywords, keywords.Count);
 
-            Assert.AreSame(TotalExpectedKeywords, keywords.Count);
-            foreach (var keyword in keywords)
+           /* foreach (var keyword in keywordList)
             {
                 System.Console.WriteLine(keyword.Value);
             }
-
+            */
         }
 
     }

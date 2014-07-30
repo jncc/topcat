@@ -20,7 +20,7 @@ namespace Catalogue.Web.Admin.Keywords
 
         // GET api/records/57d34691-9064-4c1e-90a7-7b0c112daa8d (get a record)
 
-        public List<Keyword> Get(String value = null, String vocab = null)
+        public ICollection<Keyword> Get(String value = null, String vocab = null)
         {
             return _keywordService.Read(value, vocab);
         }

@@ -53,7 +53,7 @@ namespace Catalogue.Gemini.Model
         fin = 4
     }
 
-    public class Keyword
+    public class Keyword : IComparable<Keyword>
     {
         public Keyword()
         {
@@ -69,6 +69,11 @@ namespace Catalogue.Gemini.Model
         {
             return string.Equals(Value, other.Value, StringComparison.InvariantCultureIgnoreCase);
             ;// && string.Equals(Vocab, other.Vocab, StringComparison.InvariantCultureIgnoreCase);
+        }
+
+        public int CompareTo(Keyword other)
+        {
+            return System.String.Compare(this.Value, other.Value, System.StringComparison.Ordinal);
         }
 
         public override bool Equals(object obj)
