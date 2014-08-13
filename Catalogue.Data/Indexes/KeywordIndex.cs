@@ -11,21 +11,22 @@ using Raven.Storage.Esent.SchemaUpdates.Updates;
 
 namespace Catalogue.Data.Indexes
 {
-    public class KeywordIndex : AbstractIndexCreationTask<Record>//, Keyword>
+    public class KeywordsIndex : AbstractIndexCreationTask<Record, KeywordsIndex.Result>
     {
-
-
-        public KeywordIndex()
+        public KeywordsIndex()
         {
             Map = records => from record in records
-                from k in record.Gemini.Keywords
-                select new {k.Value, k.Vocab};
+                from keyword in record.Gemini.Keywords
+                select new
+                {
+                    Keyword = keyword
+                };
+        }
 
-//            Reduce = keywords => from keyword in keywords
-//                group keyword by keyword.Value into g
-//                select new { g.Key };
 
-
+        public class Result
+        {
+            public Keyword Keyword { get; set; }
         }
     }
 }

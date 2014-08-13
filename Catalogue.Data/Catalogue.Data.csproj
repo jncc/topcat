@@ -96,6 +96,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Analyzers\NGramAnalyzer.cs" />
+    <Compile Include="DatabaseFactory.cs" />
     <Compile Include="Import\FileSystem.cs" />
     <Compile Include="Import\Mappings\ActivitiesMapping.cs" />
     <Compile Include="Import\Mappings\BaseMapper.cs" />

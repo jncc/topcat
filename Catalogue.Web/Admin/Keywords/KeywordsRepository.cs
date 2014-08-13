@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Web;
+using Catalogue.Data.Indexes;
 using Catalogue.Data.Model;
 using Catalogue.Gemini.Model;
 using Raven.Client;
@@ -51,8 +53,24 @@ namespace Catalogue.Web.Admin.Keywords
             throw new NotImplementedException();
         }
 
-
         public ICollection<Keyword> ReadAll()
+        {
+//            return _db.Query<KeywordsIndex.Result, KeywordsIndex>().Select(r => r.Keyword).ToList();
+            int start = 0;
+            var keywords = new List<Keyword>();
+            while (true)
+            {
+                var current = _db.Query<KeywordsIndex.Result, KeywordsIndex>().Select(r => r.Keyword).Take(1024).Skip(start).ToList();
+                 if (current.Count == 0)
+                    break;
+
+                start += current.Count;
+                keywords.AddRange(current);
+            }
+            return keywords;
+        }
+        
+        public ICollection<Keyword> ReadAllWithoutIndex()
         {
             int start = 0;
             var allKeywords = new HashSet<Keyword>();

@@ -1,3 +1,4 @@
+using Catalogue.Data;
 using Catalogue.Data.Seed;
 using Catalogue.Data.Test;
 using NUnit.Framework;
@@ -16,9 +17,7 @@ namespace Catalogue.Tests
         static DatabaseTestFixture()
         {
             // initialise the ResusableDocumentStore once, in this static constructor
-
-            var helper = new InMemoryDatabaseHelper { PostInitializationAction = Seeder.Seed };
-            ReusableDocumentStore = helper.Create();
+            ReusableDocumentStore = DatabaseFactory.Create(DatabaseFactory.DatabaseConnectionType.ReUseable); ;
         }
 
         /// <summary>
