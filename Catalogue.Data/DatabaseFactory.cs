@@ -22,7 +22,9 @@ namespace Catalogue.Data
         public static IDocumentStore Create(DatabaseConnectionType databaseConnectionType)
         {
             var db = CreateDatabase(databaseConnectionType);
-            return CreateIndices(db);
+             CreateIndices(db);
+             var index = db.DatabaseCommands.GetIndex("KeywordsIndex");
+            return db;
         }
 
         private static IDocumentStore CreateDatabase(DatabaseConnectionType databaseConnectionType)
@@ -41,21 +43,25 @@ namespace Catalogue.Data
                     PostInitializationAction = Seeder.Seed
                 }.Create();
             }
-            if (databaseConnectionType == DatabaseConnectionType.Proper)
+            else if (databaseConnectionType == DatabaseConnectionType.Proper)
             {
                 var documentStore = new DocumentStore {ConnectionStringName = "Data"};
                 documentStore.Initialize();
                 return documentStore;
             }
-
-            return new InMemoryDatabaseHelper {PostInitializationAction = Seeder.Seed}.Create();
+            else // (databaseConnectionType == DatabaseConnectionType.ReUseable)
+            {
+                return new InMemoryDatabaseHelper { PostInitializationAction = Seeder.Seed }.Create();               
+            }
+ 
         }
 
         private static IDocumentStore CreateIndices(IDocumentStore documentStore)
         {
+            
+            var keywordIndex = new KeywordsIndex();
+            documentStore.ExecuteIndex(keywordIndex);
             IndexCreation.CreateIndexes(typeof(Record).Assembly, documentStore);
-            IndexCreation.CreateIndexes(typeof(KeywordsIndex).Assembly, documentStore);
-
             return documentStore;
         }
     }

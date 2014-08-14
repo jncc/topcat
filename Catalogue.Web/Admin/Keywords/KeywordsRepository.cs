@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.Linq;
 using System.Web;
 using Catalogue.Data.Indexes;
@@ -18,6 +19,7 @@ namespace Catalogue.Web.Admin.Keywords
         ICollection<Keyword> ReadAllByVocab(string vocab);
         ICollection<Keyword> ReadAllByValue(string value);
         ICollection<Keyword> ReadAll();
+        ICollection<Keyword> ReadAllWithoutIndex();
     }
     public class KeywordsRepository : IKeywordsRepository
     {  private readonly IDocumentSession _db;
@@ -57,16 +59,28 @@ namespace Catalogue.Web.Admin.Keywords
         {
 //            return _db.Query<KeywordsIndex.Result, KeywordsIndex>().Select(r => r.Keyword).ToList();
             int start = 0;
+            
             var keywords = new List<Keyword>();
-            while (true)
-            {
-                var current = _db.Query<KeywordsIndex.Result, KeywordsIndex>().Select(r => r.Keyword).Take(1024).Skip(start).ToList();
-                 if (current.Count == 0)
-                    break;
+            var currentRecords = _db.Query<Record>().Take(1024).Skip(start).ToList();
+//            var testKeyword = new Keyword("Show on webGIS", "http://vocab.jncc.gov.uk/seabed-map-status");
+            var current = _db.Query<KeywordsIndex.Result, KeywordsIndex>().Customize(x => x.WaitForNonStaleResultsAsOfNow()).Select(r => r.Keyword).ToList();
 
-                start += current.Count;
-                keywords.AddRange(current);
-            }
+            //return session.Query<LogSessionFieldNames, LogRecord_LogFieldNamesIndex>()
+            //  .Where(x => x.SessionId == sessionId)
+            //  .Select(x => x.FieldName)
+            //  .Customize(x => x.WaitForNonStaleResultsAsOfNow())
+            //  .ToList();
+
+
+//            while (true)
+//            {
+//                var current = _db.Query<KeywordsIndex.Result, KeywordsIndex>().Select(r => r.Keyword).Take(1024).Skip(start).ToList();
+//                 if (current.Count == 0)
+//                    break;
+//
+//                start += current.Count;
+//                keywords.AddRange(current);
+//            }
             return keywords;
         }
         

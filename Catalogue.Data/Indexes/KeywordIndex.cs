@@ -13,14 +13,20 @@ namespace Catalogue.Data.Indexes
 {
     public class KeywordsIndex : AbstractIndexCreationTask<Record, KeywordsIndex.Result>
     {
+        public override string IndexName
+        {
+            get { return "KeywordsIndex"; }
+        }
+
         public KeywordsIndex()
         {
             Map = records => from record in records
                 from keyword in record.Gemini.Keywords
-                select new
-                {
-                    Keyword = keyword
+                select new {
+                    Value = keyword.Value,
+                    Vocab = keyword.Vocab
                 };
+
         }
 
 

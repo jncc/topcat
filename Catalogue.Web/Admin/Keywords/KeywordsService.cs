@@ -33,6 +33,7 @@ namespace Catalogue.Web.Admin.Keywords
             if (String.IsNullOrEmpty(value) && String.IsNullOrEmpty(vocab))
             {
               return _keywordsRepository.ReadAll();
+//                return _keywordsRepository.ReadAllWithoutIndex();
             }
             
             if (String.IsNullOrEmpty(value) && !String.IsNullOrEmpty(vocab))
