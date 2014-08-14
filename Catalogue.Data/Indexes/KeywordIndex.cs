@@ -26,7 +26,8 @@ namespace Catalogue.Data.Indexes
                     Value = keyword.Value,
                     Vocab = keyword.Vocab
                 };
-
+            Store(x => x.Keyword.Value, FieldStorage.Yes);
+            Store(x => x.Keyword.Vocab, FieldStorage.Yes);
         }
 
 

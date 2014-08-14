@@ -63,7 +63,9 @@ namespace Catalogue.Web.Admin.Keywords
             var keywords = new List<Keyword>();
             var currentRecords = _db.Query<Record>().Take(1024).Skip(start).ToList();
 //            var testKeyword = new Keyword("Show on webGIS", "http://vocab.jncc.gov.uk/seabed-map-status");
-            var current = _db.Query<KeywordsIndex.Result, KeywordsIndex>().Customize(x => x.WaitForNonStaleResultsAsOfNow()).Select(r => r.Keyword).ToList();
+            var current = _db.Query<KeywordsSearchIndex.Result, KeywordsSearchIndex>()
+//                .Customize(x => x.WaitForNonStaleResultsAsOfNow())
+                .Select(r => r.Value).ToList();
 
             //return session.Query<LogSessionFieldNames, LogRecord_LogFieldNamesIndex>()
             //  .Where(x => x.SessionId == sessionId)

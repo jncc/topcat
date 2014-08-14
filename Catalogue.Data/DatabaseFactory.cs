@@ -22,8 +22,8 @@ namespace Catalogue.Data
         public static IDocumentStore Create(DatabaseConnectionType databaseConnectionType)
         {
             var db = CreateDatabase(databaseConnectionType);
-             CreateIndices(db);
-             var index = db.DatabaseCommands.GetIndex("KeywordsIndex");
+            CreateIndices(db);
+            var index = db.DatabaseCommands.GetIndex("KeywordsIndex");
             return db;
         }
 
@@ -58,9 +58,6 @@ namespace Catalogue.Data
 
         private static IDocumentStore CreateIndices(IDocumentStore documentStore)
         {
-            
-            var keywordIndex = new KeywordsIndex();
-            documentStore.ExecuteIndex(keywordIndex);
             IndexCreation.CreateIndexes(typeof(Record).Assembly, documentStore);
             return documentStore;
         }
