@@ -7,10 +7,11 @@ using Catalogue.Gemini.Model;
 
 namespace Catalogue.Web.Admin.Keywords
 { public interface IKeywordsService
-    {
-        ICollection<Gemini.Model.Keyword> Read(String value = null, String vocab = null);
-        /*Gemini.Model.Keyword Read();
-        void Delete();*/
+{
+        ICollection<Keyword> ReadAll();
+        ICollection<Keyword> ReadByValue(string value);
+        ICollection<Keyword> ReadByVocab(string vocab);
+        ICollection<Keyword> ReadByValueAndVocab(string value, string vocab);
 
     }
 
@@ -28,23 +29,18 @@ namespace Catalogue.Web.Admin.Keywords
             return _keywordsRepository.ReadAll();
         }
 
-        public ICollection<Keyword> Read(string value = null, string vocab = null)
+        public ICollection<Keyword> ReadByValue(string value)
         {
-            if (String.IsNullOrEmpty(value) && String.IsNullOrEmpty(vocab))
-            {
-              return _keywordsRepository.ReadAll();
-//                return _keywordsRepository.ReadAllWithoutIndex();
-            }
-            
-            if (String.IsNullOrEmpty(value) && !String.IsNullOrEmpty(vocab))
-            {
-               return _keywordsRepository.ReadAllByVocab(vocab);
-            }
-            
-            if (!String.IsNullOrEmpty(value) && String.IsNullOrEmpty(vocab))
-            {
-                return _keywordsRepository.ReadAllByValue(value);
-            }
+            return _keywordsRepository.ReadByValue(value);
+        }
+
+        public ICollection<Keyword> ReadByVocab(string vocab)
+        {
+            return _keywordsRepository.ReadByVocab(vocab);
+        }
+
+        public ICollection<Keyword> ReadByValueAndVocab(string value, string vocab)
+        {
             // none of the above
             return _keywordsRepository.Read(value, vocab);
         }

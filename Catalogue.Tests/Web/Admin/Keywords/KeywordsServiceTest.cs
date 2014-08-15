@@ -1,21 +1,20 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Catalogue.Gemini.Model;
 using Catalogue.Web.Admin.Keywords;
-using Catalogue.Web.Search;
-using Catalogue.Web.Search.Service;
 using NUnit.Framework;
 
 namespace Catalogue.Tests.Web.Admin.Keywords
 {
-    class KeywordsServiceTest : DatabaseTestFixture
+    internal class KeywordsServiceTest : DatabaseTestFixture
     {
+        private const int TotalExpectedKeywords = 322;
+
+        private const String testStringValue = "Sh";
+        private const int TotalExpectedKeywordByTestValueSh = 322;
         private IKeywordsRepository _keywordsRepository;
         private IKeywordsService _keywordsService;
-        private const int TotalExpectedKeywords = 312;
 
         [TestFixtureSetUp]
         public void SetUp()
@@ -27,17 +26,20 @@ namespace Catalogue.Tests.Web.Admin.Keywords
         [Test]
         public void ReadAllKeywords()
         {
-            ICollection<Keyword> keywords = _keywordsService.Read();
-            List<Keyword> keywordList = keywords.ToList();
-            keywordList.Sort();
-            Assert.AreEqual(TotalExpectedKeywords, keywords.Count);
-
-           /* foreach (var keyword in keywordList)
-            {
-                System.Console.WriteLine(keyword.Value);
-            }
-            */
+            ICollection<Keyword> keywords = _keywordsService.ReadAll();
+            List<string> uniqueKeywords = keywords.Select(k => k.Vocab + "::" + k.Value).Distinct().ToList();
+            Assert.AreEqual(uniqueKeywords.Count, keywords.Count,
+                "The index is not working correctly, should only return unique values");
+            Assert.AreEqual(TotalExpectedKeywords, keywords.Count,
+                "The number of unique keywords in seed project has changed");
         }
 
+        [Test]
+        public void ReadByValue()
+        {
+            ICollection<Keyword> keywords = _keywordsService.ReadByValue(testStringValue);
+            Assert.IsFalse(keywords.Any(k => !k.Value.StartsWith(testStringValue)));
+            Assert.AreEqual(TotalExpectedKeywordByTestValueSh,keywords.Count, "Incorrect number of startswith keywords returned");
+        }
     }
 }

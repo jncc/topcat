@@ -67,8 +67,7 @@ namespace Catalogue.Gemini.Model
 
         protected bool Equals(Keyword other)
         {
-            return string.Equals(Value, other.Value, StringComparison.InvariantCultureIgnoreCase);
-            ;// && string.Equals(Vocab, other.Vocab, StringComparison.InvariantCultureIgnoreCase);
+            return string.Equals(Value, other.Value, StringComparison.InvariantCultureIgnoreCase) && string.Equals(Vocab, other.Vocab, StringComparison.InvariantCultureIgnoreCase);
         }
 
         public int CompareTo(Keyword other)
@@ -89,8 +88,7 @@ namespace Catalogue.Gemini.Model
         {
             unchecked
             {
-                return (Value.ToLower().GetHashCode() * 397);
-                //return (Value.ToLower().GetHashCode()*397) ^ Vocab.ToLower().GetHashCode();
+                return (this.Vocab + "::" + this.Value).GetHashCode()*397;
             }
         }
 
