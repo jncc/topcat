@@ -12,7 +12,7 @@ namespace Catalogue.Tests.Web.Admin.Keywords
         private const int TotalExpectedKeywords = 322;
 
         private const String testStringValue = "Sh";
-        private const int TotalExpectedKeywordByTestValueSh = 322;
+        private const int TotalExpectedKeywordByTestValueSh = 1;
         private IKeywordsRepository _keywordsRepository;
         private IKeywordsService _keywordsService;
 
@@ -37,6 +37,8 @@ namespace Catalogue.Tests.Web.Admin.Keywords
         [Test]
         public void ReadByValue()
         {
+            //search term "sh" corrisponds to "SeabedMapStatus", "Show on webGIS" of which ther are 177 instances in test data. 
+            //index will return 1 result (grouped)
             ICollection<Keyword> keywords = _keywordsService.ReadByValue(testStringValue);
             Assert.IsFalse(keywords.Any(k => !k.Value.StartsWith(testStringValue)));
             Assert.AreEqual(TotalExpectedKeywordByTestValueSh,keywords.Count, "Incorrect number of startswith keywords returned");
