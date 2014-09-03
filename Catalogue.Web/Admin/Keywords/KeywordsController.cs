@@ -6,8 +6,9 @@ using System.Net.Http;
 using System.Web.Http;
 using Catalogue.Data.Write;
 using Catalogue.Gemini.Model;
+using Catalogue.Web.Admin.Keywords;
 
-namespace Catalogue.Web.Admin.Keywords
+namespace Catalogue.Web.Controllers.Keywords
 {
     public class KeywordsController : ApiController
     {
@@ -18,11 +19,9 @@ namespace Catalogue.Web.Admin.Keywords
             _keywordService = service;
         }
 
-        // GET api/records/57d34691-9064-4c1e-90a7-7b0c112daa8d (get a record)
-
-        public ICollection<Keyword> Get(String value)
+        public ICollection<Keyword> Get(String q)
         {
-            return _keywordService.ReadByValue(value);
+            return _keywordService.ReadByValue(q);
         }
     }
 

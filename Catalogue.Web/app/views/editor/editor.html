@@ -121,7 +121,6 @@
 
                 <!-- keywords -->
               
-
                 <div class="editor-keywords form-group">
                     <span ng-repeat="k in form.gemini.keywords" tc-tag tc-tag-delete>
                         <span ng-style="{ 'background-color': hashStringToColor(k.vocab) }">&nbsp;</span>
@@ -132,10 +131,25 @@
                             ng-click="keywordEditorOpen = !keywordEditorOpen">&bull;&bull;&bull;</button>                    
                 </div>
                 
+                
+                <script type="text/ng-template" id="customTemplate.html">
+                    <a>
+                        <span bind-html-unsafe="match.model.vocab"></span>
+                        <span> : </span>
+                        <span bind-html-unsafe="match.model.value | typeaheadHighlight:query"></span>
+                    </a>
+                </script>
+                
+                <!--typeahead-template-url="customTemplate.html"-->
+
                 <div ng-show="keywordEditorOpen" class="editor-keywords-editor form-inline">
                     <div ng-repeat="k in form.gemini.keywords">
-                        <input type="text" ng-model="k.vocab" placeholder="Vocab (namespace)" class="form-control" style="width:55%" />
-                        <input type="text" ng-model="k.value" placeholder="Value (keyword)" class="form-control" style="width:35%" />
+                        <input type="text" ng-model="k.vocab" placeholder="Vocab (namespace)" class="form-control" disabled style="width:55%;" />
+                        <!--<input type="text" class="form-control" ng-model="k.value" data-animation="am-flip-x" ng-options="keyword.value for keyword in getKeywords($viewValue)" placeholder="Enter keyword" bs-typeahead />-->
+                        <input type="text" ng-model="k.value" placeholder="Value (keyword)" typeahead-template-url="customTemplate.html"  typeahead-loading="loadingKeys" typeahead="keyword as keyword.value + ' (' + keyword.vocab + ')' for keyword in getKeywords($viewValue)" class="form-control" style="width:35%" />
+                        <i ng-show="loadingKeys" class="glyphicon glyphicon-refresh"></i>
+                        
+                        <!--<input type="text" ng-model="k.value" placeholder="Value (keyword)" typeahead-template-url="customTemplate.html" typeahead="keyword as keyword.value for keyword in getKeywords($viewValue)" class="form-control" style="width:35%" />-->
                         <button class="btn btn-sm btn-primary" ng-click="removeKeyword(k)">
                             <span style="font-size: small" class="glyphicon glyphicon-remove-sign"></span>
                         </button>

@@ -17,7 +17,8 @@
         $http.get('../api/formats?q=').success (result) -> 
             $scope.lookups.currentDataFormat = getDataFormatObj $scope.form.gemini.dataFormat, result
             $scope.lookups.formats = result
-        $http.get('../api/roles?q=').success (result) -> $scope.lookups.roles = result            
+        $http.get('../api/roles?q=').success (result) -> $scope.lookups.roles = result
+                
 
         $scope.collapseDataFormatSelector = true    
         $scope.collapseDateFormat = true
@@ -92,7 +93,15 @@
         $scope.reset()
 
         #$scope.validation = fakeValidationData
+        
+        $scope.getKeywords = (term) -> $http.get('../api/keywords?q='+term).then (response) -> 
+            #console.log('this is crap')
+            #console.log(result[0].value)
+            #["test", "more test", "cheese"]
+            response.data
         return
+        
+
 
 getSecurityText = (n) -> switch n
     when 0 then 'Open'

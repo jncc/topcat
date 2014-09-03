@@ -1,4 +1,4 @@
-﻿angular.module('app.controllers').controller 'MainController',
+﻿angular.module('app.controllers',['ui.bootstrap']).controller 'MainController',
 
     ($scope, $timeout, Account, misc) ->
 
