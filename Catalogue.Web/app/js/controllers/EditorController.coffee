@@ -95,11 +95,13 @@
         #$scope.validation = fakeValidationData
         
         $scope.getKeywords = (term) -> $http.get('../api/keywords?q='+term).then (response) -> 
-            #console.log('this is crap')
-            #console.log(result[0].value)
-            #["test", "more test", "cheese"]
             response.data
-        return
+        
+        $scope.setKeyword = ($item, keyword) ->
+            console.log($item)
+            keyword.vocab = $item.vocab
+            console.log(keyword)
+            
         
 
 

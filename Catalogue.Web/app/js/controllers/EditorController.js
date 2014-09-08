@@ -128,6 +128,11 @@
         return response.data;
       });
     };
+    return $scope.setKeyword = function($item, keyword) {
+      console.log($item);
+      keyword.vocab = $item.vocab;
+      return console.log(keyword);
+    };
   });
 
   getSecurityText = function(n) {
