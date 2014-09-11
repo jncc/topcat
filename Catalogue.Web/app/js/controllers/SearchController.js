@@ -77,6 +77,11 @@
         return doTextSearch();
       }
     };
+    $scope.getKeywords = function(term) {
+      return $http.get('../api/keywords?q=' + term).then(function(response) {
+        return response.data;
+      });
+    };
     doTextSearch = function() {
       if ($scope.query.q) {
         $location.url($location.path());

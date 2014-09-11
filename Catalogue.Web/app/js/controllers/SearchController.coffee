@@ -65,7 +65,11 @@
                  $scope.model.keyword.vocab =  $scope.query.q
                  # doVocabSearch()
             else
-                doTextSearch()              
+                doTextSearch()    
+        
+        # listener for when keywords are entered into the keyword typeahead box        
+        $scope.getKeywords = (term) -> $http.get('../api/keywords?q='+term).then (response) -> 
+            response.data          
         
                     
         # not called by a listener, invoked by from changePageNumber or decideWhichSearch
