@@ -17,8 +17,9 @@
                     </a>
                 </script>
                         
-                <input ng-model="query.q" type="text" class="form-control" autofocus tc-debounce />
+                <input ng-model="query.q" ng-show="model.searchType == searchType.text" type="text" class="form-control" autofocus tc-debounce />
                 <input type="text" 
+                       ng-show="model.searchType == searchType.keyword"
                        ng-model="query.q" 
                        placeholder="Value (keyword)" 
                        typeahead-template-url="keywordTemplate.html"  
@@ -26,7 +27,7 @@
                        typeahead="keyword.value for keyword in getKeywords($viewValue)" 
                        class="form-control" 
                        tc-debounce
-                       style="width:35%" />
+                      />
 
                 <span class="input-group-btn">
                     <button class="btn btn-primary" type="button" style="width: 60px">
@@ -40,7 +41,7 @@
                         Search Type: 
                         <input type="radio" value="{{searchType.text}}"  ng-model="model.searchType" ng-change="decideWhichSearch()"> Text
                         <input type="radio" value="{{searchType.keyword}}" ng-model="model.searchType" ng-change="decideWhichSearch()"> Keywords
-                        <input type="radio" value="{{searchType.vocab}}" ng-model="model.searchType" ng-change="decideWhichSearch()"> Vocabularies
+                        <!--<input type="radio" value="{{searchType.vocab}}" ng-model="model.searchType" ng-change="decideWhichSearch()"> Vocabularies-->
                     </label>
                     </div>
         </div>
