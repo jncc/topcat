@@ -8,6 +8,7 @@ namespace Catalogue.Web.Search
     public enum SearchType
     {
         Keyword,
+        Vocabulary,
         FullText
     };
 }

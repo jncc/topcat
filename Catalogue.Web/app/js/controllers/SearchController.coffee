@@ -3,15 +3,25 @@
         appTitlePrefix = "Topcat:";
          # initial values
         $scope.query = { q: $location.search()['q'] || '', p: 0 , n:25}
-        $scope.model = { keyword : { value:$location.search()['value'] || '', vocab:''};}
+        $scope.model = { keyword : { value:$location.search()['value'] || '', vocab : $location.search()['vocab'] || ''};}
+
+        $scope.searchType = {
+            keyword: 'keyword',
+            vocab: 'vocab',
+            text: 'text'
+        }
         
-        if $scope.model.keyword.value is ''
-            console.log("false")
-            $scope.model.keywordFlag = false
-        else             
-            console.log("true")
-            $scope.model.keywordFlag = true
+        if ($scope.model.keyword.value)
+            console.log("keyword")
+            $scope.model.searchType = $scope.searchType.keyword
             $scope.query.q = $scope.model.keyword.value
+        else if ($scope.model.keyword.vocab)
+            console.log("vocab")
+            $scope.model.searchType = $scope.searchType.vocab
+            $scope.query.q = $scope.model.vocab.value
+        else 
+            console.log("text")
+            $scope.model.searchType = $scope.searchType.text
             
         # $scope.model.keyword = {};
         # slightly hacky way of triggering animations on startup
@@ -33,13 +43,13 @@
         $scope.changeKeywordResetPageNumber = (keyword) ->
             $scope.model.keyword = keyword
             $scope.query.p = 0;
-            $scope.model.keywordFlag = true
+            $scope.model.searchType = $scope.searchType.keyword
             $scope.query.q = keyword.value
             # no need to call keyword search directly as listner registerd for query q change
         
         # page number changed, don't fire any listeners jsut call seach with new model (only p will have changed)
         $scope.changePageNumber = () ->
-            if $scope.model.keywordFlag
+            if $scope.model.searchType
                 doKeywordSearch();
             else
                 doTextSearch();              
@@ -47,12 +57,13 @@
         # listener for when text entered into search box, either calls textSearch, or updates the model keyword
         $scope.decideWhichSearch = () ->
             $scope.query.p = 0 # it must be a new search                
-            if $scope.model.keywordFlag
+            if $scope.model.searchType == $scope.searchType.keyword
                 # this updates the model keyword, which then fires the actual search                
                 $scope.model.keyword.value = $scope.query.q
-                # vocab ignored server side, might have to change this
-                $scope.model.keyword.vocab = "not used yet, a user not expected to type in url";
                 doKeywordSearch()
+            else if $scope.model.searchType == $scope.searchType.vocab
+                 $scope.model.keyword.vocab =  $scope.query.q
+                 # doVocabSearch()
             else
                 doTextSearch()              
         
@@ -102,7 +113,7 @@
         $scope.$watch 'query.q', $scope.decideWhichSearch, true # coul dbe either text or keyword
         # $scope.$watch 'model.keyword.value', doKeywordSearch, true # only keyword
         # $scope.$watch 'query.p', changePageNumber, true # coul dbe text or keyword
-        # $scope.$watch 'model.keywordFlag', decideWhichSearch, true # coul dbe text or keyword
+        # $scope.$watch 'model.searchType', decideWhichSearch, true # coul dbe text or keyword
 
         # when the querystring changes, update the model query value
         #$scope.$watch(

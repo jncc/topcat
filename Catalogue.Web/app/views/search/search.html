@@ -20,7 +20,10 @@
             <div class="row text-center ">
                     <label>
                         <!--<input type="checkbox" ng-change="model.keywordFlag = !model.keywordFlag; decideWhichSearch()"> Keywords only.-->
-                        <input type="checkbox"  ng-model="model.keywordFlag" ng-change="decideWhichSearch()"> Keywords only.
+                        Search Type: 
+                        <input type="radio" value="{{searchType.text}}"  ng-model="model.searchType" ng-change="decideWhichSearch()"> Text
+                        <input type="radio" value="{{searchType.keyword}}" ng-model="model.searchType" ng-change="decideWhichSearch()"> Keywords
+                        <input type="radio" value="{{searchType.vocab}}" ng-model="model.searchType" ng-change="decideWhichSearch()"> Vocabularies
                     </label>
                     </div>
         </div>

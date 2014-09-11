@@ -177,6 +177,7 @@
     <Compile Include="Import\ImportController.cs" />
     <Compile Include="Logging\ElmahHandledErrorLoggerFilter.cs" />
     <Compile Include="Logging\UnhandledExceptionFilter.cs" />
+    <Compile Include="Search\Controllers\VocabularySearchController.cs" />
     <Compile Include="Search\Repository\SearchRepository.cs" />
     <Compile Include="Search\SearchInputModel.cs" />
     <Compile Include="Search\SearchType.cs" />

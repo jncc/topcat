@@ -11,16 +11,25 @@
     $scope.model = {
       keyword: {
         value: $location.search()['value'] || '',
-        vocab: ''
+        vocab: $location.search()['vocab'] || ''
       }
     };
-    if ($scope.model.keyword.value === '') {
-      console.log("false");
-      $scope.model.keywordFlag = false;
-    } else {
-      console.log("true");
-      $scope.model.keywordFlag = true;
+    $scope.searchType = {
+      keyword: 'keyword',
+      vocab: 'vocab',
+      text: 'text'
+    };
+    if ($scope.model.keyword.value) {
+      console.log("keyword");
+      $scope.model.searchType = $scope.searchType.keyword;
       $scope.query.q = $scope.model.keyword.value;
+    } else if ($scope.model.keyword.vocab) {
+      console.log("vocab");
+      $scope.model.searchType = $scope.searchType.vocab;
+      $scope.query.q = $scope.model.vocab.value;
+    } else {
+      console.log("text");
+      $scope.model.searchType = $scope.searchType.text;
     }
     $scope.app = {
       starting: true
@@ -47,11 +56,11 @@
     $scope.changeKeywordResetPageNumber = function(keyword) {
       $scope.model.keyword = keyword;
       $scope.query.p = 0;
-      $scope.model.keywordFlag = true;
+      $scope.model.searchType = $scope.searchType.keyword;
       return $scope.query.q = keyword.value;
     };
     $scope.changePageNumber = function() {
-      if ($scope.model.keywordFlag) {
+      if ($scope.model.searchType) {
         return doKeywordSearch();
       } else {
         return doTextSearch();
@@ -59,10 +68,11 @@
     };
     $scope.decideWhichSearch = function() {
       $scope.query.p = 0;
-      if ($scope.model.keywordFlag) {
+      if ($scope.model.searchType === $scope.searchType.keyword) {
         $scope.model.keyword.value = $scope.query.q;
-        $scope.model.keyword.vocab = "not used yet, a user not expected to type in url";
         return doKeywordSearch();
+      } else if ($scope.model.searchType === $scope.searchType.vocab) {
+        return $scope.model.keyword.vocab = $scope.query.q;
       } else {
         return doTextSearch();
       }
