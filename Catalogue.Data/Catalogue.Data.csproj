@@ -104,10 +104,10 @@
     <Compile Include="Import\Importer.cs" />
     <Compile Include="Import\Mappings\IMapping.cs" />
     <Compile Include="Indexes\FieldNames.cs" />
-    <Compile Include="Indexes\KeywordIndex.cs" />
     <Compile Include="Indexes\KeywordsSearchIndex.cs" />
     <Compile Include="Indexes\Records_SpatialIndex.cs" />
     <Compile Include="Indexes\Records_Search.cs" />
+    <Compile Include="Indexes\VocabularySearchIndex.cs" />
     <Compile Include="Model\Record.cs" />
     <Compile Include="Model\Security.cs" />
     <Compile Include="Model\Status.cs" />

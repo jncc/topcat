@@ -49,8 +49,10 @@
         
         # page number changed, don't fire any listeners jsut call seach with new model (only p will have changed)
         $scope.changePageNumber = () ->
-            if $scope.model.searchType
+            if $scope.model.searchType == $scope.searchType.keyword
                 doKeywordSearch();
+            else if $scope.model.searchType == $scope.searchType.vocab
+                doVocabSearch();
             else
                 doTextSearch();              
         
@@ -63,12 +65,16 @@
                 doKeywordSearch()
             else if $scope.model.searchType == $scope.searchType.vocab
                  $scope.model.keyword.vocab =  $scope.query.q
-                 # doVocabSearch()
+                 doVocabSearch()
             else
                 doTextSearch()    
         
         # listener for when keywords are entered into the keyword typeahead box        
         $scope.getKeywords = (term) -> $http.get('../api/keywords?q='+term).then (response) -> 
+            response.data          
+        
+        # listener for when vocabularies are entered into the keyword typeahead box        
+        $scope.getVocabularies = (term) -> $http.get('../api/vocabularies?q='+term).then (response) -> 
             response.data          
         
                     
@@ -111,7 +117,27 @@
                             $scope.result = result;                 
                 .finally -> 
                     $scope.busy.stop()          
-                    $rootScope.page = { title:appTitlePrefix+$scope.model.keyword.value}       
+                    $rootScope.page = { title:appTitlePrefix+$scope.model.keyword.value} 
+        
+        #  not called by a listener, invoked by changePageNumber or decideWhichSearch
+        doVocabSearch = () ->
+            $location.url($location.path())
+            $location.search('vocab', $scope.model.keyword.vocab) 
+            $location.search('p', $scope.query.p)            
+            $location.search('n', $scope.query.n)                       
+            $scope.busy.start()
+            $http.get("../api/vocabularySearch?vocab="+$scope.model.keyword.vocab+"&p="+$scope.query.p+"&n="+$scope.query.n)          
+                .success (result) ->
+                    # don't overwrite with slow results
+                    if angular.equals result.query, $scope.query
+                        if result.total is 0 # without this the browser crashes due to an unsafe object check by angular, when results are zero
+                            $scope.result = {} 
+                        else
+                            $scope.result = result;                 
+                .finally -> 
+                    $scope.busy.stop()          
+                    $rootScope.page = { title:appTitlePrefix+$scope.model.keyword.vocab} 
+          
        
         #  register the three listners
         $scope.$watch 'query.q', $scope.decideWhichSearch, true # coul dbe either text or keyword

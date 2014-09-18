@@ -17,17 +17,28 @@
                     </a>
                 </script>
                         
-                <input ng-model="query.q" ng-show="model.searchType == searchType.text" type="text" class="form-control" autofocus tc-debounce />
-                <input type="text" 
-                       ng-show="model.searchType == searchType.keyword"
-                       ng-model="query.q" 
-                       placeholder="Value (keyword)" 
-                       typeahead-template-url="keywordTemplate.html"  
-                       typeahead-loading="loadingKeys" 
-                       typeahead="keyword.value for keyword in getKeywords($viewValue)" 
-                       class="form-control" 
-                       tc-debounce
-                      />
+                <span ng-show="model.searchType == searchType.text"><input ng-model="query.q" type="text" class="form-control" autofocus tc-debounce /></span>
+                <span ng-show="model.searchType == searchType.keyword">
+                    <input type="text" 
+                           ng-model="query.q" 
+                           placeholder="Value (keyword)" 
+                           typeahead-template-url="keywordTemplate.html"  
+                           typeahead-loading="loadingKeys" 
+                           typeahead="keyword.value for keyword in getKeywords($viewValue)" 
+                           tc-debounce
+                           class="form-control" 
+                        />
+                </span>
+                <span ng-show="model.searchType == searchType.vocab">
+                    <input type="text" 
+                           ng-model="query.q" 
+                           placeholder="Value (vocabulary)" 
+                           typeahead-loading="loadingVocabularies" 
+                           typeahead="vocabulary for vocabulary in getVocabularies($viewValue)" 
+                           tc-debounce
+                           class="form-control" 
+                        />
+                </span>
 
                 <span class="input-group-btn">
                     <button class="btn btn-primary" type="button" style="width: 60px">
@@ -41,7 +52,7 @@
                         Search Type: 
                         <input type="radio" value="{{searchType.text}}"  ng-model="model.searchType" ng-change="decideWhichSearch()"> Text
                         <input type="radio" value="{{searchType.keyword}}" ng-model="model.searchType" ng-change="decideWhichSearch()"> Keywords
-                        <!--<input type="radio" value="{{searchType.vocab}}" ng-model="model.searchType" ng-change="decideWhichSearch()"> Vocabularies-->
+                        <input type="radio" value="{{searchType.vocab}}" ng-model="model.searchType" ng-change="decideWhichSearch()"> Vocabularies
                     </label>
                     </div>
         </div>

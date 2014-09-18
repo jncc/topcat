@@ -29,6 +29,9 @@ Currently best to disable Resharper > Options > Tools > Unit Testing > Javascrip
 * Enable QUnit support
 * Enable Jasmine support
 
+###RavenDB
+RavenDB studio can be accessed in the development environment by browsing too: http://localhost:8888/raven/studio.html
+
 Deployment
 ----------
 

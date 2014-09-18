@@ -16,7 +16,6 @@ namespace Catalogue.Web.Admin.Keywords
         ICollection<Keyword> ReadByVocab(string vocab);
         ICollection<Keyword> ReadByValue(string value);
         ICollection<Keyword> ReadAll();
-        ICollection<Keyword> ReadAllWithoutIndex();
     }
 
     public class KeywordsRepository : IKeywordsRepository
@@ -53,6 +52,8 @@ namespace Catalogue.Web.Admin.Keywords
         {
             int start = 0;
             var keywords = new List<Keyword>();
+
+            //Do this to get around the limit on max number of results returned by raven
             while (BaseQuery(start).Any(k => k.Value.StartsWith(value)))
             {
                 List<Keyword> current = BaseQuery(start).Where(k => k.Value.StartsWith(value)).Select(r => new Keyword {Value = r.Value, Vocab = r.Vocab})
@@ -75,32 +76,6 @@ namespace Catalogue.Web.Admin.Keywords
                 keywords.AddRange(current);
             }
             return keywords;
-        }
-
-        public ICollection<Keyword> ReadAllWithoutIndex()
-        {
-            int start = 0;
-            var allKeywords = new HashSet<Keyword>();
-            var allRecords = new List<Record>();
-            while (true)
-            {
-                List<Record> current = _db.Query<Record>().Take(1024).Skip(start).ToList();
-
-                if (current.Count == 0)
-                    break;
-
-                start += current.Count;
-
-                /* The only way to access non-root documents, is via the root document - ravendb is not a relational db*/
-
-                foreach (Record record in current)
-                {
-                    List<Keyword> keywords = record.Gemini.Keywords.ToList();
-                    allKeywords.UnionWith(keywords);
-                }
-                allRecords.AddRange(current);
-            }
-            return allKeywords;
         }
 
         private IQueryable<KeywordsSearchIndex.Result> BaseQuery(int start)

@@ -9,8 +9,9 @@ namespace Catalogue.Web.Search.Service
 {
     public interface ISearchService
     {
-        SearchOutputModel FindByKeyword(SearchInputModel searchInputModel);
         SearchOutputModel Find(SearchInputModel searchInputModel);
+        SearchOutputModel FindByKeyword(SearchInputModel searchInputModel);
+        SearchOutputModel FindByVocab(SearchInputModel searchInputModel);
     }
 
     public class SearchService : ISearchService
@@ -27,21 +28,14 @@ namespace Catalogue.Web.Search.Service
             return _searchRepository.FindByKeyword(searchInputModel);
         }
 
+        public SearchOutputModel FindByVocab(SearchInputModel searchInputModel)
+        {
+            return _searchRepository.FindByVocab(searchInputModel);
+        }
+
         public SearchOutputModel Find(SearchInputModel searchInputModel)
         {
             return _searchRepository.Find(searchInputModel);
-        }
-
-        public SearchOutputModel FindByFullTextAndKeyword(SearchInputModel searchInputModel)
-        {
-            throw new NotImplementedException();
-            /*var keywordOutputModel = FindByKeyword(searchTerm, n,  page);
-            var defaultOutputModel = Find(searchTerm,n, page);
-            var unioned = defaultOutputModel.Results.Union(keywordOutputModel.Results);
-            defaultOutputModel.Results = unioned.ToList();
-            defaultOutputModel.Total = defaultOutputModel.Results.Count;
-            return defaultOutputModel;*/
-
         }
     }
 }

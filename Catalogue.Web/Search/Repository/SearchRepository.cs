@@ -14,6 +14,7 @@ namespace Catalogue.Web.Search
     {
         SearchOutputModel FindByKeyword(SearchInputModel searchInputModel);
         SearchOutputModel Find(SearchInputModel searchInputModel);
+        SearchOutputModel FindByVocab(SearchInputModel searchInputModel);
     }
 
     public class SearchRepository : ISearchRepository
@@ -140,6 +141,53 @@ namespace Catalogue.Web.Search
                     .ToList(),
                 Speed = stats.DurationMilliseconds,
                 Query = new QueryOutputModel { Q = searchInputModel.Query, P = searchInputModel.PageNumber, N = searchInputModel.NumberOfRecords}
+            };
+        }
+
+        public SearchOutputModel FindByVocab(SearchInputModel searchInputModel)
+        {
+            RavenQueryStatistics stats;
+            FieldHighlightings titleLites;
+            FieldHighlightings titleNLites;
+            FieldHighlightings abstractLites;
+            FieldHighlightings abstractNLites;
+
+            IQueryable<Record> query = _db.Query<Record>()
+                .Statistics(out stats)
+                .Where(r => r.Gemini.Keywords.Any(k => k.Vocab.Equals(searchInputModel.Query)));
+
+            int skipNumber = searchInputModel.PageNumber * searchInputModel.NumberOfRecords;
+
+            List<Record> results = query
+                    .Skip(skipNumber)
+                    .Take(searchInputModel.NumberOfRecords).ToList();
+
+            return new SearchOutputModel
+            {
+                Total = stats.TotalResults,
+                Results = (from x in results
+                           let format = DataFormatQueries.GetDataFormatInfo(x.Gemini.DataFormat)
+                           select new ResultOutputModel
+                           {
+                               Id = x.Id,
+                               Title = x.Gemini.Title.TruncateNicely(200),
+                               // could be better. always want the whole title, highlighted
+                               Snippet = x.Gemini.Abstract.TruncateNicely(200),
+                               Format = new FormatOutputModel
+                               {
+                                   Group = format.Group,
+                                   Glyph = format.Glyph,
+                                   Name = format.Name,
+                               },
+                               Keywords = x.Gemini.Keywords
+                                   .OrderBy(k => k.Vocab != "http://vocab.jncc.gov.uk/jncc-broad-category") // show first
+                                   .ThenBy(k => k.Vocab).ToList(),
+                               TopCopy = x.TopCopy,
+                               Date = x.Gemini.DatasetReferenceDate,
+                           })
+                    .ToList(),
+                Speed = stats.DurationMilliseconds,
+                Query = new QueryOutputModel { Q = searchInputModel.Query, P = searchInputModel.PageNumber, N = searchInputModel.NumberOfRecords }
             };
         }
     }
