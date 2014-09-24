@@ -40,6 +40,9 @@
     <Reference Include="nunit.framework">
       <HintPath>..\packages\NUnit.2.6.2\lib\nunit.framework.dll</HintPath>
     </Reference>
+    <Reference Include="Raven.Client.Lightweight">
+      <HintPath>..\Catalogue.Web\bin\Raven.Client.Lightweight.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -67,6 +70,7 @@
     <Compile Include="Validation\ValidationResultSet.cs" />
     <Compile Include="Validation\Validator.cs" />
     <Compile Include="Vocabs\TopicCategories.cs" />
+    <Compile Include="Write\VocabularyService.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="GEMINI2.2.pdf" />

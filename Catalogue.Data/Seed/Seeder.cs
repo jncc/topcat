@@ -10,6 +10,7 @@ using Catalogue.Data.Write;
 using Catalogue.Gemini.DataFormats;
 using Catalogue.Gemini.Model;
 using Catalogue.Gemini.Templates;
+using Catalogue.Gemini.Write;
 using Catalogue.Utilities.Clone;
 using Raven.Client;
 
@@ -29,7 +30,7 @@ namespace Catalogue.Data.Seed
         {
             using (var db = store.OpenSession())
             {
-                var s = new Seeder(db, new RecordService(db, new RecordValidator()));
+                var s = new Seeder(db, new RecordService(db, new RecordValidator(new VocabularyService(db))));
                 s.AddVocabularies();
                 s.AddMeshRecords();
                 db.SaveChanges();
@@ -39,7 +40,7 @@ namespace Catalogue.Data.Seed
         {
             using (var db = store.OpenSession())
             {
-                var s = new Seeder(db, new RecordService(db, new RecordValidator()));
+                var s = new Seeder(db, new RecordService(db, new RecordValidator(new VocabularyService(db))));
                 s.AddVocabularies();
                 s.AddMeshRecords();
                 s.AddSimpleExampleRecord();
@@ -60,7 +61,7 @@ namespace Catalogue.Data.Seed
 
             using (var reader = new StreamReader(s))
             {
-                var importer = new Importer<MeshMapping>(new FileSystem(), new RecordService(db, new RecordValidator()));
+                var importer = new Importer<MeshMapping>(new FileSystem(), new RecordService(db, new RecordValidator(new VocabularyService(db))));
                 importer.SkipBadRecords = true; // todo remove when data export is finished
                 importer.Import(reader);
             }
