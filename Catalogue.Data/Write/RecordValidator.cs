@@ -439,6 +439,8 @@ namespace Catalogue.Data.Write
             };
         }
 
+
+
         [Test]
         public void should_produce_no_warnings_by_default()
         {
@@ -593,6 +595,22 @@ namespace Catalogue.Data.Write
             RecordValidationResult result = new RecordValidator(mockVocabService.Object).Validate(record);
 
             result.Errors.Any(e => e.Fields.Contains("gemini.topicCategory")).Should().BeTrue();
+        }
+
+        [Test]
+        public void should_not_allow_keyword_additions_to_controlled_vocabs()
+        {
+            Record record = SimpleRecord().With(r => r.Gemini.Keywords.Add(new Keyword("value", "vocabUrl")));
+            mockVocabService.Setup(v => v.Load("vocabUrl"))
+                            .Returns((string vocab) => new Vocabulary {Controlled = true, Id = vocab, Values = new List<string> {"notvalue"}});
+
+            RecordValidationResult result = new RecordValidator(mockVocabService.Object).Validate(record);
+
+            result.Errors.Any(e => e.Fields.Contains("gemini.keywords")).Should().BeTrue();
+            result.Errors.Single(e => e.Fields.Contains("gemini.keywords"))
+                  .Message.Should()
+                  .Be("The keyword value does not exist in the controlled vocabulary vocabUrl");
+
         }
     }
 }
