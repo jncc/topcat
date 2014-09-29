@@ -30,7 +30,8 @@ namespace Catalogue.Data.Seed
         {
             using (var db = store.OpenSession())
             {
-                var s = new Seeder(db, new RecordService(db, new RecordValidator(new VocabularyService(db))));
+                var vocabService = new VocabularyService(db);
+                var s = new Seeder(db, new RecordService(db, new RecordValidator(vocabService),vocabService));
                 s.AddVocabularies();
                 s.AddMeshRecords();
                 db.SaveChanges();
@@ -40,7 +41,8 @@ namespace Catalogue.Data.Seed
         {
             using (var db = store.OpenSession())
             {
-                var s = new Seeder(db, new RecordService(db, new RecordValidator(new VocabularyService(db))));
+                var vocabService = new VocabularyService(db);
+                var s = new Seeder(db, new RecordService(db, new RecordValidator(vocabService), vocabService));
                 s.AddVocabularies();
                 s.AddMeshRecords();
                 s.AddSimpleExampleRecord();
@@ -61,7 +63,8 @@ namespace Catalogue.Data.Seed
 
             using (var reader = new StreamReader(s))
             {
-                var importer = new Importer<MeshMapping>(new FileSystem(), new RecordService(db, new RecordValidator(new VocabularyService(db))));
+                var vocabService = new VocabularyService(db);
+                var importer = new Importer<MeshMapping>(new FileSystem(), new RecordService(db, new RecordValidator(vocabService), vocabService));
                 importer.SkipBadRecords = true; // todo remove when data export is finished
                 importer.Import(reader);
             }

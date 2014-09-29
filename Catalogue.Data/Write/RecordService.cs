@@ -7,6 +7,7 @@ using Catalogue.Gemini.Helpers;
 using Catalogue.Gemini.Model;
 using Catalogue.Gemini.Spatial;
 using Catalogue.Gemini.Templates;
+using Catalogue.Gemini.Write;
 using Catalogue.Utilities.Clone;
 using Catalogue.Utilities.Collections;
 using Catalogue.Utilities.Text;
@@ -26,13 +27,15 @@ namespace Catalogue.Data.Write
 
     public class RecordService : IRecordService
     {
-        readonly IDocumentSession db;
-        readonly IRecordValidator validator;
+        private readonly IDocumentSession db;
+        private readonly IRecordValidator validator;
+        private readonly IVocabularyService vocabService;
 
-        public RecordService(IDocumentSession db, IRecordValidator validator)
+        public RecordService(IDocumentSession db, IRecordValidator validator, IVocabularyService vocabService)
         {
             this.db = db;
             this.validator = validator;
+            this.vocabService = vocabService;
         }
 
         public Record Load(Guid id)
@@ -63,12 +66,31 @@ namespace Catalogue.Data.Write
 
             var validation = validator.Validate(record);
 
-            if (!validation.Errors.Any())
+            if (validation.Errors.Any())
             {
-                SyncDenormalizations(record);
-                db.Store(record);
+                return new RecordServiceResult
+                    {
+                        Record = record,
+                        Validation = validation
+                    };
             }
 
+            SyncDenormalizations(record);
+
+            var vocabSyncResults = vocabService.SyncKeywords(record.Gemini.Keywords);
+
+            if (vocabSyncResults.All(x => x.Success))
+            {
+                db.Store(record);
+                
+                return new RecordServiceResult
+                {
+                    Record = record,
+                    Validation = validation
+                };
+            }
+            
+            //todo: add validation errors to record  service validation results
             return new RecordServiceResult
                 {
                     Record = record,
@@ -133,7 +155,7 @@ namespace Catalogue.Data.Write
         [Test]
         public void should_fail_when_record_is_readonly()
         {
-            var service = new RecordService(Mock.Of<IDocumentSession>(), Mock.Of<IRecordValidator>());
+            var service = new RecordService(Mock.Of<IDocumentSession>(), Mock.Of<IRecordValidator>(),Mock.Of<IVocabularyService>());
             var record = new Record { ReadOnly = true };
 
             service.Invoking(s => s.Update(record))
@@ -148,7 +170,7 @@ namespace Catalogue.Data.Write
         public void should_store_valid_record_in_the_database()
         {
             var database = Mock.Of<IDocumentSession>();
-            var service = new RecordService(database, ValidatorStub());
+            var service = new RecordService(database, ValidatorStub(), Mock.Of<IVocabularyService>());
 
             var record = BasicRecord();
             service.Upsert(record);
@@ -160,7 +182,7 @@ namespace Catalogue.Data.Write
         public void should_not_store_invalid_record_in_the_database()
         {
             var database = Mock.Of<IDocumentSession>();
-            var service = new RecordService(database, FailingValidatorStub());
+            var service = new RecordService(database, FailingValidatorStub(), Mock.Of<IVocabularyService>());
 
             service.Upsert(BasicRecord());
 
@@ -174,7 +196,7 @@ namespace Catalogue.Data.Write
             // without an unnecessary fetch from the database
 
             var database = Mock.Of<IDocumentSession>();
-            var service = new RecordService(database, ValidatorStub());
+            var service = new RecordService(database, ValidatorStub(), Mock.Of<IVocabularyService>());
 
             var record = BasicRecord();
             var result = service.Upsert(record);
@@ -186,7 +208,7 @@ namespace Catalogue.Data.Write
         public void should_store_bounding_box_as_wkt()
         {
             var database = Mock.Of<IDocumentSession>();
-            var service = new RecordService(database, ValidatorStub());
+            var service = new RecordService(database, ValidatorStub(), Mock.Of<IVocabularyService>());
             
             var e = Library.Example();
             var record = new Record { Gemini = e };
@@ -203,7 +225,7 @@ namespace Catalogue.Data.Write
             // to avoid raven / lucene indexing errors
 
             var database = Mock.Of<IDocumentSession>();
-            var service = new RecordService(database, ValidatorStub());
+            var service = new RecordService(database, ValidatorStub(), Mock.Of<IVocabularyService>());
 
             service.Upsert(BasicRecord());
 
@@ -214,7 +236,7 @@ namespace Catalogue.Data.Write
         public void should_always_set_resource_type_to_dataset()
         {
             var database = Mock.Of<IDocumentSession>();
-            var service = new RecordService(database, ValidatorStub());
+            var service = new RecordService(database, ValidatorStub(), Mock.Of<IVocabularyService>());
 
             var record = BasicRecord().With(r => r.Gemini.ResourceType = "");
             service.Upsert(record);
@@ -226,7 +248,7 @@ namespace Catalogue.Data.Write
         public void should_standardise_unconditional_use_constraints()
         {
             var database = Mock.Of<IDocumentSession>();
-            var service = new RecordService(database, ValidatorStub());
+            var service = new RecordService(database, ValidatorStub(), Mock.Of<IVocabularyService>());
 
             var record = BasicRecord().With(r => r.Gemini.UseConstraints = "   No conditions APPLY");
             service.Upsert(record);
@@ -238,7 +260,7 @@ namespace Catalogue.Data.Write
         public void should_set_security_to_open_by_default()
         {
             var database = Mock.Of<IDocumentSession>();
-            var service = new RecordService(database, ValidatorStub());
+            var service = new RecordService(database, ValidatorStub(), Mock.Of<IVocabularyService>());
 
             service.Upsert(BasicRecord());
 
@@ -252,7 +274,7 @@ namespace Catalogue.Data.Write
             // finally, keywords with no namespace should be last
 
             var database = Mock.Of<IDocumentSession>();
-            var service = new RecordService(database, ValidatorStub());
+            var service = new RecordService(database, ValidatorStub(), Mock.Of<IVocabularyService>());
 
             var record = BasicRecord().With(r =>
                 {
