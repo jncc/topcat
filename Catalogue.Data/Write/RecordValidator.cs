@@ -252,7 +252,7 @@ namespace Catalogue.Data.Write
                     r => r.Gemini.ResourceType);
             }
 
-            // 40 Values of controlled vocabularys must be defined.
+            // 40 Keywords from controlled vocabularys must be defined, they cannot be added.
             ValidateControlledKeywords(record, recordValidationResult);
 
             // Conformity, required if claiming conformity to INSPIRE

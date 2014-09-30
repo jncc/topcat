@@ -34,6 +34,9 @@ namespace Catalogue.Gemini.Write
                 throw new InvalidOperationException("Cannot upsert a vocabaulary with no id");
             }
 
+            var uriResult = ValidateVocabularyUri(vocab.Id);
+            if (uriResult.Success == false) return uriResult;
+
             vocab.Values = vocab.Values.Distinct().ToList();
 
             var existingVocab = Load(vocab.Id);
@@ -51,15 +54,52 @@ namespace Catalogue.Gemini.Write
             }
             else if (vocab.Values.Any(v => existingVocab.Values.All(x => x != v)))
             {
-                throw new InvalidOperationException("Cannot implicitly update controlled vocabularies");
+                return new VocabularyServiceResult()
+                    {
+                        Success = false,
+                        Error = String.Format("Cannot update the vocabulary {0} as it is controlled", vocab.Id)
+                    };
 
             }
 
             return new VocabularyServiceResult
                 {
                     Success = true,
+                    Error = String.Empty
                 };
         }
+
+        private VocabularyServiceResult ValidateVocabularyUri(string id)
+        {
+            Uri url;
+
+            if (Uri.TryCreate(id, UriKind.Absolute, out url))
+            {
+                if (url.Scheme != Uri.UriSchemeHttp)
+                {
+                    return new VocabularyServiceResult
+                    {
+                        Success = false,
+                        Error = String.Format("Resource locator {0} is not an http url", id)
+                    };
+                }
+            }
+            else
+            {
+                return new VocabularyServiceResult
+                {
+                    Success = false,
+                    Error = String.Format("Resource locator {0} is not a valid url", id)
+                };
+            }
+
+            return new VocabularyServiceResult
+                {
+                    Success = true,
+                    Error = String.Empty
+                };
+        }
+
 
         public ICollection<VocabularyServiceResult> SyncKeywords(List<Keyword> keywords)
         {
@@ -86,6 +126,8 @@ namespace Catalogue.Gemini.Write
     public class VocabularyServiceResult
     {
         public bool Success { get; set; }
+
+        public string Error { get; set; }
     }
 
 

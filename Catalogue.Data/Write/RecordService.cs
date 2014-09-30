@@ -90,13 +90,22 @@ namespace Catalogue.Data.Write
                 };
             }
             
-            //todo: add validation errors to record  service validation results
+            AppendVocabValidationErrors(validation.Errors,vocabSyncResults);
             return new RecordServiceResult
                 {
                     Record = record,
                     Validation = validation,
                 };
         }
+
+        private void AppendVocabValidationErrors(RecordValidationIssueSet errors, ICollection<VocabularyServiceResult> vocabSyncResults)
+        {
+            foreach (var error in vocabSyncResults.Where(x => !x.Success).Select(x => x.Error))
+            {
+                errors.Add(error, r => r.Gemini.Keywords);
+            }
+        }
+
 
         void SyncDenormalizations(Record record)
         {
