@@ -113,7 +113,7 @@ namespace Catalogue.Gemini.Write
                             Controlled = false, 
                             Name = vocabId, 
                             Description = String.Empty, 
-                            PublicationDate = DateTime.Now.ToString("mm-yyyy"), 
+                            PublicationDate = DateTime.Now.ToString("MM-yyyy"), 
                             Publishable = true, 
                             Values = keywords.Where(k => k.Vocab == vocabId).Select(k => k.Value).ToList()
                         }

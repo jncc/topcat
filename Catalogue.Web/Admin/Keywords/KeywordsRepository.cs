@@ -78,9 +78,9 @@ namespace Catalogue.Web.Admin.Keywords
             return keywords;
         }
 
-        private IQueryable<KeywordsSearchIndex.Result> BaseQuery(int start)
+        private IQueryable<VocabularyKeywordIndex.Result> BaseQuery(int start)
         {
-            return _db.Query<KeywordsSearchIndex.Result, KeywordsSearchIndex>()
+            return _db.Query<VocabularyKeywordIndex.Result, VocabularyKeywordIndex>()
                 .Skip(start)
                 .Take(1024);
         }

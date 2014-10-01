@@ -18,18 +18,19 @@ namespace Catalogue.Data.Indexes
         public class Result
         {
             public string Vocab { get; set; }
+            public string VocabN { get; set; }
         }
 
         public VocabularySearchIndex()
         {
-            // we use a separate field for custom ngram search because it's of limited length
-            // and we want to always be able to match the full keyword!
 
             Map = records => from record in records
                              from k in record.Gemini.Keywords
                              select new
                              {
                                  Vocab = k.Vocab,
+                                 VocabN = k.Vocab
+
                              };
 
             Reduce = xs => from x in xs
@@ -37,10 +38,11 @@ namespace Catalogue.Data.Indexes
                            select new
                            {
                                Vocab = g.First().Vocab,
+                               VocabN = g.First().Vocab
                            };
 
             Stores.Add(x => x.Vocab, FieldStorage.Yes);
-            Analyze(x => x.Vocab, typeof(CustomKeywordAnalyzer).AssemblyQualifiedName); 
+            Analyze(x => x.VocabN, typeof(CustomKeywordAnalyzer).AssemblyQualifiedName); 
           
         }
     }
