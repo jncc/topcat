@@ -50,17 +50,33 @@ namespace Catalogue.Web.Admin.Keywords
 
         public ICollection<Keyword> ReadByValue(string value)
         {
-            int start = 0;
+            int startA = 0;
             var keywords = new List<Keyword>();
 
+            //Get matching keywords from Vocab table
             //Do this to get around the limit on max number of results returned by raven
-            while (BaseQuery(start).Any(k => k.Value.StartsWith(value)))
+            while (VocabBaseQuery(startA).Any(k => k.Value.StartsWith(value)))
             {
-                List<Keyword> current = BaseQuery(start).Where(k => k.Value.StartsWith(value)).Select(r => new Keyword {Value = r.Value, Vocab = r.Vocab})
+                List<Keyword> current = VocabBaseQuery(startA).Where(k => k.Value.StartsWith(value)).Select(r => new Keyword {Value = r.Value, Vocab = r.Vocab})
                     .ToList(); 
-                start += current.Count;
+                startA += current.Count;
                 keywords.AddRange(current);
             }
+
+            var startB = 0;
+            //Get misc keywords from Records table
+            while (MiscBaseQuery(startB).Any(k => k.Value.StartsWith(value)))
+            {
+                var current =
+                    MiscBaseQuery(startB)
+                        .Where(k => k.Value.StartsWith(value))
+                        .Select(r => new Keyword {Value = r.Value, Vocab = r.Vocab})
+                        .ToList();
+
+                startB += current.Count;
+                keywords.AddRange(current);
+            }
+
             return keywords;
         }
 
@@ -68,21 +84,32 @@ namespace Catalogue.Web.Admin.Keywords
         {
             int start = 0;
             var keywords = new List<Keyword>();
-            while (BaseQuery(start).Any())
+            while (VocabBaseQuery(start).Any())
             {
-                List<Keyword> current = BaseQuery(start).Select(r => new Keyword {Value = r.Value, Vocab = r.Vocab})
+                List<Keyword> current = VocabBaseQuery(start).Select(r => new Keyword {Value = r.Value, Vocab = r.Vocab})
                         .ToList();
                 start += current.Count;
                 keywords.AddRange(current);
             }
+
+
             return keywords;
         }
 
-        private IQueryable<VocabularyKeywordIndex.Result> BaseQuery(int start)
+        private IQueryable<VocabularyKeywordIndex.Result> VocabBaseQuery(int start)
         {
             return _db.Query<VocabularyKeywordIndex.Result, VocabularyKeywordIndex>()
                 .Skip(start)
                 .Take(1024);
         }
+
+        private IQueryable<KeywordsSearchIndex.Result> MiscBaseQuery(int start)
+        {
+            return _db.Query<KeywordsSearchIndex.Result, KeywordsSearchIndex>()
+                      .Where(x => x.Vocab == String.Empty)
+                      .Skip(start)
+                      .Take(1024);
+        }
+
     }
 }
