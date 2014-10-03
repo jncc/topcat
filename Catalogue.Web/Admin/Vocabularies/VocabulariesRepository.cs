@@ -28,10 +28,10 @@ namespace Catalogue.Web.Admin.Vocabularies
 
             var containsTerm = "*" + vocab.Trim().Replace("*", String.Empty) + "*";
 
-            return _db.Query<VocabularySearchIndex.Result, VocabularySearchIndex>()
+            return _db.Query<VocabularyIndex.Result, VocabularyIndex>()
                 .Search(k => k.Vocab, containsTerm, escapeQueryOptions: EscapeQueryOptions.AllowAllWildcards)
                 .Select(k => k.Vocab)
-                .Distinct().ToList();
+                .ToList();
 
         }
     }
