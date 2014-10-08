@@ -26,6 +26,3 @@
             $http.put('../api/admin').success (result) -> 
                 $scope.myBool.seedMesh = result
         
-
-        
-        

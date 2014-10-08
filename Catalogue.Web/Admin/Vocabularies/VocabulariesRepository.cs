@@ -11,6 +11,7 @@ namespace Catalogue.Web.Admin.Vocabularies
     public interface IVocabulariesRepository
     {
         ICollection<string> Read(string vocab);
+        ICollection<string> ReadAll();
     }
 
     public class VocabulariesRepository : IVocabulariesRepository
@@ -33,6 +34,12 @@ namespace Catalogue.Web.Admin.Vocabularies
                 .Select(k => k.Vocab)
                 .ToList();
 
+        }
+
+
+        public ICollection<string> ReadAll()
+        {
+            return _db.Query<VocabularyIndex.Result, VocabularyIndex>().Select(k => k.Vocab).ToList();
         }
     }
 }

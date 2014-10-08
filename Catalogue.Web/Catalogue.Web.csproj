@@ -257,6 +257,12 @@
     <Content Include="app\js\controllers\SearchController.min.js">
       <DependentUpon>SearchController.coffee</DependentUpon>
     </Content>
+    <Content Include="app\js\controllers\VocabulariesController.js">
+      <DependentUpon>VocabulariesController.coffee</DependentUpon>
+    </Content>
+    <Content Include="app\js\controllers\VocabulariesController.min.js">
+      <DependentUpon>VocabulariesController.coffee</DependentUpon>
+    </Content>
     <Content Include="app\js\directives.js">
       <DependentUpon>directives.coffee</DependentUpon>
     </Content>
@@ -330,6 +336,7 @@
     <Content Include="app\views\sandbox\dropdown.html" />
     <Content Include="app\views\sandbox\glyphs.html" />
     <Content Include="app\views\search\search.html" />
+    <Content Include="app\views\Vocabularies\vocabularies.html" />
     <Content Include="favicon.ico" />
     <Content Include="Global.asax" />
     <Content Include="test\e2e\runner.html" />
@@ -424,6 +431,9 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="app\js\controllers\ImportController.coffee" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="app\js\controllers\VocabulariesController.coffee" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

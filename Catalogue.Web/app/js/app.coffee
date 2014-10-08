@@ -38,6 +38,9 @@ module.config ['$routeProvider', ($routeProvider) ->
         .when '/sandbox/dropdown',
             controller:     'SandboxController',
             templateUrl:    'views/sandbox/dropdown.html'
+        .when '/vocabularies',
+            controller:     'VocabulariesController',
+            templateUrl:    'views/vocabularies/vocabularies.html'
         .when '/admin/minty1$',
             controller:     'AdminController',
             templateUrl:    'views/admin/admin.html'

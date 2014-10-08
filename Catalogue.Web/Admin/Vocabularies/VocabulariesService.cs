@@ -8,6 +8,7 @@ namespace Catalogue.Web.Admin.Vocabularies
     public interface IVocabulariesService
     {
         ICollection<string> Read(string s);
+        ICollection<string> ReadAll();
     }
 
     public class VocabulariesService : IVocabulariesService
@@ -22,6 +23,12 @@ namespace Catalogue.Web.Admin.Vocabularies
         public ICollection<string> Read(string vocab)
         {
             return _repo.Read(vocab);
+        }
+
+
+        public ICollection<string> ReadAll()
+        {
+            return _repo.ReadAll();
         }
     }
 }

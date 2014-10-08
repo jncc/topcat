@@ -4,7 +4,7 @@ using System.Web.Http;
 using Catalogue.Web.Admin.Keywords;
 using Catalogue.Web.Admin.Vocabularies;
 
-namespace Catalogue.Web.Controllers.Keywords
+namespace Catalogue.Web.Controllers.Vocabularies
 {
     public class VocabulariesController : ApiController
     {
@@ -17,6 +17,11 @@ namespace Catalogue.Web.Controllers.Keywords
 
         public ICollection<string> Get(String q)
         {
+            if (q == "all")
+            {
+                return _service.ReadAll();
+            }
+
             return _service.Read(q);
         }
     }
