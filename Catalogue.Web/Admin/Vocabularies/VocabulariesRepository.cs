@@ -10,8 +10,7 @@ namespace Catalogue.Web.Admin.Vocabularies
 {
     public interface IVocabulariesRepository
     {
-        ICollection<string> Read(string vocab);
-        ICollection<string> ReadAll();
+        ICollection<Vocabulary> Read(string id);
     }
 
     public class VocabulariesRepository : IVocabulariesRepository
@@ -23,23 +22,17 @@ namespace Catalogue.Web.Admin.Vocabularies
             _db = db;
         }
 
-        public ICollection<string> Read(string vocab)
+        //Don't return values - these are managed by keyword controller
+        public ICollection<Vocabulary> Read(string id)
         {
-            if (String.IsNullOrWhiteSpace(vocab)) return new List<string>();
+            if (String.IsNullOrWhiteSpace(id)) return new List<Vocabulary>();
 
-            var containsTerm = "*" + vocab.Trim().Replace("*", String.Empty) + "*";
+            var containsTerm = "*" + id.Trim().Replace("*", String.Empty) + "*";
 
-            return _db.Query<VocabularyIndex.Result, VocabularyIndex>()
-                .Search(k => k.Vocab, containsTerm, escapeQueryOptions: EscapeQueryOptions.AllowAllWildcards)
-                .Select(k => k.Vocab)
+            return _db.Query<Vocabulary>()
+                .Search(x => x.Id, containsTerm, escapeQueryOptions: EscapeQueryOptions.AllowAllWildcards)
+                .Select(x => x)
                 .ToList();
-
-        }
-
-
-        public ICollection<string> ReadAll()
-        {
-            return _db.Query<VocabularyIndex.Result, VocabularyIndex>().Select(k => k.Vocab).ToList();
         }
     }
 }

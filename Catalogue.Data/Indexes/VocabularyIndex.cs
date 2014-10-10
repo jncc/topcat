@@ -13,19 +13,21 @@ namespace Catalogue.Data.Indexes
 {
     public class VocabularyIndex : AbstractIndexCreationTask<Vocabulary, Indexes.VocabularyIndex.Result>
     {
-                public class Result
+        public class Result
         {
             public string Vocab { get; set; }
+            public string Name { get; set; }
             public string VocabN { get; set; }
         }
 
-                public VocabularyIndex()
+        public VocabularyIndex()
         {
 
             Map = vocabularies => from v in vocabularies
                                  select new
                                  {
                                      Vocab = v.Id,
+                                     Name = v.Name,
                                      VocabN = v.Id
 
                                  };
@@ -35,10 +37,12 @@ namespace Catalogue.Data.Indexes
                            select new
                            {
                                Vocab = g.First().Vocab,
+                               Name = g.First().Name,
                                VocabN = g.First().Vocab
                            };
 
             Stores.Add(x => x.Vocab, FieldStorage.Yes);
+            Stores.Add(x => x.Name, FieldStorage.Yes);
             Analyze(x => x.VocabN, typeof(CustomKeywordAnalyzer).AssemblyQualifiedName); 
           
         }

@@ -2,13 +2,13 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
+using Catalogue.Gemini.Model;
 
 namespace Catalogue.Web.Admin.Vocabularies
 {
     public interface IVocabulariesService
     {
-        ICollection<string> Read(string s);
-        ICollection<string> ReadAll();
+        ICollection<Vocabulary> Read(string s);
     }
 
     public class VocabulariesService : IVocabulariesService
@@ -20,15 +20,11 @@ namespace Catalogue.Web.Admin.Vocabularies
             _repo = repo;
         }
 
-        public ICollection<string> Read(string vocab)
+        public ICollection<Vocabulary> Read(string vocab)
         {
             return _repo.Read(vocab);
         }
 
 
-        public ICollection<string> ReadAll()
-        {
-            return _repo.ReadAll();
-        }
     }
 }

@@ -174,6 +174,7 @@
     <Compile Include="Admin\Keywords\KeywordsRepository.cs" />
     <Compile Include="Admin\Keywords\KeywordsService.cs" />
     <Compile Include="Admin\Vocabularies\VocabulariesController.cs" />
+    <Compile Include="Admin\Vocabularies\VocabularyListController.cs" />
     <Compile Include="Search\Controllers\VocabularyTypeaheadController.cs" />
     <Compile Include="Admin\Vocabularies\VocabulariesRepository.cs" />
     <Compile Include="Admin\Vocabularies\VocabulariesService.cs" />
@@ -259,10 +260,16 @@
       <DependentUpon>SearchController.coffee</DependentUpon>
     </Content>
     <Content Include="app\js\controllers\VocabulariesController.js">
-      <DependentUpon>VocabulariesController.coffee</DependentUpon>
+      <DependentUpon>VocabularyListController.coffee</DependentUpon>
     </Content>
     <Content Include="app\js\controllers\VocabulariesController.min.js">
-      <DependentUpon>VocabulariesController.coffee</DependentUpon>
+      <DependentUpon>VocabularyListController.coffee</DependentUpon>
+    </Content>
+    <Content Include="app\js\controllers\VocabularyListController.js">
+      <DependentUpon>VocabularyListController.coffee</DependentUpon>
+    </Content>
+    <Content Include="app\js\controllers\VocabularyListController.min.js">
+      <DependentUpon>VocabularyListController.coffee</DependentUpon>
     </Content>
     <Content Include="app\js\directives.js">
       <DependentUpon>directives.coffee</DependentUpon>
@@ -434,7 +441,7 @@
     <Content Include="app\js\controllers\ImportController.coffee" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="app\js\controllers\VocabulariesController.coffee" />
+    <Content Include="app\js\controllers\VocabularyListController.coffee" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

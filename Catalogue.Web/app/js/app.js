@@ -41,7 +41,7 @@
         controller: 'SandboxController',
         templateUrl: 'views/sandbox/dropdown.html'
       }).when('/vocabularies', {
-        controller: 'VocabulariesController',
+        controller: 'VocabularyListController',
         templateUrl: 'views/vocabularies/vocabularies.html'
       }).when('/admin/minty1$', {
         controller: 'AdminController',
