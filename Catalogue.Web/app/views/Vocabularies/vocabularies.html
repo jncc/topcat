@@ -1,9 +1,10 @@
 ﻿<div>
-    Vocabularies
-    <ul>
-        <li ng-repeat="vocab in vocabularies">
-            {{vocab.name}} ({{vocab.vocab}})
-        </li>
-    </ul>
+    <h1>Vocabularies</h1>
+
+    <div ng-repeat="v in vocabularies" class="layout-row">
+        <div class="layout-col">
+            <a ng-href="#/vocabeditor/{{v.vocab}}" ng-bind-html="v.name"></a>
+        </div>
+    </div>
 
 </div>
