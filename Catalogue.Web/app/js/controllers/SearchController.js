@@ -86,7 +86,7 @@
       });
     };
     $scope.getVocabularies = function(term) {
-      return $http.get('../api/vocabularies?q=' + term).then(function(response) {
+      return $http.get('../api/vocabularytypeahead?q=' + term).then(function(response) {
         return response.data;
       });
     };

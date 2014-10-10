@@ -73,8 +73,8 @@
         $scope.getKeywords = (term) -> $http.get('../api/keywords?q='+term).then (response) -> 
             response.data          
         
-        # listener for when vocabularies are entered into the keyword typeahead box        
-        $scope.getVocabularies = (term) -> $http.get('../api/vocabularies?q='+term).then (response) -> 
+        # listener for when vocabularies are entered into the vocabularies typeahead box        
+        $scope.getVocabularies = (term) -> $http.get('../api/vocabularytypeahead?q='+term).then (response) -> 
             response.data          
         
                     
