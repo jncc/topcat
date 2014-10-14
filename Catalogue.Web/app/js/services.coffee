@@ -6,11 +6,26 @@ module.factory 'Account', ($http, $q) ->
         d.resolve data
     d.promise
 
+module.factory 'Vocabulary', ($resource) ->
+    $resource '../api/vocabularies/?id=:id', {},
+    query: {method:'GET', params: {id: '@id'}}
+    update: {method:'PUT', params: {id: '@id'}}
+    
+module.factory 'VocabLoader', (Vocabulary, $route, $q) ->
+    () ->
+        console.log("vocabloader")
+        d = $q.defer()
+        Vocabulary.get
+            id: $route.current.params.vocabId,
+            (vocabulary) -> d.resolve vocabulary,
+            () -> d.reject 'Unable to fetch vocabulary ' + $route.current.params.vocabId
+        d.promise
+
 module.factory 'Record', ($resource) ->
     $resource '../api/records/:id', {},
     query: {method:'GET', params: {id: '@id'}}
     update: {method:'PUT', params: {id: '@id'}}
-
+    
 module.factory 'RecordLoader', (Record, $route, $q) ->
     () ->
         d = $q.defer()

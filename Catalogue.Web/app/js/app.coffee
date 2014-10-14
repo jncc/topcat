@@ -44,6 +44,10 @@ module.config ['$routeProvider', ($routeProvider) ->
         .when '/admin/minty1$',
             controller:     'AdminController',
             templateUrl:    'views/admin/admin.html'
+        .when '/vocabularies/editor/:vocabId*',
+            controller:     'VocabularyEditorController',
+            templateUrl:    'views/vocabularies/editor.html',
+            resolve:        'vocab': (VocabLoader) -> VocabLoader()
         .otherwise
             redirectTo:     '/'
     ]

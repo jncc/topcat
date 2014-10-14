@@ -46,6 +46,14 @@
       }).when('/admin/minty1$', {
         controller: 'AdminController',
         templateUrl: 'views/admin/admin.html'
+      }).when('/vocabularies/editor/:vocabId*', {
+        controller: 'VocabularyEditorController',
+        templateUrl: 'views/vocabularies/editor.html',
+        resolve: {
+          'vocab': function(VocabLoader) {
+            return VocabLoader();
+          }
+        }
       }).otherwise({
         redirectTo: '/'
       });

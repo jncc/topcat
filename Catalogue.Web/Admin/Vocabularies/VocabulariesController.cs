@@ -4,8 +4,9 @@ using System.Linq;
 using System.Web;
 using System.Web.Http;
 using Catalogue.Gemini.Model;
+using Catalogue.Web.Admin.Vocabularies;
 
-namespace Catalogue.Web.Admin.Vocabularies
+namespace Catalogue.Web.Controllers.Vocabularies
 {
     public class VocabulariesController : ApiController
     {
@@ -16,9 +17,15 @@ namespace Catalogue.Web.Admin.Vocabularies
             this.service = service;
         }
 
-        public ICollection<Vocabulary> Get(String q)
+        public Vocabulary Get(String id)
         {
-            return service.Read(q);
+            //Handles expected call with q = null when initialising editor for new vocab.
+            if (String.IsNullOrWhiteSpace(id))
+            {
+                return new Vocabulary();
+            }
+
+            return service.Read(id);
         }
     }
 }

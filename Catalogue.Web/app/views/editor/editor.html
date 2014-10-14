@@ -145,7 +145,7 @@
                 <div ng-show="keywordEditorOpen" class="editor-keywords-editor form-inline">
                     <div ng-repeat="k in form.gemini.keywords">
                         <input type="text" ng-model="k.vocab" placeholder="Vocab (namespace)" class="form-control" disabled style="width:55%;" />
-                        <!--See: -- https://github.com/angular-ui/bootstrap/blob/91ac17c9ed691a99647b66b3f464e3585398be19/src/typeahead/test/typeahead.spec.js#L372-->
+                        <!--See: -- https://github.com/angular-ui/bootstrap/blob/91ac17c9ed691a99647b66b3f464e3585398be19/src/typeahead/test/typeahead.spec.js#L372 -->
 
                         <input type="text" ng-model="k.value" placeholder="Value (keyword)" typeahead-on-select="setKeyword($item, k)" typeahead-template-url="customTemplate.html"  typeahead-loading="loadingKeys" typeahead="keyword.value as keyword for keyword in getKeywords($viewValue)" class="form-control" style="width:35%" />
                         <i ng-show="loadingKeys" class="glyphicon glyphicon-refresh"></i>

@@ -259,11 +259,11 @@
     <Content Include="app\js\controllers\SearchController.min.js">
       <DependentUpon>SearchController.coffee</DependentUpon>
     </Content>
-    <Content Include="app\js\controllers\VocabulariesController.js">
-      <DependentUpon>VocabularyListController.coffee</DependentUpon>
+    <Content Include="app\js\controllers\VocabularyEditorController.js">
+      <DependentUpon>VocabularyEditorController.coffee</DependentUpon>
     </Content>
-    <Content Include="app\js\controllers\VocabulariesController.min.js">
-      <DependentUpon>VocabularyListController.coffee</DependentUpon>
+    <Content Include="app\js\controllers\VocabularyEditorController.min.js">
+      <DependentUpon>VocabularyEditorController.coffee</DependentUpon>
     </Content>
     <Content Include="app\js\controllers\VocabularyListController.js">
       <DependentUpon>VocabularyListController.coffee</DependentUpon>
@@ -344,6 +344,7 @@
     <Content Include="app\views\sandbox\dropdown.html" />
     <Content Include="app\views\sandbox\glyphs.html" />
     <Content Include="app\views\search\search.html" />
+    <Content Include="app\views\Vocabularies\editor.html" />
     <Content Include="app\views\Vocabularies\vocabularies.html" />
     <Content Include="favicon.ico" />
     <Content Include="Global.asax" />
@@ -442,6 +443,9 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="app\js\controllers\VocabularyListController.coffee" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="app\js\controllers\VocabularyEditorController.coffee" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
