@@ -22,7 +22,10 @@ namespace Catalogue.Web.Controllers.Vocabularies
             //Handles expected call with q = null when initialising editor for new vocab.
             if (String.IsNullOrWhiteSpace(id))
             {
-                return new Vocabulary();
+                return new Vocabulary
+                    {
+                        PublicationDate = DateTime.Now.ToString("MM-yyyy"), 
+                    };
             }
 
             return service.Read(id);
