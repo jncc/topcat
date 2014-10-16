@@ -13,6 +13,10 @@
             
         $scope.addKeyword = ->
             $scope.form.values.push('')
+            
+        $scope.isClean = -> angular.equals($scope.form, vocab)
+        $scope.isSaveHidden = -> $scope.isClean()
+        $scope.isCancelHidden = -> $scope.isClean()
         
         # initially set up form
         $scope.reset()

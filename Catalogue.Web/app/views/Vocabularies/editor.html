@@ -1,34 +1,88 @@
 ﻿<div>
     <form name="theForm" novalidate>
-        <div class="form-group">
-            <label for="id" class="control-label">Vocabulary Id</label>
-            <input name="id" type="text" ng-model="form.id" placeholder="Vocab Id (URI)" class="form-control" ng-disabled="!newVocab" />
-        </div>
-        <div class="form-group">
-            <label for="name">Vocabulary Name</label>
-            <input name="name" type="text" ng-model="form.name" placeholder="Name" class="form-control"/>
-        </div>
-        <div class="form-group">
-            <label for="descriptionArea" class="control-label">Description</label>
-            <textarea id="descriptionArea" type="text" rows="2" ng-model="form.description" placeholder="Description" class="form-control" />
-        </div>
-        <div class="form-group">
-            <label for="publicationDate" class="control-label">Publication Date</label>
-            <input name="publicationDate" type="text" ng-model="form.publicationDate" placeholder="Publication Date" class="form-control" />
-        </div>
-        <label for="valuesDiv" class="control-label">Values:</label>
-        <div name="valuesDiv" class="form-inline">
-            <div ng-repeat="v in form.values track by $index">
-                <input type="text" ng-model="$parent.form.values[$index]" placeholder="Value (keyword)" class="form-control" style="width:35%"/>
-                <button class="btn btn-sm btn-primary" ng-click="removeKeyword($index)">
-                    <span style="font-size: small" class="glyphicon glyphicon-remove-sign"></span>
-                </button>
-            </div>
-            <button class="btn btn-primary icon-and-text-btn" ng-click="addKeyword()">
-                <span class="glyphicon glyphicon-plus-sign"></span>
-                    ADD
-            </button>
-        </div>
+        <div class="row">
+            <!--Top row of buttons-->
 
+            <div class="col-md-12">
+                <div class="form-group pull-right">
+                    <button class="btn btn-default icon-and-text-btn" tc-back-button>
+                        <span class="dark glyphicon glyphicon-circle-arrow-left"></span>BACK
+                    </button>
+                    <span>
+                        <button ng-click="cancel()" ng-hide="isCancelHidden()" class="btn btn-primary" >CANCEL</button>
+                        <button ng-click="save()"  ng-hide="isSaveHidden()" ng-disabled="isSaveDisabled()" class="btn btn-danger">SAVE</button>
+                    </span>
+                </div>
+            </div>
+        </div>
+        
+        <div class="row">
+            <!--Main fields etc-->
+            <div class="col-md-9">
+                <div class="form-group">
+                    <label for="id" class="control-label">Vocabulary Id</label>
+                    <input name="id" type="text" ng-model="form.id" placeholder="Vocab Id (URI)" class="form-control" ng-disabled="!newVocab" />
+                </div>
+                <div class="form-group">
+                    <label for="name">Vocabulary Name</label>
+                    <input name="name" type="text" ng-model="form.name" placeholder="Name" class="form-control"/>
+                </div>
+                <div class="form-group">
+                    <label for="descriptionArea" class="control-label">Description</label>
+                    <textarea id="descriptionArea" type="text" rows="2" ng-model="form.description" placeholder="Description" class="form-control" />
+                </div>
+                <div class="form-group">
+                    <label for="publicationDate" class="control-label">Publication Date</label>
+                    <input name="publicationDate" type="text" ng-model="form.publicationDate" placeholder="Publication Date" class="form-control" />
+                </div>
+                <label for="valuesDiv" class="control-label">Values:</label>
+                <div name="valuesDiv" class="form-inline">
+                    <div ng-repeat="v in form.values track by $index">
+                        <input type="text" ng-model="$parent.form.values[$index]" placeholder="Value (keyword)" class="form-control" style="width:35%"/>
+                        <button class="btn btn-sm btn-primary" ng-click="removeKeyword($index)">
+                            <span style="font-size: small" class="glyphicon glyphicon-remove-sign"></span>
+                        </button>
+                    </div>
+                    <button class="btn btn-primary icon-and-text-btn" ng-click="addKeyword()">
+                        <span class="glyphicon glyphicon-plus-sign"></span>
+                        ADD
+                    </button>
+                </div>
+            </div>
+            <!--Side panel-->
+            <div class="col-md-3">
+                <div class="editor-internal well well-sm">
+                    <div class="layout-row">
+                        <div class="layout-col">
+                            <span class="control-label">Controlled</span>
+                        </div>
+                        <div class="layout-col pull-right">
+                            <button ng-click="form.controlled = !form.controlled" ng-class="{ 'btn-danger': !form.controlled, 'btn-success': form.controlled }" class="btn"
+                                    title="Can this vocabulary be updated by imports or is it tightly controlled?" tc-tip>
+                                <span class="glyphicon glyphicon-repeat"></span>
+                                {{form.controlled ? 'Controlled':'Uncontrolled';}}
+                            </button>
+                        </div>
+                    </div>
+                    <hr />
+                    <div class="layout-row">
+                        <div class="layout-col">
+                            <span class="control-label">Publishable</span>
+                        </div>
+                        <div class="layout-col pull-right">
+                            <button type="button" class="btn"
+                                    ng-click="form.publishable = !form.publishable"
+                                    ng-class="{ 'btn-default': !form.publishable, 'btn-success': form.publishable }"
+                                    title="Blah blah?"
+                                    tc-tip
+                                >
+                                <span class="glyphicon glyphicon-repeat" ng-class="{ 'dark': form.status == 0 }"></span>
+                                {{ form.publishable ? 'Publishable' : 'Internal' }}
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </form>
 </div>

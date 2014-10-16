@@ -24,7 +24,8 @@ namespace Catalogue.Web.Controllers.Vocabularies
             {
                 return new Vocabulary
                     {
-                        PublicationDate = DateTime.Now.ToString("MM-yyyy"), 
+                        PublicationDate = DateTime.Now.ToString("MM-yyyy"),
+                        Publishable = true
                     };
             }
 

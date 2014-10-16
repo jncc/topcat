@@ -15,6 +15,15 @@
     $scope.addKeyword = function() {
       return $scope.form.values.push('');
     };
+    $scope.isClean = function() {
+      return angular.equals($scope.form, vocab);
+    };
+    $scope.isSaveHidden = function() {
+      return $scope.isClean();
+    };
+    $scope.isCancelHidden = function() {
+      return $scope.isClean();
+    };
     return $scope.reset();
   });
 
