@@ -43,12 +43,16 @@ namespace Catalogue.Gemini.Write
 
             if (existingVocab == null)
             {
+                CleanKeywords(vocab);
+
                 db.Store(vocab);
             }
             else if (!existingVocab.Controlled)
             {
                 existingVocab.Values.AddRange(
                     vocab.Values.Where(v => existingVocab.Values.All(x => x != v)).Select(v => v));
+
+                CleanKeywords(existingVocab);
 
                 db.Store(existingVocab);
             }
@@ -67,6 +71,15 @@ namespace Catalogue.Gemini.Write
                     Success = true,
                     Error = String.Empty
                 };
+        }
+
+        private void CleanKeywords(Vocabulary vocab)
+        {
+            vocab.Values =
+                vocab.Values.Select(x => x.Trim())
+                     .Distinct(StringComparer.CurrentCultureIgnoreCase)
+                     .OrderBy(x => x)
+                     .ToList();
         }
 
         private VocabularyServiceResult ValidateVocabularyUri(string id)
@@ -109,15 +122,19 @@ namespace Catalogue.Gemini.Write
                     where !String.IsNullOrWhiteSpace(vocabId)
                     select new Vocabulary
                         {
-                            Id = vocabId, 
-                            Controlled = false, 
-                            Name = vocabId, 
-                            Description = String.Empty, 
-                            PublicationDate = DateTime.Now.ToString("MM-yyyy"), 
-                            Publishable = true, 
-                            Values = keywords.Where(k => k.Vocab == vocabId).Select(k => k.Value).ToList()
+                            Id = vocabId,
+                            Controlled = false,
+                            Name = vocabId,
+                            Description = String.Empty,
+                            PublicationDate = DateTime.Now.ToString("MM-yyyy"),
+                            Publishable = true,
+                            Values =
+                                keywords.Where(k => k.Vocab == vocabId)
+                                        .Select(k => k.Value)
+                                        .ToList()
                         }
-                    into vocab select UpsertVocabulary(vocab)).ToList();
+                    into vocab
+                    select UpsertVocabulary(vocab)).ToList();
         }
     }
 
