@@ -19,7 +19,7 @@ namespace Catalogue.Web.Controllers.Keywords
             _keywordService = service;
         }
 
-        public ICollection<Keyword> Get(String q)
+        public ICollection<MetadataKeyword> Get(String q)
         {
             return _keywordService.ReadByValue(q);
         }

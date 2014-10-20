@@ -75,8 +75,8 @@ namespace Catalogue.Data.Seed
             {
                 Gemini = Library.Blank().With(m =>
                 {
-                    m.Keywords.Add(new Keyword { Vocab = "http://vocab.jncc.gov.uk/jncc-broad-category", Value = "Example Records" });
-                    m.Keywords.Add(new Keyword { Vocab = "http://vocab.jncc.gov.uk/example", Value = "example" });
+                    m.Keywords.Add(new MetadataKeyword { Vocab = "http://vocab.jncc.gov.uk/jncc-broad-category", Value = "Example Records" });
+                    m.Keywords.Add(new MetadataKeyword { Vocab = "http://vocab.jncc.gov.uk/example", Value = "example" });
                 }),
             };
         }

@@ -600,7 +600,7 @@ namespace Catalogue.Data.Write
         [Test]
         public void should_not_allow_keyword_additions_to_controlled_vocabs()
         {
-            Record record = SimpleRecord().With(r => r.Gemini.Keywords.Add(new Keyword("value", "vocabUrl")));
+            Record record = SimpleRecord().With(r => r.Gemini.Keywords.Add(new MetadataKeyword("value", "vocabUrl")));
             mockVocabService.Setup(v => v.Load("vocabUrl"))
                             .Returns((string vocab) => new Vocabulary {Controlled = true, Id = vocab, Values = new List<string> {"notvalue"}});
 

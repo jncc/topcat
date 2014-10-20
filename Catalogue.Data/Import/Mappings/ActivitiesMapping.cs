@@ -136,13 +136,13 @@ namespace Catalogue.Data.Import.Mappings
             }
         }
 
-        public static List<Keyword> ParseKeywords(string input)
+        public static List<MetadataKeyword> ParseKeywords(string input)
         {
             var keywords = (from each in input.Split(',') // keywords are separated by commas
                             select ParseKeywordHelper(each)).ToList();
             
             // add the broad category for activities (not included in the source data)
-            keywords.Insert(0, new Keyword
+            keywords.Insert(0, new MetadataKeyword
                 {
                    Vocab = "http://vocab.jncc.gov.uk/jncc-broad-category",
                    Value = "Marine Human Activities"
@@ -151,18 +151,18 @@ namespace Catalogue.Data.Import.Mappings
             return keywords;
         }
 
-        static Keyword ParseKeywordHelper(string s)
+        static MetadataKeyword ParseKeywordHelper(string s)
         {
             var vocabAndValue = (from x in s.Trim().Split(new [] {"::"}, StringSplitOptions.None)
                                  select x.Trim()).ToList(); // vocab::value pairs are separated by two colons
 
             if (vocabAndValue.Count <= 1) // no vocab (just a value)
             {
-                return new Keyword { Value = vocabAndValue.Single() };
+                return new MetadataKeyword { Value = vocabAndValue.Single() };
             }
             else
             {
-                return new Keyword
+                return new MetadataKeyword
                     {
                         Vocab = MapSourceVocabToRealVocab(vocabAndValue.ElementAt(0)),
                         Value = vocabAndValue.ElementAt(1),

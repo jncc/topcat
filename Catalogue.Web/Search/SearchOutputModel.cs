@@ -20,7 +20,7 @@ namespace Catalogue.Web.Controllers.Search
         public string Title { get; set; }
         public FormatOutputModel Format { get; set; }
         public string Snippet { get; set; }
-        public List<Keyword> Keywords { get; set; }
+        public List<MetadataKeyword> Keywords { get; set; }
         public bool TopCopy { get; set; }
 
         public DateTime? Date

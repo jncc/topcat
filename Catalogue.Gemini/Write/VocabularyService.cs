@@ -9,7 +9,7 @@ namespace Catalogue.Gemini.Write
     public interface IVocabularyService
     {
         Vocabulary Load(string id);
-        ICollection<VocabularyServiceResult> UpdateKeywords(List<Keyword> keywords);
+        ICollection<VocabularyServiceResult> UpdateKeywords(List<MetadataKeyword> keywords);
         VocabularyServiceResult Insert(Vocabulary vocab);
         VocabularyServiceResult Update(Vocabulary vocab);
     }
@@ -159,7 +159,7 @@ namespace Catalogue.Gemini.Write
             };
         }
 
-        public ICollection<VocabularyServiceResult> UpdateKeywords(List<Keyword> keywords)
+        public ICollection<VocabularyServiceResult> UpdateKeywords(List<MetadataKeyword> keywords)
         {
             if (keywords == null) return new List<VocabularyServiceResult>();
 

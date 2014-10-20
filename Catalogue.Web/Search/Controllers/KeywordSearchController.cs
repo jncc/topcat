@@ -16,7 +16,7 @@ namespace Catalogue.Web.Controllers.Search
 
         public SearchOutputModel Get(string value, string vocab, int n = 25, int p = 0)
         {
-            var keyword = new Keyword()
+            var keyword = new MetadataKeyword()
             {
                 Value = value,
                 Vocab = vocab

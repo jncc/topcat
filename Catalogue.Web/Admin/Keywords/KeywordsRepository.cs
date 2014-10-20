@@ -10,12 +10,12 @@ namespace Catalogue.Web.Admin.Keywords
 {
     public interface IKeywordsRepository
     {
-        Keyword Create(String value, String vocab);
-        void Delete(Keyword keyword);
-        ICollection<Keyword> Read(String value, String vocab);
-        ICollection<Keyword> ReadByVocab(string vocab);
-        ICollection<Keyword> ReadByValue(string value);
-        ICollection<Keyword> ReadAll();
+        MetadataKeyword Create(String value, String vocab);
+        void Delete(MetadataKeyword keyword);
+        ICollection<MetadataKeyword> Read(String value, String vocab);
+        ICollection<MetadataKeyword> ReadByVocab(string vocab);
+        ICollection<MetadataKeyword> ReadByValue(string value);
+        ICollection<MetadataKeyword> ReadAll();
     }
 
     public class KeywordsRepository : IKeywordsRepository
@@ -28,36 +28,36 @@ namespace Catalogue.Web.Admin.Keywords
             _db = db;
         }
 
-        public Keyword Create(string value, string vocab)
+        public MetadataKeyword Create(string value, string vocab)
         {
             throw new NotImplementedException();
         }
 
-        public void Delete(Keyword keyword)
+        public void Delete(MetadataKeyword keyword)
         {
             throw new NotImplementedException();
         }
 
-        public ICollection<Keyword> Read(string value = null, string vocab = null)
+        public ICollection<MetadataKeyword> Read(string value = null, string vocab = null)
         {
             throw new NotImplementedException();
         }
 
-        public ICollection<Keyword> ReadByVocab(string vocab)
+        public ICollection<MetadataKeyword> ReadByVocab(string vocab)
         {
             throw new NotImplementedException();
         }
 
-        public ICollection<Keyword> ReadByValue(string value)
+        public ICollection<MetadataKeyword> ReadByValue(string value)
         {
             int startA = 0;
-            var keywords = new List<Keyword>();
+            var keywords = new List<MetadataKeyword>();
 
             //Get matching keywords from Vocab table
             //Do this to get around the limit on max number of results returned by raven
             while (VocabBaseQuery(startA).Any(k => k.Value.StartsWith(value)))
             {
-                List<Keyword> current = VocabBaseQuery(startA).Where(k => k.Value.StartsWith(value)).Select(r => new Keyword {Value = r.Value, Vocab = r.Vocab})
+                List<MetadataKeyword> current = VocabBaseQuery(startA).Where(k => k.Value.StartsWith(value)).Select(r => new MetadataKeyword {Value = r.Value, Vocab = r.Vocab})
                     .ToList(); 
                 startA += current.Count;
                 keywords.AddRange(current);
@@ -70,7 +70,7 @@ namespace Catalogue.Web.Admin.Keywords
                 var current =
                     MiscBaseQuery(startB)
                         .Where(k => k.Value.StartsWith(value))
-                        .Select(r => new Keyword {Value = r.Value, Vocab = r.Vocab})
+                        .Select(r => new MetadataKeyword {Value = r.Value, Vocab = r.Vocab})
                         .ToList();
 
                 startB += current.Count;
@@ -80,13 +80,13 @@ namespace Catalogue.Web.Admin.Keywords
             return keywords;
         }
 
-        public ICollection<Keyword> ReadAll()
+        public ICollection<MetadataKeyword> ReadAll()
         {
             int start = 0;
-            var keywords = new List<Keyword>();
+            var keywords = new List<MetadataKeyword>();
             while (VocabBaseQuery(start).Any())
             {
-                List<Keyword> current = VocabBaseQuery(start).Select(r => new Keyword {Value = r.Value, Vocab = r.Vocab})
+                List<MetadataKeyword> current = VocabBaseQuery(start).Select(r => new MetadataKeyword {Value = r.Value, Vocab = r.Vocab})
                         .ToList();
                 start += current.Count;
                 keywords.AddRange(current);

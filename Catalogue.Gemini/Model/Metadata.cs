@@ -11,7 +11,7 @@ namespace Catalogue.Gemini.Model
         public string Title { get; set; }
         public string Abstract { get; set; }
         public string TopicCategory { get; set; }
-        public List<Keyword> Keywords { get; set; }
+        public List<MetadataKeyword> Keywords { get; set; }
         public TemporalExtent TemporalExtent { get; set; }
         public DateTime DatasetReferenceDate { get; set; } // / this should be changed to a collection for creation/publication/revision
         public SupportedLanguage DatasetLanguage { get; set; }
@@ -34,7 +34,7 @@ namespace Catalogue.Gemini.Model
 
         public Metadata()
         {
-            Keywords = new List<Keyword>();
+            Keywords = new List<MetadataKeyword>();
             TemporalExtent = new TemporalExtent();
             ResponsibleOrganisation = new ResponsibleParty();
             MetadataPointOfContact = new ResponsibleParty();
@@ -53,24 +53,24 @@ namespace Catalogue.Gemini.Model
         fin = 4
     }
 
-    public class Keyword : IComparable<Keyword>
+    public class MetadataKeyword : IComparable<MetadataKeyword>
     {
-        public Keyword()
+        public MetadataKeyword()
         {
         }
 
-        public Keyword(string value, string vocab)
+        public MetadataKeyword(string value, string vocab)
         {
             Value = value;
             Vocab = vocab;
         }
 
-        protected bool Equals(Keyword other)
+        protected bool Equals(MetadataKeyword other)
         {
             return string.Equals(Value, other.Value, StringComparison.InvariantCultureIgnoreCase) && string.Equals(Vocab, other.Vocab, StringComparison.InvariantCultureIgnoreCase);
         }
 
-        public int CompareTo(Keyword other)
+        public int CompareTo(MetadataKeyword other)
         {
             return System.String.Compare(this.Value, other.Value, System.StringComparison.Ordinal);
         }
@@ -81,7 +81,7 @@ namespace Catalogue.Gemini.Model
             if (ReferenceEquals(null, obj)) return false;
             if (ReferenceEquals(this, obj)) return true;
             if (obj.GetType() != this.GetType()) return false;
-            return Equals((Keyword) obj);
+            return Equals((MetadataKeyword) obj);
         }
 
         public override int GetHashCode()

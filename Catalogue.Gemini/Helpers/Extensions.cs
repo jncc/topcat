@@ -10,14 +10,14 @@ namespace Catalogue.Gemini.Helpers
 {
     public static class Extensions
     {
-        public static List<Keyword> ToKeywordList(this StringPairList source)
+        public static List<MetadataKeyword> ToKeywordList(this StringPairList source)
         {
             return source
-                .Select((pair => new Keyword { Vocab = pair.Item1, Value = pair.Item2 }))
+                .Select((pair => new MetadataKeyword { Vocab = pair.Item1, Value = pair.Item2 }))
                 .ToList();
         }
 
-        public static bool IsEqualTo(this List<Keyword> source, List<Keyword> other)
+        public static bool IsEqualTo(this List<MetadataKeyword> source, List<MetadataKeyword> other)
         {
             return source.Count == other.Count &&
                 source.Zip(other, (a, b) => new { a, b })

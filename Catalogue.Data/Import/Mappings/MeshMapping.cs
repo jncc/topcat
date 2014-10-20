@@ -26,14 +26,14 @@ namespace Catalogue.Data.Import.Mappings
             config.RegisterClassMap<GeminiMap>();
         }
 
-        public static List<Keyword> ParseMeshKeywords(string input)
+        public static List<MetadataKeyword> ParseMeshKeywords(string input)
         {
-            IEnumerable<Keyword> q = from m in Regex.Matches(input, @"\{(.*?)\}").Cast<Match>()
+            IEnumerable<MetadataKeyword> q = from m in Regex.Matches(input, @"\{(.*?)\}").Cast<Match>()
                 let pair = m.Groups.Cast<Group>().Select(g => g.Value).Skip(1).First().Split(',')
                 let vocab = pair.ElementAt(0).Trim().Trim('"').Trim()
                 let keyword = pair.ElementAt(1).Trim().Trim('"').Trim()
                 where keyword.IsNotBlank()
-                select new Keyword
+                select new MetadataKeyword
                 {
                     // todo: map the source vocab IDs to "real" ones
                     Vocab = MapSourceVocabToRealVocab(vocab),
@@ -175,7 +175,7 @@ namespace Catalogue.Data.Import.Mappings
             string input =
                 "{\"jncc-broad-category\", \"SeabedHabitatMaps\"}, {\"OriginalSeabedClassificationSystem\", \"Local\"}, {\"SeabedMapStatus\", \"Show on webGIS\"}, {\"SeabedMapStatus\", \"Translated to EUNIS\"}, {\"SeabedMapStatus\", \"Data Provider Agreement signed FULL ACCESS\"}";
 
-            List<Keyword> keywords = MeshMapping.ParseMeshKeywords(input);
+            List<MetadataKeyword> keywords = MeshMapping.ParseMeshKeywords(input);
 
             keywords.Should().HaveCount(5);
             keywords.Select(k => k.Vocab).Should().ContainInOrder(new[]
