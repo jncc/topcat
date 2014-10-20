@@ -47,9 +47,9 @@ namespace Catalogue.Web.Controllers.Records
 
         public RecordServiceResult Put(Guid id, [FromBody]Record record)
         {
-            // todo should check ID in record is the same as being PUT to
-
             var result = service.Update(record);
+
+            if (result.Record.Id != id) throw new Exception("The id of the record does not match that supplied to the put method");
 
             if (result.Success)
                 db.SaveChanges();

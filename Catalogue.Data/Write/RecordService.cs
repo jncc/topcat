@@ -77,7 +77,7 @@ namespace Catalogue.Data.Write
 
             SyncDenormalizations(record);
 
-            var vocabSyncResults = vocabService.SyncKeywords(record.Gemini.Keywords);
+            var vocabSyncResults = vocabService.UpdateKeywords(record.Gemini.Keywords);
 
             if (vocabSyncResults.All(x => x.Success))
             {
@@ -100,7 +100,7 @@ namespace Catalogue.Data.Write
 
         private void AppendVocabValidationErrors(RecordValidationIssueSet errors, ICollection<VocabularyServiceResult> vocabSyncResults)
         {
-            foreach (var error in vocabSyncResults.Where(x => !x.Success).Select(x => x.Error))
+            foreach (var error in vocabSyncResults.Where(x => !x.Success).Select(x => x.ValidationError))
             {
                 errors.Add(error, r => r.Gemini.Keywords);
             }

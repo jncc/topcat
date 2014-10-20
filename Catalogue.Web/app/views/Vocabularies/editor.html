@@ -1,8 +1,7 @@
 ﻿<div>
     <form name="theForm" novalidate>
+        <!--Top row of buttons-->
         <div class="row">
-            <!--Top row of buttons-->
-
             <div class="col-md-12">
                 <div class="form-group pull-right">
                     <button class="btn btn-default icon-and-text-btn" tc-back-button>
@@ -16,12 +15,19 @@
             </div>
         </div>
         
+        <!-- validation summary -->
+        <div ng-show="validation.errors" class="editor-validation-summary">
+            <div ng-repeat="e in validation.errors" class="editor-validation-summary-item">
+                {{e.message}}
+            </div>
+        </div>
+
         <div class="row">
             <!--Main fields etc-->
             <div class="col-md-9">
                 <div class="form-group">
                     <label for="id" class="control-label">Vocabulary Id</label>
-                    <input name="id" type="text" ng-model="form.id" placeholder="Vocab Id (URI)" class="form-control" ng-disabled="!newVocab" />
+                    <input name="id" required type="text" ng-model="form.id" placeholder="Vocab Id (URI)" class="form-control" ng-disabled="!newVocab" />
                 </div>
                 <div class="form-group">
                     <label for="name">Vocabulary Name</label>
@@ -42,6 +48,7 @@
                         <button class="btn btn-sm btn-primary" ng-click="removeKeyword($index)">
                             <span style="font-size: small" class="glyphicon glyphicon-remove-sign"></span>
                         </button>
+                        <br/>
                     </div>
                     <button class="btn btn-primary icon-and-text-btn" ng-click="addKeyword()">
                         <span class="glyphicon glyphicon-plus-sign"></span>

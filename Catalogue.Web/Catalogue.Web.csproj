@@ -176,8 +176,6 @@
     <Compile Include="Admin\Vocabularies\VocabulariesController.cs" />
     <Compile Include="Admin\Vocabularies\VocabularyListController.cs" />
     <Compile Include="Search\Controllers\VocabularyTypeaheadController.cs" />
-    <Compile Include="Admin\Vocabularies\VocabulariesRepository.cs" />
-    <Compile Include="Admin\Vocabularies\VocabulariesService.cs" />
     <Compile Include="Controllers\RolesController.cs" />
     <Compile Include="Import\ImportController.cs" />
     <Compile Include="Logging\ElmahHandledErrorLoggerFilter.cs" />

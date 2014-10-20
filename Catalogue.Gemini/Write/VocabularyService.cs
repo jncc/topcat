@@ -9,8 +9,9 @@ namespace Catalogue.Gemini.Write
     public interface IVocabularyService
     {
         Vocabulary Load(string id);
-        VocabularyServiceResult UpsertVocabulary(Vocabulary vocab);
-        ICollection<VocabularyServiceResult> SyncKeywords(List<Keyword> keywords);
+        ICollection<VocabularyServiceResult> UpdateKeywords(List<Keyword> keywords);
+        VocabularyServiceResult Insert(Vocabulary vocab);
+        VocabularyServiceResult Update(Vocabulary vocab);
     }
 
     public class VocabularyService : IVocabularyService
@@ -27,15 +28,16 @@ namespace Catalogue.Gemini.Write
             return db.Load<Vocabulary>(id);
         }
 
-        public VocabularyServiceResult UpsertVocabulary(Vocabulary vocab)
+        private VocabularyServiceResult UpsertVocabulary(Vocabulary vocab)
         {
-            if (String.IsNullOrWhiteSpace(vocab.Id))
-            {
-                throw new InvalidOperationException("Cannot upsert a vocabaulary with no id");
-            }
-
             var uriResult = ValidateVocabularyUri(vocab.Id);
-            if (uriResult.Success == false) return uriResult;
+            if (uriResult != String.Empty)
+                return new VocabularyServiceResult
+                    {
+                        Success = false,
+                        Vocab = vocab,
+                        ValidationError = uriResult
+                    };
 
             vocab.Values = vocab.Values.Distinct().ToList();
 
@@ -43,37 +45,37 @@ namespace Catalogue.Gemini.Write
 
             if (existingVocab == null)
             {
-                CleanKeywords(vocab);
+                RemoveDuplicateKeywords(vocab);
 
                 db.Store(vocab);
             }
-            else if (!existingVocab.Controlled)
+            else
             {
+                //merge values
                 existingVocab.Values.AddRange(
                     vocab.Values.Where(v => existingVocab.Values.All(x => x != v)).Select(v => v));
 
-                CleanKeywords(existingVocab);
+                RemoveDuplicateKeywords(existingVocab);
+
+                //Update vocab
+                existingVocab.Name = vocab.Name;
+                existingVocab.Description = vocab.Description;
+                existingVocab.PublicationDate = vocab.PublicationDate;
+                existingVocab.Publishable = vocab.Publishable;
+                existingVocab.Controlled = vocab.Controlled;
 
                 db.Store(existingVocab);
-            }
-            else if (vocab.Values.Any(v => existingVocab.Values.All(x => x != v)))
-            {
-                return new VocabularyServiceResult()
-                    {
-                        Success = false,
-                        Error = String.Format("Cannot update the vocabulary {0} as it is controlled", vocab.Id)
-                    };
-
             }
 
             return new VocabularyServiceResult
                 {
                     Success = true,
-                    Error = String.Empty
+                    Vocab = vocab,
+                    ValidationError = String.Empty
                 };
         }
 
-        private void CleanKeywords(Vocabulary vocab)
+        private void RemoveDuplicateKeywords(Vocabulary vocab)
         {
             vocab.Values =
                 vocab.Values.Select(x => x.Trim())
@@ -82,39 +84,82 @@ namespace Catalogue.Gemini.Write
                      .ToList();
         }
 
-        private VocabularyServiceResult ValidateVocabularyUri(string id)
+        private String ValidateVocabularyUri(string id)
         {
             Uri url;
+
+            if (String.IsNullOrWhiteSpace(id))
+            {
+                return "A vocabulary must have a properly formed Id";
+            }
 
             if (Uri.TryCreate(id, UriKind.Absolute, out url))
             {
                 if (url.Scheme != Uri.UriSchemeHttp)
                 {
-                    return new VocabularyServiceResult
-                    {
-                        Success = false,
-                        Error = String.Format("Resource locator {0} is not an http url", id)
-                    };
+
+                    return String.Format("Resource locator {0} is not an http url", id);
                 }
             }
             else
             {
+                return String.Format("Resource locator {0} is not a valid url", id);
+            }
+
+            return String.Empty;
+        }
+
+        private VocabularyServiceResult UpsertKeywords(Vocabulary vocab)
+        {
+            var uriResult = ValidateVocabularyUri(vocab.Id);
+            if (uriResult != String.Empty)
                 return new VocabularyServiceResult
                 {
                     Success = false,
-                    Error = String.Format("Resource locator {0} is not a valid url", id)
+                    Vocab = vocab,
+                    ValidationError = uriResult
                 };
+
+            vocab.Values = vocab.Values.Distinct().ToList();
+
+            var existingVocab = Load(vocab.Id);
+
+            //Upsert keywords for new and non controlled vocabularies.
+            if (existingVocab == null)
+            {
+                RemoveDuplicateKeywords(vocab);
+
+                db.Store(vocab);
+            }
+            else if (!existingVocab.Controlled)
+            {
+                existingVocab.Values.AddRange(
+                    vocab.Values.Where(v => existingVocab.Values.All(x => x != v)).Select(v => v));
+
+                RemoveDuplicateKeywords(existingVocab);
+
+                db.Store(existingVocab);
+            }
+            else if (vocab.Values.Any(v => existingVocab.Values.All(x => x != v)))
+            {
+                return new VocabularyServiceResult()
+                {
+                    Success = false,
+                    Vocab = vocab,
+                    ValidationError = String.Format("Cannot update the vocabulary {0} as it is controlled", vocab.Id)
+                };
+
             }
 
             return new VocabularyServiceResult
-                {
-                    Success = true,
-                    Error = String.Empty
-                };
+            {
+                Success = true,
+                Vocab = vocab,
+                ValidationError = String.Empty
+            };
         }
 
-
-        public ICollection<VocabularyServiceResult> SyncKeywords(List<Keyword> keywords)
+        public ICollection<VocabularyServiceResult> UpdateKeywords(List<Keyword> keywords)
         {
             if (keywords == null) return new List<VocabularyServiceResult>();
 
@@ -134,18 +179,57 @@ namespace Catalogue.Gemini.Write
                                         .ToList()
                         }
                     into vocab
-                    select UpsertVocabulary(vocab)).ToList();
+                    select UpsertKeywords(vocab)).ToList();
+        }
+
+        public VocabularyServiceResult Insert(Vocabulary vocab)
+        {
+            var uriResult = ValidateVocabularyUri(vocab.Id);
+            if (uriResult != String.Empty)
+            {
+                return new VocabularyServiceResult
+                    {
+                        Success = false,
+                        Vocab = vocab,
+                        ValidationError = uriResult
+                    };
+            }
+
+            if (Load(vocab.Id) != null)
+            {
+                return new VocabularyServiceResult
+                    {
+                        Success = false,
+                        Vocab = vocab,
+                        ValidationError = String.Format("A vocabulary with id {0} already exists", vocab.Id)
+                    };
+            }
+
+            return UpsertVocabulary(vocab);
+        }
+
+        public VocabularyServiceResult Update(Vocabulary vocab)
+        {
+            var uriResult = ValidateVocabularyUri(vocab.Id);
+            if (uriResult != String.Empty)
+            {
+                return new VocabularyServiceResult
+                    {
+                        Success = false,
+                        Vocab = vocab,
+                        ValidationError = uriResult
+                    };
+            }
+
+            return UpsertVocabulary(vocab);
         }
     }
 
-    
 
     public class VocabularyServiceResult
     {
+        public Vocabulary Vocab { get; set; }
         public bool Success { get; set; }
-
-        public string Error { get; set; }
+        public string ValidationError { get; set; }
     }
-
-
 }

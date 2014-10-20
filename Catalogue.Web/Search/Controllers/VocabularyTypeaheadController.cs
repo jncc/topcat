@@ -4,7 +4,6 @@ using System.Web.Http;
 using Catalogue.Data.Indexes;
 using System.Linq;
 using Catalogue.Web.Admin.Keywords;
-using Catalogue.Web.Admin.Vocabularies;
 using Raven.Client;
 
 namespace Catalogue.Web.Controllers.Search
