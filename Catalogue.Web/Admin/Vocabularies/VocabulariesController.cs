@@ -22,13 +22,13 @@ namespace Catalogue.Web.Controllers.Vocabularies
 
         public Vocabulary Get(String id)
         {
-
             if (id == "0")
             {
                 return new Vocabulary
                     {
                         PublicationDate = DateTime.Now.ToString("MM-yyyy"),
-                        Publishable = true
+                        Publishable = true,
+                        Values = new List<string>()
                     };
             }
 
