@@ -28,7 +28,7 @@ namespace Catalogue.Web.Controllers.Vocabularies
                     {
                         PublicationDate = DateTime.Now.ToString("MM-yyyy"),
                         Publishable = true,
-                        Values = new List<string>()
+                        Keywords = new List<VocabularyKeyword>()
                     };
             }
 

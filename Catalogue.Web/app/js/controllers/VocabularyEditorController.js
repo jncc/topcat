@@ -10,10 +10,13 @@
       }
     };
     $scope.removeKeyword = function(index) {
-      return $scope.form.values.splice(index, 1);
+      return $scope.form.keywords.splice(index, 1);
     };
     $scope.addKeyword = function() {
-      return $scope.form.values.push('');
+      return $scope.form.keywords.push({
+        id: '',
+        value: ''
+      });
     };
     $scope.isClean = function() {
       return angular.equals($scope.form, vocab);

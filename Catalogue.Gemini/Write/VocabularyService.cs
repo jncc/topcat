@@ -39,7 +39,7 @@ namespace Catalogue.Gemini.Write
                         ValidationError = uriResult
                     };
 
-            vocab.Values = vocab.Values.Distinct().ToList();
+            vocab.Keywords = vocab.Keywords.Distinct().ToList();
 
             var existingVocab = Load(vocab.Id);
 
@@ -51,9 +51,15 @@ namespace Catalogue.Gemini.Write
             }
             else
             {
+                //update existing keywords
+                //add new keywords
+                AddKeywords(existingVocab, vocab);
+                
+                //delete removed keywords
+
                 //merge values
-                existingVocab.Values.AddRange(
-                    vocab.Values.Where(v => existingVocab.Values.All(x => x != v)).Select(v => v));
+                existingVocab.Keywords.AddRange(
+                    vocab.Keywords.Where(v => existingVocab.Keywords.All(x => x != v)).Select(v => v));
 
                 RemoveDuplicateKeywords(existingVocab);
 
@@ -75,13 +81,19 @@ namespace Catalogue.Gemini.Write
                 };
         }
 
+        private void AddKeywords(Vocabulary existingVocab, Vocabulary vocab)
+        {
+            var newVals =
+                vocab.Keywords.Where(x => x.Id == Guid.Empty).Select(x => new VocabularyKeyword{Id = Guid.NewGuid(), Value = x.Value})
+                     .ToList();
+            existingVocab.Keywords.AddRange(newVals);
+        }
+
         private void RemoveDuplicateKeywords(Vocabulary vocab)
         {
-            vocab.Values =
-                vocab.Values.Select(x => x.Trim())
-                     .Distinct(StringComparer.CurrentCultureIgnoreCase)
-                     .OrderBy(x => x)
-                     .ToList();
+            vocab.Keywords = (from i in vocab.Keywords
+                           group i by i.Value.ToLowerInvariant() into g
+                           select g.OrderBy(p => p.Value).First()).ToList();
         }
 
         private String ValidateVocabularyUri(string id)
@@ -120,7 +132,7 @@ namespace Catalogue.Gemini.Write
                     ValidationError = uriResult
                 };
 
-            vocab.Values = vocab.Values.Distinct().ToList();
+            vocab.Keywords = vocab.Keywords.Distinct().ToList();
 
             var existingVocab = Load(vocab.Id);
 
@@ -133,14 +145,14 @@ namespace Catalogue.Gemini.Write
             }
             else if (!existingVocab.Controlled)
             {
-                existingVocab.Values.AddRange(
-                    vocab.Values.Where(v => existingVocab.Values.All(x => x != v)).Select(v => v));
+                //add keywords
+                existingVocab.Keywords.AddRange(vocab.Keywords.Where(x => !existingVocab.Keywords.Contains(x)));
 
                 RemoveDuplicateKeywords(existingVocab);
 
                 db.Store(existingVocab);
             }
-            else if (vocab.Values.Any(v => existingVocab.Values.All(x => x != v)))
+            else if (vocab.Keywords.Any(v => existingVocab.Keywords.All(x => x != v)))
             {
                 return new VocabularyServiceResult()
                 {
@@ -173,9 +185,9 @@ namespace Catalogue.Gemini.Write
                             Description = String.Empty,
                             PublicationDate = DateTime.Now.ToString("MM-yyyy"),
                             Publishable = true,
-                            Values =
+                            Keywords =
                                 keywords.Where(k => k.Vocab == vocabId)
-                                        .Select(k => k.Value)
+                                        .Select(k => new VocabularyKeyword{Id = Guid.NewGuid(), Value = k.Value})
                                         .ToList()
                         }
                     into vocab

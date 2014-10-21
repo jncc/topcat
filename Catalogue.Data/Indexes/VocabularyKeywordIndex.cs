@@ -27,7 +27,7 @@ namespace Catalogue.Data.Indexes
             // and we want to always be able to match the full keyword!
 
             Map = vocabularies => from vocab in vocabularies
-                                 from keyword in vocab.Values
+                                 from keyword in vocab.Keywords
                                  select new 
                                  {
                                      Key = vocab.Id + "::" + keyword, // make a unique key field

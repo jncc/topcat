@@ -186,10 +186,10 @@ namespace Catalogue.Data.Seed
                     Name = "JNCC Broad Categories",
                     Description = "The broad dataset categories used within JNCC.",
                     PublicationDate = "2013",
-                    Values = new List<string>
+                    Keywords = new List<VocabularyKeyword>
                         {
-                            "Seabed Habitat Maps",
-                            "Marine Human Activities",
+                            new VocabularyKeyword {Id = Guid.NewGuid(), Value = "Seabed Habitat Maps"},
+                            new VocabularyKeyword {Id = Guid.NewGuid(), Value = "Marine Human Activities"}
                         }
                 };
             this.db.Store(jnccCategories);

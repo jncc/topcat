@@ -9,10 +9,10 @@
                 $scope.newVocab = true
         
         $scope.removeKeyword = (index) ->
-            $scope.form.values.splice index, 1
+            $scope.form.keywords.splice index, 1
             
         $scope.addKeyword = ->
-            $scope.form.values.push('')
+            $scope.form.keywords.push({id: '', value:''})
             
         $scope.isClean = -> angular.equals($scope.form, vocab)
         $scope.isSaveHidden = -> $scope.isClean()

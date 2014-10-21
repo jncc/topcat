@@ -285,7 +285,7 @@ namespace Catalogue.Data.Write
                 {
                     foreach (var value in record.Gemini.Keywords.Where(k => k.Vocab == vocab.Id).Select(k => k.Value))
                     {
-                        if (!vocab.Values.Contains(value))
+                        if (!vocab.Keywords.Select(x => x.Value).Contains(value))
                             recordValidationResult.Errors.Add(
                                     String.Format("The keyword {0} does not exist in the controlled vocabulary {1}",
                                                   value,
@@ -602,7 +602,18 @@ namespace Catalogue.Data.Write
         {
             Record record = SimpleRecord().With(r => r.Gemini.Keywords.Add(new MetadataKeyword("value", "vocabUrl")));
             mockVocabService.Setup(v => v.Load("vocabUrl"))
-                            .Returns((string vocab) => new Vocabulary {Controlled = true, Id = vocab, Values = new List<string> {"notvalue"}});
+                            .Returns(
+                                (string vocab) =>
+                                new Vocabulary
+                                    {
+                                        Controlled = true,
+                                        Id = vocab,
+                                        Keywords =
+                                            new List<VocabularyKeyword>
+                                                {
+                                                    new VocabularyKeyword {Id = Guid.NewGuid(), Value = "notvalue"}
+                                                }
+                                    });
 
             RecordValidationResult result = new RecordValidator(mockVocabService.Object).Validate(record);
 
