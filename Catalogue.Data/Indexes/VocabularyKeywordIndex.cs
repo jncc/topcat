@@ -32,8 +32,8 @@ namespace Catalogue.Data.Indexes
                                  {
                                      Key = vocab.Id + "::" + keyword, // make a unique key field
                                      Vocab = vocab.Id,
-                                     Value = keyword,
-                                     ValueN = keyword,
+                                     Value = keyword.Value,
+                                     ValueN = keyword.Value,
                                  };
 
             Reduce = xs => from x in xs

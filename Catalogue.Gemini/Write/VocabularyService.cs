@@ -41,36 +41,51 @@ namespace Catalogue.Gemini.Write
 
             vocab.Keywords = vocab.Keywords.Distinct().ToList();
 
-            var existingVocab = Load(vocab.Id);
+            var targetVocab = Load(vocab.Id);
 
-            if (existingVocab == null)
+            if (targetVocab == null)
             {
-                RemoveDuplicateKeywords(vocab);
+                vocab.Keywords = RemoveDuplicateKeywords(vocab.Keywords).ToList();
 
                 db.Store(vocab);
             }
             else
             {
-                //update existing keywords
-                //add new keywords
-                AddKeywords(existingVocab, vocab);
-                
+                var targetKeywordHash = new HashSet<string>(targetVocab.Keywords.Select(y => y.Value));
+                var targetIdHash = new HashSet<Guid>(targetVocab.Keywords.Select(y => y.Id));
+
+                var sourceIdHash = new HashSet<Guid>(vocab.Keywords.Select(y => y.Id));
+
                 //delete removed keywords
+                //remove from metadata records
+                targetVocab.Keywords.RemoveAll(x => !sourceIdHash.Contains(x.Id));
 
-                //merge values
-                existingVocab.Keywords.AddRange(
-                    vocab.Keywords.Where(v => existingVocab.Keywords.All(x => x != v)).Select(v => v));
+                //update existing keywords
+                var updates = vocab.Keywords.Where(x => targetIdHash.Contains(x.Id));
+                foreach (var keyword in updates)
+                {
+                    targetVocab.Keywords.Single(x => x.Id == keyword.Id).Value = keyword.Value;
+                    //update metadata records
+                }
 
-                RemoveDuplicateKeywords(existingVocab);
+                //add new keywords
+                var newKeywords = RemoveDuplicateKeywords(vocab.Keywords.Where(
+                    x => x.Id == Guid.Empty && !targetKeywordHash.Contains(x.Value)));
+
+                foreach (var keyword in newKeywords)
+                {
+                    keyword.Id = Guid.NewGuid();
+                    targetVocab.Keywords.Add(keyword);
+                }
 
                 //Update vocab
-                existingVocab.Name = vocab.Name;
-                existingVocab.Description = vocab.Description;
-                existingVocab.PublicationDate = vocab.PublicationDate;
-                existingVocab.Publishable = vocab.Publishable;
-                existingVocab.Controlled = vocab.Controlled;
+                targetVocab.Name = vocab.Name;
+                targetVocab.Description = vocab.Description;
+                targetVocab.PublicationDate = vocab.PublicationDate;
+                targetVocab.Publishable = vocab.Publishable;
+                targetVocab.Controlled = vocab.Controlled;
 
-                db.Store(existingVocab);
+                db.Store(targetVocab);
             }
 
             return new VocabularyServiceResult
@@ -81,19 +96,12 @@ namespace Catalogue.Gemini.Write
                 };
         }
 
-        private void AddKeywords(Vocabulary existingVocab, Vocabulary vocab)
+        private IEnumerable<VocabularyKeyword> RemoveDuplicateKeywords(IEnumerable<VocabularyKeyword> keywords)
         {
-            var newVals =
-                vocab.Keywords.Where(x => x.Id == Guid.Empty).Select(x => new VocabularyKeyword{Id = Guid.NewGuid(), Value = x.Value})
-                     .ToList();
-            existingVocab.Keywords.AddRange(newVals);
-        }
-
-        private void RemoveDuplicateKeywords(Vocabulary vocab)
-        {
-            vocab.Keywords = (from i in vocab.Keywords
-                           group i by i.Value.ToLowerInvariant() into g
-                           select g.OrderBy(p => p.Value).First()).ToList();
+            return (from i in keywords
+                    group i by i.Value.ToLowerInvariant()
+                    into g
+                    select g.OrderBy(p => p.Value).First());
         }
 
         private String ValidateVocabularyUri(string id)
@@ -139,16 +147,18 @@ namespace Catalogue.Gemini.Write
             //Upsert keywords for new and non controlled vocabularies.
             if (existingVocab == null)
             {
-                RemoveDuplicateKeywords(vocab);
+                vocab.Keywords = RemoveDuplicateKeywords(vocab.Keywords).ToList();
 
                 db.Store(vocab);
             }
             else if (!existingVocab.Controlled)
             {
                 //add keywords
+                //todo : why add dupes in the first place you tit!
                 existingVocab.Keywords.AddRange(vocab.Keywords.Where(x => !existingVocab.Keywords.Contains(x)));
 
-                RemoveDuplicateKeywords(existingVocab);
+
+                existingVocab.Keywords =  RemoveDuplicateKeywords(existingVocab.Keywords).ToList();
 
                 db.Store(existingVocab);
             }
