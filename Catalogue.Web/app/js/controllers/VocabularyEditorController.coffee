@@ -22,6 +22,7 @@
             processResult = (response) ->
                     if response.data.success
                         vocab = response.data.vocab 
+                        $scope.form = angular.copy(vocab)
                         $scope.validation = {}
                         $scope.reset()
                         $scope.notifications.add 'Edits saved'
