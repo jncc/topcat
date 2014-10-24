@@ -100,7 +100,7 @@ namespace Catalogue.Data.Write
 
         private void AppendVocabValidationErrors(RecordValidationIssueSet errors, ICollection<VocabularyServiceResult> vocabSyncResults)
         {
-            foreach (var error in vocabSyncResults.Where(x => !x.Success).Select(x => x.ValidationError))
+            foreach (var error in vocabSyncResults.Where(x => !x.Success).SelectMany(x => x.Validation.Errors))
             {
                 errors.Add(error, r => r.Gemini.Keywords);
             }
