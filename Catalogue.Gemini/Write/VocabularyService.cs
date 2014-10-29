@@ -206,7 +206,12 @@ namespace Catalogue.Gemini.Write
 
             if (Load(vocab.Id) != null)
             {
-                validationResult.Errors.Add(String.Format("A vocabulary with id {0} already exists", vocab.Id));
+                validationResult.Errors.Add(new VocabularyValidationResultMessage
+                    {
+                        FieldName = "Id",
+                        Message = String.Format("A vocabulary with id {0} already exists", vocab.Id)
+                    });
+
                 return new VocabularyServiceResult
                 {
                     Success = false,

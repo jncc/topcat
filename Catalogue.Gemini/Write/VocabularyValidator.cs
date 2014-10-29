@@ -15,8 +15,14 @@ namespace Catalogue.Gemini.Write
 
     public class VocabularyValidationResult
     {
-        public List<string> Errors { get; set; }
-        public List<string> Warnings { get; set; }
+        public List<VocabularyValidationResultMessage> Errors { get; set; }
+        public List<VocabularyValidationResultMessage> Warnings { get; set; }
+    }
+
+    public class VocabularyValidationResultMessage
+    {
+        public string Message { get; set; }
+        public string FieldName { get; set; }
     }
 
     public class VocabularyValidator : IVocabularyValidator
@@ -34,10 +40,10 @@ namespace Catalogue.Gemini.Write
 
         public VocabularyValidationResult Valdiate(Vocabulary sourceVocab, bool allowControlledUpdates)
         {
-            var result = new VocabularyValidationResult {Errors = new List<string>(), Warnings = new List<string>()};
+            var result = new VocabularyValidationResult {Errors = new List<VocabularyValidationResultMessage>(), Warnings = new List<VocabularyValidationResultMessage>()};
             //check uri format is correct
             var r1 = ValidateVocabularyUri(sourceVocab.Id);
-            if (r1 != String.Empty) result.Errors.Add(r1);
+            if (r1 != null) result.Errors.Add(r1);
 
             var targetVocab = db.Load<Vocabulary>(sourceVocab.Id);
 
@@ -49,35 +55,40 @@ namespace Catalogue.Gemini.Write
 
             //validate additions to controlled vocabs
 
-            var r2 =ValidateControlledVocab(sourceVocab, targetVocab, allowControlledUpdates);
-            if (r2 != String.Empty) result.Errors.Add(r2);
+            result.Errors.AddRange(ValidateControlledVocab(sourceVocab, targetVocab, allowControlledUpdates));
 
             //check publication date format.
-            var r3 = ValidatePublicationDate(sourceVocab.PublicationDate);
-            if (r3 != String.Empty) result.Errors.Add(r3);
+            var r2 = ValidatePublicationDate(sourceVocab.PublicationDate);
+            if (r2 != null) result.Errors.Add(r2);
 
             return result;
         }
 
-        private string ValidateControlledVocab(Vocabulary sourceVocab, Vocabulary targetVocab, bool allowControlledUpdates)
+        private List<VocabularyValidationResultMessage> ValidateControlledVocab(Vocabulary sourceVocab, Vocabulary targetVocab, bool allowControlledUpdates)
         {
-            var result = String.Empty;
+            var result = new List<VocabularyValidationResultMessage>();
 
             if (targetVocab == null || allowControlledUpdates) return result;
 
-            var invalidKeywoards =
-                sourceVocab.Keywords.Where(x => new HashSet<Guid>(targetVocab.Keywords.Select(y => y.Id)).Contains(x.Id)).Select(x => x.Value).ToArray();
+            var invalidKeywords =
+                sourceVocab.Keywords.Where(x => new HashSet<Guid>(targetVocab.Keywords.Select(y => y.Id)).Contains(x.Id)).Select(x => x);
 
-            if (invalidKeywoards.Any())
+            foreach (var invalidKeyword in invalidKeywords)
             {
-                var keywordList = String.Join(", ", invalidKeywoards);
-                result = String.Format("The following keywords cannot be added to the vocabulary {0} because it is controlled: {1}",targetVocab.Id,keywordList);
+                result.Add(new VocabularyValidationResultMessage
+                    {
+                        FieldName = invalidKeyword.Id.ToString(),
+                        Message =
+                            String.Format(
+                                "The keyword {0} annot be added to the vocabulary {1} because it is controlled",
+                                targetVocab.Id, invalidKeyword.Value)
+                    });
             }
 
             return result;
         }
 
-        private IEnumerable<string> ValidateKeywordAdditions(Vocabulary sourceVocab, Vocabulary targetVocab)
+        private IEnumerable<VocabularyValidationResultMessage> ValidateKeywordAdditions(Vocabulary sourceVocab, Vocabulary targetVocab)
         {
             HashSet<Guid> targetIdHash = targetVocab != null ? new HashSet<Guid>(targetVocab.Keywords.Select(x => x.Id)) : new HashSet<Guid>();
 
@@ -86,12 +97,21 @@ namespace Catalogue.Gemini.Write
                                  into g
                                  select g.OrderBy(p => p.Value).First();
 
-            return duplicates.Select(keyword => String.Format("The keyword {0} is duplicated and the duplicate will not be saved.", keyword.Value)).ToList();
+            return
+                duplicates.Select(
+                    keyword =>
+                    new VocabularyValidationResultMessage
+                        {
+                            FieldName = keyword.Id.ToString(),
+                            Message =
+                                String.Format("The keyword {0} is duplicated and the duplicate will not be saved.",
+                                              keyword.Value)
+                        }).ToList();
         }
 
-        private IEnumerable<string> ValidateKeywordChanges(Vocabulary source, Vocabulary target)
+        private IEnumerable<VocabularyValidationResultMessage> ValidateKeywordChanges(Vocabulary source, Vocabulary target)
         {
-            if (target == null) return new List<string>();
+            if (target == null) return new List<VocabularyValidationResultMessage>();
 
             var targetIdHash = new HashSet<Guid>(target.Keywords.Select(x => x.Id));
 
@@ -101,34 +121,46 @@ namespace Catalogue.Gemini.Write
 
             return (from duplicate1 in dupedKeywords
                     let targetVal = target.Keywords.Where(x => x.Id == duplicate1.Id).Select(x => x.Value)
-                    select
-                        String.Format(
+                    select new VocabularyValidationResultMessage
+                        {
+                            FieldName = duplicate1.Id.ToString(),
+                            Message = String.Format(
                             "Cannot change the value of keyword {0} to {1} because it will create a duplicate keyword",
-                            targetVal, duplicate1.Value)).ToList();
+                            targetVal, duplicate1.Value) 
+                        }
+                        ).ToList();
         }
 
-        private string ValidatePublicationDate(string publicationDate)
+        private VocabularyValidationResultMessage ValidatePublicationDate(string publicationDate)
         {
-            var result = String.Empty;
-            if (String.IsNullOrWhiteSpace(publicationDate)) return result;
+            if (String.IsNullOrWhiteSpace(publicationDate)) return null;
             
             DateTime date;
             
             if (!DateTime.TryParse(publicationDate, out date))
             {
-                result =  String.Format("{0} cannot be parsed as a valid date", publicationDate);
+                return new VocabularyValidationResultMessage
+                    {
+                        FieldName = "PublicationDate",
+                        Message = String.Format("{0} cannot be parsed as a valid date", publicationDate)
+                    };
             }
 
-            return result;
+            return null;
         }
 
-        private String ValidateVocabularyUri(string id)
+        private VocabularyValidationResultMessage ValidateVocabularyUri(string id)
         {
             Uri url;
 
+
             if (String.IsNullOrWhiteSpace(id))
             {
-                return "A vocabulary must have a properly formed Id";
+                return new VocabularyValidationResultMessage
+                    {
+                        Message = "A vocabulary must have a properly formed Id",
+                        FieldName = "Id"
+                    };
             }
 
             if (Uri.TryCreate(id, UriKind.Absolute, out url))
@@ -136,15 +168,23 @@ namespace Catalogue.Gemini.Write
                 if (url.Scheme != Uri.UriSchemeHttp)
                 {
 
-                    return String.Format("Resource locator {0} is not an http url", id);
+                    return new VocabularyValidationResultMessage
+                        {
+                            Message = String.Format("Resource locator {0} is not an http url", id),
+                            FieldName = "Id"
+                        };
                 }
             }
             else
             {
-                return String.Format("Resource locator {0} is not a valid url", id);
+                return new VocabularyValidationResultMessage
+                    {
+                        Message = String.Format("Resource locator {0} is not a valid url", id),
+                        FieldName = "Id"
+                    };
             }
 
-            return String.Empty;
+            return null;
         }
     }
 }

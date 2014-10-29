@@ -102,7 +102,7 @@ namespace Catalogue.Data.Write
         {
             foreach (var error in vocabSyncResults.Where(x => !x.Success).SelectMany(x => x.Validation.Errors))
             {
-                errors.Add(error, r => r.Gemini.Keywords);
+                errors.Add(error.Message, r => r.Gemini.Keywords);
             }
         }
 
