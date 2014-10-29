@@ -20,24 +20,24 @@
         
         $scope.save = ->
             processResult = (response) ->
-                    if response.data.success
-                        vocab = response.data.vocab 
-                        $scope.form = angular.copy(vocab)
-                        $scope.validation = {}
-                        $scope.reset()
-                        $scope.notifications.add 'Edits saved'
-                        $location.path('/vocabularies/editor/' + vocab.id)
-                    else
-                        $scope.validation = response.data.validation
-                        # tell the form that fields are invalid
-                        errors = response.data.validation.errors
-                        if errors.length > 0
-                            $scope.notifications.add 'There were errors'
+                if response.data.success
+                    vocab = response.data.vocab 
+                    $scope.form = angular.copy(vocab)
+                    $scope.validation = {}
+                    $scope.reset()
+                    $scope.notifications.add 'Edits saved'
+                    $location.path('/vocabularies/editor/' + vocab.id)
+                else
+                    $scope.validation = response.data.validation
+                    # tell the form that fields are invalid
+                    errors = response.data.validation.errors
+                    if errors.length > 0
+                        $scope.notifications.add 'There were errors'
 #                        for e in errors
 #                            for field in e.fields
 #                                $scope.theForm[field].$setValidity('server', false)
                                 
-                    $scope.busy.stop()
+                $scope.busy.stop()
 
             $scope.busy.start()
             if $routeParams.vocabId isnt '0'

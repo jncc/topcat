@@ -77,7 +77,7 @@ namespace Catalogue.Data.Write
 
             SyncDenormalizations(record);
 
-            var vocabSyncResults = vocabService.UpdateKeywords(record.Gemini.Keywords);
+            var vocabSyncResults = vocabService.AddKeywords(record.Gemini.Keywords);
 
             if (vocabSyncResults.All(x => x.Success))
             {

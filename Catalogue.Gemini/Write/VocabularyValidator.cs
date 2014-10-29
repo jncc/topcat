@@ -34,7 +34,7 @@ namespace Catalogue.Gemini.Write
 
         public VocabularyValidationResult Valdiate(Vocabulary sourceVocab, bool allowControlledUpdates)
         {
-            var result = new VocabularyValidationResult {Errors = new List<string>()};
+            var result = new VocabularyValidationResult {Errors = new List<string>(), Warnings = new List<string>()};
             //check uri format is correct
             var r1 = ValidateVocabularyUri(sourceVocab.Id);
             if (r1 != String.Empty) result.Errors.Add(r1);
@@ -48,11 +48,13 @@ namespace Catalogue.Gemini.Write
             result.Warnings.AddRange(ValidateKeywordAdditions(sourceVocab, targetVocab));
 
             //validate additions to controlled vocabs
-            result.Errors.Add(ValidateControlledVocab(sourceVocab, targetVocab, allowControlledUpdates));
+
+            var r2 =ValidateControlledVocab(sourceVocab, targetVocab, allowControlledUpdates);
+            if (r2 != String.Empty) result.Errors.Add(r2);
 
             //check publication date format.
-            var r2 = ValidatePublicationDate(sourceVocab.PublicationDate);
-            if (r2 != String.Empty) result.Errors.Add(r2);
+            var r3 = ValidatePublicationDate(sourceVocab.PublicationDate);
+            if (r3 != String.Empty) result.Errors.Add(r3);
 
             return result;
         }

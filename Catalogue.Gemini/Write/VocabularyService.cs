@@ -9,7 +9,7 @@ namespace Catalogue.Gemini.Write
     public interface IVocabularyService
     {
         Vocabulary Load(string id);
-        ICollection<VocabularyServiceResult> UpdateKeywords(List<MetadataKeyword> keywords);
+        ICollection<VocabularyServiceResult> AddKeywords(List<MetadataKeyword> keywords);
         VocabularyServiceResult Insert(Vocabulary vocab);
         VocabularyServiceResult Update(Vocabulary vocab);
     }
@@ -109,7 +109,7 @@ namespace Catalogue.Gemini.Write
         }
 
 
-        private VocabularyServiceResult UpsertKeywords(Vocabulary vocab)
+        private VocabularyServiceResult LimitedVocabularyUpsert(Vocabulary vocab)
         {
             var validationResult = validator.Valdiate(vocab, allowControlledUpdates:false);
 
@@ -168,7 +168,7 @@ namespace Catalogue.Gemini.Write
 
         }
 
-        public ICollection<VocabularyServiceResult> UpdateKeywords(List<MetadataKeyword> keywords)
+        public ICollection<VocabularyServiceResult> AddKeywords(List<MetadataKeyword> keywords)
         {
             if (keywords == null) return new List<VocabularyServiceResult>();
 
@@ -188,7 +188,7 @@ namespace Catalogue.Gemini.Write
                                         .ToList()
                         }
                     into vocab
-                    select UpsertKeywords(vocab)).ToList();
+                    select LimitedVocabularyUpsert(vocab)).ToList();
         }
 
         public VocabularyServiceResult Insert(Vocabulary vocab)

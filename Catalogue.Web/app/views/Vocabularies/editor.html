@@ -44,7 +44,7 @@
                 <label for="valuesDiv" class="control-label">Values:</label>
                 <div name="valuesDiv" class="form-inline">
                     <div ng-repeat="v in form.keywords track by $index">
-                        <input type="text" ng-model="$parent.form.keywords[$index].value" placeholder="Value (keyword)" class="form-control" style="width:35%"/>
+                        <input type="text" name="{{$parent.form.keywords[$index].id}}" ng-model="$parent.form.keywords[$index].value" placeholder="Value (keyword)" class="form-control" style="width:35%"/>
                         <button class="btn btn-sm btn-primary" ng-click="removeKeyword($index)">
                             <span style="font-size: small" class="glyphicon glyphicon-remove-sign"></span>
                         </button>
