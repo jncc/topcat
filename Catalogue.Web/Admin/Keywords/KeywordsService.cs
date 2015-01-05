@@ -8,7 +8,6 @@ using Catalogue.Gemini.Model;
 namespace Catalogue.Web.Admin.Keywords
 { public interface IKeywordsService
 {
-        ICollection<MetadataKeyword> ReadAll();
         ICollection<MetadataKeyword> ReadByValue(string value);
         ICollection<MetadataKeyword> ReadByVocab(string vocab);
         ICollection<MetadataKeyword> ReadByValueAndVocab(string value, string vocab);
@@ -22,11 +21,6 @@ namespace Catalogue.Web.Admin.Keywords
         public KeywordsService(IKeywordsRepository keywordsRepository)
         {
             _keywordsRepository = keywordsRepository;
-        }
-
-        public ICollection<MetadataKeyword> ReadAll()
-        {
-            return _keywordsRepository.ReadAll();
         }
 
         public ICollection<MetadataKeyword> ReadByValue(string value)

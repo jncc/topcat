@@ -24,17 +24,6 @@ namespace Catalogue.Tests.Web.Admin.Keywords
         }
 
         [Test]
-        public void ReadAllKeywords()
-        {
-            ICollection<MetadataKeyword> keywords = _keywordsService.ReadAll();
-            List<string> uniqueKeywords = keywords.Select(k => k.Vocab + "::" + k.Value).Distinct().ToList();
-            Assert.AreEqual(uniqueKeywords.Count, keywords.Count,
-                "The index is not working correctly, should only return unique values");
-            Assert.AreEqual(TotalExpectedKeywords, keywords.Count,
-                "The number of unique keywords in seed project has changed");
-        }
-
-        [Test]
         public void ReadByValue()
         {
             //search term "sh" corrisponds to "SeabedMapStatus", "Show on webGIS" of which ther are 177 instances in test data. 
