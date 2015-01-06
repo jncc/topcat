@@ -19,14 +19,16 @@ namespace Catalogue.Data.Import
     {
         readonly IFileSystem fileSystem;
         readonly IRecordService recordService;
+        readonly IVocabularyService vocabularyService;
 
         public bool SkipBadRecords { get; set; }
         public readonly RecordValidationIssueSet Failures = new RecordValidationIssueSet();
 
-        public Importer(IFileSystem fileSystem, IRecordService recordService)
+        public Importer(IFileSystem fileSystem, IRecordService recordService, IVocabularyService vocabularyService)
         {
             this.fileSystem = fileSystem;
             this.recordService = recordService;
+            this.vocabularyService = vocabularyService;
         }
 
         public void Import(string path)
@@ -47,6 +49,7 @@ namespace Catalogue.Data.Import
             var records = csv.GetRecords<Record>();
 
             int n = 1;
+            var keywords = new List<MetadataKeyword>();
 
             foreach (var record in records)
             {
@@ -62,8 +65,13 @@ namespace Catalogue.Data.Import
                 }
 
                 n++;
+                keywords.AddRange(result.Record.Gemini.Keywords);
             }
+
+            vocabularyService.Import(keywords);
         }
+
+
     }
 
     /// <summary>
@@ -73,8 +81,8 @@ namespace Catalogue.Data.Import
     {
         public static Importer<T> CreateImporter<T>(IDocumentSession db) where T : IMapping, new()
         {
-            var vocabService = new VocabularyService(db); 
-            return new Importer<T>(new FileSystem(), new RecordService(db, new RecordValidator(vocabService)));
+            var vocabService = new VocabularyService(db);
+            return new Importer<T>(new FileSystem(), new RecordService(db, new RecordValidator(vocabService)), vocabService);
         }
     }
 
@@ -91,7 +99,7 @@ namespace Catalogue.Data.Import
             string path = @"c:\some\path.csv";
             var fileSystem = Mock.Of<IFileSystem>(fs => fs.OpenReader(path) == new StringReader(testData));
 
-            var importer = new Importer<TestDataMapping>(fileSystem, recordService);
+            var importer = new Importer<TestDataMapping>(fileSystem, recordService, Mock.Of<IVocabularyService>());
             importer.Import(path);
         }
 

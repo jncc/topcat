@@ -1,4 +1,8 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
 using Catalogue.Gemini.Model;
+using Catalogue.Utilities.Text;
 using Moq;
 using Raven.Client;
 using NUnit.Framework;
@@ -7,9 +11,9 @@ namespace Catalogue.Data.Write
 {
     public interface IVocabularyService
     {
-//        ICollection<VocabularyServiceResult> AddKeywords(List<MetadataKeyword> keywords);
         VocabularyServiceResult Insert(Vocabulary vocab);
         VocabularyServiceResult Update(Vocabulary vocab);
+        void Import(List<MetadataKeyword> keywords);
     }
 
     public class VocabularyService : IVocabularyService
@@ -23,6 +27,8 @@ namespace Catalogue.Data.Write
 //            this.validator = validator;
         }
 
+
+
         public VocabularyServiceResult Insert(Vocabulary vocab)
         {
             return Upsert(vocab);
@@ -33,6 +39,50 @@ namespace Catalogue.Data.Write
             return Upsert(vocab);
         }
 
+        public void Import(List<MetadataKeyword> keywords)
+        {
+            // really specifically for import, adds the keywords
+            foreach (var source in SeparateKeywordsIntoVocabularies(keywords))
+            {
+                var vocabulary = db.Load<Vocabulary>(source.Id);
+
+                if (vocabulary == null)
+                {
+                    Insert(source);
+                }
+                else
+                {
+                    // the vocab already exists, so just add any new keywords
+                    var newKeywords = source.Keywords.Except(vocabulary.Keywords);
+                    vocabulary.Keywords.AddRange(newKeywords);
+                    db.Store(vocabulary);
+                }
+            }
+        }
+
+        /// <summary>
+        /// Creates Vocabulary objects given a bunch of keywords. For importing.
+        /// </summary>
+        List<Vocabulary> SeparateKeywordsIntoVocabularies(List<MetadataKeyword> keywords)
+        {
+            var q = from k in keywords
+                    where k.Vocab.IsNotBlank() // only want keywords with vocabs, obviously
+                    group k by k.Vocab into g // groups of keywords (vocabs)
+                    select new Vocabulary
+                    {
+                        Id = g.Key,
+                        Name = g.Key,
+                        Description = String.Empty,
+                        PublicationDate = DateTime.Now.ToString("yyyy-MM"),
+                        Publishable = false,
+                        Keywords = g.Select(k => k.Value)
+                            .Distinct()
+                            .Select(v => new VocabularyKeyword { Value = v }).ToList()
+                    };
+
+            return q.ToList();
+        }
+
         internal VocabularyServiceResult Upsert(Vocabulary vocab)
         {
             db.Store(vocab);
@@ -41,34 +91,11 @@ namespace Catalogue.Data.Write
             {
                 Success = true,
                 Vocab = vocab,
-//                    Validation = validationResult
+//              Validation = validationResult
             };
         }
 
 
-
-//        public ICollection<VocabularyServiceResult> AddKeywords(List<MetadataKeyword> keywords)
-//        {
-//            if (keywords == null) return new List<VocabularyServiceResult>();
-//
-//            return (from vocabId in keywords.Select(k => k.Vocab)
-//                    where !String.IsNullOrWhiteSpace(vocabId)
-//                    select new Vocabulary
-//                        {
-//                            Id = vocabId,
-//                            Controlled = false,
-//                            Name = vocabId,
-//                            Description = String.Empty,
-//                            PublicationDate = DateTime.Now.ToString("MM-yyyy"),
-//                            Publishable = true,
-//                            Keywords =
-//                                keywords.Where(k => k.Vocab == vocabId)
-//                                        .Select(k => new VocabularyKeyword{Id = Guid.NewGuid(), Value = k.Value})
-//                                        .ToList()
-//                        }
-//                    into vocab
-//                    select LimitedVocabularyUpsert(vocab)).ToList();
-//        }
 
     }
 

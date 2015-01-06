@@ -25,17 +25,7 @@ namespace Catalogue.Data.Seed
             this.db = db;
             this.recordService = recordService;
         }
-         public static void importMesh(IDocumentStore store)
-        {
-            using (var db = store.OpenSession())
-            {
-                var vocabService = new VocabularyService(db);
-                var s = new Seeder(db, new RecordService(db, new RecordValidator(vocabService)));
-                s.AddVocabularies();
-                s.AddMeshRecords();
-                db.SaveChanges();
-            }
-        }
+
         public static void Seed(IDocumentStore store)
         {
             using (var db = store.OpenSession())
@@ -54,20 +44,6 @@ namespace Catalogue.Data.Seed
             }
         }
 
-        void AddMeshRecords()
-        {
-            // load the seed data file from the embedded resource
-            string resource = "Catalogue.Data.Seed.mesh.csv";
-            var s = Assembly.GetExecutingAssembly().GetManifestResourceStream(resource);
-
-            using (var reader = new StreamReader(s))
-            {
-                var vocabService = new VocabularyService(db);
-                var importer = new Importer<MeshMapping>(new FileSystem(), new RecordService(db, new RecordValidator(vocabService)));
-                importer.SkipBadRecords = true; // todo remove when data export is finished
-                importer.Import(reader);
-            }
-        }
         Record MakeExampleSeedRecord()
         {
             return new Record
@@ -79,7 +55,21 @@ namespace Catalogue.Data.Seed
                 }),
             };
         }
-        
+
+        void AddMeshRecords()
+        {
+            // load the seed data file from the embedded resource
+            string resource = "Catalogue.Data.Seed.mesh.csv";
+            var s = Assembly.GetExecutingAssembly().GetManifestResourceStream(resource);
+
+            using (var reader = new StreamReader(s))
+            {
+                var importer = Importer.CreateImporter<MeshMapping>(db);
+                importer.SkipBadRecords = true; // todo remove when data export is finished
+                importer.Import(reader);
+            }
+        }
+
         void AddSimpleExampleRecord()
         {
             var record = MakeExampleSeedRecord().With(r =>
@@ -181,7 +171,7 @@ namespace Catalogue.Data.Seed
         {
             var jnccCategories = new Vocabulary
                 {
-                    Id = "http://vocab.jncc.gov.uk/jncc-broad-categories",
+                    Id = "http://vocab.jncc.gov.uk/jncc-broad-category",
                     Name = "JNCC Broad Categories",
                     Description = "The broad dataset categories used within JNCC.",
                     PublicationDate = "2013",

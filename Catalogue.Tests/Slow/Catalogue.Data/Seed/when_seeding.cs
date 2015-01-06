@@ -1,5 +1,6 @@
 ﻿using System.Linq;
 using Catalogue.Data.Model;
+using Catalogue.Gemini.Model;
 using FluentAssertions;
 using NUnit.Framework;
 
@@ -13,7 +14,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Data.Seed
         [Test]
         public void should_seed_example_readonly_record()
         {
-            Record record = Db.Query<Record>()
+            var record = Db.Query<Record>()
                 .First(r => r.Gemini.Title.StartsWith("An example read-only record"));
 
             record.ReadOnly.Should().BeTrue();
@@ -23,6 +24,13 @@ namespace Catalogue.Tests.Slow.Catalogue.Data.Seed
         public void should_seed_small_box_record()
         {
             Db.Query<Record>().Count(r => r.Gemini.Title == "Small Box").Should().Be(1);
+        }
+
+        [Test]
+        public void should_seed_vocabs()
+        {
+            var vocabs = Db.Query<Vocabulary>().ToList();
+            vocabs.Count.Should().BeGreaterThan(3); // there are several vocabs in the mesh data
         }
     }
 }

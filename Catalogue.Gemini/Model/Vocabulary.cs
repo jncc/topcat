@@ -10,7 +10,6 @@ namespace Catalogue.Gemini.Model
         public string Description { get; set; }
         public string PublicationDate { get; set; }
 
-        public bool Controlled { get; set; } // is this a controlled (limited) list or are new values allowed?
         public bool Publishable { get; set; } // is this a vocabulary of publishable keywords?
      
         public List<VocabularyKeyword> Keywords { get; set; }
