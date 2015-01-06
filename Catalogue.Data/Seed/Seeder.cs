@@ -175,6 +175,7 @@ namespace Catalogue.Data.Seed
                     Name = "JNCC Broad Categories",
                     Description = "The broad dataset categories used within JNCC.",
                     PublicationDate = "2013",
+                    Publishable = true,
                     Keywords = new List<VocabularyKeyword>
                         {
                             new VocabularyKeyword { Value = "Seabed Habitat Maps" },
@@ -182,6 +183,17 @@ namespace Catalogue.Data.Seed
                         }
                 };
             this.db.Store(jnccCategories);
+
+            var referenceManagerCode = new Vocabulary
+                {
+                    Id = "http://vocab.jncc.gov.uk/reference-manager-code",
+                    Name = "JNCC Reference Manager Code",
+                    Description = "A field for the Reference Mnager code used within JNCC.",
+                    PublicationDate = "2013",
+                    Publishable = false,
+                    Keywords = new List<VocabularyKeyword>()
+                };
+            db.Store(referenceManagerCode);
         }
 
         // BigBoundingBoxWithNothingInside and SmallBox do not intersect
