@@ -76,8 +76,6 @@
     <Compile Include="Validation\ValidationResultSet.cs" />
     <Compile Include="Validation\Validator.cs" />
     <Compile Include="Vocabs\TopicCategories.cs" />
-    <Compile Include="Write\VocabularyService.cs" />
-    <Compile Include="Write\VocabularyValidator.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="GEMINI2.2.pdf" />
@@ -89,6 +87,7 @@
       <Name>Catalogue.Utilities</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

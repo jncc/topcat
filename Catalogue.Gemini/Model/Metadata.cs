@@ -53,7 +53,7 @@ namespace Catalogue.Gemini.Model
         fin = 4
     }
 
-    public class MetadataKeyword : IComparable<MetadataKeyword>
+    public class MetadataKeyword //: IComparable<MetadataKeyword>
     {
         public MetadataKeyword()
         {

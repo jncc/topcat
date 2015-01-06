@@ -119,6 +119,7 @@
     <Compile Include="Test\RavenUtility.cs" />
     <Compile Include="Write\RecordService.cs" />
     <Compile Include="Write\RecordValidator.cs" />
+    <Compile Include="Write\VocabularyService.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

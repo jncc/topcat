@@ -9,7 +9,6 @@ using Catalogue.Gemini.ResourceType;
 using Catalogue.Gemini.Roles;
 using Catalogue.Gemini.Templates;
 using Catalogue.Gemini.Vocabs;
-using Catalogue.Gemini.Write;
 using Catalogue.Utilities.Clone;
 using Catalogue.Utilities.Expressions;
 using Catalogue.Utilities.Text;
@@ -253,7 +252,7 @@ namespace Catalogue.Data.Write
             }
 
             // 40 Keywords from controlled vocabularys must be defined, they cannot be added.
-            ValidateControlledKeywords(record, recordValidationResult);
+            //ValidateControlledKeywords(record, recordValidationResult);
 
             // Conformity, required if claiming conformity to INSPIRE
             // not yet implemented
@@ -272,30 +271,30 @@ namespace Catalogue.Data.Write
             }
         }
 
-        private void ValidateControlledKeywords(Record record, RecordValidationResult recordValidationResult)
-        {
-            //mostly for tests.
-            if (record.Gemini.Keywords == null) return;
-
-            foreach (var vocabId in record.Gemini.Keywords.Select(k => k.Vocab).Distinct())
-            {
-                var vocab = vocabService.Load(vocabId);
-
-                if (vocab != null && vocab.Controlled)
-                {
-                    foreach (var value in record.Gemini.Keywords.Where(k => k.Vocab == vocab.Id).Select(k => k.Value))
-                    {
-                        if (!vocab.Keywords.Select(x => x.Value).Contains(value))
-                            recordValidationResult.Errors.Add(
-                                    String.Format("The keyword {0} does not exist in the controlled vocabulary {1}",
-                                                  value,
-                                                  vocab.Id), r => r.Gemini.Keywords);
-                    }
-                }
-
-            }
-
-        }
+//        private void ValidateControlledKeywords(Record record, RecordValidationResult recordValidationResult)
+//        {
+//            //mostly for tests.
+//            if (record.Gemini.Keywords == null) return;
+//
+//            foreach (var vocabId in record.Gemini.Keywords.Select(k => k.Vocab).Distinct())
+//            {
+//                var vocab = vocabService.Load(vocabId);
+//
+//                if (vocab != null && vocab.Controlled)
+//                {
+//                    foreach (var value in record.Gemini.Keywords.Where(k => k.Vocab == vocab.Id).Select(k => k.Value))
+//                    {
+//                        if (!vocab.Keywords.Select(x => x.Value).Contains(value))
+//                            recordValidationResult.Errors.Add(
+//                                    String.Format("The keyword {0} does not exist in the controlled vocabulary {1}",
+//                                                  value,
+//                                                  vocab.Id), r => r.Gemini.Keywords);
+//                    }
+//                }
+//
+//            }
+//
+//        }
 
         private void ValidateResourceLocator(Record record, RecordValidationResult result)
         {
@@ -597,31 +596,31 @@ namespace Catalogue.Data.Write
             result.Errors.Any(e => e.Fields.Contains("gemini.topicCategory")).Should().BeTrue();
         }
 
-        [Test]
-        public void should_not_allow_keyword_additions_to_controlled_vocabs()
-        {
-            Record record = SimpleRecord().With(r => r.Gemini.Keywords.Add(new MetadataKeyword("value", "vocabUrl")));
-            mockVocabService.Setup(v => v.Load("vocabUrl"))
-                            .Returns(
-                                (string vocab) =>
-                                new Vocabulary
-                                    {
-                                        Controlled = true,
-                                        Id = vocab,
-                                        Keywords =
-                                            new List<VocabularyKeyword>
-                                                {
-                                                    new VocabularyKeyword {Id = Guid.NewGuid(), Value = "notvalue"}
-                                                }
-                                    });
-
-            RecordValidationResult result = new RecordValidator(mockVocabService.Object).Validate(record);
-
-            result.Errors.Any(e => e.Fields.Contains("gemini.keywords")).Should().BeTrue();
-            result.Errors.Single(e => e.Fields.Contains("gemini.keywords"))
-                  .Message.Should()
-                  .Be("The keyword value does not exist in the controlled vocabulary vocabUrl");
-
-        }
+//        [Test]
+//        public void should_not_allow_keyword_additions_to_controlled_vocabs()
+//        {
+//            Record record = SimpleRecord().With(r => r.Gemini.Keywords.Add(new MetadataKeyword("value", "vocabUrl")));
+//            mockVocabService.Setup(v => v.Load("vocabUrl"))
+//                            .Returns(
+//                                (string vocab) =>
+//                                new Vocabulary
+//                                    {
+//                                        Controlled = true,
+//                                        Id = vocab,
+//                                        Keywords =
+//                                            new List<VocabularyKeyword>
+//                                                {
+//                                                    new VocabularyKeyword {Id = Guid.NewGuid(), Value = "notvalue"}
+//                                                }
+//                                    });
+//
+//            RecordValidationResult result = new RecordValidator(mockVocabService.Object).Validate(record);
+//
+//            result.Errors.Any(e => e.Fields.Contains("gemini.keywords")).Should().BeTrue();
+//            result.Errors.Single(e => e.Fields.Contains("gemini.keywords"))
+//                  .Message.Should()
+//                  .Be("The keyword value does not exist in the controlled vocabulary vocabUrl");
+//
+//        }
     }
 }

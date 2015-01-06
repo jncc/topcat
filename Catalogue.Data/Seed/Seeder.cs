@@ -10,7 +10,6 @@ using Catalogue.Data.Write;
 using Catalogue.Gemini.DataFormats;
 using Catalogue.Gemini.Model;
 using Catalogue.Gemini.Templates;
-using Catalogue.Gemini.Write;
 using Catalogue.Utilities.Clone;
 using Raven.Client;
 
@@ -30,8 +29,8 @@ namespace Catalogue.Data.Seed
         {
             using (var db = store.OpenSession())
             {
-                var vocabService = new VocabularyService(db, new VocabularyValidator(db));
-                var s = new Seeder(db, new RecordService(db, new RecordValidator(vocabService),vocabService));
+                var vocabService = new VocabularyService(db);
+                var s = new Seeder(db, new RecordService(db, new RecordValidator(vocabService)));
                 s.AddVocabularies();
                 s.AddMeshRecords();
                 db.SaveChanges();
@@ -41,8 +40,8 @@ namespace Catalogue.Data.Seed
         {
             using (var db = store.OpenSession())
             {
-                var vocabService = new VocabularyService(db, new VocabularyValidator(db));
-                var s = new Seeder(db, new RecordService(db, new RecordValidator(vocabService), vocabService));
+                var vocabService = new VocabularyService(db);
+                var s = new Seeder(db, new RecordService(db, new RecordValidator(vocabService)));
                 s.AddVocabularies();
                 s.AddMeshRecords();
                 s.AddSimpleExampleRecord();
@@ -63,8 +62,8 @@ namespace Catalogue.Data.Seed
 
             using (var reader = new StreamReader(s))
             {
-                var vocabService = new VocabularyService(db, new VocabularyValidator(db));
-                var importer = new Importer<MeshMapping>(new FileSystem(), new RecordService(db, new RecordValidator(vocabService), vocabService));
+                var vocabService = new VocabularyService(db);
+                var importer = new Importer<MeshMapping>(new FileSystem(), new RecordService(db, new RecordValidator(vocabService)));
                 importer.SkipBadRecords = true; // todo remove when data export is finished
                 importer.Import(reader);
             }
@@ -188,8 +187,8 @@ namespace Catalogue.Data.Seed
                     PublicationDate = "2013",
                     Keywords = new List<VocabularyKeyword>
                         {
-                            new VocabularyKeyword {Id = Guid.NewGuid(), Value = "Seabed Habitat Maps"},
-                            new VocabularyKeyword {Id = Guid.NewGuid(), Value = "Marine Human Activities"}
+                            new VocabularyKeyword { Value = "Seabed Habitat Maps" },
+                            new VocabularyKeyword { Value = "Marine Human Activities" },
                         }
                 };
             this.db.Store(jnccCategories);
