@@ -54,7 +54,8 @@
             <div class="layout-col">
                 <div class="well well-sm form-group">
                     <div class="editor-path input-group">
-                        <span class="input-group-addon well-input-group-addon">
+                        <span class="input-group-addon well-input-group-addon"
+                             tc-tip title="The path to the resource on the file share">
                             <span class="dark glyphicon glyphicon-th-large"></span>
                         </span>
 
@@ -117,7 +118,7 @@
             
         <div class="row">
            
-            <div id="keywordsArea" class="col-md-9">
+            <div class="col-md-9">
 
                 <!-- keywords -->
               
@@ -126,9 +127,9 @@
                         <span ng-style="{ 'background-color': hashStringToColor(k.vocab) }">&nbsp;</span>
                         {{ k.value }}
                     </span>
-                      <label for="keywordsBtn">Keywords</label>      
                     <button id="keywordsBtn" class="btn btn-sm btn-dialogue" tc-tip title="Edit tags (keywords)"
                             ng-click="keywordEditorOpen = !keywordEditorOpen">&bull;&bull;&bull;</button>                    
+                    <label ng-hide="form.gemini.keywords" for="keywordsBtn">Add keywords</label>
                 </div>
                 
                 
@@ -163,56 +164,79 @@
                 
                 <!-- abstract -->
                 <div class="editor-abstract form-group">
-                    <label for="abstractArea">Abstract</label>
                     <textarea id="abstractArea" type="text" ng-model="form.gemini.abstract" class="form-control"
                               rows="2"
                               placeholder="Abstract"
                               title="The abstract is a clear, brief summary of the resource's content"
                               tc-focus-tip tc-autosize></textarea>
                 </div>
-
-                <div class="form-horizontal form-group">
-                    <div class="row">
-                        <label for="temporalExtentDiv" class="col-md-2 control-label">Temporal Extent</label>
-                        
-                        <div id="temporalExtentDiv" class="col-md-3 input-group">
-                            <input type="text" class="form-control"
-                                   name="gemini.temporalExtent.begin" 
-                                   ng-model="form.gemini.temporalExtent.begin"
-                                   placeholder="yyyy-mm-dd"
-                                   datepicker-popup="yyyy-MM-dd"
-                                   tc-focus-tip 
-                                   is-open="extentBegin"
-                                   close-text="Close"
-                                   ng-click="open($event,'extentBegin')"
-                                   title="The dates covered by the data resource" />
-                            <span class="input-group-addon" ng-click="open($event,'extentBegin')">
-                                <span class="dark glyphicon glyphicon-calendar"></span>
-                            </span>
-                        </div>
-                        <div class="col-md-1">
-                            <span class="glyphicon glyphicon-chevron-right" style="margin-left: 1em;padding-top: 5px;"></span>
-                        </div>
-                        <div class="col-md-3 input-group">
-                            <input type="text" class="form-control"
-                                   name="gemini.temporalExtent.end" 
-                                   ng-model="form.gemini.temporalExtent.end"
-                                   placeholder="yyyy-mm-dd"
-                                   datepicker-popup="yyyy-MM-dd"
-                                   tc-focus-tip 
-                                   is-open="extentEnd"
-                                   close-text="Close"
-                                   ng-click="open($event,'extentEnd')"
-                                   title="The dates covered by the data resource" />
-                            <span class="input-group-addon" ng-click="open($event,'extentEnd')">
-                                <span class="dark glyphicon glyphicon-calendar"></span>
-                            </span>
-                        </div>
-                    </div>
-                    <div class="col-md-2"></div>
-                </div>
                 
-                <!-- datesetreferecne date -->
+                <!-- resource locator -->
+                <div class="editor-resource-locator form-group">
+                    <div class="input-group">
+                        <span class="input-group-addon well-input-group-addon"
+                            tc-tip title="Published location for online access (URL)">
+                            <span class="dark glyphicon glyphicon-globe"></span>
+                        </span>
+
+                        <input name="resourceLocator" ng-model="form.gemini.resourceLocator" 
+                                       type="text" class="form-control" 
+                                       placeholder="Published Location (URL)"
+                                       tc-focus-tip title="Published location for online access (URL)"
+                                       spellcheck="false" />
+                        
+                        <a href="{{form.gemini.resourceLocator}}" target="_blank" class="input-group-addon pointable" ng-disabled="!form.gemini.resourceLocator">
+                            <span class="dark glyphicon glyphicon-new-window" title="Go to resource" tc-tip></span>
+                        </a> 
+
+                    </div>
+                </div>
+
+                <hr />
+                <hr />
+                <hr />
+                <hr />
+                
+                <!-- temporal extent-->
+                <div class="form-horizontal form-group">
+                    <label for="temporalExtentDiv" class="col-md-2 control-label">Temporal Extent</label>
+                    <div id="temporalExtentDiv" class="col-md-3 input-group">
+                        <input type="text" class="form-control"
+                               name="gemini.temporalExtent.begin" 
+                               ng-model="form.gemini.temporalExtent.begin"
+                               placeholder="yyyy-mm-dd"
+                               datepicker-popup="yyyy-MM-dd"
+                               tc-focus-tip 
+                               is-open="extentBegin"
+                               close-text="Close"
+                               ng-click="open($event,'extentBegin')"
+                               title="The dates covered by the data resource" />
+                        <span class="input-group-addon" ng-click="open($event,'extentBegin')">
+                            <span class="dark glyphicon glyphicon-calendar"></span>
+                        </span>
+                    </div>
+                    <div class="col-md-1">
+                        <span class="glyphicon glyphicon-chevron-right" style="margin-left: 1em;padding-top: 5px;"></span>
+                    </div>
+                    <div class="col-md-3 input-group">
+                        <input type="text" class="form-control"
+                               name="gemini.temporalExtent.end" 
+                               ng-model="form.gemini.temporalExtent.end"
+                               placeholder="yyyy-mm-dd"
+                               datepicker-popup="yyyy-MM-dd"
+                               tc-focus-tip 
+                               is-open="extentEnd"
+                               close-text="Close"
+                               ng-click="open($event,'extentEnd')"
+                               title="The dates covered by the data resource" />
+                        <span class="input-group-addon" ng-click="open($event,'extentEnd')">
+                            <span class="dark glyphicon glyphicon-calendar"></span>
+                        </span>
+                    </div>
+                </div>
+                <hr />
+
+                <!-- dateset reference date -->
                 <div class="form-horizontal">
                     <div class="form-group">
                         <label for="datasetReferenceDateDiv" class="col-md-2">Dataset Reference Date</label>
@@ -237,7 +261,7 @@
                     </div>
                 </div>
                 
-                <!-- topic cateogy and resource locator -->
+                <!-- topic category -->
                 <div class="form-horizontal ">
                     <div class="form-group">
                         <div class="col-sm-12">
@@ -252,25 +276,13 @@
                                 </select>
                             </div>
                         </div>
-                        <div class="col-sm-12">
-                            <label for="resourceLocatorDiv" class="col-sm-2 control-label">Resource Locator</label>
-                            <div id="resourceLocatorDiv" class="col-sm-4 input-group">
-                                <input name="resourceLocator" ng-model="form.gemini.resourceLocator" 
-                                       type="text" class="form-control" 
-                                       placeholder="Published Resource Location"
-                                       tc-focus-tip title="Location (Address) for on-line access using a Uniform Resource Locator (URL) address or similar addressing scheme"
-                                       spellcheck="false" />
-                                <a href="{{form.gemini.resourceLocator}}" target="_blank" class="input-group-addon pointable">
-                                    <span class="dark glyphicon glyphicon-folder-open" title="Go to resource" tc-focus-tip></span>
-                                </a>
-                            </div>
-                        </div>
+
                     </div>
                 </div>
                 
                 <hr />
 
-                <!-- lieage , public access and use contraints-->
+                <!-- lineage , public access and use contraints-->
                 <div class="col-md-12" >
                     <div class="editor-abstract form-group col-md-4 pull-left">
                         <label for="lineageArea">Lineage</label>
@@ -520,7 +532,9 @@
                         </div>
                         <div class="layout-col pull-right">
                             <div class="btn-group">
-                                <button ng-click="form.topCopy = true" ng-class="{ 'btn-primary': form.topCopy, 'btn-default': !form.topCopy }" class="btn">
+                                <button ng-click="form.topCopy = true" ng-class="{ 'btn-primary': form.topCopy, 'btn-default': !form.topCopy }" class="btn"
+                                    title="Is this the 'top copy' of this resource?"
+                                    tc-tip>
                                     <span class="glyphicon glyphicon-leaf"></span>Yes
                                 </button>
                                 <button ng-click="form.topCopy = false" ng-class="{ 'btn-primary': !form.topCopy, 'btn-default': form.topCopy  }" class="btn">
@@ -630,8 +644,8 @@
                     
                 </div>
 
-            </div>            
-            <!--{{form}}-->
+            </div>    
         </div>
+        <pre>{{form}}</pre>
     </form>
 </div>

@@ -23,9 +23,10 @@ qtipDefaults =
     show:
         event: 'click mouseenter',
         solo: true,
+        delay: 0,
     hide:
         fixed: true,
-        delay: 100,
+        delay: 0,
     style:
         classes: 'qtip-dark qtip-rounded tip'
 
