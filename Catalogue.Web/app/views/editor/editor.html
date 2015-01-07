@@ -173,35 +173,38 @@
                 
                 
                 
-                <div tabset>
+                <div class="editor-tabs" tabset>
                     
                     <div tab>
                         <tab-heading>
                             <span class="glyphicon glyphicon-asterisk"></span> Identity                            
                         </tab-heading>
-                        
-                        
+                        <div class="form-group">
+                            
+                            <!-- resource locator -->
+                            <div class="editor-resource-locator form-group">
+                                <div class="input-group">
+                                    <span class="input-group-addon well-input-group-addon"
+                                          tc-tip title="Published location for online access (URL)">
+                                        <span class="dark glyphicon glyphicon-globe"></span>
+                                    </span>
 
-                        <!-- resource locator -->
-                        <div class="editor-resource-locator form-group">
-                            <div class="input-group">
-                                <span class="input-group-addon well-input-group-addon"
-                                    tc-tip title="Published location for online access (URL)">
-                                    <span class="dark glyphicon glyphicon-globe"></span>
-                                </span>
+                                    <input name="resourceLocator" ng-model="form.gemini.resourceLocator"
+                                           type="text" class="form-control"
+                                           placeholder="Published Location (URL)"
+                                           tc-focus-tip title="Published location for online access (URL)"
+                                           spellcheck="false" />
 
-                                <input name="resourceLocator" ng-model="form.gemini.resourceLocator" 
-                                                type="text" class="form-control" 
-                                                placeholder="Published Location (URL)"
-                                                tc-focus-tip title="Published location for online access (URL)"
-                                                spellcheck="false" />
-                        
-                                <a href="{{form.gemini.resourceLocator}}" target="_blank" class="input-group-addon pointable" ng-disabled="!form.gemini.resourceLocator">
-                                    <span class="dark glyphicon glyphicon-new-window" title="Go to resource" tc-tip></span>
-                                </a> 
+                                    <a href="{{form.gemini.resourceLocator}}" target="_blank" class="input-group-addon pointable" ng-disabled="!form.gemini.resourceLocator">
+                                        <span class="dark glyphicon glyphicon-new-window" title="Go to resource" tc-tip></span>
+                                    </a>
 
+                                </div>
                             </div>
+
+
                         </div>
+                        
 
                         <hr />
                         

@@ -12,14 +12,10 @@ Development
 -----------
 
 ###Web Essentials
-Install the Visual Studio Web Essentials extensions pack for design-time support for CoffeeScript (.coffee) and LESS (.less).
+Install the [Visual Studio Web Essentials] (http://vswebessentials.com/) extensions pack for design-time support for CoffeeScript (.coffee) and LESS (.less).
 These are essential if you want to edit the application's Javascript or CSS.
 There are no build-time or run-time steps used to compile Coffeescript and LESS - the Visual Studio extensions are simpler.
 The application will expect the correct .js and .css files to have been design-time generated.
-
-[VS plugin] (http://visualstudiogallery.msdn.microsoft.com/07d54d12-7133-4e15-becb-6f451ea3bea6).
-
-This support might be built-in to Visual Studio 2013.
 
 ###AngularJS
 There is (allegedly) [Resharper support](http://blogs.jetbrains.com/dotnet/2013/02/angularjs-support-for-resharper/).
