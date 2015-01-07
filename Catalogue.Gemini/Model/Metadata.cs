@@ -53,45 +53,8 @@ namespace Catalogue.Gemini.Model
         fin = 4
     }
 
-    public class MetadataKeyword //: IComparable<MetadataKeyword>
+    public class MetadataKeyword
     {
-        public MetadataKeyword()
-        {
-        }
-
-        public MetadataKeyword(string value, string vocab)
-        {
-            Value = value;
-            Vocab = vocab;
-        }
-
-        protected bool Equals(MetadataKeyword other)
-        {
-            return string.Equals(Value, other.Value, StringComparison.InvariantCultureIgnoreCase) && string.Equals(Vocab, other.Vocab, StringComparison.InvariantCultureIgnoreCase);
-        }
-
-        public int CompareTo(MetadataKeyword other)
-        {
-            return System.String.Compare(this.Value, other.Value, System.StringComparison.Ordinal);
-        }
-
-        public override bool Equals(object obj)
-        {
-            
-            if (ReferenceEquals(null, obj)) return false;
-            if (ReferenceEquals(this, obj)) return true;
-            if (obj.GetType() != this.GetType()) return false;
-            return Equals((MetadataKeyword) obj);
-        }
-
-        public override int GetHashCode()
-        {
-            unchecked
-            {
-                return (this.Vocab + "::" + this.Value).GetHashCode()*397;
-            }
-        }
-
         public string Value { get; set; }
         public string Vocab { get; set; }
     }
