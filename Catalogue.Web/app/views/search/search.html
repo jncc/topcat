@@ -102,10 +102,11 @@
 </div>
 
 <div class="text-center" ng-show="result.total > result.results.length">
+
     <ul class="pagination">
-        <!--<li class="disabled"><a href="">&laquo;</a></li>-->
-        <li style="cursor: pointer" ng-repeat="n in range(0,maxPages(result.total, 25))" ng-class="(n===query.p+1) ? 'active' : ''">
-            <span ng-click="query.p = n-1"><span ng-bind="n">n</span></span>
+     <!--   <li class="disabled"><a href="">&laquo;</a></li>-->
+    <li style="cursor: pointer;" ng-repeat="n in range(0,maxPages(result.total, 25))" ng-class="(n===query.p+1) ? 'active' : ''">
+            <span ng-click="query.p = n-1; changePageNumber();"><span ng-bind="n">n</span></span>
         </li>
         <!--<li><span href="#">&raquo;</span></li>-->
     </ul>
