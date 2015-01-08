@@ -44,14 +44,12 @@ namespace Catalogue.Data.Write
                 result.Errors.Add("Location Path must not be blank", r => r.Path);
             }
 
-            // also part of gemini spec
             // title_must_not_be_blank
             if (record.Gemini.Title.IsBlank())
             {
                 result.Errors.Add("Title must not be blank", r => r.Gemini.Title);
             }
 
-            // the below perform app specific checks, not gemini
             ValidateTopicCategory(record, result);
             ValidateResourceLocator(record, result);
             ValidateResponsibleOrganisation(record, result);
@@ -72,31 +70,26 @@ namespace Catalogue.Data.Write
                 result.Errors.Add("Publishable records must have a resource locator",
                     r => r.Status, r => r.Gemini.ResourceLocator);
             }
+
             if (record.Validation == Validation.Gemini)
             {
-                GeminiValidation(record, result);
+                PerformGeminiValidation(record, result);
             }
-
-            
 
             return result;
         }
 
-        private void GeminiValidation(Record record, RecordValidationResult recordValidationResult)
+        private void PerformGeminiValidation(Record record, RecordValidationResult recordValidationResult)
         {
             // structured to match the gemini doc
 
-            // 1 title, checked even if not gemini. But repeating here to be explicit and ease refactoring
-            if (record.Gemini.Title.IsBlank())
-            {
-                recordValidationResult.Errors.Add("Title must be provided" + GeminiSuffix, r => r.Gemini.Title);
-            }
+            // 1 title is validated at basic level
 
             // 2 alternative title not used as optional
 
             // 3 Dataset language, conditional - data resource contains textual information
             // lets assume all data resources contain text
-            // data_type is enum so can't be null, will default to eng - todo unit tests
+            // data_type is enum so can't be null, will default to eng
 
             // 4 abstract is mandatory
             if (record.Gemini.Abstract.IsBlank())
@@ -140,16 +133,12 @@ namespace Catalogue.Data.Write
             }
 
             // 15 extent is optional and not used
-            // deliberately not implmented
 
             // 16 Vertical extent information is optional and not used
-            // deliberately not implmented
 
             // 17 Spatial reference system is optional
-            // deliberately not implmented
 
             // 18 Spatial resolution, where it can be specified it should - so its optional
-            // deliberately not implmented
 
             // 19 resource location, conditional
             // when online access is availble, should be a valid url
@@ -179,7 +168,6 @@ namespace Catalogue.Data.Write
 
 
             // 21 DataFormat optional 
-            // deliberately not implmented
 
             // 23 reponsible Organisation
             if (record.Gemini.ResponsibleOrganisation.Email.IsBlank())
@@ -199,7 +187,6 @@ namespace Catalogue.Data.Write
             }
 
             // 24 frequency of update is optional
-            // deliberatley not implemented
              
             // 25 limitations on publci access is mandatory
             if (record.Gemini.LimitationsOnPublicAccess.IsBlank())
@@ -211,12 +198,11 @@ namespace Catalogue.Data.Write
             // 26 use constraints are mandatory
             if (record.Gemini.UseConstraints.IsBlank())
             {
-                recordValidationResult.Errors.Add("Use Constraints must be provided if there are none, leave as 'no conditions apply'",
+                recordValidationResult.Errors.Add("Use Constraints must be provided (if there are none, leave as 'no conditions apply')",
                     r => r.Gemini.UseConstraints);
             }
 
             // 27 Additional information source is optional
-            // deliebrately not implemeted
 
             // 30 metadatadate is mandatory
             if (record.Gemini.MetadataDate.Equals(DateTime.MinValue))
@@ -226,7 +212,6 @@ namespace Catalogue.Data.Write
             }
 
             // 33 Metadatalanguage
-            // deliberaretly not implemented, only supporting english
 
             // 35 Point of contacts
             // org name and email contact mandatory
@@ -258,7 +243,6 @@ namespace Catalogue.Data.Write
             // not yet implemented
 
             // Equivalent scale, optional
-            // deliberaty not implemented
 
             // BoundingBox
             // mandatory and valid
@@ -323,7 +307,7 @@ namespace Catalogue.Data.Write
         {
             // topic_category_must_be_valid
 
-            string s = record.Gemini.TopicCategory;
+            var s = record.Gemini.TopicCategory;
 
             if (s.IsNotBlank() && !TopicCategories.Values.Keys.Any(k => k == s))
             {
@@ -335,7 +319,7 @@ namespace Catalogue.Data.Write
         private void ValidateResponsibleOrganisation(Record record, RecordValidationResult result)
         {
             // responsible_organisation_role_must_be_an_allowed_role
-            string role = record.Gemini.ResponsibleOrganisation.Role;
+            var role = record.Gemini.ResponsibleOrganisation.Role;
             if (role.IsNotBlank() && !ResponsiblePartyRoles.Allowed.Contains(role))
             {
                 result.Errors.Add(String.Format("Responsible Organisation Role '{0}' is not valid", role),
@@ -346,7 +330,7 @@ namespace Catalogue.Data.Write
         private void ValidateMetadataPointOfContact(Record record, RecordValidationResult result)
         {
             // metadata_point_of_contact_role_must_be_an_allowed_role
-            string role = record.Gemini.MetadataPointOfContact.Role;
+            var role = record.Gemini.MetadataPointOfContact.Role;
             if (role.IsNotBlank() && !ResponsiblePartyRoles.Allowed.Contains(role))
             {
                 result.Errors.Add(String.Format("Metadata Point of Contact Role '{0}' is not valid", role),
@@ -357,7 +341,7 @@ namespace Catalogue.Data.Write
         private void ValidateResourceType(Record record, RecordValidationResult result)
         {
             // resource type must be a valid Gemini resource type if not blank
-            string resourceType = record.Gemini.ResourceType;
+            var resourceType = record.Gemini.ResourceType;
             if (resourceType.IsNotBlank() && !ResourceTypes.Allowed.Contains(resourceType))
             {
                 result.Errors.Add(String.Format("Resource Type '{0}' is not valid", resourceType),
@@ -445,14 +429,14 @@ namespace Catalogue.Data.Write
         {
             // the basic level of validation shouldn't produce warnings - that would be too annoying
 
-            RecordValidationResult result = new RecordValidator(mockVocabService.Object).Validate(SimpleRecord() /* no Level argument */);
+            var result = new RecordValidator(mockVocabService.Object).Validate(SimpleRecord() /* no Level argument */);
             result.Warnings.Should().BeEmpty();
         }
 
         [Test]
         public void title_must_not_be_blank([Values("", " ", null)] string blank)
         {
-            RecordValidationResult result =
+            var result =
                 new RecordValidator(mockVocabService.Object).Validate(SimpleRecord().With(r => r.Gemini.Title = blank));
 
             result.Errors.Single().Message.Should().StartWith("Title must not be blank");
@@ -462,7 +446,7 @@ namespace Catalogue.Data.Write
         [Test]
         public void path_must_not_be_blank([Values("", " ", null)] string blank)
         {
-            RecordValidationResult result = new RecordValidator(mockVocabService.Object).Validate(SimpleRecord().With(r => r.Path = blank));
+            var result = new RecordValidator(mockVocabService.Object).Validate(SimpleRecord().With(r => r.Path = blank));
 
             result.Errors.Single().Message.Should().StartWith("Location Path must not be blank");
             result.Errors.Single().Fields.Single().Should().Be("path");
@@ -471,8 +455,8 @@ namespace Catalogue.Data.Write
         [Test]
         public void topic_category_must_be_valid()
         {
-            Record record = SimpleRecord().With(r => r.Gemini.TopicCategory = "anInvalidTopicCategory");
-            RecordValidationResult result = new RecordValidator(mockVocabService.Object).Validate(record);
+            var record = SimpleRecord().With(r => r.Gemini.TopicCategory = "anInvalidTopicCategory");
+            var result = new RecordValidator(mockVocabService.Object).Validate(record);
 
             result.Errors.Single().Message.Should().Contain("Topic Category 'anInvalidTopicCategory' is not valid");
             result.Errors.Single().Fields.Single().Should().Be("gemini.topicCategory");
@@ -481,8 +465,8 @@ namespace Catalogue.Data.Write
         [Test]
         public void topic_category_may_be_blank([Values("", null)] string blank)
         {
-            Record record = SimpleRecord().With(r => r.Gemini.TopicCategory = blank);
-            RecordValidationResult result = new RecordValidator(mockVocabService.Object).Validate(record);
+            var record = SimpleRecord().With(r => r.Gemini.TopicCategory = blank);
+            var result = new RecordValidator(mockVocabService.Object).Validate(record);
             result.Errors.Should().BeEmpty();
         }
 
@@ -490,13 +474,13 @@ namespace Catalogue.Data.Write
         public void non_open_records_must_have_limitations_on_public_access(
             [Values(Security.Classified, Security.Restricted)] Security nonOpen, [Values("", " ", null)] string blank)
         {
-            Record record = SimpleRecord().With(r =>
+            var record = SimpleRecord().With(r =>
             {
                 r.Security = nonOpen;
                 r.Gemini.LimitationsOnPublicAccess = blank;
             });
 
-            RecordValidationResult result = new RecordValidator(mockVocabService.Object).Validate(record);
+            var result = new RecordValidator(mockVocabService.Object).Validate(record);
 
             result.Errors.Single().Fields.Should().Contain("security");
             result.Errors.Single().Fields.Should().Contain("gemini.limitationsOnPublicAccess");
@@ -505,13 +489,13 @@ namespace Catalogue.Data.Write
         [Test]
         public void publishable_records_must_have_a_resource_locator([Values("", " ", null)] string blank)
         {
-            Record record = SimpleRecord().With(r =>
+            var record = SimpleRecord().With(r =>
             {
                 r.Status = Status.Publishable;
                 r.Gemini.ResourceLocator = blank;
             });
 
-            RecordValidationResult result = new RecordValidator(mockVocabService.Object).Validate(record);
+            var result = new RecordValidator(mockVocabService.Object).Validate(record);
 
             result.Errors.Single().Fields.Should().Contain("status");
             result.Errors.Single().Fields.Should().Contain("gemini.resourceLocator");
@@ -521,42 +505,42 @@ namespace Catalogue.Data.Write
         public void resource_locator_must_be_a_well_formed_http_url(
             [Values(@"Z:\some\path", "utter rubbish")] string nonHttpUrl)
         {
-            Record record = SimpleRecord().With(r => r.Gemini.ResourceLocator = nonHttpUrl);
-            RecordValidationResult result = new RecordValidator(mockVocabService.Object).Validate(record);
+            var record = SimpleRecord().With(r => r.Gemini.ResourceLocator = nonHttpUrl);
+            var result = new RecordValidator(mockVocabService.Object).Validate(record);
             result.Errors.Single().Fields.Should().Contain("gemini.resourceLocator");
         }
 
         [Test]
         public void resource_locator_may_be_set()
         {
-            Record record = SimpleRecord().With(r => r.Gemini.ResourceLocator = "http://example.org/resource/locator");
-            RecordValidationResult result = new RecordValidator(mockVocabService.Object).Validate(record);
+            var record = SimpleRecord().With(r => r.Gemini.ResourceLocator = "http://example.org/resource/locator");
+            var result = new RecordValidator(mockVocabService.Object).Validate(record);
             result.Errors.Should().BeEmpty();
         }
 
         [Test]
         public void responsible_organisation_role_must_be_an_allowed_role()
         {
-            Record record = SimpleRecord().With(r => r.Gemini.ResponsibleOrganisation = new ResponsibleParty
+            var record = SimpleRecord().With(r => r.Gemini.ResponsibleOrganisation = new ResponsibleParty
             {
                 Email = "a.mann@example.com",
                 Name = "A. Mann",
                 Role = "some role that isn't allowed",
             });
-            RecordValidationResult result = new RecordValidator(mockVocabService.Object).Validate(record);
+            var result = new RecordValidator(mockVocabService.Object).Validate(record);
             result.Errors.Single().Fields.Should().Contain("gemini.responsibleOrganisation.role");
         }
 
         [Test]
         public void metadata_point_of_contact_role_must_be_an_allowed_role()
         {
-            Record record = SimpleRecord().With(r => r.Gemini.MetadataPointOfContact = new ResponsibleParty
+            var record = SimpleRecord().With(r => r.Gemini.MetadataPointOfContact = new ResponsibleParty
             {
                 Email = "a.mann@example.com",
                 Name = "A. Mann",
                 Role = "some role that isn't allowed",
             });
-            RecordValidationResult result = new RecordValidator(mockVocabService.Object).Validate(record);
+            var result = new RecordValidator(mockVocabService.Object).Validate(record);
             result.Errors.Single().Fields.Should().Contain("gemini.metadataPointOfContact.role");
         }
     }
@@ -578,20 +562,17 @@ namespace Catalogue.Data.Write
         [Test]
         public void blank_use_constraints_are_not_allowed([Values("", " ", null)] string blank)
         {
-            Record record = SimpleRecord().With(r => r.Gemini.UseConstraints = blank);
-            RecordValidationResult result = new RecordValidator(mockVocabService.Object).Validate(record);
+            var record = SimpleRecord().With(r => r.Gemini.UseConstraints = blank);
+            var result = new RecordValidator(mockVocabService.Object).Validate(record);
 
             result.Errors.Any(e => e.Fields.Contains("gemini.useConstraints")).Should().BeTrue();
-            result.Errors.Single(e => e.Fields.Contains("gemini.useConstraints"))
-                  .Message.Should()
-                  .Be("Use Constraints must be provided if there are none, leave as 'no conditions apply'");
         }
 
         [Test]
         public void topic_category_must_not_be_blank([Values("", " ", null)] string blank)
         {
-            Record record = SimpleRecord().With(r => r.Gemini.TopicCategory = blank);
-            RecordValidationResult result = new RecordValidator(mockVocabService.Object).Validate(record);
+            var record = SimpleRecord().With(r => r.Gemini.TopicCategory = blank);
+            var result = new RecordValidator(mockVocabService.Object).Validate(record);
 
             result.Errors.Any(e => e.Fields.Contains("gemini.topicCategory")).Should().BeTrue();
         }
