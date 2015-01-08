@@ -75,10 +75,6 @@ module.directive 'tcTag', () ->
                 my: 'top center'
                 at: 'bottom center'
 
-module.directive 'tcTagDelete', () ->
-    link: (scope, elem, attrs) ->
-        
-
 # top-copy icon
 module.directive 'tcTopCopyIcon', () ->
     link: (scope, elem, attrs) ->

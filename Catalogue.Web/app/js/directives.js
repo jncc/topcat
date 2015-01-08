@@ -124,12 +124,6 @@
     };
   });
 
-  module.directive('tcTagDelete', function() {
-    return {
-      link: function(scope, elem, attrs) {}
-    };
-  });
-
   module.directive('tcTopCopyIcon', function() {
     return {
       link: function(scope, elem, attrs) {
