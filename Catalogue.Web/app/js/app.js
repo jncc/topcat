@@ -1,11 +1,11 @@
-(function() {
+﻿(function() {
   var module;
 
   module = angular.module('app', ['ngAnimate', 'ngRoute', 'ngSanitize', 'app.utilities', 'app.directives', 'app.services', 'app.controllers', 'filters']);
 
   angular.module('app.utilities', []);
 
-  angular.module('app.directives', ['ui.bootstrap']);
+  angular.module('app.directives', []);
 
   angular.module('app.services', ['ngResource']);
 

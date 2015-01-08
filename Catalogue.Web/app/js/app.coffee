@@ -2,6 +2,7 @@
     'ngAnimate',
     'ngRoute',
     'ngSanitize',
+    
     'app.utilities',
     'app.directives',
     'app.services',
@@ -10,7 +11,7 @@
     ]
         
 angular.module 'app.utilities', []
-angular.module 'app.directives', ['ui.bootstrap']
+angular.module 'app.directives', []
 angular.module 'app.services', ['ngResource']
 angular.module 'app.controllers', []
 
