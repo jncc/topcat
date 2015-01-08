@@ -179,28 +179,58 @@
                         <tab-heading>
                             <span class="glyphicon glyphicon-asterisk"></span> Identity                            
                         </tab-heading>
-                        <div class="form-group">
-                            
-                            <!-- resource locator -->
-                            <div class="editor-resource-locator form-group">
-                                <div class="input-group">
-                                    <span class="input-group-addon well-input-group-addon"
-                                          tc-tip title="Published location for online access (URL)">
-                                        <span class="dark glyphicon glyphicon-globe"></span>
-                                    </span>
+                        
 
-                                    <input name="resourceLocator" ng-model="form.gemini.resourceLocator"
-                                           type="text" class="form-control"
-                                           placeholder="Published Location (URL)"
-                                           tc-focus-tip title="Published location for online access (URL)"
-                                           spellcheck="false" />
+                        <div class="row">
+                            <div class="col-md-8">
+                                
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        
+                                        
+                                        <select data-ng-model="form.gemini.resourceType"
+                                                class="form-control"
+                                                title="The type of resource described by this metadata"
+                                                value="Dataset"
+                                                tc-focus-tip>
+                                            <option value="dataset" selected>Dataset</option>
+                                            <option value="series" disabled selected>Dataset Series (Not Available)</option>
+                                            <option value="service" disabled selected>Service (Not Available)</option>
+                                        </select>                            
 
-                                    <a href="{{form.gemini.resourceLocator}}" target="_blank" class="input-group-addon pointable" ng-disabled="!form.gemini.resourceLocator">
-                                        <span class="dark glyphicon glyphicon-new-window" title="Go to resource" tc-tip></span>
-                                    </a>
-
+                                    </div>
+                                    <div class="col-md-6">
+                                    xxx
+                                    </div>
                                 </div>
+                                
+                                
+                                <!-- resource locator -->
+                                <div class="editor-resource-locator form-group">
+                                    <div class="input-group">
+                                        <span class="input-group-addon well-input-group-addon"
+                                                tc-tip title="Published location for online access (URL)">
+                                            <span class="dark glyphicon glyphicon-globe"></span>
+                                        </span>
+
+                                        <input name="resourceLocator" ng-model="form.gemini.resourceLocator"
+                                                type="text" class="form-control"
+                                                placeholder="Published Location (URL)"
+                                                tc-focus-tip title="Published location for online access (URL)"
+                                                spellcheck="false" />
+
+                                        <a href="{{form.gemini.resourceLocator}}" target="_blank" class="input-group-addon pointable" ng-disabled="!form.gemini.resourceLocator">
+                                            <span class="dark glyphicon glyphicon-new-window" title="Go to resource" tc-tip></span>
+                                        </a>
+
+                                    </div>
+                                </div>
+
                             </div>
+                            <div class="col-md-4">
+                                
+                            </div>
+                            
 
 
                         </div>
@@ -210,15 +240,6 @@
                         
                         <!-- resource type -->
                         <div>
-                            <select data-ng-model="form.gemini.resourceType"
-                                    class="form-control"
-                                    title="The type of resource described by this metadata"
-                                    value="Dataset"
-                                    tc-focus-tip>
-                                <option value="dataset" selected>Dataset</option>
-                                <option value="series" disabled selected>Dataset Series (Not Available)</option>
-                                <option value="service" disabled selected>Service (Not Available)</option>
-                            </select>                            
                             <!--<input class="form-control" type="text" ng-model="form.gemini.resourceType" placeholder="Type of Resource" title="The type of resource described by this metadata" tc-focus-tip />-->
                         </div>
 
@@ -297,7 +318,10 @@
 
                     <div tab>
                         <tab-heading>
-                            <span class="glyphicon glyphicon-cutlery"></span> Usage                            
+                            <span class="glyphicon glyphicon-cutlery"></span> Usage 
+                            <small ng-show="hasUsageConstraints()" class="little-warning-badge" tc-tip title="There are constraints or restrictions to be aware of">
+                                <span class="glyphicon glyphicon-exclamation-sign"></span>
+                            </small>
                         </tab-heading>
 
                         <!-- public access and use contraints-->
@@ -310,16 +334,16 @@
                         <textarea type="text" ng-model="form.gemini.useConstraints" class="form-control"
                                     rows="2"
                                     placeholder="no conditions apply"
-                                    title="Restrictions and legal restraints on using the data resource"
+                                    title="Usage and legal constraints on using the data resource"
                                     tc-focus-tip tc-autosize></textarea>
                     </div>
                     
                     <div tab>
                         <tab-heading>
-                            <span class="glyphicon glyphicon-cog"></span> Meta                            
+                            <span class="glyphicon glyphicon-cog"></span> Meta
                         </tab-heading>
                         
-                        Information about this metadat record
+                        Information about this metadata record
                         
                         
                         <!-- point of contact -->

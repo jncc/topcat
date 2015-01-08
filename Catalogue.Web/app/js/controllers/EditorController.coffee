@@ -76,7 +76,8 @@
         $scope.isCancelHidden = -> $scope.isClean()
         $scope.isSaveDisabled = -> $scope.isClean() # || $scope.theForm.$invalid 
 
-        #$scope.keywordEditorOpen = true
+        $scope.hasUsageConstraints = () -> (!!$scope.form.gemini.limitationsOnPublicAccess and $scope.form.gemini.limitationsOnPublicAccess isnt 'no limitations') or (!!$scope.form.gemini.useConstraints and $scope.form.gemini.useConstraints isnt 'no conditions apply')
+
         $scope.removeKeyword = (keyword) ->
             $scope.form.gemini.keywords.splice ($.inArray keyword, $scope.form.gemini.keywords), 1
         $scope.addKeyword = ->

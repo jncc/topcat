@@ -101,6 +101,9 @@
     $scope.isSaveDisabled = function() {
       return $scope.isClean();
     };
+    $scope.hasUsageConstraints = function() {
+      return (!!$scope.form.gemini.limitationsOnPublicAccess && $scope.form.gemini.limitationsOnPublicAccess !== 'no limitations') || (!!$scope.form.gemini.useConstraints && $scope.form.gemini.useConstraints !== 'no conditions apply');
+    };
     $scope.removeKeyword = function(keyword) {
       return $scope.form.gemini.keywords.splice($.inArray(keyword, $scope.form.gemini.keywords), 1);
     };
