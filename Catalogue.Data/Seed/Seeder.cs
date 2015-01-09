@@ -65,6 +65,7 @@ namespace Catalogue.Data.Seed
             using (var reader = new StreamReader(s))
             {
                 var importer = Importer.CreateImporter<MeshMapping>(db);
+                importer.ImportKeywords = true;
                 importer.SkipBadRecords = true; // todo remove when data export is finished
                 importer.Import(reader);
             }
@@ -188,12 +189,25 @@ namespace Catalogue.Data.Seed
                 {
                     Id = "http://vocab.jncc.gov.uk/reference-manager-code",
                     Name = "JNCC Reference Manager Code",
-                    Description = "A field for the Reference Mnager code used within JNCC.",
+                    Description = "A field for the Reference Manager code used within JNCC.",
                     PublicationDate = "2013",
                     Publishable = false,
+                    Controlled = false,
                     Keywords = new List<VocabularyKeyword>()
                 };
             db.Store(referenceManagerCode);
+
+//            var referenceManagerCode = new Vocabulary
+//            {
+//                Id = "http://vocab.jncc.gov.uk/reference-manager-code",
+//                Name = "JNCC Reference Manager Code",
+//                Description = "A field for the Reference Manager code used within JNCC.",
+//                PublicationDate = "2013",
+//                Publishable = false,
+//                Controlled = false,
+//                Keywords = new List<VocabularyKeyword>()
+//            };
+//            db.Store(referenceManagerCode);
         }
 
         // BigBoundingBoxWithNothingInside and SmallBox do not intersect

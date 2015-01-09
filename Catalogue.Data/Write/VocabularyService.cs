@@ -41,18 +41,13 @@ namespace Catalogue.Data.Write
 
         public void Import(List<MetadataKeyword> keywords)
         {
-            // really specifically for import, adds the keywords
+            // (specifically for imports) adds the keywords to existing controlled vocabs
             foreach (var source in SeparateKeywordsIntoVocabularies(keywords))
             {
                 var vocabulary = db.Load<Vocabulary>(source.Id);
 
-                if (vocabulary == null)
+                if (vocabulary != null && vocabulary.Controlled)
                 {
-                    Insert(source);
-                }
-                else
-                {
-                    // the vocab already exists, so just add any new keywords
                     var newKeywords = source.Keywords.Except(vocabulary.Keywords);
                     vocabulary.Keywords.AddRange(newKeywords);
                     db.Store(vocabulary);

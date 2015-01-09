@@ -11,6 +11,7 @@ namespace Catalogue.Gemini.Model
         public string PublicationDate { get; set; }
 
         public bool Publishable { get; set; } // is this a vocabulary of publishable keywords?
+        public bool Controlled { get; set; }
      
         public List<VocabularyKeyword> Keywords { get; set; }
     }

@@ -22,6 +22,13 @@ namespace Catalogue.Data.Import
         readonly IVocabularyService vocabularyService;
 
         public bool SkipBadRecords { get; set; }
+
+        /// <summary>
+        /// Import keywords in the source records to existing matching controlled vocabularies.
+        /// Used by the seeder for convenience and may be useful in future.
+        /// </summary>
+        public bool ImportKeywords { get; set; }
+
         public readonly RecordValidationIssueSet Failures = new RecordValidationIssueSet();
 
         public Importer(IFileSystem fileSystem, IRecordService recordService, IVocabularyService vocabularyService)
@@ -68,10 +75,11 @@ namespace Catalogue.Data.Import
                 keywords.AddRange(result.Record.Gemini.Keywords);
             }
 
-            vocabularyService.Import(keywords);
+            if (ImportKeywords)
+            {
+                vocabularyService.Import(keywords);
+            }
         }
-
-
     }
 
     /// <summary>
