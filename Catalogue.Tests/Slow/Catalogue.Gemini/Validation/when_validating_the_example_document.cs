@@ -38,29 +38,5 @@ namespace Catalogue.Tests.Slow.Catalogue.Gemini.Validation
                 .Valid
                 .Should().BeTrue();
         }
-
-        /// <summary>
-        ///     This doesn't do anything yet, nto sure if it should as we have topcat specific validation
-        ///     Ceh just checks for gemini compatible xsd ? Not actual values afaik so far.
-        /// </summary>
-        [Test]
-        public void should_not_be_valid_gemini()
-        {
-            // without this we get an error message 417
-            // http://stackoverflow.com/questions/566437/http-post-returns-the-error-417-expectation-failed-c
-            ServicePointManager.Expect100Continue = false;
-            // start with the example document
-            Metadata metadata = Library.Example();
-
-            // ...encode it into xml
-            XDocument doc = new XmlEncoder().Create(new Guid("b97aac01-5e5d-4209-b626-514e40245bc1"), metadata);
-
-            // ...validate it with the CEH validator
-//            var result = new Validator().Validate(doc);
-
-//            result.Results.Single(r => r.Validation.StartsWith("GEMINI2"))
-//                .Valid
-//                .Should().BeFalse();
-        }
     }
 }

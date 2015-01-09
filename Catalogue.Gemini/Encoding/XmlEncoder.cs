@@ -34,7 +34,7 @@ namespace Catalogue.Gemini.Encoding
                     new XAttribute(XNamespace.Xmlns + "gco", gco.NamespaceName),
                     new XAttribute(XNamespace.Xmlns + "gml", gml.NamespaceName),
                     MakeFileIdentifier(id),
-                    MakeMetadataLanguage(m),
+                    MakeDatasetLanguage(m), // continually confused with MetadataLanguage
                     MakeResourceType(m),
                     MakeMetadataPointOfContact(m),
                     MakeMetadataDate(m),
@@ -93,16 +93,7 @@ namespace Catalogue.Gemini.Encoding
         XElement MakeMetadataDate(Metadata metadata)
         {
             return new XElement(gmd + "dateStamp",
-                new XElement(gco + "Date",metadata.MetadataDate.ToString(@"yyyy-MM-dd")));
-        }
-
-        XElement MakeMetadataLanguage(Metadata metadata)
-        {
-            return new XElement(gmd + "language",
-                new XElement(gmd + "LanguageCode",
-                    new XAttribute("codeList", "http://www.loc.gov/standards/iso639-2/php/code_list.php"),
-                    new XAttribute("codeListValue", "eng"),
-                    "eng"));
+                new XElement(gco + "Date", metadata.MetadataDate.ToString("yyyy-MM-dd")));
         }
 
         XElement MakeDatasetReferenceDate(Metadata metadata)
