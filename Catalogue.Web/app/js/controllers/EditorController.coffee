@@ -1,7 +1,7 @@
 ﻿angular.module('app.controllers').controller 'EditorController',
 
     ($scope, $http, $routeParams, $location, record, Record) -> 
-        # todo lookups should be injected
+    
         $scope.lookups = {}
         $scope.lookups.currentDataFormat = {}
         $scope.lookups.languages = [ 
@@ -33,6 +33,7 @@
             $scope.lookups.currentDataFormat = getDataFormatObj $scope.form.gemini.dataFormat, $scope.lookups.formats
             $scope.notifications.add 'Edits cancelled'
         
+        # todo er, what's this?!
         $scope.open = ($event, elem) ->
             $event.preventDefault();
             $event.stopPropagation();
@@ -67,8 +68,6 @@
                 $http.post('../api/records', $scope.form).then processResult
 
         $scope.reset = -> 
-            record.gemini.metadataPointOfContact.name = $scope.user.displayName
-            record.gemini.metadataPointOfContact.email = $scope.user.email
             $scope.form = angular.copy(record)
             
         $scope.isClean = -> angular.equals($scope.form, record)
@@ -99,11 +98,7 @@
             response.data
         
         $scope.setKeyword = ($item, keyword) ->
-            console.log($item)
             keyword.vocab = $item.vocab
-            console.log(keyword)
-            
-        
 
 
 getSecurityText = (n) -> switch n

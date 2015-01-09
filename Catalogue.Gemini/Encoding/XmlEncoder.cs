@@ -34,7 +34,7 @@ namespace Catalogue.Gemini.Encoding
                     new XAttribute(XNamespace.Xmlns + "gco", gco.NamespaceName),
                     new XAttribute(XNamespace.Xmlns + "gml", gml.NamespaceName),
                     MakeFileIdentifier(id),
-                    MetadataLanguage.Make(m),
+                    MakeMetadataLanguage(m),
                     MakeResourceType(m),
                     MakeMetadataPointOfContact(m),
                     MakeMetadataDate(m),
@@ -62,23 +62,12 @@ namespace Catalogue.Gemini.Encoding
                     MakeLineage(m)));
         }
 
-        public XDocument Update(XDocument doc, Metadata metadata)
-        {
-            var d = new XDocument(doc);
-
-            MetadataLanguage.Set(d, metadata);
-
-            return d;
-        }
-
-
         #region Elements
 
         XElement MakeFileIdentifier(Guid id)
         {
             return new XElement(gmd + "fileIdentifier", new XElement(gco + "CharacterString", id));
         }
-
 
         XElement MakeResourceType(Metadata metadata)
         {
@@ -105,6 +94,15 @@ namespace Catalogue.Gemini.Encoding
         {
             return new XElement(gmd + "dateStamp",
                 new XElement(gco + "Date",metadata.MetadataDate.ToString(@"yyyy-MM-dd")));
+        }
+
+        XElement MakeMetadataLanguage(Metadata metadata)
+        {
+            return new XElement(gmd + "language",
+                new XElement(gmd + "LanguageCode",
+                    new XAttribute("codeList", "http://www.loc.gov/standards/iso639-2/php/code_list.php"),
+                    new XAttribute("codeListValue", "eng"),
+                    "eng"));
         }
 
         XElement MakeDatasetReferenceDate(Metadata metadata)
@@ -184,13 +182,13 @@ namespace Catalogue.Gemini.Encoding
         
         XElement MakeDatasetLanguage(Metadata metadata)
         {
-            // this is required unfortunately by ISO19115 but not Gemini - default to metadata language  
+            // this is required unfortunately by ISO19115 but not Gemini - default to eng
             
             return new XElement(gmd + "language",
                 new XElement(gmd + "LanguageCode",
                     new XAttribute("codeList", "http://www.loc.gov/standards/iso639-2/php/code_list.php"),
-                    new XAttribute("codeListValue", metadata.MetadataLanguage),
-                    metadata.MetadataLanguage));
+                    new XAttribute("codeListValue", "eng"),
+                    "eng"));
         }
 
         XElement MakeTopicCategory(Metadata metadata)
@@ -273,40 +271,5 @@ namespace Catalogue.Gemini.Encoding
         }
 
         #endregion
-
-
-        // experimental.. seeing how we could update the xml document if necessary
-
-        static class MetadataLanguage
-        {
-            public static XElement Make(Metadata m)
-            {
-                return new XElement(gmd + "language",
-                    new XElement(gmd + "LanguageCode",
-                        new XAttribute("codeList", "http://www.loc.gov/standards/iso639-2/php/code_list.php"),
-                        new XAttribute("codeListValue", m.MetadataLanguage.ToString()),
-                        m.MetadataLanguage));
-            }
-
-            static readonly string xpath = "//*/gmd:language/gmd:LanguageCode";
-
-            public static string Get(XDocument doc)
-            {
-                // todo use this Get to test out reading from the xml
-                // we will have to read from the xml each time i guess??
-                // can't rely on the metadata record in raven. it's only for indexing.
-                // inex the record, defer to the xml for reading i guess.
-                return doc.XPath(xpath).Value;
-            }
-
-            public static void Set(XDocument doc, Metadata m)
-            {
-                var e = doc.XPath(xpath);
-                e.SetAttributeValue("codeListValue", m.MetadataLanguage);
-                e.SetValue(m.MetadataLanguage);
-            }
-        }
-    
     }
-
 }

@@ -129,7 +129,7 @@
                     </span>
                     <button id="keywordsBtn" class="btn btn-sm btn-dialogue" tc-tip title="Edit tags (keywords)"
                             ng-click="keywordEditorOpen = !keywordEditorOpen">&bull;&bull;&bull;</button>                    
-                    <label ng-hide="form.gemini.keywords" for="keywordsBtn">Add keywords</label>
+                    <label ng-hide="form.gemini.keywords" for="keywordsBtn">Keywords</label>
                 </div>
                 
                 
@@ -353,13 +353,13 @@
                                 <div class="form-group">
                                     <label for="metadataPointofContactNameDiv" class="col-md-2 control-label">Name</label>
                                     <div id="metadataPointofContactNameDiv" class="col-md-10">
-                                        <input class="form-control" type="text" ng-model="form.gemini.metadataPointOfContact.name" placeholder="Metadata Point of Contact Name" title="The name of the point of contact responsible for this metadata" tc-focus-tip />
+                                        <input class="form-control" type="text" ng-model="form.gemini.metadataPointOfContact.name" placeholder="Metadata Point of Contact Name" title="The name of the contact for this record" tc-focus-tip />
                                     </div>
                                 </div>
                                 <div class="form-group">
                                     <label for="metadataPointofContactEmailDiv" class="col-md-2 control-label">Email</label>
                                     <div id="metadataPointofContactEmailDiv" class="col-md-10">
-                                        <input class="form-control" type="text" ng-model="form.gemini.metadataPointOfContact.email" title="An email for the point of contact for this metadata" tc-focus-tip />
+                                        <input class="form-control" type="text" ng-model="form.gemini.metadataPointOfContact.email" title="An email for the contact for this record" tc-focus-tip />
                                     </div>
                                 </div>
                                 <div class="form-group">
@@ -399,20 +399,7 @@
                                     </span>
                                 </div>
                             </div>
-                            <div class="col-md-6">
-                                <label for="language" class="col-md-6 control-label" style="text-align:left;">Metadata Language</label>
-                                <div id="language" class="col-md-6">
-                                    <div class="form-group text-left selectContainer">
-                                        <select
-                                            ng-model="form.gemini.metadataLanguage"
-                                            ng-options="language.code as language.text for language in lookups.languages"
-                                            class="form-control"
-                                            title="Language used for documenting the metadata">
-                                            <option value="" disabled selected style="display: none">Metadata Language</option>
-                                        </select>
-                                    </div>
-                                </div>
-                            </div>
+
                         </div>
 
                     </div>

@@ -120,7 +120,6 @@ namespace Catalogue.Data.Import.Mappings
                     
                 }
                     );
-                Map(m => m.MetadataLanguage);
                 Map(m => m.MetadataPointOfContact).ConvertUsing(row =>
                 {
                     string name = row.GetField("MetadataPOCName");

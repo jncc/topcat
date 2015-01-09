@@ -62,7 +62,6 @@
     <Compile Include="DataFormats\DataFormats.cs" />
     <Compile Include="Encoding\Ns.cs" />
     <Compile Include="Encoding\when_creating_document_from_blank_record.cs" />
-    <Compile Include="Encoding\when_updating_the_metadata_language.cs" />
     <Compile Include="Encoding\XmlEncoder.cs" />
     <Compile Include="Encoding\XPathExtensions.cs" />
     <Compile Include="Helpers\Extensions.cs" />

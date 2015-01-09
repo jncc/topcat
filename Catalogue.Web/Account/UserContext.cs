@@ -54,4 +54,10 @@ namespace Catalogue.Web.Code.Account
             get { return principal.Identity.IsAuthenticated; }
         }
     }
+
+    public class TestUserContext : IUserContext
+    {
+        public User User { get { return new User("Test User", "Tester", "tester@example.com");  } }
+        public bool Authenticated { get { return true; } }
+    }
 }

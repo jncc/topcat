@@ -14,7 +14,6 @@ namespace Catalogue.Gemini.Model
         public List<MetadataKeyword> Keywords { get; set; }
         public TemporalExtent TemporalExtent { get; set; }
         public DateTime DatasetReferenceDate { get; set; } // / this should be changed to a collection for creation/publication/revision
-        public SupportedLanguage DatasetLanguage { get; set; }
         public string Lineage { get; set; }
 //      public decimal SpatialResolution { get; set; } // todo we'll probably need this https://wiki.ceh.ac.uk/display/cehigh/Spatial+resolution
         public string ResourceLocator { get; set; }
@@ -26,7 +25,6 @@ namespace Catalogue.Gemini.Model
         public string SpatialReferenceSystem { get; set; }
         public List<Extent> Extent { get; set; } // support multiple locations; use same UI as keywords
         public DateTime MetadataDate { get; set; }
-        public SupportedLanguage MetadataLanguage { get; set; }
         
         public ResponsibleParty MetadataPointOfContact { get; set; }
         public string ResourceType { get; set; }  // dataset | series | service

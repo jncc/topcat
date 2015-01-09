@@ -85,8 +85,6 @@
       }
     };
     $scope.reset = function() {
-      record.gemini.metadataPointOfContact.name = $scope.user.displayName;
-      record.gemini.metadataPointOfContact.email = $scope.user.email;
       return $scope.form = angular.copy(record);
     };
     $scope.isClean = function() {
@@ -132,9 +130,7 @@
       });
     };
     return $scope.setKeyword = function($item, keyword) {
-      console.log($item);
-      keyword.vocab = $item.vocab;
-      return console.log(keyword);
+      return keyword.vocab = $item.vocab;
     };
   });
 
@@ -195,3 +191,5 @@
   };
 
 }).call(this);
+
+//# sourceMappingURL=EditorController.js.map

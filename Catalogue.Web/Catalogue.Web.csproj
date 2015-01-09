@@ -444,6 +444,11 @@
     <Content Include="app\lib\angular-1.2.28\angular-sanitize.min.js.map" />
     <Content Include="app\lib\angular-1.2.28\angular.min.js.map" />
   </ItemGroup>
+  <ItemGroup>
+    <Content Include="app\js\controllers\EditorController.js.map">
+      <DependentUpon>EditorController.js</DependentUpon>
+    </Content>
+  </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>

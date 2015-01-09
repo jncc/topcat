@@ -23,6 +23,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Gemini.Validation
             // without this we get an error message 417
             // http://stackoverflow.com/questions/566437/http-post-returns-the-error-417-expectation-failed-c
             ServicePointManager.Expect100Continue = false;
+
             // start with the example document
             Metadata metadata = Library.Example();
 
@@ -31,6 +32,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Gemini.Validation
 
             // ...validate it with the CEH validator
             ValidationResultSet result = new Validator().Validate(doc);
+
             // IGNORE MEDIN VALIDATION ERRORS
             result.Results.Single(r => r.Validation.StartsWith("GEMINI2"))
                 .Valid

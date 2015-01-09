@@ -15,7 +15,7 @@ namespace Catalogue.Gemini.Templates
     public static class Library
     {
         /// <summary>
-        /// This is the important template, used for creating new records. (todo)
+        /// A blank template, used for creating new records.
         /// </summary>
         public static Metadata Blank()
         {
@@ -29,22 +29,21 @@ namespace Catalogue.Gemini.Templates
 
 
                 TemporalExtent = new TemporalExtent { Begin = new DateTime(), End = new DateTime() },
-                DatasetReferenceDate = System.DateTime.Now,
+                DatasetReferenceDate = new DateTime(),
                 Lineage = "",
                 ResourceLocator = "",
                 DataFormat = "",
                 ResponsibleOrganisation = new ResponsibleParty
                 {
-                    Name = "Joint Nature Conservation Committee (JNCC)",
-                    Email = "data@jncc.gov.uk",
-                    Role = "distributor",
+                    Name = "",
+                    Email = "",
+                    Role = "",
                 },
                 LimitationsOnPublicAccess = "",
                 UseConstraints = "",
                 SpatialReferenceSystem = "",
                 Extent = new List<Extent>(),
                 MetadataDate = new DateTime(),
-//TODO                MetadataLanguage = new CultureInfo.Get,
                 MetadataPointOfContact = new ResponsibleParty
                 {
                     Name = "",
@@ -91,7 +90,6 @@ namespace Catalogue.Gemini.Templates
                 SpatialReferenceSystem = "http://www.opengis.net/def/crs/EPSG/0/4326",
                 Extent = new StringPairList { { "", "Bermuda" } }.ToExtentList(),
                 MetadataDate = Convert.ToDateTime("2013-07-16"),
-                MetadataLanguage = SupportedLanguage.eng,
                 MetadataPointOfContact = new ResponsibleParty
                 {
                     Name = "Joint Nature Conservation Committee (JNCC)",

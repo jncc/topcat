@@ -19,7 +19,6 @@ namespace Catalogue.Data.Write
 {
     public interface IRecordService
     {
-        Record Load(Guid id);
         RecordServiceResult Insert(Record record);
         RecordServiceResult Update(Record record);
     }
@@ -33,11 +32,6 @@ namespace Catalogue.Data.Write
         {
             this.db = db;
             this.validator = validator;
-        }
-
-        public Record Load(Guid id)
-        {
-            return db.Load<Record>(id);
         }
 
         public RecordServiceResult Insert(Record record)

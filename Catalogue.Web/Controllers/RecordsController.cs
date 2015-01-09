@@ -4,8 +4,10 @@ using System.Linq;
 using System.Web.Http;
 using Catalogue.Data.Model;
 using Catalogue.Data.Write;
+using Catalogue.Gemini.Model;
 using Catalogue.Gemini.Templates;
 using Catalogue.Utilities.Clone;
+using Catalogue.Web.Code.Account;
 using FluentAssertions;
 using Moq;
 using NUnit.Framework;
@@ -17,11 +19,13 @@ namespace Catalogue.Web.Controllers.Records
     {
         readonly IDocumentSession db;
         readonly IRecordService service;
+        private readonly IUserContext user;
 
-        public RecordsController(IRecordService service, IDocumentSession db)
+        public RecordsController(IRecordService service, IDocumentSession db, IUserContext user)
         {
             this.service = service;
             this.db = db;
+            this.user = user;
         }
 
         // GET api/records/57d34691-9064-4c1e-90a7-7b0c112daa8d (get a record)
@@ -29,18 +33,9 @@ namespace Catalogue.Web.Controllers.Records
         public Record Get(Guid id)
         {
             if (id == Guid.Empty) // a nice empty record for making a new one
-            {
-                return new Record
-                    {
-                        Id = Guid.Empty,
-                        Gemini = Library.Blank(),
-                        Review = DateTime.Now
-                    };
-            }
+                return MakeNewRecord();
             else
-            {
-                return service.Load(id);
-            }
+                return db.Load<Record>(id);
         }
 
         // PUT api/records/57d34691-9064-4c1e-90a7-7b0c112daa8d (update/replace a record)
@@ -69,6 +64,30 @@ namespace Catalogue.Web.Controllers.Records
             return result;
         }
 
+        Record MakeNewRecord()
+        {
+            return new Record
+            {
+                Id = Guid.Empty,
+                Gemini = Library.Blank().With(r =>
+                    {
+                        r.ResponsibleOrganisation = new ResponsibleParty
+                            {
+                                Name = "Joint Nature Conservation Committee (JNCC)",
+                                Email = "data@jncc.gov.uk",
+                                Role = "distributor",
+                            };
+                        r.MetadataDate = DateTime.Now.Date;
+                        r.MetadataPointOfContact = new ResponsibleParty
+                            {
+                                Name = user.User.DisplayName,
+                                Email = user.User.Email,
+                                Role = "author", // it's a new record, so let's suppose the user must be the metadata author
+                            };
+                    }),
+                    Review = DateTime.Now.AddYears(3) // arbitrarily decided to default to 3 years from now
+                };
+        }
     }
 
     public class records_controllers_tests
@@ -76,7 +95,7 @@ namespace Catalogue.Web.Controllers.Records
         [Test]
         public void should_return_blank_record_for_empty_guid()
         {
-            var controller = new RecordsController(Mock.Of<IRecordService>(), Mock.Of<IDocumentSession>());
+            var controller = new RecordsController(Mock.Of<IRecordService>(), Mock.Of<IDocumentSession>(), new TestUserContext());
             var record = controller.Get(Guid.Empty);
 
             record.Gemini.Title.Should().BeBlank();
@@ -93,7 +112,7 @@ namespace Catalogue.Web.Controllers.Records
                 };
             var rsr = RecordServiceResult.SuccessfulResult.With(r => r.Record = record);
             var service = Mock.Of<IRecordService>(s => s.Insert(It.IsAny<Record>()) == rsr);
-            var controller = new RecordsController(service, Mock.Of<IDocumentSession>());
+            var controller = new RecordsController(service, Mock.Of<IDocumentSession>(), new TestUserContext());
             
             var result = controller.Post(record);
 
