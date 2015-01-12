@@ -92,6 +92,7 @@
   <ItemGroup>
     <Compile Include="Data\Import\ImporterTest.cs" />
     <Compile Include="Explicit\ad_hoc_queries.cs" />
+    <Compile Include="Explicit\Catalogue.Data\Export\octonaughts_lets_do_this.cs" />
     <Compile Include="Explicit\Catalogue.Import\import_runner.cs" />
     <Compile Include="Explicit\exploratory_search_tests.cs" />
     <Compile Include="Explicit\feasibility_tests.cs" />
@@ -117,9 +118,7 @@
     <None Include="app.config" />
     <None Include="packages.config" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Explicit\Catalogue.Data\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <ProjectReference Include="..\Catalogue.Data\Catalogue.Data.csproj">
       <Project>{3ad6b61c-cab1-4cc4-8895-ba2dd3b58c59}</Project>

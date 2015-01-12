@@ -180,11 +180,6 @@ namespace Catalogue.Data.Write
                 recordValidationResult.Errors.Add("Name of responsible organisation must be provided" + GeminiSuffix,
                         r => r.Gemini.ResponsibleOrganisation.Name);
             }
-            if (!record.Gemini.ResponsibleOrganisation.Role.Equals("distributor"))
-            {
-                recordValidationResult.Errors.Add("Distributor must be provided" + GeminiSuffix,
-                        r => r.Gemini.ResponsibleOrganisation.Role);
-            }
 
             // 24 frequency of update is optional
              

@@ -1,12 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
+﻿using System.Linq;
 using System.Net;
-using System.Text;
-using System.Threading.Tasks;
 using System.Xml.Linq;
-using System.Xml.Serialization;
+using Catalogue.Utilities.Xml;
 
 namespace Catalogue.Gemini.Validation
 {
@@ -33,8 +28,10 @@ namespace Catalogue.Gemini.Validation
             var c = new WebClient();
             c.Headers[HttpRequestHeader.ContentType] = "application/vnd.iso.19139+xml";
             c.Headers[HttpRequestHeader.Accept] = "application/xml";
-            
-            return c.UploadString("http://metacheck.nerc-lancaster.ac.uk/validator", doc.ToString());
+
+            // ceh validator seems to fail with utf-16 documents
+            string s = doc.ToUtf8DocumentString();
+            return c.UploadString("http://metacheck.nerc-lancaster.ac.uk/validator", s);
         }
 
         ValidationResultSet ParseCehResult(string cehResult)
