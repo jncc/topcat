@@ -175,6 +175,7 @@
     <Compile Include="Admin\Keywords\KeywordsService.cs" />
     <Compile Include="Admin\Vocabularies\VocabulariesController.cs" />
     <Compile Include="Admin\Vocabularies\VocabularyListController.cs" />
+    <Compile Include="Controllers\Download\DownloadController.cs" />
     <Compile Include="Search\Controllers\VocabularyTypeaheadController.cs" />
     <Compile Include="Controllers\RolesController.cs" />
     <Compile Include="Import\ImportController.cs" />

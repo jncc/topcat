@@ -32,7 +32,6 @@ namespace Catalogue.Tests.Explicit.Catalogue.Data.Export
 
             var xml = new global::Catalogue.Gemini.Encoding.XmlEncoder().Create(new Guid("a92a3e00-2ff6-4270-b19e-377c7d542d7c"), Library.Example());
             var ceh = new global::Catalogue.Gemini.Validation.Validator().Validate(xml);
-            ceh.Results.
         }
     }
 }

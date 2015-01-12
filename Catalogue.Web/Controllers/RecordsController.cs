@@ -19,7 +19,7 @@ namespace Catalogue.Web.Controllers.Records
     {
         readonly IDocumentSession db;
         readonly IRecordService service;
-        private readonly IUserContext user;
+        readonly IUserContext user;
 
         public RecordsController(IRecordService service, IDocumentSession db, IUserContext user)
         {

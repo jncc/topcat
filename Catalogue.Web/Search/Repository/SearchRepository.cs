@@ -191,4 +191,4 @@ namespace Catalogue.Web.Search
             };
         }
     }
-}
+} 
