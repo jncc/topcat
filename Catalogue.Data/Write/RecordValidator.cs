@@ -25,7 +25,7 @@ namespace Catalogue.Data.Write
 
     public class RecordValidator : IRecordValidator
     {
-        private const string GeminiSuffix =  " (Gemini Compatibility).";
+        private const string GeminiSuffix =  " (Gemini)";
 
         private readonly IVocabularyService vocabService;
 

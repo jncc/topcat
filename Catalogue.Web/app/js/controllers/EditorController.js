@@ -4,27 +4,6 @@
   angular.module('app.controllers').controller('EditorController', function($scope, $http, $routeParams, $location, record, Record) {
     $scope.lookups = {};
     $scope.lookups.currentDataFormat = {};
-    $scope.lookups.languages = [
-      {
-        code: 'eng',
-        text: 'English'
-      }, {
-        code: 'cym',
-        text: 'Welsh'
-      }, {
-        code: 'gle',
-        text: 'Gaelic (Irish)'
-      }, {
-        code: 'gla',
-        text: 'Gaelic (Scottish)'
-      }, {
-        code: 'cor',
-        text: 'Cornish'
-      }, {
-        code: 'sco',
-        text: 'Ulster Scots'
-      }
-    ];
     $http.get('../api/topics').success(function(result) {
       return $scope.lookups.topics = result;
     });
@@ -65,13 +44,14 @@
           errors = response.data.validation.errors;
           if (errors.length > 0) {
             $scope.notifications.add('There were errors');
-          }
-          for (_i = 0, _len = errors.length; _i < _len; _i++) {
-            e = errors[_i];
-            _ref = e.fields;
-            for (_j = 0, _len1 = _ref.length; _j < _len1; _j++) {
-              field = _ref[_j];
-              $scope.theForm[field].$setValidity('server', false);
+            console.log(errors);
+            for (_i = 0, _len = errors.length; _i < _len; _i++) {
+              e = errors[_i];
+              _ref = e.fields;
+              for (_j = 0, _len1 = _ref.length; _j < _len1; _j++) {
+                field = _ref[_j];
+                $scope.theForm[field].$setValidity('server', false);
+              }
             }
           }
         }
@@ -191,5 +171,3 @@
   };
 
 }).call(this);
-
-//# sourceMappingURL=EditorController.js.map

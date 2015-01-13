@@ -4,14 +4,7 @@
     
         $scope.lookups = {}
         $scope.lookups.currentDataFormat = {}
-        $scope.lookups.languages = [ 
-            {code:'eng', text:'English'},
-            {code:'cym', text:'Welsh'},
-            {code:'gle', text:'Gaelic (Irish)'},
-            {code:'gla', text:'Gaelic (Scottish)'},
-            {code:'cor', text:'Cornish'},
-            {code:'sco', text:'Ulster Scots'}
-        ];
+
         
         $http.get('../api/topics').success (result) -> $scope.lookups.topics = result
         $http.get('../api/formats?q=').success (result) -> 
@@ -42,25 +35,27 @@
     
         $scope.save = ->
             processResult = (response) ->
-                    if response.data.success
-                        record = response.data.record # oo-er, is updating a param a good idea?
-                        $scope.validation = {}
-                        $scope.reset()
-                        $scope.notifications.add 'Edits saved'
-                        $location.path('/editor/' + record.id)
-                    else
-                        $scope.validation = response.data.validation
-                        # tell the form that fields are invalid
-                        errors = response.data.validation.errors
-                        if errors.length > 0
-                            $scope.notifications.add 'There were errors'
+                if response.data.success
+                    record = response.data.record # oo-er, is updating a param a good idea?
+                    $scope.validation = {}
+                    $scope.reset()
+                    $scope.notifications.add 'Edits saved'
+                    $location.path('/editor/' + record.id)
+                else
+                    $scope.validation = response.data.validation
+                    # tell the form that fields are invalid
+                    errors = response.data.validation.errors
+                    if errors.length > 0
+                        $scope.notifications.add 'There were errors'
+                        console.log errors
                         for e in errors
                             for field in e.fields
                                 $scope.theForm[field].$setValidity('server', false)                                
                                 
-                    $scope.busy.stop()
+                $scope.busy.stop()
 
             $scope.busy.start()
+
             if $routeParams.recordId isnt '00000000-0000-0000-0000-000000000000'
                 # todo use resource Record.update ??
                 $http.put('../api/records/' + record.id, $scope.form).then processResult
