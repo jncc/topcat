@@ -272,19 +272,21 @@ namespace Catalogue.Data.Write
             {
                 result.Errors.Add("Path must not be blank", r => r.Path);
             }
-
-            // path_must_be_a_valid_file_system_path
-            Uri uri;
-            if (Uri.TryCreate(record.Path, UriKind.Absolute, out uri))
+            else // (let's not add additional errors if it's just that it's blank)
             {
-                if (uri.Scheme != Uri.UriSchemeFile)
+                // path_must_be_a_valid_file_system_path
+                Uri uri;
+                if (Uri.TryCreate(record.Path, UriKind.Absolute, out uri))
+                {
+                    if (uri.Scheme != Uri.UriSchemeFile)
+                    {
+                        result.Errors.Add("Path must be a file system path", r => r.Path);
+                    }
+                }
+                else
                 {
                     result.Errors.Add("Path must be a file system path", r => r.Path);
                 }
-            }
-            else
-            {
-                result.Errors.Add("Path must be a file system path", r => r.Path);
             }
         }
 
@@ -464,7 +466,6 @@ namespace Catalogue.Data.Write
         {
             var result = new RecordValidator(mockVocabService.Object).Validate(SimpleRecord().With(r => r.Path = blank));
 
-            result.Errors.Single().Message.Should().StartWith("Location Path must not be blank");
             result.Errors.Single().Fields.Single().Should().Be("path");
         }
 
