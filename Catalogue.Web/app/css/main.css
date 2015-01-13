@@ -83,6 +83,9 @@ hr {
   left: auto !important;
   right: 0px;
 }
+label {
+  font-weight: normal;
+}
 .header {
   display: table;
   width: 100%;
