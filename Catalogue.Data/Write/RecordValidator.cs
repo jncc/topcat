@@ -38,18 +38,8 @@ namespace Catalogue.Data.Write
         {
             var result = new RecordValidationResult();
 
-            // path_must_not_be_blank
-            if (record.Path.IsBlank())
-            {
-                result.Errors.Add("Location Path must not be blank", r => r.Path);
-            }
-
-            // title_must_not_be_blank
-            if (record.Gemini.Title.IsBlank())
-            {
-                result.Errors.Add("Title must not be blank", r => r.Gemini.Title);
-            }
-
+            ValidatePath(record, result);
+            ValidateTitle(record, result);
             ValidateTopicCategory(record, result);
             ValidateResourceLocator(record, result);
             ValidateResponsibleOrganisation(record, result);
@@ -79,7 +69,7 @@ namespace Catalogue.Data.Write
             return result;
         }
 
-        private void PerformGeminiValidation(Record record, RecordValidationResult recordValidationResult)
+        void PerformGeminiValidation(Record record, RecordValidationResult recordValidationResult)
         {
             // structured to match the gemini doc
 
@@ -275,13 +265,44 @@ namespace Catalogue.Data.Write
 //
 //        }
 
-        private void ValidateResourceLocator(Record record, RecordValidationResult result)
+        void ValidatePath(Record record, RecordValidationResult result)
+        {
+            // path_must_not_be_blank
+            if (record.Path.IsBlank())
+            {
+                result.Errors.Add("Path must not be blank", r => r.Path);
+            }
+
+            // path_must_be_a_valid_file_system_path
+            Uri uri;
+            if (Uri.TryCreate(record.Path, UriKind.Absolute, out uri))
+            {
+                if (uri.Scheme != Uri.UriSchemeFile)
+                {
+                    result.Errors.Add("Path must be a file system path", r => r.Path);
+                }
+            }
+            else
+            {
+                result.Errors.Add("Path must be a file system path", r => r.Path);
+            }
+        }
+
+        void ValidateTitle(Record record, RecordValidationResult result)
+        {
+            // title_must_not_be_blank
+            if (record.Gemini.Title.IsBlank())
+            {
+                result.Errors.Add("Title must not be blank", r => r.Gemini.Title);
+            }
+        }
+
+        void ValidateResourceLocator(Record record, RecordValidationResult result)
         {
             // resource_locator_must_be_a_well_formed_http_url
             if (record.Gemini.ResourceLocator.IsNotBlank())
             {
                 Uri url;
-
                 if (Uri.TryCreate(record.Gemini.ResourceLocator, UriKind.Absolute, out url))
                 {
                     if (url.Scheme != Uri.UriSchemeHttp)
@@ -298,7 +319,7 @@ namespace Catalogue.Data.Write
             }
         }
 
-        private void ValidateTopicCategory(Record record, RecordValidationResult result)
+        void ValidateTopicCategory(Record record, RecordValidationResult result)
         {
             // topic_category_must_be_valid
 
@@ -311,7 +332,7 @@ namespace Catalogue.Data.Write
             }
         }
 
-        private void ValidateResponsibleOrganisation(Record record, RecordValidationResult result)
+        void ValidateResponsibleOrganisation(Record record, RecordValidationResult result)
         {
             // responsible_organisation_role_must_be_an_allowed_role
             var role = record.Gemini.ResponsibleOrganisation.Role;
@@ -322,7 +343,7 @@ namespace Catalogue.Data.Write
             }
         }
 
-        private void ValidateMetadataPointOfContact(Record record, RecordValidationResult result)
+        void ValidateMetadataPointOfContact(Record record, RecordValidationResult result)
         {
             // metadata_point_of_contact_role_must_be_an_allowed_role
             var role = record.Gemini.MetadataPointOfContact.Role;
@@ -333,7 +354,7 @@ namespace Catalogue.Data.Write
             }
         }
 
-        private void ValidateResourceType(Record record, RecordValidationResult result)
+        void ValidateResourceType(Record record, RecordValidationResult result)
         {
             // resource type must be a valid Gemini resource type if not blank
             var resourceType = record.Gemini.ResourceType;
@@ -444,6 +465,14 @@ namespace Catalogue.Data.Write
             var result = new RecordValidator(mockVocabService.Object).Validate(SimpleRecord().With(r => r.Path = blank));
 
             result.Errors.Single().Message.Should().StartWith("Location Path must not be blank");
+            result.Errors.Single().Fields.Single().Should().Be("path");
+        }
+
+        [Test]
+        public void path_must_be_a_valid_file_system_path()
+        {
+            var result = new RecordValidator(mockVocabService.Object).Validate(SimpleRecord().With(r => r.Path = "not a path"));
+
             result.Errors.Single().Fields.Single().Should().Be("path");
         }
 
