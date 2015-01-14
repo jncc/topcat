@@ -328,11 +328,6 @@
     <Content Include="app\lib\respond-1.2.0\test\unit\test2.css" />
     <Content Include="app\lib\respond-1.2.0\test\unit\test3.css" />
     <Content Include="app\lib\respond-1.2.0\test\unit\tests.js" />
-    <Content Include="app\lib\silviomoreto-bootstrap-select-aeb60b3\bootstrap-select.css" />
-    <Content Include="app\lib\silviomoreto-bootstrap-select-aeb60b3\bootstrap-select.js" />
-    <Content Include="app\lib\silviomoreto-bootstrap-select-aeb60b3\bootstrap-select.min.css" />
-    <Content Include="app\lib\silviomoreto-bootstrap-select-aeb60b3\bootstrap-select.min.js" />
-    <Content Include="app\lib\silviomoreto-bootstrap-select-aeb60b3\test.html" />
     <Content Include="app\lib\zeroclipboard-1.1.7\ZeroClipboard.min.js" />
     <Content Include="app\lib\zeroclipboard-1.1.7\ZeroClipboard.swf" />
     <Content Include="app\views\admin\admin.html" />
@@ -375,11 +370,6 @@
     <Content Include="app\lib\bootstrap-3.0.0\fonts\glyphicons-halflings-regular.svg" />
     <Content Include="app\lib\bootstrap-3.0.0\fonts\glyphicons-halflings-regular.ttf" />
     <Content Include="app\lib\bootstrap-3.0.0\fonts\glyphicons-halflings-regular.woff" />
-    <Content Include="app\lib\silviomoreto-bootstrap-select-aeb60b3\bootstrap-select.jquery.json" />
-    <Content Include="app\lib\silviomoreto-bootstrap-select-aeb60b3\bower.json" />
-    <Content Include="app\lib\silviomoreto-bootstrap-select-aeb60b3\CONTRIBUTING.md" />
-    <Content Include="app\lib\silviomoreto-bootstrap-select-aeb60b3\package.json" />
-    <Content Include="app\lib\silviomoreto-bootstrap-select-aeb60b3\README.md" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="app\js\services.coffee" />
