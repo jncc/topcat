@@ -274,13 +274,26 @@
                         </div>
 
 
+                        <div class="form-group text-left selectContainer">
+                            <select
+                                ng-model="form.topic"
+                                ng-options="topic.name for topic in lookups.topics"
+                                class="form-control"
+                                title="The main theme of the data resource">
+                                <option value="" disabled selected>Topic</option>
+                            </select>
+                        </div>
                         
+                        <ul class="dropdown-menu">
+                          <li><input type="checkbox" id="ID" name="NAME" value="VALUE"><label for="ID">Label</label></li>
+                          <!-- Other items -->
+                        </ul>
                         
                         <h3>Additional Information Source</h3>
 
                         
                         <!-- lineage -->
-                        <textarea id="Textarea1" type="text" ng-model="form.gemini.lineage" class="form-control"
+                        <textarea type="text" ng-model="form.gemini.lineage" class="form-control"
                                   rows="2"
                                   placeholder="Lineage"
                                   title="Information about the events or source data used in the construction of the data resource"

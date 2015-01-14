@@ -327,7 +327,7 @@ namespace Catalogue.Data.Write
 
             var s = record.Gemini.TopicCategory;
 
-            if (s.IsNotBlank() && !TopicCategories.Values.Keys.Any(k => k == s))
+            if (s.IsNotBlank() && !TopicCategories.Values.Any(c => c.Name == s))
             {
                 result.Errors.Add(String.Format("Topic Category '{0}' is not valid", record.Gemini.TopicCategory),
                     r => r.Gemini.TopicCategory);

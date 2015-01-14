@@ -176,6 +176,7 @@
     <Compile Include="Admin\Vocabularies\VocabulariesController.cs" />
     <Compile Include="Admin\Vocabularies\VocabularyListController.cs" />
     <Compile Include="Controllers\Download\DownloadController.cs" />
+    <Compile Include="Controllers\Topics\TopicsController.cs" />
     <Compile Include="Search\Controllers\VocabularyTypeaheadController.cs" />
     <Compile Include="Controllers\RolesController.cs" />
     <Compile Include="Import\ImportController.cs" />
@@ -195,8 +196,6 @@
     <Compile Include="Search\Controllers\SearchController.cs" />
     <Compile Include="Search\Controllers\KeywordSearchController.cs" />
     <Compile Include="Search\SearchOutputModel.cs" />
-    <Compile Include="Topics\TopicModel.cs" />
-    <Compile Include="Topics\TopicsController.cs" />
     <Compile Include="Validator\ValidatorController.cs" />
     <Compile Include="Validator\ValidatorInputModel.cs" />
     <Compile Include="Validator\ValidatorResult.cs" />
