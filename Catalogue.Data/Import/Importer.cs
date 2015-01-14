@@ -6,6 +6,8 @@ using Catalogue.Data.Import.Mappings;
 using Catalogue.Data.Model;
 using Catalogue.Data.Write;
 using Catalogue.Gemini.Model;
+using Catalogue.Gemini.Templates;
+using Catalogue.Utilities.Clone;
 using Catalogue.Utilities.Text;
 using CsvHelper;
 using CsvHelper.Configuration;
@@ -102,7 +104,13 @@ namespace Catalogue.Data.Import
         [SetUp]
         public void setup()
         {
-            recordService = Mock.Of<IRecordService>(rs => rs.Insert(It.IsAny<Record>()) == RecordServiceResult.SuccessfulResult);
+            var record = new Record
+                {
+                    Path = @"X:\some\path",
+                    Gemini = Library.Blank().With(m => m.Title = "Some new record")
+                };
+            var result = RecordServiceResult.SuccessfulResult.With(r => r.Record = record);
+            recordService = Mock.Of<IRecordService>(rs => rs.Insert(It.IsAny<Record>()) == result);
 
             string path = @"c:\some\path.csv";
             var fileSystem = Mock.Of<IFileSystem>(fs => fs.OpenReader(path) == new StringReader(testData));
