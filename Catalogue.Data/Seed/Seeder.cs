@@ -183,7 +183,7 @@ namespace Catalogue.Data.Seed
                             new VocabularyKeyword { Value = "Marine Human Activities" },
                         }
                 };
-            this.db.Store(jnccCategories);
+            db.Store(jnccCategories);
 
             var referenceManagerCode = new Vocabulary
                 {
@@ -197,17 +197,55 @@ namespace Catalogue.Data.Seed
                 };
             db.Store(referenceManagerCode);
 
-//            var referenceManagerCode = new Vocabulary
-//            {
-//                Id = "http://vocab.jncc.gov.uk/reference-manager-code",
-//                Name = "JNCC Reference Manager Code",
-//                Description = "A field for the Reference Manager code used within JNCC.",
-//                PublicationDate = "2013",
-//                Publishable = false,
-//                Controlled = false,
-//                Keywords = new List<VocabularyKeyword>()
-//            };
-//            db.Store(referenceManagerCode);
+            var meshOriginalSeabedClassification = new Vocabulary
+                {
+                    Id = "http://vocab.jncc.gov.uk/original-seabed-classification-system",
+                    Name = "Original Seabed Classification",
+                    Description = "Used by MESH",
+                    PublicationDate = "2013",
+                    Publishable = false,
+                    Controlled = true,
+                    Keywords = new List<VocabularyKeyword>()
+                };
+            db.Store(meshOriginalSeabedClassification);
+
+            var meshSeabedMapStatus = new Vocabulary
+                {
+                    Id = "http://vocab.jncc.gov.uk/seabed-map-status",
+                    Name = "Seabed Map Status",
+                    Description = "Used by MESH",
+                    PublicationDate = "2013",
+                    Publishable = false,
+                    Controlled = true,
+                    Keywords = new List<VocabularyKeyword>()
+                };
+            db.Store(meshSeabedMapStatus);
+
+            var meshSeabedSurveyPurpose = new Vocabulary
+            {
+                Id = "http://vocab.jncc.gov.uk/seabed-survey-purpose",
+                Name = "Seabed Survey Purpose",
+                Description = "Used by MESH",
+                PublicationDate = "2013",
+                Publishable = false,
+                Controlled = true,
+                Keywords = new List<VocabularyKeyword>()
+            };
+            db.Store(meshSeabedSurveyPurpose);
+
+            var meshSeabedSurveyTechnique = new Vocabulary
+            {
+                Id = "http://vocab.jncc.gov.uk/seabed-survey-technique",
+                Name = "Seabed Map Status",
+                Description = "Used by MESH",
+                PublicationDate = "2013",
+                Publishable = false,
+                Controlled = true,
+                Keywords = new List<VocabularyKeyword>()
+            };
+            db.Store(meshSeabedSurveyTechnique);
+
+
         }
 
         // BigBoundingBoxWithNothingInside and SmallBox do not intersect

@@ -29,8 +29,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Data.Seed
         [Test]
         public void should_seed_vocabs()
         {
-            var vocabs = Db.Query<Vocabulary>().ToList();
-            vocabs.Count.Should().BeGreaterThan(3); // there are several vocabs in the mesh data
+            Db.Query<Vocabulary>().Count().Should().Be(6);
         }
     }
 }
