@@ -13,7 +13,7 @@ module.factory 'Vocabulary', ($resource) ->
     
 module.factory 'VocabLoader', (Vocabulary, $route, $q) ->
     () ->
-        console.log("vocabloader")
+        #console.log("vocabloader")
         d = $q.defer()
         Vocabulary.get
             id: $route.current.params.vocabId,

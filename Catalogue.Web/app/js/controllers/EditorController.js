@@ -44,7 +44,6 @@
           errors = response.data.validation.errors;
           if (errors.length > 0) {
             $scope.notifications.add('There were errors');
-            console.log(errors);
             for (_i = 0, _len = errors.length; _i < _len; _i++) {
               e = errors[_i];
               _ref = e.fields;

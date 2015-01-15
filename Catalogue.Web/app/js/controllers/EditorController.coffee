@@ -47,7 +47,7 @@
                     errors = response.data.validation.errors
                     if errors.length > 0
                         $scope.notifications.add 'There were errors'
-                        console.log errors
+                        #console.log errors
                         for e in errors
                             for field in e.fields
                                 $scope.theForm[field].$setValidity('server', false)                                

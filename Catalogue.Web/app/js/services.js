@@ -1,4 +1,4 @@
-(function() {
+﻿(function() {
   var hslToRgb, module;
 
   module = angular.module('app.services');
@@ -32,7 +32,6 @@
   module.factory('VocabLoader', function(Vocabulary, $route, $q) {
     return function() {
       var d;
-      console.log("vocabloader");
       d = $q.defer();
       Vocabulary.get({
         id: $route.current.params.vocabId

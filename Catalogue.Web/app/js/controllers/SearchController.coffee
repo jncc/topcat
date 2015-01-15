@@ -12,15 +12,15 @@
         }
         
         if ($scope.model.keyword.value)
-            console.log("keyword")
+            #console.log("keyword")
             $scope.model.searchType = $scope.searchType.keyword
             $scope.query.q = $scope.model.keyword.value
         else if ($scope.model.keyword.vocab)
-            console.log("vocab")
+            #console.log("vocab")
             $scope.model.searchType = $scope.searchType.vocab
             $scope.query.q = $scope.model.vocab.value
         else 
-            console.log("text")
+            #console.log("text")
             $scope.model.searchType = $scope.searchType.text
             
         # $scope.model.keyword = {};
