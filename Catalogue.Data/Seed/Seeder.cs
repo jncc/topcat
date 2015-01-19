@@ -155,7 +155,7 @@ namespace Catalogue.Data.Seed
                                 m.Title = "An example " + n + " record";
                                 m.Abstract = "This is an example record for some " + n + " data";
                                 m.DataFormat = (from f in g.Formats select f.Name).FirstOrDefault();
-                                m.DatasetReferenceDate = new DateTime(2012, 1, 1);
+                                m.DatasetReferenceDate = "2012-01-01";
                             });
                     });
 

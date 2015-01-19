@@ -134,7 +134,7 @@ namespace Catalogue.Data.Write
             }
 
             // 8 DatasetReferenceDate mandatory
-            if (record.Gemini.DatasetReferenceDate.Equals(DateTime.MinValue))
+            if (record.Gemini.DatasetReferenceDate.IsBlank())
             {
                 recordValidationResult.Errors.Add("Dataset Reference Date must be provided"+GeminiSuffix,
                     r => r.Gemini.DatasetReferenceDate);
@@ -321,6 +321,15 @@ namespace Catalogue.Data.Write
             {
                 result.Errors.Add("Title must not be blank", r => r.Gemini.Title);
             }
+        }
+
+        void ValidateDatasetReferenceDate(Record record, RecordValidationResult result)
+        {
+            // dataset_reference_date_must_be_valid_date
+//            if ()
+//            {
+//                result.Errors.Add("Dataset reference date is invalid", r => r.Gemini.DatasetReferenceDate);
+//            }
         }
 
         void ValidateResourceLocator(Record record, RecordValidationResult result)
@@ -544,6 +553,21 @@ namespace Catalogue.Data.Write
             var result = new RecordValidator(mockVocabService.Object).Validate(SimpleRecord().With(r => r.Path = "not a path"));
 
             result.Errors.Single().Fields.Single().Should().Be("path");
+        }
+
+        [Test]
+        public void dataset_reference_date_must_be_valid_date([Values("", " ", null)] string invalid)
+        {
+            var validDates = new[]
+                {
+                    "",
+                    "",
+                    "",
+                    "",
+                };
+//            var result = new RecordValidator(mockVocabService.Object).Validate(SimpleRecord().With(r => r.Gemini.DatasetReferenceDate));
+//
+//            result.Errors.Single().Fields.Single().Should().Be("path");
         }
 
         [Test]

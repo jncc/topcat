@@ -78,10 +78,7 @@ namespace Catalogue.Data.Import.Mappings
                         return new TemporalExtent { Begin = ConvertStrToDate(raw), End = ConvertStrToDate(raw) };
                     });
 
-                Map(m => m.DatasetReferenceDate).ConvertUsing(row =>
-                {
-                    return ConvertStrToDate(row.GetField("Dataset reference date"));
-                }); ;
+                Map(m => m.DatasetReferenceDate).ConvertUsing(row => row.GetField("Dataset reference date"));
                 Map(m => m.Lineage);
 //              Map(m => m.ResourceLocator); // not present
 //              Map(m => m.AdditionalInformationSource); // not present

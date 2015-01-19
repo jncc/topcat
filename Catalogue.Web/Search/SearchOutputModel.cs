@@ -15,29 +15,13 @@ namespace Catalogue.Web.Controllers.Search
 
     public class ResultOutputModel
     {
-        private DateTime? _Date;
         public Guid Id { get; set; }
         public string Title { get; set; }
         public FormatOutputModel Format { get; set; }
         public string Snippet { get; set; }
         public List<MetadataKeyword> Keywords { get; set; }
         public bool TopCopy { get; set; }
-
-        public DateTime? Date
-        {
-            get { return _Date; }
-            set
-            {
-                if (value.Equals(DateTime.MinValue))
-                {
-                    _Date = null;
-                }
-                else
-                {
-                    _Date = value;
-                }
-            }
-        }
+        public string Date { get; set; }
 
         public string TemporalExtentFrom { get; set; }
         public string TemporalExtentTo { get; set; }

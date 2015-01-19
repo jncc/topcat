@@ -103,6 +103,7 @@
     <Compile Include="Import\Mappings\MeshMapping.cs" />
     <Compile Include="Import\Importer.cs" />
     <Compile Include="Import\Mappings\IMapping.cs" />
+    <Compile Include="Import\ImportUtility.cs" />
     <Compile Include="Indexes\FieldNames.cs" />
     <Compile Include="Indexes\VocabularyIndex.cs" />
     <Compile Include="Indexes\VocabularyKeywordIndex.cs" />

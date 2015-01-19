@@ -94,11 +94,7 @@ namespace Catalogue.Data.Import.Mappings
                     DateTime End = ConvertStrToDate(row.GetField("TemporalExtentEnd"));
                     return new TemporalExtent {Begin = Begin, End = End};
                 });
-                Map(m => m.DatasetReferenceDate).ConvertUsing(row =>
-                {
-                    return ConvertStrToDate(row.GetField("DatasetReferenceDate"));
-                }
-                    );
+                Map(m => m.DatasetReferenceDate);
                 Map(m => m.Lineage);
                 Map(m => m.ResourceLocator);
                 Map(m => m.AdditionalInformationSource);

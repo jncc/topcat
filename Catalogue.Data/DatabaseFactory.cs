@@ -23,7 +23,6 @@ namespace Catalogue.Data
         {
             var db = CreateDatabase(databaseConnectionType);
             CreateIndices(db);
-            var index = db.DatabaseCommands.GetIndex("KeywordsIndex");
             return db;
         }
 
@@ -51,6 +50,7 @@ namespace Catalogue.Data
             }
             else // (databaseConnectionType == DatabaseConnectionType.ReUseable)
             {
+                // what is this??
                 return new InMemoryDatabaseHelper { PostInitializationAction = Seeder.Seed }.Create();               
             }
  

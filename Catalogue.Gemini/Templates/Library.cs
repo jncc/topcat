@@ -29,7 +29,7 @@ namespace Catalogue.Gemini.Templates
 
 
                 TemporalExtent = new TemporalExtent { Begin = new DateTime(), End = new DateTime() },
-                DatasetReferenceDate = new DateTime(),
+                DatasetReferenceDate = "",
                 Lineage = "",
                 ResourceLocator = "",
                 DataFormat = "",
@@ -75,7 +75,7 @@ namespace Catalogue.Gemini.Templates
                     }
                     .ToKeywordList(),
                 TemporalExtent = new TemporalExtent { Begin = new DateTime(), End = new DateTime() },
-                DatasetReferenceDate = new DateTime(),
+                DatasetReferenceDate = "2015-01-01",
                 Lineage = "This dataset was imagined by a developer.",
                 ResourceLocator = "http://data.jncc.gov.uk/5eb63655-d7fe-46af-88bc-71f7db243ad3",
                 DataFormat = "XLS",
