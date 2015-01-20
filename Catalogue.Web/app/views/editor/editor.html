@@ -194,7 +194,7 @@
                                                 value="Dataset"
                                                 tc-focus-tip>
                                             <option value="dataset">Dataset</option>
-<!--                                            <option value="series">Dataset Series (Not Available)</option>-->
+                                            <!--                                            <option value="series">Dataset Series (Not Available)</option>-->
                                             <option value="service">Service</option>
                                         </select>                            
 
@@ -234,6 +234,8 @@
                                     </div>
                                 </div>
                                 
+                                <br />
+                                
                                 
                                 <!-- resource locator -->
                                 <div class="editor-resource-locator form-group">
@@ -261,18 +263,7 @@
                                 
                             </div>
                             
-
-
                         </div>
-                        
-
-                        <hr />
-                        
-                        <!-- resource type -->
-                        <div>
-                            <!--<input class="form-control" type="text" ng-model="form.gemini.resourceType" placeholder="Type of Resource" title="The type of resource described by this metadata" tc-focus-tip />-->
-                        </div>
-
 
                         <div class="form-group text-left selectContainer">
                             <select
@@ -289,45 +280,43 @@
                           <!-- Other items -->
                         </ul>
                         
-                        <h3>Additional Information Source</h3>
-
-                        
                         <!-- lineage -->
+                        <div ng-show="form.gemini.lineage">Lineage</div>
                         <textarea type="text" ng-model="form.gemini.lineage" class="form-control"
                                   rows="2"
                                   placeholder="Lineage"
                                   title="Information about the events or source data used in the construction of the data resource"
                                   tc-focus-tip tc-autosize></textarea>
+                        
+                        <br />
 
+                        <div ng-show="form.gemini.additionalInformationSource">Additional information source</div>
+                        <textarea type="text" ng-model="form.gemini.additionalInformationSource" class="form-control"
+                                  rows="2"
+                                  placeholder="Additional information source"
+                                  title="Other descriptive information about the data resource"
+                                  tc-focus-tip tc-autosize></textarea>
+                        
+                        <br />
+                        
                         <!-- reponsible organisation  -->
                         <div>
-                            <label for="responsibleOrgDiv"><h4>Responsible Organisation</h4></label>
-                            <div id="responsibleOrgDiv" class="form-horizontal ">
-                                <div class="form-group">
-                                    <label for="responsibleOrgNameDiv" class="col-md-2 control-label">Name</label>
-                                    <div id="responsibleOrgNameDiv" class="col-md-10">
-                                        <input disabled class="form-control" type="text" ng-model="form.gemini.responsibleOrganisation.name" placeholder="Responsible Organisation Name" title="The name of the organisation responsible for this resource" tc-focus-tip />
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <label for="responsibleOrgEmailDiv" class="col-md-2 control-label">Email</label>
-                                    <div id="responsibleOrgEmailDiv" class="col-md-10">
-                                        <input disabled class="form-control" type="text" ng-model="form.gemini.responsibleOrganisation.email" placeholder="Responsible Organisation Email" title="An email for the point of contact in this responsible organisation" tc-focus-tip />
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <label for="responsibleOrgRoleDiv" class="col-md-2 control-label">Role</label>
-                                    <div id="responsibleOrgRoleDiv" class="col-md-10">
-                                        <select disabled
-                                                data-ng-model="form.gemini.responsibleOrganisation.role"
-                                                data-ng-options="role as role|camelCaseFilter for role in lookups.roles"
-                                                class="form-control"
-                                                title="The role of the responsible organisation with this resource"
-                                                tc-focus-tip>
-                                            <option value="" disabled selected style="display: none">Responsible Organisation Role</option>
-                                        </select>
-                                    </div>
-                                </div>
+                            <div>Responsible Organisation</div>
+                            <div>
+                                <input disabled class="form-control" type="text" ng-model="form.gemini.responsibleOrganisation.name" placeholder="Name" title="The name of the organisation responsible for this resource" tc-focus-tip />
+                            </div>
+                            <div>
+                                <input disabled class="form-control" type="text" ng-model="form.gemini.responsibleOrganisation.email" placeholder="Email" title="An email for the point of contact in this responsible organisation" tc-focus-tip />
+                            </div>
+                            <div>
+                                <select disabled
+                                        data-ng-model="form.gemini.responsibleOrganisation.role"
+                                        data-ng-options="role as role|camelCaseFilter for role in lookups.roles"
+                                        class="form-control"
+                                        title="The role of the responsible organisation with this resource"
+                                        tc-focus-tip>
+                                    <option value="" disabled selected style="display: none">Responsible Organisation Role</option>
+                                </select>
                             </div>
                         </div>
                         
