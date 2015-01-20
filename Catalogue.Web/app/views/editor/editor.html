@@ -602,11 +602,10 @@
                             
                             <button type="button" class="btn btn-default"
                                  ng-click="form.validation = (form.validation + 1) % 2"
-                                ng-class="{ 'btn-default': form.validation == 0, 'btn-success': form.validation == 1}"
-                                    title="The level of validation to perform on the record"
-                                    tc-tip
-                                >
-                                <span class="dark glyphicon glyphicon-repeat"></span>
+                                 ng-class="{ 'btn-default': form.validation == 0, 'btn-primary': form.validation == 1}"
+                                 title="The level of validation to perform on the record"
+                                 tc-tip>
+                                <span class="glyphicon glyphicon-repeat" ng-class="{ 'dark': form.validation == 0 }"></span>
                                 {{form.validation == 1 ? 'Gemini':'Basic';}}
                             </button>
 
@@ -627,7 +626,7 @@
                                     title="The resource's security level"
                                     tc-tip
                                 >
-                                <span class="glyphicon glyphicon-repeat" ng-class="{ 'dark': form.status == 0 }"></span>
+                                <span class="glyphicon glyphicon-repeat" ng-class="{ 'dark': form.security == 0 }"></span>
                                 {{ getSecurityText(form.security) }}
                             </button>
 

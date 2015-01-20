@@ -26,8 +26,6 @@ namespace Catalogue.Gemini.Templates
                 Abstract = "",
                 TopicCategory = "",
                 Keywords = new StringPairList().ToKeywordList(),
-
-
                 TemporalExtent = new TemporalExtent { Begin = new DateTime(), End = new DateTime() },
                 DatasetReferenceDate = "",
                 Lineage = "",

@@ -59,177 +59,6 @@ namespace Catalogue.Data.Write
             return result;
         }
 
-        void PerformGeminiValidation(Record record, RecordValidationResult recordValidationResult)
-        {
-            // structured to match the gemini doc
-
-            // 1 title is validated at basic level
-
-            // 2 alternative title not used as optional
-
-            // 3 Dataset language, conditional - data resource contains textual information
-            // lets assume all data resources contain text
-            // data_type is enum so can't be null, will default to eng
-
-            // 4 abstract is mandatory
-            if (record.Gemini.Abstract.IsBlank())
-            {
-                recordValidationResult.Errors.Add("Abstract must be provided" , r => r.Gemini.Abstract);
-            }
-
-            // 5 topic_category_must_not_be_blank
-            if (record.Gemini.TopicCategory.IsBlank())
-            {
-                recordValidationResult.Errors.Add(String.Format("Topic Category must be provided"+GeminiSuffix),
-                    r => r.Gemini.TopicCategory);
-            }
-
-            // 6 keywords mandatory
-            if (record.Gemini.Keywords.Count == 0)
-            {
-                recordValidationResult.Errors.Add("Keywords must be provided"+GeminiSuffix, r => r.Gemini.Keywords);
-            }
-
-            // 7 temporal extent is mandatory (so not DateTime.minvalue) and must be logical (they can be the same)
-            if (record.Gemini.TemporalExtent.Begin > record.Gemini.TemporalExtent.End ||
-                record.Gemini.TemporalExtent.Begin.Equals(DateTime.MinValue) ||
-                record.Gemini.TemporalExtent.End.Equals(DateTime.MinValue))
-            {
-                recordValidationResult.Errors.Add("Temporal extent must be provided, and must begin before it ends"+GeminiSuffix,
-                    r => r.Gemini.TemporalExtent);
-            }
-
-            // 8 DatasetReferenceDate mandatory
-            if (record.Gemini.DatasetReferenceDate.IsBlank())
-            {
-                recordValidationResult.Errors.Add("Dataset Reference Date must be provided"+GeminiSuffix,
-                    r => r.Gemini.DatasetReferenceDate);
-            }
-
-            // 10 Lineage is mandatory
-            if (record.Gemini.Lineage.IsBlank())
-            {
-                recordValidationResult.Errors.Add("Lineage msut be provided"+GeminiSuffix, r => r.Gemini.TemporalExtent);
-            }
-
-            // 15 extent is optional and not used
-
-            // 16 Vertical extent information is optional and not used
-
-            // 17 Spatial reference system is optional
-
-            // 18 Spatial resolution, where it can be specified it should - so its optional
-
-            // 19 resource location, conditional
-            // when online access is availble, should be a valid url
-            // resource_locator_must_be_a_well_formed_http_url
-            // when do not yet perform a get request and get a 200 response, the only true way to validate a url
-            if (record.Gemini.ResourceLocator.IsBlank())
-            {
-                recordValidationResult.Errors.Add("Resource locator must be provided" + GeminiSuffix,
-                      r => r.Gemini.ResourceLocator);
-            }else{
-                Uri url;
-
-                if (Uri.TryCreate(record.Gemini.ResourceLocator, UriKind.Absolute, out url))
-                {
-                    if (url.Scheme != Uri.UriSchemeHttp)
-                    {
-                        recordValidationResult.Errors.Add("Resource locator must be an http url",
-                            r => r.Gemini.ResourceLocator);
-                    }
-                }
-                else
-                {
-                    recordValidationResult.Errors.Add("Resource locator must be a valid url",
-                        r => r.Gemini.ResourceLocator);
-                }
-            }
-
-
-            // 21 DataFormat optional 
-
-            // 23 reponsible Organisation
-            if (record.Gemini.ResponsibleOrganisation.Email.IsBlank())
-            {
-                recordValidationResult.Errors.Add("Email address for responsible organisation must be provided"+GeminiSuffix,
-                        r => r.Gemini.ResponsibleOrganisation.Email);
-            }
-            if (record.Gemini.ResponsibleOrganisation.Name.IsBlank())
-            {
-                recordValidationResult.Errors.Add("Name of responsible organisation must be provided" + GeminiSuffix,
-                        r => r.Gemini.ResponsibleOrganisation.Name);
-            }
-
-            // 24 frequency of update is optional
-             
-            // 25 limitations on publci access is mandatory
-            if (record.Gemini.LimitationsOnPublicAccess.IsBlank())
-            {
-                recordValidationResult.Errors.Add("Limitations On Public Access must be provided"+GeminiSuffix,
-                    r => r.Gemini.LimitationsOnPublicAccess);
-            }
-
-            // 26 use constraints are mandatory
-            if (record.Gemini.UseConstraints.IsBlank())
-            {
-                recordValidationResult.Errors.Add("Use Constraints must be provided (if there are none, leave as 'no conditions apply')",
-                    r => r.Gemini.UseConstraints);
-            }
-
-            // 27 Additional information source is optional
-
-            // 30 metadatadate is mandatory
-            if (record.Gemini.MetadataDate.Equals(DateTime.MinValue))
-            {
-                recordValidationResult.Errors.Add("A metadata reference date must be provided"+GeminiSuffix,
-                    r => r.Gemini.MetadataDate);
-            }
-
-            // 33 Metadatalanguage
-
-            // 35 Point of contacts
-            // org name and email contact mandatory
-            if (record.Gemini.MetadataPointOfContact.Email.IsBlank())
-            {
-                recordValidationResult.Errors.Add("A metadata point of contact email address must be provided" + GeminiSuffix,
-                    r => r.Gemini.MetadataPointOfContact.Email);
-            }
-            if (record.Gemini.MetadataPointOfContact.Name.IsBlank())
-            {
-                recordValidationResult.Errors.Add("A metadata point of contact organisation name must be provided" + GeminiSuffix,
-                    r => r.Gemini.MetadataPointOfContact.Name);
-            }
-
-            // 36 Uniuque resource identifier
-            // not yet implemented need code and codespace
-
-            // 39 resource type is mandatory
-            if (record.Gemini.ResourceType.IsBlank())
-            {
-                recordValidationResult.Errors.Add("A resource type must be provided" + GeminiSuffix,
-                    r => r.Gemini.ResourceType);
-            }
-
-            // 40 Keywords from controlled vocabularys must be defined, they cannot be added.
-            //ValidateControlledKeywords(record, recordValidationResult);
-
-            // Conformity, required if claiming conformity to INSPIRE
-            // not yet implemented
-
-            // Equivalent scale, optional
-
-            // BoundingBox
-            // mandatory and valid
-
-            if (record.Gemini.BoundingBox == null)
-            {
-                recordValidationResult.Errors.Add(
-                    "A bounding box must be supplied to conform to the Gemini specification",
-                    r => r.Gemini.BoundingBox);
-            }
-        }
-
         void ValidatePath(Record record, RecordValidationResult result)
         {
             // path_must_not_be_blank
@@ -380,6 +209,179 @@ namespace Catalogue.Data.Write
             {
                 result.Errors.Add("Publishable records must have a resource locator",
                     r => r.Status, r => r.Gemini.ResourceLocator);
+            }
+        }
+
+        void PerformGeminiValidation(Record record, RecordValidationResult recordValidationResult)
+        {
+            // structured to match the gemini doc
+
+            // 1 title is validated at basic level
+
+            // 2 alternative title not used as optional
+
+            // 3 Dataset language, conditional - data resource contains textual information
+            // lets assume all data resources contain text
+            // data_type is enum so can't be null, will default to eng
+
+            // 4 abstract is mandatory
+            if (record.Gemini.Abstract.IsBlank())
+            {
+                recordValidationResult.Errors.Add("Abstract must be provided" + GeminiSuffix, r => r.Gemini.Abstract);
+            }
+
+            // 5 topic_category_must_not_be_blank
+            if (record.Gemini.TopicCategory.IsBlank())
+            {
+                recordValidationResult.Errors.Add(String.Format("Topic Category must be provided" + GeminiSuffix),
+                    r => r.Gemini.TopicCategory);
+            }
+
+            // 6 keywords mandatory
+            if (record.Gemini.Keywords.Count == 0)
+            {
+                recordValidationResult.Errors.Add("Keywords must be provided" + GeminiSuffix, r => r.Gemini.Keywords);
+            }
+
+            // 7 temporal extent is mandatory (so not DateTime.minvalue) and must be logical (they can be the same)
+            if (record.Gemini.TemporalExtent.Begin > record.Gemini.TemporalExtent.End ||
+                record.Gemini.TemporalExtent.Begin.Equals(DateTime.MinValue) ||
+                record.Gemini.TemporalExtent.End.Equals(DateTime.MinValue))
+            {
+                recordValidationResult.Errors.Add("Temporal extent must be provided, and must begin before it ends" + GeminiSuffix,
+                    r => r.Gemini.TemporalExtent);
+            }
+
+            // 8 DatasetReferenceDate mandatory
+            if (record.Gemini.DatasetReferenceDate.IsBlank())
+            {
+                recordValidationResult.Errors.Add("Dataset Reference Date must be provided" + GeminiSuffix,
+                    r => r.Gemini.DatasetReferenceDate);
+            }
+
+            // 10 Lineage is mandatory
+            if (record.Gemini.Lineage.IsBlank())
+            {
+                recordValidationResult.Errors.Add("Lineage msut be provided" + GeminiSuffix, r => r.Gemini.TemporalExtent);
+            }
+
+            // 15 extent is optional and not used
+
+            // 16 Vertical extent information is optional and not used
+
+            // 17 Spatial reference system is optional
+
+            // 18 Spatial resolution, where it can be specified it should - so its optional
+
+            // 19 resource location, conditional
+            // when online access is availble, should be a valid url
+            // resource_locator_must_be_a_well_formed_http_url
+            // when do not yet perform a get request and get a 200 response, the only true way to validate a url
+            if (record.Gemini.ResourceLocator.IsBlank())
+            {
+                recordValidationResult.Errors.Add("Resource locator must be provided" + GeminiSuffix,
+                      r => r.Gemini.ResourceLocator);
+            }
+            else
+            {
+                Uri url;
+
+                if (Uri.TryCreate(record.Gemini.ResourceLocator, UriKind.Absolute, out url))
+                {
+                    if (url.Scheme != Uri.UriSchemeHttp)
+                    {
+                        recordValidationResult.Errors.Add("Resource locator must be an http url",
+                            r => r.Gemini.ResourceLocator);
+                    }
+                }
+                else
+                {
+                    recordValidationResult.Errors.Add("Resource locator must be a valid url",
+                        r => r.Gemini.ResourceLocator);
+                }
+            }
+
+
+            // 21 DataFormat optional 
+
+            // 23 reponsible Organisation
+            if (record.Gemini.ResponsibleOrganisation.Email.IsBlank())
+            {
+                recordValidationResult.Errors.Add("Email address for responsible organisation must be provided" + GeminiSuffix,
+                        r => r.Gemini.ResponsibleOrganisation.Email);
+            }
+            if (record.Gemini.ResponsibleOrganisation.Name.IsBlank())
+            {
+                recordValidationResult.Errors.Add("Name of responsible organisation must be provided" + GeminiSuffix,
+                        r => r.Gemini.ResponsibleOrganisation.Name);
+            }
+
+            // 24 frequency of update is optional
+
+            // 25 limitations on publci access is mandatory
+            if (record.Gemini.LimitationsOnPublicAccess.IsBlank())
+            {
+                recordValidationResult.Errors.Add("Limitations On Public Access must be provided" + GeminiSuffix,
+                    r => r.Gemini.LimitationsOnPublicAccess);
+            }
+
+            // 26 use constraints are mandatory
+            if (record.Gemini.UseConstraints.IsBlank())
+            {
+                recordValidationResult.Errors.Add("Use Constraints must be provided (if there are none, leave as 'no conditions apply')",
+                    r => r.Gemini.UseConstraints);
+            }
+
+            // 27 Additional information source is optional
+
+            // 30 metadatadate is mandatory
+            if (record.Gemini.MetadataDate.Equals(DateTime.MinValue))
+            {
+                recordValidationResult.Errors.Add("A metadata reference date must be provided" + GeminiSuffix,
+                    r => r.Gemini.MetadataDate);
+            }
+
+            // 33 Metadatalanguage
+
+            // 35 Point of contacts
+            // org name and email contact mandatory
+            if (record.Gemini.MetadataPointOfContact.Email.IsBlank())
+            {
+                recordValidationResult.Errors.Add("A metadata point of contact email address must be provided" + GeminiSuffix,
+                    r => r.Gemini.MetadataPointOfContact.Email);
+            }
+            if (record.Gemini.MetadataPointOfContact.Name.IsBlank())
+            {
+                recordValidationResult.Errors.Add("A metadata point of contact organisation name must be provided" + GeminiSuffix,
+                    r => r.Gemini.MetadataPointOfContact.Name);
+            }
+
+            // 36 Uniuque resource identifier
+            // not yet implemented need code and codespace
+
+            // 39 resource type is mandatory
+            if (record.Gemini.ResourceType.IsBlank())
+            {
+                recordValidationResult.Errors.Add("A resource type must be provided" + GeminiSuffix,
+                    r => r.Gemini.ResourceType);
+            }
+
+            // 40 Keywords from controlled vocabularys must be defined, they cannot be added.
+            //ValidateControlledKeywords(record, recordValidationResult);
+
+            // Conformity, required if claiming conformity to INSPIRE
+            // not yet implemented
+
+            // Equivalent scale, optional
+
+            // BoundingBox
+            // mandatory and valid
+
+            if (record.Gemini.BoundingBox == null)
+            {
+                recordValidationResult.Errors.Add(
+                    "A bounding box must be supplied to conform to the Gemini specification",
+                    r => r.Gemini.BoundingBox);
             }
         }
     }
