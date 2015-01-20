@@ -117,10 +117,10 @@ namespace Catalogue.Data.Write
         void ValidateDatasetReferenceDate(Record record, RecordValidationResult result)
         {
             // dataset_reference_date_must_be_valid_date
-//            if ()
-//            {
-//                result.Errors.Add("Dataset reference date is invalid", r => r.Gemini.DatasetReferenceDate);
-//            }
+            if (IsValidDate(record.Gemini.DatasetReferenceDate))
+            {
+                result.Errors.Add("Dataset reference date is not a valid date", r => r.Gemini.DatasetReferenceDate);
+            }
         }
 
         void ValidateResourceLocator(Record record, RecordValidationResult result)
@@ -210,6 +210,11 @@ namespace Catalogue.Data.Write
                 result.Errors.Add("Publishable records must have a resource locator",
                     r => r.Status, r => r.Gemini.ResourceLocator);
             }
+        }
+
+        bool IsValidDate(string date)
+        {
+            return true; // todo
         }
 
         void PerformGeminiValidation(Record record, RecordValidationResult recordValidationResult)

@@ -49,9 +49,6 @@ namespace Catalogue.Data.Write
 
         internal RecordServiceResult Upsert(Record record)
         {
-            // currently only supporting dataset resource types
-            record.Gemini.ResourceType = "dataset";
-
             CorrectlyOrderKeywords(record);
             StandardiseUnconditionalUseConstraints(record);
 

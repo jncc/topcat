@@ -44,7 +44,7 @@ namespace Catalogue.Web.Controllers.Records
         {
             var result = service.Update(record);
 
-            if (result.Record.Id != id) throw new Exception("The id of the record does not match that supplied to the put method");
+            if (result.Record.Id != id) throw new Exception("The ID of the record does not match that supplied to the put method");
 
             if (result.Success)
                 db.SaveChanges();
@@ -69,16 +69,17 @@ namespace Catalogue.Web.Controllers.Records
             return new Record
             {
                 Id = Guid.Empty,
-                Gemini = Library.Blank().With(r =>
+                Gemini = Library.Blank().With(m =>
                     {
-                        r.ResponsibleOrganisation = new ResponsibleParty
+                        m.ResourceType = "dataset";
+                        m.ResponsibleOrganisation = new ResponsibleParty
                             {
                                 Name = "Joint Nature Conservation Committee (JNCC)",
                                 Email = "data@jncc.gov.uk",
                                 Role = "distributor",
                             };
-                        r.MetadataDate = DateTime.Now.Date;
-                        r.MetadataPointOfContact = new ResponsibleParty
+                        m.MetadataDate = DateTime.Now.Date;
+                        m.MetadataPointOfContact = new ResponsibleParty
                             {
                                 Name = user.User.DisplayName,
                                 Email = user.User.Email,
