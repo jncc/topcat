@@ -301,15 +301,15 @@
                         
                         <!-- reponsible organisation  -->
                         <div>
-                            <div>Responsible Organisation</div>
+                            <div>Responsible Organisation / Author</div>
                             <div>
-                                <input disabled class="form-control" type="text" ng-model="form.gemini.responsibleOrganisation.name" placeholder="Name" title="The name of the organisation responsible for this resource" tc-focus-tip />
+                                <input class="form-control" type="text" ng-model="form.gemini.responsibleOrganisation.name" placeholder="Name" title="The name of the organisation responsible for this resource" tc-focus-tip />
                             </div>
                             <div>
-                                <input disabled class="form-control" type="text" ng-model="form.gemini.responsibleOrganisation.email" placeholder="Email" title="An email for the point of contact in this responsible organisation" tc-focus-tip />
+                                <input class="form-control" type="text" ng-model="form.gemini.responsibleOrganisation.email" placeholder="Email" title="An email for the point of contact in this responsible organisation" tc-focus-tip />
                             </div>
                             <div>
-                                <select disabled
+                                <select
                                         data-ng-model="form.gemini.responsibleOrganisation.role"
                                         data-ng-options="role as role|camelCaseFilter for role in lookups.roles"
                                         class="form-control"
