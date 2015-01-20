@@ -242,6 +242,7 @@ label {
 }
 .editor-abstract {
   padding-top: 0.3em;
+  padding-bottom: 0.5em;
 }
 .editor-abstract textarea {
   resize: none;
@@ -249,7 +250,7 @@ label {
   padding-right: 2em;
 }
 .editor-tabs .tab-content {
-  padding-top: 1em;
+  margin-top: 1.5em;
 }
 .editor-tabs .little-warning-badge {
   color: #266ed9;
