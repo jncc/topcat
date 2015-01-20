@@ -56,7 +56,7 @@
 
             $scope.busy.start()
 
-            if $routeParams.recordId isnt '00000000-0000-0000-0000-000000000000'
+            if $scope.isNew()
                 # todo use resource Record.update ??
                 $http.put('../api/records/' + record.id, $scope.form).then processResult
             else
@@ -65,6 +65,7 @@
         $scope.reset = -> 
             $scope.form = angular.copy(record)
             
+        $scope.isNew = -> $routeParams.recordId is '00000000-0000-0000-0000-000000000000'
         $scope.isClean = -> angular.equals($scope.form, record)
         $scope.isSaveHidden = -> $scope.isClean() or record.readOnly
         $scope.isCancelHidden = -> $scope.isClean()

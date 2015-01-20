@@ -334,15 +334,20 @@
                         </tab-heading>
 
                         <!-- public access and use contraints-->
+                        
+                        <div ng-show="form.gemini.limitationsOnPublicAccess">Limitations on public access</div>
                         <textarea type="text" name="gemini.limitationsOnPublicAccess" ng-model="form.gemini.limitationsOnPublicAccess" class="form-control"
                                   rows="2"
-                                  placeholder="no limitations"
+                                  placeholder="Limitations on public access"
                                   title="Restrictions imposed on the data resource for security and other reasons"
                                   tc-focus-tip tc-autosize></textarea>
+                        
+                        <br />
 
+                        <div ng-show="form.gemini.useConstraints">Use constraints</div>
                         <textarea type="text" ng-model="form.gemini.useConstraints" class="form-control"
                                     rows="2"
-                                    placeholder="no conditions apply"
+                                    placeholder="Use constraints"
                                     title="Usage and legal constraints on using the data resource"
                                     tc-focus-tip tc-autosize></textarea>
                     </div>
@@ -354,59 +359,50 @@
                         
                         Information about this metadata record
                         
+                        <br />
+                        <br />
                         
                         <!-- point of contact -->
                         <div>
-                            <label for="metadataPointOfContactDiv"><h4>Metadata Point of Contact</h4></label>
-                            <div id="metadataPointOfContactDiv" class="form-horizontal ">
-                                <div class="form-group">
-                                    <label for="metadataPointofContactNameDiv" class="col-md-2 control-label">Name</label>
-                                    <div id="metadataPointofContactNameDiv" class="col-md-10">
-                                        <input class="form-control" type="text" ng-model="form.gemini.metadataPointOfContact.name" placeholder="Metadata Point of Contact Name" title="The name of the contact for this record" tc-focus-tip />
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <label for="metadataPointofContactEmailDiv" class="col-md-2 control-label">Email</label>
-                                    <div id="metadataPointofContactEmailDiv" class="col-md-10">
-                                        <input class="form-control" type="text" ng-model="form.gemini.metadataPointOfContact.email" title="An email for the contact for this record" tc-focus-tip />
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <label for="metadataPointofContactRoleDiv" class="col-md-2 control-label">Role</label>
-                                    <div id="metadataPointofContactRoleDiv" class="col-md-10">
-                                        <select
-                                            data-ng-model="form.gemini.metadataPointOfContact.role"
-                                            data-ng-options="role as role|camelCaseFilter for role in lookups.roles"
-                                            class="form-control"
-                                            title="The role of the point of contact for this metadata"
-                                            tc-focus-tip>
-                                            <option value="" disabled selected style="display: none">Metadata Point of Contact Role</option>
-                                        </select>    
-                                    </div>
-                                </div>
+                            <div>Point of contact</div>
+                            <div>
+                                <input class="form-control" type="text" ng-model="form.gemini.metadataPointOfContact.name" placeholder="Name" title="The name of the contact for this record" tc-focus-tip />
+                            </div>
+                            <div>
+                                <input class="form-control" type="text" ng-model="form.gemini.metadataPointOfContact.email" placeholder="Email" title="An email for the contact for this record" tc-focus-tip />
+                            </div>
+                            <div>
+                                <select
+                                    data-ng-model="form.gemini.metadataPointOfContact.role"
+                                    data-ng-options="role as role|camelCaseFilter for role in lookups.roles"
+                                    class="form-control"
+                                    title="The role of the point of contact for this metadata"
+                                    tc-focus-tip>
+                                    <option value="" disabled selected style="display: none">Metadata Point of Contact Role</option>
+                                </select>    
                             </div>
                         </div>
                         
+                        <br />
+                        <br />
 
                         <!-- metadata date, lang -->                        
                         <div class="layout-row form-horizontal">
-                            <div class="col-md-6">
-                                <label for="metadataDate" class="col-md-6 control-label" style="text-align:left;">Metadata Date</label>
-                                <div id="metadataDate" class="col-md-6 input-group">
-                                    <input type="text" class="form-control"
-                                           name="gemini.metadataDate" 
-                                           ng-model="form.gemini.metadataDate"
-                                           placeholder="yyyy-mm-dd"
-                                           datepicker-popup="yyyy-MM-dd"
-                                           tc-focus-tip 
-                                           is-open="metadataDate"
-                                           close-text="Close"
-                                           ng-click="open($event,'metadataDate')"
-                                           title="The dates covered by the data resource" />
-                                    <span class="input-group-addon" ng-click="open($event,'metadataDate')">
-                                        <span class="dark glyphicon glyphicon-calendar"></span>
-                                    </span>
-                                </div>
+                            <label for="metadataDate" class="col-md-6 control-label" style="text-align:left;">Metadata Date</label>
+                            <div id="metadataDate" class="col-md-6 input-group">
+                                <input type="text" class="form-control"
+                                       name="gemini.metadataDate" 
+                                       ng-model="form.gemini.metadataDate"
+                                       placeholder="yyyy-mm-dd"
+                                       datepicker-popup="yyyy-MM-dd"
+                                       tc-focus-tip 
+                                       is-open="metadataDate"
+                                       close-text="Close"
+                                       ng-click="open($event,'metadataDate')"
+                                       title="The dates covered by the data resource" />
+                                <span class="input-group-addon" ng-click="open($event,'metadataDate')">
+                                    <span class="dark glyphicon glyphicon-calendar"></span>
+                                </span>
                             </div>
 
                         </div>
@@ -455,11 +451,12 @@
                                 </span>
                             </div>
                         </div>
+                        <br />
+                        <br />
                         <hr />
                         
                         
                         <div>
-                            <label for="spatialDataDiv"><h4>Spatial Data</h4></label>
                             <div id="spatialDataDiv" class="form-horizontal">
                                 <label for="extent" class="col-md-2" style="text-align:left; padding-left:0;">Spatial Extents</label>
                                 <div id="extent">
@@ -500,6 +497,8 @@
                                     </div>
                                 </div>
                         
+                                <br />
+
                                 <div>
                                     <label for="boundingBoxDiv">Bounding Box</label>
                                     <div id="boundingBoxDiv" class="form-horizontal">

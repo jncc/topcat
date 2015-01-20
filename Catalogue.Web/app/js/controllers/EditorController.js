@@ -57,7 +57,7 @@
         return $scope.busy.stop();
       };
       $scope.busy.start();
-      if ($routeParams.recordId !== '00000000-0000-0000-0000-000000000000') {
+      if ($scope.isNew()) {
         return $http.put('../api/records/' + record.id, $scope.form).then(processResult);
       } else {
         return $http.post('../api/records', $scope.form).then(processResult);
@@ -65,6 +65,9 @@
     };
     $scope.reset = function() {
       return $scope.form = angular.copy(record);
+    };
+    $scope.isNew = function() {
+      return $routeParams.recordId === '00000000-0000-0000-0000-000000000000';
     };
     $scope.isClean = function() {
       return angular.equals($scope.form, record);
