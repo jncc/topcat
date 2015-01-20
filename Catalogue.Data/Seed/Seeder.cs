@@ -165,7 +165,19 @@ namespace Catalogue.Data.Seed
 
         void AddBboxes()
         {
-           recordService.Insert(SmallBox);
+            var smallBox = MakeExampleSeedRecord().With(r =>
+                {
+                    r.Id = new Guid("764dcdea-1231-4494-bc18-6931cc8adcee");
+                    r.Path = @"Z:\path\to\small\box";
+                    r.Gemini = r.Gemini.With(m =>
+                        {
+                            m.Title = "Small Box";
+                            m.DataFormat = "csv";
+                            m.BoundingBox = new BoundingBox { North = 30, South = 20, East = 60, West = 50 };
+                        });
+                });
+
+           recordService.Insert(smallBox);
         }
 
         void AddVocabularies()
@@ -253,17 +265,5 @@ namespace Catalogue.Data.Seed
 
         public static readonly string BoundingBoxContainingNothing = "POLYGON((10 10,40 10,40 40,10 40,10 10))";
         public static readonly string BoundingBoxContainingSmallBox = "POLYGON((40 10,60 10,60 30,40 30,40 10))";
-
-        public static readonly Record SmallBox = new Record
-        {
-            Id = new Guid("764dcdea-1231-4494-bc18-6931cc8adcee"),
-            Gemini = new Metadata
-                {
-                    Title = "Small Box",
-                    DataFormat = "csv",
-                    BoundingBox = new BoundingBox { North = 30, South = 20, East = 60, West = 50 },
-                },
-                Path = @"Z:\path\to\small\box",
-        };
     }
 }

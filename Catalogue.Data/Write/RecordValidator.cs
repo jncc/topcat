@@ -42,27 +42,14 @@ namespace Catalogue.Data.Write
 
             ValidatePath(record, result);
             ValidateTitle(record, result);
+            ValidateKeywords(record, result);
             ValidateTopicCategory(record, result);
             ValidateResourceLocator(record, result);
             ValidateResponsibleOrganisation(record, result);
             ValidateMetadataPointOfContact(record, result);
             ValidateResourceType(record, result);
-            ValidateKeywords(record, result);
-
-            // non_open_records_must_have_limitations_on_public_access
-            if (record.Security != Security.Open && record.Gemini.LimitationsOnPublicAccess.IsBlank())
-            {
-                result.Errors.Add("Non-open records must describe their limitations on public access",
-                    r => r.Security,
-                    r => r.Gemini.LimitationsOnPublicAccess);
-            }
-
-            // publishable_records_must_have_a_resource_locator
-            if (record.Status == Status.Publishable && record.Gemini.ResourceLocator.IsBlank())
-            {
-                result.Errors.Add("Publishable records must have a resource locator",
-                    r => r.Status, r => r.Gemini.ResourceLocator);
-            }
+            ValidateSecurityInvariants(record, result);
+            ValidatePublishableInvariants(record, result);
 
             if (record.Validation == Validation.Gemini)
             {
@@ -70,27 +57,6 @@ namespace Catalogue.Data.Write
             }
 
             return result;
-        }
-
-        private void ValidateKeywords(Record record, RecordValidationResult recordValidationResult)
-        {
-            //Must be one, non blank keyword
-
-            if (record.Gemini.Keywords.All(k => String.IsNullOrWhiteSpace(k.Value)))
-            {
-                recordValidationResult.Errors.Add(String.Format("At least one keyword must be specified" + GeminiSuffix),
-                    r => r.Gemini.Keywords);
-            }
-
-            //No blank keywords
-            if (record.Gemini.Keywords.Any(k => String.IsNullOrWhiteSpace(k.Value)))
-            {
-                recordValidationResult.Errors.Add(
-                    String.Format("Keywords cannot be blank" + GeminiSuffix),
-                    r => r.Gemini.Keywords);
-            }
-
-
         }
 
         void PerformGeminiValidation(Record record, RecordValidationResult recordValidationResult)
@@ -264,31 +230,6 @@ namespace Catalogue.Data.Write
             }
         }
 
-//        private void ValidateControlledKeywords(Record record, RecordValidationResult recordValidationResult)
-//        {
-//            //mostly for tests.
-//            if (record.Gemini.Keywords == null) return;
-//
-//            foreach (var vocabId in record.Gemini.Keywords.Select(k => k.Vocab).Distinct())
-//            {
-//                var vocab = vocabService.Load(vocabId);
-//
-//                if (vocab != null && vocab.Controlled)
-//                {
-//                    foreach (var value in record.Gemini.Keywords.Where(k => k.Vocab == vocab.Id).Select(k => k.Value))
-//                    {
-//                        if (!vocab.Keywords.Select(x => x.Value).Contains(value))
-//                            recordValidationResult.Errors.Add(
-//                                    String.Format("The keyword {0} does not exist in the controlled vocabulary {1}",
-//                                                  value,
-//                                                  vocab.Id), r => r.Gemini.Keywords);
-//                    }
-//                }
-//
-//            }
-//
-//        }
-
         void ValidatePath(Record record, RecordValidationResult result)
         {
             // path_must_not_be_blank
@@ -321,6 +262,27 @@ namespace Catalogue.Data.Write
             {
                 result.Errors.Add("Title must not be blank", r => r.Gemini.Title);
             }
+        }
+
+        void ValidateKeywords(Record record, RecordValidationResult recordValidationResult)
+        {
+            //Must be one, non blank keyword
+
+            if (record.Gemini.Keywords.All(k => String.IsNullOrWhiteSpace(k.Value)))
+            {
+                recordValidationResult.Errors.Add(String.Format("At least one keyword must be specified" + GeminiSuffix),
+                    r => r.Gemini.Keywords);
+            }
+
+            //No blank keywords
+            if (record.Gemini.Keywords.Any(k => String.IsNullOrWhiteSpace(k.Value)))
+            {
+                recordValidationResult.Errors.Add(
+                    String.Format("Keywords cannot be blank" + GeminiSuffix),
+                    r => r.Gemini.Keywords);
+            }
+
+
         }
 
         void ValidateDatasetReferenceDate(Record record, RecordValidationResult result)
@@ -399,6 +361,27 @@ namespace Catalogue.Data.Write
                     r => r.Gemini.ResourceType);
             }
         }
+
+        void ValidateSecurityInvariants(Record record, RecordValidationResult result)
+        {
+            // non_open_records_must_have_limitations_on_public_access
+            if (record.Security != Security.Open && record.Gemini.LimitationsOnPublicAccess.IsBlank())
+            {
+                result.Errors.Add("Non-open records must describe their limitations on public access",
+                    r => r.Security,
+                    r => r.Gemini.LimitationsOnPublicAccess);
+            }
+        }
+
+        void ValidatePublishableInvariants(Record record, RecordValidationResult result)
+        {
+            // publishable_records_must_have_a_resource_locator
+            if (record.Status == Status.Publishable && record.Gemini.ResourceLocator.IsBlank())
+            {
+                result.Errors.Add("Publishable records must have a resource locator",
+                    r => r.Status, r => r.Gemini.ResourceLocator);
+            }
+        }
     }
 
     public class RecordValidationIssue
@@ -461,7 +444,6 @@ namespace Catalogue.Data.Write
 
     internal class when_validating_at_basic_level
     {
-
         private Mock<IVocabularyService> mockVocabService = new Mock<IVocabularyService>();
 
         private Record SimpleRecord()
@@ -470,19 +452,16 @@ namespace Catalogue.Data.Write
             {
                 Path = @"X:\some\path",
                 Gemini = Library.Blank().With(m =>
-                {
-                    m.Title = "Some title";
-                    m.Keywords = new StringPairList
-                        {
-                            /* { "", "NDGO0001" },*/
-                            {"http://jncc.gov.uk", "Bermuda Institute of Ocean Sciences"},
-                        }
-                        .ToKeywordList();
-                }),
+                    {
+                        m.Title = "Some title";
+                        m.Keywords = new StringPairList
+                            {
+                                { "http://vocab.jncc.gov.uk/jncc-broad-category", "Example Category" },
+                            }
+                            .ToKeywordList();
+                    }),
             };
         }
-
-        
 
         [Test]
         public void should_produce_no_warnings_by_default()
@@ -491,42 +470,6 @@ namespace Catalogue.Data.Write
 
             var result = new RecordValidator(mockVocabService.Object).Validate(SimpleRecord() /* no Level argument */);
             result.Warnings.Should().BeEmpty();
-        }
-
-        [Test]
-        public void one_non_blank_keyword_must_be_provided()
-        {
-            // should not validate on empty list
-             var r1 =
-                new RecordValidator(mockVocabService.Object).Validate(SimpleRecord().With(r => r.Gemini.Keywords = new List<MetadataKeyword>()));
-
-             r1.Errors.Single().Message.Should().StartWith("At least one keyword must be specified");
-            r1.Errors.Single().Fields.Single().Should().Be("gemini.keywords");
-
-            //should not validate on list with blank keywords
-            var r2 = new RecordValidator(mockVocabService.Object).Validate(SimpleRecord().With(r => r.Gemini.Keywords = new StringPairList
-                        {
-                            {"", ""},
-                        }
-                        .ToKeywordList()));
-               
-
-            r2.Errors.First().Message.Should().StartWith("At least one keyword must be specified");
-            r2.Errors.First().Fields.Single().Should().Be("gemini.keywords");
-
-        }
-
-        [Test]
-        public void no_blank_keywords()
-        {
-            var record = SimpleRecord();
-            record.Gemini.Keywords.Add(new MetadataKeyword() {Value = String.Empty, Vocab = String.Empty});
-
-            var result =
-                new RecordValidator(mockVocabService.Object).Validate(record);
-
-            result.Errors.Single().Message.Should().StartWith("Keywords cannot be blank");
-            result.Errors.Single().Fields.Single().Should().Be("gemini.keywords");
         }
 
         [Test]
@@ -553,6 +496,42 @@ namespace Catalogue.Data.Write
             var result = new RecordValidator(mockVocabService.Object).Validate(SimpleRecord().With(r => r.Path = "not a path"));
 
             result.Errors.Single().Fields.Single().Should().Be("path");
+        }
+
+        [Test]
+        public void one_non_blank_keyword_must_be_provided()
+        {
+            // should not validate on empty list
+            var r1 =
+               new RecordValidator(mockVocabService.Object).Validate(SimpleRecord().With(r => r.Gemini.Keywords = new List<MetadataKeyword>()));
+
+            r1.Errors.Single().Message.Should().StartWith("At least one keyword must be specified");
+            r1.Errors.Single().Fields.Single().Should().Be("gemini.keywords");
+
+            //should not validate on list with blank keywords
+            var r2 = new RecordValidator(mockVocabService.Object).Validate(SimpleRecord().With(r => r.Gemini.Keywords = new StringPairList
+                        {
+                            {"", ""},
+                        }
+                        .ToKeywordList()));
+
+
+            r2.Errors.First().Message.Should().StartWith("At least one keyword must be specified");
+            r2.Errors.First().Fields.Single().Should().Be("gemini.keywords");
+
+        }
+
+        [Test]
+        public void keywords_may_not_be_blank()
+        {
+            var record = SimpleRecord();
+            record.Gemini.Keywords.Add(new MetadataKeyword() { Value = String.Empty, Vocab = String.Empty });
+
+            var result =
+                new RecordValidator(mockVocabService.Object).Validate(record);
+
+            result.Errors.Single().Message.Should().StartWith("Keywords cannot be blank");
+            result.Errors.Single().Fields.Single().Should().Be("gemini.keywords");
         }
 
         [Test]
