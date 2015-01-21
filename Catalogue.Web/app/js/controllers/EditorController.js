@@ -58,9 +58,9 @@
       };
       $scope.busy.start();
       if ($scope.isNew()) {
-        return $http.put('../api/records/' + record.id, $scope.form).then(processResult);
-      } else {
         return $http.post('../api/records', $scope.form).then(processResult);
+      } else {
+        return $http.put('../api/records/' + record.id, $scope.form).then(processResult);
       }
     };
     $scope.reset = function() {
