@@ -49,10 +49,11 @@ namespace Catalogue.Data.Seed
             return new Record
             {
                 Gemini = Library.Blank().With(m =>
-                {
-                    m.Keywords.Add(new MetadataKeyword { Vocab = "http://vocab.jncc.gov.uk/jncc-broad-category", Value = "Example Records" });
-                    m.Keywords.Add(new MetadataKeyword { Vocab = "http://vocab.jncc.gov.uk/example", Value = "example" });
-                }),
+                    {
+                        m.ResourceType = "dataset";
+                        m.Keywords.Add(new MetadataKeyword { Vocab = "http://vocab.jncc.gov.uk/jncc-broad-category", Value = "Example Records" });
+                        m.Keywords.Add(new MetadataKeyword { Vocab = "http://vocab.jncc.gov.uk/example", Value = "example" });
+                    }),
             };
         }
 
@@ -155,7 +156,7 @@ namespace Catalogue.Data.Seed
                                 m.Title = "An example " + n + " record";
                                 m.Abstract = "This is an example record for some " + n + " data";
                                 m.DataFormat = (from f in g.Formats select f.Name).FirstOrDefault();
-                                m.DatasetReferenceDate = new DateTime(2012, 1, 1);
+                                m.DatasetReferenceDate = "2012-01-01";
                             });
                     });
 
@@ -165,7 +166,19 @@ namespace Catalogue.Data.Seed
 
         void AddBboxes()
         {
-           recordService.Insert(SmallBox);
+            var smallBox = MakeExampleSeedRecord().With(r =>
+                {
+                    r.Id = new Guid("764dcdea-1231-4494-bc18-6931cc8adcee");
+                    r.Path = @"Z:\path\to\small\box";
+                    r.Gemini = r.Gemini.With(m =>
+                        {
+                            m.Title = "Small Box";
+                            m.DataFormat = "csv";
+                            m.BoundingBox = new BoundingBox { North = 30, South = 20, East = 60, West = 50 };
+                        });
+                });
+
+           recordService.Insert(smallBox);
         }
 
         void AddVocabularies()
@@ -253,17 +266,5 @@ namespace Catalogue.Data.Seed
 
         public static readonly string BoundingBoxContainingNothing = "POLYGON((10 10,40 10,40 40,10 40,10 10))";
         public static readonly string BoundingBoxContainingSmallBox = "POLYGON((40 10,60 10,60 30,40 30,40 10))";
-
-        public static readonly Record SmallBox = new Record
-        {
-            Id = new Guid("764dcdea-1231-4494-bc18-6931cc8adcee"),
-            Gemini = new Metadata
-                {
-                    Title = "Small Box",
-                    DataFormat = "csv",
-                    BoundingBox = new BoundingBox { North = 30, South = 20, East = 60, West = 50 },
-                },
-                Path = @"Z:\path\to\small\box",
-        };
     }
 }

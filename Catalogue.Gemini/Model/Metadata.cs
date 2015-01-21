@@ -13,17 +13,17 @@ namespace Catalogue.Gemini.Model
         public string TopicCategory { get; set; }
         public List<MetadataKeyword> Keywords { get; set; }
         public TemporalExtent TemporalExtent { get; set; }
-        public DateTime DatasetReferenceDate { get; set; } // / this should be changed to a collection for creation/publication/revision
+        public string DatasetReferenceDate { get; set; } // might be changed to a collection for creation/publication/revision
         public string Lineage { get; set; }
 //      public decimal SpatialResolution { get; set; } // todo we'll probably need this https://wiki.ceh.ac.uk/display/cehigh/Spatial+resolution
         public string ResourceLocator { get; set; }
         public string AdditionalInformationSource { get; set; }
-        public string DataFormat { get; set; } // mesh uses MEDIN data format categories from http://vocab.ndg.nerc.ac.uk/client/vocabServer.jsp
+        public string DataFormat { get; set; }
         public ResponsibleParty ResponsibleOrganisation { get; set; }
         public string LimitationsOnPublicAccess { get; set; }
         public string UseConstraints { get; set; }
         public string SpatialReferenceSystem { get; set; }
-        public List<Extent> Extent { get; set; } // support multiple locations; use same UI as keywords
+        public List<Extent> Extent { get; set; }
         public DateTime MetadataDate { get; set; }
         
         public ResponsibleParty MetadataPointOfContact { get; set; }

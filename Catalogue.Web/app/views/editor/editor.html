@@ -193,9 +193,9 @@
                                                 title="The type of resource described by this metadata"
                                                 value="Dataset"
                                                 tc-focus-tip>
-                                            <option value="dataset" selected>Dataset</option>
-                                            <option value="series" disabled selected>Dataset Series (Not Available)</option>
-                                            <option value="service" disabled selected>Service (Not Available)</option>
+                                            <option value="dataset">Dataset</option>
+                                            <!--                                            <option value="series">Dataset Series (Not Available)</option>-->
+                                            <option value="service">Service</option>
                                         </select>                            
 
                                     </div>
@@ -203,7 +203,7 @@
                                     <div class="col-md-8">
                                         <div class="form-inline">
                                             <div class="form-group">
-                                                <label>Publication date</label>
+                                                <label>Published / revised</label>
                                                
                                             </div>
                                             <div class="form-group">
@@ -218,7 +218,7 @@
                                                            is-open="datasetReferenceDate"
                                                            close-text="Close"
                                                            ng-click="open($event,'datasetReferenceDate')"
-                                                           title="The dates covered by the data resource" />
+                                                           title="The dataset reference date" />
                                                     <span class="input-group-addon" ng-click="open($event,'datasetReferenceDate')">
                                                         <span class="dark glyphicon glyphicon-calendar"></span>
                                                     </span>
@@ -233,6 +233,8 @@
 
                                     </div>
                                 </div>
+                                
+                                <br />
                                 
                                 
                                 <!-- resource locator -->
@@ -261,18 +263,7 @@
                                 
                             </div>
                             
-
-
                         </div>
-                        
-
-                        <hr />
-                        
-                        <!-- resource type -->
-                        <div>
-                            <!--<input class="form-control" type="text" ng-model="form.gemini.resourceType" placeholder="Type of Resource" title="The type of resource described by this metadata" tc-focus-tip />-->
-                        </div>
-
 
                         <div class="form-group text-left selectContainer">
                             <select
@@ -289,45 +280,43 @@
                           <!-- Other items -->
                         </ul>
                         
-                        <h3>Additional Information Source</h3>
-
-                        
                         <!-- lineage -->
+                        <div ng-show="form.gemini.lineage">Lineage</div>
                         <textarea type="text" ng-model="form.gemini.lineage" class="form-control"
                                   rows="2"
                                   placeholder="Lineage"
                                   title="Information about the events or source data used in the construction of the data resource"
                                   tc-focus-tip tc-autosize></textarea>
+                        
+                        <br />
 
+                        <div ng-show="form.gemini.additionalInformationSource">Additional information source</div>
+                        <textarea type="text" ng-model="form.gemini.additionalInformationSource" class="form-control"
+                                  rows="2"
+                                  placeholder="Additional information source"
+                                  title="Other descriptive information about the data resource"
+                                  tc-focus-tip tc-autosize></textarea>
+                        
+                        <br />
+                        
                         <!-- reponsible organisation  -->
                         <div>
-                            <label for="responsibleOrgDiv"><h4>Responsible Organisation</h4></label>
-                            <div id="responsibleOrgDiv" class="form-horizontal ">
-                                <div class="form-group">
-                                    <label for="responsibleOrgNameDiv" class="col-md-2 control-label">Name</label>
-                                    <div id="responsibleOrgNameDiv" class="col-md-10">
-                                        <input disabled class="form-control" type="text" ng-model="form.gemini.responsibleOrganisation.name" placeholder="Responsible Organisation Name" title="The name of the organisation responsible for this resource" tc-focus-tip />
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <label for="responsibleOrgEmailDiv" class="col-md-2 control-label">Email</label>
-                                    <div id="responsibleOrgEmailDiv" class="col-md-10">
-                                        <input disabled class="form-control" type="text" ng-model="form.gemini.responsibleOrganisation.email" placeholder="Responsible Organisation Email" title="An email for the point of contact in this responsible organisation" tc-focus-tip />
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <label for="responsibleOrgRoleDiv" class="col-md-2 control-label">Role</label>
-                                    <div id="responsibleOrgRoleDiv" class="col-md-10">
-                                        <select disabled
-                                                data-ng-model="form.gemini.responsibleOrganisation.role"
-                                                data-ng-options="role as role|camelCaseFilter for role in lookups.roles"
-                                                class="form-control"
-                                                title="The role of the responsible organisation with this resource"
-                                                tc-focus-tip>
-                                            <option value="" disabled selected style="display: none">Responsible Organisation Role</option>
-                                        </select>
-                                    </div>
-                                </div>
+                            <div>Responsible Organisation / Author</div>
+                            <div>
+                                <input class="form-control" type="text" ng-model="form.gemini.responsibleOrganisation.name" placeholder="Name" title="The name of the organisation responsible for this resource" tc-focus-tip />
+                            </div>
+                            <div>
+                                <input class="form-control" type="text" ng-model="form.gemini.responsibleOrganisation.email" placeholder="Email" title="An email for the point of contact in this responsible organisation" tc-focus-tip />
+                            </div>
+                            <div>
+                                <select
+                                        data-ng-model="form.gemini.responsibleOrganisation.role"
+                                        data-ng-options="role as role|camelCaseFilter for role in lookups.roles"
+                                        class="form-control"
+                                        title="The role of the responsible organisation with this resource"
+                                        tc-focus-tip>
+                                    <option value="" disabled selected style="display: none">Responsible Organisation Role</option>
+                                </select>
                             </div>
                         </div>
                         
@@ -345,15 +334,20 @@
                         </tab-heading>
 
                         <!-- public access and use contraints-->
+                        
+                        <div ng-show="form.gemini.limitationsOnPublicAccess">Limitations on public access</div>
                         <textarea type="text" name="gemini.limitationsOnPublicAccess" ng-model="form.gemini.limitationsOnPublicAccess" class="form-control"
                                   rows="2"
-                                  placeholder="no limitations"
+                                  placeholder="Limitations on public access"
                                   title="Restrictions imposed on the data resource for security and other reasons"
                                   tc-focus-tip tc-autosize></textarea>
+                        
+                        <br />
 
+                        <div ng-show="form.gemini.useConstraints">Use constraints</div>
                         <textarea type="text" ng-model="form.gemini.useConstraints" class="form-control"
                                     rows="2"
-                                    placeholder="no conditions apply"
+                                    placeholder="Use constraints"
                                     title="Usage and legal constraints on using the data resource"
                                     tc-focus-tip tc-autosize></textarea>
                     </div>
@@ -365,59 +359,50 @@
                         
                         Information about this metadata record
                         
+                        <br />
+                        <br />
                         
                         <!-- point of contact -->
                         <div>
-                            <label for="metadataPointOfContactDiv"><h4>Metadata Point of Contact</h4></label>
-                            <div id="metadataPointOfContactDiv" class="form-horizontal ">
-                                <div class="form-group">
-                                    <label for="metadataPointofContactNameDiv" class="col-md-2 control-label">Name</label>
-                                    <div id="metadataPointofContactNameDiv" class="col-md-10">
-                                        <input class="form-control" type="text" ng-model="form.gemini.metadataPointOfContact.name" placeholder="Metadata Point of Contact Name" title="The name of the contact for this record" tc-focus-tip />
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <label for="metadataPointofContactEmailDiv" class="col-md-2 control-label">Email</label>
-                                    <div id="metadataPointofContactEmailDiv" class="col-md-10">
-                                        <input class="form-control" type="text" ng-model="form.gemini.metadataPointOfContact.email" title="An email for the contact for this record" tc-focus-tip />
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <label for="metadataPointofContactRoleDiv" class="col-md-2 control-label">Role</label>
-                                    <div id="metadataPointofContactRoleDiv" class="col-md-10">
-                                        <select
-                                            data-ng-model="form.gemini.metadataPointOfContact.role"
-                                            data-ng-options="role as role|camelCaseFilter for role in lookups.roles"
-                                            class="form-control"
-                                            title="The role of the point of contact for this metadata"
-                                            tc-focus-tip>
-                                            <option value="" disabled selected style="display: none">Metadata Point of Contact Role</option>
-                                        </select>    
-                                    </div>
-                                </div>
+                            <div>Point of contact</div>
+                            <div>
+                                <input class="form-control" type="text" ng-model="form.gemini.metadataPointOfContact.name" placeholder="Name" title="The name of the contact for this record" tc-focus-tip />
+                            </div>
+                            <div>
+                                <input class="form-control" type="text" ng-model="form.gemini.metadataPointOfContact.email" placeholder="Email" title="An email for the contact for this record" tc-focus-tip />
+                            </div>
+                            <div>
+                                <select
+                                    data-ng-model="form.gemini.metadataPointOfContact.role"
+                                    data-ng-options="role as role|camelCaseFilter for role in lookups.roles"
+                                    class="form-control"
+                                    title="The role of the point of contact for this metadata"
+                                    tc-focus-tip>
+                                    <option value="" disabled selected style="display: none">Metadata Point of Contact Role</option>
+                                </select>    
                             </div>
                         </div>
                         
+                        <br />
+                        <br />
 
                         <!-- metadata date, lang -->                        
                         <div class="layout-row form-horizontal">
-                            <div class="col-md-6">
-                                <label for="metadataDate" class="col-md-6 control-label" style="text-align:left;">Metadata Date</label>
-                                <div id="metadataDate" class="col-md-6 input-group">
-                                    <input type="text" class="form-control"
-                                           name="gemini.metadataDate" 
-                                           ng-model="form.gemini.metadataDate"
-                                           placeholder="yyyy-mm-dd"
-                                           datepicker-popup="yyyy-MM-dd"
-                                           tc-focus-tip 
-                                           is-open="metadataDate"
-                                           close-text="Close"
-                                           ng-click="open($event,'metadataDate')"
-                                           title="The dates covered by the data resource" />
-                                    <span class="input-group-addon" ng-click="open($event,'metadataDate')">
-                                        <span class="dark glyphicon glyphicon-calendar"></span>
-                                    </span>
-                                </div>
+                            <label for="metadataDate" class="col-md-6 control-label" style="text-align:left;">Metadata Date</label>
+                            <div id="metadataDate" class="col-md-6 input-group">
+                                <input type="text" class="form-control"
+                                       name="gemini.metadataDate" 
+                                       ng-model="form.gemini.metadataDate"
+                                       placeholder="yyyy-mm-dd"
+                                       datepicker-popup="yyyy-MM-dd"
+                                       tc-focus-tip 
+                                       is-open="metadataDate"
+                                       close-text="Close"
+                                       ng-click="open($event,'metadataDate')"
+                                       title="The dates covered by the data resource" />
+                                <span class="input-group-addon" ng-click="open($event,'metadataDate')">
+                                    <span class="dark glyphicon glyphicon-calendar"></span>
+                                </span>
                             </div>
 
                         </div>
@@ -466,11 +451,12 @@
                                 </span>
                             </div>
                         </div>
+                        <br />
+                        <br />
                         <hr />
                         
                         
                         <div>
-                            <label for="spatialDataDiv"><h4>Spatial Data</h4></label>
                             <div id="spatialDataDiv" class="form-horizontal">
                                 <label for="extent" class="col-md-2" style="text-align:left; padding-left:0;">Spatial Extents</label>
                                 <div id="extent">
@@ -511,6 +497,8 @@
                                     </div>
                                 </div>
                         
+                                <br />
+
                                 <div>
                                     <label for="boundingBoxDiv">Bounding Box</label>
                                     <div id="boundingBoxDiv" class="form-horizontal">
@@ -602,11 +590,10 @@
                             
                             <button type="button" class="btn btn-default"
                                  ng-click="form.validation = (form.validation + 1) % 2"
-                                ng-class="{ 'btn-default': form.validation == 0, 'btn-success': form.validation == 1}"
-                                    title="The level of validation to perform on the record"
-                                    tc-tip
-                                >
-                                <span class="dark glyphicon glyphicon-repeat"></span>
+                                 ng-class="{ 'btn-default': form.validation == 0, 'btn-primary': form.validation == 1}"
+                                 title="The level of validation to perform on the record"
+                                 tc-tip>
+                                <span class="glyphicon glyphicon-repeat" ng-class="{ 'dark': form.validation == 0 }"></span>
                                 {{form.validation == 1 ? 'Gemini':'Basic';}}
                             </button>
 
@@ -627,7 +614,7 @@
                                     title="The resource's security level"
                                     tc-tip
                                 >
-                                <span class="glyphicon glyphicon-repeat" ng-class="{ 'dark': form.status == 0 }"></span>
+                                <span class="glyphicon glyphicon-repeat" ng-class="{ 'dark': form.security == 0 }"></span>
                                 {{ getSecurityText(form.security) }}
                             </button>
 

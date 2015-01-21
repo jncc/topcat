@@ -101,12 +101,12 @@ namespace Catalogue.Gemini.Encoding
             return new XElement(gmd + "date",
                 new XElement(gmd + "CI_Date",
                     new XElement(gmd + "date",
-                        new XElement(gco + "Date", metadata.DatasetReferenceDate.ToString(@"yyyy-MM-dd"))),
+                        new XElement(gco + "Date", metadata.DatasetReferenceDate)),
                     new XElement(gmd + "dateType",
                         new XElement(gmd + "CI_DateTypeCode",
                             new XAttribute("codeList", "http://standards.iso.org/ittf/PubliclyAvailableStandards/ISO_19139_Schemas/resources/codelist/gmxCodelists.xml#CI_DateTypeCode"),
                             new XAttribute("codeListValue", "publication"),
-                            metadata.DatasetReferenceDate.ToString(@"yyyy-MM-dd")))));
+                            metadata.DatasetReferenceDate))));
         }
 
         XElement MakeUniqueResourceIdentifier(Guid id)
