@@ -11,7 +11,7 @@ namespace Catalogue.Tests.Explicit.Catalogue.Import
     {
         [Explicit]
         [Test]
-        public void run()
+        public void RunActivitiesImport()
         {
             var store = new DocumentStore();
             store.ParseConnectionString("Url=http://localhost:8888/");
@@ -23,5 +23,10 @@ namespace Catalogue.Tests.Explicit.Catalogue.Import
                 importer.Import(@"C:\Work\pressures-data\Human_Activities_Metadata_Catalogue.csv");
             }
         }
+
+
+        
     }
+
+
 }

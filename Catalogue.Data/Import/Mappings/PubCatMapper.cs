@@ -9,6 +9,9 @@ using Catalogue.Gemini.Model;
 using Catalogue.Utilities.Text;
 using CsvHelper;
 using CsvHelper.Configuration;
+using NUnit.Framework;
+using Raven.Client;
+using Raven.Client.Document;
 
 namespace Catalogue.Data.Import.Mappings
 {
@@ -16,9 +19,12 @@ namespace Catalogue.Data.Import.Mappings
     {
         public void Apply(CsvConfiguration config)
         {
+            config.Delimiter = "\t";
+            config.QuoteAllFields = true;
             config.TrimFields = true;
             config.RegisterClassMap<RecordMap>();
             config.RegisterClassMap<GeminiMap>();
+            
         }
     }
 
@@ -29,7 +35,7 @@ namespace Catalogue.Data.Import.Mappings
             Map(m => m.Title).Name("Title");
             Map(m => m.ResponsibleOrganisation).ConvertUsing(row =>
                 {
-                    string name = row.GetField("Author");
+                    string name = row.GetField("Authors");
                     string email = String.Empty;
                     string role = "Author";
 
@@ -60,83 +66,26 @@ namespace Catalogue.Data.Import.Mappings
             var keywords = new List<MetadataKeyword>();
             
             keywords.AddRange(GetPageKeywords(row.GetField("Keywords")));
-            keywords.Add(GetNhbsNumber(row.GetField("NhbsNumber")));
-            keywords.Add(GetIsbnNumber(row.GetField("IsbnNumber")));
-            keywords.Add(GetIssnNumber(row.GetField("IssnNumber")));
-            keywords.Add(GetJnccReportSeriesNumber(row.GetField("JnccReportSeriesNumber")));
-            keywords.Add(GetFreePublicationIndicator(row.GetField("Free")));
-            keywords.Add(GetDiscontinuedPublicationIndicator(row.GetField("Discontinued")));
+
+            AddKeyword(keywords, "http://vocab.jncc.gov.uk/NHBS",  row.GetField("NhbsNumber"));
+            AddKeyword(keywords, "http://vocab.jncc.gov.uk/ISBN", row.GetField("IsbnNumber"));
+            AddKeyword(keywords, "http://vocab.jncc.gov.uk/ISSN", row.GetField("IssnNumber"));
+            AddKeyword(keywords, "http://vocab.jncc.gov.uk/JnccReportSeriesNumber", row.GetField("JnccReportSeriesNumber"));
+            AddKeyword(keywords, "http://vocab.jncc.gov.uk/publications", row.GetField("Free"));
+            AddKeyword(keywords, "http://vocab.jncc.gov.uk/publications", row.GetField("Discontinued"));
 
             return keywords;
         }
 
-        private MetadataKeyword GetDiscontinuedPublicationIndicator(string discontinuedIndicator)
+        private void AddKeyword(List<MetadataKeyword> keywords, string vocab, string value)
         {
-            if (discontinuedIndicator.IsBlank()) return null;
-            if (discontinuedIndicator.ToLower() != "1") return null;
+            if (value.IsBlank()) return;
 
-            return new MetadataKeyword()
-            {
-                Value = "Discontinued",
-                Vocab = "http://vocab.jncc.gov.uk/publications"
-            };
-        }
-
-        private MetadataKeyword GetFreePublicationIndicator(string freeIndicator)
-        {
-            if (freeIndicator.IsBlank()) return null;
-            if (freeIndicator.ToLower() != "1") return null;
-
-            return new MetadataKeyword()
-            {
-                Value = "Free",
-                Vocab = "http://vocab.jncc.gov.uk/publications"
-            };
-        }
-
-
-        private MetadataKeyword GetJnccReportSeriesNumber(string jnccReportSeriesNo)
-        {
-            if (jnccReportSeriesNo.IsBlank()) return null;
-
-            return new MetadataKeyword()
-            {
-                Value = jnccReportSeriesNo,
-                Vocab = "http://vocab.jncc.gov.uk/JnccReportSeriesNumber"
-            };
-        }
-
-        private MetadataKeyword GetIssnNumber(string issnNo)
-        {
-            if (issnNo.IsBlank()) return null;
-
-            return new MetadataKeyword()
-            {
-                Value = issnNo,
-                Vocab = "http://vocab.jncc.gov.uk/ISSN"
-            };
-        }
-
-        private MetadataKeyword GetIsbnNumber(string isbnNo)
-        {
-            if (isbnNo.IsBlank()) return null;
-
-            return new MetadataKeyword()
-            {
-                Value = isbnNo,
-                Vocab = "http://vocab.jncc.gov.uk/ISBN"
-            };
-        }
-
-        private MetadataKeyword GetNhbsNumber(string nhbsNo)
-        {
-            if (nhbsNo.IsBlank()) return null;
-
-            return new MetadataKeyword()
+            keywords.Add(new MetadataKeyword()
                 {
-                    Value = nhbsNo,
-                    Vocab = "http://vocab.jncc.gov.uk/NHBS"
-                };
+                    Vocab = vocab,
+                    Value = value
+                });
         }
 
         private IEnumerable<MetadataKeyword> GetPageKeywords(string input)
@@ -161,8 +110,26 @@ namespace Catalogue.Data.Import.Mappings
     {
         public override void CreateMap()
         {
-            throw new NotImplementedException();
+            References<GeminiMap>(m => m.Gemini);
         }
     }
+    
+    internal class import_runnner
+    {
+        [Explicit]
+        [Test]
+        public void RunPubcatImport()
+        {
+            var store = new DocumentStore();
+            store.ParseConnectionString("Url=http://localhost:8888/");
+            store.Initialize();
+
+            using (IDocumentSession db = store.OpenSession())
+            {
+                var importer = Importer.CreateImporter<PubCatMapper>(db);
+                importer.Import(@"C:\Working\pubcat.csv");
+            }
+        }
+    }
+
 }
-    ;
