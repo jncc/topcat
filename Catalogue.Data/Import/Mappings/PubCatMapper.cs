@@ -110,6 +110,8 @@ namespace Catalogue.Data.Import.Mappings
     {
         public override void CreateMap()
         {
+            Map(m => m.Path).Name("Path")
+
             References<GeminiMap>(m => m.Gemini);
         }
     }
