@@ -37,7 +37,7 @@ namespace Catalogue.Data.Import.Mappings
                 {
                     string name = row.GetField("Authors");
                     string email = String.Empty;
-                    string role = "Author";
+                    string role = "author";
 
                     return new ResponsibleParty {Name = name, Email = email, Role = role};
                 });
@@ -110,7 +110,7 @@ namespace Catalogue.Data.Import.Mappings
     {
         public override void CreateMap()
         {
-            Map(m => m.Path).Name("Path")
+            Map(m => m.Path).Name("Path");
 
             References<GeminiMap>(m => m.Gemini);
         }
