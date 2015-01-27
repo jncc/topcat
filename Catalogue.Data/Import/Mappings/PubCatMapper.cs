@@ -71,8 +71,16 @@ namespace Catalogue.Data.Import.Mappings
             AddKeyword(keywords, "http://vocab.jncc.gov.uk/ISBN", row.GetField("IsbnNumber"));
             AddKeyword(keywords, "http://vocab.jncc.gov.uk/ISSN", row.GetField("IssnNumber"));
             AddKeyword(keywords, "http://vocab.jncc.gov.uk/JnccReportSeriesNumber", row.GetField("JnccReportSeriesNumber"));
-            AddKeyword(keywords, "http://vocab.jncc.gov.uk/publications", row.GetField("Free"));
-            AddKeyword(keywords, "http://vocab.jncc.gov.uk/publications", row.GetField("Discontinued"));
+
+            if (row.GetField("Free") == "1")
+            {
+                AddKeyword(keywords, "http://vocab.jncc.gov.uk/publications", "Free");
+            }
+
+            if (row.GetField("Discontinued") == "1")
+            {
+                AddKeyword(keywords, "http://vocab.jncc.gov.uk/publications", "Discontinued");
+            }
 
             return keywords;
         }
@@ -130,6 +138,7 @@ namespace Catalogue.Data.Import.Mappings
             {
                 var importer = Importer.CreateImporter<PubCatMapper>(db);
                 importer.Import(@"C:\Working\pubcat.csv");
+                db.SaveChanges();
             }
         }
     }
