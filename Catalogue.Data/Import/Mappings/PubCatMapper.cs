@@ -138,7 +138,7 @@ namespace Catalogue.Data.Import.Mappings
             {
                 var importer = Importer.CreateImporter<PubCatMapper>(db);
                 importer.Import(@"C:\Working\pubcat.csv");
-                db.SaveChanges();
+                //db.SaveChanges();
             }
         }
     }
