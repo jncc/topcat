@@ -18,14 +18,14 @@ namespace Catalogue.Tests.Web.Search
             NumberOfRecords= 25,
             PageNumber= 0
         };
-        private SearchRepository _searchRepository;
+        private SearchService _searchService;
         private SearchService _searchService;
         private const int PageSize = 25;
 
         [TestFixtureSetUp]
         public void setUp()
         {
-            _searchRepository = new SearchRepository(Db);
+            _searchRepository = new SearchService(Db);
             _searchService = new SearchService(_searchRepository);
         }
         [Test]

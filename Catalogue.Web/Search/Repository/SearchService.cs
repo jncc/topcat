@@ -10,24 +10,24 @@ using Raven.Client;
 
 namespace Catalogue.Web.Search
 {
-    public interface ISearchRepository
+    public interface ISearchService
     {
-        SearchOutputModel FindByKeyword(SearchInputModel searchInputModel);
+        SearchOutputModel FindByKeywords(SearchInputModel searchInputModel);
         SearchOutputModel Find(SearchInputModel searchInputModel);
         SearchOutputModel FindByVocab(SearchInputModel searchInputModel);
     }
 
-    public class SearchRepository : ISearchRepository
+    public class SearchService : ISearchService
     {
         private readonly IDocumentSession _db;
 
 
-        public SearchRepository(IDocumentSession db)
+        public SearchService(IDocumentSession db)
         {
             _db = db;
         }
 
-        public SearchOutputModel FindByKeyword(SearchInputModel searchInputModel)
+        public SearchOutputModel FindByKeywords(SearchInputModel searchInputModel)
         {
             RavenQueryStatistics stats;
             FieldHighlightings titleLites;

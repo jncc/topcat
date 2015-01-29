@@ -182,19 +182,18 @@
     <Compile Include="Import\ImportController.cs" />
     <Compile Include="Logging\ElmahHandledErrorLoggerFilter.cs" />
     <Compile Include="Logging\UnhandledExceptionFilter.cs" />
-    <Compile Include="Search\Controllers\VocabularySearchController.cs" />
-    <Compile Include="Search\Repository\SearchRepository.cs" />
+    <Compile Include="Controllers\Search\VocabularySearchController.cs" />
+    <Compile Include="Search\Repository\SearchService.cs" />
     <Compile Include="Search\SearchInputModel.cs" />
     <Compile Include="Search\SearchType.cs" />
-    <Compile Include="Search\Service\SearchService.cs" />
     <Compile Include="Settings.cs" />
     <Compile Include="Account\AccountController.cs" />
     <Compile Include="Controllers\FormatsController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\RecordsController.cs" />
     <Compile Include="Controllers\SandboxController.cs" />
-    <Compile Include="Search\Controllers\SearchController.cs" />
-    <Compile Include="Search\Controllers\KeywordSearchController.cs" />
+    <Compile Include="Controllers\Search\SearchController.cs" />
+    <Compile Include="Controllers\Search\KeywordSearchController.cs" />
     <Compile Include="Search\SearchOutputModel.cs" />
     <Compile Include="Validator\ValidatorController.cs" />
     <Compile Include="Validator\ValidatorInputModel.cs" />
@@ -438,6 +437,9 @@
     <Content Include="app\js\controllers\EditorController.js.map">
       <DependentUpon>EditorController.js</DependentUpon>
     </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Search\Service\" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
