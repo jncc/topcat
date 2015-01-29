@@ -209,8 +209,8 @@ namespace Catalogue.Gemini.Encoding
                     new XElement(gmd + "extent",
                         new XElement(gml + "TimePeriod",
                             new XAttribute(gml + "id", "t1"),
-                            new XElement(gml + "beginPosition", metadata.TemporalExtent.Begin.ToString(@"yyyy-MM-dd")),
-                            new XElement(gml + "endPosition", metadata.TemporalExtent.End.Date.ToString(@"yyyy-MM-dd"))))));
+                            new XElement(gml + "beginPosition", metadata.TemporalExtent.Begin),
+                            new XElement(gml + "endPosition", metadata.TemporalExtent.End)))));
         }
 
         XElement MakeDataFormat(Metadata metadata)

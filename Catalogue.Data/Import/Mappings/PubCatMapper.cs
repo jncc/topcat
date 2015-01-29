@@ -15,7 +15,7 @@ using Raven.Client.Document;
 
 namespace Catalogue.Data.Import.Mappings
 {
-    public class PubCatMapper : BaseMapper, IMapping
+    public class PubCatMapper : IMapping
     {
         public void Apply(CsvConfiguration config)
         {

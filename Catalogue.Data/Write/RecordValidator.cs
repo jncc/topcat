@@ -248,14 +248,15 @@ namespace Catalogue.Data.Write
                 recordValidationResult.Errors.Add("Keywords must be provided" + GeminiSuffix, r => r.Gemini.Keywords);
             }
 
-            // 7 temporal extent is mandatory (so not DateTime.minvalue) and must be logical (they can be the same)
-            if (record.Gemini.TemporalExtent.Begin > record.Gemini.TemporalExtent.End ||
-                record.Gemini.TemporalExtent.Begin.Equals(DateTime.MinValue) ||
-                record.Gemini.TemporalExtent.End.Equals(DateTime.MinValue))
-            {
-                recordValidationResult.Errors.Add("Temporal extent must be provided, and must begin before it ends" + GeminiSuffix,
-                    r => r.Gemini.TemporalExtent);
-            }
+            // 7 temporal extent is mandatory and must be logical (they can be the same)
+            // todo
+//            if (record.Gemini.TemporalExtent.Begin > record.Gemini.TemporalExtent.End ||
+//                record.Gemini.TemporalExtent.Begin.Equals(DateTime.MinValue) ||
+//                record.Gemini.TemporalExtent.End.Equals(DateTime.MinValue))
+//            {
+//                recordValidationResult.Errors.Add("Temporal extent must be provided, and must begin before it ends" + GeminiSuffix,
+//                    r => r.Gemini.TemporalExtent);
+//            }
 
             // 8 DatasetReferenceDate mandatory
             if (record.Gemini.DatasetReferenceDate.IsBlank())

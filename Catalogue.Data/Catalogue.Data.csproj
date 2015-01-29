@@ -99,7 +99,6 @@
     <Compile Include="DatabaseFactory.cs" />
     <Compile Include="Import\FileSystem.cs" />
     <Compile Include="Import\Mappings\ActivitiesMapping.cs" />
-    <Compile Include="Import\Mappings\BaseMapper.cs" />
     <Compile Include="Import\Mappings\MeshMapping.cs" />
     <Compile Include="Import\Importer.cs" />
     <Compile Include="Import\Mappings\IMapping.cs" />
