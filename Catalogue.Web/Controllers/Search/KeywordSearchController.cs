@@ -10,11 +10,11 @@ namespace Catalogue.Web.Controllers.Search
 {
     public class KeywordSearchController : ApiController
     {
-        private readonly ISearchService _keywordSearchService;
+        private readonly ISearchHelper searchHelper;
 
-        public KeywordSearchController(ISearchService keywordSearchService)
+        public KeywordSearchController(ISearchHelper searchHelper)
         {
-            _keywordSearchService = keywordSearchService;
+            this.searchHelper = searchHelper;
         }
 
 
@@ -28,7 +28,7 @@ namespace Catalogue.Web.Controllers.Search
                 PageNumber = p,
                 SearchType = SearchType.Keyword
             };
-            var output = _keywordSearchService.KeywordSearch(searchInputModel);
+            var output = searchHelper.KeywordSearch(searchInputModel);
             return output;
         }
 

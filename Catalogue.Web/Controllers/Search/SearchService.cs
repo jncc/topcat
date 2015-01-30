@@ -1,26 +1,24 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using Catalogue.Data.Indexes;
 using Catalogue.Data.Model;
 using Catalogue.Gemini.DataFormats;
-using Catalogue.Gemini.Model;
 using Catalogue.Utilities.Text;
-using Catalogue.Web.Controllers.Search;
+using Catalogue.Web.Search;
 using Raven.Client;
 
-namespace Catalogue.Web.Search
+namespace Catalogue.Web.Controllers.Search
 {
-    public interface ISearchService
+    public interface ISearchHelper
     {
         SearchOutputModel KeywordSearch(SearchInputModel searchInputModel);
         SearchOutputModel FullTextSearch(SearchInputModel searchInputModel);
     }
 
-    public class SearchService : ISearchService
+    public class SearchHelper : ISearchHelper
     {
         private readonly IDocumentSession _db;
 
-        public SearchService(IDocumentSession db)
+        public SearchHelper(IDocumentSession db)
         {
             _db = db;
         }

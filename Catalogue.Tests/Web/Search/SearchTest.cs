@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Catalogue.Gemini.Model;
+using Catalogue.Web.Controllers.Search;
 using Catalogue.Web.Search;
 using NUnit.Framework;
 
@@ -18,19 +19,19 @@ namespace Catalogue.Tests.Web.Search
             PageNumber= 0
         };
 
-        private SearchService _searchService;
+        private SearchHelper searchHelper;
         private const int PageSize = 25;
 
         [TestFixtureSetUp]
         public void setUp()
         {
-            _searchService = new SearchService(Db);
+            searchHelper = new SearchHelper(Db);
         }
         [Test]
         public void WhenPagingCheckCountIsAsExpected()
         {
             // do not perform a full text search, so should be fewer results
-            var results = _searchService.FullTextSearch(_searchInputModel);
+            var results = searchHelper.FullTextSearch(_searchInputModel);
             Assert.AreEqual(results.Results.Count, 25);
             var totalReturned = results.Results.Count;
             // loop through each page
@@ -38,16 +39,12 @@ namespace Catalogue.Tests.Web.Search
             for (int i = 1; i <= pages; i++)
             {
                 _searchInputModel.PageNumber = i;
-                results = _searchService.FullTextSearch(_searchInputModel);
+                results = searchHelper.FullTextSearch(_searchInputModel);
                 totalReturned += results.Results.Count;
             }
             Assert.AreEqual(results.Total,totalReturned);
         }
 
-        [Test]
-        public void OutputKeywordsForExample()
-        {
-            
-        }
+    
     }
 }

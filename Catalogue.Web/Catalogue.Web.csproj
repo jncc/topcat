@@ -177,14 +177,14 @@
     <Compile Include="Admin\Vocabularies\VocabularyListController.cs" />
     <Compile Include="Controllers\Download\DownloadController.cs" />
     <Compile Include="Controllers\Topics\TopicsController.cs" />
-    <Compile Include="Search\Controllers\VocabularyTypeaheadController.cs" />
+    <Compile Include="Controllers\Search\VocabularyTypeaheadController.cs" />
     <Compile Include="Controllers\RolesController.cs" />
     <Compile Include="Import\ImportController.cs" />
     <Compile Include="Logging\ElmahHandledErrorLoggerFilter.cs" />
     <Compile Include="Logging\UnhandledExceptionFilter.cs" />
-    <Compile Include="Search\Repository\SearchService.cs" />
-    <Compile Include="Search\SearchInputModel.cs" />
-    <Compile Include="Search\SearchType.cs" />
+    <Compile Include="Controllers\Search\SearchService.cs" />
+    <Compile Include="Controllers\Search\SearchInputModel.cs" />
+    <Compile Include="Controllers\Search\SearchType.cs" />
     <Compile Include="Settings.cs" />
     <Compile Include="Account\AccountController.cs" />
     <Compile Include="Controllers\FormatsController.cs" />
@@ -193,7 +193,7 @@
     <Compile Include="Controllers\SandboxController.cs" />
     <Compile Include="Controllers\Search\SearchController.cs" />
     <Compile Include="Controllers\Search\KeywordSearchController.cs" />
-    <Compile Include="Search\SearchOutputModel.cs" />
+    <Compile Include="Controllers\Search\SearchOutputModel.cs" />
     <Compile Include="Validator\ValidatorController.cs" />
     <Compile Include="Validator\ValidatorInputModel.cs" />
     <Compile Include="Validator\ValidatorResult.cs" />
@@ -437,9 +437,7 @@
       <DependentUpon>EditorController.js</DependentUpon>
     </Content>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Search\Service\" />
-  </ItemGroup>
+  <ItemGroup />
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>

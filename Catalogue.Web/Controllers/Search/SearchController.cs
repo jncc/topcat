@@ -5,11 +5,11 @@ namespace Catalogue.Web.Controllers.Search
 {
     public class SearchController : ApiController
     {
-        private readonly ISearchService _searchService;
+        private readonly ISearchHelper _searchHelper;
 
-        public SearchController(ISearchService searchService)
+        public SearchController(ISearchHelper searchHelper)
         {
-            _searchService = searchService;
+            _searchHelper = searchHelper;
         }
 
         // GET api/search?q=blah
@@ -21,7 +21,7 @@ namespace Catalogue.Web.Controllers.Search
                 Query = q,
                 NumberOfRecords = n
             };
-            var output = _searchService.FullTextSearch(searchInputModel);
+            var output = _searchHelper.FullTextSearch(searchInputModel);
             return output;
         }
     }
