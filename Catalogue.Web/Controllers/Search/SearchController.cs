@@ -21,7 +21,7 @@ namespace Catalogue.Web.Controllers.Search
                 Query = q,
                 NumberOfRecords = n
             };
-            var output = _searchService.Find(searchInputModel);
+            var output = _searchService.FullTextSearch(searchInputModel);
             return output;
         }
     }

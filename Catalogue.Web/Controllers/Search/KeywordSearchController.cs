@@ -28,7 +28,7 @@ namespace Catalogue.Web.Controllers.Search
                 PageNumber = p,
                 SearchType = SearchType.Keyword
             };
-            var output = _keywordSearchService.FindByKeywords(searchInputModel);
+            var output = _keywordSearchService.KeywordSearch(searchInputModel);
             return output;
         }
 

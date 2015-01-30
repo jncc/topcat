@@ -12,68 +12,45 @@ namespace Catalogue.Web.Search
 {
     public interface ISearchService
     {
-        SearchOutputModel FindByKeywords(SearchInputModel searchInputModel);
-        SearchOutputModel Find(SearchInputModel searchInputModel);
+        SearchOutputModel KeywordSearch(SearchInputModel searchInputModel);
+        SearchOutputModel FullTextSearch(SearchInputModel searchInputModel);
     }
 
     public class SearchService : ISearchService
     {
         private readonly IDocumentSession _db;
 
-
         public SearchService(IDocumentSession db)
         {
             _db = db;
         }
 
-        public SearchOutputModel FindByKeywords(SearchInputModel searchInputModel)
+        public SearchOutputModel KeywordSearch(SearchInputModel searchInputModel)
         {
             RavenQueryStatistics stats;
-            FieldHighlightings titleLites;
-            FieldHighlightings titleNLites;
-            FieldHighlightings abstractLites;
-            FieldHighlightings abstractNLites;
             
-            IQueryable<Record> query = _db.Query<Record>()
+            var query = _db.Query<Record>()
                 .Statistics(out stats)
                 .Where(r => r.Gemini.Keywords.Any(k => k.Value.Equals(searchInputModel.Keywords.First().Value)));
 
-           int skipNumber = searchInputModel.PageNumber * searchInputModel.NumberOfRecords;
+            int skipNumber = searchInputModel.PageNumber * searchInputModel.NumberOfRecords;
 
-            List<Record> results = query
-                    .Skip(skipNumber)
-                    .Take(searchInputModel.NumberOfRecords).ToList();
-           
-            return new SearchOutputModel
-            {
-                Total = stats.TotalResults,
-                Results = (from x in results
-                    let format = DataFormatQueries.GetDataFormatInfo(x.Gemini.DataFormat)
-                    select new ResultOutputModel
+            var results = query
+                .Skip(skipNumber)
+                .Take(searchInputModel.NumberOfRecords)
+                .ToList()
+                .Select(r => new HalfBakedResult
                     {
-                        Id = x.Id,
-                        Title = x.Gemini.Title.TruncateNicely(200),
-                        // could be better. always want the whole title, highlighted
-                        Snippet = x.Gemini.Abstract.TruncateNicely(200),
-                        Format = new FormatOutputModel
-                        {
-                            Group = format.Group,
-                            Glyph = format.Glyph,
-                            Name = format.Name,
-                        },
-                        Keywords = x.Gemini.Keywords
-                            .OrderBy(k => k.Vocab != "http://vocab.jncc.gov.uk/jncc-broad-category") // show first
-                            .ThenBy(k => k.Vocab).ToList(),
-                        TopCopy = x.TopCopy,
-                        Date = x.Gemini.DatasetReferenceDate,
-                    })
-                    .ToList(),
-                Speed = stats.DurationMilliseconds,
-                Query = new QueryOutputModel {Q = searchInputModel.Keywords.First().Value, P = searchInputModel.PageNumber, N = searchInputModel.NumberOfRecords}
-            };
+                        Result = r,
+                        Title = r.Gemini.Title.TruncateNicely(200),
+                        Snippet = r.Gemini.Abstract.TruncateNicely(200)
+                    });
+
+            return MakeSearchOutputModel(searchInputModel, stats, results);
+
         }
 
-        public SearchOutputModel Find(SearchInputModel searchInputModel)
+        public SearchOutputModel FullTextSearch(SearchInputModel searchInputModel)
         {
             RavenQueryStatistics stats;
             FieldHighlightings titleLites;
@@ -98,50 +75,71 @@ namespace Catalogue.Web.Search
             List<Record> results = query
                     .Skip(skipNumber)
                     .Take(searchInputModel.NumberOfRecords).ToList();
-        
-          
+
+
 
             var xs = from r in results
-                select new
-                {
-                    result = r,
-                    titleFragments =
-                        titleLites.GetFragments("records/" + r.Id).Concat(titleNLites.GetFragments("records/" + r.Id)),
-                    abstractFragments =
-                        abstractLites.GetFragments("records/" + r.Id)
-                            .Concat(abstractNLites.GetFragments("records/" + r.Id)),
-                };
+                     let titleFragments =
+                         titleLites.GetFragments("records/" + r.Id).Concat(titleNLites.GetFragments("records/" + r.Id))
+                     let abstractFragments =
+                         abstractLites.GetFragments("records/" + r.Id)
+                                      .Concat(abstractNLites.GetFragments("records/" + r.Id))
+                     select new HalfBakedResult
+                         {
+                             Result = r,
+                             Title = titleFragments.Select(f => f.TruncateNicely(200)).FirstOrDefault()
+                                     ?? r.Gemini.Title.TruncateNicely(200),
+                             Snippet = abstractFragments.Select(f => f.TruncateNicely(200)).FirstOrDefault()
+                                       ?? r.Gemini.Abstract.TruncateNicely(200)
+                         };
 
-            return new SearchOutputModel
-            {
-                Total = stats.TotalResults,
-                Results = (from x in xs
-                    let format = DataFormatQueries.GetDataFormatInfo(x.result.Gemini.DataFormat)
-                    select new ResultOutputModel
-                    {
-                        Id = x.result.Id,
-                        Title = x.titleFragments.Select(f => f.TruncateNicely(200)).FirstOrDefault()
-                                ?? x.result.Gemini.Title.TruncateNicely(200),
-                        // could be better. always want the whole title, highlighted
-                        Snippet = x.abstractFragments.Select(f => f.TruncateNicely(200)).FirstOrDefault()
-                                  ?? x.result.Gemini.Abstract.TruncateNicely(200),
-                        Format = new FormatOutputModel
-                        {
-                            Group = format.Group,
-                            Glyph = format.Glyph,
-                            Name = format.Name,
-                        },
-                        Keywords = x.result.Gemini.Keywords
-                            .OrderBy(k => k.Vocab != "http://vocab.jncc.gov.uk/jncc-broad-category") // show first
-                            .ThenBy(k => k.Vocab).ToList(),
-                        TopCopy = x.result.TopCopy,
-                        Date = x.result.Gemini.DatasetReferenceDate,
-                    })
-                    .ToList(),
-                Speed = stats.DurationMilliseconds,
-                Query = new QueryOutputModel { Q = searchInputModel.Query, P = searchInputModel.PageNumber, N = searchInputModel.NumberOfRecords}
-            };
+            return MakeSearchOutputModel(searchInputModel, stats, xs);
         }
 
+        private static SearchOutputModel MakeSearchOutputModel(SearchInputModel searchInputModel, RavenQueryStatistics stats,
+                                                               IEnumerable<HalfBakedResult> xs)
+        {
+            return new SearchOutputModel
+                {
+                    Total = stats.TotalResults,
+                    Results = (from x in xs
+                               let format = DataFormatQueries.GetDataFormatInfo(x.Result.Gemini.DataFormat)
+                               select new ResultOutputModel
+                                   {
+                                       Id = x.Result.Id,
+                                       Title = x.Title,
+                                       // could be better. always want the whole title, highlighted
+                                       Snippet = x.Snippet,
+                                       Format = new FormatOutputModel
+                                           {
+                                               Group = format.Group,
+                                               Glyph = format.Glyph,
+                                               Name = format.Name,
+                                           },
+                                       Keywords = x.Result.Gemini.Keywords
+                                                   .OrderBy(k => k.Vocab != "http://vocab.jncc.gov.uk/jncc-broad-category")
+                                   // show first
+                                                   .ThenBy(k => k.Vocab).ToList(),
+                                       TopCopy = x.Result.TopCopy,
+                                       Date = x.Result.Gemini.DatasetReferenceDate,
+                                   })
+                        .ToList(),
+                    Speed = stats.DurationMilliseconds,
+                    Query =
+                        new QueryOutputModel
+                            {
+                                Q = searchInputModel.Query,
+                                P = searchInputModel.PageNumber,
+                                N = searchInputModel.NumberOfRecords
+                            }
+                };
+        }
+    }
+
+    class HalfBakedResult
+    {
+        public Record Result { get; set; }
+        public string Title { get; set; }
+        public string Snippet { get; set; }
     }
 } 
