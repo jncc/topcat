@@ -27,11 +27,11 @@ namespace Catalogue.Web.Controllers.Search
         {
             RavenQueryStatistics stats;
 
-            var cc = searchInputModel.Keywords.First().Value;
+            var keyword = searchInputModel.Keywords.Single(); // for now, we only support one keyword
 
             var query = _db.Query<Record>()
                 .Statistics(out stats)
-                .Where(r => r.Gemini.Keywords.Any(k => k.Value == cc));
+                .Where(r => r.Gemini.Keywords.Any(k => k.Value == keyword.Value && k.Vocab == keyword.Vocab));
 
             int skipNumber = searchInputModel.PageNumber * searchInputModel.NumberOfRecords;
 
