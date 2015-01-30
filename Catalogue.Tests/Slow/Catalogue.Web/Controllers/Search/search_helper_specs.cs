@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Catalogue.Gemini.Model;
 using Catalogue.Web.Controllers.Search;
 using Catalogue.Web.Search;
+using FluentAssertions;
 using NUnit.Framework;
 
 namespace Catalogue.Tests.Slow.Catalogue.Web.Controllers.Search
@@ -24,7 +25,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Web.Controllers.Search
                     NumberOfRecords = 25
                 };
 
-            var result = helper.KeywordSearch(input);
+            helper.KeywordSearch(input).Results.Count().Should().Be(25);
         }
     }
 }
