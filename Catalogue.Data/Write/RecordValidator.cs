@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Text.RegularExpressions;
 using Catalogue.Data.Model;
 using Catalogue.Gemini.Helpers;
 using Catalogue.Gemini.Model;
@@ -117,7 +118,7 @@ namespace Catalogue.Data.Write
         void ValidateDatasetReferenceDate(Record record, RecordValidationResult result)
         {
             // dataset_reference_date_must_be_valid_date
-            if (IsValidDate(record.Gemini.DatasetReferenceDate))
+            if (!IsValidDate(record.Gemini.DatasetReferenceDate))
             {
                 result.Errors.Add("Dataset reference date is not a valid date", r => r.Gemini.DatasetReferenceDate);
             }
@@ -125,8 +126,21 @@ namespace Catalogue.Data.Write
 
         void ValidateTemporalExtent(Record record, RecordValidationResult result)
         {
-            // dataset_reference_date_must_be_valid_date
-            // todo
+            var begin = record.Gemini.TemporalExtent.Begin;
+            var end = record.Gemini.TemporalExtent.End;
+
+            // temporal_extent_must_be_valid_dates
+            if (begin.IsNotBlank() && !IsValidDate(begin))
+            {
+                result.Errors.Add("Temporal Extent (Begin) is not a valid date", r => r.Gemini.TemporalExtent.Begin);
+            }
+
+            if (end.IsNotBlank() && !IsValidDate(end))
+            {
+                result.Errors.Add("Temporal Extent (End) is not a valid date", r => r.Gemini.TemporalExtent.End);
+            }
+
+            // todo ensure End is after Begin
         }
 
         void ValidateResourceLocator(Record record, RecordValidationResult result)
@@ -220,7 +234,12 @@ namespace Catalogue.Data.Write
 
         bool IsValidDate(string date)
         {
-            return true; // todo
+            return true;
+            var yearOnly = new Regex(@"^\d\d\d\d$");
+            var yearAndMonth = new Regex(@"^\d\d\d\d-(0[1-9]|1[012])$");
+            var yearMonthAndDay = new Regex(@"^\d\d\d\d-(0[1-9]|1[012])-(0[1-9]|[12][0-9]|3[01])$");
+
+            return yearOnly.IsMatch(date) || yearAndMonth.IsMatch(date) || yearMonthAndDay.IsMatch(date);
         }
 
         void PerformGeminiValidation(Record record, RecordValidationResult recordValidationResult)
