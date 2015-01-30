@@ -182,7 +182,6 @@
     <Compile Include="Import\ImportController.cs" />
     <Compile Include="Logging\ElmahHandledErrorLoggerFilter.cs" />
     <Compile Include="Logging\UnhandledExceptionFilter.cs" />
-    <Compile Include="Controllers\Search\VocabularySearchController.cs" />
     <Compile Include="Search\Repository\SearchService.cs" />
     <Compile Include="Search\SearchInputModel.cs" />
     <Compile Include="Search\SearchType.cs" />
