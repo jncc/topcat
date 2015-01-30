@@ -5,7 +5,6 @@ using System.Text;
 using System.Threading.Tasks;
 using Catalogue.Gemini.Model;
 using Catalogue.Web.Search;
-using Catalogue.Web.Search.Service;
 using NUnit.Framework;
 
 namespace Catalogue.Tests.Web.Search
@@ -18,15 +17,14 @@ namespace Catalogue.Tests.Web.Search
             NumberOfRecords= 25,
             PageNumber= 0
         };
-        private SearchService _searchService;
+
         private SearchService _searchService;
         private const int PageSize = 25;
 
         [TestFixtureSetUp]
         public void setUp()
         {
-            _searchRepository = new SearchService(Db);
-            _searchService = new SearchService(_searchRepository);
+            _searchService = new SearchService(Db);
         }
         [Test]
         public void WhenPagingCheckCountIsAsExpected()

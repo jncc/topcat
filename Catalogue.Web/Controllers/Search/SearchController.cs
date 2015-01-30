@@ -1,6 +1,5 @@
 ﻿using System.Web.Http;
 using Catalogue.Web.Search;
-using Catalogue.Web.Search.Service;
 
 namespace Catalogue.Web.Controllers.Search
 {

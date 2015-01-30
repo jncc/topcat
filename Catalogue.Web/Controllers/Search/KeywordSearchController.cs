@@ -17,6 +17,8 @@ namespace Catalogue.Web.Controllers.Search
             _keywordSearchService = keywordSearchService;
         }
 
+
+
         public SearchOutputModel Get(string[] keywords, int n = 25, int p = 0)
         {
             var searchInputModel = new SearchInputModel()
@@ -30,16 +32,19 @@ namespace Catalogue.Web.Controllers.Search
             return output;
         }
 
-        private List<MetadataKeyword> GetKeywords(string[] keywords)
+        private List<MetadataKeyword> GetKeywords(IEnumerable<string> keywords)
         {
-            var splitPattern = new Regex("");
-
             return (from k in keywords
                     where k.IsNotBlank()
-                    select new MetadataKeyword()
+                    from m in Regex.Matches(k, @"^([\w/]*)/(\w*)$").Cast<Match>()
+                    let pair = m.Groups.Cast<Group>().Select(g => g.Value).Skip(1)
+                    select new MetadataKeyword
                         {
-                            Value = 
-                        }).ToList();
+                            Vocab = "http://" + pair.ElementAt(0).Trim(),
+                            Value = pair.ElementAt(1).Trim()
+                        }
+                   ).ToList();
+
         }
     }
 }
