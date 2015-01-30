@@ -37,7 +37,7 @@ namespace Catalogue.Web.Search
             
             IQueryable<Record> query = _db.Query<Record>()
                 .Statistics(out stats)
-                .Where(r => r.Gemini.Keywords.Any(k => k.Value.Equals(searchInputModel.Keyword.Value)));
+                .Where(r => r.Gemini.Keywords.Any(k => k.Value.Equals(searchInputModel.Keywords.First().Value)));
 
            int skipNumber = searchInputModel.PageNumber * searchInputModel.NumberOfRecords;
 
@@ -70,7 +70,7 @@ namespace Catalogue.Web.Search
                     })
                     .ToList(),
                 Speed = stats.DurationMilliseconds,
-                Query = new QueryOutputModel {Q = searchInputModel.Keyword.Value, P = searchInputModel.PageNumber, N = searchInputModel.NumberOfRecords}
+                Query = new QueryOutputModel {Q = searchInputModel.Keywords.First().Value, P = searchInputModel.PageNumber, N = searchInputModel.NumberOfRecords}
             };
         }
 
