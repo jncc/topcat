@@ -43,6 +43,8 @@ namespace Catalogue.Data.Write
             ValidatePath(record, result);
             ValidateTitle(record, result);
             ValidateKeywords(record, result);
+            ValidateDatasetReferenceDate(record, result);
+            ValidateTemporalExtent(record, result);
             ValidateTopicCategory(record, result);
             ValidateResourceLocator(record, result);
             ValidateResponsibleOrganisation(record, result);
@@ -110,8 +112,6 @@ namespace Catalogue.Data.Write
                     String.Format("Keywords cannot be blank" + GeminiSuffix),
                     r => r.Gemini.Keywords);
             }
-
-
         }
 
         void ValidateDatasetReferenceDate(Record record, RecordValidationResult result)
@@ -121,6 +121,12 @@ namespace Catalogue.Data.Write
             {
                 result.Errors.Add("Dataset reference date is not a valid date", r => r.Gemini.DatasetReferenceDate);
             }
+        }
+
+        void ValidateTemporalExtent(Record record, RecordValidationResult result)
+        {
+            // dataset_reference_date_must_be_valid_date
+            // todo
         }
 
         void ValidateResourceLocator(Record record, RecordValidationResult result)
@@ -248,15 +254,12 @@ namespace Catalogue.Data.Write
                 recordValidationResult.Errors.Add("Keywords must be provided" + GeminiSuffix, r => r.Gemini.Keywords);
             }
 
-            // 7 temporal extent is mandatory and must be logical (they can be the same)
-            // todo
-//            if (record.Gemini.TemporalExtent.Begin > record.Gemini.TemporalExtent.End ||
-//                record.Gemini.TemporalExtent.Begin.Equals(DateTime.MinValue) ||
-//                record.Gemini.TemporalExtent.End.Equals(DateTime.MinValue))
-//            {
-//                recordValidationResult.Errors.Add("Temporal extent must be provided, and must begin before it ends" + GeminiSuffix,
-//                    r => r.Gemini.TemporalExtent);
-//            }
+            // 7 temporal extent is mandatory
+            if (record.Gemini.TemporalExtent.Begin.IsBlank())
+            {
+                recordValidationResult.Errors.Add("Temporal Extent must be provided" + GeminiSuffix,
+                    r => r.Gemini.TemporalExtent.Begin);
+            }
 
             // 8 DatasetReferenceDate mandatory
             if (record.Gemini.DatasetReferenceDate.IsBlank())

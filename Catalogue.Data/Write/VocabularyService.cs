@@ -50,7 +50,6 @@ namespace Catalogue.Data.Write
                 {
                     var newKeywords = source.Keywords.Except(vocabulary.Keywords);
                     vocabulary.Keywords.AddRange(newKeywords);
-                    db.Store(vocabulary);
                 }
             }
         }
