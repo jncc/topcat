@@ -20,21 +20,12 @@
                 <span ng-show="model.searchType == searchType.text"><input ng-model="query.q" type="text" class="form-control" autofocus tc-debounce /></span>
                 <span ng-show="model.searchType == searchType.keyword">
                     <input type="text" 
-                           ng-model="query.q" 
-                           placeholder="Value (keyword)" 
+                           ng-model="model.keyword" 
+                           typeahead-on-select="onKeywordSelect($item, $model, $label)"
+                           placeholder="Keyword" 
                            typeahead-template-url="keywordTemplate.html"  
                            typeahead-loading="loadingKeys" 
                            typeahead="keyword.value for keyword in getKeywords($viewValue)" 
-                           tc-debounce
-                           class="form-control" 
-                        />
-                </span>
-                <span ng-show="model.searchType == searchType.vocab">
-                    <input type="text" 
-                           ng-model="query.q" 
-                           placeholder="Value (vocabulary)" 
-                           typeahead-loading="loadingVocabularies" 
-                           typeahead="vocabulary for vocabulary in getVocabularies($viewValue)" 
                            tc-debounce
                            class="form-control" 
                         />
@@ -47,12 +38,12 @@
                 </span>
             </div>
             <div class="row text-center ">
-                    <label>
-                        <input type="radio" value="{{searchType.text}}"  ng-model="model.searchType" ng-change="decideWhichSearch()"> Text
-                        <input type="radio" value="{{searchType.keyword}}" ng-model="model.searchType" ng-change="decideWhichSearch()"> Keywords
-                    </label>
-                    </div>
-        </div>
+                <label>
+                    <input type="radio" value="{{searchType.text}}"  ng-model="model.searchType" ng-change="decideWhichSearch()"> Text
+                    <input type="radio" value="{{searchType.keyword}}" ng-model="model.searchType" ng-change="decideWhichSearch()"> Keywords
+                </label>
+            </div>
+</div>
         </form>
     </div>
     <div class="col-md-1">

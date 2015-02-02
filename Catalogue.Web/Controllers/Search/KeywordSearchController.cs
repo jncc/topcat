@@ -19,11 +19,11 @@ namespace Catalogue.Web.Controllers.Search
 
 
 
-        public SearchOutputModel Get(string[] keywords, int n = 25, int p = 0)
+        public SearchOutputModel Get(string[] q, int n = 25, int p = 0)
         {
             var searchInputModel = new SearchInputModel()
             {
-                Keywords = GetKeywords(keywords),
+                Keywords = GetKeywords(q),
                 NumberOfRecords = n,
                 PageNumber = p,
                 SearchType = SearchType.Keyword

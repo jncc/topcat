@@ -1,5 +1,6 @@
 ﻿using System.Web.Http;
 using Catalogue.Web.Search;
+using System.Linq;
 
 namespace Catalogue.Web.Controllers.Search
 {
@@ -13,12 +14,12 @@ namespace Catalogue.Web.Controllers.Search
         }
 
         // GET api/search?q=blah
-        public SearchOutputModel Get(string q, int n = 25, int p = 0)
+        public SearchOutputModel Get(string q, int n = 25, int p = 0, string t = "text")
         {
             SearchInputModel searchInputModel = new SearchInputModel()
             {
                 PageNumber = p,
-                Query = q,
+                Query = q, //should only be one full text search term but q could be an arrary for keywords
                 NumberOfRecords = n
             };
             var output = _searchHelper.FullTextSearch(searchInputModel);
