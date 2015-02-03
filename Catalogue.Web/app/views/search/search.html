@@ -17,10 +17,10 @@
                     </a>
                 </script>
                         
-                <span ng-show="model.searchType == searchType.text"><input ng-model="query.q" type="text" class="form-control" autofocus tc-debounce /></span>
-                <span ng-show="model.searchType == searchType.keyword">
+                <span ng-show="query.t == searchType.fulltext"><input ng-model="query.q" type="text" class="form-control" autofocus tc-debounce /></span>
+                <span ng-show="query.t == searchType.keyword">
                     <input type="text" 
-                           ng-model="model.keyword" 
+                           ng-model="keyword" 
                            typeahead-on-select="onKeywordSelect($item, $model, $label)"
                            placeholder="Keyword" 
                            typeahead-template-url="keywordTemplate.html"  
@@ -39,8 +39,8 @@
             </div>
             <div class="row text-center ">
                 <label>
-                    <input type="radio" value="{{searchType.text}}"  ng-model="model.searchType" ng-change="decideWhichSearch()"> Text
-                    <input type="radio" value="{{searchType.keyword}}" ng-model="model.searchType" ng-change="decideWhichSearch()"> Keywords
+                    <input type="radio" value="{{searchType.fulltext}}"  ng-model="query.t" ng-change="decideWhichSearch()"> Text
+                    <input type="radio" value="{{searchType.keyword}}" ng-model="query.t" ng-change="decideWhichSearch()"> Keywords
                 </label>
             </div>
 </div>

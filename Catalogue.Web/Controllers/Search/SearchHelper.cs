@@ -90,7 +90,7 @@ namespace Catalogue.Web.Controllers.Search
                              Title = titleFragments.Select(f => f.TruncateNicely(200)).FirstOrDefault()
                                      ?? r.Gemini.Title.TruncateNicely(200),
                              Snippet = abstractFragments.Select(f => f.TruncateNicely(200)).FirstOrDefault()
-                                       ?? r.Gemini.Abstract.TruncateNicely(200)
+                                       ?? r.Gemini.Abstract.TruncateNicely(200),
                          };
 
             return MakeSearchOutputModel(searchInputModel, stats, xs);
@@ -130,7 +130,8 @@ namespace Catalogue.Web.Controllers.Search
                             {
                                 Q = searchInputModel.Query,
                                 P = searchInputModel.PageNumber,
-                                N = searchInputModel.NumberOfRecords
+                                N = searchInputModel.NumberOfRecords,
+                                T = searchInputModel.SearchType.ToString().ToLower()
                             }
                 };
         }

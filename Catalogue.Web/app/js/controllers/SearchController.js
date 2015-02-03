@@ -5,26 +5,15 @@
     appTitlePrefix = "Topcat:";
     $scope.searchType = {
       keyword: 'keyword',
-      text: 'text'
+      fulltext: 'fulltext'
     };
-    $scope.model = {
-      keyword: {
-        value: '',
-        vocab: ''
-      },
-      searchType: $scope.searchType.text
-    };
+    $scope.keyword = '';
     $scope.query = {
       q: $location.search()['q'] || '',
       p: 0,
       n: 25,
-      t: $scope.searchType.text
+      t: $scope.searchType.fulltext
     };
-    if ($scope.query.t === $scope.searchType.keyword) {
-      $scope.model.searchType = $scope.searchType.keyword;
-    } else {
-      $scope.model.searchType = $scope.searchType.text;
-    }
     $scope.app = {
       starting: true
     };
@@ -48,9 +37,9 @@
       title: appTitlePrefix
     };
     $scope.changeKeywordResetPageNumber = function(keyword) {
-      $scope.model.keyword = keyword;
+      $scope.keyword = keyword;
       $scope.query.p = 0;
-      $scope.model.searchType = $scope.searchType.keyword;
+      $scope.query.t = $scope.searchType.keyword;
       return $scope.query.q = getPathFromKeyword(keyword);
     };
     $scope.changePageNumber = function() {
@@ -73,7 +62,7 @@
           title: appTitlePrefix + $scope.query.q
         };
         $scope.busy.start();
-        if ($scope.model.searchType === $scope.searchType.keyword) {
+        if ($scope.query.t === $scope.searchType.keyword) {
           url = '../api/keywordSearch?' + $.param($scope.query);
         } else {
           url = '../api/search?' + $.param($scope.query);
@@ -100,9 +89,7 @@
     $scope.onKeywordSelect = function(keyword, model, label) {
       return $scope.query.q = getPathFromKeyword(keyword);
     };
-    $scope.decideWhichSearch = function() {
-      return $scope.query.t = $model.searchType;
-    };
+    $scope.decideWhichSearch = function() {};
     return $scope.$watch('query.q', $scope.doSearch, true);
   });
 

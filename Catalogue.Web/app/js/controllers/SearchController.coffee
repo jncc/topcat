@@ -4,25 +4,12 @@
          # initial values
         $scope.searchType = {
             keyword: 'keyword',
-            text: 'text'
+            fulltext: 'fulltext'
         }
         
-        $scope.model = {
-            keyword: {
-                value:  '',
-                vocab:  ''
-            }
-            searchType: $scope.searchType.text
-        };
+        $scope.keyword = ''
          
-        $scope.query = { q: $location.search()['q'] || '', p: 0 , n:25, t: $scope.searchType.text}
-
-        if ($scope.query.t == $scope.searchType.keyword)
-            #console.log("keyword")
-            $scope.model.searchType = $scope.searchType.keyword
-        else 
-            #console.log("text")
-            $scope.model.searchType = $scope.searchType.text
+        $scope.query = { q: $location.search()['q'] || '', p: 0 , n:25, t: $scope.searchType.fulltext}
             
         # $scope.model.keyword = {};
         # slightly hacky way of triggering animations on startup
@@ -42,9 +29,9 @@
         
         # update flag, then fire listner
         $scope.changeKeywordResetPageNumber = (keyword) ->
-            $scope.model.keyword = keyword
+            $scope.keyword = keyword
             $scope.query.p = 0;
-            $scope.model.searchType = $scope.searchType.keyword
+            $scope.query.t = $scope.searchType.keyword
             $scope.query.q = getPathFromKeyword(keyword)
             # no need to call keyword search directly as listner registerd for query q change
         
@@ -69,7 +56,7 @@
                 $scope.busy.start()
                 
                 # set url
-                if $scope.model.searchType == $scope.searchType.keyword
+                if $scope.query.t == $scope.searchType.keyword
                     url = '../api/keywordSearch?' + $.param $scope.query
                 else
                     url = '../api/search?' + $.param $scope.query
@@ -93,8 +80,7 @@
         $scope.onKeywordSelect = (keyword, model, label) -> 
             $scope.query.q = getPathFromKeyword(keyword)
             
-        $scope.decideWhichSearch = () ->
-            $scope.query.t = $model.searchType
+        $scope.decideWhichSearch = () -> #todo: get rid of this if not needed by radio buttons
             
         #  register the three listners
         $scope.$watch 'query.q', $scope.doSearch, true # could  be either text or keyword
