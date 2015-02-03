@@ -192,7 +192,6 @@
     <Compile Include="Controllers\RecordsController.cs" />
     <Compile Include="Controllers\SandboxController.cs" />
     <Compile Include="Controllers\Search\SearchController.cs" />
-    <Compile Include="Controllers\Search\KeywordSearchController.cs" />
     <Compile Include="Controllers\Search\SearchOutputModel.cs" />
     <Compile Include="Validator\ValidatorController.cs" />
     <Compile Include="Validator\ValidatorInputModel.cs" />

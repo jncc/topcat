@@ -3,16 +3,12 @@
   angular.module('app.controllers').controller('SearchController', function($scope, $rootScope, $location, $http, $timeout) {
     var appTitlePrefix, getPathFromKeyword;
     appTitlePrefix = "Topcat:";
-    $scope.searchType = {
-      keyword: 'keyword',
-      fulltext: 'fulltext'
-    };
     $scope.keyword = '';
     $scope.query = {
       q: $location.search()['q'] || '',
+      k: $location.search()['k'] || '',
       p: 0,
-      n: 25,
-      t: $scope.searchType.fulltext
+      n: 25
     };
     $scope.app = {
       starting: true
@@ -36,14 +32,9 @@
     $rootScope.page = {
       title: appTitlePrefix
     };
-    $scope.changeKeywordResetPageNumber = function(keyword) {
-      $scope.keyword = keyword;
+    $scope.tagSearch = function(keyword) {
       $scope.query.p = 0;
-      $scope.query.t = $scope.searchType.keyword;
-      return $scope.query.q = getPathFromKeyword(keyword);
-    };
-    $scope.changePageNumber = function() {
-      return doSearch;
+      return $scope.query.k = getPathFromKeyword(keyword);
     };
     $scope.getKeywords = function(term) {
       return $http.get('../api/keywords?q=' + term).then(function(response) {
@@ -55,18 +46,14 @@
       if ($scope.query.q) {
         $location.url($location.path());
         $location.search('q', $scope.query.q);
-        $location.search('t', $scope.query.t);
+        $location.search('k', $scope.query.k);
         $location.search('p', $scope.query.p);
         $location.search('n', $scope.query.n);
         $rootScope.page = {
           title: appTitlePrefix + $scope.query.q
         };
         $scope.busy.start();
-        if ($scope.query.t === $scope.searchType.keyword) {
-          url = '../api/keywordSearch?' + $.param($scope.query);
-        } else {
-          url = '../api/search?' + $.param($scope.query);
-        }
+        url = '../api/search?' + $.param($scope.query);
         return $http.get(url).success(function(result) {
           if (angular.equals(result.query, $scope.query)) {
             if (result.total === 0) {
@@ -87,10 +74,10 @@
       return path;
     };
     $scope.onKeywordSelect = function(keyword, model, label) {
-      return $scope.query.q = getPathFromKeyword(keyword);
+      return $scope.query.k = getPathFromKeyword(keyword);
     };
     $scope.decideWhichSearch = function() {};
-    return $scope.$watch('query.q', $scope.doSearch, true);
+    return $scope.$watch('query', $scope.doSearch, true);
   });
 
 }).call(this);

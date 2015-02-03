@@ -20,7 +20,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Web.Controllers.Search
 
             var input = new SearchInputModel
                 {
-                    Keywords = new List<MetadataKeyword> {new MetadataKeyword{Vocab = "http://vocab.jncc.gov.uk/jncc-broad-category" ,Value = "Seabed Habitat Maps"}},
+                    Keywords = new [] {"vocab.jncc.gov.uk/jncc-broad-category/Seabed Habitat Maps"},
                     PageNumber = 0,
                     NumberOfRecords = 25
                 };

@@ -2,14 +2,14 @@
     ($scope, $rootScope, $location, $http, $timeout) ->
         appTitlePrefix = "Topcat:";
          # initial values
-        $scope.searchType = {
-            keyword: 'keyword',
-            fulltext: 'fulltext'
-        }
-        
+
         $scope.keyword = ''
          
-        $scope.query = { q: $location.search()['q'] || '', p: 0 , n:25, t: $scope.searchType.fulltext}
+        $scope.query = { 
+            q: $location.search()['q'] || '', 
+            k: $location.search()['k'] || '', 
+            p: 0 , 
+            n:25 }
             
         # $scope.model.keyword = {};
         # slightly hacky way of triggering animations on startup
@@ -27,39 +27,27 @@
             
         $rootScope.page = { title:appTitlePrefix } 
         
-        # update flag, then fire listner
-        $scope.changeKeywordResetPageNumber = (keyword) ->
-            $scope.keyword = keyword
+        $scope.tagSearch = (keyword) ->
             $scope.query.p = 0;
-            $scope.query.t = $scope.searchType.keyword
-            $scope.query.q = getPathFromKeyword(keyword)
-            # no need to call keyword search directly as listner registerd for query q change
-        
-        # page number changed, don't fire any listeners jsut call seach with new model (only p will have changed)
-        $scope.changePageNumber = () -> doSearch          
+            $scope.query.k = getPathFromKeyword(keyword)        
         
         # listener for when keywords are entered into the keyword typeahead box        
         $scope.getKeywords = (term) -> $http.get('../api/keywords?q='+term).then (response) -> 
             response.data          
                     
-        # not called by a listener, invoked by from changePageNumber or decideWhichSearch
         $scope.doSearch = () ->
             if $scope.query.q 
                 # update the url
                 $location.url($location.path())
-                $location.search('q', $scope.query.q) 
-                $location.search('t', $scope.query.t)
+                $location.search('q', $scope.query.q)
+                $location.search('k', $scope.query.k)
                 $location.search('p', $scope.query.p) 
                 $location.search('n', $scope.query.n)
                 
                 $rootScope.page = {title: appTitlePrefix + $scope.query.q} # update the page title
                 $scope.busy.start()
-                
-                # set url
-                if $scope.query.t == $scope.searchType.keyword
-                    url = '../api/keywordSearch?' + $.param $scope.query
-                else
-                    url = '../api/search?' + $.param $scope.query
+
+                url = '../api/search?' + $.param $scope.query
                     
                 #search server
                 $http.get(url)
@@ -78,12 +66,12 @@
             path
             
         $scope.onKeywordSelect = (keyword, model, label) -> 
-            $scope.query.q = getPathFromKeyword(keyword)
+            $scope.query.k = getPathFromKeyword(keyword)
             
         $scope.decideWhichSearch = () -> #todo: get rid of this if not needed by radio buttons
             
         #  register the three listners
-        $scope.$watch 'query.q', $scope.doSearch, true # could  be either text or keyword
+        $scope.$watch 'query', $scope.doSearch, true # could  be either text or keyword
         # $scope.$watch 'model.keyword.value', doKeywordSearch, true # only keyword
         # $scope.$watch 'query.p', changePageNumber, true # coul dbe text or keyword
         # $scope.$watch 'model.searchType', decideWhichSearch, true # coul dbe text or keyword

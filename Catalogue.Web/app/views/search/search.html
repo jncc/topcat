@@ -81,7 +81,7 @@
         </div>
         <div ng-bind-html="r.snippet"></div>
         <div class="search-tags">
-            <span class="tag" ng-repeat="k in r.keywords"  style="cursor: pointer;" tc-tip title="Click to search by this tag" ng-click="changeKeywordResetPageNumber(k)"> <!-- update keyword will fire the listner -->
+            <span class="tag" ng-repeat="k in r.keywords"  style="cursor: pointer;" tc-tip title="Click to search by this tag" ng-click="tagSearch(k)">
                 <span tc-tag ng-style="{ 'background-color': hashStringToColor(k.vocab) }">&nbsp;<!--<span class="glyphicon glyphicon-info-sign"></span>--></span>
                 {{ k.value }}
             </span>
@@ -96,7 +96,7 @@
     <ul class="pagination">
      <!--   <li class="disabled"><a href="">&laquo;</a></li>-->
     <li style="cursor: pointer;" ng-repeat="n in range(0,maxPages(result.total, 25))" ng-class="(n===query.p+1) ? 'active' : ''">
-            <span ng-click="query.p = n-1; changePageNumber();"><span ng-bind="n">n</span></span>
+            <span ng-click="query.p = n-1"><span ng-bind="n">n</span></span>
         </li>
         <!--<li><span href="#">&raquo;</span></li>-->
     </ul>

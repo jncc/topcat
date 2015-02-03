@@ -33,6 +33,7 @@ namespace Catalogue.Web.Controllers.Search
         public int P { get; set; }
         public int N { get; set; }
         public string T { get; set; }
+        public string[] K { get; set; }
     }
 
     public class FormatOutputModel

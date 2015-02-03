@@ -1,7 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System.Text.RegularExpressions;
 using Catalogue.Data.Model;
 using Catalogue.Gemini.DataFormats;
+using Catalogue.Gemini.Model;
 using Catalogue.Utilities.Text;
 using Catalogue.Web.Search;
 using Raven.Client;
@@ -27,7 +29,7 @@ namespace Catalogue.Web.Controllers.Search
         {
             RavenQueryStatistics stats;
 
-            var keyword = searchInputModel.Keywords.Single(); // for now, we only support one keyword
+            var keyword = GetKeywords(searchInputModel.Keywords).Single(); // for now, we only support one keyword
 
             var query = _db.Query<Record>()
                 .Statistics(out stats)
@@ -96,6 +98,21 @@ namespace Catalogue.Web.Controllers.Search
             return MakeSearchOutputModel(searchInputModel, stats, xs);
         }
 
+        private List<MetadataKeyword> GetKeywords(IEnumerable<string> keywords)
+        {
+            return (from k in keywords
+                    where k.IsNotBlank()
+                    from m in Regex.Matches(k,  @"^([\w\s/\.-]*)/([\w\s-]*)$").Cast<Match>()
+                    let pair = m.Groups.Cast<Group>().Select(g => g.Value).Skip(1)
+                    select new MetadataKeyword
+                    {
+                        Vocab = "http://" + pair.ElementAt(0).Trim(),
+                        Value = pair.ElementAt(1).Trim()
+                    }
+                   ).ToList();
+
+        }
+
         private static SearchOutputModel MakeSearchOutputModel(SearchInputModel searchInputModel, RavenQueryStatistics stats,
                                                                IEnumerable<HalfBakedResult> xs)
         {
@@ -128,10 +145,10 @@ namespace Catalogue.Web.Controllers.Search
                     Query =
                         new QueryOutputModel
                             {
+                                K = searchInputModel.Keywords,
                                 Q = searchInputModel.Query,
                                 P = searchInputModel.PageNumber,
                                 N = searchInputModel.NumberOfRecords,
-                                T = searchInputModel.SearchType.ToString().ToLower()
                             }
                 };
         }

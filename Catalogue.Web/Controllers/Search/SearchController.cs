@@ -1,4 +1,8 @@
-﻿using System.Web.Http;
+﻿using System.Collections.Generic;
+using System.Text.RegularExpressions;
+using System.Web.Http;
+using Catalogue.Gemini.Model;
+using Catalogue.Utilities.Text;
 using Catalogue.Web.Search;
 using System.Linq;
 
@@ -14,17 +18,39 @@ namespace Catalogue.Web.Controllers.Search
         }
 
         // GET api/search?q=blah
-        public SearchOutputModel Get(string q, int n = 25, int p = 0, SearchType t = SearchType.FullText)
+        //todo should accpet array of q.
+        public SearchOutputModel Get(string q, string k, int n = 25, int p = 0)
         {
-            SearchInputModel searchInputModel = new SearchInputModel()
+            //could easily rework this to combine the outputs.
+            if (k.IsNotBlank()) return KeywordSearch(new []{k}, n, p);
+
+            return FullTextSearch(q, n, p);
+        }
+
+        private SearchOutputModel FullTextSearch(string q, int n, int p)
+        {
+            var searchInputModel = new SearchInputModel()
             {
                 PageNumber = p,
-                Query = q, //should only be one full text search term but q could be an arrary for keywords
+                Query = q,
                 NumberOfRecords = n,
-                SearchType = t
+                SearchType = SearchType.FullText
             };
-            var output = _searchHelper.FullTextSearch(searchInputModel);
-            return output;
+            return _searchHelper.FullTextSearch(searchInputModel);
         }
+
+        private SearchOutputModel KeywordSearch(string[] k, int n, int p)
+        {
+            var searchInputModel = new SearchInputModel()
+            {
+                Keywords = k,
+                NumberOfRecords = n,
+                PageNumber = p,
+                SearchType = SearchType.Keyword
+            };
+            return _searchHelper.KeywordSearch(searchInputModel);
+        }
+
+
     }
 }
