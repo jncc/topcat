@@ -1,15 +1,7 @@
 (function() {
 
   angular.module('app.controllers').controller('SearchController', function($scope, $rootScope, $location, $http, $timeout) {
-    var appTitlePrefix, ensureEndsWith, getPathFromKeyword;
-    appTitlePrefix = "Topcat:";
-    ensureEndsWith = function(str, suffix) {
-      if (!(str.indexOf(suffix, str.length - suffix.length) !== -1)) {
-        return str.concat(suffix);
-      } else {
-        return str;
-      }
-    };
+    var appTitlePrefix, ensureEndsWith, getKeywordFromPath, getPathFromKeyword;
     $scope.searchType = {
       fulltext: 'fulltext',
       keyword: 'keyword'
@@ -22,9 +14,32 @@
       p: 0,
       n: 25
     };
-    if ($scope.query.k[0] !== '') {
-      $scope.activeSearchType = $scope.searchType.keyword;
-    }
+    getPathFromKeyword = function(keyword) {
+      var path;
+      path = ensureEndsWith(keyword.vocab, '/') + keyword.value;
+      return path.replace("http://", "");
+    };
+    getKeywordFromPath = function(path) {
+      var elements, i, value, vocab, _i, _ref;
+      elements = path.split('/');
+      value = elements[elements.length - 1];
+      vocab = "http://";
+      for (i = _i = 0, _ref = elements.length - 2; _i <= _ref; i = _i += 1) {
+        vocab = vocab.concat(elements[i].concat('/'));
+      }
+      return {
+        value: value,
+        vocab: vocab
+      };
+    };
+    appTitlePrefix = "Topcat:";
+    ensureEndsWith = function(str, suffix) {
+      if (!(str.indexOf(suffix, str.length - suffix.length) !== -1)) {
+        return str.concat(suffix);
+      } else {
+        return str;
+      }
+    };
     $scope.app = {
       starting: true
     };
@@ -83,11 +98,6 @@
         });
       }
     };
-    getPathFromKeyword = function(keyword) {
-      var path;
-      path = ensureEndsWith(keyword.vocab, '/') + keyword.value;
-      return path.replace("http://", "");
-    };
     $scope.onKeywordSelect = function(keyword, model, label) {
       $scope.query.k = [getPathFromKeyword(keyword)];
       return $scope.doSearch();
@@ -103,6 +113,10 @@
       $scope.query.p = n - 1;
       return $scope.doSearch();
     };
+    if ($scope.query.k[0] !== '') {
+      $scope.activeSearchType = $scope.searchType.keyword;
+      $scope.keyword = getKeywordFromPath($scope.query.k[0]);
+    }
     return $scope.doSearch();
   });
 

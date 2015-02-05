@@ -1,19 +1,10 @@
 ﻿angular.module('app.controllers').controller 'SearchController',
     ($scope, $rootScope, $location, $http, $timeout) ->
-        appTitlePrefix = "Topcat:";
-         # initial values
-         
-        ensureEndsWith = (str, suffix) ->
-            if !(str.indexOf(suffix, str.length - suffix.length) != -1) 
-                return str.concat(suffix)
-            else
-                return str
-
         $scope.searchType = {
             fulltext: 'fulltext',
             keyword:  'keyword'
         }
-       
+    
         $scope.activeSearchType = $scope.searchType.fulltext
         
         $scope.keyword = ''
@@ -23,11 +14,30 @@
             k: [$location.search()['k'] || ''], 
             p: 0 , 
             n:25 }
-            
-        # Work out starting search type
-        if ($scope.query.k[0] != '') 
-            $scope.activeSearchType = $scope.searchType.keyword
-       
+    
+        getPathFromKeyword = (keyword) ->
+            path = ensureEndsWith(keyword.vocab, '/') + keyword.value
+            path.replace("http://", "")
+ 
+        getKeywordFromPath = (path) -> 
+            elements = path.split('/')
+            value = elements[elements.length - 1]
+            vocab = "http://"
+            for i in [0..elements.length - 2] by 1
+                vocab = vocab.concat(elements[i].concat('/'))
+            return {value: value, vocab: vocab}
+    
+        appTitlePrefix = "Topcat:";
+         # initial values
+         
+        ensureEndsWith = (str, suffix) ->
+            if !(str.indexOf(suffix, str.length - suffix.length) != -1) 
+                return str.concat(suffix)
+            else
+                return str
+
+
+      
         #Search on page load based on qs params 
             
         # slightly hacky way of triggering animations on startup
@@ -79,10 +89,7 @@
                                 $scope.result = result;    
                     .finally -> $scope.busy.stop()        
         
-        getPathFromKeyword = (keyword) ->
-            path = ensureEndsWith(keyword.vocab, '/') + keyword.value
-            path.replace("http://", "")
- 
+
             
         $scope.onKeywordSelect = (keyword, model, label) -> 
             $scope.query.k = [getPathFromKeyword(keyword)]
@@ -109,6 +116,15 @@
         #    ()  -> $location.search()['q'] #todo watch and update whole querystring
         #    (q) -> $scope.query.q = q || ''
         #)
+        
+
+            
+        # Work out starting search type
+        #fuggle keyword if initialised via qs
+        
+        if ($scope.query.k[0] != '') 
+            $scope.activeSearchType = $scope.searchType.keyword
+            $scope.keyword = getKeywordFromPath($scope.query.k[0])
         
         $scope.doSearch()
 
