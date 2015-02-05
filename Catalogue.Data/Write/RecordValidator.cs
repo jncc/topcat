@@ -273,7 +273,7 @@ namespace Catalogue.Data.Write
                 recordValidationResult.Errors.Add("Keywords must be provided" + GeminiSuffix, r => r.Gemini.Keywords);
             }
 
-            // 7 temporal extent is mandatory
+            // 7 temporal extent is mandatory - at least Begin must be provided
             if (record.Gemini.TemporalExtent.Begin.IsBlank())
             {
                 recordValidationResult.Errors.Add("Temporal Extent must be provided" + GeminiSuffix,
