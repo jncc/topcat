@@ -16,7 +16,7 @@ using NUnit.Framework;
 
 namespace Catalogue.Data.Import.Mappings
 {
-    public class ActivitiesMapping : BaseMapper, IMapping
+    public class ActivitiesMapping : IMapping
     {
         public void Apply(CsvConfiguration config)
         {
@@ -70,12 +70,11 @@ namespace Catalogue.Data.Import.Mappings
                                 .ToList(); // should be either a single value, or a the value followed by two (possibly empty) from/to values
 
                             if (parsed.Count == 3)
-                                return new TemporalExtent { Begin = ConvertStrToDate(parsed.ElementAt(1)), End = ConvertStrToDate(parsed.ElementAt(2)) };
+                                return new TemporalExtent { Begin = parsed.ElementAt(1), End = parsed.ElementAt(2) };
                         }
 
-                        // let's put the single date in both - gemini actually allows for a single date,
-                        // but we haven't allowed that in our profile (does it really make much sense?)
-                        return new TemporalExtent { Begin = ConvertStrToDate(raw), End = ConvertStrToDate(raw) };
+                        // let's put the single date in the being
+                        return new TemporalExtent { Begin = raw, End = "" };
                     });
 
                 Map(m => m.DatasetReferenceDate).ConvertUsing(row => row.GetField("Dataset reference date"));
@@ -96,7 +95,7 @@ namespace Catalogue.Data.Import.Mappings
                 Map(m => m.SpatialReferenceSystem).Name("Spatial reference system");
                 Map(m => m.MetadataDate).ConvertUsing(row =>
                 {
-                    return ConvertStrToDate(row.GetField("Metadata date"));
+                    return ImportUtility.ParseDate(row.GetField("Metadata date"));
                 });
                 Map(m => m.ResourceType).Name("Resource type "); // only use dataset atm
 //                Map(m => m.MetadataLanguage); // Not available
@@ -309,14 +308,14 @@ namespace Catalogue.Data.Import.Mappings
         public void should_import_temporal_extent()
         {
             imported.Should().Contain(r =>
-                r.Gemini.TemporalExtent.Begin.Year.Equals(2006) && r.Gemini.TemporalExtent.End.Year.Equals(2010));
+                r.Gemini.TemporalExtent.Begin.StartsWith("2006") && r.Gemini.TemporalExtent.End.StartsWith("2010"));
         }
 
         [Test]
         public void should_import_temporal_extent_with_single_date()
         {
             imported.Should().Contain(r =>
-                r.Gemini.TemporalExtent.Begin.Year.Equals(2010) && r.Gemini.TemporalExtent.End.Year.Equals(2010));
+                r.Gemini.TemporalExtent.Begin.StartsWith("2010") && r.Gemini.TemporalExtent.End.StartsWith("2010"));
         }
 
         [Test]

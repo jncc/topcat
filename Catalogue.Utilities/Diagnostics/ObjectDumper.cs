@@ -13,6 +13,19 @@ namespace Catalogue.Utilities.Diagnostics
     // See the ReadMe.html for additional information
     public class ObjectDumper
     {
+        /// <summary>
+        /// Dumps the object to a string. Added for convenience by Pete.
+        /// </summary>
+        public static string String(object element)
+        {
+            using (var w = new StringWriter())
+            {
+                var dumper = new ObjectDumper(0) { writer = w };
+                dumper.WriteObject(null, element);
+                return w.ToString();
+            }
+        }
+
         public static void WriteAll(IEnumerable<object> elements)
         {
             foreach (var element in elements)

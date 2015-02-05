@@ -202,18 +202,6 @@ namespace Catalogue.Data.Write
         }
 
         [Test]
-        public void should_always_set_resource_type_to_dataset()
-        {
-            var database = Mock.Of<IDocumentSession>();
-            var service = new RecordService(database, ValidatorStub());
-
-            var record = BasicRecord().With(r => r.Gemini.ResourceType = "");
-            service.Upsert(record);
-
-            Mock.Get(database).Verify(db => db.Store(It.Is((Record r) => r.Gemini.ResourceType == "dataset")));
-        }
-
-        [Test]
         public void should_standardise_unconditional_use_constraints()
         {
             var database = Mock.Of<IDocumentSession>();

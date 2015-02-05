@@ -65,8 +65,8 @@ namespace Catalogue.Gemini.Model
 
     public class TemporalExtent
     {
-        public DateTime Begin { get; set; }
-        public DateTime End { get; set; }
+        public string Begin { get; set; }
+        public string End { get; set; }
     }
 
     public class ResponsibleParty

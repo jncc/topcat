@@ -15,7 +15,7 @@ namespace Catalogue.Data.Import.Mappings
     /// <summary>
     ///     The mappings for importing the Marine Habitat (MESH) data.
     /// </summary>
-    public class MeshMapping :BaseMapper, IMapping
+    public class MeshMapping : IMapping
     {
         public void Apply(CsvConfiguration config)
         {
@@ -76,6 +76,7 @@ namespace Catalogue.Data.Import.Mappings
                     return w;
             }
         }
+
         public class GeminiMap : CsvClassMap<Metadata>
         {
             public override void CreateMap()
@@ -90,11 +91,18 @@ namespace Catalogue.Data.Import.Mappings
                 });
                 Map(m => m.TemporalExtent).ConvertUsing(row =>
                 {
-                    DateTime Begin = ConvertStrToDate(row.GetField("TemporalExtentBegin"));
-                    DateTime End = ConvertStrToDate(row.GetField("TemporalExtentEnd"));
-                    return new TemporalExtent {Begin = Begin, End = End};
+                    string begin =  row.GetField("TemporalExtentBegin");
+                    string end = row.GetField("TemporalExtentEnd");
+                    return new TemporalExtent
+                        {
+                            Begin = ImportUtility.ParseDate(begin),
+                            End = ImportUtility.ParseDate(end)
+                        };
                 });
-                Map(m => m.DatasetReferenceDate);
+                Map(m => m.DatasetReferenceDate).ConvertUsing(row =>
+                    {
+                        return ImportUtility.ParseDate(row.GetField("DatasetReferenceDate"));
+                    });
                 Map(m => m.Lineage);
                 Map(m => m.ResourceLocator);
                 Map(m => m.AdditionalInformationSource);
@@ -112,10 +120,9 @@ namespace Catalogue.Data.Import.Mappings
                 Map(m => m.SpatialReferenceSystem);
                 Map(m => m.MetadataDate).ConvertUsing(row =>
                 {
-                    return ConvertStrToDate(row.GetField("MetadataDate"));
+                    return DateTime.Parse(row.GetField("MetadataDate"));
                     
-                }
-                    );
+                });
                 Map(m => m.MetadataPointOfContact).ConvertUsing(row =>
                 {
                     string name = row.GetField("MetadataPOCName");

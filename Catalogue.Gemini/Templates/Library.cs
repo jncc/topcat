@@ -26,7 +26,7 @@ namespace Catalogue.Gemini.Templates
                 Abstract = "",
                 TopicCategory = "",
                 Keywords = new StringPairList().ToKeywordList(),
-                TemporalExtent = new TemporalExtent { Begin = new DateTime(), End = new DateTime() },
+                TemporalExtent = new TemporalExtent { Begin = "", End = "" },
                 DatasetReferenceDate = "",
                 Lineage = "",
                 ResourceLocator = "",
@@ -72,7 +72,7 @@ namespace Catalogue.Gemini.Templates
                         { "http://jncc.gov.uk", "Bermuda Institute of Ocean Sciences" },
                     }
                     .ToKeywordList(),
-                TemporalExtent = new TemporalExtent { Begin = new DateTime(), End = new DateTime() },
+                TemporalExtent = new TemporalExtent { Begin = "1998-01", End = "" },
                 DatasetReferenceDate = "2015-01-01",
                 Lineage = "This dataset was imagined by a developer.",
                 ResourceLocator = "http://data.jncc.gov.uk/5eb63655-d7fe-46af-88bc-71f7db243ad3",

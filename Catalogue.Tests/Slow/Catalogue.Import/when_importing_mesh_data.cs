@@ -67,6 +67,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Import
         [Test]
         public void should_all_be_top_copy()
         {
+            Console.Write("hello");
             imported.Count(r => r.TopCopy).Should().Be(189);
         }
 

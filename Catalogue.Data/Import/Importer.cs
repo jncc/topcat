@@ -31,7 +31,7 @@ namespace Catalogue.Data.Import
         /// </summary>
         public bool ImportKeywords { get; set; }
 
-        public readonly RecordValidationIssueSet Failures = new RecordValidationIssueSet();
+        public readonly List<RecordServiceResult> Results = new List<RecordServiceResult>();
 
         public Importer(IFileSystem fileSystem, IRecordService recordService, IVocabularyService vocabularyService)
         {
@@ -74,6 +74,8 @@ namespace Catalogue.Data.Import
                 }
 
                 n++;
+                Results.Add(result);
+
                 keywords.AddRange(result.Record.Gemini.Keywords);
             }
 
