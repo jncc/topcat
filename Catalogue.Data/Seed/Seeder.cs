@@ -11,6 +11,8 @@ using Catalogue.Gemini.DataFormats;
 using Catalogue.Gemini.Model;
 using Catalogue.Gemini.Templates;
 using Catalogue.Utilities.Clone;
+using Catalogue.Utilities.Diagnostics;
+using Catalogue.Utilities.Text;
 using Raven.Client;
 
 namespace Catalogue.Data.Seed
@@ -69,6 +71,16 @@ namespace Catalogue.Data.Seed
                 importer.ImportKeywords = true;
                 importer.SkipBadRecords = true; // todo remove when data export is finished
                 importer.Import(reader);
+
+//                var probs = from r in importer.Results
+//                    where !r.Success
+//                    select new
+//                    {
+//                        r.Record.SourceIdentifier,
+//                        errors = r.Validation.Errors.ToConcatenatedString(e => e.Message, ",")
+//                    };
+//
+//                string log = ObjectDumper.String(probs);
             }
         }
 
