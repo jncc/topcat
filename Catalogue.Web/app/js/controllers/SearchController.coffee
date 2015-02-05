@@ -36,9 +36,6 @@
             else
                 return str
 
-
-      
-        #Search on page load based on qs params 
             
         # slightly hacky way of triggering animations on startup
         # to work around angular skipping the initial animation
@@ -56,7 +53,7 @@
         $rootScope.page = { title:appTitlePrefix } 
         
         $scope.tagSearch = (keyword) ->
-            $scope.query.p = '';
+            $scope.query.p = 0;
             $scope.query.k = [getPathFromKeyword(keyword)]
             $scope.doSearch()        
         
@@ -101,7 +98,7 @@
             else if $scope.activeSearchType == $scope.searchType.fulltext
                 $scope.query.k = [''] 
                 
-        $scope.nextPage = () ->
+        $scope.nextPage = (n) ->
             $scope.query.p = n-1
             $scope.doSearch()
             
