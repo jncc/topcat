@@ -3,13 +3,21 @@
   angular.module('app.controllers').controller('SearchController', function($scope, $rootScope, $location, $http, $timeout) {
     var appTitlePrefix, getPathFromKeyword;
     appTitlePrefix = "Topcat:";
+    $scope.searchType = {
+      fulltext: 'fulltext',
+      keyword: 'keyword'
+    };
+    $scope.activeSearchType = $scope.searchType.fulltext;
     $scope.keyword = '';
     $scope.query = {
       q: $location.search()['q'] || '',
-      k: $location.search()['k'] || '',
+      k: [$location.search()['k']] || [''],
       p: 0,
       n: 25
     };
+    if ($scope.query.k !== ['']) {
+      $scope.activeSearchType = $scope.searchType.keyword;
+    }
     $scope.app = {
       starting: true
     };
@@ -33,8 +41,9 @@
       title: appTitlePrefix
     };
     $scope.tagSearch = function(keyword) {
-      $scope.query.p = 0;
-      return $scope.query.k = getPathFromKeyword(keyword);
+      $scope.query.p = '';
+      $scope.query.k = [getPathFromKeyword(keyword)];
+      return $scope.doSearch;
     };
     $scope.getKeywords = function(term) {
       return $http.get('../api/keywords?q=' + term).then(function(response) {
@@ -46,7 +55,7 @@
       if ($scope.query.q) {
         $location.url($location.path());
         $location.search('q', $scope.query.q);
-        $location.search('k', $scope.query.k);
+        $location.search('k', $scope.query.k[0]);
         $location.search('p', $scope.query.p);
         $location.search('n', $scope.query.n);
         $rootScope.page = {
@@ -74,10 +83,19 @@
       return path;
     };
     $scope.onKeywordSelect = function(keyword, model, label) {
-      return $scope.query.k = getPathFromKeyword(keyword);
+      return $scope.query.k = [getPathFromKeyword(keyword)];
     };
-    $scope.decideWhichSearch = function() {};
-    return $scope.$watch('query', $scope.doSearch, true);
+    $scope.switchSearchType = function() {
+      if ($scope.activeSearchType === $scope.searchType.keyword) {
+        return $scope.query.q = '';
+      } else if ($scope.activeSearchType === $scope.searchType.fulltext) {
+        return $scope.query.k = [''];
+      }
+    };
+    return $scope.nextPage = function() {
+      $scope.query.p = n - 1;
+      return $scope.doSearch;
+    };
   });
 
 }).call(this);

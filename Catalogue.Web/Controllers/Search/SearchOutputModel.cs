@@ -32,7 +32,6 @@ namespace Catalogue.Web.Controllers.Search
         public string Q { get; set; }
         public int P { get; set; }
         public int N { get; set; }
-        public string T { get; set; }
         public string[] K { get; set; }
     }
 

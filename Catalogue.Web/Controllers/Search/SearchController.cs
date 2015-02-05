@@ -1,10 +1,7 @@
-﻿using System.Collections.Generic;
-using System.Text.RegularExpressions;
+﻿using System;
 using System.Web.Http;
-using Catalogue.Gemini.Model;
 using Catalogue.Utilities.Text;
 using Catalogue.Web.Search;
-using System.Linq;
 
 namespace Catalogue.Web.Controllers.Search
 {
@@ -22,7 +19,7 @@ namespace Catalogue.Web.Controllers.Search
         public SearchOutputModel Get(string q, string k, int n = 25, int p = 0)
         {
             //could easily rework this to combine the outputs.
-            if (k.IsNotBlank()) return KeywordSearch(new []{k}, n, p);
+            if (k.IsNotBlank()) return KeywordSearch(k, n, p);
 
             return FullTextSearch(q, n, p);
         }
@@ -31,22 +28,22 @@ namespace Catalogue.Web.Controllers.Search
         {
             var searchInputModel = new SearchInputModel()
             {
+                Keywords = new [] {String.Empty},
                 PageNumber = p,
                 Query = q,
                 NumberOfRecords = n,
-                SearchType = SearchType.FullText
             };
             return _searchHelper.FullTextSearch(searchInputModel);
         }
 
-        private SearchOutputModel KeywordSearch(string[] k, int n, int p)
+        private SearchOutputModel KeywordSearch(string k, int n, int p)
         {
             var searchInputModel = new SearchInputModel()
             {
-                Keywords = k,
+                Query = string.Empty,
+                Keywords = new[] {k},
                 NumberOfRecords = n,
                 PageNumber = p,
-                SearchType = SearchType.Keyword
             };
             return _searchHelper.KeywordSearch(searchInputModel);
         }

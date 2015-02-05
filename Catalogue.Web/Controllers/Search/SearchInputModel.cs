@@ -29,7 +29,6 @@ namespace Catalogue.Web.Search
         public int PageNumber { get; set; }
         public string Query { get; set; }
         public string[] Keywords { get; set; }
-        public SearchType SearchType { get; set; }
     }
 
 }
