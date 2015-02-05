@@ -27,7 +27,8 @@
         # Work out starting search type
         if ($scope.query.k[0] != '') 
             $scope.activeSearchType = $scope.searchType.keyword
-            
+       
+        #Search on page load based on qs params 
             
         # slightly hacky way of triggering animations on startup
         # to work around angular skipping the initial animation
@@ -108,4 +109,6 @@
         #    ()  -> $location.search()['q'] #todo watch and update whole querystring
         #    (q) -> $scope.query.q = q || ''
         #)
+        
+        $scope.doSearch()
 

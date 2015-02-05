@@ -102,7 +102,7 @@
     </ul>
 </div>
 
-<div ng-show="!query.q && !query.k && !app.starting" class="fade-in-with-delay">
+<div ng-show="!query.q && query.k[0] = '' && !app.starting" class="fade-in-with-delay">
     <div class="row">
         <div class="col-md-7 welcome">
             <h2><b>Discover and organise</b> the data assets we hold as an organisation with <b>Topcat</b>.</h2>

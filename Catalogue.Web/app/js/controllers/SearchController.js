@@ -99,10 +99,11 @@
         return $scope.query.k = [''];
       }
     };
-    return $scope.nextPage = function() {
+    $scope.nextPage = function() {
       $scope.query.p = n - 1;
       return $scope.doSearch();
     };
+    return $scope.doSearch();
   });
 
 }).call(this);
