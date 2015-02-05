@@ -29,7 +29,9 @@ namespace Catalogue.Web.Controllers.Search
         {
             RavenQueryStatistics stats;
 
-            var keyword = GetKeywords(searchInputModel.Keywords).Single(); // for now, we only support one keyword
+            var keywords = GetKeywords(searchInputModel.Keywords);
+
+            var keyword = keywords.Single(); // for now, we only support one keyword
 
             var query = _db.Query<Record>()
                 .Statistics(out stats)
@@ -102,7 +104,7 @@ namespace Catalogue.Web.Controllers.Search
         {
             return (from k in keywords
                     where k.IsNotBlank()
-                    from m in Regex.Matches(k,  @"^([\w\s/\.-]*)/([\w\s-]*)$").Cast<Match>()
+                    from m in Regex.Matches(k,  @"^([\w\s/\.-]*)/([\w\s-]*)$", RegexOptions.IgnoreCase).Cast<Match>()
                     let pair = m.Groups.Cast<Group>().Select(g => g.Value).Skip(1)
                     select new MetadataKeyword
                     {

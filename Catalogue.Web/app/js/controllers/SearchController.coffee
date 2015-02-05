@@ -3,6 +3,12 @@
         appTitlePrefix = "Topcat:";
          # initial values
          
+        ensureEndsWith = (str, suffix) ->
+            if !(str.indexOf(suffix, str.length - suffix.length) != -1) 
+                return str.concat(suffix)
+            else
+                return str
+
         $scope.searchType = {
             fulltext: 'fulltext',
             keyword:  'keyword'
@@ -14,12 +20,12 @@
         
         $scope.query = { 
             q: $location.search()['q'] || '', 
-            k: [$location.search()['k']] || [''], 
+            k: [$location.search()['k'] || ''], 
             p: 0 , 
             n:25 }
             
         # Work out starting search type
-        if ($scope.query.k != ['']) 
+        if ($scope.query.k[0] != '') 
             $scope.activeSearchType = $scope.searchType.keyword
             
             
@@ -41,14 +47,14 @@
         $scope.tagSearch = (keyword) ->
             $scope.query.p = '';
             $scope.query.k = [getPathFromKeyword(keyword)]
-            $scope.doSearch        
+            $scope.doSearch()        
         
         # listener for when keywords are entered into the keyword typeahead box        
         $scope.getKeywords = (term) -> $http.get('../api/keywords?q='+term).then (response) -> 
             response.data          
                     
         $scope.doSearch = () ->
-            if $scope.query.q 
+            if $scope.query.q || $scope.query.k[0]
                 # update the url
                 $location.url($location.path())
                 $location.search('q', $scope.query.q)
@@ -73,12 +79,13 @@
                     .finally -> $scope.busy.stop()        
         
         getPathFromKeyword = (keyword) ->
-            path = keyword.vocab + keyword.value
+            path = ensureEndsWith(keyword.vocab, '/') + keyword.value
             path.replace("http://", "")
-            path
+ 
             
         $scope.onKeywordSelect = (keyword, model, label) -> 
             $scope.query.k = [getPathFromKeyword(keyword)]
+            $scope.doSearch()
             
         $scope.switchSearchType = () -> #todo: get rid of this if not needed by radio buttons
             if $scope.activeSearchType == $scope.searchType.keyword 
@@ -88,7 +95,7 @@
                 
         $scope.nextPage = () ->
             $scope.query.p = n-1
-            $scope.doSearch
+            $scope.doSearch()
             
         #  register the three listners
         # $scope.$watch 'query', $scope.doSearch, true # could  be either text or keyword
