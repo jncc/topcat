@@ -179,7 +179,7 @@
     <Compile Include="Controllers\Topics\TopicsController.cs" />
     <Compile Include="Controllers\Search\VocabularyTypeaheadController.cs" />
     <Compile Include="Controllers\RolesController.cs" />
-    <Compile Include="Import\ImportController.cs" />
+    <Compile Include="Controllers\Ingest\IngestController.cs" />
     <Compile Include="Logging\ElmahHandledErrorLoggerFilter.cs" />
     <Compile Include="Logging\UnhandledExceptionFilter.cs" />
     <Compile Include="Controllers\Search\SearchHelper.cs" />
@@ -230,11 +230,11 @@
     <Content Include="app\js\controllers\EditorController.min.js">
       <DependentUpon>EditorController.coffee</DependentUpon>
     </Content>
-    <Content Include="app\js\controllers\ImportController.js">
-      <DependentUpon>ImportController.coffee</DependentUpon>
+    <Content Include="app\js\controllers\IngestController.js">
+      <DependentUpon>IngestController.coffee</DependentUpon>
     </Content>
-    <Content Include="app\js\controllers\ImportController.min.js">
-      <DependentUpon>ImportController.coffee</DependentUpon>
+    <Content Include="app\js\controllers\IngestController.min.js">
+      <DependentUpon>IngestController.coffee</DependentUpon>
     </Content>
     <Content Include="app\js\controllers\MainController.js">
       <DependentUpon>MainController.coffee</DependentUpon>
@@ -327,7 +327,7 @@
     <Content Include="app\lib\respond-1.2.0\test\unit\tests.js" />
     <Content Include="app\lib\zeroclipboard-1.1.7\ZeroClipboard.min.js" />
     <Content Include="app\lib\zeroclipboard-1.1.7\ZeroClipboard.swf" />
-    <Content Include="app\views\admin\admin.html" />
+    <Content Include="app\views\ingest\ingest.html" />
     <Content Include="app\views\editor\editor.html" />
     <Content Include="app\views\sandbox\colours.html" />
     <Content Include="app\views\sandbox\dropdown.html" />
@@ -416,7 +416,7 @@
     <Content Include="app\js\controllers\EditorController.map" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="app\js\controllers\ImportController.coffee" />
+    <Content Include="app\js\controllers\IngestController.coffee" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="app\js\controllers\VocabularyListController.coffee" />

@@ -1,0 +1,19 @@
+﻿<div>
+    <h3>Imports </h3>
+    <div>
+        Select import <br/>
+        <select ng-model="import.selectedImport">
+            <option ng-repeat="i in import" value="{{i.id}}">{{i.name}}</option>
+        </select>
+    </div>
+    <div>
+        Place file in {{importFolder}} and enter file name here.
+        <input type="text" ng-model="import.fileName" class="form-control"/>
+        <button ng-click="import.skipBadRecords = !import.skipBadRecords" ng-class="{ 'btn-danger': !import.skipBadRecords, 'btn-success': import.skipBadRecords }" class="btn"
+                title="Skip bad records when importing?" tc-tip>
+            <span class="glyphicon glyphicon-repeat"></span>
+            {{import.skipBadRecords ? 'Skip bad records':'Fail on bad records';}}
+        </button>
+        <button ng-click="runImport()">Import Data</button>
+    </div>
+</div>
