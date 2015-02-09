@@ -10,17 +10,24 @@ namespace Catalogue.Web.Controllers.Ingest
 {
     /*Slightly weird controller, should only be used once in live system, when importing the data*/
 
-    public class Import
+    public class Ingest
     {
         public int Id { get; set; }
         public bool SkipBadRecords { get; set; }
         public string FileName { get; set; }
     }
 
-    public class ImportSettings
+    public class IngestSettings
     {
         public string ImportFolderPath { get; set; }
     }
+
+    public class IngestResult
+    {
+        public bool Success { get; set; }
+        public string Exception { get; set; }
+    }
+
 
     public class IngestController : ApiController
     {
@@ -35,26 +42,42 @@ namespace Catalogue.Web.Controllers.Ingest
             this.db = db;
         }
 
-        public Boolean Post([FromBody] Import import)
+        public IngestResult Post([FromBody] Ingest ingest)
         {
-            if (import.Id == 0) RunImport<ActivitiesMapping>(import);
-            if (import.Id == 1) RunImport<MeshMapping>(import);
-            if (import.Id == 2) RunImport<PubCatMapper>(import);
+            if (ingest.Id == 0) return RunImport<ActivitiesMapping>(ingest);
+            if (ingest.Id == 1) return RunImport<MeshMapping>(ingest);
+            if (ingest.Id == 2) return RunImport<PubCatMapper>(ingest);
 
-            return true;
+            throw new ArgumentException("Invalid import id");
         }
 
-        private void RunImport<T>(Import import) where T : IMapping, new()
+        private IngestResult RunImport<T>(Ingest ingest) where T : IMapping, new()
         {
-            var vocabService = new VocabularyService(db);
-            var importer = new Importer<T>(new FileSystem(), new RecordService(db,new RecordValidator(vocabService)), vocabService);
-            importer.Import(ImportFolderPath + import.FileName);
-            db.SaveChanges();
+            var importer = Importer.CreateImporter<T>(db);
+            try
+            {
+                importer.Import(ImportFolderPath + ingest.FileName);
+                db.SaveChanges();
+            }
+            catch (Exception e)
+            {
+                return new IngestResult
+                    {
+                        Success = false,
+                        Exception = e.Message
+                    };
+            }
+
+            return new IngestResult
+            {
+                Success = true
+            };
+
         }
 
-        public ImportSettings Get()
+        public IngestSettings Get()
         {
-            return new ImportSettings
+            return new IngestSettings
                 {
                     ImportFolderPath = this.ImportFolderPath
                 };

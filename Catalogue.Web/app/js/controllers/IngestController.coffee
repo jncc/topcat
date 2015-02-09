@@ -10,10 +10,11 @@
                 
         $scope.runImport = ->
             processResult = (response) ->
-                if response.data.success
+                if response.success
                     $scope.notifications.add 'Import run successfully'
                 else
                     $scope.notifications.add 'Import failed'
+                    $scope.notifications.add response.exception
                                 
                 $scope.busy.stop()
 

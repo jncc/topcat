@@ -82,6 +82,9 @@ namespace Catalogue.Data.Import.Mappings
                 AddKeyword(keywords, "http://vocab.jncc.gov.uk/publications", "Discontinued");
             }
 
+            //All pubcat elements are marked with this.
+            AddKeyword(keywords, "http://vocab.jncc.gov.uk/publications", "Publication");
+
             return keywords;
         }
 
