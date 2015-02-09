@@ -42,9 +42,9 @@ module.config ['$routeProvider', ($routeProvider) ->
         .when '/vocabularies',
             controller:     'VocabularyListController',
             templateUrl:    'views/vocabularies/vocabularies.html'
-        .when '/admin/minty1$',
-            controller:     'AdminController',
-            templateUrl:    'views/admin/admin.html'
+        .when '/ingest',
+            controller:     'IngestController',
+            templateUrl:    'views/ingest/ingest.html'
         .when '/vocabularies/editor/:vocabId*',
             controller:     'VocabularyEditorController',
             templateUrl:    'views/vocabularies/editor.html',

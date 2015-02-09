@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using Catalogue.Gemini.Model;
+using Catalogue.Web.Controllers.Search;
 
 namespace Catalogue.Web.Search
 {
@@ -27,8 +28,7 @@ namespace Catalogue.Web.Search
         public int NumberOfRecords { get; set; }
         public int PageNumber { get; set; }
         public string Query { get; set; }
-        public MetadataKeyword Keyword { get; set; }
-        public SearchType SearchType { get; set; }
+        public string[] Keywords { get; set; }
     }
 
 }

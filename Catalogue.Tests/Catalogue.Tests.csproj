@@ -68,7 +68,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Data\Import\ImporterTest.cs" />
     <Compile Include="Explicit\ad_hoc_queries.cs" />
     <Compile Include="Explicit\Catalogue.Data\Export\octonaughts_lets_do_this.cs" />
     <Compile Include="Explicit\Catalogue.Import\import_runner.cs" />
@@ -85,6 +84,7 @@
     <Compile Include="Slow\Catalogue.Data\Versioning\versioning_specs.cs" />
     <Compile Include="Slow\Catalogue.Gemini\Validation\when_validating_the_example_document.cs" />
     <Compile Include="Slow\Catalogue.Import\when_importing_mesh_data.cs" />
+    <Compile Include="Slow\Catalogue.Web\Controllers\Search\search_helper_specs.cs" />
     <Compile Include="Slow\Spatial\when_querying_spatial_test_data.cs" />
     <Compile Include="Slow\when_testing_this_application.cs" />
     <Compile Include="DatabaseTestFixture.cs" />
@@ -96,7 +96,9 @@
     <None Include="app.config" />
     <None Include="packages.config" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Data\" />
+  </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Catalogue.Data\Catalogue.Data.csproj">
       <Project>{3ad6b61c-cab1-4cc4-8895-ba2dd3b58c59}</Project>

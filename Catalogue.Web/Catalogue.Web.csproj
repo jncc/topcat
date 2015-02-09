@@ -155,25 +155,22 @@
     <Compile Include="Admin\Vocabularies\VocabularyListController.cs" />
     <Compile Include="Controllers\Download\DownloadController.cs" />
     <Compile Include="Controllers\Topics\TopicsController.cs" />
-    <Compile Include="Search\Controllers\VocabularyTypeaheadController.cs" />
+    <Compile Include="Controllers\Search\VocabularyTypeaheadController.cs" />
     <Compile Include="Controllers\RolesController.cs" />
-    <Compile Include="Import\ImportController.cs" />
+    <Compile Include="Controllers\Ingest\IngestController.cs" />
     <Compile Include="Logging\ElmahHandledErrorLoggerFilter.cs" />
     <Compile Include="Logging\UnhandledExceptionFilter.cs" />
-    <Compile Include="Search\Controllers\VocabularySearchController.cs" />
-    <Compile Include="Search\Repository\SearchRepository.cs" />
-    <Compile Include="Search\SearchInputModel.cs" />
-    <Compile Include="Search\SearchType.cs" />
-    <Compile Include="Search\Service\SearchService.cs" />
+    <Compile Include="Controllers\Search\SearchHelper.cs" />
+    <Compile Include="Controllers\Search\SearchInputModel.cs" />
+    <Compile Include="Controllers\Search\SearchType.cs" />
     <Compile Include="Settings.cs" />
     <Compile Include="Account\AccountController.cs" />
     <Compile Include="Controllers\FormatsController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\RecordsController.cs" />
     <Compile Include="Controllers\SandboxController.cs" />
-    <Compile Include="Search\Controllers\SearchController.cs" />
-    <Compile Include="Search\Controllers\KeywordSearchController.cs" />
-    <Compile Include="Search\SearchOutputModel.cs" />
+    <Compile Include="Controllers\Search\SearchController.cs" />
+    <Compile Include="Controllers\Search\SearchOutputModel.cs" />
     <Compile Include="Validator\ValidatorController.cs" />
     <Compile Include="Validator\ValidatorInputModel.cs" />
     <Compile Include="Validator\ValidatorResult.cs" />
@@ -211,11 +208,11 @@
     <Content Include="app\js\controllers\EditorController.min.js">
       <DependentUpon>EditorController.coffee</DependentUpon>
     </Content>
-    <Content Include="app\js\controllers\ImportController.js">
-      <DependentUpon>ImportController.coffee</DependentUpon>
+    <Content Include="app\js\controllers\IngestController.js">
+      <DependentUpon>IngestController.coffee</DependentUpon>
     </Content>
-    <Content Include="app\js\controllers\ImportController.min.js">
-      <DependentUpon>ImportController.coffee</DependentUpon>
+    <Content Include="app\js\controllers\IngestController.min.js">
+      <DependentUpon>IngestController.coffee</DependentUpon>
     </Content>
     <Content Include="app\js\controllers\MainController.js">
       <DependentUpon>MainController.coffee</DependentUpon>
@@ -308,7 +305,7 @@
     <Content Include="app\lib\respond-1.2.0\test\unit\tests.js" />
     <Content Include="app\lib\zeroclipboard-1.1.7\ZeroClipboard.min.js" />
     <Content Include="app\lib\zeroclipboard-1.1.7\ZeroClipboard.swf" />
-    <Content Include="app\views\admin\admin.html" />
+    <Content Include="app\views\ingest\ingest.html" />
     <Content Include="app\views\editor\editor.html" />
     <Content Include="app\views\sandbox\colours.html" />
     <Content Include="app\views\sandbox\dropdown.html" />
@@ -397,7 +394,7 @@
     <Content Include="app\js\controllers\EditorController.map" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="app\js\controllers\ImportController.coffee" />
+    <Content Include="app\js\controllers\IngestController.coffee" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="app\js\controllers\VocabularyListController.coffee" />
