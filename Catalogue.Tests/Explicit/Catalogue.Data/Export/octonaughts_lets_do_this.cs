@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Net;
 using System.Text;
 using System.Threading.Tasks;
+using Catalogue.Data.Export;
 using Catalogue.Data.Model;
 using Catalogue.Data.Write;
 using Catalogue.Gemini.Templates;
@@ -15,6 +17,22 @@ namespace Catalogue.Tests.Explicit.Catalogue.Data.Export
 {
     class octonaughts_lets_do_this : DatabaseTestFixture
     {
+
+        [Test, Explicit]
+        public void foo()
+        {
+            var query = Db.Query<Record>().Where(r => r.Gemini.Title == "Broadscale remote survey and mapping of sublittoral habitats and their associated biota in the Firth of Lorn: biotopes");
+            var records = query.ToList();
+
+            records.Any().Should().BeTrue();
+
+            using (var writer = File.CreateText(@"c:\deleteme.txt"))
+            {
+                var exporter = new Exporter();
+                exporter.Export(records, writer);
+            }
+        }
+
         [Test, Explicit]
         public void go()
         {

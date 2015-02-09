@@ -15,7 +15,7 @@ using Raven.Client.Document;
 
 namespace Catalogue.Data.Import.Mappings
 {
-    public class PubCatMapper : IMapping
+    public class PubCatMapping : IMapping
     {
         public void Apply(CsvConfiguration config)
         {
@@ -139,7 +139,7 @@ namespace Catalogue.Data.Import.Mappings
 
             using (IDocumentSession db = store.OpenSession())
             {
-                var importer = Importer.CreateImporter<PubCatMapper>(db);
+                var importer = Importer.CreateImporter<PubCatMapping>(db);
                 importer.Import(@"C:\Working\pubcat.csv");
                 //db.SaveChanges();
             }
