@@ -29,8 +29,7 @@ namespace Catalogue.Web.Controllers.Search
         {
             RavenQueryStatistics stats;
 
-            var keywords = GetKeywords(searchInputModel.Keywords);
-
+            var keywords = ParameterHelper.ParseKeywords(searchInputModel.Keywords);
             var keyword = keywords.Single(); // for now, we only support one keyword
 
             var query = _db.Query<Record>()
@@ -98,21 +97,6 @@ namespace Catalogue.Web.Controllers.Search
                          };
 
             return MakeSearchOutputModel(searchInputModel, stats, xs);
-        }
-
-        private List<MetadataKeyword> GetKeywords(IEnumerable<string> keywords)
-        {
-            return (from k in keywords
-                    where k.IsNotBlank()
-                    from m in Regex.Matches(k,  @"^([\w\s/\.-]*)/([\w\s-]*)$", RegexOptions.IgnoreCase).Cast<Match>()
-                    let pair = m.Groups.Cast<Group>().Select(g => g.Value).Skip(1)
-                    select new MetadataKeyword
-                    {
-                        Vocab = "http://" + pair.ElementAt(0).Trim(),
-                        Value = pair.ElementAt(1).Trim()
-                    }
-                   ).ToList();
-
         }
 
         private static SearchOutputModel MakeSearchOutputModel(SearchInputModel searchInputModel, RavenQueryStatistics stats,
