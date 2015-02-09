@@ -83,7 +83,7 @@ namespace Catalogue.Data.Import.Mappings
             }
 
             //All pubcat elements are marked with this.
-            AddKeyword(keywords, "http://vocab.jncc.gov.uk/publications", "Publication");
+            AddKeyword(keywords, "http://vocab.jncc.gov.uk/jncc-broad-category", "Publications");
 
             return keywords;
         }
