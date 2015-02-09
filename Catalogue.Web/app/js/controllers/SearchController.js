@@ -1,33 +1,45 @@
-﻿(function() {
+(function() {
 
   angular.module('app.controllers').controller('SearchController', function($scope, $rootScope, $location, $http, $timeout) {
-    var appTitlePrefix, doKeywordSearch, doTextSearch, doVocabSearch;
-    appTitlePrefix = "Topcat:";
+    var appTitlePrefix, ensureEndsWith, getKeywordFromPath, getPathFromKeyword;
+    $scope.searchType = {
+      fulltext: 'fulltext',
+      keyword: 'keyword'
+    };
+    $scope.activeSearchType = $scope.searchType.fulltext;
+    $scope.keyword = '';
     $scope.query = {
       q: $location.search()['q'] || '',
+      k: [$location.search()['k'] || ''],
       p: 0,
       n: 25
     };
-    $scope.model = {
-      keyword: {
-        value: $location.search()['value'] || '',
-        vocab: $location.search()['vocab'] || ''
+    getPathFromKeyword = function(keyword) {
+      var path;
+      path = ensureEndsWith(keyword.vocab, '/') + keyword.value;
+      return path.replace("http://", "");
+    };
+    getKeywordFromPath = function(path) {
+      var elements, i, value, vocab, _i, _ref;
+      elements = path.split('/');
+      value = elements[elements.length - 1];
+      vocab = "http://";
+      for (i = _i = 0, _ref = elements.length - 2; _i <= _ref; i = _i += 1) {
+        vocab = vocab.concat(elements[i].concat('/'));
+      }
+      return {
+        value: value,
+        vocab: vocab
+      };
+    };
+    appTitlePrefix = "Topcat:";
+    ensureEndsWith = function(str, suffix) {
+      if (!(str.indexOf(suffix, str.length - suffix.length) !== -1)) {
+        return str.concat(suffix);
+      } else {
+        return str;
       }
     };
-    $scope.searchType = {
-      keyword: 'keyword',
-      vocab: 'vocab',
-      text: 'text'
-    };
-    if ($scope.model.keyword.value) {
-      $scope.model.searchType = $scope.searchType.keyword;
-      $scope.query.q = $scope.model.keyword.value;
-    } else if ($scope.model.keyword.vocab) {
-      $scope.model.searchType = $scope.searchType.vocab;
-      $scope.query.q = $scope.model.vocab.value;
-    } else {
-      $scope.model.searchType = $scope.searchType.text;
-    }
     $scope.app = {
       starting: true
     };
@@ -50,54 +62,30 @@
     $rootScope.page = {
       title: appTitlePrefix
     };
-    $scope.changeKeywordResetPageNumber = function(keyword) {
-      $scope.model.keyword = keyword;
+    $scope.tagSearch = function(keyword) {
       $scope.query.p = 0;
-      $scope.model.searchType = $scope.searchType.keyword;
-      return $scope.query.q = keyword.value;
-    };
-    $scope.changePageNumber = function() {
-      if ($scope.model.searchType === $scope.searchType.keyword) {
-        return doKeywordSearch();
-      } else if ($scope.model.searchType === $scope.searchType.vocab) {
-        return doVocabSearch();
-      } else {
-        return doTextSearch();
-      }
-    };
-    $scope.decideWhichSearch = function() {
-      $scope.query.p = 0;
-      if ($scope.model.searchType === $scope.searchType.keyword) {
-        $scope.model.keyword.value = $scope.query.q;
-        return doKeywordSearch();
-      } else if ($scope.model.searchType === $scope.searchType.vocab) {
-        $scope.model.keyword.vocab = $scope.query.q;
-        return doVocabSearch();
-      } else {
-        return doTextSearch();
-      }
+      $scope.query.k = [getPathFromKeyword(keyword)];
+      return $scope.doSearch();
     };
     $scope.getKeywords = function(term) {
       return $http.get('../api/keywords?q=' + term).then(function(response) {
         return response.data;
       });
     };
-    $scope.getVocabularies = function(term) {
-      return $http.get('../api/vocabularytypeahead?q=' + term).then(function(response) {
-        return response.data;
-      });
-    };
-    doTextSearch = function() {
-      if ($scope.query.q) {
+    $scope.doSearch = function() {
+      var url;
+      if ($scope.query.q || $scope.query.k[0]) {
         $location.url($location.path());
         $location.search('q', $scope.query.q);
+        $location.search('k', $scope.query.k[0]);
         $location.search('p', $scope.query.p);
         $location.search('n', $scope.query.n);
         $rootScope.page = {
           title: appTitlePrefix + $scope.query.q
         };
         $scope.busy.start();
-        return $http.get('../api/search?' + $.param($scope.query)).success(function(result) {
+        url = '../api/search?' + $.param($scope.query);
+        return $http.get(url).success(function(result) {
           if (angular.equals(result.query, $scope.query)) {
             if (result.total === 0) {
               return $scope.result = {};
@@ -110,49 +98,26 @@
         });
       }
     };
-    doKeywordSearch = function() {
-      $location.url($location.path());
-      $location.search('value', $scope.model.keyword.value);
-      $location.search('p', $scope.query.p);
-      $location.search('n', $scope.query.n);
-      $scope.busy.start();
-      return $http.get("../api/keywordSearch?value=" + $scope.model.keyword.value + "&vocab=" + $scope.model.keyword.vocab + "&p=" + $scope.query.p + "&n=" + $scope.query.n).success(function(result) {
-        if (angular.equals(result.query, $scope.query)) {
-          if (result.total === 0) {
-            return $scope.result = {};
-          } else {
-            return $scope.result = result;
-          }
-        }
-      })["finally"](function() {
-        $scope.busy.stop();
-        return $rootScope.page = {
-          title: appTitlePrefix + $scope.model.keyword.value
-        };
-      });
+    $scope.onKeywordSelect = function(keyword, model, label) {
+      $scope.query.k = [getPathFromKeyword(keyword)];
+      return $scope.doSearch();
     };
-    doVocabSearch = function() {
-      $location.url($location.path());
-      $location.search('vocab', $scope.model.keyword.vocab);
-      $location.search('p', $scope.query.p);
-      $location.search('n', $scope.query.n);
-      $scope.busy.start();
-      return $http.get("../api/vocabularySearch?vocab=" + $scope.model.keyword.vocab + "&p=" + $scope.query.p + "&n=" + $scope.query.n).success(function(result) {
-        if (angular.equals(result.query, $scope.query)) {
-          if (result.total === 0) {
-            return $scope.result = {};
-          } else {
-            return $scope.result = result;
-          }
-        }
-      })["finally"](function() {
-        $scope.busy.stop();
-        return $rootScope.page = {
-          title: appTitlePrefix + $scope.model.keyword.vocab
-        };
-      });
+    $scope.switchSearchType = function() {
+      if ($scope.activeSearchType === $scope.searchType.keyword) {
+        return $scope.query.q = '';
+      } else if ($scope.activeSearchType === $scope.searchType.fulltext) {
+        return $scope.query.k = [''];
+      }
     };
-    return $scope.$watch('query.q', $scope.decideWhichSearch, true);
+    $scope.nextPage = function(n) {
+      $scope.query.p = n - 1;
+      return $scope.doSearch();
+    };
+    if ($scope.query.k[0] !== '') {
+      $scope.activeSearchType = $scope.searchType.keyword;
+      $scope.keyword = getKeywordFromPath($scope.query.k[0]);
+    }
+    return $scope.doSearch();
   });
 
 }).call(this);

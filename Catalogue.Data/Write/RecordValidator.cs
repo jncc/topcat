@@ -98,11 +98,9 @@ namespace Catalogue.Data.Write
 
         void ValidateKeywords(Record record, RecordValidationResult recordValidationResult)
         {
-            //Must be one, non blank keyword
-
-            if (record.Gemini.Keywords.All(k => String.IsNullOrWhiteSpace(k.Value)))
+            if (!record.Gemini.Keywords.Any(k => k.Vocab == "http://vocab.jncc.gov.uk/jncc-broad-category"))
             {
-                recordValidationResult.Errors.Add(String.Format("At least one keyword must be specified" + GeminiSuffix),
+                recordValidationResult.Errors.Add(String.Format("Must specify a JNCC Broad Category"),
                     r => r.Gemini.Keywords);
             }
 
@@ -110,7 +108,7 @@ namespace Catalogue.Data.Write
             if (record.Gemini.Keywords.Any(k => String.IsNullOrWhiteSpace(k.Value)))
             {
                 recordValidationResult.Errors.Add(
-                    String.Format("Keywords cannot be blank" + GeminiSuffix),
+                    String.Format("Keywords cannot be blank"),
                     r => r.Gemini.Keywords);
             }
         }
@@ -529,26 +527,13 @@ namespace Catalogue.Data.Write
         }
 
         [Test]
-        public void one_non_blank_keyword_must_be_provided()
+        public void jncc_broad_category_must_be_provided()
         {
             // should not validate on empty list
             var r1 =
                new RecordValidator(mockVocabService.Object).Validate(SimpleRecord().With(r => r.Gemini.Keywords = new List<MetadataKeyword>()));
 
-            r1.Errors.Single().Message.Should().StartWith("At least one keyword must be specified");
-            r1.Errors.Single().Fields.Single().Should().Be("gemini.keywords");
-
-            //should not validate on list with blank keywords
-            var r2 = new RecordValidator(mockVocabService.Object).Validate(SimpleRecord().With(r => r.Gemini.Keywords = new StringPairList
-                        {
-                            {"", ""},
-                        }
-                        .ToKeywordList()));
-
-
-            r2.Errors.First().Message.Should().StartWith("At least one keyword must be specified");
-            r2.Errors.First().Fields.Single().Should().Be("gemini.keywords");
-
+            r1.Errors.Single().Message.Should().StartWith("Must specify a JNCC Broad Category");
         }
 
         [Test]
