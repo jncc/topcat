@@ -2,10 +2,9 @@
 Topcat - the JNCC Datasets Catalogue
 ====================================
 
-A simple data resource catalogue supporting a sensible profile of UK Gemini.
+A simple data resource catalogue supporting a sensible profile of UK Gemini plus custom fields.
 
 Licensed under [Open Government Licence v2](http://www.nationalarchives.gov.uk/doc/open-government-licence/version/2/).
-
 
 
 Development
@@ -26,12 +25,17 @@ Currently best to disable Resharper > Options > Tools > Unit Testing > Javascrip
 * Enable Jasmine support
 
 ###RavenDB
-RavenDB studio can be accessed in the development environment by browsing too: http://localhost:8888/raven/studio.html
+RavenDB studio can be accessed in development at http://localhost:8888
+
+To upgrade RavenDB, after updating the NuGet packages you currently need to update the Raven.Studio.Html5.zip file which can be got from the downloadable distribution.
+Hopefully this will be embedded in a forthcoming version, making this extra step unnecessary.
 
 Deployment
 ----------
 
-Topcat should run with no special setup on a vanilla Visual Studio installation for local development. Here's what you need to do to create a production instance.
+Topcat runs with no special setup in Visual Studio for local development.
+
+Here's what you need to do to create a production instance:
 
 ###Windows Authentication
 This is an corporate / intranet application and user account details and authentication rely on
@@ -62,6 +66,6 @@ The Windows installer should replace most of the following manual steps - but [h
 * `ICACLS e:\catalogue-deployments\Live\RavenDB\Web /grant "IIS AppPool\Catalogue.Data.Live":F`
 * C:\Windows\System32\inetsrv\config\applicationHost.config ensure startMode="AlwaysRunning". `<add name="Catalogue.Data.Live" managedRuntimeVersion="v4.0" startMode="AlwaysRunning" />`
 
-When creating a new database instance, the **Versioning bundle** needs to be enabled.
+When deploying a new database instance, the **Versioning bundle** needs to be enabled.
 
 The Catalogue.Data.dll must be copied into Raven/Analyzers folder because RavenDB needs to be able to load the custom Lucene analyzer we use.  
