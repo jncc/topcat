@@ -1,29 +1,38 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Net;
+using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Web;
+using System.Web.Http;
+using Catalogue.Data.Model;
 using Catalogue.Data.Write;
 using Catalogue.Web.Code.Account;
 using Raven.Client;
 
 namespace Catalogue.Web.Controllers.Download
 {
-    public class DownloadController
+    public class DownloadController : ApiController
     {
         readonly IDocumentSession db;
-        readonly IRecordService service;
-        readonly IUserContext user;
 
-        public DownloadController(IDocumentSession db, IRecordService service, IUserContext user)
+        public DownloadController(IDocumentSession db)
         {
             this.db = db;
-            this.service = service;
-            this.user = user;
         }
 
-        public string Get(string vocab, string value)
+        public List<Record> Get(string k)
         {
-            throw new NotImplementedException(); // tod 
+            var keyword = ParameterHelper.ParseKeywords(new[] { k }).Single(); // for now, support only one
+
+            var q = from r in db.Query<Record>()
+                    where r.Gemini.Keywords.Any(x => x.Vocab == keyword.Vocab && x.Value == keyword.Value)
+                    select r;
+
+            return q.ToList();
         }
+
     }
 }
