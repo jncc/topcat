@@ -18,6 +18,14 @@ namespace Catalogue.Data.Import.Mappings
 {
     public class ActivitiesMapping : IMapping
     {
+        public IEnumerable<Vocabulary> Vocabularies { get; private set; }
+
+        public ActivitiesMapping()
+        {
+            //Vocabs are provided in the seeder.
+            Vocabularies = new List<Vocabulary>();
+        }
+
         public void Apply(CsvConfiguration config)
         {
             // see http://joshclose.github.io/CsvHelper/

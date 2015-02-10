@@ -18,6 +18,13 @@
         </button>
     </div>
     <div>
+        <button ng-click="import.importKeywords = !import.importKeywords" ng-class="{ 'btn-danger': import.importKeywords, 'btn-success': !import.importKeywords }" class="btn"
+                title="Import keywords and create new vocabs?" tc-tip>
+            <span class="glyphicon glyphicon-repeat"></span>
+            {{import.importKeywords ? 'Import Keywords':'Do not import keywords';}}
+        </button>
+    </div>
+    <div>
         <button ng-click="runImport()" class="btn">Import Data</button>
     </div>
 </div>

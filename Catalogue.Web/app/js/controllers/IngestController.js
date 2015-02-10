@@ -4,7 +4,8 @@
     $scope["import"] = {
       id: 0,
       fileName: '',
-      skipBadRecords: false
+      skipBadRecords: false,
+      importKeywords: false
     };
     $scope.imports = [
       {

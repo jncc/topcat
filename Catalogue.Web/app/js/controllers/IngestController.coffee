@@ -1,7 +1,7 @@
 ﻿angular.module('app.controllers').controller 'IngestController',
 
     ($scope, $http) -> 
-        $scope.import = {id: 0, fileName: '', skipBadRecords: false}
+        $scope.import = {id: 0, fileName: '', skipBadRecords: false, importKeywords: false}
         $scope.imports = [{id: 0, name: 'Activities'},
                 {id: 1, name: 'Mesh'},
                 {id: 2, name: 'Publication Catalogue'}]

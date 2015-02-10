@@ -17,6 +17,29 @@ namespace Catalogue.Data.Import.Mappings
 {
     public class PubCatMapping : IMapping
     {
+        public IEnumerable<Vocabulary> Vocabularies { get; private set; }
+
+        public PubCatMapping()
+        {
+            Vocabularies = new List<Vocabulary>
+                {
+                    new Vocabulary
+                        {
+                            Id = "http://vocab.jncc.gov.uk/publications",
+                            Description = "Publications Flags",
+                            Controlled = true,
+                            Publishable = true,
+                            PublicationDate = "2015",
+                            Keywords = new List<VocabularyKeyword>
+                                {
+                                    new VocabularyKeyword {Value = "Free"},
+                                    new VocabularyKeyword {Value = "Discontinued"}
+                                }
+
+                        }
+                };
+        }
+
         public void Apply(CsvConfiguration config)
         {
             config.Delimiter = "\t";
@@ -24,7 +47,6 @@ namespace Catalogue.Data.Import.Mappings
             config.TrimFields = true;
             config.RegisterClassMap<RecordMap>();
             config.RegisterClassMap<GeminiMap>();
-            
         }
     }
 

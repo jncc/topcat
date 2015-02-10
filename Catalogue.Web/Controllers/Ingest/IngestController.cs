@@ -14,6 +14,7 @@ namespace Catalogue.Web.Controllers.Ingest
     {
         public int Id { get; set; }
         public bool SkipBadRecords { get; set; }
+        public bool ImportKeywords { get; set; }
         public string FileName { get; set; }
     }
 
@@ -54,6 +55,9 @@ namespace Catalogue.Web.Controllers.Ingest
         private IngestResult RunImport<T>(Ingest ingest) where T : IMapping, new()
         {
             var importer = Importer.CreateImporter<T>(db);
+            importer.ImportKeywords = ingest.ImportKeywords;
+            importer.SkipBadRecords = ingest.SkipBadRecords;
+            
             try
             {
                 importer.Import(ImportFolderPath + ingest.FileName);
