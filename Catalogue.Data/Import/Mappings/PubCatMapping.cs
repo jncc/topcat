@@ -26,7 +26,8 @@ namespace Catalogue.Data.Import.Mappings
                     new Vocabulary
                         {
                             Id = "http://vocab.jncc.gov.uk/publications",
-                            Description = "Publications Flags",
+                            Name = "Publication properties",
+                            Description = "Describes various properties of JNCC Publications",
                             Controlled = true,
                             Publishable = true,
                             PublicationDate = "2015",
