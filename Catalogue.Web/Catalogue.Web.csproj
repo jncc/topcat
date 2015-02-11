@@ -173,8 +173,8 @@
     <Compile Include="Admin\Keywords\KeywordsController.cs" />
     <Compile Include="Admin\Keywords\KeywordsRepository.cs" />
     <Compile Include="Admin\Keywords\KeywordsService.cs" />
-    <Compile Include="Admin\Vocabularies\VocabulariesController.cs" />
-    <Compile Include="Admin\Vocabularies\VocabularyListController.cs" />
+    <Compile Include="Controllers\Vocabularies\VocabulariesController.cs" />
+    <Compile Include="Controllers\Vocabularies\VocabularyListController.cs" />
     <Compile Include="Controllers\Download\DownloadController.cs" />
     <Compile Include="Controllers\Export\ExportController.cs" />
     <Compile Include="Controllers\ParameterHelper.cs" />
