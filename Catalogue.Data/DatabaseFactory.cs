@@ -11,55 +11,27 @@ namespace Catalogue.Data
 {
     public class DatabaseFactory
     {
-        public enum DatabaseConnectionType
+        public static IDocumentStore Production()
         {
-            Proper,
-            InMemory,
-            ReUseable
+            var store = new DocumentStore { ConnectionStringName = "Data" };
+            store.Initialize();
+            IndexCreation.CreateIndexes(typeof(Record).Assembly, store);
+            return store;
         }
 
-
-        public static IDocumentStore Create(DatabaseConnectionType databaseConnectionType)
+        public static IDocumentStore InMemory()
         {
-            var db = CreateDatabase(databaseConnectionType);
-            CreateIndices(db);
-            return db;
-        }
-
-        private static IDocumentStore CreateDatabase(DatabaseConnectionType databaseConnectionType)
-        {
-            if (databaseConnectionType == DatabaseConnectionType.InMemory)
+            return new InMemoryDatabaseHelper
             {
-                return new InMemoryDatabaseHelper
+                PreInitializationAction = store =>
                 {
-                    PreInitializationAction = store =>
-                    {
-                        const int port = 8888;
-                        store.Configuration.Port = port;
-                        NonAdminHttp.EnsureCanListenToWhenInNonAdminContext(port);
-                        store.UseEmbeddedHttpServer = true;
-                    },
-                    PostInitializationAction = Seeder.Seed
-                }.Create();
-            }
-            else if (databaseConnectionType == DatabaseConnectionType.Proper)
-            {
-                var documentStore = new DocumentStore {ConnectionStringName = "Data"};
-                documentStore.Initialize();
-                return documentStore;
-            }
-            else // (databaseConnectionType == DatabaseConnectionType.ReUseable)
-            {
-                // what is this??
-                return new InMemoryDatabaseHelper { PostInitializationAction = Seeder.Seed }.Create();               
-            }
- 
-        }
-
-        private static IDocumentStore CreateIndices(IDocumentStore documentStore)
-        {
-            IndexCreation.CreateIndexes(typeof(Record).Assembly, documentStore);
-            return documentStore;
+                    const int port = 8888;
+                    store.Configuration.Port = port;
+                    NonAdminHttp.EnsureCanListenToWhenInNonAdminContext(port);
+                    store.UseEmbeddedHttpServer = true;
+                },
+                PostInitializationAction = Seeder.Seed
+            }.Create();
         }
     }
 }

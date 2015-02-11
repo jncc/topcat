@@ -59,13 +59,13 @@ namespace Catalogue.Web
             if (ConfigurationManager.AppSettings["Environment"] == "Dev")
             {
                 // use in-memory database for development
-                DocumentStore = DatabaseFactory.Create(DatabaseFactory.DatabaseConnectionType.InMemory);
+                DocumentStore = DatabaseFactory.InMemory();
             }
             else
             {
                 // todo enable versioning for non-dev environments
                 // todo (extract the versioning configuration from the InMemoryDatabaseHelper somehow)
-                DocumentStore = DatabaseFactory.Create(DatabaseFactory.DatabaseConnectionType.Proper);
+                DocumentStore = DatabaseFactory.Production();
             }
         }
     }
