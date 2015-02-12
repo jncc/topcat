@@ -63,7 +63,9 @@
       title: appTitlePrefix
     };
     $scope.tagSearch = function(keyword) {
-      $scope.query.p = 0;
+      $scope.keyword = keyword;
+      $scope.activeSearchType = $scope.searchType.keyword;
+      $scope.query.q = '';
       $scope.query.k = [getPathFromKeyword(keyword)];
       return $scope.doSearch();
     };

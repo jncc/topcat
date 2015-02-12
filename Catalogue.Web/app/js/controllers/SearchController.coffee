@@ -53,7 +53,9 @@
         $rootScope.page = { title:appTitlePrefix } 
         
         $scope.tagSearch = (keyword) ->
-            $scope.query.p = 0;
+            $scope.keyword = keyword
+            $scope.activeSearchType = $scope.searchType.keyword
+            $scope.query.q = '';
             $scope.query.k = [getPathFromKeyword(keyword)]
             $scope.doSearch()        
         
