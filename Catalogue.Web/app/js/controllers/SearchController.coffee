@@ -13,7 +13,7 @@
             q: $location.search()['q'] || '', 
             k: [$location.search()['k'] || ''], 
             p: 0 , 
-            n:25 }
+            n:25}
     
         getPathFromKeyword = (keyword) ->
             path = ensureEndsWith(keyword.vocab, '/') + keyword.value
