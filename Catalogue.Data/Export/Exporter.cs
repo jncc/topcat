@@ -1,0 +1,56 @@
+﻿using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using Catalogue.Data.Model;
+using Catalogue.Gemini.Model;
+using CsvHelper;
+using CsvHelper.TypeConversion;
+using Newtonsoft.Json;
+
+namespace Catalogue.Data.Export
+{
+    public class Exporter
+    {
+        public void Export(IEnumerable<Record> records, TextWriter writer)
+        {
+            var csv = new CsvWriter(writer);
+            csv.Configuration.Delimiter = "\t";
+            TypeConverterFactory.AddConverter<List<MetadataKeyword>>(new MetadataKeywordConverter());
+            TypeConverterFactory.AddConverter<List<Extent>>(new ExtentListConverter());
+            csv.WriteRecords(records);
+        }
+
+
+        public class MetadataKeywordConverter : DefaultTypeConverter
+        {
+            public override bool CanConvertTo(Type type)
+            {
+                return type == typeof(string);
+            }
+
+            public override string ConvertToString(TypeConverterOptions options, object value)
+            {
+                var v = (List<MetadataKeyword>)value;
+                return JsonConvert.SerializeObject(v);
+            }
+        }
+
+        public class ExtentListConverter : DefaultTypeConverter
+        {
+            public override bool CanConvertTo(Type type)
+            {
+                return type == typeof(string);
+            }
+
+            public override string ConvertToString(TypeConverterOptions options, object value)
+            {
+                var v = (List<Extent>)value;
+                return JsonConvert.SerializeObject(v);
+            }
+        }
+    }
+
+}

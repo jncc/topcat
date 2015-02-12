@@ -202,6 +202,7 @@ namespace Catalogue.Data.Seed
                     Description = "The broad dataset categories used within JNCC.",
                     PublicationDate = "2013",
                     Publishable = true,
+                    Controlled = true,
                     Keywords = new List<VocabularyKeyword>
                         {
                             new VocabularyKeyword { Value = "Seabed Habitat Maps" },

@@ -15,8 +15,32 @@ using Raven.Client.Document;
 
 namespace Catalogue.Data.Import.Mappings
 {
-    public class PubCatMapper : IMapping
+    public class PubCatMapping : IMapping
     {
+        public IEnumerable<Vocabulary> Vocabularies { get; private set; }
+
+        public PubCatMapping()
+        {
+            Vocabularies = new List<Vocabulary>
+                {
+                    new Vocabulary
+                        {
+                            Id = "http://vocab.jncc.gov.uk/publications",
+                            Name = "Publication properties",
+                            Description = "Describes various properties of JNCC Publications",
+                            Controlled = true,
+                            Publishable = true,
+                            PublicationDate = "2015",
+                            Keywords = new List<VocabularyKeyword>
+                                {
+                                    new VocabularyKeyword {Value = "Free"},
+                                    new VocabularyKeyword {Value = "Discontinued"}
+                                }
+
+                        }
+                };
+        }
+
         public void Apply(CsvConfiguration config)
         {
             config.Delimiter = "\t";
@@ -24,7 +48,6 @@ namespace Catalogue.Data.Import.Mappings
             config.TrimFields = true;
             config.RegisterClassMap<RecordMap>();
             config.RegisterClassMap<GeminiMap>();
-            
         }
     }
 
@@ -139,7 +162,7 @@ namespace Catalogue.Data.Import.Mappings
 
             using (IDocumentSession db = store.OpenSession())
             {
-                var importer = Importer.CreateImporter<PubCatMapper>(db);
+                var importer = Importer.CreateImporter<PubCatMapping>(db);
                 importer.Import(@"C:\Working\pubcat.csv");
                 //db.SaveChanges();
             }

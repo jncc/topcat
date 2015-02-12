@@ -17,6 +17,14 @@ namespace Catalogue.Data.Import.Mappings
     /// </summary>
     public class MeshMapping : IMapping
     {
+        public IEnumerable<Vocabulary> Vocabularies { get; private set; }
+
+        public MeshMapping()
+        {
+            //Vocabs are provided in the seeder.
+            Vocabularies = new List<Vocabulary>();
+        }
+
         public void Apply(CsvConfiguration config)
         {
             // see http://joshclose.github.io/CsvHelper/

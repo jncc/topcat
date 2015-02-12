@@ -1,9 +1,10 @@
 ﻿<div>
     <h1>Vocabularies</h1>
-
+    
+    {{vocabularies}}
     <div ng-repeat="v in vocabularies" class="layout-row">
         <div class="layout-col">
-            <a ng-href="#/vocabularies/editor/{{v.vocab}}" ng-bind-html="v.name"></a>
+            <a ng-href="#/vocabularies/editor/{{encodeId(v.id)}}" ng-bind-html="v.name"></a>
         </div>
     </div>
     <a href="#/vocabularies/editor/0" class="btn btn-default" tc-tip title="Add a vocabulary" style="width: 60px">

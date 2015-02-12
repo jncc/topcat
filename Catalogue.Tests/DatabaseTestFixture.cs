@@ -17,7 +17,7 @@ namespace Catalogue.Tests
         static DatabaseTestFixture()
         {
             // initialise the ResusableDocumentStore once, in this static constructor
-            ReusableDocumentStore = DatabaseFactory.Create(DatabaseFactory.DatabaseConnectionType.ReUseable); 
+            ReusableDocumentStore = DatabaseFactory.InMemory(); 
         }
 
         /// <summary>

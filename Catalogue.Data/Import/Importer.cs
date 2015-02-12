@@ -53,6 +53,7 @@ namespace Catalogue.Data.Import
             var csv = new CsvReader(reader);
 
             var mapping = Activator.CreateInstance<T>();
+
             mapping.Apply(csv.Configuration);
 
             var records = csv.GetRecords<Record>();
@@ -81,6 +82,11 @@ namespace Catalogue.Data.Import
 
             if (ImportKeywords)
             {
+                foreach (var vocab in mapping.Vocabularies)
+                {
+                    vocabularyService.Insert(vocab);
+                }
+
                 vocabularyService.Import(keywords);
             }
         }
@@ -143,6 +149,13 @@ Another abstract,Some more notes,file:///z/some/location";
 
     public class TestDataMapping : IMapping
     {
+        public IEnumerable<Vocabulary> Vocabularies { get; private set; }
+
+        public TestDataMapping()
+        {
+            Vocabularies = new List<Vocabulary>();
+        }
+
         public void Apply(CsvConfiguration config)
         {
             // see http://joshclose.github.io/CsvHelper/

@@ -14,6 +14,7 @@ namespace Catalogue.Web.Controllers.Ingest
     {
         public int Id { get; set; }
         public bool SkipBadRecords { get; set; }
+        public bool ImportKeywords { get; set; }
         public string FileName { get; set; }
     }
 
@@ -46,7 +47,7 @@ namespace Catalogue.Web.Controllers.Ingest
         {
             if (ingest.Id == 0) return RunImport<ActivitiesMapping>(ingest);
             if (ingest.Id == 1) return RunImport<MeshMapping>(ingest);
-            if (ingest.Id == 2) return RunImport<PubCatMapper>(ingest);
+            if (ingest.Id == 2) return RunImport<PubCatMapping>(ingest);
 
             throw new ArgumentException("Invalid import id");
         }
@@ -54,19 +55,12 @@ namespace Catalogue.Web.Controllers.Ingest
         private IngestResult RunImport<T>(Ingest ingest) where T : IMapping, new()
         {
             var importer = Importer.CreateImporter<T>(db);
-            try
-            {
-                importer.Import(ImportFolderPath + ingest.FileName);
-                db.SaveChanges();
-            }
-            catch (Exception e)
-            {
-                return new IngestResult
-                    {
-                        Success = false,
-                        Exception = e.Message
-                    };
-            }
+            importer.ImportKeywords = ingest.ImportKeywords;
+            importer.SkipBadRecords = ingest.SkipBadRecords;
+
+            importer.Import(ImportFolderPath + ingest.FileName);
+            db.SaveChanges();
+
 
             return new IngestResult
             {
