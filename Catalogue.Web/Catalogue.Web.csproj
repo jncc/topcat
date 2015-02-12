@@ -152,6 +152,7 @@
     <Compile Include="Admin\Keywords\KeywordsRepository.cs" />
     <Compile Include="Admin\Keywords\KeywordsService.cs" />
     <Compile Include="Controllers\FelixController.cs" />
+    <Compile Include="Controllers\Seed\SeedController.cs" />
     <Compile Include="Controllers\Vocabularies\VocabulariesController.cs" />
     <Compile Include="Controllers\Vocabularies\VocabularyListController.cs" />
     <Compile Include="Controllers\Download\DownloadController.cs" />
