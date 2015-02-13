@@ -1,5 +1,4 @@
-(function() {
-
+﻿(function() {
   angular.module('app.controllers').controller('IngestController', function($scope, $http) {
     $scope["import"] = {
       id: 0,
@@ -10,13 +9,16 @@
     $scope.imports = [
       {
         id: 0,
-        name: 'Activities'
+        name: 'Topcat'
       }, {
         id: 1,
-        name: 'Mesh'
+        name: 'Activities'
       }, {
         id: 2,
-        name: 'Publication Catalogue'
+        name: 'Mesh'
+      }, {
+        id: 3,
+        name: 'Publications'
       }
     ];
     return $scope.runImport = function() {
@@ -36,3 +38,5 @@
   });
 
 }).call(this);
+
+//# sourceMappingURL=IngestController.js.map

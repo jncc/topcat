@@ -2,9 +2,11 @@
 
     ($scope, $http) -> 
         $scope.import = {id: 0, fileName: '', skipBadRecords: false, importKeywords: false}
-        $scope.imports = [{id: 0, name: 'Activities'},
-                {id: 1, name: 'Mesh'},
-                {id: 2, name: 'Publication Catalogue'}]
+        $scope.imports = [
+            {id: 0, name: 'Topcat'},
+            {id: 1, name: 'Activities'},
+            {id: 2, name: 'Mesh'},
+            {id: 3, name: 'Publications'}]
                 
                 
                 

@@ -13,7 +13,7 @@ using NUnit.Framework;
 namespace Catalogue.Data.Import.Mappings
 {
     /// <summary>
-    ///     The mappings for importing the Marine Habitat (MESH) data.
+    /// The mappings for importing the Marine Habitat (MESH) data.
     /// </summary>
     public class MeshMapping : IMapping
     {
@@ -21,7 +21,6 @@ namespace Catalogue.Data.Import.Mappings
 
         public MeshMapping()
         {
-            //Vocabs are provided in the seeder.
             Vocabularies = new List<Vocabulary>();
         }
 
