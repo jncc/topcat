@@ -12,12 +12,10 @@ namespace Catalogue.Web.Controllers.Seed
 {
     public class SeedController : ApiController
     {
-        readonly IDocumentStore store;
         readonly IEnvironment environment;
 
-        public SeedController(IDocumentStore store, IEnvironment environment)
+        public SeedController(IEnvironment environment)
         {
-            this.store = store;
             this.environment = environment;
         }
 
@@ -29,7 +27,7 @@ namespace Catalogue.Web.Controllers.Seed
             if (environment.Name == "Live")
                 throw new InvalidOperationException("Oops, you surely didn't mean to seed the live instance..?");
 
-            Seeder.Seed(store);
+            Seeder.Seed(WebApiApplication.DocumentStore);
 
             return new HttpResponseMessage();
         }
