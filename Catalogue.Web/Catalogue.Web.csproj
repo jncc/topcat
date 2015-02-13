@@ -162,6 +162,7 @@
     <Compile Include="Controllers\Search\VocabularyTypeaheadController.cs" />
     <Compile Include="Controllers\RolesController.cs" />
     <Compile Include="Controllers\Ingest\IngestController.cs" />
+    <Compile Include="Customization\CustomWebApiAssembliesResolver.cs" />
     <Compile Include="Logging\ElmahHandledErrorLoggerFilter.cs" />
     <Compile Include="Logging\UnhandledExceptionFilter.cs" />
     <Compile Include="Controllers\Search\SearchHelper.cs" />
