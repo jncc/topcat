@@ -17,12 +17,21 @@ namespace Catalogue.Data.Import.Mappings
 {
     public class PubCatMapping : IMapping
     {
-        public IEnumerable<Vocabulary> Vocabularies { get; private set; }
-
-        public PubCatMapping()
-        {
-            Vocabularies = new List<Vocabulary>
+        public IEnumerable<Vocabulary> RequiredVocabularies {
+            get
+            {
+                return new List<Vocabulary>
                 {
+                    new Vocabulary
+                        {
+                            Id = "http://vocab.jncc.gov.uk/jncc-broad-category",
+                            Name = "JNCC Broad Categories",
+                            Description = "The broad dataset categories used within JNCC.",
+                            Controlled = true,
+                            Publishable = true,
+                            PublicationDate = "2015",
+                            Keywords = new List<VocabularyKeyword>()
+                        },
                     new Vocabulary
                         {
                             Id = "http://vocab.jncc.gov.uk/publications",
@@ -37,8 +46,37 @@ namespace Catalogue.Data.Import.Mappings
                                     new VocabularyKeyword {Value = "Discontinued"}
                                 }
 
+                        },
+                        new Vocabulary
+                        {
+                            Id = "http://vocab.jncc.gov.uk/NHBS",
+                            Name = "NHBS Numbers",
+                            Description = "NHBS Number",
+                            Controlled = false,
+                            Publishable = true,
+                            PublicationDate = "2015",
+                        },
+                        new Vocabulary
+                        {
+                            Id = "http://vocab.jncc.gov.uk/ISBN",
+                            Name = "ISBN Numbers",
+                            Description = "ISBN Numbers",
+                            Controlled = false,
+                            Publishable = true,
+                            PublicationDate = "2015",
+                        },
+                        new Vocabulary
+                        {
+                            Id = "http://vocab.jncc.gov.uk/ISSN",
+                            Name = "ISSN Numbers",
+                            Description = "ISSN Numbers",
+                            Controlled = false,
+                            Publishable = true,
+                            PublicationDate = "2015",
                         }
                 };
+            }
+
         }
 
         public void Apply(CsvConfiguration config)

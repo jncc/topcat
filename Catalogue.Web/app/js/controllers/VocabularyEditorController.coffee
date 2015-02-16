@@ -40,10 +40,11 @@
                 $scope.busy.stop()
 
             $scope.busy.start()
-            if $routeParams.vocabId isnt '0'
-                $http.put('../api/vocabularies?id=' + vocab.id, $scope.form).then processResult
-            else
+            if $scope.newVocab
                 $http.post('../api/vocabularies', $scope.form).then processResult
+            else
+                $http.put('../api/vocabularies?id=' + vocab.id, $scope.form).then processResult
+                
         
         # initially set up form
         $scope.reset()

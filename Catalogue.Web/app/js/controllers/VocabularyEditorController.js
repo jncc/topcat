@@ -48,10 +48,10 @@
         return $scope.busy.stop();
       };
       $scope.busy.start();
-      if ($routeParams.vocabId !== '0') {
-        return $http.put('../api/vocabularies?id=' + vocab.id, $scope.form).then(processResult);
-      } else {
+      if ($scope.newVocab) {
         return $http.post('../api/vocabularies', $scope.form).then(processResult);
+      } else {
+        return $http.put('../api/vocabularies?id=' + vocab.id, $scope.form).then(processResult);
       }
     };
     return $scope.reset();

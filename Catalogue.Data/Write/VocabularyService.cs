@@ -31,7 +31,16 @@ namespace Catalogue.Data.Write
 
         public VocabularyServiceResult Insert(Vocabulary vocab)
         {
-            return Upsert(vocab);
+            //Only insert new vocabs
+            var existingVocab = db.Load<Vocabulary>(vocab.Id);
+
+            if (existingVocab == null) return Upsert(vocab);
+
+            return new VocabularyServiceResult
+                {
+                    Success = false,
+                    Vocab = vocab
+                };
         }
 
         public VocabularyServiceResult Update(Vocabulary vocab)

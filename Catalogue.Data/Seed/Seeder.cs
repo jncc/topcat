@@ -82,7 +82,6 @@ namespace Catalogue.Data.Seed
             using (var reader = new StreamReader(s))
             {
                 var importer = Importer.CreateImporter<MeshMapping>(db);
-                importer.ImportKeywords = true;
                 importer.SkipBadRecords = true; // todo remove when data export is finished
                 importer.Import(reader);
 

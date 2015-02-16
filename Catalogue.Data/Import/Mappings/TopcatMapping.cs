@@ -15,7 +15,7 @@ namespace Catalogue.Data.Import.Mappings
     /// </summary>
     public class TopcatMapping : IMapping
     {
-        public IEnumerable<Vocabulary> Vocabularies { get; private set; }
+        public IEnumerable<Vocabulary> RequiredVocabularies { get; private set; }
         
         public void Apply(CsvConfiguration config)
         {

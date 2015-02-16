@@ -1,10 +1,10 @@
-﻿(function() {
+(function() {
+
   angular.module('app.controllers').controller('IngestController', function($scope, $http) {
     $scope["import"] = {
       id: 0,
       fileName: '',
-      skipBadRecords: false,
-      importKeywords: false
+      skipBadRecords: false
     };
     $scope.imports = [
       {
@@ -38,5 +38,3 @@
   });
 
 }).call(this);
-
-//# sourceMappingURL=IngestController.js.map

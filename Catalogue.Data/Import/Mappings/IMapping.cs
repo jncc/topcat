@@ -6,7 +6,7 @@ namespace Catalogue.Data.Import.Mappings
 {
     public interface IMapping
     {
-        IEnumerable<Vocabulary> Vocabularies { get; }
+        IEnumerable<Vocabulary> RequiredVocabularies { get; }
         void Apply(CsvConfiguration config);
     }
 }

@@ -17,11 +17,11 @@ namespace Catalogue.Data.Import.Mappings
     /// </summary>
     public class MeshMapping : IMapping
     {
-        public IEnumerable<Vocabulary> Vocabularies { get; private set; }
+        public IEnumerable<Vocabulary> RequiredVocabularies { get; private set; }
 
         public MeshMapping()
         {
-            Vocabularies = new List<Vocabulary>();
+            RequiredVocabularies = new List<Vocabulary>();
         }
 
         public void Apply(CsvConfiguration config)

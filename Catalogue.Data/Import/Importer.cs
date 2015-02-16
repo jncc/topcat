@@ -25,12 +25,6 @@ namespace Catalogue.Data.Import
 
         public bool SkipBadRecords { get; set; }
 
-        /// <summary>
-        /// Import keywords in the source records to existing matching controlled vocabularies.
-        /// Used by the seeder for convenience and may be useful in future.
-        /// </summary>
-        public bool ImportKeywords { get; set; }
-
         public readonly List<RecordServiceResult> Results = new List<RecordServiceResult>();
 
         public Importer(IFileSystem fileSystem, IRecordService recordService, IVocabularyService vocabularyService)
@@ -80,15 +74,13 @@ namespace Catalogue.Data.Import
                 keywords.AddRange(result.Record.Gemini.Keywords);
             }
 
-            if (ImportKeywords)
+            foreach (var vocab in mapping.RequiredVocabularies)
             {
-                foreach (var vocab in mapping.Vocabularies)
-                {
-                    vocabularyService.Insert(vocab);
-                }
-
-                vocabularyService.Import(keywords);
+                vocabularyService.Insert(vocab);
             }
+
+            vocabularyService.Import(keywords);
+            
         }
     }
 
@@ -149,11 +141,11 @@ Another abstract,Some more notes,file:///z/some/location";
 
     public class TestDataMapping : IMapping
     {
-        public IEnumerable<Vocabulary> Vocabularies { get; private set; }
+        public IEnumerable<Vocabulary> RequiredVocabularies { get; private set; }
 
         public TestDataMapping()
         {
-            Vocabularies = new List<Vocabulary>();
+            RequiredVocabularies = new List<Vocabulary>();
         }
 
         public void Apply(CsvConfiguration config)
