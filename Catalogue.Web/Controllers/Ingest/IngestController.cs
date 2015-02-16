@@ -46,9 +46,9 @@ namespace Catalogue.Web.Controllers.Ingest
         public IngestResult Post([FromBody] Ingest ingest)
         {
             if (ingest.Id == 0) return RunImport<TopcatMapping>(ingest);
-            if (ingest.Id == 0) return RunImport<ActivitiesMapping>(ingest);
-            if (ingest.Id == 1) return RunImport<MeshMapping>(ingest);
-            if (ingest.Id == 2) return RunImport<PubCatMapping>(ingest);
+            if (ingest.Id == 1) return RunImport<ActivitiesMapping>(ingest);
+            if (ingest.Id == 2) return RunImport<MeshMapping>(ingest);
+            if (ingest.Id == 3) return RunImport<PubCatMapping>(ingest);
 
             throw new ArgumentException("Invalid import id");
         }
