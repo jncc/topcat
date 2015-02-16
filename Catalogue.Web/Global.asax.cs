@@ -1,9 +1,11 @@
 ﻿using System.Configuration;
 using System.Web;
 using System.Web.Http;
+using System.Web.Http.Dispatcher;
 using System.Web.Mvc;
 using System.Web.Routing;
 using Catalogue.Data;
+using Catalogue.Web.Customization;
 using Catalogue.Web.Logging;
 using Newtonsoft.Json.Serialization;
 using Raven.Client;
@@ -37,6 +39,9 @@ namespace Catalogue.Web
 
         private static void ConfigWebApi(HttpConfiguration config)
         {
+            // we need our own custom assemblies resolver for webapi - see type summary
+            config.Services.Replace(typeof(IAssembliesResolver), new CustomWebApiAssembliesResolver());
+
             /*
            * this allows only request method type per controller
            */

@@ -14,7 +14,11 @@ namespace Catalogue.Data.Test
 
         public IDocumentStore Create()
         {
-            var store = new EmbeddableDocumentStore { RunInMemory = true };
+            var store = new EmbeddableDocumentStore
+            {
+                RunInMemory = true,
+                DefaultDatabase = "topcat"
+            };
             
             // activate versioning bundle
             store.Configuration.Settings.Add("Raven/ActiveBundles", "Versioning");

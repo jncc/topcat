@@ -36,6 +36,16 @@ namespace Catalogue.Data.Export
                 var v = (List<MetadataKeyword>)value;
                 return JsonConvert.SerializeObject(v);
             }
+
+            public override bool CanConvertFrom(Type type)
+            {
+                return type == typeof(string);
+            }
+
+            public override object ConvertFromString(TypeConverterOptions options, string text)
+            {
+                return JsonConvert.DeserializeObject(text, typeof(List<MetadataKeyword>));
+            }
         }
 
         public class ExtentListConverter : DefaultTypeConverter

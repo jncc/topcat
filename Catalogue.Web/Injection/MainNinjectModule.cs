@@ -27,9 +27,6 @@ namespace Catalogue.Web.Injection
                 .SelectAllClasses()
                 .BindDefaultInterface());
 
-            // the raven document store should be an application-scoped singleton
-            Bind<IDocumentStore>().ToMethod(x => WebApiApplication.DocumentStore);
-
             // inject a once-per-request raven document session
             Bind<IDocumentSession>()
                 .ToMethod(x => WebApiApplication.DocumentStore.OpenSession())

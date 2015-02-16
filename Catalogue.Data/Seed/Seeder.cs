@@ -46,6 +46,20 @@ namespace Catalogue.Data.Seed
             }
         }
 
+        /// <summary>
+        /// todo remove this, just for bootstrapping first live instance
+        /// </summary>
+        public static void SeedVocabsOnly(IDocumentStore store)
+        {
+            using (var db = store.OpenSession())
+            {
+                var vocabService = new VocabularyService(db);
+                var s = new Seeder(db, new RecordService(db, new RecordValidator(vocabService)));
+                s.AddVocabularies();
+                db.SaveChanges();
+            }
+        }
+
         Record MakeExampleSeedRecord()
         {
             return new Record

@@ -1,6 +1,0 @@
-﻿<?xml version="1.0" encoding="utf-8" ?>
-<configuration>
-  <elmah>
-    <errorLog type="Elmah.RavenDbErrorLog, Elmah.RavenDB" connectionStringName="Elmah" />
-  </elmah>
-</configuration>
