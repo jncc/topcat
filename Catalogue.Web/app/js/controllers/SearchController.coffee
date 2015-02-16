@@ -91,6 +91,7 @@
 
             
         $scope.onKeywordSelect = (keyword, model, label) -> 
+            $scope.keyword = keyword
             $scope.query.k = [getPathFromKeyword(keyword)]
             $scope.doSearch()
             

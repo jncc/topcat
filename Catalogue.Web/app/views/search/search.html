@@ -6,54 +6,56 @@
 <div class="row">
     <div class="col-md-7 col-md-offset-2">
         <form>
-        <div class="form-group">
-            <div class="input-group">
+            <div class="form-group">
+                <div class="input-group">
                 
-                <script type="text/ng-template" id="keywordTemplate.html">
-                    <a>
-                        <span bind-html-unsafe="match.model.vocab"></span>
-                        <br/>
-                        <span bind-html-unsafe="match.model.value | typeaheadHighlight:query"></span>
-                    </a>
-                </script>
+                    <script type="text/ng-template" id="keywordTemplate.html">
+                        <a>
+                            <span bind-html-unsafe="match.model.vocab"></span>
+                            <br/>
+                            <span bind-html-unsafe="match.model.value | typeaheadHighlight:query"></span>
+                        </a>
+                    </script>
                         
-                <span ng-show="activeSearchType == searchType.fulltext"><input ng-model="query.q" type="text" class="form-control" ng-change="doSearch()" autofocus tc-debounce /></span>
-                <span ng-show="activeSearchType == searchType.keyword">
-                    <input type="text" 
-                           ng-model="keyword" 
-                           typeahead-on-select="onKeywordSelect($item, $model, $label)"
-                           placeholder="Keyword" 
-                           typeahead-template-url="keywordTemplate.html"  
-                           typeahead-loading="loadingKeys" 
-                           typeahead="keyword.value for keyword in getKeywords($viewValue)" 
-                           tc-debounce
-                           class="form-control" 
-                        />
-                </span>
+                    <span ng-show="activeSearchType == searchType.fulltext">
+                        <input ng-model="query.q" type="text" class="form-control" ng-change="doSearch()" autofocus tc-debounce />
+                    </span>
+                    <span ng-show="activeSearchType == searchType.keyword">
+                        <input type="text" 
+                               ng-model="keyword" 
+                               typeahead-on-select="onKeywordSelect($item, $model, $label)"
+                               placeholder="Keyword" 
+                               typeahead-template-url="keywordTemplate.html"  
+                               typeahead-loading="loadingKeys" 
+                               typeahead="keyword.value for keyword in getKeywords($viewValue)" 
+                               tc-debounce
+                               class="form-control" 
+                            />
+                    </span>
 
-                <span class="input-group-btn">
-                    <button class="btn btn-primary" type="button" style="width: 60px">
-                        <span class="glyphicon glyphicon-search"></span>
-                    </button>
-                </span>
+                    <span class="input-group-btn">
+                        <button class="btn btn-primary" type="button" style="width: 60px">
+                            <span class="glyphicon glyphicon-search"></span>
+                        </button>
+                    </span>
+                </div>
+                <div class="row text-center ">
+                    <label>
+                        <input type="radio" value="{{searchType.fulltext}}"  ng-model="activeSearchType" ng-change="switchSearchType()"> Text
+                        <input type="radio" value="{{searchType.keyword}}" ng-model="activeSearchType" ng-change="switchSearchType()"> Keywords
+                    </label>
+                </div>
             </div>
-            <div class="row text-center ">
-                <label>
-                    <input type="radio" value="{{searchType.fulltext}}"  ng-model="activeSearchType" ng-change="switchSearchType()"> Text
-                    <input type="radio" value="{{searchType.keyword}}" ng-model="activeSearchType" ng-change="switchSearchType()"> Keywords
-                </label>
-            </div>
-</div>
         </form>
     </div>
     <div class="col-md-1">
-            <div class="form-group">
+        <div class="form-group">
                 
-                <a href="#editor/00000000-0000-0000-0000-000000000000" class="btn btn-default" tc-tip title="Add a record" style="width: 60px">
-                    <span class="glyphicon glyphicon-plus"></span>
-                </a>
+            <a href="#editor/00000000-0000-0000-0000-000000000000" class="btn btn-default" tc-tip title="Add a record" style="width: 60px">
+                <span class="glyphicon glyphicon-plus"></span>
+            </a>
                 
-            </div>
+        </div>
     
     </div>
 </div>
