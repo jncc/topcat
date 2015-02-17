@@ -22,7 +22,8 @@ namespace Catalogue.Web.Controllers.Seed
         /// <summary>
         /// Useful for non-live instances. Requires a POST so is difficult to do by accident.
         /// </summary>
-        public HttpResponseMessage Post()
+        [HttpPost, Route("api/seed/all")]
+        public HttpResponseMessage All()
         {
             if (environment.Name == "Live")
                 throw new InvalidOperationException("Oops, you surely didn't mean to seed the live instance..?");
@@ -32,14 +33,20 @@ namespace Catalogue.Web.Controllers.Seed
             return new HttpResponseMessage();
         }
 
-        /// <summary>
-        /// Todo remove this
-        /// Useful for non-live instances. Requires a PUT so is difficult to do by accident.
-        /// </summary>
-        public HttpResponseMessage Put()
-        {
-            Seeder.SeedVocabsOnly(WebApiApplication.DocumentStore);
+//        /// <summary>
+//        /// Todo remove this
+//        /// Useful for non-live instances. Requires a PUT so is difficult to do by accident.
+//        /// </summary>
+//        public HttpResponseMessage Put()
+//        {
+//            Seeder.SeedVocabsOnly(WebApiApplication.DocumentStore);
+//
+//            return new HttpResponseMessage();
+//        }
 
+        [HttpPost, Route("api/seed/inspire")]
+        public HttpResponseMessage Inspire()
+        {
             return new HttpResponseMessage();
         }
     }

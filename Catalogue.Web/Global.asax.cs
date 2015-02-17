@@ -16,37 +16,37 @@ namespace Catalogue.Web
     {
         public static IDocumentStore DocumentStore { get; private set; }
 
-
-        public static void RegisterGlobalFilters(GlobalFilterCollection filters)
-        {
-            filters.Add(new ElmahHandledErrorLoggerFilter());
-            filters.Add(new HandleErrorAttribute());
-        }
-
         protected void Application_Start()
         {
             AreaRegistration.RegisterAllAreas();
-            ConfigWebApi(GlobalConfiguration.Configuration);
+            GlobalConfiguration.Configure(ConfigWebApi);
             RegisterRoutes(RouteTable.Routes);
-            // serialize enums using their strings, not ordinals
-//            GlobalConfiguration.Configuration.Formatters.JsonFormatter.SerializerSettings.Converters.Add(new StringEnumConverter());
-            // we want to serialize PascalCase .NET properties with camelCase in json responses
-            GlobalConfiguration.Configuration.Formatters.JsonFormatter.SerializerSettings.ContractResolver =
-                new CamelCasePropertyNamesContractResolver();
+
+            // serialize PascalCase .NET properties with camelCase in json
+            GlobalConfiguration.Configuration.Formatters.JsonFormatter.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
+            
             InitializeDataStore();
             RegisterGlobalFilters(GlobalFilters.Filters);
         }
 
-        private static void ConfigWebApi(HttpConfiguration config)
+        static void RegisterGlobalFilters(GlobalFilterCollection filters)
+        {
+            filters.Add(new ElmahHandledErrorLoggerFilter());
+            filters.Add(new HandleErrorAttribute());
+        }
+        
+        static void ConfigWebApi(HttpConfiguration config)
         {
             // we need our own custom assemblies resolver for webapi - see type summary
             config.Services.Replace(typeof(IAssembliesResolver), new CustomWebApiAssembliesResolver());
 
-            /*
-           * this allows only request method type per controller
-           */
-            config.Routes.MapHttpRoute("DefaultApi", "api/{controller}/{id}", new {id = RouteParameter.Optional}
-                );
+            // enable attribute-based routing
+            config.MapHttpAttributeRoutes();
+
+            // default web api route pattern
+            config.Routes.MapHttpRoute("DefaultApi", "api/{controller}/{id}", new { id = RouteParameter.Optional });
+
+            // what's this for?
             config.Filters.Add(new UnhandledExceptionFilter());
         }
 
