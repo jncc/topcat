@@ -91,8 +91,7 @@ namespace Catalogue.Data.Import
     {
         public static Importer<T> CreateImporter<T>(IDocumentSession db) where T : IMapping, new()
         {
-            var vocabService = new VocabularyService(db);
-            return new Importer<T>(new FileSystem(), new RecordService(db, new RecordValidator(vocabService)), vocabService);
+            return new Importer<T>(new FileSystem(), new RecordService(db, new RecordValidator(db)), new VocabularyService(db));
         }
     }
 
