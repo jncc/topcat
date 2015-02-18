@@ -17,6 +17,15 @@
       };
     };
     $scope.initialiseQuery();
+    $scope.setSearchType = function() {
+      if ($scope.query.k[0] !== '') {
+        $scope.activeSearchType = $scope.searchType.keyword;
+        return $scope.keyword = getKeywordFromPath($scope.query.k[0]);
+      } else {
+        $scope.activeSearchType = $scope.searchType.fulltext;
+        return $scope.keyword = '';
+      }
+    };
     getPathFromKeyword = function(keyword) {
       var path;
       path = ensureEndsWith(keyword.vocab, '/') + keyword.value;
@@ -24,16 +33,23 @@
     };
     getKeywordFromPath = function(path) {
       var elements, i, value, vocab, _i, _ref;
-      elements = path.split('/');
-      value = elements[elements.length - 1];
-      vocab = "http://";
-      for (i = _i = 0, _ref = elements.length - 2; _i <= _ref; i = _i += 1) {
-        vocab = vocab.concat(elements[i].concat('/'));
+      if (path.indexOf('/') === -1) {
+        return {
+          value: path,
+          vocab: ''
+        };
+      } else {
+        elements = path.split('/');
+        value = elements[elements.length - 1];
+        vocab = "http://";
+        for (i = _i = 0, _ref = elements.length - 2; _i <= _ref; i = _i += 1) {
+          vocab = vocab.concat(elements[i].concat('/'));
+        }
+        return {
+          value: value,
+          vocab: vocab
+        };
       }
-      return {
-        value: value,
-        vocab: vocab
-      };
     };
     appTitlePrefix = "Topcat:";
     ensureEndsWith = function(str, suffix) {
@@ -121,13 +137,10 @@
     };
     $scope.$on('$routeUpdate', function() {
       $scope.initialiseQuery();
+      $scope.setSearchType();
       return $scope.doSearch();
     });
-    $scope.initialise = function() {};
-    if ($scope.query.k[0] !== '') {
-      $scope.activeSearchType = $scope.searchType.keyword;
-      $scope.keyword = getKeywordFromPath($scope.query.k[0]);
-    }
+    $scope.setSearchType();
     return $scope.doSearch();
   });
 

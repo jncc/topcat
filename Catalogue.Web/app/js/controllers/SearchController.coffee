@@ -17,18 +17,30 @@
                 n:25}
                 
         $scope.initialiseQuery()
+        
+        $scope.setSearchType = () ->
+            if $scope.query.k[0] != ''
+                $scope.activeSearchType = $scope.searchType.keyword
+                $scope.keyword = getKeywordFromPath($scope.query.k[0])
+            else
+                $scope.activeSearchType = $scope.searchType.fulltext
+                $scope.keyword = ''
+                
     
         getPathFromKeyword = (keyword) ->
             path = ensureEndsWith(keyword.vocab, '/') + keyword.value
             path.replace("http://", "")
  
         getKeywordFromPath = (path) -> 
-            elements = path.split('/')
-            value = elements[elements.length - 1]
-            vocab = "http://"
-            for i in [0..elements.length - 2] by 1
-                vocab = vocab.concat(elements[i].concat('/'))
-            return {value: value, vocab: vocab}
+            if path.indexOf('/') == -1
+                return {value: path, vocab: ''}
+            else
+                elements = path.split('/')
+                value = elements[elements.length - 1]
+                vocab = "http://"
+                for i in [0..elements.length - 2] by 1
+                    vocab = vocab.concat(elements[i].concat('/'))
+                return {value: value, vocab: vocab}
     
         appTitlePrefix = "Topcat:";
          # initial values
@@ -110,16 +122,11 @@
             
         $scope.$on('$routeUpdate',() -> 
             $scope.initialiseQuery()
+            $scope.setSearchType()
             $scope.doSearch())
             
-        $scope.initialise = () -> 
-            
         # Work out starting search type
-        #fuggle keyword if initialised via qs
-        
-        if ($scope.query.k[0] != '') 
-            $scope.activeSearchType = $scope.searchType.keyword
-            $scope.keyword = getKeywordFromPath($scope.query.k[0])
-        
+        $scope.setSearchType()
+
         $scope.doSearch()
 
