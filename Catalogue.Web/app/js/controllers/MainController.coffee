@@ -1,6 +1,6 @@
 ﻿angular.module('app.controllers',['ui.bootstrap']).controller 'MainController',
 
-    ($scope, $timeout, Account, misc) ->
+    ($scope, $rootScope, $timeout, Account, misc) ->
 
         # implement busy spinner feature
         busyCount = 0
@@ -22,6 +22,13 @@
         # every page needs a user
         Account.then (user) -> $scope.user = user
 
+        # horrid hack to ensure qtips hide when url (location) changes
+        # don't know why qtip can't cope with this naturally but it leaves
+        # tooltips hanging visible when the element has gone
+        $rootScope.$on '$locationChangeStart', ->
+            $('.qtip').qtip 'hide'
+
         # utility function to be moved
         $scope.hashStringToColor = misc.hashStringToColor
+        
         
