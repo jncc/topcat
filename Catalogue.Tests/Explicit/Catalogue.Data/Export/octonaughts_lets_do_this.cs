@@ -12,7 +12,6 @@ using Catalogue.Gemini.Templates;
 using FluentAssertions;
 using Moq;
 using NUnit.Framework;
-using Raven.Client;
 
 namespace Catalogue.Tests.Explicit.Catalogue.Data.Export
 {
@@ -46,7 +45,7 @@ namespace Catalogue.Tests.Explicit.Catalogue.Data.Export
             record.Validation = Validation.Gemini;
             record.Gemini.LimitationsOnPublicAccess = "this is a test record so shouldn't be viewed by anyone ...";
 
-            var validator = new RecordValidator(Mock.Of<IDocumentSession>());
+            var validator = new RecordValidator();
             var result = validator.Validate(record);
 
             var xml = new global::Catalogue.Gemini.Encoding.XmlEncoder().Create(new Guid("a92a3e00-2ff6-4270-b19e-377c7d542d7c"), Library.Example());

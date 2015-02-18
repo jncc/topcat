@@ -32,7 +32,7 @@ namespace Catalogue.Data.Seed
         {
             using (var db = store.OpenSession())
             {
-                var s = new Seeder(db, new RecordService(db, new RecordValidator(db)));
+                var s = new Seeder(db, new RecordService(db, new RecordValidator()));
                 s.AddVocabularies();
                 s.AddMeshRecords();
                 s.AddSimpleExampleRecord();
@@ -52,7 +52,7 @@ namespace Catalogue.Data.Seed
         {
             using (var db = store.OpenSession())
             {
-                var s = new Seeder(db, new RecordService(db, new RecordValidator(db)));
+                var s = new Seeder(db, new RecordService(db, new RecordValidator()));
                 s.AddVocabularies();
                 db.SaveChanges();
             }

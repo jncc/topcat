@@ -18,7 +18,6 @@ using Catalogue.Utilities.Text;
 using FluentAssertions;
 using Moq;
 using NUnit.Framework;
-using Raven.Client;
 
 namespace Catalogue.Data.Write
 {
@@ -30,13 +29,6 @@ namespace Catalogue.Data.Write
     public class RecordValidator : IRecordValidator
     {
         private const string GeminiSuffix =  " (Gemini)";
-
-        private readonly IDocumentSession _db;
-
-        public RecordValidator(IDocumentSession db)
-        {
-            this._db = db;
-        }
 
         public RecordValidationResult Validate(Record record)
         {
@@ -473,8 +465,6 @@ namespace Catalogue.Data.Write
 
     internal class when_validating_at_basic_level
     {
-        private Mock<IDocumentSession> mockDb = new Mock<IDocumentSession>();
-
         private Record SimpleRecord()
         {
             return new Record
@@ -497,7 +487,7 @@ namespace Catalogue.Data.Write
         {
             // the basic level of validation shouldn't produce warnings - that would be too annoying
 
-            var result = new RecordValidator(mockDb.Object).Validate(SimpleRecord() /* no Level argument */);
+            var result = new RecordValidator().Validate(SimpleRecord() /* no Level argument */);
             result.Warnings.Should().BeEmpty();
         }
 
@@ -505,7 +495,7 @@ namespace Catalogue.Data.Write
         public void title_must_not_be_blank([Values("", " ", null)] string blank)
         {
             var result =
-                new RecordValidator(mockDb.Object).Validate(SimpleRecord().With(r => r.Gemini.Title = blank));
+                new RecordValidator().Validate(SimpleRecord().With(r => r.Gemini.Title = blank));
 
             result.Errors.Single().Message.Should().StartWith("Title must not be blank");
             result.Errors.Single().Fields.Single().Should().Be("gemini.title");
@@ -514,7 +504,7 @@ namespace Catalogue.Data.Write
         [Test]
         public void path_must_not_be_blank([Values("", " ", null)] string blank)
         {
-            var result = new RecordValidator(mockDb.Object).Validate(SimpleRecord().With(r => r.Path = blank));
+            var result = new RecordValidator().Validate(SimpleRecord().With(r => r.Path = blank));
 
             result.Errors.Single().Fields.Single().Should().Be("path");
         }
@@ -522,7 +512,7 @@ namespace Catalogue.Data.Write
         [Test]
         public void path_must_be_a_valid_file_system_path()
         {
-            var result = new RecordValidator(mockDb.Object).Validate(SimpleRecord().With(r => r.Path = "not a path"));
+            var result = new RecordValidator().Validate(SimpleRecord().With(r => r.Path = "not a path"));
 
             result.Errors.Single().Fields.Single().Should().Be("path");
         }
@@ -532,7 +522,7 @@ namespace Catalogue.Data.Write
         {
             // should not validate on empty list
             var r1 =
-               new RecordValidator(mockDb.Object).Validate(SimpleRecord().With(r => r.Gemini.Keywords = new List<MetadataKeyword>()));
+               new RecordValidator().Validate(SimpleRecord().With(r => r.Gemini.Keywords = new List<MetadataKeyword>()));
 
             r1.Errors.Single().Message.Should().StartWith("Must specify a JNCC Broad Category");
         }
@@ -544,7 +534,7 @@ namespace Catalogue.Data.Write
             record.Gemini.Keywords.Add(new MetadataKeyword() { Value = String.Empty, Vocab = String.Empty });
 
             var result =
-                new RecordValidator(mockDb.Object).Validate(record);
+                new RecordValidator().Validate(record);
 
             result.Errors.Single().Message.Should().StartWith("Keywords cannot be blank");
             result.Errors.Single().Fields.Single().Should().Be("gemini.keywords");
@@ -560,7 +550,7 @@ namespace Catalogue.Data.Write
                     "",
                     "",
                 };
-//            var result = new RecordValidator(mockVocabService.Object).Validate(SimpleRecord().With(r => r.Gemini.DatasetReferenceDate));
+//            var result = new RecordValidator().Validate(SimpleRecord().With(r => r.Gemini.DatasetReferenceDate));
 //
 //            result.Errors.Single().Fields.Single().Should().Be("path");
         }
@@ -569,7 +559,7 @@ namespace Catalogue.Data.Write
         public void topic_category_must_be_valid()
         {
             var record = SimpleRecord().With(r => r.Gemini.TopicCategory = "anInvalidTopicCategory");
-            var result = new RecordValidator(mockDb.Object).Validate(record);
+            var result = new RecordValidator().Validate(record);
 
             result.Errors.Single().Message.Should().Contain("Topic Category 'anInvalidTopicCategory' is not valid");
             result.Errors.Single().Fields.Single().Should().Be("gemini.topicCategory");
@@ -579,7 +569,7 @@ namespace Catalogue.Data.Write
         public void topic_category_may_be_blank([Values("", null)] string blank)
         {
             var record = SimpleRecord().With(r => r.Gemini.TopicCategory = blank);
-            var result = new RecordValidator(mockDb.Object).Validate(record);
+            var result = new RecordValidator().Validate(record);
             result.Errors.Should().BeEmpty();
         }
 
@@ -593,7 +583,7 @@ namespace Catalogue.Data.Write
                 r.Gemini.LimitationsOnPublicAccess = blank;
             });
 
-            var result = new RecordValidator(mockDb.Object).Validate(record);
+            var result = new RecordValidator().Validate(record);
 
             result.Errors.Single().Fields.Should().Contain("security");
             result.Errors.Single().Fields.Should().Contain("gemini.limitationsOnPublicAccess");
@@ -608,7 +598,7 @@ namespace Catalogue.Data.Write
                 r.Gemini.ResourceLocator = blank;
             });
 
-            var result = new RecordValidator(mockDb.Object).Validate(record);
+            var result = new RecordValidator().Validate(record);
 
             result.Errors.Single().Fields.Should().Contain("status");
             result.Errors.Single().Fields.Should().Contain("gemini.resourceLocator");
@@ -619,7 +609,7 @@ namespace Catalogue.Data.Write
             [Values(@"Z:\some\path", "utter rubbish")] string nonHttpUrl)
         {
             var record = SimpleRecord().With(r => r.Gemini.ResourceLocator = nonHttpUrl);
-            var result = new RecordValidator(mockDb.Object).Validate(record);
+            var result = new RecordValidator().Validate(record);
             result.Errors.Single().Fields.Should().Contain("gemini.resourceLocator");
         }
 
@@ -627,7 +617,7 @@ namespace Catalogue.Data.Write
         public void resource_locator_may_be_set()
         {
             var record = SimpleRecord().With(r => r.Gemini.ResourceLocator = "http://example.org/resource/locator");
-            var result = new RecordValidator(mockDb.Object).Validate(record);
+            var result = new RecordValidator().Validate(record);
             result.Errors.Should().BeEmpty();
         }
 
@@ -640,7 +630,7 @@ namespace Catalogue.Data.Write
                 Name = "A. Mann",
                 Role = "some role that isn't allowed",
             });
-            var result = new RecordValidator(mockDb.Object).Validate(record);
+            var result = new RecordValidator().Validate(record);
             result.Errors.Single().Fields.Should().Contain("gemini.responsibleOrganisation.role");
         }
 
@@ -653,14 +643,13 @@ namespace Catalogue.Data.Write
                 Name = "A. Mann",
                 Role = "some role that isn't allowed",
             });
-            var result = new RecordValidator(mockDb.Object).Validate(record);
+            var result = new RecordValidator().Validate(record);
             result.Errors.Single().Fields.Should().Contain("gemini.metadataPointOfContact.role");
         }
     }
 
     internal class when_validating_at_gemini_level
     {
-        private Mock<IDocumentSession> mockDb = new Mock<IDocumentSession>();
 
         private Record SimpleRecord()
         {
@@ -676,7 +665,7 @@ namespace Catalogue.Data.Write
         public void blank_use_constraints_are_not_allowed([Values("", " ", null)] string blank)
         {
             var record = SimpleRecord().With(r => r.Gemini.UseConstraints = blank);
-            var result = new RecordValidator(mockDb.Object).Validate(record);
+            var result = new RecordValidator().Validate(record);
 
             result.Errors.Any(e => e.Fields.Contains("gemini.useConstraints")).Should().BeTrue();
         }
@@ -685,7 +674,7 @@ namespace Catalogue.Data.Write
         public void topic_category_must_not_be_blank([Values("", " ", null)] string blank)
         {
             var record = SimpleRecord().With(r => r.Gemini.TopicCategory = blank);
-            var result = new RecordValidator(mockDb.Object).Validate(record);
+            var result = new RecordValidator().Validate(record);
 
             result.Errors.Any(e => e.Fields.Contains("gemini.topicCategory")).Should().BeTrue();
         }
@@ -708,7 +697,7 @@ namespace Catalogue.Data.Write
 //                                                }
 //                                    });
 //
-//            RecordValidationResult result = new RecordValidator(mockVocabService.Object).Validate(record);
+//            RecordValidationResult result = new RecordValidator().Validate(record);
 //
 //            result.Errors.Any(e => e.Fields.Contains("gemini.keywords")).Should().BeTrue();
 //            result.Errors.Single(e => e.Fields.Contains("gemini.keywords"))
