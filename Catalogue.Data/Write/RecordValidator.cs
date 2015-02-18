@@ -225,6 +225,7 @@ namespace Catalogue.Data.Write
 
         bool IsValidDate(string date)
         {
+            //todo: Disabled for mest data testing.
             return true;
             var yearOnly = new Regex(@"^\d\d\d\d$");
             var yearAndMonth = new Regex(@"^\d\d\d\d-(0[1-9]|1[012])$");
