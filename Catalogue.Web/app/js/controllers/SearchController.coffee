@@ -9,11 +9,14 @@
         
         $scope.keyword = ''
         
-        $scope.query = { 
-            q: $location.search()['q'] || '', 
-            k: [$location.search()['k'] || ''], 
-            p: 0 , 
-            n:25}
+        $scope.initialiseQuery = () ->
+            $scope.query = { 
+                q: $location.search()['q'] || '', 
+                k: [$location.search()['k'] || ''], 
+                p: 0 , 
+                n:25}
+                
+        $scope.initialiseQuery()
     
         getPathFromKeyword = (keyword) ->
             path = ensureEndsWith(keyword.vocab, '/') + keyword.value
@@ -104,6 +107,12 @@
         $scope.nextPage = (n) ->
             $scope.query.p = n-1
             $scope.doSearch()
+            
+        $scope.$on('$routeUpdate',() -> 
+            $scope.initialiseQuery()
+            $scope.doSearch())
+            
+        $scope.initialise = () -> 
             
         # Work out starting search type
         #fuggle keyword if initialised via qs

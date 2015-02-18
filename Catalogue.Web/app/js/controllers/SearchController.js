@@ -8,12 +8,15 @@
     };
     $scope.activeSearchType = $scope.searchType.fulltext;
     $scope.keyword = '';
-    $scope.query = {
-      q: $location.search()['q'] || '',
-      k: [$location.search()['k'] || ''],
-      p: 0,
-      n: 25
+    $scope.initialiseQuery = function() {
+      return $scope.query = {
+        q: $location.search()['q'] || '',
+        k: [$location.search()['k'] || ''],
+        p: 0,
+        n: 25
+      };
     };
+    $scope.initialiseQuery();
     getPathFromKeyword = function(keyword) {
       var path;
       path = ensureEndsWith(keyword.vocab, '/') + keyword.value;
@@ -116,6 +119,11 @@
       $scope.query.p = n - 1;
       return $scope.doSearch();
     };
+    $scope.$on('$routeUpdate', function() {
+      $scope.initialiseQuery();
+      return $scope.doSearch();
+    });
+    $scope.initialise = function() {};
     if ($scope.query.k[0] !== '') {
       $scope.activeSearchType = $scope.searchType.keyword;
       $scope.keyword = getKeywordFromPath($scope.query.k[0]);
