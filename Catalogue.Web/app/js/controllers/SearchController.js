@@ -8,11 +8,23 @@
     };
     $scope.activeSearchType = $scope.searchType.fulltext;
     $scope.keyword = '';
-    $scope.query = {
-      q: $location.search()['q'] || '',
-      k: [$location.search()['k'] || ''],
-      p: 0,
-      n: 25
+    $scope.initialiseQuery = function() {
+      return $scope.query = {
+        q: $location.search()['q'] || '',
+        k: [$location.search()['k'] || ''],
+        p: 0,
+        n: 25
+      };
+    };
+    $scope.initialiseQuery();
+    $scope.setSearchType = function() {
+      if ($scope.query.k[0] !== '') {
+        $scope.activeSearchType = $scope.searchType.keyword;
+        return $scope.keyword = getKeywordFromPath($scope.query.k[0]);
+      } else {
+        $scope.activeSearchType = $scope.searchType.fulltext;
+        return $scope.keyword = '';
+      }
     };
     getPathFromKeyword = function(keyword) {
       var path;
@@ -21,20 +33,27 @@
     };
     getKeywordFromPath = function(path) {
       var elements, i, value, vocab, _i, _ref;
-      elements = path.split('/');
-      value = elements[elements.length - 1];
-      vocab = "http://";
-      for (i = _i = 0, _ref = elements.length - 2; _i <= _ref; i = _i += 1) {
-        vocab = vocab.concat(elements[i].concat('/'));
+      if (path.indexOf('/') === -1) {
+        return {
+          value: path,
+          vocab: ''
+        };
+      } else {
+        elements = path.split('/');
+        value = elements[elements.length - 1];
+        vocab = "http://";
+        for (i = _i = 0, _ref = elements.length - 2; _i <= _ref; i = _i += 1) {
+          vocab = vocab.concat(elements[i].concat('/'));
+        }
+        return {
+          value: value,
+          vocab: vocab
+        };
       }
-      return {
-        value: value,
-        vocab: vocab
-      };
     };
     appTitlePrefix = "Topcat:";
     ensureEndsWith = function(str, suffix) {
-      if (!(str.indexOf(suffix, str.length - suffix.length) !== -1)) {
+      if (str !== '' && !(str.indexOf(suffix, str.length - suffix.length) !== -1)) {
         return str.concat(suffix);
       } else {
         return str;
@@ -116,10 +135,12 @@
       $scope.query.p = n - 1;
       return $scope.doSearch();
     };
-    if ($scope.query.k[0] !== '') {
-      $scope.activeSearchType = $scope.searchType.keyword;
-      $scope.keyword = getKeywordFromPath($scope.query.k[0]);
-    }
+    $scope.$on('$routeUpdate', function() {
+      $scope.initialiseQuery();
+      $scope.setSearchType();
+      return $scope.doSearch();
+    });
+    $scope.setSearchType();
     return $scope.doSearch();
   });
 

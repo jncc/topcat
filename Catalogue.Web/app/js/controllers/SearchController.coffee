@@ -9,29 +9,44 @@
         
         $scope.keyword = ''
         
-        $scope.query = { 
-            q: $location.search()['q'] || '', 
-            k: [$location.search()['k'] || ''], 
-            p: 0 , 
-            n:25}
+        $scope.initialiseQuery = () ->
+            $scope.query = { 
+                q: $location.search()['q'] || '', 
+                k: [$location.search()['k'] || ''], 
+                p: 0 , 
+                n:25}
+                
+        $scope.initialiseQuery()
+        
+        $scope.setSearchType = () ->
+            if $scope.query.k[0] != ''
+                $scope.activeSearchType = $scope.searchType.keyword
+                $scope.keyword = getKeywordFromPath($scope.query.k[0])
+            else
+                $scope.activeSearchType = $scope.searchType.fulltext
+                $scope.keyword = ''
+                
     
         getPathFromKeyword = (keyword) ->
             path = ensureEndsWith(keyword.vocab, '/') + keyword.value
             path.replace("http://", "")
  
         getKeywordFromPath = (path) -> 
-            elements = path.split('/')
-            value = elements[elements.length - 1]
-            vocab = "http://"
-            for i in [0..elements.length - 2] by 1
-                vocab = vocab.concat(elements[i].concat('/'))
-            return {value: value, vocab: vocab}
+            if path.indexOf('/') == -1
+                return {value: path, vocab: ''}
+            else
+                elements = path.split('/')
+                value = elements[elements.length - 1]
+                vocab = "http://"
+                for i in [0..elements.length - 2] by 1
+                    vocab = vocab.concat(elements[i].concat('/'))
+                return {value: value, vocab: vocab}
     
         appTitlePrefix = "Topcat:";
          # initial values
          
         ensureEndsWith = (str, suffix) ->
-            if !(str.indexOf(suffix, str.length - suffix.length) != -1) 
+            if str != '' && !(str.indexOf(suffix, str.length - suffix.length) != -1)  
                 return str.concat(suffix)
             else
                 return str
@@ -105,26 +120,13 @@
             $scope.query.p = n-1
             $scope.doSearch()
             
-        #  register the three listners
-        # $scope.$watch 'query', $scope.doSearch, true # could  be either text or keyword
-        # $scope.$watch 'model.keyword.value', doKeywordSearch, true # only keyword
-        # $scope.$watch 'query.p', changePageNumber, true # coul dbe text or keyword
-        # $scope.$watch 'model.searchType', decideWhichSearch, true # coul dbe text or keyword
-
-        # when the querystring changes, update the model query value
-        #$scope.$watch(
-        #    ()  -> $location.search()['q'] #todo watch and update whole querystring
-        #    (q) -> $scope.query.q = q || ''
-        #)
-        
-
+        $scope.$on('$routeUpdate',() -> 
+            $scope.initialiseQuery()
+            $scope.setSearchType()
+            $scope.doSearch())
             
         # Work out starting search type
-        #fuggle keyword if initialised via qs
-        
-        if ($scope.query.k[0] != '') 
-            $scope.activeSearchType = $scope.searchType.keyword
-            $scope.keyword = getKeywordFromPath($scope.query.k[0])
-        
+        $scope.setSearchType()
+
         $scope.doSearch()
 
