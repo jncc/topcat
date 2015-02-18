@@ -17,7 +17,19 @@ namespace Catalogue.Web.Controllers
         /// </summary>
         public static List<MetadataKeyword> ParseKeywords(IEnumerable<string> keywords)
         {
-            return (from k in keywords
+            List<MetadataKeyword> result = new List<MetadataKeyword>();
+
+            var k1 = (from k in keywords
+                        where k.IsNotBlank() && k.IndexOf('/') == -1
+                        select new MetadataKeyword
+                            {
+                                Vocab = String.Empty,
+                                Value = k
+                            }).ToList();
+
+            result.AddRange(k1);
+
+            var k2 =  (from k in keywords
                     where k.IsNotBlank()
                     from m in Regex.Matches(k, @"^([\w\s/\.-]*)/([\w\s-]*)$", RegexOptions.IgnoreCase).Cast<Match>()
                     let pair = m.Groups.Cast<Group>().Select(g => g.Value).Skip(1)
@@ -28,6 +40,9 @@ namespace Catalogue.Web.Controllers
                     }
                    ).ToList();
 
+            result.AddRange(k2);
+
+            return result;
         }
 
     }
@@ -42,6 +57,27 @@ namespace Catalogue.Web.Controllers
             var results = ParameterHelper.ParseKeywords(new [] { urlKeyword });
 
             results.Should().HaveCount(1);
+        }
+
+        [Test]
+        public void should_parse_keywords_with_no_vocab()
+        {
+            string urlKeyword = "Seabed Habitat Maps";
+
+            var results = ParameterHelper.ParseKeywords(new [] { urlKeyword });
+
+            results.Should().HaveCount(1);
+        }
+
+
+        [Test]
+        public void should_handle_empty_set_nicely()
+        {
+            string urlKeyword = String.Empty;
+
+            var results = ParameterHelper.ParseKeywords(new[] { urlKeyword });
+
+            results.Should().HaveCount(0);
         }
     }
 }
