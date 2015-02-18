@@ -31,7 +31,7 @@
          # initial values
          
         ensureEndsWith = (str, suffix) ->
-            if !(str.indexOf(suffix, str.length - suffix.length) != -1) 
+            if str != '' && !(str.indexOf(suffix, str.length - suffix.length) != -1)  
                 return str.concat(suffix)
             else
                 return str
@@ -104,20 +104,6 @@
         $scope.nextPage = (n) ->
             $scope.query.p = n-1
             $scope.doSearch()
-            
-        #  register the three listners
-        # $scope.$watch 'query', $scope.doSearch, true # could  be either text or keyword
-        # $scope.$watch 'model.keyword.value', doKeywordSearch, true # only keyword
-        # $scope.$watch 'query.p', changePageNumber, true # coul dbe text or keyword
-        # $scope.$watch 'model.searchType', decideWhichSearch, true # coul dbe text or keyword
-
-        # when the querystring changes, update the model query value
-        #$scope.$watch(
-        #    ()  -> $location.search()['q'] #todo watch and update whole querystring
-        #    (q) -> $scope.query.q = q || ''
-        #)
-        
-
             
         # Work out starting search type
         #fuggle keyword if initialised via qs

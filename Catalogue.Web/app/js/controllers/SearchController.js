@@ -34,7 +34,7 @@
     };
     appTitlePrefix = "Topcat:";
     ensureEndsWith = function(str, suffix) {
-      if (!(str.indexOf(suffix, str.length - suffix.length) !== -1)) {
+      if (str !== '' && !(str.indexOf(suffix, str.length - suffix.length) !== -1)) {
         return str.concat(suffix);
       } else {
         return str;
