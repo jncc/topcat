@@ -128,14 +128,17 @@ namespace Catalogue.Data.Import.Mappings
 
         private string GetBadKeywordText(string keywords)
         {
-            var output = new StringBuilder("##Bad Keywords");
-            output.AppendLine();
-            output.Append(
-                "The following keywords were associated with the original CMS page for this publication. There lenght indicates they may be invalid");
 
             var badKeywords = from k in ParsePageKeywords(keywords)
                               where k.Length > 30
                               select k;
+
+            if (!badKeywords.Any()) return String.Empty;
+
+            var output = new StringBuilder("##Bad Keywords");
+            output.AppendLine();
+            output.Append(
+                "The following keywords were associated with the original CMS page for this publication. There lenght indicates they may be invalid");
 
             foreach (var badKeyword in badKeywords)
             {
