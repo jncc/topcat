@@ -139,7 +139,7 @@ namespace Catalogue.Data.Import.Mappings
             var output = new StringBuilder("##Bad Keywords");
             output.AppendLine();
             output.Append(
-                "The following keywords were associated with the original CMS page for this publication. There lenght indicates they may be invalid");
+                "The following keywords were associated with the original CMS page for this publication. There length indicates they may be invalid");
 
             foreach (var badKeyword in enumerable)
             {
