@@ -27,7 +27,7 @@ namespace Catalogue.Gemini.Model
         public DateTime MetadataDate { get; set; }
         
         public ResponsibleParty MetadataPointOfContact { get; set; }
-        public string ResourceType { get; set; }  // dataset | series | service
+        public string ResourceType { get; set; }  // dataset | series | service | publication
         public BoundingBox BoundingBox { get; set; }
 
         public Metadata()

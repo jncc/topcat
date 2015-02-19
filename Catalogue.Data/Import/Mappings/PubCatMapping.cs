@@ -121,7 +121,9 @@ namespace Catalogue.Data.Import.Mappings
             //Invalid dates handled by exporter - go to comments field with note
             Map(m => m.DatasetReferenceDate).Name("PublicationDate");
             Map(m => m.Keywords).ConvertUsing(GetKeywords);
-            Map(m => m.ResourceLocator).ConvertUsing(row => "http://some/exmple/public/location");
+            Map(m => m.ResourceLocator).ConvertUsing(row => "http://some/example/public/location");
+            Map(m => m.DataFormat).ConvertUsing(row => "Documents");
+            Map(m => m.ResourceType).ConvertUsing(row => "publication");
         }
 
         private string GetBadKeywordText(string keywords)
