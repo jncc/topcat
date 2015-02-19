@@ -112,21 +112,43 @@ namespace Catalogue.Data.Import.Mappings
                     sb.AppendLine(row.GetField("Citation"));
                     sb.AppendLine();
                     sb.AppendLine(row.GetField("Comment"));
+                    sb.AppendLine();
+                    sb.Append(GetBadKeywordText(row.GetField("Keywords")));
 
                     return sb.ToString();
 
                 });
             //Invalid dates handled by exporter - go to comments field with note
             Map(m => m.DatasetReferenceDate).Name("PublicationDate");
-            Map(m => m.Keywords).ConvertUsing(ParseKeywords);
+            Map(m => m.Keywords).ConvertUsing(GetKeywords);
+            Map(m => m.ResourceLocator).ConvertUsing(row => "http://some/exmple/public/location");
+        }
+
+        private string GetBadKeywordText(string keywords)
+        {
+            var output = new StringBuilder("##Bad Keywords");
+            output.AppendLine();
+            output.Append(
+                "The following keywords were associated with the original CMS page for this publication. There lenght indicates they may be invalid");
+
+            var badKeywords = from k in ParsePageKeywords(keywords)
+                              where k.Length > 30
+                              select k;
+
+            foreach (var badKeyword in badKeywords)
+            {
+                output.AppendLine(badKeyword);
+            }
+
+            return output.ToString();
         }
 
 
-        private List<MetadataKeyword> ParseKeywords(ICsvReaderRow row)
+        private List<MetadataKeyword> GetKeywords(ICsvReaderRow row)
         {
             var keywords = new List<MetadataKeyword>();
             
-            keywords.AddRange(GetPageKeywords(row.GetField("Keywords")));
+            keywords.AddRange(GetValidPageKeywords(row.GetField("Keywords")));
 
             AddKeyword(keywords, "http://vocab.jncc.gov.uk/NHBS",  row.GetField("NhbsNumber"));
             AddKeyword(keywords, "http://vocab.jncc.gov.uk/ISBN", row.GetField("IsbnNumber"));
@@ -160,14 +182,22 @@ namespace Catalogue.Data.Import.Mappings
                 });
         }
 
-        private IEnumerable<MetadataKeyword> GetPageKeywords(string input)
+        private IEnumerable<string> ParsePageKeywords(string input)
         {
-            if (input.IsBlank()) return  new List<MetadataKeyword>();
 
-            return from m in Regex.Matches(input, @"\{(.*?)\}").Cast<Match>()
-                   let keyword = m.Groups.Cast<Group>().Select(g => g.Value).Skip(1).First().Split(',')
-                   from k in keyword
-                   where k.IsNotBlank()
+            if (input.IsBlank()) return new List<string>();
+
+            return (from m in Regex.Matches(input, @"\{(.*?)\}").Cast<Match>()
+             let keyword = m.Groups.Cast<Group>().Select(g => g.Value).Skip(1).First().Split(',')
+             from k in keyword
+             where k.IsNotBlank()
+             select k).Distinct(StringComparer.InvariantCultureIgnoreCase);
+        } 
+
+        private IEnumerable<MetadataKeyword> GetValidPageKeywords(string input)
+        {
+            return from k in ParsePageKeywords(input)
+                   where k.Length <= 30
                    select new MetadataKeyword
                        {
                            Vocab = String.Empty,
@@ -176,13 +206,13 @@ namespace Catalogue.Data.Import.Mappings
         }
     }
 
-
-
     public class RecordMap : CsvClassMap<Record>
     {
         public override void CreateMap()
         {
             Map(m => m.Path).Name("Path");
+            Map(m => m.TopCopy).ConvertUsing(row => true);
+            Map(m => m.Status).ConvertUsing(row  => Status.Publishable);
 
             References<GeminiMap>(m => m.Gemini);
         }
