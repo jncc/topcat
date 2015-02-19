@@ -23,7 +23,7 @@
                     <span ng-show="activeSearchType == searchType.keyword">
                         <input type="text" 
                                ng-model="keyword" 
-                               typeahead-on-select="onKeywordSelect($item, $model, $label)"
+                               typeahead-on-select="tagSearch($item)"
                                placeholder="Keyword" 
                                typeahead-template-url="keywordTemplate.html"  
                                typeahead-loading="loadingKeys" 
@@ -65,7 +65,7 @@
 
 
 <div ng-show="query.q">
-    {{query.p * 25 || 0}} to {{result.results.length + (query.p * 25) || 0}}, of {{result.total || 0}} results
+    {{query.p * 25 || 1}} to {{result.results.length + (query.p * 25) || 0}}, of {{result.total || 0}} results
     <span ng-show="result.speed">{{(result.speed / 1000) | number:2}} seconds.</span>
     <hr />
 </div>
