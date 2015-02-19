@@ -5,15 +5,14 @@ using Catalogue.Data.Model;
 using Catalogue.Gemini.DataFormats;
 using Catalogue.Gemini.Model;
 using Catalogue.Utilities.Text;
-using Catalogue.Web.Search;
 using Raven.Client;
 
 namespace Catalogue.Web.Controllers.Search
 {
     public interface ISearchHelper
     {
-        SearchOutputModel KeywordSearch(SearchInputModel searchInputModel);
-        SearchOutputModel FullTextSearch(SearchInputModel searchInputModel);
+        SearchOutputModel KeywordSearch(QueryModel queryModel);
+        SearchOutputModel FullTextSearch(QueryModel queryModel);
     }
 
     public class SearchHelper : ISearchHelper
@@ -25,22 +24,22 @@ namespace Catalogue.Web.Controllers.Search
             _db = db;
         }
 
-        public SearchOutputModel KeywordSearch(SearchInputModel searchInputModel)
+        public SearchOutputModel KeywordSearch(QueryModel queryModel)
         {
             RavenQueryStatistics stats;
 
-            var keywords = ParameterHelper.ParseKeywords(searchInputModel.Keywords);
+            var keywords = ParameterHelper.ParseKeywords(queryModel.K);
             var keyword = keywords.Single(); // for now, we only support one keyword
 
             var query = _db.Query<Record>()
                 .Statistics(out stats)
                 .Where(r => r.Gemini.Keywords.Any(k => k.Value == keyword.Value && k.Vocab == keyword.Vocab));
 
-            int skipNumber = searchInputModel.PageNumber * searchInputModel.NumberOfRecords;
+            int skipNumber = queryModel.P * queryModel.N;
 
             var results = query
                 .Skip(skipNumber)
-                .Take(searchInputModel.NumberOfRecords)
+                .Take(queryModel.N)
                 .ToList()
                 .Select(r => new HalfBakedResult
                     {
@@ -49,11 +48,10 @@ namespace Catalogue.Web.Controllers.Search
                         Snippet = r.Gemini.Abstract.TruncateNicely(200)
                     });
 
-            return MakeSearchOutputModel(searchInputModel, stats, results);
-
+            return MakeSearchOutputModel(queryModel, stats, results);
         }
 
-        public SearchOutputModel FullTextSearch(SearchInputModel searchInputModel)
+        public SearchOutputModel FullTextSearch(QueryModel queryModel)
         {
             RavenQueryStatistics stats;
             FieldHighlightings titleLites;
@@ -68,17 +66,16 @@ namespace Catalogue.Web.Controllers.Search
                 .Highlight("Abstract", 202, 1, out abstractLites)
                 .Highlight("AbstractN", 202, 1, out abstractNLites)
                 .SetHighlighterTags("<b>", "</b>")
-                .Search("Title", searchInputModel.Query).Boost(10)
-                .Search("TitleN", searchInputModel.Query)
-                .Search("Abstract", searchInputModel.Query)
-                .Search("AbstractN", searchInputModel.Query);
+                .Search("Title", queryModel.Q).Boost(10)
+                .Search("TitleN", queryModel.Q)
+                .Search("Abstract", queryModel.Q)
+                .Search("AbstractN", queryModel.Q);
             
-            int skipNumber = searchInputModel.PageNumber * searchInputModel.NumberOfRecords;
+            int skipNumber = queryModel.P * queryModel.N;
             
             List<Record> results = query
                     .Skip(skipNumber)
-                    .Take(searchInputModel.NumberOfRecords).ToList();
-
+                    .Take(queryModel.N).ToList();
 
 
             var xs = from r in results
@@ -96,11 +93,13 @@ namespace Catalogue.Web.Controllers.Search
                                        ?? r.Gemini.Abstract.TruncateNicely(200),
                          };
 
-            return MakeSearchOutputModel(searchInputModel, stats, xs);
+            return MakeSearchOutputModel(queryModel, stats, xs);
         }
 
-        private static SearchOutputModel MakeSearchOutputModel(SearchInputModel searchInputModel, RavenQueryStatistics stats,
-                                                               IEnumerable<HalfBakedResult> xs)
+        static SearchOutputModel MakeSearchOutputModel(
+            QueryModel queryModel,
+            RavenQueryStatistics stats,
+            IEnumerable<HalfBakedResult> xs)
         {
             return new SearchOutputModel
                 {
@@ -131,10 +130,10 @@ namespace Catalogue.Web.Controllers.Search
                     Query =
                         new QueryOutputModel
                             {
-                                K = searchInputModel.Keywords,
-                                Q = searchInputModel.Query,
-                                P = searchInputModel.PageNumber,
-                                N = searchInputModel.NumberOfRecords,
+                                K = queryModel.K,
+                                Q = queryModel.Q,
+                                P = queryModel.P,
+                                N = queryModel.N,
                             }
                 };
         }

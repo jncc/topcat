@@ -4,7 +4,6 @@ using System.IO;
 using System.Linq;
 using Catalogue.Gemini.Model;
 using Catalogue.Web.Controllers.Search;
-using Catalogue.Web.Search;
 using Moq;
 using NUnit.Framework;
 
@@ -31,11 +30,11 @@ namespace Catalogue.Tests.Web.Search
             Speed = 100L
         };
 
-        private readonly SearchInputModel _searchInputModel = new SearchInputModel()
+        private readonly QueryModel _searchInputModel = new QueryModel()
         {
             Keyword = Keyword,
-            NumberOfRecords = 0,
-            PageNumber = 1
+            N = 0,
+            P = 1
         };
 
       
@@ -45,10 +44,10 @@ namespace Catalogue.Tests.Web.Search
             
             var mock = new Mock<ISearchRepository>();
 
-            mock.Setup(m => m.FindByKeyword(It.Is<SearchInputModel>(s => s.Equals(_searchInputModel)))).Returns(_searchOutputModel);
+            mock.Setup(m => m.FindByKeyword(It.Is<QueryModel>(s => s.Equals(_searchInputModel)))).Returns(_searchOutputModel);
             var keywordSearchService = new SearchService(mock.Object);
             var searchOutputModel = keywordSearchService.FindByKeyword(_searchInputModel);
-            mock.Verify(m => m.FindByKeyword(It.Is<SearchInputModel>(s => s.Equals(_searchInputModel))), Times.Once);
+            mock.Verify(m => m.FindByKeyword(It.Is<QueryModel>(s => s.Equals(_searchInputModel))), Times.Once);
             Assert.AreEqual(searchOutputModel, _searchOutputModel);
         }
 
@@ -56,10 +55,10 @@ namespace Catalogue.Tests.Web.Search
         public void ExpectServiceCallInController()
         {
             var mock = new Mock<ISearchService>();
-            mock.Setup(m => m.FindByKeyword(It.Is<SearchInputModel>(s => s.Equals(_searchInputModel)))).Returns(_searchOutputModel);
+            mock.Setup(m => m.FindByKeyword(It.Is<QueryModel>(s => s.Equals(_searchInputModel)))).Returns(_searchOutputModel);
             var keywordSearchController = new KeywordSearchController(mock.Object);
             var searchOutputModel = keywordSearchController.Post(_searchInputModel);
-            mock.Verify(m => m.FindByKeyword(It.Is<SearchInputModel>(s => s.Equals(_searchInputModel))), Times.Once);
+            mock.Verify(m => m.FindByKeyword(It.Is<QueryModel>(s => s.Equals(_searchInputModel))), Times.Once);
             Assert.AreEqual(searchOutputModel, _searchOutputModel);
         }
 

@@ -151,6 +151,8 @@
     <Compile Include="Admin\Keywords\KeywordsController.cs" />
     <Compile Include="Admin\Keywords\KeywordsRepository.cs" />
     <Compile Include="Admin\Keywords\KeywordsService.cs" />
+    <Compile Include="Controllers\QueryModel.cs" />
+    <Compile Include="Controllers\Sandbox\SandboxController.cs" />
     <Compile Include="Controllers\Seed\SeedController.cs" />
     <Compile Include="Controllers\Vocabularies\VocabulariesController.cs" />
     <Compile Include="Controllers\Vocabularies\VocabularyListController.cs" />
@@ -165,14 +167,12 @@
     <Compile Include="Logging\ElmahHandledErrorLoggerFilter.cs" />
     <Compile Include="Logging\UnhandledExceptionFilter.cs" />
     <Compile Include="Controllers\Search\SearchHelper.cs" />
-    <Compile Include="Controllers\Search\SearchInputModel.cs" />
     <Compile Include="Controllers\Search\SearchType.cs" />
     <Compile Include="Settings.cs" />
     <Compile Include="Account\AccountController.cs" />
     <Compile Include="Controllers\FormatsController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\RecordsController.cs" />
-    <Compile Include="Controllers\SandboxController.cs" />
     <Compile Include="Controllers\Search\SearchController.cs" />
     <Compile Include="Controllers\Search\SearchOutputModel.cs" />
     <Compile Include="Validator\ValidatorController.cs" />
