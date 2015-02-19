@@ -1,6 +1,5 @@
-(function() {
-
-  angular.module('app.controllers', ['ui.bootstrap']).controller('MainController', function($scope, $timeout, Account, misc) {
+﻿(function() {
+  angular.module('app.controllers', ['ui.bootstrap']).controller('MainController', function($scope, $rootScope, $timeout, Account, misc) {
     var busyCount, notifications;
     busyCount = 0;
     $scope.busy = {
@@ -32,7 +31,12 @@
     Account.then(function(user) {
       return $scope.user = user;
     });
+    $rootScope.$on('$locationChangeStart', function() {
+      return $('.qtip').qtip('hide');
+    });
     return $scope.hashStringToColor = misc.hashStringToColor;
   });
 
 }).call(this);
+
+//# sourceMappingURL=MainController.js.map

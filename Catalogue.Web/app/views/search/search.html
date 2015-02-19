@@ -83,8 +83,8 @@
         </div>
         <div ng-bind-html="r.snippet"></div>
         <div class="search-tags">
-            <span class="tag" ng-repeat="k in r.keywords"  style="cursor: pointer;" tc-tip title="Click to search by this tag" ng-click="tagSearch(k)">
-                <span tc-tag ng-style="{ 'background-color': hashStringToColor(k.vocab) }">&nbsp;<!--<span class="glyphicon glyphicon-info-sign"></span>--></span>
+            <span tc-tag class="tag" ng-repeat="k in r.keywords" style="cursor: pointer;" tc-tip ng-click="tagSearch(k)">
+                <span ng-style="{ 'background-color': hashStringToColor(k.vocab) }">&nbsp;<!--<span class="glyphicon glyphicon-info-sign"></span>--></span>
                 {{ k.value }}
             </span>
             
