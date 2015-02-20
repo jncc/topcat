@@ -1,6 +1,6 @@
 ﻿(function() {
   angular.module('app.controllers').controller('SearchController', function($scope, $rootScope, $location, $http, $timeout) {
-    var appTitlePrefix, blah, doSearch, ensureEndsWith, getKeywordFromPath, getPathFromKeyword, newQuery;
+    var appTitlePrefix, doSearch, ensureEndsWith, getKeywordFromPath, getPathFromKeyword, newQuery, updateUrl;
     appTitlePrefix = "Topcat ";
     $scope.app = {
       starting: true
@@ -8,8 +8,11 @@
     $timeout((function() {
       return $scope.app.starting = false;
     }), 500);
+    updateUrl = function(query) {
+      return $location.search('q', query.q);
+    };
     doSearch = function(query) {
-      $location.search('q', $scope.query.q);
+      updateUrl(query);
       if (query.q || query.k[0]) {
         $scope.busy.start();
         return $http.get('../api/search?' + $.param($scope.query)).success(function(result) {
@@ -35,13 +38,8 @@
         n: 25
       };
     };
-    blah = $.extend({}, newQuery(), $location.search());
-    console.log(blah);
-    $scope.query = blah;
     $scope.$watch('query', doSearch, true);
-    $scope.$watch(function() {
-      return $location.search();
-    }, function(x) {});
+    $scope.query = $.extend({}, newQuery(), $location.search());
     $rootScope.page = {
       title: appTitlePrefix
     };
@@ -75,26 +73,29 @@
         };
       }
     };
-    return ensureEndsWith = function(str, suffix) {
+    ensureEndsWith = function(str, suffix) {
       if (str !== '' && !(str.indexOf(suffix, str.length - suffix.length) !== -1)) {
         return str.concat(suffix);
       } else {
         return str;
       }
     };
-
-    /*
-    $scope.nextPage = (n) ->
-        $scope.query.p = n-1
-        $scope.doSearch()
-    $scope.range  = (min, max, step) ->
-        step = if step is undefined then 1 else step;
-        input = [];
-        for i in [0..max] by step
-            input.push(i);
-    $scope.maxPages  = (total, pageLength) ->
-        Math.ceil(total/pageLength)-1;
-     */
+    $scope.setPage = function(n) {
+      return $scope.query.p = n - 1;
+    };
+    $scope.range = function(min, max, step) {
+      var i, input, _i, _results;
+      step = step === void 0 ? 1 : step;
+      input = [];
+      _results = [];
+      for (i = _i = 0; step > 0 ? _i <= max : _i >= max; i = _i += step) {
+        _results.push(input.push(i));
+      }
+      return _results;
+    };
+    return $scope.maxPages = function(total, pageLength) {
+      return Math.ceil(total / pageLength) - 1;
+    };
   });
 
 }).call(this);

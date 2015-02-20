@@ -8,29 +8,29 @@
         <form>
             <div class="form-group">
                 <div class="input-group">
-                
+
                     <script type="text/ng-template" id="keywordTemplate.html">
                         <a>
                             <span bind-html-unsafe="match.model.vocab"></span>
-                            <br/>
+                            <br />
                             <span bind-html-unsafe="match.model.value | typeaheadHighlight:query"></span>
                         </a>
                     </script>
-                        
-                    <span ng-show="activeSearchType == searchType.fulltext">
-                        <input ng-model="query.q" type="text" class="form-control" ng-change="doSearch()" autofocus tc-debounce />
+
+                    <span>
+                        <input ng-model="query.q" type="text" class="form-control" autofocus tc-debounce />
                     </span>
-                    <span ng-show="activeSearchType == searchType.keyword">
-                        <input type="text" 
-                               ng-model="keyword" 
+
+                    <span ng-show="false">
+                        <input type="text"
+                               ng-model="keyword"
                                typeahead-on-select="tagSearch($item)"
-                               placeholder="Keyword" 
-                               typeahead-template-url="keywordTemplate.html"  
-                               typeahead-loading="loadingKeys" 
-                               typeahead="keyword.value for keyword in getKeywords($viewValue)" 
+                               placeholder="Keyword"
+                               typeahead-template-url="keywordTemplate.html"
+                               typeahead-loading="loadingKeys"
+                               typeahead="keyword.value for keyword in getKeywords($viewValue)"
                                tc-debounce
-                               class="form-control" 
-                            />
+                               class="form-control" />
                     </span>
 
                     <span class="input-group-btn">
@@ -41,7 +41,7 @@
                 </div>
                 <div class="row text-center ">
                     <label>
-                        <input type="radio" value="{{searchType.fulltext}}"  ng-model="activeSearchType" ng-change="switchSearchType()"> Text
+                        <input type="radio" value="{{searchType.fulltext}}" ng-model="activeSearchType" ng-change="switchSearchType()"> Text
                         <input type="radio" value="{{searchType.keyword}}" ng-model="activeSearchType" ng-change="switchSearchType()"> Keywords
                     </label>
                 </div>
@@ -50,13 +50,13 @@
     </div>
     <div class="col-md-1">
         <div class="form-group">
-                
+
             <a href="#editor/00000000-0000-0000-0000-000000000000" class="btn btn-default" tc-tip title="Add a record" style="width: 60px">
                 <span class="glyphicon glyphicon-plus"></span>
             </a>
-                
+
         </div>
-    
+
     </div>
 </div>
 
@@ -65,8 +65,11 @@
 
 
 <div ng-show="query.q">
-    {{query.p * 25 || 1}} to {{result.results.length + (query.p * 25) || 0}}, of {{result.total || 0}} results
-    <span ng-show="result.speed">{{(result.speed / 1000) | number:2}} seconds.</span>
+    <span ng-show="result.total > result.results.length">
+        {{query.p * 25 || 0}} to {{result.results.length + (query.p * 25) || 0}} of 
+    </span>
+    {{result.total || 0}} results
+    <span ng-show="result.speed">in {{(result.speed / 1000) | number:2}} seconds</span>
     <hr />
 </div>
 
@@ -87,18 +90,17 @@
                 <span ng-style="{ 'background-color': hashStringToColor(k.vocab) }">&nbsp;<!--<span class="glyphicon glyphicon-info-sign"></span>--></span>
                 {{ k.value }}
             </span>
-            
+
         </div>
-        
+
     </div>
 </div>
 
 <div class="text-center" ng-show="result.total > result.results.length">
-
     <ul class="pagination">
-     <!--   <li class="disabled"><a href="">&laquo;</a></li>-->
-    <li style="cursor: pointer;" ng-repeat="n in range(0,maxPages(result.total, 25))" ng-class="(n===query.p+1) ? 'active' : ''">
-            <span ng-click="nextPage(n)"><span ng-bind="n">n</span></span>
+        <!--   <li class="disabled"><a href="">&laquo;</a></li>-->
+        <li style="cursor: pointer;" ng-repeat="n in range(0,maxPages(result.total, 25))" ng-class="(n===query.p+1) ? 'active' : ''">
+            <span ng-click="setPage(n)"><span ng-bind="n">n</span></span>
         </li>
         <!--<li><span href="#">&raquo;</span></li>-->
     </ul>
@@ -112,18 +114,20 @@
             <h3>Why are we building Topcat?</h3>
             <ul>
                 <li>To give us a better foundation for our <b>evidence base</b>.</li>
-                <li>To help us in our <b>daily work</b> to
+                <li>
+                    To help us in our <b>daily work</b> to
                     <ul>
                         <li>know <b>which</b> resources we've got</li>
                         <li><b>find</b> the resources we need</li>
                         <li><b>share</b> knowledge &ndash; between current and future staff</li>
                         <li>better <b>organise</b> our data resources</li>
                         <li>serve <b>external</b> requests</li>
-                        <li>avoid <b>asking</b> other organisations for the same data more than once</li> 
+                        <li>avoid <b>asking</b> other organisations for the same data more than once</li>
                         <li>solve practical problems around dataset <b>licensing</b> and terms of use.</li>
                     </ul>
                 </li>
-                <li>To standardise our metadata
+                <li>
+                    To standardise our metadata
                     <ul>
                         <li>to make <b>contract</b> deliverables easier to specify</li>
                         <li>for sharing metadata with other <b>organisations</b></li>
@@ -133,11 +137,13 @@
                 <li>To satisfy external <b>quality requirements</b>.</li>
                 <li>To help teams towards their <b>open data</b> responsibilities.</li>
             </ul>
-            
-            <p>There is a clear, common need in many teams that we can meet with a shared solution.
+
+            <p>
+                There is a clear, common need in many teams that we can meet with a shared solution.
                 Please check out our roadmap (right) and get in touch
                 at <a href="mailto:Data.Services@jncc.gov.uk">Data.Services@jncc.gov.uk</a> if you want
-                to help influence the project.</p>
+                to help influence the project.
+            </p>
         </div>
         <div class="col-md-5 roadmap">
 
@@ -162,11 +168,13 @@
                     <li>Known locations &amp; bounding boxes</li>
                 </ul>
             </div>
-                
+
             <h3>Full text search <span class="label label-default">New</span></h3>
-            <p>You can currently search all the datasets from
+            <p>
+                You can currently search all the datasets from
                 the Mapping European Seabed Habitats (<a href="http://jncc.defra.gov.uk/page-1583">MESH</a>)
-                project. Many thanks to Helen Ellwood for helping us import this really useful seed data.</p>
+                project. Many thanks to Helen Ellwood for helping us import this really useful seed data.
+            </p>
         </div>
     </div>
 </div>
