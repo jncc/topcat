@@ -5,58 +5,61 @@
 
 <div class="row">
     <div class="col-md-7 col-md-offset-2">
-        <form>
-            <div class="form-group">
-                <div class="input-group">
+        <div class="input-group">
 
-                    <script type="text/ng-template" id="keywordTemplate.html">
-                        <a>
-                            <span bind-html-unsafe="match.model.vocab"></span>
-                            <br />
-                            <span bind-html-unsafe="match.model.value | typeaheadHighlight:query"></span>
-                        </a>
-                    </script>
+            <script type="text/ng-template" id="keywordTemplate.html">
+                <a>
+                    <span bind-html-unsafe="match.model.vocab"></span>
+                    <br />
+                    <span bind-html-unsafe="match.model.value | typeaheadHighlight:query"></span>
+                </a>
+            </script>
 
-                    <span>
-                        <input ng-model="query.q" type="text" class="form-control" autofocus tc-debounce />
-                    </span>
+            <span>
+                <input ng-model="query.q" type="text" class="form-control" autofocus tc-debounce />
+            </span>
 
-                    <span ng-show="false">
-                        <input type="text"
-                               ng-model="keyword"
-                               typeahead-on-select="tagSearch($item)"
-                               placeholder="Keyword"
-                               typeahead-template-url="keywordTemplate.html"
-                               typeahead-loading="loadingKeys"
-                               typeahead="keyword.value for keyword in getKeywords($viewValue)"
-                               tc-debounce
-                               class="form-control" />
-                    </span>
+            <span ng-show="false">
+                <input type="text"
+                       ng-model="keyword"
+                       typeahead-on-select="tagSearch($item)"
+                       placeholder="Keyword"
+                       typeahead-template-url="keywordTemplate.html"
+                       typeahead-loading="loadingKeys"
+                       typeahead="keyword.value for keyword in getKeywords($viewValue)"
+                       tc-debounce
+                       class="form-control" />
+            </span>
 
-                    <span class="input-group-btn">
-                        <button class="btn btn-primary" type="button" style="width: 60px">
-                            <span class="glyphicon glyphicon-search"></span>
-                        </button>
-                    </span>
-                </div>
-                <div class="row text-center ">
-                    <label>
-                        <input type="radio" value="{{searchType.fulltext}}" ng-model="activeSearchType" ng-change="switchSearchType()"> Text
-                        <input type="radio" value="{{searchType.keyword}}" ng-model="activeSearchType" ng-change="switchSearchType()"> Keywords
-                    </label>
-                </div>
-            </div>
-        </form>
-    </div>
-    <div class="col-md-1">
-        <div class="form-group">
-
-            <a href="#editor/00000000-0000-0000-0000-000000000000" class="btn btn-default" tc-tip title="Add a record" style="width: 60px">
-                <span class="glyphicon glyphicon-plus"></span>
-            </a>
-
+            <span class="input-group-btn">
+                <button class="btn btn-primary" type="button" style="width: 60px">
+                    <span class="glyphicon glyphicon-search"></span>
+                </button>
+            </span>
         </div>
 
+    </div>
+    <div class="col-md-1">
+        <div class="form-inline">
+            <button ng-click="advanced = !advanced" class="btn btn-default" tc-tip title="Advanced search options" style="width: 60px">
+                <span class="glyphicon" ng-class="advanced ? 'glyphicon-chevron-up' : 'glyphicon-chevron-down'"></span>
+            </button>
+        </div>
+    </div>
+    <div class="col-md-1">
+        <div class="form-inline">
+            <a href="#editor/00000000-0000-0000-0000-000000000000" class="btn btn-default" tc-tip title="Add a record" style="width: 60px">
+                <span class="glyphicon glyphicon-plus-sign"></span>
+            </a>
+        </div>
+    </div>
+</div>
+<div class="row search-advanced" ng-show="advanced">
+    <div class="col-md-7 col-md-offset-2">
+        <div class="well well-sm">
+            hello
+
+        </div>
     </div>
 </div>
 
@@ -66,7 +69,7 @@
 
 <div ng-show="query.q">
     <span ng-show="result.total > result.results.length">
-        {{query.p * 25 || 0}} to {{result.results.length + (query.p * 25) || 0}} of 
+        {{query.p * 25 || 0}} to {{result.results.length + (query.p * 25) || 0}} of
     </span>
     {{result.total || 0}} results
     <span ng-show="result.speed">in {{(result.speed / 1000) | number:2}} seconds</span>
@@ -75,24 +78,21 @@
 
 <div ng-repeat="r in result.results" class="layout-row search-result">
     <div class="layout-col search-format">
-        <span class="dark glyphicon {{r.format.glyph}}" title="{{r.format.group}} "></span>
-        <!--<span class="label label-default">{{($index + (25*(query.p)))+1}}</span>-->
+        <span class="dark glyphicon {{r.format.glyph}}" tc-tip title="{{r.format.group}}"></span>
     </div>
     <div class="layout-col">
         <div class="search-title">
             <a ng-href="#/editor/{{r.id}}" ng-bind-html="r.title"></a>
-            <span class="search-date" ng-show="r.date">{{r.date.substring(0, 4)}}</span><!-- json handles dates as strings, so  can't use getUTCFullYear()-->
+            <span class="search-date" ng-show="r.date">{{r.date.substring(0, 4)}}</span>
             <span tc-top-copy-icon ng-show="r.topCopy" title="Top copy"></span>
         </div>
         <div ng-bind-html="r.snippet"></div>
         <div class="search-tags">
             <span tc-tag class="tag" ng-repeat="k in r.keywords" style="cursor: pointer;" tc-tip ng-click="tagSearch(k)">
-                <span ng-style="{ 'background-color': hashStringToColor(k.vocab) }">&nbsp;<!--<span class="glyphicon glyphicon-info-sign"></span>--></span>
+                <span ng-style="{ 'background-color': hashStringToColor(k.vocab) }">&nbsp;</span>
                 {{ k.value }}
             </span>
-
         </div>
-
     </div>
 </div>
 

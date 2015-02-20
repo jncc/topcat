@@ -122,6 +122,9 @@ label {
   padding-top: 0.5em;
   padding-left: 3em;
 }
+.search-advanced {
+  margin-top: 1em;
+}
 .search-result {
   margin: 1.2em 0;
 }
@@ -350,3 +353,4 @@ form .ng-dirty.ng-invalid {
 .nav > li > a {
   color: #666666;
 }
+/*# sourceMappingURL=main.css.map */
