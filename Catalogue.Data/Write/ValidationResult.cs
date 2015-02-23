@@ -59,7 +59,7 @@ namespace Catalogue.Data.Write
             {
                 return (from e in FieldExpressions
                         let expression = e.Body.RemoveUnary()
-                        let fullDottedPath = expression.ToString().Replace("r.", String.Empty)
+                        let fullDottedPath = expression.ToString().Replace("r.", String.Empty).Replace("v.", String.Empty) //sucks
                         let camelCasedProperties = fullDottedPath.Split('.').Select(StringUtility.ToCamelCase)
                         select String.Join(".", camelCasedProperties))
                     .ToList();
