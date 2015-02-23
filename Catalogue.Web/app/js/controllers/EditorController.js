@@ -1,4 +1,4 @@
-﻿(function() {
+(function() {
   var fakeValidationData, getDataFormatObj, getSecurityText, updateDataFormatObj;
 
   angular.module('app.controllers').controller('EditorController', function($scope, $http, $routeParams, $location, record, Record) {

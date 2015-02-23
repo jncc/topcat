@@ -18,6 +18,13 @@ namespace Catalogue.Data.Write
 
     public class VocabularyService : IVocabularyService
     {
+        private readonly IVocabularyValidator validator;
+
+        public VocabularyService(IVocabularyValidator validator)
+        {
+            this.validator = validator;
+        }
+
         private readonly IDocumentSession db;
 //        private readonly IVocabularyValidator validator;
 

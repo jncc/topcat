@@ -33,6 +33,7 @@
             $scope[elem] = true;
             return
     
+        # http://jsfiddle.net/Eukat/ possibly the way to do it
         $scope.save = ->
             processResult = (response) ->
                 if response.data.success
@@ -50,6 +51,7 @@
                         #console.log errors
                         for e in errors
                             for field in e.fields
+                            
                                 $scope.theForm[field].$setValidity('server', false)                                
                                 
                 $scope.busy.stop()
