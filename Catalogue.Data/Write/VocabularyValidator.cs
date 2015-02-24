@@ -21,13 +21,28 @@ namespace Catalogue.Data.Write
 
             var result = new ValidationResult<Vocabulary>();
 
-            //validate name
+            ValidateId(vocab, result);
+            ValidateName(vocab, result);
+
+            return result;
+        }
+
+        private static void ValidateName(Vocabulary vocab, ValidationResult<Vocabulary> result)
+        {
             if (String.IsNullOrWhiteSpace(vocab.Name))
             {
                 result.Errors.Add("The name must not be blank", v => v.Name);
             }
+        }
 
-            return result;
+        private void ValidateId(Vocabulary vocab, ValidationResult<Vocabulary> result)
+        {
+            if (String.IsNullOrWhiteSpace(vocab.Id))
+            {
+                result.Errors.Add("The Id must not be blank", v => v.Id);
+            }
+
+            //todo: validate ID format
         }
     }
 

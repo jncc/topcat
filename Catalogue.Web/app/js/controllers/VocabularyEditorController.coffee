@@ -35,7 +35,9 @@
                         $scope.notifications.add 'There were errors'
                         for e in errors
                             for field in e.fields
-                                $scope.theForm[field].$setValidity('server', false)
+                                $scope.theForm[field].$setValidity('server', false) 
+#                                $scope.theForm.$setValidity(field, false, $scope.theForm)
+
                                 
                 $scope.busy.stop()
 

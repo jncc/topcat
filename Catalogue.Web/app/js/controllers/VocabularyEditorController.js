@@ -1,5 +1,4 @@
-(function() {
-
+﻿(function() {
   angular.module('app.controllers').controller('VocabularyEditorController', function($scope, $http, $routeParams, $location, vocab) {
     $scope.reset = function() {
       $scope.form = angular.copy(vocab);
@@ -66,3 +65,5 @@
   });
 
 }).call(this);
+
+//# sourceMappingURL=VocabularyEditorController.js.map
