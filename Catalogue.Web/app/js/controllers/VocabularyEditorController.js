@@ -30,7 +30,7 @@
     $scope.save = function() {
       var processResult;
       processResult = function(response) {
-        var errors;
+        var e, errors, field, _i, _j, _len, _len1, _ref;
         if (response.data.success) {
           vocab = response.data.vocab;
           $scope.form = angular.copy(vocab);
@@ -43,6 +43,14 @@
           errors = response.data.validation.errors;
           if (errors.length > 0) {
             $scope.notifications.add('There were errors');
+            for (_i = 0, _len = errors.length; _i < _len; _i++) {
+              e = errors[_i];
+              _ref = e.fields;
+              for (_j = 0, _len1 = _ref.length; _j < _len1; _j++) {
+                field = _ref[_j];
+                $scope.theForm[field].$setValidity('server', false);
+              }
+            }
           }
         }
         return $scope.busy.stop();
