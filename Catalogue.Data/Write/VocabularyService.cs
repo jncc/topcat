@@ -20,18 +20,13 @@ namespace Catalogue.Data.Write
     {
         private readonly IVocabularyValidator validator;
 
-        public VocabularyService(IVocabularyValidator validator)
-        {
-            this.validator = validator;
-        }
-
         private readonly IDocumentSession db;
 //        private readonly IVocabularyValidator validator;
 
-        public VocabularyService(IDocumentSession db)
+        public VocabularyService(IDocumentSession db, IVocabularyValidator validator)
         {
             this.db = db;
-//            this.validator = validator;
+            this.validator = validator;
         }
 
 
@@ -41,13 +36,9 @@ namespace Catalogue.Data.Write
             //Only insert new vocabs
             var existingVocab = db.Load<Vocabulary>(vocab.Id);
 
-            if (existingVocab == null) return Upsert(vocab);
-
-            return new VocabularyServiceResult
-                {
-                    Success = false,
-                    Vocab = vocab
-                };
+            if (existingVocab != null) throw new InvalidOperationException("Cannot insert an existing record.");
+               
+            return Upsert(vocab);          
         }
 
         public VocabularyServiceResult Update(Vocabulary vocab)
@@ -94,15 +85,16 @@ namespace Catalogue.Data.Write
             return q.ToList();
         }
 
-        internal VocabularyServiceResult Upsert(Vocabulary vocab)
+        public VocabularyServiceResult Upsert(Vocabulary vocab)
         {
-            db.Store(vocab);
+            var validation = validator.Validate(vocab);
+
+            if (!validation.Errors.Any()) db.Store(vocab);
 
             return new VocabularyServiceResult
             {
-                Success = true,
                 Vocab = vocab,
-//              Validation = validationResult
+                Validation = validation
             };
         }
 
@@ -114,29 +106,38 @@ namespace Catalogue.Data.Write
     public class VocabularyServiceResult
     {
         public Vocabulary Vocab { get; set; }
-        public bool Success { get; set; }
-//        public VocabularyValidationResult  Validation { get; set; }
+        public ValidationResult<Vocabulary> Validation { get; set; }
+        public bool Success { get { return !Validation.Errors.Any(); } }
     }
 
     public class when_upserting_a_vocabulary
     {
         [Test]
-        public void should_store_record_in_the_database()
+        public void should_validate_and_store_record_in_the_database()
         {
-            var database = Mock.Of<IDocumentSession>();
-            var service = new VocabularyService(database);
+            var database = new Mock<IDocumentSession>();
+            //mock existing vocab test
+            database.Setup(x => x.Load<Vocabulary>()).Returns<Vocabulary>(null);
+
+            var validator = new Mock<IVocabularyValidator>();
+            validator.Setup(x => x.Validate(It.IsAny<Vocabulary>())).Returns(new ValidationResult<Vocabulary>());
+
+            var service = new VocabularyService(database.Object, validator.Object);
 
             var record = BasicVocabulary();
             service.Upsert(record);
 
-            Mock.Get(database).Verify(db => db.Store(record));
+            Mock.Get(validator.Object).Verify(v => v.Validate(record));
+            Mock.Get(database.Object).Verify(db => db.Store(record));
         }
+
 
         Vocabulary BasicVocabulary()
         {
             return new Vocabulary
             {
-                // todo
+                Id = "http://some/vocab",
+                Name = "Some Name"
             };
         }
     }
