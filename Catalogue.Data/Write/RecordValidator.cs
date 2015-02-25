@@ -92,7 +92,7 @@ namespace Catalogue.Data.Write
         {
             if (!record.Gemini.Keywords.Any(k => k.Vocab == "http://vocab.jncc.gov.uk/jncc-broad-category"))
             {
-                ValidationResult.Errors.Add(String.Format("Must specify a JNCC Broad Category"),
+                ValidationResult.Errors.Add(String.Format("Must specify a JNCC Broad Category keyword"),
                     r => r.Gemini.Keywords);
             }
 
