@@ -86,7 +86,11 @@
             <span class="search-date" ng-show="r.date">{{r.date.substring(0, 4)}}</span>
             <span tc-top-copy-icon ng-show="r.topCopy" title="Top copy"></span>
         </div>
-        <div ng-bind-html="r.snippet"></div>
+        <div>
+            <span class="search-resource-type">{{r.resourceType }}</span>
+            <span class="search-resource-type-bullet">&bull;</span>
+            <span ng-bind-html="r.snippet"></span>
+        </div>
         <div class="search-tags">
             <span tc-tag class="tag" ng-repeat="k in r.keywords" style="cursor: pointer;" tc-tip ng-click="tagSearch(k)">
                 <span ng-style="{ 'background-color': hashStringToColor(k.vocab) }">&nbsp;</span>

@@ -22,6 +22,7 @@ namespace Catalogue.Web.Controllers.Search
         public List<MetadataKeyword> Keywords { get; set; }
         public bool TopCopy { get; set; }
         public string Date { get; set; }
+        public string ResourceType { get; set; }
 
         public string TemporalExtentFrom { get; set; }
         public string TemporalExtentTo { get; set; }

@@ -119,11 +119,11 @@ namespace Catalogue.Web.Controllers.Search
                                                Name = format.Name,
                                            },
                                        Keywords = x.Result.Gemini.Keywords
-                                                   .OrderBy(k => k.Vocab != "http://vocab.jncc.gov.uk/jncc-broad-category")
-                                   // show first
+                                                   .OrderBy(k => k.Vocab != "http://vocab.jncc.gov.uk/jncc-broad-category") // show first
                                                    .ThenBy(k => k.Vocab).ToList(),
                                        TopCopy = x.Result.TopCopy,
                                        Date = x.Result.Gemini.DatasetReferenceDate,
+                                       ResourceType = x.Result.Gemini.ResourceType.FirstCharToUpper(),
                                    })
                         .ToList(),
                     Speed = stats.DurationMilliseconds,
