@@ -102,13 +102,13 @@ namespace Catalogue.Data.Import.Mappings
                     string end = row.GetField("TemporalExtentEnd");
                     return new TemporalExtent
                         {
-                            Begin = ImportUtility.ParseDate(begin),
-                            End = ImportUtility.ParseDate(end)
+                            Begin = begin,
+                            End = end
                         };
                 });
                 Map(m => m.DatasetReferenceDate).ConvertUsing(row =>
                     {
-                        return ImportUtility.ParseDate(row.GetField("DatasetReferenceDate"));
+                        return row.GetField("DatasetReferenceDate");
                     });
                 Map(m => m.Lineage);
                 Map(m => m.ResourceLocator);
