@@ -6,6 +6,7 @@ using System.Linq.Expressions;
 using Catalogue.Data.Model;
 using Catalogue.Utilities.Expressions;
 using Catalogue.Utilities.Text;
+using System.Text.RegularExpressions;
 
 namespace Catalogue.Data.Write
 {
@@ -59,7 +60,7 @@ namespace Catalogue.Data.Write
             {
                 return (from e in FieldExpressions
                         let expression = e.Body.RemoveUnary()
-                        let fullDottedPath = expression.ToString().Replace("r.", String.Empty).Replace("v.", String.Empty) //todo: make this more generic then relaying on a specific instance name
+                        let fullDottedPath = Regex.Replace(expression.ToString(), @"^\w+\.", "",RegexOptions.IgnoreCase)
                         let camelCasedProperties = fullDottedPath.Split('.').Select(StringUtility.ToCamelCase)
                         select String.Join(".", camelCasedProperties))
                     .ToList();
