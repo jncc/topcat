@@ -159,16 +159,15 @@ label {
 .search-result .search-title .search-date {
   font-size: larger;
   color: #666666;
-  margin-left: 0.2em;
+}
+.search-result .search-divider-bullet {
+  font-weight: bold;
+  color: #dddddd;
+  margin: 0 0.15em 0 0.25em;
 }
 .search-result .search-resource-type {
   font-weight: bold;
   color: #888;
-}
-.search-result .search-resource-type-bullet {
-  font-weight: bold;
-  color: #dddddd;
-  margin: 0 0.15em 0 0.25em;
 }
 .search-result .search-tags {
   margin-top: 6px;

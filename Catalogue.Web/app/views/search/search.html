@@ -83,12 +83,13 @@
     <div class="layout-col">
         <div class="search-title">
             <a ng-href="#/editor/{{r.id}}" ng-bind-html="r.title"></a>
+            <span class="search-divider-bullet">&bull;</span>
             <span class="search-date" ng-show="r.date">{{r.date.substring(0, 4)}}</span>
             <span tc-top-copy-icon ng-show="r.topCopy" title="Top copy"></span>
         </div>
         <div>
             <span class="search-resource-type">{{r.resourceType }}</span>
-            <span class="search-resource-type-bullet">&bull;</span>
+            <span class="search-divider-bullet">&bull;</span>
             <span ng-bind-html="r.snippet"></span>
         </div>
         <div class="search-tags">
