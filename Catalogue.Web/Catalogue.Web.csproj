@@ -451,6 +451,11 @@
       <DependentUpon>VocabularyEditorController.min.js</DependentUpon>
     </Content>
   </ItemGroup>
+  <ItemGroup>
+    <Content Include="app\css\main.css.map">
+      <DependentUpon>main.css</DependentUpon>
+    </Content>
+  </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
