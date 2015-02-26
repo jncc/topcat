@@ -19,19 +19,31 @@
             #$location.search('p', $scope.query.p) 
             #$location.search('n', $scope.query.n)
         
+        suggestKeywords = (query) ->
+            if query.q
+                $scope.busy.start()
+                $http.get('../api/keywords?q=' + query.q)
+                    .success (result) ->
+                        $scope.keywordSuggestions = result
+                    .finally -> $scope.busy.stop()
+            else
+                $scope.keywordSuggestions = {}
+            
         doSearch = (query) ->
             # update the page title  
             #$rootScope.page = {title: appTitlePrefix + $scope.query.q}
             
             updateUrl query
             
+            suggestKeywords query
+            
             if query.q or query.k[0]
                 $scope.busy.start()
                 # search server
-                $http.get('../api/search?' + $.param $scope.query)
+                $http.get('../api/search?' + $.param query)
                     .success (result) ->
                         # don't overwrite with earlier but slower queries!
-                        if angular.equals result.query, $scope.query
+                        if angular.equals result.query, query
                             if result.total is 0 # without this the browser crashes due to an unsafe object check by angular, when results are zero
                                 $scope.result = {} 
                             else

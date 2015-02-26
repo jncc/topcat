@@ -5,7 +5,7 @@
 
 <div class="row">
     <div class="col-md-7 col-md-offset-2">
-        <div class="input-group">
+        <div class="search-box input-group">
 
             <script type="text/ng-template" id="keywordTemplate.html">
                 <a>
@@ -54,24 +54,26 @@
         </div>
     </div>
 </div>
+<div class="search-keyword-suggestions" ng-show="keywordSuggestions">
+    <span tc-tag class="tag" ng-repeat="k in keywordSuggestions" style="cursor: pointer;" tc-tip ng-click="tagSearch(k)">
+        <span ng-style="{ 'background-color': hashStringToColor(k.vocab) }">&nbsp;</span>
+        {{ k.value }}
+    </span>
+</div>
 <div class="row search-advanced" ng-show="advanced">
     <div class="col-md-7 col-md-offset-2">
         <div class="well well-sm">
-            hello
-
+            advanced search?
         </div>
     </div>
 </div>
 
-<br />
-<br />
-
-
 <div ng-show="query.q">
+    Found
     <span ng-show="result.total > result.results.length">
         {{query.p * 25 || 0}} to {{result.results.length + (query.p * 25) || 0}} of
     </span>
-    {{result.total || 0}} results
+    {{result.total || 0}} records
     <span ng-show="result.speed">in {{(result.speed / 1000) | number:2}} seconds</span>
     <hr />
 </div>

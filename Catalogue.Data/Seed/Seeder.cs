@@ -122,7 +122,7 @@ namespace Catalogue.Data.Seed
                 {
                     m.Title = "An example record with lots of vocabless keywords / tags";
                     m.Abstract = "This is just another example record.";
-                    m.Keywords.Add(new MetadataKeyword { Vocab = "", Value = "example" });
+                    m.Keywords.Add(new MetadataKeyword { Vocab = "", Value = "example tag" });
                     m.Keywords.Add(new MetadataKeyword { Vocab = "", Value = "data-services" });
                     m.Keywords.Add(new MetadataKeyword { Vocab = "", Value = "metadata" });
                 });

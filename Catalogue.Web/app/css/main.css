@@ -122,8 +122,14 @@ label {
   padding-top: 0.5em;
   padding-left: 3em;
 }
+.search-box {
+  margin-bottom: 3em;
+}
 .search-advanced {
   margin-top: 1em;
+}
+.search-keyword-suggestions {
+  margin-bottom: 1.5em;
 }
 .search-result {
   margin: 1.2em 0;

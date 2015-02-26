@@ -1,6 +1,6 @@
 ﻿(function() {
   angular.module('app.controllers').controller('SearchController', function($scope, $rootScope, $location, $http, $timeout) {
-    var appTitlePrefix, doSearch, ensureEndsWith, getKeywordFromPath, getPathFromKeyword, newQuery, updateUrl;
+    var appTitlePrefix, doSearch, ensureEndsWith, getKeywordFromPath, getPathFromKeyword, newQuery, suggestKeywords, updateUrl;
     appTitlePrefix = "Topcat ";
     $scope.app = {
       starting: true
@@ -11,12 +11,25 @@
     updateUrl = function(query) {
       return $location.search('q', query.q);
     };
+    suggestKeywords = function(query) {
+      if (query.q) {
+        $scope.busy.start();
+        return $http.get('../api/keywords?q=' + query.q).success(function(result) {
+          return $scope.keywordSuggestions = result;
+        })["finally"](function() {
+          return $scope.busy.stop();
+        });
+      } else {
+        return $scope.keywordSuggestions = {};
+      }
+    };
     doSearch = function(query) {
       updateUrl(query);
+      suggestKeywords(query);
       if (query.q || query.k[0]) {
         $scope.busy.start();
-        return $http.get('../api/search?' + $.param($scope.query)).success(function(result) {
-          if (angular.equals(result.query, $scope.query)) {
+        return $http.get('../api/search?' + $.param(query)).success(function(result) {
+          if (angular.equals(result.query, query)) {
             if (result.total === 0) {
               return $scope.result = {};
             } else {
