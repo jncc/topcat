@@ -36,6 +36,7 @@ namespace Catalogue.Data.Seed
                 s.AddVocabularies();
                 s.AddMeshRecords();
                 s.AddSimpleExampleRecord();
+                s.AddRecordWithLotsOfVocablessTags();
                 s.AddReadOnlyRecord();
                 s.AddSecureRecords();
                 s.AddNonTopCopyRecord();
@@ -106,6 +107,25 @@ namespace Catalogue.Data.Seed
                         m.Title = "A simple example record";
                         m.Abstract = "This is a simple example record.";
                     });
+            });
+
+            recordService.Insert(record);
+        }
+
+        void AddRecordWithLotsOfVocablessTags()
+        {
+            var record = MakeExampleSeedRecord().With(r =>
+            {
+                r.Id = new Guid("58fbee5e-58e6-4119-82cb-587ec383cb62");
+                r.Path = @"X:\blah\\blah";
+                r.Gemini = r.Gemini.With(m =>
+                {
+                    m.Title = "An example record with lots of vocabless keywords / tags";
+                    m.Abstract = "This is just another example record.";
+                    m.Keywords.Add(new MetadataKeyword { Vocab = "", Value = "example" });
+                    m.Keywords.Add(new MetadataKeyword { Vocab = "", Value = "data-services" });
+                    m.Keywords.Add(new MetadataKeyword { Vocab = "", Value = "metadata" });
+                });
             });
 
             recordService.Insert(record);
