@@ -4,3 +4,4 @@
 
         $scope.x = 3;
 #        Formats.then (formats) -> $scope.formats = formats
+

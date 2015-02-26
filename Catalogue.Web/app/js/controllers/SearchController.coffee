@@ -13,21 +13,19 @@
 
         updateUrl = (query) -> 
             # update the url querystring to match the query object
-            #$location.url($location.path()) wtf?
             $location.search 'q', query.q
-            #$location.search('k', $scope.query.k[0])
+            $location.search 'k', query.k
             #$location.search('p', $scope.query.p) 
             #$location.search('n', $scope.query.n)
         
         queryRecords = (query) ->
-            console.log query.k[0]
             $scope.busy.start()
-            console.log $.param query
             $http.get('../api/search?' + $.param query)
                 .success (result) ->
+                    # don't overwrite with earlier but slower queries!
                     console.log result.query
                     console.log query
-                    # don't overwrite with earlier but slower queries!
+                    
                     if angular.equals result.query, query
                         if result.total is 0 # without this the browser crashes due to an unsafe object check by angular, when results are zero
                             $scope.result = {}
@@ -35,42 +33,41 @@
                             $scope.result = result;    
                 .finally -> $scope.busy.stop()
         
-        suggestKeywords = (query) ->
+        queryKeywords = (query) ->
             $scope.busy.start()
             $http.get('../api/keywords?q=' + query.q)
                 .success (result) ->
                     $scope.keywordSuggestions = result
                 .finally -> $scope.busy.stop()
         
-        resetStuff = (query) ->
+        # called whenever the $scope.query object changes
+        doSearch = (query) ->
             # update the page title  
             #$rootScope.page = {title: appTitlePrefix + $scope.query.q}
             updateUrl query
-        
-        # called whenever the $scope.query object changes
-        doSearch = (query) ->
-            resetStuff query
-            if query.k[0]
-                $scope.keywordSuggestions = {}
+            
+            # currently we not doing combinations of both kinds of query            
+            if query.q
+                queryKeywords query
                 queryRecords query
-            else if query.q
-                suggestKeywords query
+            else if query.k
+                $scope.keywordSuggestions = {}
                 queryRecords query
             else
                 $scope.keywordSuggestions = {}
                 $scope.result = {}
                 
-        newQuery = ->
-            q: null,
-            k: [null],
-            p: 0, 
-            n: 25
-
         # when the model query value is updated, do the search
         $scope.$watch 'query', doSearch, true
 
-        # initialise the query to whatever is in the querystring                
-        $scope.query = $.extend {}, newQuery(), $location.search()
+        newQuery = ->
+            q: null,
+            k: null,
+            p: 0, 
+            n: 25
+
+        # initialise the query to whatever is in the querystring
+        $scope.query = $.extend {}, newQuery(), $location.search() 
         
         # when the querystring changes, update the model query value
         # todo this doesn't work very well; let's see if we can do without it
@@ -83,8 +80,7 @@
         
         
         $scope.queryByKeyword = (keyword) ->
-            $scope.query = $.extend {}, newQuery(), { 'k': [getPathFromKeyword(keyword)] }
-            console.log $scope.query
+            $scope.query = $.extend {}, newQuery(), { 'k': getPathFromKeyword(keyword) }
         
         $rootScope.page = { title:appTitlePrefix } 
         

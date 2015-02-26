@@ -19,6 +19,7 @@ namespace Catalogue.Web.Controllers.Sandbox
         public class InputModel
         {
             public string x { get; set; }
+            public List<int> ys { get; set; }
         }
     }
 }

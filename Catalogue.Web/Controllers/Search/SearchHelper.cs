@@ -28,8 +28,7 @@ namespace Catalogue.Web.Controllers.Search
         {
             RavenQueryStatistics stats;
 
-            var keywords = ParameterHelper.ParseKeywords(queryModel.K);
-            var keyword = keywords.Single(); // for now, we only support one keyword
+            var keyword = ParameterHelper.ParseKeywords(new [] {queryModel.K}).Single(); // for now, we only support one keyword
 
             var query = _db.Query<Record>()
                 .Statistics(out stats)
