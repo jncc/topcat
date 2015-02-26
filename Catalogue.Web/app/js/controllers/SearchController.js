@@ -1,6 +1,6 @@
 ﻿(function() {
   angular.module('app.controllers').controller('SearchController', function($scope, $rootScope, $location, $http, $timeout) {
-    var appTitlePrefix, doSearch, ensureEndsWith, getKeywordFromPath, getPathFromKeyword, newQuery, suggestKeywords, updateUrl;
+    var appTitlePrefix, doSearch, ensureEndsWith, getKeywordFromPath, getPathFromKeyword, newQuery, queryRecords, resetStuff, suggestKeywords, updateUrl;
     appTitlePrefix = "Topcat ";
     $scope.app = {
       starting: true
@@ -11,41 +11,51 @@
     updateUrl = function(query) {
       return $location.search('q', query.q);
     };
+    queryRecords = function(query) {
+      console.log(query.k[0]);
+      $scope.busy.start();
+      console.log($.param(query));
+      return $http.get('../api/search?' + $.param(query)).success(function(result) {
+        console.log(result.query);
+        console.log(query);
+        if (angular.equals(result.query, query)) {
+          if (result.total === 0) {
+            return $scope.result = {};
+          } else {
+            return $scope.result = result;
+          }
+        }
+      })["finally"](function() {
+        return $scope.busy.stop();
+      });
+    };
     suggestKeywords = function(query) {
-      if (query.q) {
-        $scope.busy.start();
-        return $http.get('../api/keywords?q=' + query.q).success(function(result) {
-          return $scope.keywordSuggestions = result;
-        })["finally"](function() {
-          return $scope.busy.stop();
-        });
-      } else {
-        return $scope.keywordSuggestions = {};
-      }
+      $scope.busy.start();
+      return $http.get('../api/keywords?q=' + query.q).success(function(result) {
+        return $scope.keywordSuggestions = result;
+      })["finally"](function() {
+        return $scope.busy.stop();
+      });
+    };
+    resetStuff = function(query) {
+      return updateUrl(query);
     };
     doSearch = function(query) {
-      updateUrl(query);
-      suggestKeywords(query);
-      if (query.q || query.k[0]) {
-        $scope.busy.start();
-        return $http.get('../api/search?' + $.param(query)).success(function(result) {
-          if (angular.equals(result.query, query)) {
-            if (result.total === 0) {
-              return $scope.result = {};
-            } else {
-              return $scope.result = result;
-            }
-          }
-        })["finally"](function() {
-          return $scope.busy.stop();
-        });
+      resetStuff(query);
+      if (query.k[0]) {
+        $scope.keywordSuggestions = {};
+        return queryRecords(query);
+      } else if (query.q) {
+        suggestKeywords(query);
+        return queryRecords(query);
       } else {
+        $scope.keywordSuggestions = {};
         return $scope.result = {};
       }
     };
     newQuery = function() {
       return {
-        q: '',
+        q: null,
         k: [null],
         p: 0,
         n: 25
@@ -53,6 +63,12 @@
     };
     $scope.$watch('query', doSearch, true);
     $scope.query = $.extend({}, newQuery(), $location.search());
+    $scope.queryByKeyword = function(keyword) {
+      $scope.query = $.extend({}, newQuery(), {
+        'k': [getPathFromKeyword(keyword)]
+      });
+      return console.log($scope.query);
+    };
     $rootScope.page = {
       title: appTitlePrefix
     };

@@ -55,7 +55,7 @@
     </div>
 </div>
 <div class="search-keyword-suggestions" ng-show="keywordSuggestions">
-    <span tc-tag class="tag" ng-repeat="k in keywordSuggestions" style="cursor: pointer;" tc-tip ng-click="tagSearch(k)">
+    <span tc-tag class="tag" ng-repeat="k in keywordSuggestions" style="cursor: pointer;" tc-tip ng-click="queryByKeyword(k)">
         <span ng-style="{ 'background-color': hashStringToColor(k.vocab) }">&nbsp;</span>
         {{ k.value }}
     </span>
@@ -95,7 +95,7 @@
             <span ng-bind-html="r.snippet"></span>
         </div>
         <div class="search-tags">
-            <span tc-tag class="tag" ng-repeat="k in r.keywords" style="cursor: pointer;" tc-tip ng-click="tagSearch(k)">
+            <span tc-tag class="tag" ng-repeat="k in r.keywords" style="cursor: pointer;" tc-tip ng-click="queryByKeyword(k)">
                 <span ng-style="{ 'background-color': hashStringToColor(k.vocab) }">&nbsp;</span>
                 {{ k.value }}
             </span>
