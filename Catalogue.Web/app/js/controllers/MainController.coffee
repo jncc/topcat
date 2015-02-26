@@ -31,4 +31,10 @@
         # utility function to be moved
         $scope.hashStringToColor = misc.hashStringToColor
         
-        
+angular.module('filters').filter('highlight', ($sce) -> 
+    (text, q) ->
+        regex = new RegExp('(' + q + ')', 'gi')
+        if q
+            text = text.replace(regex, '<b>$1</b>')
+        $sce.trustAsHtml(text)
+        )

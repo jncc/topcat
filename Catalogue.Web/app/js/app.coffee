@@ -2,7 +2,6 @@
     'ngAnimate',
     'ngRoute',
     'ngSanitize',
-    
     'app.utilities',
     'app.directives',
     'app.services',
@@ -25,7 +24,7 @@ module.config ['$routeProvider', ($routeProvider) ->
         .when '/'
             controller:     'SearchController',
             templateUrl:    'views/search/search.html',
-            reloadOnSearch: false,
+            reloadOnSearch: false
         .when '/editor/:recordId',
             controller:     'EditorController',
             templateUrl:    'views/editor/editor.html',

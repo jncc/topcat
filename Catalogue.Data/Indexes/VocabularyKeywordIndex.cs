@@ -51,6 +51,7 @@ namespace Catalogue.Data.Indexes
             Stores.Add(x => x.Value, FieldStorage.Yes);
             Analyze(x => x.Value, typeof(StandardAnalyzer).AssemblyQualifiedName);
             Analyze(x => x.ValueN, typeof(CustomKeywordAnalyzer).AssemblyQualifiedName);
+            Index(x => x.Value, FieldIndexing.Analyzed);
         }
     }
 }

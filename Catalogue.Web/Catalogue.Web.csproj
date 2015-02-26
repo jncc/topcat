@@ -148,6 +148,7 @@
   <ItemGroup>
     <Compile Include="Account\User.cs" />
     <Compile Include="Account\UserContext.cs" />
+    <Compile Include="Controllers\Keywords\KeywordModel.cs" />
     <Compile Include="Controllers\Keywords\KeywordsController.cs" />
     <Compile Include="Controllers\QueryModel.cs" />
     <Compile Include="Controllers\Sandbox\SandboxController.cs" />

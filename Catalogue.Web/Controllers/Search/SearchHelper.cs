@@ -58,7 +58,7 @@ namespace Catalogue.Web.Controllers.Search
             FieldHighlightings abstractLites;
             FieldHighlightings abstractNLites;
 
-            IDocumentQuery<Record> query = _db.Advanced.LuceneQuery<Record>("Records/Search")
+            var query = _db.Advanced.LuceneQuery<Record>("Records/Search")
                 .Statistics(out stats)
                 .Highlight("Title", 202, 1, out titleLites)
                 .Highlight("TitleN", 202, 1, out titleNLites)
@@ -72,10 +72,9 @@ namespace Catalogue.Web.Controllers.Search
             
             int skipNumber = queryModel.P * queryModel.N;
             
-            List<Record> results = query
+            var results = query
                     .Skip(skipNumber)
                     .Take(queryModel.N).ToList();
-
 
             var xs = from r in results
                      let titleFragments =

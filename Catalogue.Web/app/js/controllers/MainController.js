@@ -37,6 +37,17 @@
     return $scope.hashStringToColor = misc.hashStringToColor;
   });
 
+  angular.module('filters').filter('highlight', function($sce) {
+    return function(text, q) {
+      var regex;
+      regex = new RegExp('(' + q + ')', 'gi');
+      if (q) {
+        text = text.replace(regex, '<b>$1</b>');
+      }
+      return $sce.trustAsHtml(text);
+    };
+  });
+
 }).call(this);
 
 //# sourceMappingURL=MainController.js.map
