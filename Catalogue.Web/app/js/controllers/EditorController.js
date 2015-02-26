@@ -50,7 +50,13 @@
               _ref = e.fields;
               for (_j = 0, _len1 = _ref.length; _j < _len1; _j++) {
                 field = _ref[_j];
-                $scope.theForm[field].$setValidity('server', false);
+                try {
+                  $scope.theForm[field].$setValidity('server', false);
+                } catch (_error) {
+                  e = _error;
+                  console.log(field);
+                  console.log(e);
+                }
               }
             }
           }

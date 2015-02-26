@@ -1,7 +1,7 @@
 ﻿<div>
-    
+
     <form name="theForm" novalidate>
-        
+
         <!-- top row of buttons etc.  -->
         <div class="row">
             <div class="col-md-6">
@@ -18,8 +18,8 @@
                         <span class="dark glyphicon glyphicon-circle-arrow-left"></span>BACK
                     </button>
                     <span>
-                        <button ng-click="cancel()" ng-hide="isCancelHidden()" class="btn btn-primary" >CANCEL</button>
-                        <button ng-click="save()"  ng-hide="isSaveHidden()" ng-disabled="isSaveDisabled()" class="btn btn-danger">SAVE</button>
+                        <button ng-click="cancel()" ng-hide="isCancelHidden()" class="btn btn-primary">CANCEL</button>
+                        <button ng-click="save()" ng-hide="isSaveHidden()" ng-disabled="isSaveDisabled()" class="btn btn-danger">SAVE</button>
                     </span>
                 </div>
             </div>
@@ -43,7 +43,7 @@
 
             </div>
         </div>
-        
+
         <!-- format and path -->
         <div class="layout-row">
             <div class="layout-col editor-format">
@@ -55,16 +55,16 @@
                 <div class="well well-sm form-group">
                     <div class="editor-path input-group">
                         <span class="input-group-addon well-input-group-addon"
-                             tc-tip title="The path to the resource on the file share">
+                              tc-tip title="The path to the resource on the file share">
                             <span class="dark glyphicon glyphicon-th-large"></span>
                         </span>
 
-                        <input id="form-path" name="path" ng-model="form.path" 
-                               type="text" class="form-control" 
+                        <input id="form-path" name="path" ng-model="form.path"
+                               type="text" class="form-control"
                                placeholder="Location"
                                tc-focus-tip title="The path to the resource on the file share"
                                spellcheck="false" />
-                        
+
                         <span class="input-group-addon pointable"
                               ng-disabled="!form.path"
                               tc-copy-path-to-clipboard="form-path"
@@ -84,7 +84,7 @@
                 </div>
             </div>
         </div>
-        
+
         <!-- data format selector -->
         <div collapse="collapseDataFormatSelector" class="form-group">
             <div style="display:block;">
@@ -101,13 +101,13 @@
                             <ul ng-if="format.formats.length > 0" class="list-inline">
                                 <li ng-repeat="type in format.formats" class="data-format-list-item" ng-click="lookups.currentDataFormat = updateDataFormatObj(type.name, lookups.formats, form)">
                                     <span class="glyphicon {{format.glyph}} data-format-list-item-glyph"></span>
-                                    <span class="data-format-list-item-text">{{type.name}} <span ng-show="type.code">{{'(' + type.code + ')'}}</span></span>                                
+                                    <span class="data-format-list-item-text">{{type.name}} <span ng-show="type.code">{{'(' + type.code + ')'}}</span></span>
                                 </li>
                             </ul>
                             <ul ng-if="format.formats.length == 0" class="list-inline">
                                 <li class="data-format-list-item" ng-click="lookups.currentDataFormat = updateDataFormatObj(undefined, undefined, form)">
                                     <span class="glyphicon {{format.glyph}} data-format-list-item-glyph"></span>
-                                    <span class="data-format-list-item-text">{{format.name}}</span>                                                            
+                                    <span class="data-format-list-item-text">{{format.name}}</span>
                                 </li>
                             </ul>
                         </tab>
@@ -115,18 +115,18 @@
                 </div>
             </div>
         </div>
-            
+
         <div class="row">
-           
+
             <div class="col-md-9">
                 <!-- keywords -->
                 <div name="keywordsDiv" class="editor-keywords form-group">
-                    <!--Hidden field for capturing errors against the keywords set-->
-                    <input type="hidden" name="gemini.keywords" ng-model="form.gemini.keywords" />
                     <span ng-repeat="k in form.gemini.keywords" tc-tag class="tag">
                         <span ng-style="{ 'background-color': hashStringToColor(k.vocab) }">&nbsp;</span>
                         {{ k.value }}
                     </span>
+                    <!--Hidden field for capturing errors against the gemini.keywords set-->
+                    <input type="hidden" name="gemini.keywords" ng-model="form.gemini.keywords" />
                     <span ng-class="{'ng-invalid': $.isEmptyObject(theForm['gemini.keywords'].$error) == false}">
                         <button id="keywordsBtn" class="btn btn-sm btn-dialogue" tc-tip title="Edit tags (keywords)"
                                 ng-click="keywordEditorOpen = !keywordEditorOpen">
@@ -135,16 +135,16 @@
                         <label ng-hide="form.gemini.keywords" for="keywordsBtn">Keywords</label>
                     </span>
                 </div>
-                
-                
+
+
                 <script type="text/ng-template" id="customTemplate.html">
                     <a>
                         <span bind-html-unsafe="match.model.vocab"></span>
-                        <br/>
+                        <br />
                         <span bind-html-unsafe="match.model.value | typeaheadHighlight:query"></span>
                     </a>
                 </script>
-                
+
                 <!--typeahead-template-url="customTemplate.html"-->
 
                 <div ng-show="keywordEditorOpen" class="editor-keywords-editor form-inline">
@@ -152,10 +152,10 @@
                         <input type="text" ng-model="k.vocab" placeholder="Vocab (namespace)" class="form-control" disabled style="width:55%;" />
                         <!--See: -- https://github.com/angular-ui/bootstrap/blob/91ac17c9ed691a99647b66b3f464e3585398be19/src/typeahead/test/typeahead.spec.js#L372 -->
 
-                        <input type="text" ng-model="k.value" placeholder="Value (keyword)" typeahead-on-select="setKeyword($item, k)" typeahead-template-url="customTemplate.html"  typeahead-loading="loadingKeys" typeahead="keyword.value as keyword for keyword in getKeywords($viewValue)" class="form-control" style="width:35%" />
+                        <input type="text" ng-model="k.value" placeholder="Value (keyword)" typeahead-on-select="setKeyword($item, k)" typeahead-template-url="customTemplate.html" typeahead-loading="loadingKeys" typeahead="keyword.value as keyword for keyword in getKeywords($viewValue)" class="form-control" style="width:35%" />
                         <i ng-show="loadingKeys" class="glyphicon glyphicon-refresh"></i>
-                        
-                        
+
+
                         <button class="btn btn-sm btn-primary" ng-click="removeKeyword(k)">
                             <span style="font-size: small" class="glyphicon glyphicon-remove-sign"></span>
                         </button>
@@ -165,33 +165,33 @@
                         ADD
                     </button>
                 </div>
-                
+
                 <!-- abstract -->
                 <div class="editor-abstract form-group">
-                    <textarea id="abstractArea" type="text" ng-model="form.gemini.abstract" class="form-control"
+                    <textarea id="abstractArea" name="gemini.abstract" type="text" ng-model="form.gemini.abstract" class="form-control"
                               rows="2"
                               placeholder="Abstract"
                               title="The abstract is a clear, brief summary of the resource's content"
                               tc-focus-tip tc-autosize></textarea>
                 </div>
-                
-                
-                
+
+
+
                 <div class="editor-tabs" tabset>
-                    
+
                     <div tab>
                         <tab-heading>
-                            <span class="glyphicon glyphicon-asterisk"></span> Identity                            
+                            <span class="glyphicon glyphicon-asterisk"></span> Identity
                         </tab-heading>
-                        
+
 
                         <div class="row">
                             <div class="col-md-8">
-                                
+
                                 <div class="row">
                                     <div class="col-md-4">
-                                        
-                                        
+
+
                                         <select data-ng-model="form.gemini.resourceType"
                                                 class="form-control"
                                                 title="The type of resource described by this metadata"
@@ -201,7 +201,7 @@
                                             <!--                                            <option value="series">Dataset Series (Not Available)</option>-->
                                             <option value="publication">Publication</option>
                                             <option value="service">Service</option>
-                                        </select>                            
+                                        </select>
 
                                     </div>
 
@@ -209,17 +209,17 @@
                                         <div class="form-inline">
                                             <div class="form-group">
                                                 <label>Published / revised</label>
-                                               
+
                                             </div>
                                             <div class="form-group">
                                                 <!-- dateset reference date -->
-                                                <div class="input-group"  style="width:10em">
+                                                <div class="input-group" style="width:10em">
                                                     <input type="text" class="form-control"
-                                                           name="gemini.datasetReferenceDate" 
+                                                           name="gemini.datasetReferenceDate"
                                                            ng-model="form.gemini.datasetReferenceDate"
                                                            placeholder="yyyy-mm-dd"
                                                            datepicker-popup="yyyy-MM-dd"
-                                                           tc-focus-tip 
+                                                           tc-focus-tip
                                                            is-open="datasetReferenceDate"
                                                            close-text="Close"
                                                            ng-click="open($event,'datasetReferenceDate')"
@@ -227,34 +227,34 @@
                                                     <span class="input-group-addon" ng-click="open($event,'datasetReferenceDate')">
                                                         <span class="dark glyphicon glyphicon-calendar"></span>
                                                     </span>
-                                                </div>  
-  
-                                                
+                                                </div>
+
+
                                             </div>
-                                     
-                                        </div>                                        
-                                        
-                                        
+
+                                        </div>
+
+
 
                                     </div>
                                 </div>
-                                
+
                                 <br />
-                                
-                                
+
+
                                 <!-- resource locator -->
                                 <div class="editor-resource-locator form-group">
                                     <div class="input-group">
                                         <span class="input-group-addon well-input-group-addon"
-                                                tc-tip title="Published location for online access (URL)">
+                                              tc-tip title="Published location for online access (URL)">
                                             <span class="dark glyphicon glyphicon-globe"></span>
                                         </span>
 
-                                        <input name="resourceLocator" ng-model="form.gemini.resourceLocator"
-                                                type="text" class="form-control"
-                                                placeholder="Published Location (URL)"
-                                                tc-focus-tip title="Published location for online access (URL)"
-                                                spellcheck="false" />
+                                        <input name="gemini.resourceLocator" ng-model="form.gemini.resourceLocator"
+                                               type="text" class="form-control"
+                                               placeholder="Published Location (URL)"
+                                               tc-focus-tip title="Published location for online access (URL)"
+                                               spellcheck="false" />
 
                                         <a href="{{form.gemini.resourceLocator}}" target="_blank" class="input-group-addon pointable" ng-disabled="!form.gemini.resourceLocator">
                                             <span class="dark glyphicon glyphicon-new-window" title="Go to resource" tc-tip></span>
@@ -265,45 +265,45 @@
 
                             </div>
                             <div class="col-md-4">
-                                
+
                             </div>
-                            
+
                         </div>
 
                         <div class="form-group text-left selectContainer">
-                            <select
-                                ng-model="form.topic"
-                                ng-options="topic.name for topic in lookups.topics"
-                                class="form-control"
-                                title="The main theme of the data resource">
+                            <select name="gemini.topicCategory"
+                                    ng-model="form.gemini.topicCategory"
+                                    ng-options="topic.name for topic in lookups.topics"
+                                    class="form-control"
+                                    title="The main theme of the data resource">
                                 <option value="" disabled selected>Topic</option>
                             </select>
                         </div>
-                        
+
                         <ul class="dropdown-menu">
-                          <li><input type="checkbox" id="ID" name="NAME" value="VALUE"><label for="ID">Label</label></li>
-                          <!-- Other items -->
+                            <li><input type="checkbox" id="ID" name="NAME" value="VALUE"><label for="ID">Label</label></li>
+                            <!-- Other items -->
                         </ul>
-                        
+
                         <!-- lineage -->
                         <div ng-show="form.gemini.lineage">Lineage</div>
-                        <textarea type="text" ng-model="form.gemini.lineage" class="form-control"
+                        <textarea name="gemini.lineage" type="text" ng-model="form.gemini.lineage" class="form-control"
                                   rows="2"
                                   placeholder="Lineage"
                                   title="Information about the events or source data used in the construction of the data resource"
                                   tc-focus-tip tc-autosize></textarea>
-                        
+
                         <br />
 
                         <div ng-show="form.gemini.additionalInformationSource">Additional information source</div>
-                        <textarea type="text" ng-model="form.gemini.additionalInformationSource" class="form-control"
+                        <textarea type="text" name="gemini.additionalInformationSource" ng-model="form.gemini.additionalInformationSource" class="form-control"
                                   rows="2"
                                   placeholder="Additional information source"
                                   title="Other descriptive information about the data resource"
                                   tc-focus-tip tc-autosize></textarea>
-                        
+
                         <br />
-                        
+
                         <!-- reponsible organisation  -->
                         <div>
                             <div>Responsible Organisation / Author</div>
@@ -314,8 +314,7 @@
                                 <input class="form-control" type="text" ng-model="form.gemini.responsibleOrganisation.email" placeholder="Email" title="An email for the point of contact in this responsible organisation" tc-focus-tip />
                             </div>
                             <div>
-                                <select
-                                        data-ng-model="form.gemini.responsibleOrganisation.role"
+                                <select data-ng-model="form.gemini.responsibleOrganisation.role"
                                         data-ng-options="role as role|camelCaseFilter for role in lookups.roles"
                                         class="form-control"
                                         title="The role of the responsible organisation with this resource"
@@ -324,49 +323,49 @@
                                 </select>
                             </div>
                         </div>
-                        
 
-                        
+
+
 
                     </div>
 
                     <div tab>
                         <tab-heading>
-                            <span class="glyphicon glyphicon-cutlery"></span> Usage 
+                            <span class="glyphicon glyphicon-cutlery"></span> Usage
                             <small ng-show="hasUsageConstraints()" class="little-warning-badge" tc-tip title="There are constraints or restrictions to be aware of">
                                 <span class="glyphicon glyphicon-exclamation-sign"></span>
                             </small>
                         </tab-heading>
 
                         <!-- public access and use contraints-->
-                        
+
                         <div ng-show="form.gemini.limitationsOnPublicAccess">Limitations on public access</div>
                         <textarea type="text" name="gemini.limitationsOnPublicAccess" ng-model="form.gemini.limitationsOnPublicAccess" class="form-control"
                                   rows="2"
                                   placeholder="Limitations on public access"
                                   title="Restrictions imposed on the data resource for security and other reasons"
                                   tc-focus-tip tc-autosize></textarea>
-                        
+
                         <br />
 
                         <div ng-show="form.gemini.useConstraints">Use constraints</div>
-                        <textarea type="text" ng-model="form.gemini.useConstraints" class="form-control"
-                                    rows="2"
-                                    placeholder="Use constraints"
-                                    title="Usage and legal constraints on using the data resource"
-                                    tc-focus-tip tc-autosize></textarea>
+                        <textarea type="text" name="gemini.useConstraints" ng-model="form.gemini.useConstraints" class="form-control"
+                                  rows="2"
+                                  placeholder="Use constraints"
+                                  title="Usage and legal constraints on using the data resource"
+                                  tc-focus-tip tc-autosize></textarea>
                     </div>
-                    
+
                     <div tab>
                         <tab-heading>
                             <span class="glyphicon glyphicon-cog"></span> Meta
                         </tab-heading>
-                        
+
                         Information about this metadata record
-                        
+
                         <br />
                         <br />
-                        
+
                         <!-- point of contact -->
                         <div>
                             <div>Point of contact</div>
@@ -377,30 +376,29 @@
                                 <input class="form-control" type="text" ng-model="form.gemini.metadataPointOfContact.email" placeholder="Email" title="An email for the contact for this record" tc-focus-tip />
                             </div>
                             <div>
-                                <select
-                                    data-ng-model="form.gemini.metadataPointOfContact.role"
-                                    data-ng-options="role as role|camelCaseFilter for role in lookups.roles"
-                                    class="form-control"
-                                    title="The role of the point of contact for this metadata"
-                                    tc-focus-tip>
+                                <select data-ng-model="form.gemini.metadataPointOfContact.role"
+                                        data-ng-options="role as role|camelCaseFilter for role in lookups.roles"
+                                        class="form-control"
+                                        title="The role of the point of contact for this metadata"
+                                        tc-focus-tip>
                                     <option value="" disabled selected style="display: none">Metadata Point of Contact Role</option>
-                                </select>    
+                                </select>
                             </div>
                         </div>
-                        
+
                         <br />
                         <br />
 
-                        <!-- metadata date, lang -->                        
+                        <!-- metadata date, lang -->
                         <div class="layout-row form-horizontal">
                             <label for="metadataDate" class="col-md-6 control-label" style="text-align:left;">Metadata Date</label>
                             <div id="metadataDate" class="col-md-6 input-group">
                                 <input type="text" class="form-control"
-                                       name="gemini.metadataDate" 
+                                       name="gemini.metadataDate"
                                        ng-model="form.gemini.metadataDate"
                                        placeholder="yyyy-mm-dd"
                                        datepicker-popup="yyyy-MM-dd"
-                                       tc-focus-tip 
+                                       tc-focus-tip
                                        is-open="metadataDate"
                                        close-text="Close"
                                        ng-click="open($event,'metadataDate')"
@@ -413,7 +411,7 @@
                         </div>
 
                     </div>
-                    
+
                     <div tab>
                         <tab-heading>
                             <span class="glyphicon glyphicon-map-marker"></span> Extent
@@ -424,11 +422,11 @@
                             <label for="temporalExtentDiv" class="col-md-2 control-label">Temporal Extent</label>
                             <div id="temporalExtentDiv" class="col-md-3 input-group">
                                 <input type="text" class="form-control"
-                                       name="gemini.temporalExtent.begin" 
+                                       name="gemini.temporalExtent.begin"
                                        ng-model="form.gemini.temporalExtent.begin"
                                        placeholder="yyyy-mm-dd"
                                        datepicker-popup="yyyy-MM-dd"
-                                       tc-focus-tip 
+                                       tc-focus-tip
                                        is-open="extentBegin"
                                        close-text="Close"
                                        ng-click="open($event,'extentBegin')"
@@ -442,11 +440,11 @@
                             </div>
                             <div class="col-md-3 input-group">
                                 <input type="text" class="form-control"
-                                       name="gemini.temporalExtent.end" 
+                                       name="gemini.temporalExtent.end"
                                        ng-model="form.gemini.temporalExtent.end"
                                        placeholder="yyyy-mm-dd"
                                        datepicker-popup="yyyy-MM-dd"
-                                       tc-focus-tip 
+                                       tc-focus-tip
                                        is-open="extentEnd"
                                        close-text="Close"
                                        ng-click="open($event,'extentEnd')"
@@ -459,8 +457,8 @@
                         <br />
                         <br />
                         <hr />
-                        
-                        
+
+
                         <div>
                             <div id="spatialDataDiv" class="form-horizontal">
                                 <label for="extent" class="col-md-2" style="text-align:left; padding-left:0;">Spatial Extents</label>
@@ -470,14 +468,16 @@
                                             <span>No Extents Provided</span>
                                         </div>
                                         <div style="float:left;" ng-if="form.gemini.extent.length > 0">
-                                            <span ng-repeat="extent in form.gemini.extent" title="{{extent.authority}}" tc-focus-tip  tc-tag class="ng-scope ng-binding tag">
+                                            <span ng-repeat="extent in form.gemini.extent" title="{{extent.authority}}" tc-focus-tip tc-tag class="ng-scope ng-binding tag">
                                                 <span ng-style="{ 'background-color': hashStringToColor(extent.authority) }">&nbsp;</span>
                                                 {{ extent.authority }} - {{ extent.code }}
-                                            </span>                 
+                                            </span>
                                         </div>
                                         <div style="padding-left:20px; float: left;">
                                             <button class="btn btn-sm btn-dialogue" tc-tip title="Edit Extents"
-                                                    ng-click="extentEditorOpen = !extentEditorOpen">&bull;&bull;&bull;</button>   
+                                                    ng-click="extentEditorOpen = !extentEditorOpen">
+                                                &bull;&bull;&bull;
+                                            </button>
                                         </div>
                                     </div>
                                     <div ng-show="extentEditorOpen" class="editor-keywords-editor form-inline" style="clear:both; padding-top: 10px;">
@@ -492,16 +492,16 @@
                                             <span class="glyphicon glyphicon-plus-sign"></span>
                                             NEW
                                         </button>
-                                    </div>                                
+                                    </div>
                                 </div>
-                        
+
                                 <div class="layout-row form-horizontal">
                                     <label for="spatialReferenceDiv" class="col-md-3 control-label" style="padding-left:0; text-align:left;">Spatial Reference System</label>
                                     <div id="spatialReferenceDiv" class="col-md-9" style="padding-left:0; padding-right:0;">
                                         <input class="form-control" type="text" ng-model="form.gemini.spatialReferenceSystem" title="Identifier of the system of spatial referencing, whether by coordiantes or geographic identifiers used in the data resource" tc-focus-tip />
                                     </div>
                                 </div>
-                        
+
                                 <br />
 
                                 <div>
@@ -538,8 +538,8 @@
                                 </div>
                             </div>
                         </div>
-                        
-                        
+
+
 
 
                     </div>
@@ -550,22 +550,22 @@
 
                 <hr />
                 <hr />
-                <hr class="clearfix"/>
+                <hr class="clearfix" />
                 <hr />
 
                 <br /><br />
 
                 <div class="form-group">
                     <button ng-click="cancel()" ng-hide="isCancelHidden()" class="btn btn-primary">CANCEL</button>
-                    <button ng-click="save()"  ng-hide="isSaveHidden()" ng-disabled="isSaveDisabled()" class="btn btn-danger">SAVE</button>
+                    <button ng-click="save()" ng-hide="isSaveHidden()" ng-disabled="isSaveDisabled()" class="btn btn-danger">SAVE</button>
                 </div>
 
             </div>
 
-          
+
             <div class="col-md-3">
                 <div class="editor-internal well well-sm">
-                    
+
 
                     <div class="editor-top-copy layout-row">
                         <div class="layout-col">
@@ -574,8 +574,8 @@
                         <div class="layout-col pull-right">
                             <div class="btn-group">
                                 <button ng-click="form.topCopy = true" ng-class="{ 'btn-primary': form.topCopy, 'btn-default': !form.topCopy }" class="btn"
-                                    title="Is this the 'top copy' of this resource?"
-                                    tc-tip>
+                                        title="Is this the 'top copy' of this resource?"
+                                        tc-tip>
                                     <span class="glyphicon glyphicon-leaf"></span>Yes
                                 </button>
                                 <button ng-click="form.topCopy = false" ng-class="{ 'btn-primary': !form.topCopy, 'btn-default': form.topCopy  }" class="btn">
@@ -584,7 +584,7 @@
                             </div>
                         </div>
                     </div>
-                    
+
                     <hr />
 
                     <div class="editor-validation layout-row">
@@ -592,12 +592,12 @@
                             <span>Validation</span>
                         </div>
                         <div class="layout-col pull-right">
-                            
+
                             <button type="button" class="btn btn-default"
-                                 ng-click="form.validation = (form.validation + 1) % 2"
-                                 ng-class="{ 'btn-default': form.validation == 0, 'btn-primary': form.validation == 1}"
-                                 title="The level of validation to perform on the record"
-                                 tc-tip>
+                                    ng-click="form.validation = (form.validation + 1) % 2"
+                                    ng-class="{ 'btn-default': form.validation == 0, 'btn-primary': form.validation == 1}"
+                                    title="The level of validation to perform on the record"
+                                    tc-tip>
                                 <span class="glyphicon glyphicon-repeat" ng-class="{ 'dark': form.validation == 0 }"></span>
                                 {{form.validation == 1 ? 'Gemini':'Basic';}}
                             </button>
@@ -612,13 +612,12 @@
                             <span>Security</span>
                         </div>
                         <div class="layout-col pull-right">
-                            
+
                             <button type="button" class="btn"
                                     ng-click="form.security = (form.security + 1) % 3"
                                     ng-class="{ 'btn-default': form.security == 0, 'btn-warning': form.security == 1, 'btn-danger': form.security == 2  }"
                                     title="The resource's security level"
-                                    tc-tip
-                                >
+                                    tc-tip>
                                 <span class="glyphicon glyphicon-repeat" ng-class="{ 'dark': form.security == 0 }"></span>
                                 {{ getSecurityText(form.security) }}
                             </button>
@@ -632,13 +631,12 @@
                             <span>Status</span>
                         </div>
                         <div class="layout-col pull-right">
-                            
+
                             <button type="button" class="btn"
-                                ng-click="form.status = (form.status + 1) % 2"
-                                ng-class="{ 'btn-default': form.status == 0, 'btn-success': form.status == 1 }"
-                                title="Is the resource for internal use only, or is it for publishing externally?"
-                                tc-tip
-                                >
+                                    ng-click="form.status = (form.status + 1) % 2"
+                                    ng-class="{ 'btn-default': form.status == 0, 'btn-success': form.status == 1 }"
+                                    title="Is the resource for internal use only, or is it for publishing externally?"
+                                    tc-tip>
                                 <span class="glyphicon glyphicon-repeat" ng-class="{ 'dark': form.status == 0 }"></span>
                                 {{ form.status == 0 ? 'Internal' : 'Publishable' }}
                             </button>
@@ -647,19 +645,19 @@
                     </div>
 
                     <hr />
-                    
+
                     <div class="editor-review layout-row">
                         <div class="layout-col">
                             <span>Review</span>
                         </div>
                         <div class="layout-col pull-right">
-                           <div class="input-group date-container hackyhack">
+                            <div class="input-group date-container hackyhack">
                                 <input type="text" class="form-control"
-                                       name="gemini.temporalExtent.end" 
+                                       name="gemini.temporalExtent.end"
                                        ng-model="form.review"
                                        placeholder="yyyy-mm-dd"
                                        datepicker-popup="yyyy-MM-dd"
-                                       tc-focus-tip 
+                                       tc-focus-tip
                                        is-open="review"
                                        close-text="Close"
                                        ng-click="open($event,'review')"
@@ -675,16 +673,16 @@
 
                     <div class="editor-notes form-group">
                         <textarea ng-model="form.notes" type="text" rows="4"
-                            tc-autosize
-                            class="form-control"
-                            placeholder="Notes"
-                            title="Notes to keep separate from the Gemini record"
-                            tc-focus-tip></textarea>
+                                  tc-autosize
+                                  class="form-control"
+                                  placeholder="Notes"
+                                  title="Notes to keep separate from the Gemini record"
+                                  tc-focus-tip></textarea>
                     </div>
-                    
+
                 </div>
 
-            </div>    
+            </div>
         </div>
         <pre>{{form}}</pre>
     </form>

@@ -281,7 +281,7 @@ namespace Catalogue.Data.Write
             // 10 Lineage is mandatory
             if (record.Gemini.Lineage.IsBlank())
             {
-                ValidationResult.Errors.Add("Lineage msut be provided" + GeminiSuffix, r => r.Gemini.TemporalExtent);
+                ValidationResult.Errors.Add("Lineage msut be provided" + GeminiSuffix, r => r.Gemini.Lineage);
             }
 
             // 15 extent is optional and not used
@@ -602,6 +602,15 @@ namespace Catalogue.Data.Write
                 Gemini = Library.Example(),
                 Validation = Validation.Gemini,
             };
+        }
+
+        [Test]
+        public void blanck_lineage_is_not_allowed([Values("", " ", null)] string blank)
+        {
+            var record = SimpleRecord().With(r => r.Gemini.Lineage = blank);
+            var result = new RecordValidator().Validate(record);
+
+            result.Errors.Any(e => e.Fields.Contains("gemini.lineage")).Should().BeTrue();
         }
 
         [Test]
