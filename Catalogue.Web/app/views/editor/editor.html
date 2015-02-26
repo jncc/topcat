@@ -119,20 +119,21 @@
         <div class="row">
            
             <div class="col-md-9">
-
                 <!-- keywords -->
-                Form geminig keywords: {{theForm['gemini.keywords'].$error}}
-                <div name="keywordsDiv" ng-class="{ 'ng-invalid': form.gemini.keywords.$invalid, 'editor-keywords' : true, 'form-group' : true}">
+                <div name="keywordsDiv" class="editor-keywords form-group">
+                    <!--Hidden field for capturing errors against the keywords set-->
                     <input type="hidden" name="gemini.keywords" ng-model="form.gemini.keywords" />
                     <span ng-repeat="k in form.gemini.keywords" tc-tag class="tag">
                         <span ng-style="{ 'background-color': hashStringToColor(k.vocab) }">&nbsp;</span>
                         {{ k.value }}
                     </span>
-                    <button id="keywordsBtn" class="btn btn-sm btn-dialogue" tc-tip title="Edit tags (keywords)"
-                            ng-click="keywordEditorOpen = !keywordEditorOpen">
-                        &bull;&bull;&bull;
-                    </button>
-                    <label ng-hide="form.gemini.keywords" for="keywordsBtn">Keywords</label>
+                    <span ng-class="{'ng-invalid': $.isEmptyObject(theForm['gemini.keywords'].$error) == false}">
+                        <button id="keywordsBtn" class="btn btn-sm btn-dialogue" tc-tip title="Edit tags (keywords)"
+                                ng-click="keywordEditorOpen = !keywordEditorOpen">
+                            &bull;&bull;&bull;
+                        </button>
+                        <label ng-hide="form.gemini.keywords" for="keywordsBtn">Keywords</label>
+                    </span>
                 </div>
                 
                 

@@ -4,6 +4,7 @@
   angular.module('app.controllers').controller('EditorController', function($scope, $http, $routeParams, $location, record, Record) {
     $scope.lookups = {};
     $scope.lookups.currentDataFormat = {};
+    $scope.$ = $;
     $http.get('../api/topics').success(function(result) {
       return $scope.lookups.topics = result;
     });

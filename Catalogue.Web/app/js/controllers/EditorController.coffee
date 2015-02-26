@@ -4,7 +4,9 @@
     
         $scope.lookups = {}
         $scope.lookups.currentDataFormat = {}
-
+        
+        #Allow jQuery calls so we can use some of it's convenient tests, No DOM mods please
+        $scope.$ = $
         
         $http.get('../api/topics').success (result) -> $scope.lookups.topics = result
         $http.get('../api/formats?q=').success (result) -> 
@@ -20,7 +22,7 @@
         $scope.getSecurityText = getSecurityText
         $scope.getDataFormatObj = getDataFormatObj
         $scope.updateDataFormatObj = updateDataFormatObj
-
+        
         $scope.cancel = ->
             $scope.reset()
             $scope.lookups.currentDataFormat = getDataFormatObj $scope.form.gemini.dataFormat, $scope.lookups.formats
