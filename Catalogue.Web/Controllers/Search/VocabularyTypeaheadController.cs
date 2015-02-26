@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Web.Http;
 using Catalogue.Data.Indexes;
 using System.Linq;
-using Catalogue.Web.Admin.Keywords;
 using Raven.Client;
 
 namespace Catalogue.Web.Controllers.Search

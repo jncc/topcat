@@ -148,9 +148,7 @@
   <ItemGroup>
     <Compile Include="Account\User.cs" />
     <Compile Include="Account\UserContext.cs" />
-    <Compile Include="Admin\Keywords\KeywordsController.cs" />
-    <Compile Include="Admin\Keywords\KeywordsRepository.cs" />
-    <Compile Include="Admin\Keywords\KeywordsService.cs" />
+    <Compile Include="Controllers\Keywords\KeywordsController.cs" />
     <Compile Include="Controllers\QueryModel.cs" />
     <Compile Include="Controllers\Sandbox\SandboxController.cs" />
     <Compile Include="Controllers\Seed\SeedController.cs" />
