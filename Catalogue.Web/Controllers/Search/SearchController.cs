@@ -23,11 +23,11 @@ namespace Catalogue.Web.Controllers.Search
             }
             else if (model.HasKeywords)
             {
-                return searchHelper.KeywordSearch(model);
+                return searchHelper.SearchByKeyword(model);
             }
             else
             {
-                return searchHelper.FullTextSearch(model);
+                return searchHelper.SearchByText(model);
             }
         }
     }

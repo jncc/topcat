@@ -11,8 +11,8 @@ namespace Catalogue.Web.Controllers.Search
 {
     public interface ISearchHelper
     {
-        SearchOutputModel KeywordSearch(QueryModel queryModel);
-        SearchOutputModel FullTextSearch(QueryModel queryModel);
+        SearchOutputModel SearchByKeyword(QueryModel queryModel);
+        SearchOutputModel SearchByText(QueryModel queryModel);
     }
 
     public class SearchHelper : ISearchHelper
@@ -24,7 +24,7 @@ namespace Catalogue.Web.Controllers.Search
             _db = db;
         }
 
-        public SearchOutputModel KeywordSearch(QueryModel queryModel)
+        public SearchOutputModel SearchByKeyword(QueryModel queryModel)
         {
             RavenQueryStatistics stats;
 
@@ -50,7 +50,7 @@ namespace Catalogue.Web.Controllers.Search
             return MakeSearchOutputModel(queryModel, stats, results);
         }
 
-        public SearchOutputModel FullTextSearch(QueryModel queryModel)
+        public SearchOutputModel SearchByText(QueryModel queryModel)
         {
             RavenQueryStatistics stats;
             FieldHighlightings titleLites;

@@ -23,19 +23,20 @@ namespace Catalogue.Web.Controllers.Keywords
         public List<MetadataKeyword> Get(string q, int take = 10)
         {
             var vocabfulKeywords = db.Query<VocabularyKeywordIndex.Result, VocabularyKeywordIndex>()
-                .Where(k => k.Value.StartsWith(q))
+                .Search(k => k.Value, q)
                 .Take(take)
-                .Select(r => new MetadataKeyword { Value = r.Value, Vocab = r.Vocab })
+                .Select(r => new { r.Vocab, r.Value })
                 .ToList();
 
+//            var vocablessKeywords = new List<MetadataKeyword>();
             var vocablessKeywords = db.Query<KeywordsSearchIndex.Result, KeywordsSearchIndex>()
-                .Where(x => x.Vocab == String.Empty)
-                .Where(k => k.Value.StartsWith(q))
+                .Search(k => k.Value, q)
                 .Take(take)
-                .Select(r => new MetadataKeyword { Value = r.Value, Vocab = r.Vocab })
+                .Select(r => new { r.Vocab, r.Value })
                 .ToList();
 
-            return vocabfulKeywords.Concat(vocablessKeywords)
+            return vocabfulKeywords.Concat(vocablessKeywords.Except(vocabfulKeywords))
+                .Select(x => new MetadataKeyword { Vocab = x.Vocab, Value = x.Value })
                 .Take(take)
                 .ToList();
         }

@@ -23,9 +23,6 @@
             $http.get('../api/search?' + $.param query)
                 .success (result) ->
                     # don't overwrite with earlier but slower queries!
-                    console.log result.query
-                    console.log query
-                    
                     if angular.equals result.query, query
                         if result.total is 0 # without this the browser crashes due to an unsafe object check by angular, when results are zero
                             $scope.result = {}

@@ -15,8 +15,6 @@
     queryRecords = function(query) {
       $scope.busy.start();
       return $http.get('../api/search?' + $.param(query)).success(function(result) {
-        console.log(result.query);
-        console.log(query);
         if (angular.equals(result.query, query)) {
           if (result.total === 0) {
             return $scope.result = {};

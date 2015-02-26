@@ -25,7 +25,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Web.Controllers.Search
                     N = 25
                 };
 
-            helper.KeywordSearch(input).Results.Count().Should().Be(25);
+            helper.SearchByKeyword(input).Results.Count().Should().Be(25);
         }
     }
 }
