@@ -1,6 +1,6 @@
 ﻿angular.module('app.controllers').controller 'EditorController',
 
-    ($scope, $http, $routeParams, $location, record, Record) -> 
+    ($scope, $http, $routeParams, $location, record) -> 
     
         $scope.lookups = {}
         $scope.lookups.currentDataFormat = {}
@@ -66,7 +66,6 @@
             if $scope.isNew()
                 $http.post('../api/records', $scope.form).then processResult
             else
-                # todo use resource Record.update ??
                 $http.put('../api/records/' + record.id, $scope.form).then processResult
 
         $scope.reset = -> 

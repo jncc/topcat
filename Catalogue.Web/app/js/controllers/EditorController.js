@@ -1,7 +1,7 @@
-﻿(function() {
+(function() {
   var fakeValidationData, getDataFormatObj, getSecurityText, updateDataFormatObj;
 
-  angular.module('app.controllers').controller('EditorController', function($scope, $http, $routeParams, $location, record, Record) {
+  angular.module('app.controllers').controller('EditorController', function($scope, $http, $routeParams, $location, record) {
     $scope.lookups = {};
     $scope.lookups.currentDataFormat = {};
     $scope.$ = $;
@@ -52,8 +52,7 @@
                 field = _ref[_j];
                 try {
                   $scope.theForm[field].$setValidity('server', false);
-                } catch (_error) {
-                  e = _error;
+                } catch (e) {
                   console.log(field);
                   console.log(e);
                 }
@@ -180,5 +179,3 @@
   };
 
 }).call(this);
-
-//# sourceMappingURL=EditorController.js.map
