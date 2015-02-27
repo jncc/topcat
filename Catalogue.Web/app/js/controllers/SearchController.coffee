@@ -13,8 +13,8 @@
 
         updateUrl = (query) -> 
             # update the url querystring to match the query object
-            $location.search 'q', query.q
-            $location.search 'k', query.k
+            $location.search 'q', query.q || null
+            $location.search 'k', query.k || null
             #$location.search('p', $scope.query.p) 
             #$location.search('n', $scope.query.n)
         
@@ -22,13 +22,16 @@
             $scope.busy.start()
             $http.get('../api/search?' + $.param query)
                 .success (result) ->
+                    #console.log query
+                    #console.log result.query
                     # don't overwrite with earlier but slower queries!
                     if angular.equals result.query, query
                         if result.total is 0 # without this the browser crashes due to an unsafe object check by angular, when results are zero
                             $scope.result = {}
                         else
-                            $scope.result = result;    
-                .finally -> $scope.busy.stop()
+                            $scope.result = result
+                .error (e) -> $scope.notifications.add 'Oops! ' + e.message
+                .finally   -> $scope.busy.stop()
         
         queryKeywords = (query) ->
             $scope.busy.start()
@@ -89,16 +92,21 @@
         getPathFromKeyword = (keyword) ->
             path = ensureEndsWith(keyword.vocab, '/') + keyword.value
             path.replace("http://", "")
-        getKeywordFromPath = (path) -> 
-            if path.indexOf('/') == -1
-                return {value: path, vocab: ''}
+        $scope.getKeywordFromPath = (path) ->
+            if path # handle undefined argument
+                if path.indexOf('/') == -1
+                    return {value: path, vocab: ''}
+                else
+                    elements = path.split('/')
+                    console.log elements
+      #              value = elements[elements.length - 1]
+       #             vocab = "http://"
+        #            for i in [0..elements.length - 2] by 1
+         #               vocab = vocab.concat(elements[i].concat('/'))
+                        #vocab = vocab.substring(0, vocab.length - 1)
+                    return {value: '', vocab: ''}
             else
-                elements = path.split('/')
-                value = elements[elements.length - 1]
-                vocab = "http://"
-                for i in [0..elements.length - 2] by 1
-                    vocab = vocab.concat(elements[i].concat('/'))
-                return {value: value, vocab: vocab}
+                return {value: '', vocab: ''}
         ensureEndsWith = (str, suffix) ->
             if str != '' && !(str.indexOf(suffix, str.length - suffix.length) != -1)  
                 return str.concat(suffix)

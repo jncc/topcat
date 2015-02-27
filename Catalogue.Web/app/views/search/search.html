@@ -55,7 +55,7 @@
     </div>
 </div>
 <div class="search-keyword-suggestions" ng-show="keywordSuggestions">
-    <span tc-tag class="tag" ng-repeat="k in keywordSuggestions" style="cursor: pointer;" tc-tip ng-click="queryByKeyword(k)">
+    <span tc-tag class="tag" ng-repeat="k in keywordSuggestions" style="cursor: pointer;" ng-click="queryByKeyword(k)">
         <span ng-style="{ 'background-color': hashStringToColor(k.vocab) }">&nbsp;</span>
         <blah ng-bind-html="k.value | highlight:query.q"></blah>
     </span>
@@ -68,13 +68,19 @@
     </div>
 </div>
 
-<div ng-show="query.q">
-    Found
+<div ng-show="query.q || query.k">
     <span ng-show="result.total > result.results.length">
         {{query.p * 25 || 0}} to {{result.results.length + (query.p * 25) || 0}} of
     </span>
     {{result.total || 0}} records
-    <span ng-show="result.speed">in {{(result.speed / 1000) | number:2}} seconds</span>
+<!--    <span ng-show="result.speed">in {{(result.speed / 1000) | number:2}} seconds</span>-->
+    <span ng-show="result.query.k">
+        tagged
+        <span class="tag">
+            <span ng-style="{ 'background-color': hashStringToColor(getKeywordFromPath(result.query.k).vocab) }">&nbsp;</span>
+            {{result.query.k}}
+        </span>
+    </span>
     <hr />
 </div>
 

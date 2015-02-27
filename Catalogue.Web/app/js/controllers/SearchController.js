@@ -1,6 +1,6 @@
 ﻿(function() {
   angular.module('app.controllers').controller('SearchController', function($scope, $rootScope, $location, $http, $timeout) {
-    var appTitlePrefix, doSearch, ensureEndsWith, getKeywordFromPath, getPathFromKeyword, newQuery, queryKeywords, queryRecords, updateUrl;
+    var appTitlePrefix, doSearch, ensureEndsWith, getPathFromKeyword, newQuery, queryKeywords, queryRecords, updateUrl;
     appTitlePrefix = "Topcat ";
     $scope.app = {
       starting: true
@@ -9,8 +9,8 @@
       return $scope.app.starting = false;
     }), 500);
     updateUrl = function(query) {
-      $location.search('q', query.q);
-      return $location.search('k', query.k);
+      $location.search('q', query.q || null);
+      return $location.search('k', query.k || null);
     };
     queryRecords = function(query) {
       $scope.busy.start();
@@ -22,6 +22,8 @@
             return $scope.result = result;
           }
         }
+      }).error(function(e) {
+        return $scope.notifications.add('Oops! ' + e.message);
       })["finally"](function() {
         return $scope.busy.stop();
       });
@@ -75,23 +77,26 @@
       path = ensureEndsWith(keyword.vocab, '/') + keyword.value;
       return path.replace("http://", "");
     };
-    getKeywordFromPath = function(path) {
-      var elements, i, value, vocab, _i, _ref;
-      if (path.indexOf('/') === -1) {
-        return {
-          value: path,
-          vocab: ''
-        };
-      } else {
-        elements = path.split('/');
-        value = elements[elements.length - 1];
-        vocab = "http://";
-        for (i = _i = 0, _ref = elements.length - 2; _i <= _ref; i = _i += 1) {
-          vocab = vocab.concat(elements[i].concat('/'));
+    $scope.getKeywordFromPath = function(path) {
+      var elements;
+      if (path) {
+        if (path.indexOf('/') === -1) {
+          return {
+            value: path,
+            vocab: ''
+          };
+        } else {
+          elements = path.split('/');
+          console.log(elements);
+          return {
+            value: '',
+            vocab: ''
+          };
         }
+      } else {
         return {
-          value: value,
-          vocab: vocab
+          value: '',
+          vocab: ''
         };
       }
     };
