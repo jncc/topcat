@@ -38,6 +38,7 @@
             $http.get('../api/keywords?q=' + query.q)
                 .success (result) ->
                     $scope.keywordSuggestions = result
+                .error   -> $scope.keywordSuggestions = {}
                 .finally -> $scope.busy.stop()
         
         # called whenever the $scope.query object changes
@@ -92,21 +93,16 @@
         getPathFromKeyword = (keyword) ->
             path = ensureEndsWith(keyword.vocab, '/') + keyword.value
             path.replace("http://", "")
-        $scope.getKeywordFromPath = (path) ->
-            if path # handle undefined argument
-                if path.indexOf('/') == -1
-                    return {value: path, vocab: ''}
-                else
-                    elements = path.split('/')
-                    console.log elements
-      #              value = elements[elements.length - 1]
-       #             vocab = "http://"
-        #            for i in [0..elements.length - 2] by 1
-         #               vocab = vocab.concat(elements[i].concat('/'))
-                        #vocab = vocab.substring(0, vocab.length - 1)
-                    return {value: '', vocab: ''}
+        getKeywordFromPath = (path) -> 
+            if path.indexOf('/') == -1
+                return {value: path, vocab: ''}
             else
-                return {value: '', vocab: ''}
+                elements = path.split('/')
+                value = elements[elements.length - 1]
+                vocab = "http://"
+                for i in [0..elements.length - 2] by 1
+                    vocab = vocab.concat(elements[i].concat('/'))
+                return {value: value, vocab: vocab}
         ensureEndsWith = (str, suffix) ->
             if str != '' && !(str.indexOf(suffix, str.length - suffix.length) != -1)  
                 return str.concat(suffix)

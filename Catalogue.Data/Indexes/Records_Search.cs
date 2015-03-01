@@ -32,6 +32,12 @@ namespace Catalogue.Data.Indexes
                                      TitleN = record.Gemini.Title, 
                                      Abstract = record.Gemini.Abstract,
                                      AbstractN = record.Gemini.Abstract,
+//                                     Gemini_Keywords_Value = (
+//                                         from docGeminiKeywordsItem in ((IEnumerable<dynamic>)record.Gemini.Keywords).DefaultIfEmpty()
+//                                         select docGeminiKeywordsItem.Value).ToArray(),
+//                                     Gemini_Keywords_Vocab = (
+//                                         from docGeminiKeywordsItem in ((IEnumerable<dynamic>)record.Gemini.Keywords).DefaultIfEmpty()
+//                                         select docGeminiKeywordsItem.Vocab).ToArray()
                                  };
 
             Analyze(x => x.Title, typeof(StemAnalyzer).AssemblyQualifiedName);
