@@ -86,8 +86,10 @@
             </span>
         </span>        
     </div>
-    <div class="search-results-view-picker layout-col" ng-show="result.total > 0" style="text-align: right;">
-        <div class="btn-group" role="group">
+    <div class="search-results-export layout-col">
+    </div>
+    <div class="layout-col" ng-show="result.total > 0" style="text-align: right;">
+        <div class="search-results-view-picker btn-group" role="group">
             <button class="btn" tc-tip title="List view" style="width: 60px" ng-click="resultsView = 'list'" ng-class="{ 'btn-primary': resultsView == 'list', 'btn-default': resultsView != 'list' }">
                 <span class="glyphicon glyphicon-align-left"></span>
             </button>
@@ -95,6 +97,9 @@
                 <span class="glyphicon glyphicon-list"></span>
             </button>
         </div>
+        <button class="btn btn-default" tc-tip title="Export" style="width: 60px">
+            <span class="glyphicon glyphicon-download"></span>
+        </button>
     </div>
     <hr/>
 </div>
