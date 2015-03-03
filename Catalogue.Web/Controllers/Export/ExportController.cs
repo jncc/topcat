@@ -20,10 +20,11 @@ namespace Catalogue.Web.Controllers.Export
             this.db = db;
         }
 
-        public HttpResponseMessage Get(QueryModel input)
+        public HttpResponseMessage Get([FromUri] QueryModel input)
         {
             var keyword = ParameterHelper.ParseKeywords(new[] { input.K }).Single(); // for now, support only one
 
+            // ignore paging (p and n) parameters - exporting always returns the full record set
             // todo use the same query / index as search page (in SearchHelper)
 
             var q = from r in db.Query<Record>()
