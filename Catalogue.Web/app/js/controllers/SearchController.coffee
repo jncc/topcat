@@ -89,9 +89,7 @@
         
         $rootScope.page = { title:appTitlePrefix } 
         
-        # listener for when keywords are entered into the keyword typeahead box        
-        $scope.getKeywords = (term) -> $http.get('../api/keywords?q='+term).then (response) -> 
-            response.data                              
+        $scope.querystring = -> $.param $scope.query
 
         # keyword helper functions            
         getPathFromKeyword = (keyword) ->

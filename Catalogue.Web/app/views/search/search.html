@@ -66,8 +66,6 @@
             </span>
         </span>        
     </div>
-    <div class="search-results-export layout-col">
-    </div>
     <div class="layout-col" ng-show="result.total > 0" style="text-align: right;">
         <div class="search-results-view-picker btn-group" role="group">
             <button class="btn" tc-tip title="List view" style="width: 60px" ng-click="resultsView = 'list'" ng-class="{ 'btn-primary': resultsView == 'list', 'btn-default': resultsView != 'list' }">
@@ -77,9 +75,9 @@
                 <span class="glyphicon glyphicon-list"></span>
             </button>
         </div>
-        <button class="btn btn-default" tc-tip title="Export" style="width: 60px">
+        <a class="btn btn-default" role="button" tc-tip title="Export" style="width: 60px" ng-href="../api/export?{{querystring()}}">
             <span class="glyphicon glyphicon-cloud-download"></span>
-        </button>
+        </a>
     </div>
     <hr/>
 </div>

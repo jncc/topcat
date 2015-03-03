@@ -70,10 +70,8 @@
     $rootScope.page = {
       title: appTitlePrefix
     };
-    $scope.getKeywords = function(term) {
-      return $http.get('../api/keywords?q=' + term).then(function(response) {
-        return response.data;
-      });
+    $scope.querystring = function() {
+      return $.param($scope.query);
     };
     getPathFromKeyword = function(keyword) {
       var path;
