@@ -19,10 +19,7 @@ namespace Catalogue.Web.Controllers.Keywords
         public List<KeywordModel> Get(string q, int take = 10)
         {
             var vocabfulKeywords = db.Query<VocabularyKeywordIndex.Result, VocabularyKeywordIndex>()
-//                .Highlight(r => r.Value, 202, 1, out vocabfulLites)
-//                .SetHighlighterTags("<b>", "</b>")
-//                .Customize(x=>x.Highlight("Value", 128, 1, out vocabfulLites))
-                .Search(k => k.Value, q)
+                .Search(k => k.ValueN, q)
                 .Take(take)
                 .Select(r => new { r.Vocab, r.Value })
                 .ToList();

@@ -1,6 +1,6 @@
 ﻿(function() {
   angular.module('app.controllers').controller('SearchController', function($scope, $rootScope, $location, $http, $timeout) {
-    var appTitlePrefix, doSearch, ensureEndsWith, getKeywordFromPath, getPathFromKeyword, newQuery, queryKeywords, queryRecords, updateUrl;
+    var appTitlePrefix, ensureEndsWith, getKeywordFromPath, getPathFromKeyword, newQuery, queryKeywords, queryRecords, updateUrl;
     appTitlePrefix = "Topcat ";
     $scope.app = {
       starting: true
@@ -39,7 +39,7 @@
         return $scope.busy.stop();
       });
     };
-    doSearch = function(query) {
+    $scope.doSearch = function(query) {
       updateUrl(query);
       if (query.q) {
         queryKeywords(query);
@@ -52,7 +52,7 @@
         return $scope.result = {};
       }
     };
-    $scope.$watch('query', doSearch, true);
+    $scope.$watch('query', $scope.doSearch, true);
     newQuery = function() {
       return {
         q: null,

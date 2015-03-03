@@ -45,7 +45,8 @@
                 .finally -> $scope.busy.stop()
         
         # called whenever the $scope.query object changes
-        doSearch = (query) ->
+        # also called explicitly from search button
+        $scope.doSearch = (query) ->
             # update the page title  
             #$rootScope.page = {title: appTitlePrefix + $scope.query.q}
             updateUrl query
@@ -62,7 +63,7 @@
                 $scope.result = {}
                 
         # when the model query value is updated, do the search
-        $scope.$watch 'query', doSearch, true
+        $scope.$watch 'query', $scope.doSearch, true
 
         newQuery = ->
             q: null,
