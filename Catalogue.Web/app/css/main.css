@@ -131,6 +131,9 @@ label {
 .search-keyword-suggestions {
   margin-bottom: 1.5em;
 }
+.search-results-view-picker button span {
+  font-size: smaller;
+}
 .search-result {
   margin: 1.2em 0;
 }

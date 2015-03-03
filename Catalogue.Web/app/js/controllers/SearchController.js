@@ -8,6 +8,7 @@
     $timeout((function() {
       return $scope.app.starting = false;
     }), 500);
+    $scope.resultsView = 'list';
     updateUrl = function(query) {
       $location.search('q', query.q || null);
       return $location.search('k', query.k || null);

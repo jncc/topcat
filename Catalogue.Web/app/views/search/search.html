@@ -54,12 +54,14 @@
         </div>
     </div>
 </div>
+
 <div class="search-keyword-suggestions" ng-show="keywordSuggestions">
     <span tc-tag class="tag" ng-repeat="k in keywordSuggestions" style="cursor: pointer;" ng-click="queryByKeyword(k)">
         <span ng-style="{ 'background-color': hashStringToColor(k.vocab) }">&nbsp;</span>
         <blah ng-bind-html="k.value | highlight:query.q"></blah>
     </span>
 </div>
+
 <div class="row search-advanced" ng-show="advanced">
     <div class="col-md-7 col-md-offset-2">
         <div class="well well-sm">
@@ -68,20 +70,33 @@
     </div>
 </div>
 
-<div ng-show="query.q || query.k">
-    <span ng-show="result.total > result.results.length">
-        {{query.p * 25 || 0}} to {{result.results.length + (query.p * 25) || 0}} of
-    </span>
-    {{result.total || 0}} records
-<!--    <span ng-show="result.speed">in {{(result.speed / 1000) | number:2}} seconds</span>-->
-    <span ng-show="result.query.k">
-        tagged
-        <span class="tag">
-            <span ng-style="{ 'background-color': hashStringToColor(getKeywordFromPath(result.query.k).vocab) }">&nbsp;</span>
-            {{result.query.k}}
+<div ng-show="query.q || query.k" class="layout-row">
+    <div class="layout-col">
+        Found
+        <span ng-show="result.total > result.results.length">
+            {{query.p * 25 || 0}} to {{result.results.length + (query.p * 25) || 0}} of
         </span>
-    </span>
-    <hr />
+        {{result.total || 0}} records
+        <!-- <span ng-show="result.speed">in {{(result.speed / 1000) | number:2}} seconds</span>-->
+        <span ng-show="result.query.k">
+            tagged
+            <span class="tag">
+                <span ng-style="{ 'background-color': hashStringToColor(getKeywordFromPath(result.query.k).vocab) }">&nbsp;</span>
+                {{result.query.k}}
+            </span>
+        </span>        
+    </div>
+    <div class="search-results-view-picker layout-col" ng-show="result.total > 0" style="text-align: right;">
+        <div class="btn-group" role="group">
+            <button class="btn" tc-tip title="List view" style="width: 60px" ng-click="resultsView = 'list'" ng-class="{ 'btn-primary': resultsView == 'list', 'btn-default': resultsView != 'list' }">
+                <span class="glyphicon glyphicon-align-left"></span>
+            </button>
+            <button class="btn btn-default" tc-tip title="Grid view" style="width: 60px">
+                <span class="glyphicon glyphicon-list"></span>
+            </button>
+        </div>
+    </div>
+    <hr/>
 </div>
 
 <div ng-repeat="r in result.results" class="layout-row search-result">
@@ -166,11 +181,11 @@
                     <li>Google-style search <span class="label label-success">Done</span></li>
                     <li>Authenticate without passwords <span class="label label-success">Done</span></li>
                     <li>Import MESH metadata <span class="label label-success">Done</span></li>
-                    <li>Import Pressures metadata <span class="label label-success">Done</span></li>
+                    <li>Import Pressures metadata <span class="label label-danger">In progress</span></li>
                     <li>Metadata editor <span class="label label-danger">In progress</span></li>
                     <li>Keyword selection <span class="label label-danger">In progress</span></li>
-                    <li>Validation <span class="label label-danger">In progress</span></li>
-                    <li>Export <span class="label label-danger">In progress</span></li>
+                    <li>Validation <span class="label label-success">Done</span></li>
+                    <li>Export <span class="label label-success">Done</span></li>
                 </ul>
                 <h3>Wishlist</h3>
                 <ul>

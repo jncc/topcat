@@ -8,6 +8,9 @@
         # angular skipping the initial animation - set app.starting to true for 500ms
         $scope.app = { starting: true };
         $timeout (-> $scope.app.starting = false), 500
+        
+        # default results view style
+        $scope.resultsView = 'list' 
 
         # note: $location.search is the angular api for the querystring value
 
