@@ -39,7 +39,7 @@ namespace Catalogue.Web.Controllers.Export
 
             result.Content.Headers.ContentDisposition = new ContentDispositionHeaderValue("attachment")
                 {
-                    FileName = "topcat-export-" + DateTime.Now.ToString("yyyyMMdd-hhmmss") + ".txt"
+                    FileName = "topcat-export-" + DateTime.Now.ToString("yyyyMMdd-HHmmss") + ".txt"
                 };
             result.Content.Headers.ContentType = new MediaTypeHeaderValue("application/octet-stream");
 

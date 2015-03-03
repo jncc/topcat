@@ -60,7 +60,7 @@ namespace Catalogue.Web.Controllers.Search
             FieldHighlightings abstractLites;
             FieldHighlightings abstractNLites;
 
-            var query = _db.Advanced.LuceneQuery<Record>("Records/Search")
+            var query = _db.Advanced.LuceneQuery<Record>("RecordSearchIndex")
                 .Statistics(out stats)
                 .Highlight("Title", 202, 1, out titleLites)
                 .Highlight("TitleN", 202, 1, out titleNLites)
@@ -106,7 +106,7 @@ namespace Catalogue.Web.Controllers.Search
 //
 //            var keyword = ParameterHelper.ParseKeywords(new[] { input.K }).Single(); // for now, we only support one keyword
 //
-//            var query = _db.Query<Records_Search.Shape, Records_Search>()
+//            var query = _db.Query<RecordSearchIndex.Result, RecordSearchIndex>()
 //                .Where(r => r.Gemini.Keywords.Any(k => k.Value == keyword.Value && k.Vocab == keyword.Vocab))
 //                .Statistics(out stats)
 //                .Customize(x => x.Highlight("Title", 202, 1, out titleLites))

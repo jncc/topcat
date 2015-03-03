@@ -98,7 +98,7 @@ namespace Catalogue.Tests.Explicit
 
             using (IDocumentSession db = store.OpenSession())
             {
-                List<Record> results = db.Query<Record, Records_SpatialIndex>()
+                List<Record> results = db.Query<Record, RecordSpatialIndex>()
                     .Customize(x => x.RelatesToShape(FieldNames.Spatial, peakDistrictBbox, SpatialRelation.Intersects))
                     .Where(i => i.Gemini.Title.StartsWith("GA"))
                     //.Take(10)
@@ -109,11 +109,6 @@ namespace Catalogue.Tests.Explicit
             }
 
             Console.WriteLine(watch.ElapsedMilliseconds);
-        }
-
-        [Explicit, Test]
-        public void generate_random_boxes()
-        {
         }
     }
 }

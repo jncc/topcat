@@ -1,20 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Linq;
 using Catalogue.Data.Analyzers;
 using Catalogue.Data.Model;
-using Catalogue.Gemini.Model;
-using Lucene.Net.Analysis.Standard;
 using Raven.Abstractions.Indexing;
 using Raven.Client.Indexes;
 
 namespace Catalogue.Data.Indexes
 {
-    public class Records_Search : AbstractIndexCreationTask<Record, Records_Search.Shape>
+    /// <summary>
+    /// This is the primary / most important index, used for searching / exporting records.
+    /// </summary>
+    public class RecordSearchIndex : AbstractIndexCreationTask<Record, RecordSearchIndex.Result>
     {
-        public class Shape
+        public class Result
         {
             public string Title { get; set; }
             public string TitleN { get; set; }
@@ -22,7 +19,7 @@ namespace Catalogue.Data.Indexes
             public string AbstractN { get; set; }
         }
 
-        public Records_Search()
+        public RecordSearchIndex()
         {
             Map = records => from record in records
                              select new
@@ -40,19 +37,18 @@ namespace Catalogue.Data.Indexes
 //                                         select docGeminiKeywordsItem.Vocab).ToArray()
                                  };
 
+            // store and analyse the Title field
             Analyze(x => x.Title, typeof(StemAnalyzer).AssemblyQualifiedName);
             Stores.Add(x => x.Title, FieldStorage.Yes);
             TermVector(x => x.Title, FieldTermVector.WithPositionsAndOffsets);
-
             Analyze(x => x.TitleN, typeof(NGramAnalyzer).AssemblyQualifiedName);
             Stores.Add(x => x.TitleN, FieldStorage.Yes);
             TermVector(x => x.TitleN, FieldTermVector.WithPositionsAndOffsets);
 
-
+            // store and analyse the Abstract field
             Analyze(x => x.Abstract, typeof(StemAnalyzer).AssemblyQualifiedName);
             Stores.Add(x => x.Abstract, FieldStorage.Yes);
             TermVector(x => x.Abstract, FieldTermVector.WithPositionsAndOffsets);
-
             Analyze(x => x.AbstractN, typeof(NGramAnalyzer).AssemblyQualifiedName);
             Stores.Add(x => x.AbstractN, FieldStorage.Yes);
             TermVector(x => x.AbstractN, FieldTermVector.WithPositionsAndOffsets);

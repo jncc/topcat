@@ -20,7 +20,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Web.Controllers.Search
 
             var input = new QueryModel
                 {
-                    K = new [] {"vocab.jncc.gov.uk/jncc-broad-category/Seabed Habitat Maps"},
+                    K = "vocab.jncc.gov.uk/jncc-broad-category/Seabed Habitat Maps",
                     P = 0,
                     N = 25
                 };

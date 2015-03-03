@@ -7,6 +7,9 @@ using Raven.Client;
 
 namespace Catalogue.Web.Controllers.Search
 {
+    /// <summary>
+    /// This index is only used in the editor. Can we use 
+    /// </summary>
     public class VocabularyTypeaheadController : ApiController
     {
         private readonly IDocumentSession _db;

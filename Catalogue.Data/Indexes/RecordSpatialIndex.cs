@@ -5,9 +5,9 @@ using Raven.Client.Indexes;
 
 namespace Catalogue.Data.Indexes
 {
-    public class Records_SpatialIndex : AbstractIndexCreationTask<Record>
+    public class RecordSpatialIndex : AbstractIndexCreationTask<Record>
     {
-        public Records_SpatialIndex()
+        public RecordSpatialIndex()
         {
             Map = records => from r in records
                              select new

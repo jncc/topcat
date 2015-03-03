@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using Catalogue.Data.Indexes;
 using Catalogue.Data.Model;
 using FluentAssertions;
 using NUnit.Framework;
@@ -11,7 +12,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Data.Indexes
         [Test]
         public void can_search_partial_matches()
         {
-            List<Record> results = Db.Advanced.LuceneQuery<Record>("Records/Search")
+            List<Record> results = Db.Advanced.LuceneQuery<Record, RecordSearchIndex>()
                 .Search("TitleN", "stu") // search the ngrammed title field for 'stu'
                 .Take(100)
                 .ToList();
