@@ -75,10 +75,22 @@ namespace Catalogue.Data.Import.Mappings
 
         public static string MapSourceKeywordToRealKeyword(string w)
         {
-            switch (w)
+            switch (w.ToLower())
             {
-                case "SeabedHabitatMaps":
+                case "seabedhabitatmaps":
                     return "Seabed Habitat Maps";
+                case "nature conservation":
+                    return "Nature Conservation";
+                case "diver survey":
+                    return "Diver survey";
+                case "diver video":
+                    return "Diver video";
+                case "grabs":
+                    return "Grabs";
+                case "side scan sonar":
+                    return "Side scan sonar";
+                case "towed video":
+                    return "Towed video";
                 default:
                     return w;
             }
