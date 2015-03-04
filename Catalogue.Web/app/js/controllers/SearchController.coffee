@@ -10,7 +10,7 @@
         $timeout (-> $scope.app.starting = false), 500
         
         # default results view style
-        $scope.resultsView = 'list' 
+        $scope.resultsView = 'list'
 
         # note: $location.search is the angular api for the querystring value
 

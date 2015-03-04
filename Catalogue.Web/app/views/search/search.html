@@ -35,7 +35,7 @@
     </div>
 </div>
 
-<div class="search-keyword-suggestions" ng-show="keywordSuggestions">
+<div class="search-keyword-suggestions" ng-show="keywordSuggestions[0]">
     <span tc-tag class="tag" ng-repeat="k in keywordSuggestions" style="cursor: pointer;" ng-click="queryByKeyword(k)">
         <span ng-style="{ 'background-color': hashStringToColor(k.vocab) }">&nbsp;</span>
         <blah ng-bind-html="k.value | highlight:query.q"></blah>
@@ -64,7 +64,8 @@
                 <span ng-style="{ 'background-color': hashStringToColor(getKeywordFromPath(result.query.k).vocab) }">&nbsp;</span>
                 {{result.query.k}}
             </span>
-        </span>        
+            <span ng-show="query.q">matching query</span>
+        </span>
     </div>
     <div class="layout-col" ng-show="result.total > 0" style="text-align: right;">
         <div class="search-results-view-picker btn-group" role="group">
