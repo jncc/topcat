@@ -1,4 +1,5 @@
 ﻿angular.module('app.controllers').controller 'EditorController',
+angular.module('app.controllers').controller 'EditorController',
 
     ($scope, $http, $routeParams, $location, record, Record) -> 
     

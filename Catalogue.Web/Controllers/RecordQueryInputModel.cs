@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using Catalogue.Utilities.Text;
 
@@ -27,6 +28,7 @@ namespace Catalogue.Web.Controllers
         /// <summary>
         /// The full-text search query.
         /// </summary>
+        [DisplayFormat(ConvertEmptyStringToNull = false)]
         public string Q { get; set; }
 
         /// <summary>

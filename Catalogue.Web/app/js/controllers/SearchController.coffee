@@ -2,8 +2,6 @@
     
     ($scope, $rootScope, $location, $http, $timeout) ->
         
-        appTitlePrefix = "Topcat ";
-         
         # slightly hacky way of triggering animations on startup to work around
         # angular skipping the initial animation - set app.starting to true for 500ms
         $scope.app = { starting: true };
@@ -25,48 +23,39 @@
             $scope.busy.start()
             $http.get('../api/search?' + $.param query)
                 .success (result) ->
-                    #console.log query
-                    #console.log result.query
+                    console.log query
+                    console.log result.query
                     # don't overwrite with earlier but slower queries!
                     if angular.equals result.query, query
-                        if result.total is 0 # without this the browser crashes due to an unsafe object check by angular, when results are zero
-                            $scope.result = {}
-                        else
-                            $scope.result = result
+                        #if result.total is 0 # without this the browser crashes due to an unsafe object check by angular, when results are zero
+                            #$scope.result = {}
+                        $scope.result = result
                 .error (e) -> $scope.notifications.add 'Oops! ' + e.message
                 .finally   -> $scope.busy.stop()
         
         queryKeywords = (query) ->
-            $scope.busy.start()
-            $http.get('../api/keywords?q=' + query.q)
-                .success (result) ->
-                    $scope.keywordSuggestions = result
-                .error   -> $scope.keywordSuggestions = {}
-                .finally -> $scope.busy.stop()
+            if query.q
+                $scope.busy.start()
+                $http.get('../api/keywords?q=' + query.q)
+                    .success (result) ->
+                        $scope.keywordSuggestions = result
+                    .error (e) -> $scope.notifications.add 'Oops! ' + e.message
+                    .finally   -> $scope.busy.stop()
+             else
+                $scope.keywordSuggestions = {}
         
         # called whenever the $scope.query object changes
         # also called explicitly from search button
         $scope.doSearch = (query) ->
-            # update the page title  
-            #$rootScope.page = {title: appTitlePrefix + $scope.query.q}
-            updateUrl query
-            
-            # currently we not doing combinations of both kinds of query            
-            if query.q
-                queryKeywords query
-                queryRecords query
-            else if query.k
-                $scope.keywordSuggestions = {}
-                queryRecords query
-            else
-                $scope.keywordSuggestions = {}
-                $scope.result = {}
+            updateUrl query            
+            queryKeywords query
+            queryRecords query
                 
         # when the model query value is updated, do the search
         $scope.$watch 'query', $scope.doSearch, true
 
         newQuery = ->
-            q: null,
+            q: '',
             k: null,
             p: 0, 
             n: 25
@@ -83,12 +72,13 @@
         #        #$scope.query = $.extend {}, newQuery(), x
         #)
         
-        
         $scope.queryByKeyword = (keyword) ->
             $scope.query = $.extend {}, newQuery(), { 'k': getPathFromKeyword(keyword) }
+            
+        $scope.removeKeywordFromQuery = (keyword) ->
+            $scope.query.k = null
         
-        $rootScope.page = { title:appTitlePrefix } 
-        
+        # function to get the current querystring in the view (for constructing export url)
         $scope.querystring = -> $.param $scope.query
 
         # keyword helper functions            

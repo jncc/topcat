@@ -50,7 +50,7 @@
 <!--    </div>-->
 <!--</div>-->
 
-<div ng-show="query.q || query.k" class="layout-row">
+<div ng-show="result.query" class="layout-row">
     <div class="layout-col">
         Found
         <span ng-show="result.total > result.results.length">
@@ -63,10 +63,10 @@
             <span class="tag">
                 <span ng-style="{ 'background-color': hashStringToColor(getKeywordFromPath(result.query.k).vocab) }">&nbsp;</span>
                 {{result.query.k}}
-                <span class="glyphicon glyphicon-remove"></span>
+                <span class="glyphicon glyphicon-remove" ng-click="removeKeywordFromQuery(result.query.k)" tc-tip title="Remove"></span>
             </span>
-            <span ng-show="query.q">matching query</span>
         </span>
+        <span ng-show="query.q">matching <b>{{query.q}}</b></span>
     </div>
     <div class="layout-col" ng-show="result.total > 0" style="text-align: right;">
         <div class="search-results-view-picker btn-group" role="group">
@@ -119,6 +119,7 @@
     </ul>
 </div>
 
+{{result}}
 <div ng-show="!query.q && query.k[0] == '' && !app.starting" class="fade-in-with-delay">
     <div class="row">
         <div class="col-md-7 welcome">
