@@ -1,5 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Text.RegularExpressions;
 using Catalogue.Data.Indexes;
 using Catalogue.Data.Model;
@@ -7,6 +9,7 @@ using Catalogue.Gemini.DataFormats;
 using Catalogue.Gemini.Model;
 using Catalogue.Utilities.Text;
 using Raven.Client;
+using Raven.Client.Linq;
 using Raven.Client.Linq.Indexing;
 
 namespace Catalogue.Web.Controllers.Search
@@ -15,7 +18,6 @@ namespace Catalogue.Web.Controllers.Search
     {
         SearchOutputModel Search(QueryModel queryModel);
         SearchOutputModel SearchByKeyword(QueryModel queryModel);
-        SearchOutputModel SearchByText(QueryModel queryModel);
     }
 
     public class SearchHelper : ISearchHelper
@@ -33,9 +35,8 @@ namespace Catalogue.Web.Controllers.Search
 
             var keyword = ParameterHelper.ParseKeywords(new [] {queryModel.K}).Single(); // for now, we only support one keyword
 
-            var query = _db.Query<Record>()
-                .Statistics(out stats)
-                .Where(r => r.Gemini.Keywords.Any(k => k.Value == keyword.Value && k.Vocab == keyword.Vocab));
+            var query = Queryable.Where(_db.Query<Record>()
+                    .Statistics(out stats), r => r.Gemini.Keywords.Any(k => k.Value == keyword.Value && k.Vocab == keyword.Vocab));
 
             int skipNumber = queryModel.P * queryModel.N;
 
@@ -53,50 +54,6 @@ namespace Catalogue.Web.Controllers.Search
             return MakeSearchOutputModel(queryModel, stats, results);
         }
 
-        public SearchOutputModel SearchByText(QueryModel queryModel)
-        {
-            RavenQueryStatistics stats;
-            FieldHighlightings titleLites;
-            FieldHighlightings titleNLites;
-            FieldHighlightings abstractLites;
-            FieldHighlightings abstractNLites;
-
-            var query = _db.Advanced.DocumentQuery<Record, RecordIndex>()
-                .Statistics(out stats)
-                .Highlight("Title", 202, 1, out titleLites)
-                .Highlight("TitleN", 202, 1, out titleNLites)
-                .Highlight("Abstract", 202, 1, out abstractLites)
-                .Highlight("AbstractN", 202, 1, out abstractNLites)
-                .SetHighlighterTags("<b>", "</b>")
-                .Search("Title", queryModel.Q).Boost(10)
-                .Search("TitleN", queryModel.Q)
-                .Search("Abstract", queryModel.Q)
-                .Search("AbstractN", queryModel.Q);
-            
-            int skipNumber = queryModel.P * queryModel.N;
-            
-            var results = query
-                    .Skip(skipNumber)
-                    .Take(queryModel.N).ToList();
-
-            var xs = from r in results
-                     let titleFragments =
-                         titleLites.GetFragments("records/" + r.Id).Concat(titleNLites.GetFragments("records/" + r.Id))
-                     let abstractFragments =
-                         abstractLites.GetFragments("records/" + r.Id)
-                                      .Concat(abstractNLites.GetFragments("records/" + r.Id))
-                     select new HalfBakedResult
-                         {
-                             Result = r,
-                             Title = titleFragments.Select(f => f.TruncateNicely(200)).FirstOrDefault()
-                                     ?? r.Gemini.Title.TruncateNicely(200),
-                             Snippet = abstractFragments.Select(f => f.TruncateNicely(200)).FirstOrDefault()
-                                       ?? r.Gemini.Abstract.TruncateNicely(200),
-                         };
-
-            return MakeSearchOutputModel(queryModel, stats, xs);
-        }
-
         public SearchOutputModel Search(QueryModel input)
         {
             RavenQueryStatistics stats;
@@ -105,22 +62,31 @@ namespace Catalogue.Web.Controllers.Search
             FieldHighlightings abstractLites = null;
             FieldHighlightings abstractNLites = null;
 
-            //var keyword = ParameterHelper.ParseKeywords(new[] { input.K }).Single(); // for now, we only support one keyword
-
             var query = _db.Query<RecordIndex.Result, RecordIndex>()
                 .Statistics(out stats)
                 .Customize(x => x.Highlight("Title", 202, 1, out titleLites))
                 .Customize(x => x.Highlight("TitleN", 202, 1, out titleNLites))
                 .Customize(x => x.Highlight("Abstract", 202, 1, out abstractLites))
                 .Customize(x => x.Highlight("AbstractN", 202, 1, out abstractNLites))
-                .Customize(x => x.SetHighlighterTags("<b>", "</b>"))
-                .Search(r => r.Title, input.Q, boost: 10)
-                .Search(r => r.TitleN, input.Q)
-                .Search(r => r.Abstract, input.Q)
-                .Search(r => r.AbstractN, input.Q)
-                .As<Record>();
+                .Customize(x => x.SetHighlighterTags("<b>", "</b>"));
 
-            var results = query
+            if (input.Q.IsNotBlank())
+            {
+                query = query
+                    .Search(r => r.Title, input.Q, boost: 10)
+                    .Search(r => r.TitleN, input.Q)
+                    .Search(r => r.Abstract, input.Q)
+                    .Search(r => r.AbstractN, input.Q);
+            }
+
+            if (input.K.IsNotBlank())
+            {
+                var keyword = ParameterHelper.ParseKeywords(new[] { input.K }).Single(); // for now, we only support one keyword
+                var k = keyword.Vocab + "/" + keyword.Value;
+                query = query.Where(r => r.Keywords.Contains(k));
+            }
+
+            var results = query.As<Record>() // project the query from the index result type to the actual document type
                     .Skip(input.P * input.N)
                     .Take(input.N)
                     .ToList();

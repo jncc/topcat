@@ -13,10 +13,11 @@ namespace Catalogue.Data.Indexes
     {
         public class Result
         {
-            public string Title { get; set; }
-            public string TitleN { get; set; }
-            public string Abstract { get; set; }
-            public string AbstractN { get; set; }
+            public string   Title     { get; set; }
+            public string   TitleN    { get; set; }
+            public string   Abstract  { get; set; }
+            public string   AbstractN { get; set; }
+            public string[] Keywords  { get; set; }
         }
 
         public RecordIndex()
@@ -29,12 +30,7 @@ namespace Catalogue.Data.Indexes
                                      TitleN = record.Gemini.Title, 
                                      Abstract = record.Gemini.Abstract,
                                      AbstractN = record.Gemini.Abstract,
-//                                     Gemini_Keywords_Value = (
-//                                         from docGeminiKeywordsItem in ((IEnumerable<dynamic>)record.Gemini.Keywords).DefaultIfEmpty()
-//                                         select docGeminiKeywordsItem.Value).ToArray(),
-//                                     Gemini_Keywords_Vocab = (
-//                                         from docGeminiKeywordsItem in ((IEnumerable<dynamic>)record.Gemini.Keywords).DefaultIfEmpty()
-//                                         select docGeminiKeywordsItem.Vocab).ToArray()
+                                     Keywords = record.Gemini.Keywords.Select(k => k.Vocab + "/" + k.Value)
                                  };
 
             // store and analyse the Title field

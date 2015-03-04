@@ -70,6 +70,7 @@
   <ItemGroup>
     <Compile Include="Explicit\ad_hoc_queries.cs" />
     <Compile Include="Explicit\Catalogue.Data\Export\octonaughts_lets_do_this.cs" />
+    <Compile Include="Explicit\Catalogue.Data\Indexes\my_record_index_tests.cs" />
     <Compile Include="Explicit\Catalogue.Import\import_runner.cs" />
     <Compile Include="Explicit\exploratory_search_tests.cs" />
     <Compile Include="Explicit\feasibility_tests.cs" />
