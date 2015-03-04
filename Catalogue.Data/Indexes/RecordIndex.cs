@@ -9,7 +9,7 @@ namespace Catalogue.Data.Indexes
     /// <summary>
     /// This is the primary / most important index, used for searching / exporting records.
     /// </summary>
-    public class RecordSearchIndex : AbstractIndexCreationTask<Record, RecordSearchIndex.Result>
+    public class RecordIndex : AbstractIndexCreationTask<Record, RecordIndex.Result>
     {
         public class Result
         {
@@ -19,7 +19,7 @@ namespace Catalogue.Data.Indexes
             public string AbstractN { get; set; }
         }
 
-        public RecordSearchIndex()
+        public RecordIndex()
         {
             Map = records => from record in records
                              select new

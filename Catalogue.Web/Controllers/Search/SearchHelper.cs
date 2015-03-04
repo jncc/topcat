@@ -13,6 +13,7 @@ namespace Catalogue.Web.Controllers.Search
 {
     public interface ISearchHelper
     {
+        SearchOutputModel Search(QueryModel queryModel);
         SearchOutputModel SearchByKeyword(QueryModel queryModel);
         SearchOutputModel SearchByText(QueryModel queryModel);
     }
@@ -60,7 +61,7 @@ namespace Catalogue.Web.Controllers.Search
             FieldHighlightings abstractLites;
             FieldHighlightings abstractNLites;
 
-            var query = _db.Advanced.LuceneQuery<Record>("RecordSearchIndex")
+            var query = _db.Advanced.DocumentQuery<Record, RecordIndex>()
                 .Statistics(out stats)
                 .Highlight("Title", 202, 1, out titleLites)
                 .Highlight("TitleN", 202, 1, out titleNLites)
@@ -96,52 +97,51 @@ namespace Catalogue.Web.Controllers.Search
             return MakeSearchOutputModel(queryModel, stats, xs);
         }
 
-//        public SearchOutputModel Search(QueryModel input)
-//        {
-//            RavenQueryStatistics stats;
-//            FieldHighlightings titleLites;
-//            FieldHighlightings titleNLites;
-//            FieldHighlightings abstractLites;
-//            FieldHighlightings abstractNLites;
-//
-//            var keyword = ParameterHelper.ParseKeywords(new[] { input.K }).Single(); // for now, we only support one keyword
-//
-//            var query = _db.Query<RecordSearchIndex.Result, RecordSearchIndex>()
-//                .Where(r => r.Gemini.Keywords.Any(k => k.Value == keyword.Value && k.Vocab == keyword.Vocab))
-//                .Statistics(out stats)
-//                .Customize(x => x.Highlight("Title", 202, 1, out titleLites))
-//                
-////                .Highlight("TitleN", 202, 1, out titleNLites)
-////                .Highlight("Abstract", 202, 1, out abstractLites)
-////                .Highlight("AbstractN", 202, 1, out abstractNLites)
-//                .Customize( x=> x.SetHighlighterTags("<b>", "</b>"))
-//                .Search(r => r., input.Q).Boost(10)
-//                .Search("TitleN", input.Q)
-//                .Search("Abstract", input.Q)
-//                .Search("AbstractN", input.Q);
-//
-//            var results = query
-//                    .Skip(input.P * input.N)
-//                    .Take(input.N)
-//                    .ToList();
-//
-//            var xs = from r in results
-//                     let titleFragments =
-//                         titleLites.GetFragments("records/" + r.Id).Concat(titleNLites.GetFragments("records/" + r.Id))
-//                     let abstractFragments =
-//                         abstractLites.GetFragments("records/" + r.Id)
-//                                      .Concat(abstractNLites.GetFragments("records/" + r.Id))
-//                     select new HalfBakedResult
-//                     {
-//                         Result = r,
-//                         Title = titleFragments.Select(f => f.TruncateNicely(200)).FirstOrDefault()
-//                                 ?? r.Gemini.Title.TruncateNicely(200),
-//                         Snippet = abstractFragments.Select(f => f.TruncateNicely(200)).FirstOrDefault()
-//                                   ?? r.Gemini.Abstract.TruncateNicely(200),
-//                     };
-//
-//            return MakeSearchOutputModel(input, stats, xs);
-//        }
+        public SearchOutputModel Search(QueryModel input)
+        {
+            RavenQueryStatistics stats;
+            FieldHighlightings titleLites = null;
+            FieldHighlightings titleNLites = null;
+            FieldHighlightings abstractLites = null;
+            FieldHighlightings abstractNLites = null;
+
+            //var keyword = ParameterHelper.ParseKeywords(new[] { input.K }).Single(); // for now, we only support one keyword
+
+            var query = _db.Query<RecordIndex.Result, RecordIndex>()
+                .Statistics(out stats)
+                .Customize(x => x.Highlight("Title", 202, 1, out titleLites))
+                .Customize(x => x.Highlight("TitleN", 202, 1, out titleNLites))
+                .Customize(x => x.Highlight("Abstract", 202, 1, out abstractLites))
+                .Customize(x => x.Highlight("AbstractN", 202, 1, out abstractNLites))
+                .Customize(x => x.SetHighlighterTags("<b>", "</b>"))
+                .Search(r => r.Title, input.Q, boost: 10)
+                .Search(r => r.TitleN, input.Q)
+                .Search(r => r.Abstract, input.Q)
+                .Search(r => r.AbstractN, input.Q)
+                .As<Record>();
+
+            var results = query
+                    .Skip(input.P * input.N)
+                    .Take(input.N)
+                    .ToList();
+
+            var xs = from r in results
+                     let titleFragments =
+                         titleLites.GetFragments("records/" + r.Id).Concat(titleNLites.GetFragments("records/" + r.Id))
+                     let abstractFragments =
+                         abstractLites.GetFragments("records/" + r.Id)
+                                      .Concat(abstractNLites.GetFragments("records/" + r.Id))
+                     select new HalfBakedResult
+                     {
+                         Result = r,
+                         Title = titleFragments.Select(f => f.TruncateNicely(200)).FirstOrDefault()
+                                 ?? r.Gemini.Title.TruncateNicely(200),
+                         Snippet = abstractFragments.Select(f => f.TruncateNicely(200)).FirstOrDefault()
+                                   ?? r.Gemini.Abstract.TruncateNicely(200),
+                     };
+
+            return MakeSearchOutputModel(input, stats, xs);
+        }
 
 
         static SearchOutputModel MakeSearchOutputModel(

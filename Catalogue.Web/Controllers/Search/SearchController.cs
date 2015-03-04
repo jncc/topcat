@@ -27,7 +27,7 @@ namespace Catalogue.Web.Controllers.Search
             }
             else
             {
-                return searchHelper.SearchByText(model);
+                return searchHelper.Search(model);
             }
         }
     }
