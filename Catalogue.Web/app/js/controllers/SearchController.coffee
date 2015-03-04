@@ -21,7 +21,7 @@
         
         queryRecords = (query) ->
             $scope.busy.start()
-            $http.get('../api/search?' + $.param query)
+            $http.get('../api/search?' + $.param query, true)
                 .success (result) ->
                     console.log query
                     console.log result.query
@@ -48,7 +48,7 @@
         # also called explicitly from search button
         $scope.doSearch = (query) ->
             updateUrl query
-            if query.q or query.k
+            if query.q or query.k[0]
                 queryKeywords query
                 queryRecords query
             else
@@ -60,8 +60,8 @@
 
         newQuery = ->
             q: '',
-            k: null,
-            p: 0, 
+            k: [],
+            p: 0,
             n: 25
 
         # initialise the query to whatever is in the querystring
@@ -77,13 +77,13 @@
         #)
         
         $scope.queryByKeyword = (keyword) ->
-            $scope.query = $.extend {}, newQuery(), { 'k': getPathFromKeyword(keyword) }
+            $scope.query = $.extend {}, newQuery(), { 'k': [getPathFromKeyword(keyword)] }
             
         $scope.removeKeywordFromQuery = (keyword) ->
-            $scope.query.k = null
+            $scope.query.k = []
         
         # function to get the current querystring in the view (for constructing export url)
-        $scope.querystring = -> $.param $scope.query
+        $scope.querystring = -> $.param $scope.query, true # true means traditional serialization (no square brackets for arrays)
 
         # keyword helper functions            
         getPathFromKeyword = (keyword) ->

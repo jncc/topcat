@@ -49,9 +49,9 @@ namespace Catalogue.Web.Controllers
                     .Search(r => r.AbstractN, input.Q);
             }
 
-            if (input.K.IsNotBlank())
+            if (input.HasKeywords())
             {
-                var keyword = ParameterHelper.ParseKeywords(new[] { input.K }).Single(); // for now, we only support one keyword
+                var keyword = ParameterHelper.ParseKeywords(input.K).Single();
                 var k = keyword.Vocab + "/" + keyword.Value;
                 query = query.Where(r => r.Keywords.Contains(k));
             }
@@ -85,7 +85,7 @@ namespace Catalogue.Web.Controllers
 
 
         static RecordQueryOutputModel MakeOutput(
-            RecordQueryInputModel recordQueryInputModel,
+            RecordQueryInputModel input,
             RavenQueryStatistics stats,
             IEnumerable<HalfBakedResult> xs)
         {
@@ -115,13 +115,7 @@ namespace Catalogue.Web.Controllers
                                    })
                         .ToList(),
                     Speed = stats.DurationMilliseconds,
-                    Query = new QueryOutputModel
-                            {
-                                K = recordQueryInputModel.K,
-                                Q = recordQueryInputModel.Q,
-                                P = recordQueryInputModel.P,
-                                N = recordQueryInputModel.N,
-                            }
+                    Query = input
                 };
         }
     }

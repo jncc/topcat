@@ -7,13 +7,13 @@ namespace Catalogue.Web.Controllers
 {
     public class RecordQueryInputModel
     {
-//        public RecordQueryInputModel()
-//        {
-//            N = 25;
-//            P = 0;
-//            Q = String.Empty;
-//            K = new string[0];
-//        }
+        public RecordQueryInputModel()
+        {
+            N = 25;
+            P = 0;
+            Q = String.Empty;
+            K = new string[0];
+        }
 
         /// <summary>
         /// The number of records (page size).
@@ -34,12 +34,11 @@ namespace Catalogue.Web.Controllers
         /// <summary>
         /// The keywords to restrict the query to.
         /// </summary>
-        public string K { get; set; }
+        public string[] K { get; set; }
 
-        public bool HasKeywords
+        public bool HasKeywords()
         {
-            get { return this.K.IsNotBlank(); } // this.K.Any() && this.K.First().IsNotBlank()
+            return this.K != null && this.K.Any() && this.K.First().IsNotBlank();
         }
     }
-
 }

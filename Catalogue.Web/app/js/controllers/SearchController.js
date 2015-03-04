@@ -14,7 +14,7 @@
     };
     queryRecords = function(query) {
       $scope.busy.start();
-      return $http.get('../api/search?' + $.param(query)).success(function(result) {
+      return $http.get('../api/search?' + $.param(query, true)).success(function(result) {
         console.log(query);
         console.log(result.query);
         if (angular.equals(result.query, query)) {
@@ -42,7 +42,7 @@
     };
     $scope.doSearch = function(query) {
       updateUrl(query);
-      if (query.q || query.k) {
+      if (query.q || query.k[0]) {
         queryKeywords(query);
         return queryRecords(query);
       } else {
@@ -54,7 +54,7 @@
     newQuery = function() {
       return {
         q: '',
-        k: null,
+        k: [],
         p: 0,
         n: 25
       };
@@ -62,14 +62,14 @@
     $scope.query = $.extend({}, newQuery(), $location.search());
     $scope.queryByKeyword = function(keyword) {
       return $scope.query = $.extend({}, newQuery(), {
-        'k': getPathFromKeyword(keyword)
+        'k': [getPathFromKeyword(keyword)]
       });
     };
     $scope.removeKeywordFromQuery = function(keyword) {
-      return $scope.query.k = null;
+      return $scope.query.k = [];
     };
     $scope.querystring = function() {
-      return $.param($scope.query);
+      return $.param($scope.query, true);
     };
     getPathFromKeyword = function(keyword) {
       var path;

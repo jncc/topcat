@@ -58,11 +58,11 @@
         </span>
         {{result.total || 0}} records
         <!-- <span ng-show="result.speed">in {{(result.speed / 1000) | number:2}} seconds</span>-->
-        <span ng-show="result.query.k">
+        <span ng-show="result.query.k[0]">
             tagged
             <span class="tag">
                 <span ng-style="{ 'background-color': hashStringToColor(getKeywordFromPath(result.query.k).vocab) }">&nbsp;</span>
-                {{result.query.k}}
+                {{result.query.k[0]}}
                 <span class="glyphicon glyphicon-remove" ng-click="removeKeywordFromQuery(result.query.k)" tc-tip title="Remove"></span>
             </span>
         </span>
@@ -119,7 +119,7 @@
     </ul>
 </div>
 
-<div ng-show="!query.q && query.k[0] == '' && !app.starting" class="fade-in-with-delay">
+<div ng-show="!query.q && !query.k[0] && !app.starting" class="fade-in-with-delay">
     <div class="row">
         <div class="col-md-7 welcome">
             <h2><b>Discover and organise</b> the data assets we hold as an organisation with <b>Topcat</b>.</h2>

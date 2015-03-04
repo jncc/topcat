@@ -1,11 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Catalogue.Gemini.Model;
+﻿using System.Linq;
 using Catalogue.Web.Controllers;
-using Catalogue.Web.Controllers.Search;
 using FluentAssertions;
 using NUnit.Framework;
 
@@ -20,12 +14,13 @@ namespace Catalogue.Tests.Slow.Catalogue.Web.Controllers.Search
 
             var input = new RecordQueryInputModel
                 {
-                    K = "vocab.jncc.gov.uk/jncc-broad-category/Seabed Habitat Maps",
+                    Q = "",
+                    K = new [] { "vocab.jncc.gov.uk/jncc-broad-category/Seabed Habitat Maps" },
                     P = 0,
                     N = 25
                 };
 
-            helper.SearchByKeyword(input).Results.Count().Should().Be(25);
+            helper.SearchQuery(input).Results.Count().Should().Be(25);
         }
     }
 }
