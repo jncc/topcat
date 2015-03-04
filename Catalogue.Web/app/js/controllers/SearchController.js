@@ -42,8 +42,13 @@
     };
     $scope.doSearch = function(query) {
       updateUrl(query);
-      queryKeywords(query);
-      return queryRecords(query);
+      if (query.q || query.k) {
+        queryKeywords(query);
+        return queryRecords(query);
+      } else {
+        $scope.result = {};
+        return $scope.keywordSuggestions = {};
+      }
     };
     $scope.$watch('query', $scope.doSearch, true);
     newQuery = function() {

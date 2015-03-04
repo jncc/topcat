@@ -47,9 +47,13 @@
         # called whenever the $scope.query object changes
         # also called explicitly from search button
         $scope.doSearch = (query) ->
-            updateUrl query            
-            queryKeywords query
-            queryRecords query
+            updateUrl query
+            if query.q or query.k
+                queryKeywords query
+                queryRecords query
+            else
+                $scope.result = {}
+                $scope.keywordSuggestions = {}
                 
         # when the model query value is updated, do the search
         $scope.$watch 'query', $scope.doSearch, true

@@ -25,7 +25,7 @@ namespace Catalogue.Web.Controllers.Keywords
                 .ToList();
 
             var vocablessKeywords = db.Query<RecordKeywordIndex.Result, RecordKeywordIndex>()
-                .Search(k => k.Value, q)
+                .Search(k => k.ValueN, q)
                 .Take(take)
                 .Select(r => new { r.Vocab, r.Value })
                 .ToList();
