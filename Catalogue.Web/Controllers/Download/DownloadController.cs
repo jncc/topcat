@@ -35,7 +35,7 @@ namespace Catalogue.Web.Controllers.Download
         }
 
 //        [HttpGet, Route("api/download/iso")]
-//        public object Xml(QueryModel input)
+//        public object Xml(RecordQueryInputModel input)
 //        {
 //            var keyword = ParameterHelper.ParseKeywords(new[] { input..K }).Single(); // for now, support only one
 //

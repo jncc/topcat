@@ -4,9 +4,9 @@ using Catalogue.Utilities.Text;
 
 namespace Catalogue.Web.Controllers
 {
-    public class QueryModel
+    public class RecordQueryInputModel
     {
-//        public QueryModel()
+//        public RecordQueryInputModel()
 //        {
 //            N = 25;
 //            P = 0;

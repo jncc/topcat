@@ -13,27 +13,29 @@ namespace Catalogue.Web.Controllers.Export
 {
     public class ExportController : ApiController
     {
-        IDocumentSession db;
+        RecordQueryer queryer;
 
-        public ExportController(IDocumentSession db)
+        public ExportController(RecordQueryer queryer)
         {
-            this.db = db;
+            this.queryer = queryer;
         }
 
-        public HttpResponseMessage Get([FromUri] QueryModel input)
+        public HttpResponseMessage Get([FromUri] RecordQueryInputModel input)
         {
-            var keyword = ParameterHelper.ParseKeywords(new[] { input.K }).Single(); // for now, support only one
+            // todo will need to use ravendb streaming or increase db page size for larger exports
 
             // ignore paging (p and n) parameters - exporting always returns the full record set
-            // todo use the same query / index as search page (in SearchHelper)
+            input.P = 0;
+            input.N = 1024;
+            
+            var results = queryer.RecordQuery(input).ToList();
 
-            var q = from r in db.Query<Record>()
-                    where r.Gemini.Keywords.Any(x => x.Vocab == keyword.Vocab && x.Value == keyword.Value)
-                    select r;
+            if (results.Count >= 1024)
+                throw new InvalidOperationException("We don't support exports this large yet.");
 
             var writer = new StringWriter();
             var exporter = new Exporter();
-            exporter.Export(q.ToList(), writer);
+            exporter.Export(results, writer);
 
             var result = new HttpResponseMessage(HttpStatusCode.OK) {Content = new StringContent(writer.ToString())};
 

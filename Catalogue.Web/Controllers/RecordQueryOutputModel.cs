@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using Catalogue.Gemini.Model;
 
-namespace Catalogue.Web.Controllers.Search
+namespace Catalogue.Web.Controllers
 {
-    public class SearchOutputModel
+    public class RecordQueryOutputModel
     {
         public int Total { get; set; }
         public List<ResultOutputModel> Results { get; set; }

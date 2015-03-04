@@ -1,67 +1,37 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Linq.Expressions;
-using System.Text.RegularExpressions;
 using Catalogue.Data.Indexes;
 using Catalogue.Data.Model;
 using Catalogue.Gemini.DataFormats;
-using Catalogue.Gemini.Model;
 using Catalogue.Utilities.Text;
 using Raven.Client;
 using Raven.Client.Linq;
-using Raven.Client.Linq.Indexing;
 
-namespace Catalogue.Web.Controllers.Search
+namespace Catalogue.Web.Controllers
 {
-    public interface ISearchHelper
+    public interface IRecordQueryer
     {
-        SearchOutputModel Search(QueryModel queryModel);
-        SearchOutputModel SearchByKeyword(QueryModel queryModel);
+        RecordQueryOutputModel SearchQuery(RecordQueryInputModel input);
+        IEnumerable<Record> RecordQuery(RecordQueryInputModel input);
     }
 
-    public class SearchHelper : ISearchHelper
+    public class RecordQueryer : IRecordQueryer
     {
         private readonly IDocumentSession _db;
 
-        public SearchHelper(IDocumentSession db)
+        public RecordQueryer(IDocumentSession db)
         {
             _db = db;
         }
 
-        public SearchOutputModel SearchByKeyword(QueryModel queryModel)
+        RavenQueryStatistics stats;
+        FieldHighlightings titleLites;
+        FieldHighlightings titleNLites;
+        FieldHighlightings abstractLites;
+        FieldHighlightings abstractNLites;
+
+        public IEnumerable<Record> RecordQuery(RecordQueryInputModel input)
         {
-            RavenQueryStatistics stats;
-
-            var keyword = ParameterHelper.ParseKeywords(new [] {queryModel.K}).Single(); // for now, we only support one keyword
-
-            var query = Queryable.Where(_db.Query<Record>()
-                    .Statistics(out stats), r => r.Gemini.Keywords.Any(k => k.Value == keyword.Value && k.Vocab == keyword.Vocab));
-
-            int skipNumber = queryModel.P * queryModel.N;
-
-            var results = query
-                .Skip(skipNumber)
-                .Take(queryModel.N)
-                .ToList()
-                .Select(r => new HalfBakedResult
-                    {
-                        Result = r,
-                        Title = r.Gemini.Title.TruncateNicely(200),
-                        Snippet = r.Gemini.Abstract.TruncateNicely(200)
-                    });
-
-            return MakeSearchOutputModel(queryModel, stats, results);
-        }
-
-        public SearchOutputModel Search(QueryModel input)
-        {
-            RavenQueryStatistics stats;
-            FieldHighlightings titleLites = null;
-            FieldHighlightings titleNLites = null;
-            FieldHighlightings abstractLites = null;
-            FieldHighlightings abstractNLites = null;
-
             var query = _db.Query<RecordIndex.Result, RecordIndex>()
                 .Statistics(out stats)
                 .Customize(x => x.Highlight("Title", 202, 1, out titleLites))
@@ -86,12 +56,16 @@ namespace Catalogue.Web.Controllers.Search
                 query = query.Where(r => r.Keywords.Contains(k));
             }
 
-            var results = query.As<Record>() // project the query from the index result type to the actual document type
+            return query.As<Record>() // project the query from the index result type to the actual document type
                     .Skip(input.P * input.N)
                     .Take(input.N)
                     .ToList();
+        }
 
-            var xs = from r in results
+        public RecordQueryOutputModel SearchQuery(RecordQueryInputModel input)
+        {
+
+            var xs = from r in RecordQuery(input)
                      let titleFragments =
                          titleLites.GetFragments("records/" + r.Id).Concat(titleNLites.GetFragments("records/" + r.Id))
                      let abstractFragments =
@@ -106,16 +80,16 @@ namespace Catalogue.Web.Controllers.Search
                                    ?? r.Gemini.Abstract.TruncateNicely(200),
                      };
 
-            return MakeSearchOutputModel(input, stats, xs);
+            return MakeOutput(input, stats, xs);
         }
 
 
-        static SearchOutputModel MakeSearchOutputModel(
-            QueryModel queryModel,
+        static RecordQueryOutputModel MakeOutput(
+            RecordQueryInputModel recordQueryInputModel,
             RavenQueryStatistics stats,
             IEnumerable<HalfBakedResult> xs)
         {
-            return new SearchOutputModel
+            return new RecordQueryOutputModel
                 {
                     Total = stats.TotalResults,
                     Results = (from x in xs
@@ -141,13 +115,12 @@ namespace Catalogue.Web.Controllers.Search
                                    })
                         .ToList(),
                     Speed = stats.DurationMilliseconds,
-                    Query =
-                        new QueryOutputModel
+                    Query = new QueryOutputModel
                             {
-                                K = queryModel.K,
-                                Q = queryModel.Q,
-                                P = queryModel.P,
-                                N = queryModel.N,
+                                K = recordQueryInputModel.K,
+                                Q = recordQueryInputModel.Q,
+                                P = recordQueryInputModel.P,
+                                N = recordQueryInputModel.N,
                             }
                 };
         }
@@ -159,4 +132,4 @@ namespace Catalogue.Web.Controllers.Search
         public string Title { get; set; }
         public string Snippet { get; set; }
     }
-} 
+}

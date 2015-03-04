@@ -4,17 +4,17 @@ namespace Catalogue.Web.Controllers.Search
 {
     public class SearchController : ApiController
     {
-        readonly ISearchHelper helper;
+        readonly IRecordQueryer queryer;
 
-        public SearchController(ISearchHelper helper)
+        public SearchController(IRecordQueryer queryer)
         {
-            this.helper = helper;
+            this.queryer = queryer;
         }
 
         // GET api/search?q=blah
-        public SearchOutputModel Get([FromUri] QueryModel model)
+        public RecordQueryOutputModel Get([FromUri] RecordQueryInputModel model)
         {
-            return helper.Search(model);
+            return queryer.SearchQuery(model);
         }
     }
 }

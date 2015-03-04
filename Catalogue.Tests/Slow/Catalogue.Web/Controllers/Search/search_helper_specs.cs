@@ -16,9 +16,9 @@ namespace Catalogue.Tests.Slow.Catalogue.Web.Controllers.Search
         [Test]
         public void keyword_search_test()
         {
-            var helper = new SearchHelper(Db);
+            var helper = new RecordQueryer(Db);
 
-            var input = new QueryModel
+            var input = new RecordQueryInputModel
                 {
                     K = "vocab.jncc.gov.uk/jncc-broad-category/Seabed Habitat Maps",
                     P = 0,

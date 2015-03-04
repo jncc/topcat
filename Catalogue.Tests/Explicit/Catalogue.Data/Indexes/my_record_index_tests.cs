@@ -16,7 +16,7 @@ namespace Catalogue.Tests.Explicit.Catalogue.Data.Indexes
 //        [Test]
 //        public void blah()
 //        {
-//            var query = Db.Query<MyRecordIndex.Result, MyRecordIndex>()
+//            var query = Db.SearchQuery<MyRecordIndex.Result, MyRecordIndex>()
 //                .Search(r => r.Title, "broad")
 //                .Where(r => r.Keywords.Contains("http://vocab.jncc.gov.uk/reference-manager-code/R2290"))
 //                .As<Record>();

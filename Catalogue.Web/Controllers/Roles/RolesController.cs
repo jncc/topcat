@@ -1,17 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Net;
-using System.Net.Http;
 using System.Web.Http;
 using Catalogue.Gemini.Roles;
 using FluentAssertions;
 
-namespace Catalogue.Web.Controllers
+namespace Catalogue.Web.Controllers.Roles
 {
     public class RolesController : ApiController
     {
-        public List<String> Get(String q)
+        public List<string> Get(String q)
         {
             if (!String.IsNullOrWhiteSpace(q))
             {
