@@ -60,13 +60,17 @@
       };
     };
     $scope.query = $.extend({}, newQuery(), $location.search());
-    $scope.queryByKeyword = function(keyword) {
-      return $scope.query = $.extend({}, newQuery(), {
-        'k': [getPathFromKeyword(keyword)]
-      });
+    $scope.addKeywordToQuery = function(keyword) {
+      if ($scope.query.k.length === 0) {
+        return $scope.query = $.extend({}, newQuery(), {
+          'k': [getPathFromKeyword(keyword)]
+        });
+      } else {
+        return $scope.query.k.push(getPathFromKeyword(keyword));
+      }
     };
     $scope.removeKeywordFromQuery = function(keyword) {
-      return $scope.query.k = [];
+      return $scope.query.k.splice($.inArray(keyword, $scope.query.k), 1);
     };
     $scope.querystring = function() {
       return $.param($scope.query, true);

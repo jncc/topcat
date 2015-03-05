@@ -36,7 +36,7 @@
 </div>
 
 <div class="search-keyword-suggestions" ng-show="keywordSuggestions[0]">
-    <span tc-tag class="tag" ng-repeat="k in keywordSuggestions" style="cursor: pointer;" ng-click="queryByKeyword(k)">
+    <span tc-tag class="tag" ng-repeat="k in keywordSuggestions" style="cursor: pointer;" ng-click="addKeywordToQuery(k)">
         <span ng-style="{ 'background-color': hashStringToColor(k.vocab) }">&nbsp;</span>
         <blah ng-bind-html="k.value | highlight:query.q"></blah>
     </span>
@@ -60,10 +60,10 @@
         <!-- <span ng-show="result.speed">in {{(result.speed / 1000) | number:2}} seconds</span>-->
         <span ng-show="result.query.k[0]">
             tagged
-            <span class="tag">
-                <span ng-style="{ 'background-color': hashStringToColor(getKeywordFromPath(result.query.k).vocab) }">&nbsp;</span>
-                {{result.query.k[0]}}
-                <span class="glyphicon glyphicon-remove" ng-click="removeKeywordFromQuery(result.query.k)" tc-tip title="Remove"></span>
+            <span class="tag" ng-repeat="k in result.query.k">
+                <span ng-style="{ 'background-color': hashStringToColor(getKeywordFromPath(k).vocab) }">&nbsp;</span>
+                {{k}}
+                <span class="glyphicon glyphicon-remove" ng-click="removeKeywordFromQuery(k)" tc-tip title="Remove"></span>
             </span>
         </span>
         <span ng-show="query.q">matching <b>{{query.q}}</b></span>
@@ -101,7 +101,7 @@
             <span ng-bind-html="r.snippet"></span>
         </div>
         <div class="search-tags">
-            <span tc-tag class="tag" ng-repeat="k in r.keywords" style="cursor: pointer;" tc-tip ng-click="queryByKeyword(k)">
+            <span tc-tag class="tag" ng-repeat="k in r.keywords" style="cursor: pointer;" tc-tip ng-click="addKeywordToQuery(k)">
                 <span ng-style="{ 'background-color': hashStringToColor(k.vocab) }">&nbsp;</span>
                 {{ k.value }}
             </span>

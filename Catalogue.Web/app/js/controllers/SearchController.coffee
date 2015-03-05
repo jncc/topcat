@@ -76,11 +76,15 @@
         #        #$scope.query = $.extend {}, newQuery(), x
         #)
         
-        $scope.queryByKeyword = (keyword) ->
-            $scope.query = $.extend {}, newQuery(), { 'k': [getPathFromKeyword(keyword)] }
-            
+        $scope.addKeywordToQuery = (keyword) ->
+            # for usability, if this is the first keyword added, clear the current query
+            if $scope.query.k.length == 0
+                $scope.query = $.extend {}, newQuery(), { 'k': [getPathFromKeyword(keyword)] }
+            else
+                $scope.query.k.push getPathFromKeyword(keyword)
+                
         $scope.removeKeywordFromQuery = (keyword) ->
-            $scope.query.k = []
+            $scope.query.k.splice ($.inArray keyword, $scope.query.k), 1
         
         # function to get the current querystring in the view (for constructing export url)
         $scope.querystring = -> $.param $scope.query, true # true means traditional serialization (no square brackets for arrays)

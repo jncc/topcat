@@ -47,6 +47,7 @@ namespace Catalogue.Web.Controllers
                     .Search(r => r.TitleN, input.Q)
                     .Search(r => r.Abstract, input.Q)
                     .Search(r => r.AbstractN, input.Q);
+                    // .Search(r => r.Keywords, input.Q)
             }
 
             if (input.HasKeywords())
