@@ -87,6 +87,9 @@ namespace Catalogue.Data.Import.Mappings
                     return "Diver video";
                 case "grabs":
                     return "Grabs";
+                case "multibeam echo sounder":
+                case "multibeam echo scounder":
+                    return "Multibeam echo sounder";
                 case "side scan sonar":
                     return "Side scan sonar";
                 case "towed video":
