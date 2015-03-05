@@ -51,9 +51,11 @@ namespace Catalogue.Web.Controllers
 
             if (input.HasKeywords())
             {
-                var keyword = ParameterHelper.ParseKeywords(input.K).Single();
-                var k = keyword.Vocab + "/" + keyword.Value;
-                query = query.Where(r => r.Keywords.Contains(k));
+                foreach (var keyword in ParameterHelper.ParseKeywords(input.K))
+                {
+                    string k = keyword.Vocab + "/" + keyword.Value;
+                    query = query.Where(r => r.Keywords.Contains(k));
+                }
             }
 
             return query.As<Record>() // project the query from the index result type to the actual document type
@@ -64,7 +66,6 @@ namespace Catalogue.Web.Controllers
 
         public RecordQueryOutputModel SearchQuery(RecordQueryInputModel input)
         {
-
             var xs = from r in RecordQuery(input)
                      let titleFragments =
                          titleLites.GetFragments("records/" + r.Id).Concat(titleNLites.GetFragments("records/" + r.Id))
