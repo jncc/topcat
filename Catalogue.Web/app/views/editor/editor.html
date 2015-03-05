@@ -335,7 +335,15 @@
                         </tab-heading>
 
                         <!-- public access and use contraints-->
+                        <div ng-show="form.gemini.useConstraints">Use constraints</div>
+                        <textarea type="text" ng-model="form.gemini.useConstraints" class="form-control"
+                                    rows="2"
+                                    placeholder="Use constraints"
+                                    title="Usage and legal constraints (such as &copy; copyright) on using the data resource"
+                                    tc-focus-tip tc-autosize></textarea>
                         
+                        <br />
+
                         <div ng-show="form.gemini.limitationsOnPublicAccess">Limitations on public access</div>
                         <textarea type="text" name="gemini.limitationsOnPublicAccess" ng-model="form.gemini.limitationsOnPublicAccess" class="form-control"
                                   rows="2"
@@ -343,14 +351,6 @@
                                   title="Restrictions imposed on the data resource for security and other reasons"
                                   tc-focus-tip tc-autosize></textarea>
                         
-                        <br />
-
-                        <div ng-show="form.gemini.useConstraints">Use constraints</div>
-                        <textarea type="text" ng-model="form.gemini.useConstraints" class="form-control"
-                                    rows="2"
-                                    placeholder="Use constraints"
-                                    title="Usage and legal constraints on using the data resource"
-                                    tc-focus-tip tc-autosize></textarea>
                     </div>
                     
                     <div tab>
