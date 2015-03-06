@@ -19,13 +19,13 @@
         </div>
 
     </div>
-<!--    <div class="col-md-1">-->
-<!--        <div class="form-inline">-->
-<!--            <button ng-click="advanced = !advanced" class="btn btn-default" tc-tip title="Advanced search options" style="width: 60px">-->
-<!--                <span class="glyphicon" ng-class="advanced ? 'glyphicon-chevron-up' : 'glyphicon-chevron-down'"></span>-->
-<!--            </button>-->
-<!--        </div>-->
-<!--    </div>-->
+    <!--    <div class="col-md-1">-->
+    <!--        <div class="form-inline">-->
+    <!--            <button ng-click="advanced = !advanced" class="btn btn-default" tc-tip title="Advanced search options" style="width: 60px">-->
+    <!--                <span class="glyphicon" ng-class="advanced ? 'glyphicon-chevron-up' : 'glyphicon-chevron-down'"></span>-->
+    <!--            </button>-->
+    <!--        </div>-->
+    <!--    </div>-->
     <div class="col-sm-2">
         <div class="form-inline">
             <a href="#editor/00000000-0000-0000-0000-000000000000" class="btn btn-default" tc-tip title="Add a record" style="width: 60px">
@@ -50,23 +50,26 @@
 <!--    </div>-->
 <!--</div>-->
 
-<div ng-show="result.query" class="layout-row">
+<div ng-show="result.query" class="search-results-header layout-row">
     <div class="layout-col">
         Found
         <span ng-show="result.total > result.results.length">
-            {{query.p * 25 || 1}} to {{result.results.length + (query.p * 25) || 0}} of
+            {{result.query.p * 25 || 1}} to {{result.results.length + (query.p * 25) || 0}} of
         </span>
         {{result.total || 0}} records
         <!-- <span ng-show="result.speed">in {{(result.speed / 1000) | number:2}} seconds</span>-->
         <span ng-show="result.query.k[0]">
             tagged
-            <span class="tag" ng-repeat="s in result.query.k" ng-init="k = keywordFromString(s)" tc-tag>
+            <span tc-tag class="tag" ng-repeat="s in result.query.k" ng-init="k = keywordFromString(s)">
                 <span ng-style="{ 'background-color': hashStringToColor(k.vocab) }">&nbsp;</span>
                 {{k.value}}
                 <span class="glyphicon glyphicon-remove" ng-click="removeKeywordFromQuery(s)" tc-tip title="Remove"></span>
             </span>
         </span>
-        <span ng-show="query.q">matching <b>{{query.q}}</b></span>
+        <span ng-show="result.query.q">
+            matching <b>{{result.query.q}}</b>
+            <span ng-show="result.query.k[0]" class="glyphicon glyphicon-remove" ng-click="query.q = ''" tc-tip title="Remove"></span>
+        </span>
     </div>
     <!-- results view / export buttons -->
     <div class="layout-col" ng-show="result.total > 0" style="text-align: right;">
@@ -82,7 +85,7 @@
             <span class="glyphicon glyphicon-cloud-download"></span>
         </a>
     </div>
-    <hr/>
+    <hr />
 </div>
 
 <div ng-repeat="r in result.results" class="layout-row search-result">

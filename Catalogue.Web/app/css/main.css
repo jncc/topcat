@@ -134,6 +134,11 @@ label {
 .search-results-view-picker button span {
   font-size: smaller;
 }
+.search-results-header .glyphicon-remove {
+  font-size: 75%;
+  color: #666666;
+  cursor: pointer;
+}
 .search-result {
   margin: 1.2em 0;
 }
@@ -195,11 +200,6 @@ label {
   display: inline-block;
   width: 7px;
   margin-right: 2px;
-}
-.tag .glyphicon-remove {
-  font-size: 75%;
-  color: #666666;
-  cursor: pointer;
 }
 .tip {
   max-width: 100%;
