@@ -2,7 +2,7 @@
   var __indexOf = [].indexOf || function(item) { for (var i = 0, l = this.length; i < l; i++) { if (i in this && this[i] === item) return i; } return -1; };
 
   angular.module('app.controllers').controller('SearchController', function($scope, $rootScope, $location, $http, $timeout) {
-    var blankQuery, ensureEndsWith, getKeywordFromPath, getPathFromKeyword, parseQuerystring, queryKeywords, queryRecords, updateUrl;
+    var blankQuery, parseQuerystring, queryKeywords, queryRecords, updateUrl;
     $scope.app = {
       starting: true
     };
@@ -11,8 +11,10 @@
     }), 500);
     $scope.resultsView = 'list';
     updateUrl = function(query) {
+      var blank;
+      blank = blankQuery();
       $location.search('q', query.q || null);
-      return $location.search('k', query.k || null);
+      return $location.search('k', query.k);
     };
     queryRecords = function(query) {
       $scope.busy.start();
@@ -68,9 +70,12 @@
     };
     $scope.query = parseQuerystring();
     $scope.$watch('query', $scope.doSearch, true);
+    $scope.querystring = function() {
+      return $.param($scope.query, true);
+    };
     $scope.addKeywordToQuery = function(keyword) {
       var k;
-      k = getPathFromKeyword(keyword);
+      k = $scope.keywordToString(keyword);
       if ($scope.query.k.length === 0) {
         return $scope.query = $.extend({}, blankQuery(), {
           'k': [k]
@@ -84,39 +89,24 @@
     $scope.removeKeywordFromQuery = function(keyword) {
       return $scope.query.k.splice($.inArray(keyword, $scope.query.k), 1);
     };
-    $scope.querystring = function() {
-      return $.param($scope.query, true);
+    $scope.keywordToString = function(k) {
+      var s;
+      s = k.vocab + '/' + k.value;
+      return s.replace('http://', '');
     };
-    getPathFromKeyword = function(keyword) {
-      var path;
-      path = ensureEndsWith(keyword.vocab, '/') + keyword.value;
-      return path.replace("http://", "");
-    };
-    getKeywordFromPath = function(path) {
-      var elements, i, value, vocab, _i, _ref;
-      if (path.indexOf('/') === -1) {
+    $scope.keywordFromString = function(s) {
+      var slash;
+      if ((s.indexOf('/')) === -1) {
         return {
-          value: path,
-          vocab: ''
+          vocab: '',
+          value: s
         };
       } else {
-        elements = path.split('/');
-        value = elements[elements.length - 1];
-        vocab = "http://";
-        for (i = _i = 0, _ref = elements.length - 2; _i <= _ref; i = _i += 1) {
-          vocab = vocab.concat(elements[i].concat('/'));
-        }
+        slash = s.lastIndexOf('/');
         return {
-          value: value,
-          vocab: vocab
+          vocab: 'http://' + (s.substring(0, slash)),
+          value: s.substring(slash + 1)
         };
-      }
-    };
-    ensureEndsWith = function(str, suffix) {
-      if (str !== '' && !(str.indexOf(suffix, str.length - suffix.length) !== -1)) {
-        return str.concat(suffix);
-      } else {
-        return str;
       }
     };
     $scope.setPage = function(n) {

@@ -10,11 +10,12 @@
         # default results view style
         $scope.resultsView = 'list'
 
-        updateUrl = (query) -> 
+        updateUrl = (query) ->
+            blank = blankQuery()
             # update the url querystring to match the query object
             $location.search 'q', query.q || null
-            $location.search 'k', query.k || null
-            #$location.search('p', $scope.query.p) 
+            $location.search 'k', query.k # angular does the right thing here
+            #$location.search('p', if query.p != blank.p then query.p else null) 
             #$location.search('n', $scope.query.n)
         
         queryRecords = (query) ->
@@ -79,8 +80,11 @@
         #        #$scope.query = $.extend {}, blankQuery(), x
         #)
         
+        # function to get the current querystring in the view (for constructing export url)
+        $scope.querystring = -> $.param $scope.query, true # true means traditional serialization (no square brackets for arrays)
+
         $scope.addKeywordToQuery = (keyword) ->
-            k = getPathFromKeyword(keyword)
+            k = $scope.keywordToString(keyword)
             # for usability, if this is the first keyword added, clear the current query
             if $scope.query.k.length == 0
                 $scope.query = $.extend {}, blankQuery(), { 'k': [k] }
@@ -92,31 +96,19 @@
         $scope.removeKeywordFromQuery = (keyword) ->
             $scope.query.k.splice ($.inArray keyword, $scope.query.k), 1
         
-        # function to get the current querystring in the view (for constructing export url)
-        $scope.querystring = -> $.param $scope.query, true # true means traditional serialization (no square brackets for arrays)
-
         # keyword helper functions            
-        getPathFromKeyword = (keyword) ->
-            path = ensureEndsWith(keyword.vocab, '/') + keyword.value
-            path.replace("http://", "")
-        getKeywordFromPath = (path) -> 
-            if path.indexOf('/') == -1
-                return {value: path, vocab: ''}
+        $scope.keywordToString = (k) ->
+            s = k.vocab + '/' + k.value
+            s.replace 'http://', ''
+        $scope.keywordFromString = (s) -> 
+            if (s.indexOf '/') == -1
+                vocab: ''
+                value: s
             else
-                elements = path.split('/')
-                value = elements[elements.length - 1]
-                vocab = "http://"
-                for i in [0..elements.length - 2] by 1
-                    vocab = vocab.concat(elements[i].concat('/'))
-                return {value: value, vocab: vocab}
-        ensureEndsWith = (str, suffix) ->
-            if str != '' && !(str.indexOf(suffix, str.length - suffix.length) != -1)  
-                return str.concat(suffix)
-            else
-                return str
+                slash = s.lastIndexOf '/'
+                vocab: 'http://' + (s.substring 0, slash)
+                value: s.substring (slash + 1)
     
-       
-
         # paging helper functions                
         $scope.setPage = (n) ->
             $scope.query.p = n-1

@@ -54,26 +54,27 @@
     <div class="layout-col">
         Found
         <span ng-show="result.total > result.results.length">
-            {{query.p * 25 || 0}} to {{result.results.length + (query.p * 25) || 0}} of
+            {{query.p * 25 || 1}} to {{result.results.length + (query.p * 25) || 0}} of
         </span>
         {{result.total || 0}} records
         <!-- <span ng-show="result.speed">in {{(result.speed / 1000) | number:2}} seconds</span>-->
         <span ng-show="result.query.k[0]">
             tagged
-            <span class="tag" ng-repeat="k in result.query.k">
-                <span ng-style="{ 'background-color': hashStringToColor(getKeywordFromPath(k).vocab) }">&nbsp;</span>
-                {{k}}
-                <span class="glyphicon glyphicon-remove" ng-click="removeKeywordFromQuery(k)" tc-tip title="Remove"></span>
+            <span class="tag" ng-repeat="s in result.query.k" ng-init="k = keywordFromString(s)" tc-tag>
+                <span ng-style="{ 'background-color': hashStringToColor(k.vocab) }">&nbsp;</span>
+                {{k.value}}
+                <span class="glyphicon glyphicon-remove" ng-click="removeKeywordFromQuery(s)" tc-tip title="Remove"></span>
             </span>
         </span>
         <span ng-show="query.q">matching <b>{{query.q}}</b></span>
     </div>
+    <!-- results view / export buttons -->
     <div class="layout-col" ng-show="result.total > 0" style="text-align: right;">
         <div class="search-results-view-picker btn-group" role="group">
             <button class="btn" tc-tip title="List view" style="width: 60px" ng-click="resultsView = 'list'" ng-class="{ 'btn-primary': resultsView == 'list', 'btn-default': resultsView != 'list' }">
                 <span class="glyphicon glyphicon-align-left"></span>
             </button>
-            <button class="btn btn-default" tc-tip title="Grid view" style="width: 60px">
+            <button class="btn btn-default" tc-tip title="Grid view" style="width: 60px" ng-click="notifications.add('Sorry, grid view isn\'t implemented yet!')">
                 <span class="glyphicon glyphicon-list"></span>
             </button>
         </div>
@@ -109,15 +110,15 @@
     </div>
 </div>
 
-<div class="text-center" ng-show="result.total > result.results.length">
-    <ul class="pagination">
-        <!--   <li class="disabled"><a href="">&laquo;</a></li>-->
-        <li style="cursor: pointer;" ng-repeat="n in range(0,maxPages(result.total, 25))" ng-class="(n===query.p+1) ? 'active' : ''">
-            <span ng-click="setPage(n)"><span ng-bind="n">n</span></span>
-        </li>
-        <!--<li><span href="#">&raquo;</span></li>-->
-    </ul>
-</div>
+<!--<div class="text-center" ng-show="result.total > result.results.length">-->
+<!--    <ul class="pagination">-->
+<!--        $1$   <li class="disabled"><a href="">&laquo;</a></li>#1#-->
+<!--        <li style="cursor: pointer;" ng-repeat="n in range(0,maxPages(result.total, 25))" ng-class="(n===query.p+1) ? 'active' : ''">-->
+<!--            <span ng-click="setPage(n)"><span ng-bind="n">n</span></span>-->
+<!--        </li>-->
+<!--        $1$<li><span href="#">&raquo;</span></li>#1#-->
+<!--    </ul>-->
+<!--</div>-->
 
 <div ng-show="!query.q && !query.k[0] && !app.starting" class="fade-in-with-delay">
     <div class="row">
