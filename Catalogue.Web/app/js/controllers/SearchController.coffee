@@ -10,8 +10,6 @@
         # default results view style
         $scope.resultsView = 'list'
 
-        # note: $location.search is the angular api for the querystring value
-
         updateUrl = (query) -> 
             # update the url querystring to match the query object
             $location.search 'q', query.q || null
@@ -23,12 +21,10 @@
             $scope.busy.start()
             $http.get('../api/search?' + $.param query, true)
                 .success (result) ->
-                    console.log query
-                    console.log result.query
+                    #console.log query
+                    #console.log result.query
                     # don't overwrite with earlier but slower queries!
                     if angular.equals result.query, query
-                        #if result.total is 0 # without this the browser crashes due to an unsafe object check by angular, when results are zero
-                            #$scope.result = {}
                         $scope.result = result
                 .error (e) -> $scope.notifications.add 'Oops! ' + e.message
                 .finally   -> $scope.busy.stop()
@@ -55,33 +51,43 @@
                 $scope.result = {}
                 $scope.keywordSuggestions = {}
                 
-        # when the model query value is updated, do the search
-        $scope.$watch 'query', $scope.doSearch, true
-
-        newQuery = ->
+        blankQuery = ->
             q: '',
             k: [],
             p: 0,
             n: 25
 
+        parseQuerystring = ->
+            o = $location.search() # angular api for getting the querystring as an object
+            # when there is exactly one keyword, angular's $location.search does not return an array
+            # so fix it up (make k an array of one keyword)
+            o.k = [o.k] if o.k and not $.isArray o.k
+            $.extend {}, blankQuery(), o
+
         # initialise the query to whatever is in the querystring
-        $scope.query = $.extend {}, newQuery(), $location.search() 
+        $scope.query = parseQuerystring()
         
+        # when the model query value is updated, do the search
+        $scope.$watch 'query', $scope.doSearch, true
+
         # when the querystring changes, update the model query value
         # todo this doesn't work very well; let's see if we can do without it
         #$scope.$watch(
         #    ()  -> $location.search()
         #    (x) ->
-        #        #console.log $.extend {}, newQuery(), x
-        #        #$scope.query = $.extend {}, newQuery(), x
+        #        #console.log $.extend {}, blankQuery(), x
+        #        #$scope.query = $.extend {}, blankQuery(), x
         #)
         
         $scope.addKeywordToQuery = (keyword) ->
+            k = getPathFromKeyword(keyword)
             # for usability, if this is the first keyword added, clear the current query
             if $scope.query.k.length == 0
-                $scope.query = $.extend {}, newQuery(), { 'k': [getPathFromKeyword(keyword)] }
+                $scope.query = $.extend {}, blankQuery(), { 'k': [k] }
+            else if k in $scope.query.k
+                $scope.notifications.add 'Your query already contains this keyword'
             else
-                $scope.query.k.push getPathFromKeyword(keyword)
+                $scope.query.k.push k
                 
         $scope.removeKeywordFromQuery = (keyword) ->
             $scope.query.k.splice ($.inArray keyword, $scope.query.k), 1

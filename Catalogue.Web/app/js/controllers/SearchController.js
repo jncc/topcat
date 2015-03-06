@@ -1,6 +1,8 @@
 ﻿(function() {
+  var __indexOf = [].indexOf || function(item) { for (var i = 0, l = this.length; i < l; i++) { if (i in this && this[i] === item) return i; } return -1; };
+
   angular.module('app.controllers').controller('SearchController', function($scope, $rootScope, $location, $http, $timeout) {
-    var ensureEndsWith, getKeywordFromPath, getPathFromKeyword, newQuery, queryKeywords, queryRecords, updateUrl;
+    var blankQuery, ensureEndsWith, getKeywordFromPath, getPathFromKeyword, parseQuerystring, queryKeywords, queryRecords, updateUrl;
     $scope.app = {
       starting: true
     };
@@ -15,8 +17,6 @@
     queryRecords = function(query) {
       $scope.busy.start();
       return $http.get('../api/search?' + $.param(query, true)).success(function(result) {
-        console.log(query);
-        console.log(result.query);
         if (angular.equals(result.query, query)) {
           return $scope.result = result;
         }
@@ -50,8 +50,7 @@
         return $scope.keywordSuggestions = {};
       }
     };
-    $scope.$watch('query', $scope.doSearch, true);
-    newQuery = function() {
+    blankQuery = function() {
       return {
         q: '',
         k: [],
@@ -59,14 +58,27 @@
         n: 25
       };
     };
-    $scope.query = $.extend({}, newQuery(), $location.search());
+    parseQuerystring = function() {
+      var o;
+      o = $location.search();
+      if (o.k && !$.isArray(o.k)) {
+        o.k = [o.k];
+      }
+      return $.extend({}, blankQuery(), o);
+    };
+    $scope.query = parseQuerystring();
+    $scope.$watch('query', $scope.doSearch, true);
     $scope.addKeywordToQuery = function(keyword) {
+      var k;
+      k = getPathFromKeyword(keyword);
       if ($scope.query.k.length === 0) {
-        return $scope.query = $.extend({}, newQuery(), {
-          'k': [getPathFromKeyword(keyword)]
+        return $scope.query = $.extend({}, blankQuery(), {
+          'k': [k]
         });
+      } else if (__indexOf.call($scope.query.k, k) >= 0) {
+        return $scope.notifications.add('Your query already contains this keyword');
       } else {
-        return $scope.query.k.push(getPathFromKeyword(keyword));
+        return $scope.query.k.push(k);
       }
     };
     $scope.removeKeywordFromQuery = function(keyword) {

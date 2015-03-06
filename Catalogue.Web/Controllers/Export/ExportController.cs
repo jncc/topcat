@@ -22,12 +22,7 @@ namespace Catalogue.Web.Controllers.Export
 
         public HttpResponseMessage Get([FromUri] RecordQueryInputModel input)
         {
-            // todo will need to use ravendb streaming or increase db page size for larger exports
-
-            // ignore paging (p and n) parameters - exporting always returns the full record set
-            input.P = 0;
-            input.N = 1024;
-            
+            // todo will need to use ravendb streaming or increase db page size for larger exports            
             var results = queryer.RecordQuery(input).ToList();
 
             if (results.Count >= 1024)
