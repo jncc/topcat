@@ -33,16 +33,16 @@ namespace Catalogue.Web.Controllers.Seed
             return new HttpResponseMessage();
         }
 
-//        /// <summary>
-//        /// Todo remove this
-//        /// Useful for non-live instances. Requires a PUT so is difficult to do by accident.
-//        /// </summary>
-//        public HttpResponseMessage Put()
-//        {
-//            Seeder.SeedVocabsOnly(WebApiApplication.DocumentStore);
-//
-//            return new HttpResponseMessage();
-//        }
+        /// <summary>
+        /// Todo remove this
+        /// </summary>
+        [HttpPost, Route("api/seed/vocabs")]
+        public HttpResponseMessage Vocabs()
+        {
+            Seeder.SeedVocabsOnly(WebApiApplication.DocumentStore);
+
+            return new HttpResponseMessage();
+        }
 
         [HttpPost, Route("api/seed/inspire")]
         public HttpResponseMessage Inspire()
