@@ -76,7 +76,14 @@ namespace Catalogue.Data.Import
 
             foreach (var vocab in mapping.RequiredVocabularies)
             {
-                vocabularyService.Insert(vocab);
+                try
+                {
+                    vocabularyService.Insert(vocab);
+                }
+                catch (InvalidOperationException)
+                {
+                    //ignore this - trying to insert an existing vocab.
+                }
             }
 
             vocabularyService.Import(keywords);
@@ -91,7 +98,7 @@ namespace Catalogue.Data.Import
     {
         public static Importer<T> CreateImporter<T>(IDocumentSession db) where T : IMapping, new()
         {
-            return new Importer<T>(new FileSystem(), new RecordService(db, new RecordValidator()), new VocabularyService(db));
+            return new Importer<T>(new FileSystem(), new RecordService(db, new RecordValidator()), new VocabularyService(db, new VocabularyValidator()));
         }
     }
 

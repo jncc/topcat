@@ -95,7 +95,7 @@ namespace Catalogue.Data.Write
 
     public class RecordServiceResult
     {
-        public RecordValidationResult Validation { get; set; }
+        public ValidationResult<Record> Validation { get; set; }
         public bool Success { get { return !Validation.Errors.Any(); } }
 
         /// <summary>
@@ -106,7 +106,7 @@ namespace Catalogue.Data.Write
         /// <summary>
         /// A convenience result for tests, etc.
         /// </summary>
-        public static readonly RecordServiceResult SuccessfulResult = new RecordServiceResult { Validation = new RecordValidationResult() };
+        public static readonly RecordServiceResult SuccessfulResult = new RecordServiceResult { Validation = new ValidationResult<Record>() };
     }
 
 
@@ -275,7 +275,7 @@ namespace Catalogue.Data.Write
         /// </summary>
         IRecordValidator ValidatorStub()
         {
-            return Mock.Of<IRecordValidator>(v => v.Validate(It.IsAny<Record>()) == new RecordValidationResult());
+            return Mock.Of<IRecordValidator>(v => v.Validate(It.IsAny<Record>()) == new ValidationResult<Record>());
         }
 
         /// <summary>
@@ -283,7 +283,7 @@ namespace Catalogue.Data.Write
         /// </summary>
         IRecordValidator FailingValidatorStub()
         {
-            var r = new RecordValidationResult();
+            var r = new ValidationResult<Record>();
             r.Errors.Add("Don't be silly!");
             return Mock.Of<IRecordValidator>(v => v.Validate(It.IsAny<Record>()) == r);
         }

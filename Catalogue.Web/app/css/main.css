@@ -309,7 +309,7 @@ label {
   margin-bottom: 4px;
   margin-right: 4px;
 }
-form .ng-dirty.ng-invalid {
+form .ng-invalid {
   border: 1px solid #ff1493;
   background-color: #f9f2f4;
 }

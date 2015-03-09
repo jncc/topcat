@@ -39,8 +39,7 @@ namespace Catalogue.Web.Controllers.Vocabularies
         {
             var result =  service.Insert(vocab);
 
-            if (result.Success)
-                db.SaveChanges();
+            if (result.Success) db.SaveChanges();
 
             return result;
         }
