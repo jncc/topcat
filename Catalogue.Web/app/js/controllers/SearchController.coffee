@@ -1,6 +1,6 @@
 ﻿angular.module('app.controllers').controller 'SearchController',
     
-    ($scope, $rootScope, $location, $http, $timeout) ->
+    ($scope, $rootScope, $location, $http, $timeout, $q) ->
         
         # slightly hacky way of triggering animations on startup to work around
         # angular skipping the initial animation - set app.starting to true for 500ms
@@ -19,7 +19,6 @@
             #$location.search('n', $scope.query.n)
         
         queryRecords = (query) ->
-            $scope.busy.start()
             $http.get('../api/search?' + $.param query, true)
                 .success (result) ->
                     #console.log query
@@ -28,29 +27,32 @@
                     if angular.equals result.query, query
                         $scope.result = result
                 .error (e) -> $scope.notifications.add 'Oops! ' + e.message
-                .finally   -> $scope.busy.stop()
         
         queryKeywords = (query) ->
-            if query.q
-                $scope.busy.start()
+            if query.q # don't want to query server with empty query
                 $http.get('../api/keywords?q=' + query.q)
-                    .success (result) ->
-                        $scope.keywordSuggestions = result
+                    .success (result) -> $scope.keywordSuggestions = result
                     .error (e) -> $scope.notifications.add 'Oops! ' + e.message
-                    .finally   -> $scope.busy.stop()
-             else
-                $scope.keywordSuggestions = {}
+            else
+                $q.defer() # return an empty promise
         
         # called whenever the $scope.query object changes
-        # also called explicitly from search button
+        # (also called explicitly from search button)
         $scope.doSearch = (query) ->
             updateUrl query
             if query.q or query.k[0]
-                queryKeywords query
-                queryRecords query
+                $scope.busy.start()
+                keywordsPromise = queryKeywords query
+                recordsPromise  = queryRecords query
+                # when all queries complete
+                $q.all [keywordsPromise, recordsPromise]
+                    .finally ->
+                        $scope.busy.stop()
+                        if !$scope.result.query.q
+                            $scope.keywordSuggestions = {}
             else
-                $scope.result = {}
                 $scope.keywordSuggestions = {}
+                $scope.result = {}
                 
         blankQuery = ->
             q: '',

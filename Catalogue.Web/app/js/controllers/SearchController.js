@@ -1,7 +1,7 @@
 ﻿(function() {
   var __indexOf = [].indexOf || function(item) { for (var i = 0, l = this.length; i < l; i++) { if (i in this && this[i] === item) return i; } return -1; };
 
-  angular.module('app.controllers').controller('SearchController', function($scope, $rootScope, $location, $http, $timeout) {
+  angular.module('app.controllers').controller('SearchController', function($scope, $rootScope, $location, $http, $timeout, $q) {
     var blankQuery, parseQuerystring, queryKeywords, queryRecords, updateUrl;
     $scope.app = {
       starting: true
@@ -17,39 +17,41 @@
       return $location.search('k', query.k);
     };
     queryRecords = function(query) {
-      $scope.busy.start();
       return $http.get('../api/search?' + $.param(query, true)).success(function(result) {
         if (angular.equals(result.query, query)) {
           return $scope.result = result;
         }
       }).error(function(e) {
         return $scope.notifications.add('Oops! ' + e.message);
-      })["finally"](function() {
-        return $scope.busy.stop();
       });
     };
     queryKeywords = function(query) {
       if (query.q) {
-        $scope.busy.start();
         return $http.get('../api/keywords?q=' + query.q).success(function(result) {
           return $scope.keywordSuggestions = result;
         }).error(function(e) {
           return $scope.notifications.add('Oops! ' + e.message);
-        })["finally"](function() {
-          return $scope.busy.stop();
         });
       } else {
-        return $scope.keywordSuggestions = {};
+        return $q.defer();
       }
     };
     $scope.doSearch = function(query) {
+      var keywordsPromise, recordsPromise;
       updateUrl(query);
       if (query.q || query.k[0]) {
-        queryKeywords(query);
-        return queryRecords(query);
+        $scope.busy.start();
+        keywordsPromise = queryKeywords(query);
+        recordsPromise = queryRecords(query);
+        return $q.all([keywordsPromise, recordsPromise])["finally"](function() {
+          $scope.busy.stop();
+          if (!$scope.result.query.q) {
+            return $scope.keywordSuggestions = {};
+          }
+        });
       } else {
-        $scope.result = {};
-        return $scope.keywordSuggestions = {};
+        $scope.keywordSuggestions = {};
+        return $scope.result = {};
       }
     };
     blankQuery = function() {
