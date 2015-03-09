@@ -36,8 +36,7 @@
 </div>
 
 <div class="search-keyword-suggestions" ng-show="keywordSuggestions[0]">
-    <span tc-tag class="tag" ng-repeat="k in keywordSuggestions" style="cursor: pointer;" ng-click="addKeywordToQuery(k)">
-        <span ng-style="{ 'background-color': hashStringToColor(k.vocab) }">&nbsp;</span>
+    <span tc-tag ng-repeat="k in keywordSuggestions" ng-click="addKeywordToQuery(k)" class="pointable">
         <blah ng-bind-html="k.value | highlight:query.q"></blah>
     </span>
 </div>

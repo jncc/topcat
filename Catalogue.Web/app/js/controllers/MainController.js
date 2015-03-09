@@ -1,5 +1,5 @@
 ﻿(function() {
-  angular.module('app.controllers', ['ui.bootstrap']).controller('MainController', function($scope, $rootScope, $timeout, Account, misc) {
+  angular.module('app.controllers', ['ui.bootstrap']).controller('MainController', function($scope, $rootScope, $timeout, Account) {
     var busyCount, notifications;
     busyCount = 0;
     $scope.busy = {
@@ -31,10 +31,9 @@
     Account.then(function(user) {
       return $scope.user = user;
     });
-    $rootScope.$on('$locationChangeStart', function() {
+    return $rootScope.$on('$locationChangeStart', function() {
       return $('.qtip').qtip('hide');
     });
-    return $scope.hashStringToColor = misc.hashStringToColor;
   });
 
   angular.module('filters').filter('highlight', function($sce) {

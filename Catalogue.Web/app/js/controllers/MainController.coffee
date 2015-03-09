@@ -1,6 +1,6 @@
 ﻿angular.module('app.controllers',['ui.bootstrap']).controller 'MainController',
 
-    ($scope, $rootScope, $timeout, Account, misc) ->
+    ($scope, $rootScope, $timeout, Account) ->
 
         # implement busy spinner feature
         busyCount = 0
@@ -26,9 +26,6 @@
         # don't know why qtip can't cope with this naturally but it leaves
         # tooltips hanging visible when the element has gone
         $rootScope.$on '$locationChangeStart', -> $('.qtip').qtip 'hide'
-
-        # utility function to be moved
-        $scope.hashStringToColor = misc.hashStringToColor
         
 # todo move this! used for hightlighting suggested keywords
 angular.module('filters').filter 'highlight', ($sce) -> 
