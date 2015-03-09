@@ -196,10 +196,15 @@ label {
 .tag:hover {
   background-color: #dddddd;
 }
-.tag > span {
+.tag > .vocabful-colour-edge {
   display: inline-block;
   width: 7px;
   margin-right: 2px;
+}
+.tag > .vocabless-colour-edge {
+  display: inline-block;
+  width: 0;
+  margin-right: 0.15em;
 }
 .tip {
   max-width: 100%;

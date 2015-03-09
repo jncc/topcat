@@ -64,21 +64,20 @@ module.directive 'tcQtipTitle', () ->
                     my: 'top center',
                     at: 'bottom center'        
 
-
-
 # widget for tags (keywords)
 module.directive 'tcTag', () ->
     link: (scope, elem, attrs) ->
         elem.addClass 'tag'
         # prepend a coloured edging strip to represent the vocab
-        if scope.k.vocab
-            span = angular.element '<span style="background-color:'
-                + hashStringToColour scope.k.vocab
-                + '">&nbsp;</span>'
-            elem.prepend span
+        edge = if scope.k.vocab
+            colour = hashStringToColour scope.k.vocab
+            angular.element '<span class="vocabful-colour-edge" style="background-color:' + colour + '">&nbsp;</span>'
+        else
+            angular.element '<span class="vocabless-colour-edge"></span>'
+        elem.prepend edge
         # call qtip with options constructed from the defaults
         $(elem).qtip $.extend {}, qtipDefaults,
-            content: text: scope.k.vocab
+            content: text: scope.k.vocab || "No vocabulary"
             position:
                 my: 'top center'
                 at: 'bottom center'
@@ -215,7 +214,6 @@ module.directive 'tcDropdown', ($timeout) ->
         $scope.hide = false
         this.activate = (item) -> $scope.active = item
         
-
 # todo split this file up!
                  
 # helper function to create a colour from a vocab string

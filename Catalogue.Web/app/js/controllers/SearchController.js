@@ -93,7 +93,7 @@
     };
     $scope.keywordToString = function(k) {
       var s;
-      s = k.vocab + '/' + k.value;
+      s = k.vocab ? k.vocab + '/' + k.value : k.value;
       return s.replace('http://', '');
     };
     $scope.keywordFromString = function(s) {

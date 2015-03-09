@@ -37,7 +37,7 @@
 
 <div class="search-keyword-suggestions" ng-show="keywordSuggestions[0]">
     <span tc-tag ng-repeat="k in keywordSuggestions" ng-click="addKeywordToQuery(k)" class="pointable">
-        <blah ng-bind-html="k.value | highlight:query.q"></blah>
+        <span ng-bind-html="k.value | highlight:query.q"></span>
     </span>
 </div>
 
@@ -59,8 +59,7 @@
         <!-- <span ng-show="result.speed">in {{(result.speed / 1000) | number:2}} seconds</span>-->
         <span ng-show="result.query.k[0]">
             tagged
-            <span tc-tag class="tag" ng-repeat="s in result.query.k" ng-init="k = keywordFromString(s)">
-                <span ng-style="{ 'background-color': hashStringToColor(k.vocab) }">&nbsp;</span>
+            <span tc-tag ng-repeat="s in result.query.k" ng-init="k = keywordFromString(s)">
                 {{k.value}}
                 <span class="glyphicon glyphicon-remove" ng-click="removeKeywordFromQuery(s)" tc-tip title="Remove"></span>
             </span>
@@ -104,8 +103,7 @@
             <span ng-bind-html="r.snippet"></span>
         </div>
         <div class="search-tags">
-            <span tc-tag class="tag" ng-repeat="k in r.keywords" style="cursor: pointer;" tc-tip ng-click="addKeywordToQuery(k)">
-                <span ng-style="{ 'background-color': hashStringToColor(k.vocab) }">&nbsp;</span>
+            <span tc-tag ng-repeat="k in r.keywords" tc-tip ng-click="addKeywordToQuery(k)" class="pointable">
                 {{ k.value }}
             </span>
         </div>

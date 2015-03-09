@@ -97,6 +97,7 @@ namespace Catalogue.Web.Controllers
                                     },
                                 Keywords = r.Gemini.Keywords
                                             .OrderBy(k => k.Vocab != "http://vocab.jncc.gov.uk/jncc-broad-category") // show first
+                                            .ThenBy(k => k.Vocab.IsBlank())
                                             .ThenBy(k => k.Vocab).ToList(),
                                 TopCopy = r.TopCopy,
                                 Date = r.Gemini.DatasetReferenceDate,

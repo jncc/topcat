@@ -100,7 +100,7 @@
         
         # keyword helper functions            
         $scope.keywordToString = (k) ->
-            s = k.vocab + '/' + k.value
+            s = if k.vocab then k.vocab + '/' + k.value else k.value
             s.replace 'http://', ''
         $scope.keywordFromString = (s) -> 
             if (s.indexOf '/') == -1

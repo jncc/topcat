@@ -123,8 +123,7 @@
                 <!-- keywords -->
               
                 <div class="editor-keywords form-group">
-                    <span ng-repeat="k in form.gemini.keywords" tc-tag class="tag">
-                        <span ng-style="{ 'background-color': hashStringToColor(k.vocab) }">&nbsp;</span>
+                    <span tc-tag ng-repeat="k in form.gemini.keywords">
                         {{ k.value }}
                     </span>
                     <button id="keywordsBtn" class="btn btn-sm btn-dialogue" tc-tip title="Edit tags (keywords)"
@@ -466,8 +465,7 @@
                                             <span>No Extents Provided</span>
                                         </div>
                                         <div style="float:left;" ng-if="form.gemini.extent.length > 0">
-                                            <span ng-repeat="extent in form.gemini.extent" title="{{extent.authority}}" tc-focus-tip  tc-tag class="ng-scope ng-binding tag">
-                                                <span ng-style="{ 'background-color': hashStringToColor(extent.authority) }">&nbsp;</span>
+                                            <span ng-repeat="extent in form.gemini.extent" title="{{extent.authority}}" tc-focus-tip  class="tag">
                                                 {{ extent.authority }} - {{ extent.code }}
                                             </span>                 
                                         </div>

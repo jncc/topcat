@@ -111,16 +111,13 @@
   module.directive('tcTag', function() {
     return {
       link: function(scope, elem, attrs) {
-        var colour, span;
+        var colour, edge;
         elem.addClass('tag');
-        if (scope.k.vocab) {
-          colour = hashStringToColour(scope.k.vocab);
-          span = angular.element('<span style="background-color:' + colour + '">&nbsp;</span>');
-          elem.prepend(span);
-        }
+        edge = scope.k.vocab ? (colour = hashStringToColour(scope.k.vocab), angular.element('<span class="vocabful-colour-edge" style="background-color:' + colour + '">&nbsp;</span>')) : angular.element('<span class="vocabless-colour-edge"></span>');
+        elem.prepend(edge);
         return $(elem).qtip($.extend({}, qtipDefaults, {
           content: {
-            text: scope.k.vocab
+            text: scope.k.vocab || "No vocabulary"
           },
           position: {
             my: 'top center',
