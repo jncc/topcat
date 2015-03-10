@@ -1,7 +1,7 @@
-(function() {
+﻿(function() {
   var fakeValidationData, getDataFormatObj, getSecurityText, updateDataFormatObj;
 
-  angular.module('app.controllers').controller('EditorController', angular.module('app.controllers').controller('EditorController', function($scope, $http, $routeParams, $location, record, Record) {
+  angular.module('app.controllers').controller('EditorController', function($scope, $http, $routeParams, $location, record, Record) {
     $scope.lookups = {};
     $scope.lookups.currentDataFormat = {};
     $http.get('../api/topics').success(function(result) {
@@ -114,7 +114,7 @@
     return $scope.setKeyword = function($item, keyword) {
       return keyword.vocab = $item.vocab;
     };
-  }));
+  });
 
   getSecurityText = function(n) {
     switch (n) {
