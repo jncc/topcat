@@ -57,7 +57,7 @@
         </span>
         {{result.total || 0}} records
         <!-- <span ng-show="result.speed">in {{(result.speed / 1000) | number:2}} seconds</span>-->
-        <span ng-show="result.query.k[0]">
+        <span ng-show="result.query.k[0]" class="search-results-header-tagged">
             tagged
             <span tc-tag ng-repeat="s in result.query.k" ng-init="k = keywordFromString(s)">
                 {{k.value}}
@@ -123,11 +123,12 @@
 <div ng-show="!query.q && !query.k[0] && !app.starting" class="fade-in-with-delay">
     <div class="row">
         <div class="col-md-7 welcome">
-            <h2><b>Discover and organise</b> the data assets we hold as an organisation with <b>Topcat</b>.</h2>
+            <h1><b>Discover and organise</b> the data we hold at JNCC with <b>Topcat</b>, our new metadata catalogue</h1>
             <br />
-            <h3>Why are we building Topcat?</h3>
+            <h2>Why are we building Topcat?</h2>
             <ul>
                 <li>To give us a better foundation for our <b>evidence base</b>.</li>
+                <li>To help teams towards their <b>open data</b> responsibilities.</li>
                 <li>
                     To help us in our <b>daily work</b> to
                     <ul>
@@ -149,11 +150,10 @@
                     </ul>
                 </li>
                 <li>To satisfy external <b>quality requirements</b>.</li>
-                <li>To help teams towards their <b>open data</b> responsibilities.</li>
             </ul>
 
             <p>
-                There is a clear, common need in many teams that we can meet with a shared solution.
+                There is a clear need in many teams we can meet with a shared solution.
                 Please check out our roadmap (right) and get in touch
                 at <a href="mailto:Data.Services@jncc.gov.uk">Data.Services@jncc.gov.uk</a> if you want
                 to help influence the project.
@@ -165,25 +165,27 @@
                 <h2>Roadmap</h2>
                 <ul>
                     <li>Google-style search <span class="label label-success">Done</span></li>
+                    <li>Super-duper keyword filtering <span class="label label-success">Done</span></li>
                     <li>Authenticate without passwords <span class="label label-success">Done</span></li>
-                    <li>Import MESH metadata <span class="label label-success">Done</span></li>
-                    <li>Import Pressures metadata <span class="label label-danger">In progress</span></li>
                     <li>Metadata editor <span class="label label-danger">In progress</span></li>
-                    <li>Keyword selection <span class="label label-danger">In progress</span></li>
-                    <li>Validation <span class="label label-success">Done</span></li>
-                    <li>Export <span class="label label-success">Done</span></li>
+                    <li>Import MESH catalogue <span class="label label-success">Done</span></li>
+                    <li>Import Human Activities catalogue <span class="label label-danger">In progress</span></li>
+                    <li>Import Publications catalogue <span class="label label-danger">In progress</span></li>
+                    <li>Validation (basic and Gemini) <span class="label label-success">Done</span></li>
+                    <li>Export / download <span class="label label-success">Done</span></li>
                 </ul>
                 <h3>Wishlist</h3>
                 <ul>
+                    <li>Keyword browser</li>
                     <li>Spatial search</li>
                     <li>Bounding box editor UI</li>
                     <li>Advanced search</li>
-                    <li>Vocabularies<span class="label label-danger">In progress</span></li>
+                    <li>Vocabularies <span class="label label-danger">In progress</span></li>
                     <li>Known locations &amp; bounding boxes</li>
                 </ul>
             </div>
 
-            <h3>Full text search <span class="label label-default">New</span></h3>
+            <h3>Search MESH <span class="label label-default">New</span></h3>
             <p>
                 You can currently search all the datasets from
                 the Mapping European Seabed Habitats (<a href="http://jncc.defra.gov.uk/page-1583">MESH</a>)

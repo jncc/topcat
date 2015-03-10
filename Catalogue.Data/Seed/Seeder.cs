@@ -238,6 +238,7 @@ namespace Catalogue.Data.Seed
                         {
                             new VocabularyKeyword { Value = "Seabed Habitat Maps" },
                             new VocabularyKeyword { Value = "Marine Human Activities" },
+                            new VocabularyKeyword { Value = "Publications" },
                         }
                 };
             db.Store(jnccCategories);

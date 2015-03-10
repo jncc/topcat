@@ -28,6 +28,7 @@
 .hoverable-glyphicon:hover {
   color: #444444;
 }
+h1,
 h2,
 h3 {
   color: #888;
@@ -138,6 +139,12 @@ label {
   font-size: 75%;
   color: #666666;
   cursor: pointer;
+}
+.search-results-header .search-results-header-tagged > span:first-child {
+  margin-left: 0.2em;
+}
+.search-results-header .search-results-header-tagged > span:last-child {
+  margin-right: 0.2em;
 }
 .search-result {
   margin: 1.2em 0;

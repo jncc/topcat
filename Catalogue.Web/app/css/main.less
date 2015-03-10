@@ -54,7 +54,7 @@ html { overflow-y: scroll; }
     &:hover { color: @darker; }
 }
 
-h2, h3 { color: #888; }
+h1, h2, h3 { color: #888; }
 
 hr {
     margin-top: 0.9em;
@@ -170,9 +170,6 @@ label {
     margin-bottom: 1.5em;
 }
 
-.search-results-export-button {
-}
-
 .search-results-view-picker {
     button span {
         font-size:smaller;
@@ -184,6 +181,11 @@ label {
         font-size: 75%;
         color: @dark;
         .pointable;
+    }
+    .search-results-header-tagged {
+        // make the spacing look better
+        >span:first-child { margin-left:0.2em; }
+        >span:last-child { margin-right:0.2em; }
     }
 }
 
