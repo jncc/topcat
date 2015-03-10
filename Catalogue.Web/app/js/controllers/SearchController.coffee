@@ -86,14 +86,14 @@
         $scope.querystring = -> $.param $scope.query, true # true means traditional serialization (no square brackets for arrays)
 
         $scope.addKeywordToQuery = (keyword) ->
-            k = $scope.keywordToString(keyword)
-            # for usability, if this is the first keyword added, clear the current query
-            if $scope.query.k.length == 0
-                $scope.query = $.extend {}, blankQuery(), { 'k': [k] }
-            else if k in $scope.query.k
+            s = $scope.keywordToString(keyword)
+            if s in $scope.query.k
                 $scope.notifications.add 'Your query already contains this keyword'
             else
-                $scope.query.k.push k
+                # for usability, when keywords are added, clear the current query
+                k = $scope.query.k
+                k.push s
+                $scope.query = $.extend {}, blankQuery(), { 'k': k }
                 
         $scope.removeKeywordFromQuery = (keyword) ->
             $scope.query.k.splice ($.inArray keyword, $scope.query.k), 1

@@ -76,16 +76,16 @@
       return $.param($scope.query, true);
     };
     $scope.addKeywordToQuery = function(keyword) {
-      var k;
-      k = $scope.keywordToString(keyword);
-      if ($scope.query.k.length === 0) {
-        return $scope.query = $.extend({}, blankQuery(), {
-          'k': [k]
-        });
-      } else if (__indexOf.call($scope.query.k, k) >= 0) {
+      var k, s;
+      s = $scope.keywordToString(keyword);
+      if (__indexOf.call($scope.query.k, s) >= 0) {
         return $scope.notifications.add('Your query already contains this keyword');
       } else {
-        return $scope.query.k.push(k);
+        k = $scope.query.k;
+        k.push(s);
+        return $scope.query = $.extend({}, blankQuery(), {
+          'k': k
+        });
       }
     };
     $scope.removeKeywordFromQuery = function(keyword) {
