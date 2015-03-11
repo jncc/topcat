@@ -1,6 +1,6 @@
 ﻿angular.module('app.controllers',['ui.bootstrap']).controller 'MainController',
 
-    ($scope, $rootScope, $timeout, Account) ->
+    ($scope, $rootScope, $timeout, $cookies, Account) ->
 
         # implement busy spinner feature
         busyCount = 0
@@ -26,6 +26,11 @@
         # don't know why qtip can't cope with this naturally but it leaves
         # tooltips hanging visible when the element has gone
         $rootScope.$on '$locationChangeStart', -> $('.qtip').qtip 'hide'
+        
+        probablyChrome = navigator.userAgent.toLowerCase().indexOf('chrome') isnt -1
+        if not probablyChrome
+            
+            $scope.notifications.add 'Topcat works best on Chrome!'
         
 # todo move this! used for hightlighting suggested keywords
 angular.module('filters').filter 'highlight', ($sce) -> 

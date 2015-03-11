@@ -1,6 +1,6 @@
 ﻿(function() {
-  angular.module('app.controllers', ['ui.bootstrap']).controller('MainController', function($scope, $rootScope, $timeout, Account) {
-    var busyCount, notifications;
+  angular.module('app.controllers', ['ui.bootstrap']).controller('MainController', function($scope, $rootScope, $timeout, $cookies, Account) {
+    var busyCount, notifications, probablyChrome;
     busyCount = 0;
     $scope.busy = {
       start: function() {
@@ -31,9 +31,13 @@
     Account.then(function(user) {
       return $scope.user = user;
     });
-    return $rootScope.$on('$locationChangeStart', function() {
+    $rootScope.$on('$locationChangeStart', function() {
       return $('.qtip').qtip('hide');
     });
+    probablyChrome = navigator.userAgent.toLowerCase().indexOf('chrome') !== -1;
+    if (!probablyChrome) {
+      return $scope.notifications.add('Topcat works best on Chrome!');
+    }
   });
 
   angular.module('filters').filter('highlight', function($sce) {
