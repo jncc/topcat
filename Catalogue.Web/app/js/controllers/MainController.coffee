@@ -27,12 +27,18 @@
         # tooltips hanging visible when the element has gone
         $rootScope.$on '$locationChangeStart', -> $('.qtip').qtip 'hide'
         
-        probablyChrome = navigator.userAgent.toLowerCase().indexOf('chrome') isnt -1
-        if not probablyChrome
-            
-            $scope.notifications.add 'Topcat works best on Chrome!'
-        
-# todo move this! used for hightlighting suggested keywords
+        # a hopefully temporary message while jncc still uses ie8
+        # this will break when we next update angular!
+        # see https://docs.angularjs.org/api/ngCookies/service/$cookies
+        browserCheckedForSupport = $cookies.browserCheckedForSupport
+        if not browserCheckedForSupport
+            $cookies.browserCheckedForSupport = true
+            ua = navigator.userAgent.toLowerCase()
+            supported = ua.indexOf('chrome') > 0
+            if not supported
+                $timeout ( -> $scope.notifications.add 'Heads up! Topcat currently works best in Chrome'), 3000
+
+# todo move this! used for highlighting suggested keywords
 angular.module('filters').filter 'highlight', ($sce) -> 
     (text, q) ->
         regex = new RegExp '(' + q + ')', 'gi'
