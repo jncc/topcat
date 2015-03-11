@@ -2,6 +2,7 @@
     'ngAnimate',
     'ngRoute',
     'ngSanitize',
+    'ngCookies',
     'app.utilities',
     'app.directives',
     'app.services',
@@ -12,16 +13,11 @@
 angular.module 'app.utilities', []
 angular.module 'app.directives', []
 angular.module 'app.services', ['ngResource']
-angular.module 'app.controllers', []
+angular.module 'app.controllers', ['ngCookies']
 
-angular.module('filters', []).filter('camelCaseFilter', () -> 
-    (input) -> 
-        input.charAt(0).toUpperCase() + input.substr(1).replace(/[A-Z]/g, ' $&')
-)
-
-module.config ['$routeProvider', ($routeProvider) ->
+module.config ($routeProvider) ->
     $routeProvider
-        .when '/'
+        .when '/',
             controller:     'SearchController',
             templateUrl:    'views/search/search.html',
             reloadOnSearch: false
@@ -50,7 +46,12 @@ module.config ['$routeProvider', ($routeProvider) ->
             resolve:        'vocab': (VocabLoader) -> VocabLoader()
         .otherwise
             redirectTo:     '/'
-    ]
+
+# todo erm, move or remove this
+angular.module('filters', []).filter('camelCaseFilter', () -> 
+    (input) -> 
+        input.charAt(0).toUpperCase() + input.substr(1).replace(/[A-Z]/g, ' $&')
+)
 
 module.animation '.my-special-animation', ->
   enter: (element, done) ->

@@ -265,6 +265,7 @@
       <DependentUpon>utilities.coffee</DependentUpon>
     </Content>
     <Content Include="app\lib\angular-1.2.28\angular-animate.min.js" />
+    <Content Include="app\lib\angular-1.2.28\angular-cookies.min.js" />
     <Content Include="app\lib\angular-1.2.28\angular-resource.min.js" />
     <Content Include="app\lib\angular-1.2.28\angular-route.min.js" />
     <Content Include="app\lib\angular-1.2.28\angular-sanitize.min.js" />
@@ -499,6 +500,19 @@
   <ItemGroup>
     <Content Include="app\js\utilities.min.js.map">
       <DependentUpon>utilities.min.js</DependentUpon>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="app\lib\angular-1.2.28\angular-cookies.min.js.map" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="app\js\app.js.map">
+      <DependentUpon>app.js</DependentUpon>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="app\js\app.min.js.map">
+      <DependentUpon>app.min.js</DependentUpon>
     </Content>
   </ItemGroup>
   <ItemGroup>
