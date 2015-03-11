@@ -1,10 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Linq;
 using Catalogue.Data.Analyzers;
-using Catalogue.Data.Model;
 using Catalogue.Gemini.Model;
 using Raven.Abstractions.Indexing;
 using Raven.Client.Indexes;

@@ -54,7 +54,7 @@ html { overflow-y: scroll; }
     &:hover { color: @darker; }
 }
 
-h2, h3 { color: #888; }
+h1, h2, h3 { color: #888; }
 
 hr {
     margin-top: 0.9em;
@@ -158,6 +158,37 @@ label {
 // search
 // ------
 
+.search-box {
+    margin-bottom: 3em;
+}
+    
+.search-advanced {
+    margin-top: 1em;
+}
+
+.search-keyword-suggestions {
+    margin-bottom: 1.5em;
+}
+
+.search-results-view-picker {
+    button span {
+        font-size:smaller;
+    }
+}
+
+.search-results-header {
+    .glyphicon-remove {
+        font-size: 75%;
+        color: @dark;
+        .pointable;
+    }
+    .search-results-header-tagged {
+        // make the spacing look better
+        >span:first-child { margin-left:0.2em; }
+        >span:last-child { margin-right:0.2em; }
+    }
+}
+
 .search-result {
     a {
         text-decoration: underline;
@@ -189,8 +220,18 @@ label {
         .search-date {
             font-size: larger;
             color: @dark;
-            margin-left: 0.2em;
         }
+    }
+
+    .search-divider-bullet {
+        font-weight: bold;
+        color: @lesspale;
+        margin: 0 0.15em 0 0.25em;
+    }
+
+    .search-resource-type {
+        font-weight: bold;
+        color: #888;
     }
 
     .search-tags {
@@ -212,10 +253,15 @@ label {
     &:hover {
         background-color: @lesspale;
     }
-    > span {
+    > .vocabful-colour-edge {
         display: inline-block;
         width: 7px;
         margin-right: 2px;
+    }
+    > .vocabless-colour-edge {
+        display: inline-block;
+        width: 0;
+        margin-right: 0.15em;
     }
 }
 

@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Catalogue.Data.Analyzers;
 using Catalogue.Gemini.Model;
+using Lucene.Net.Analysis.Standard;
 using Raven.Abstractions.Indexing;
 using Raven.Client.Indexes;
 
@@ -48,7 +49,9 @@ namespace Catalogue.Data.Indexes
 
             Stores.Add(x => x.Vocab, FieldStorage.Yes);
             Stores.Add(x => x.Value, FieldStorage.Yes);
-            Analyze(x => x.ValueN, typeof(CustomKeywordAnalyzer).AssemblyQualifiedName); 
+            Analyze(x => x.Value, typeof(StandardAnalyzer).AssemblyQualifiedName);
+            Analyze(x => x.ValueN, typeof(CustomKeywordAnalyzer).AssemblyQualifiedName);
+            Index(x => x.Value, FieldIndexing.Analyzed);
         }
     }
 }

@@ -2,15 +2,15 @@
 using System.Collections.Generic;
 using Catalogue.Gemini.Model;
 
-namespace Catalogue.Web.Controllers.Search
+namespace Catalogue.Web.Controllers
 {
-    public class SearchOutputModel
+    public class RecordQueryOutputModel
     {
         public int Total { get; set; }
         public List<ResultOutputModel> Results { get; set; }
         public long Speed { get; set; }
 
-        public QueryOutputModel Query { get; set; }
+        public RecordQueryInputModel Query { get; set; }
     }
 
     public class ResultOutputModel
@@ -22,17 +22,10 @@ namespace Catalogue.Web.Controllers.Search
         public List<MetadataKeyword> Keywords { get; set; }
         public bool TopCopy { get; set; }
         public string Date { get; set; }
+        public string ResourceType { get; set; }
 
         public string TemporalExtentFrom { get; set; }
         public string TemporalExtentTo { get; set; }
-    }
-
-    public class QueryOutputModel
-    {
-        public string Q { get; set; }
-        public int P { get; set; }
-        public int N { get; set; }
-        public string[] K { get; set; }
     }
 
     public class FormatOutputModel

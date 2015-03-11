@@ -4,126 +4,145 @@
 <br />
 
 <div class="row">
-    <div class="col-md-7 col-md-offset-2">
-        <form>
-            <div class="form-group">
-                <div class="input-group">
-                
-                    <script type="text/ng-template" id="keywordTemplate.html">
-                        <a>
-                            <span bind-html-unsafe="match.model.vocab"></span>
-                            <br/>
-                            <span bind-html-unsafe="match.model.value | typeaheadHighlight:query"></span>
-                        </a>
-                    </script>
-                        
-                    <span ng-show="activeSearchType == searchType.fulltext">
-                        <input ng-model="query.q" type="text" class="form-control" ng-change="doSearch()" autofocus tc-debounce />
-                    </span>
-                    <span ng-show="activeSearchType == searchType.keyword">
-                        <input type="text" 
-                               ng-model="keyword" 
-                               typeahead-on-select="onKeywordSelect($item, $model, $label)"
-                               placeholder="Keyword" 
-                               typeahead-template-url="keywordTemplate.html"  
-                               typeahead-loading="loadingKeys" 
-                               typeahead="keyword.value for keyword in getKeywords($viewValue)" 
-                               tc-debounce
-                               class="form-control" 
-                            />
-                    </span>
+    <div class="col-sm-7 col-sm-offset-2">
+        <div class="search-box input-group">
 
-                    <span class="input-group-btn">
-                        <button class="btn btn-primary" type="button" style="width: 60px">
-                            <span class="glyphicon glyphicon-search"></span>
-                        </button>
-                    </span>
-                </div>
-                <div class="row text-center ">
-                    <label>
-                        <input type="radio" value="{{searchType.fulltext}}"  ng-model="activeSearchType" ng-change="switchSearchType()"> Text
-                        <input type="radio" value="{{searchType.keyword}}" ng-model="activeSearchType" ng-change="switchSearchType()"> Keywords
-                    </label>
-                </div>
-            </div>
-        </form>
-    </div>
-    <div class="col-md-1">
-        <div class="form-group">
-                
-            <a href="#editor/00000000-0000-0000-0000-000000000000" class="btn btn-default" tc-tip title="Add a record" style="width: 60px">
-                <span class="glyphicon glyphicon-plus"></span>
-            </a>
-                
+            <span>
+                <input ng-model="query.q" type="text" class="form-control" autofocus tc-debounce />
+            </span>
+
+            <span class="input-group-btn">
+                <button class="btn btn-primary" type="button" style="width: 60px" ng-click="doSearch(query)">
+                    <span class="glyphicon glyphicon-search"></span>
+                </button>
+            </span>
         </div>
-    
+
+    </div>
+    <!--    <div class="col-md-1">-->
+    <!--        <div class="form-inline">-->
+    <!--            <button ng-click="advanced = !advanced" class="btn btn-default" tc-tip title="Advanced search options" style="width: 60px">-->
+    <!--                <span class="glyphicon" ng-class="advanced ? 'glyphicon-chevron-up' : 'glyphicon-chevron-down'"></span>-->
+    <!--            </button>-->
+    <!--        </div>-->
+    <!--    </div>-->
+    <div class="col-sm-2">
+        <div class="form-inline">
+            <a href="#editor/00000000-0000-0000-0000-000000000000" class="btn btn-default" tc-tip title="Add a record" style="width: 60px">
+                <span class="glyphicon glyphicon-plus-sign"></span>
+            </a>
+        </div>
     </div>
 </div>
 
-<br />
-<br />
+<div class="search-keyword-suggestions" ng-show="keywordSuggestions[0]">
+    <span tc-tag ng-repeat="k in keywordSuggestions" ng-click="addKeywordToQuery(k)" class="pointable">
+        <span ng-bind-html="k.value | highlight:query.q"></span>
+    </span>
+</div>
 
+<!--<div class="row search-advanced" ng-show="advanced">-->
+<!--    <div class="col-md-7 col-md-offset-2">-->
+<!--        <div class="well well-sm">-->
+<!--            advanced search options might appear here...?-->
+<!--        </div>-->
+<!--    </div>-->
+<!--</div>-->
 
-<div ng-show="query.q">
-    {{query.p * 25 || 0}} to {{result.results.length + (query.p * 25) || 0}}, of {{result.total || 0}} results
-    <span ng-show="result.speed">{{(result.speed / 1000) | number:2}} seconds.</span>
+<div ng-show="result.query" class="search-results-header layout-row">
+    <div class="layout-col">
+        Found
+        <span ng-show="result.total > result.results.length">
+            {{result.query.p * 25 || 1}} to {{result.results.length + (query.p * 25) || 0}} of
+        </span>
+        {{result.total || 0}} records
+        <!-- <span ng-show="result.speed">in {{(result.speed / 1000) | number:2}} seconds</span>-->
+        <span ng-show="result.query.k[0]" class="search-results-header-tagged">
+            tagged
+            <span tc-tag ng-repeat="s in result.query.k" ng-init="k = keywordFromString(s)">
+                {{k.value}}
+                <span class="glyphicon glyphicon-remove" ng-click="removeKeywordFromQuery(s)" tc-tip title="Remove"></span>
+            </span>
+        </span>
+        <span ng-show="result.query.q">
+            matching <b>{{result.query.q}}</b>
+            <span ng-show="result.query.k[0]" class="glyphicon glyphicon-remove" ng-click="query.q = ''" tc-tip title="Remove"></span>
+        </span>
+    </div>
+    <!-- results view / export buttons -->
+    <div class="layout-col" ng-show="result.total > 0" style="text-align: right;">
+        <div class="search-results-view-picker btn-group" role="group">
+            <button class="btn" tc-tip title="List view" style="width: 60px" ng-click="resultsView = 'list'" ng-class="{ 'btn-primary': resultsView == 'list', 'btn-default': resultsView != 'list' }">
+                <span class="glyphicon glyphicon-align-left"></span>
+            </button>
+            <button class="btn btn-default" tc-tip title="Grid view" style="width: 60px" ng-click="notifications.add('Sorry, grid view isn\'t implemented yet!')">
+                <span class="glyphicon glyphicon-list"></span>
+            </button>
+        </div>
+        <a class="btn btn-default" role="button" tc-tip title="Export" style="width: 60px" ng-href="../api/export?{{querystring()}}">
+            <span class="glyphicon glyphicon-cloud-download"></span>
+        </a>
+    </div>
     <hr />
 </div>
 
 <div ng-repeat="r in result.results" class="layout-row search-result">
     <div class="layout-col search-format">
-        <span class="dark glyphicon {{r.format.glyph}}" title="{{r.format.group}} "></span>
-        <!--<span class="label label-default">{{($index + (25*(query.p)))+1}}</span>-->
+        <span class="dark glyphicon {{r.format.glyph}}" tc-tip title="{{r.format.group}}"></span>
     </div>
     <div class="layout-col">
         <div class="search-title">
             <a ng-href="#/editor/{{r.id}}" ng-bind-html="r.title"></a>
-            <span class="search-date" ng-show="r.date">{{r.date.substring(0, 4)}}</span><!-- json handles dates as strings, so  can't use getUTCFullYear()-->
+            <span class="search-divider-bullet">&bull;</span>
+            <span class="search-date" ng-show="r.date">{{r.date.substring(0, 4)}}</span>
             <span tc-top-copy-icon ng-show="r.topCopy" title="Top copy"></span>
         </div>
-        <div ng-bind-html="r.snippet"></div>
+        <div>
+            <span class="search-resource-type">{{r.resourceType }}</span>
+            <span class="search-divider-bullet">&bull;</span>
+            <span ng-bind-html="r.snippet"></span>
+        </div>
         <div class="search-tags">
-            <span tc-tag class="tag" ng-repeat="k in r.keywords" style="cursor: pointer;" tc-tip ng-click="tagSearch(k)">
-                <span ng-style="{ 'background-color': hashStringToColor(k.vocab) }">&nbsp;<!--<span class="glyphicon glyphicon-info-sign"></span>--></span>
+            <span tc-tag ng-repeat="k in r.keywords" tc-tip ng-click="addKeywordToQuery(k)" class="pointable">
                 {{ k.value }}
             </span>
-            
         </div>
-        
     </div>
 </div>
 
-<div class="text-center" ng-show="result.total > result.results.length">
+<!--<div class="text-center" ng-show="result.total > result.results.length">-->
+<!--    <ul class="pagination">-->
+<!--        $1$   <li class="disabled"><a href="">&laquo;</a></li>#1#-->
+<!--        <li style="cursor: pointer;" ng-repeat="n in range(0,maxPages(result.total, 25))" ng-class="(n===query.p+1) ? 'active' : ''">-->
+<!--            <span ng-click="setPage(n)"><span ng-bind="n">n</span></span>-->
+<!--        </li>-->
+<!--        $1$<li><span href="#">&raquo;</span></li>#1#-->
+<!--    </ul>-->
+<!--</div>-->
 
-    <ul class="pagination">
-     <!--   <li class="disabled"><a href="">&laquo;</a></li>-->
-    <li style="cursor: pointer;" ng-repeat="n in range(0,maxPages(result.total, 25))" ng-class="(n===query.p+1) ? 'active' : ''">
-            <span ng-click="nextPage(n)"><span ng-bind="n">n</span></span>
-        </li>
-        <!--<li><span href="#">&raquo;</span></li>-->
-    </ul>
-</div>
-
-<div ng-show="!query.q && query.k[0] == '' && !app.starting" class="fade-in-with-delay">
+<div ng-show="!query.q && !query.k[0] && !app.starting" class="fade-in-with-delay">
     <div class="row">
         <div class="col-md-7 welcome">
-            <h2><b>Discover and organise</b> the data assets we hold as an organisation with <b>Topcat</b>.</h2>
+            <h1><b>Discover and organise</b> the data we hold at JNCC with <b>Topcat</b>, our new metadata catalogue</h1>
             <br />
-            <h3>Why are we building Topcat?</h3>
+            <h2>Why are we building Topcat?</h2>
             <ul>
                 <li>To give us a better foundation for our <b>evidence base</b>.</li>
-                <li>To help us in our <b>daily work</b> to
+                <li>To help teams towards their <b>open data</b> responsibilities.</li>
+                <li>
+                    To help us in our <b>daily work</b> to
                     <ul>
-                        <li>know <b>which</b> resources we've got</li>
-                        <li><b>find</b> the resources we need</li>
+                        <li>know <b>what</b> data we've got</li>
+                        <li><b>find</b> the data we need</li>
                         <li><b>share</b> knowledge &ndash; between current and future staff</li>
                         <li>better <b>organise</b> our data resources</li>
                         <li>serve <b>external</b> requests</li>
-                        <li>avoid <b>asking</b> other organisations for the same data more than once</li> 
+                        <li>avoid <b>asking</b> other organisations for the same data more than once</li>
                         <li>solve practical problems around dataset <b>licensing</b> and terms of use.</li>
                     </ul>
                 </li>
-                <li>To standardise our metadata
+                <li>
+                    To standardise our metadata
                     <ul>
                         <li>to make <b>contract</b> deliverables easier to specify</li>
                         <li>for sharing metadata with other <b>organisations</b></li>
@@ -131,13 +150,14 @@
                     </ul>
                 </li>
                 <li>To satisfy external <b>quality requirements</b>.</li>
-                <li>To help teams towards their <b>open data</b> responsibilities.</li>
             </ul>
-            
-            <p>There is a clear, common need in many teams that we can meet with a shared solution.
+
+            <p>
+                There is a clear need in many teams we can meet with a shared solution.
                 Please check out our roadmap (right) and get in touch
                 at <a href="mailto:Data.Services@jncc.gov.uk">Data.Services@jncc.gov.uk</a> if you want
-                to help influence the project.</p>
+                to help influence the project.
+            </p>
         </div>
         <div class="col-md-5 roadmap">
 
@@ -145,28 +165,32 @@
                 <h2>Roadmap</h2>
                 <ul>
                     <li>Google-style search <span class="label label-success">Done</span></li>
+                    <li>Super-duper keyword filtering <span class="label label-success">Done</span></li>
                     <li>Authenticate without passwords <span class="label label-success">Done</span></li>
-                    <li>Import MESH metadata <span class="label label-success">Done</span></li>
-                    <li>Import Pressures metadata <span class="label label-success">Done</span></li>
                     <li>Metadata editor <span class="label label-danger">In progress</span></li>
-                    <li>Keyword selection <span class="label label-danger">In progress</span></li>
-                    <li>Validation <span class="label label-danger">In progress</span></li>
-                    <li>Export <span class="label label-danger">In progress</span></li>
+                    <li>Import MESH catalogue <span class="label label-success">Done</span></li>
+                    <li>Import Human Activities catalogue <span class="label label-danger">In progress</span></li>
+                    <li>Import Publications catalogue <span class="label label-danger">In progress</span></li>
+                    <li>Validation (basic and Gemini) <span class="label label-success">Done</span></li>
+                    <li>Export / download <span class="label label-success">Done</span></li>
                 </ul>
                 <h3>Wishlist</h3>
                 <ul>
+                    <li>Keyword browser</li>
                     <li>Spatial search</li>
                     <li>Bounding box editor UI</li>
                     <li>Advanced search</li>
-                    <li>Vocabularies<span class="label label-danger">In progress</span></li>
+                    <li>Vocabularies <span class="label label-danger">In progress</span></li>
                     <li>Known locations &amp; bounding boxes</li>
                 </ul>
             </div>
-                
-            <h3>Full text search <span class="label label-default">New</span></h3>
-            <p>You can currently search all the datasets from
+
+            <h3>Search MESH <span class="label label-default">New</span></h3>
+            <p>
+                You can currently search all the datasets from
                 the Mapping European Seabed Habitats (<a href="http://jncc.defra.gov.uk/page-1583">MESH</a>)
-                project. Many thanks to Helen Ellwood for helping us import this really useful seed data.</p>
+                project. Many thanks to Helen Ellwood for helping us import this really useful seed data.
+            </p>
         </div>
     </div>
 </div>

@@ -122,6 +122,14 @@ namespace Catalogue.Utilities.Text
 
             return sb.ToString();
         }
+
+        public static string FirstCharToUpper(this string s)
+        {
+            if (s.IsNotBlank())
+                return s.First().ToString().ToUpper() + s.Substring(1);
+            else
+                return s;
+        }
     }
 
     class string_utility_tests

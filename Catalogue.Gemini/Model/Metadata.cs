@@ -25,9 +25,8 @@ namespace Catalogue.Gemini.Model
         public string SpatialReferenceSystem { get; set; }
         public List<Extent> Extent { get; set; }
         public DateTime MetadataDate { get; set; }
-        
         public ResponsibleParty MetadataPointOfContact { get; set; }
-        public string ResourceType { get; set; }  // dataset | series | service | publication
+        public string ResourceType { get; set; }  // dataset | series | service (custom:| publication)
         public BoundingBox BoundingBox { get; set; }
 
         public Metadata()

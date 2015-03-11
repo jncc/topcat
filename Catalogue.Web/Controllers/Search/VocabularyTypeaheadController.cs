@@ -3,11 +3,13 @@ using System.Collections.Generic;
 using System.Web.Http;
 using Catalogue.Data.Indexes;
 using System.Linq;
-using Catalogue.Web.Admin.Keywords;
 using Raven.Client;
 
 namespace Catalogue.Web.Controllers.Search
 {
+    /// <summary>
+    /// This index is only used in the editor. Can we use 
+    /// </summary>
     public class VocabularyTypeaheadController : ApiController
     {
         private readonly IDocumentSession _db;

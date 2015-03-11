@@ -1,15 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Net;
-using System.Net.Http;
-using System.Net.Http.Headers;
-using System.Web;
 using System.Web.Http;
 using Catalogue.Data.Model;
-using Catalogue.Data.Write;
-using Catalogue.Web.Code.Account;
 using Raven.Client;
 
 namespace Catalogue.Web.Controllers.Download
@@ -25,6 +17,7 @@ namespace Catalogue.Web.Controllers.Download
 
         public List<Record> Get(string k)
         {
+            // todo use the RecordQueryer instead, and/or think about combining with ExportController??
             var keyword = ParameterHelper.ParseKeywords(new[] { k }).Single(); // for now, support only one
 
             var q = from r in db.Query<Record>()
@@ -34,5 +27,11 @@ namespace Catalogue.Web.Controllers.Download
             return q.ToList();
         }
 
+//        [HttpGet, Route("api/download/iso")]
+//        public object Xml(RecordQueryInputModel input)
+//        {
+//            var keyword = ParameterHelper.ParseKeywords(new[] { input..K }).Single(); // for now, support only one
+//
+//        }
     }
 }

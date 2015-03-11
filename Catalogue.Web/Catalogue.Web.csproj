@@ -148,9 +148,16 @@
   <ItemGroup>
     <Compile Include="Account\User.cs" />
     <Compile Include="Account\UserContext.cs" />
-    <Compile Include="Admin\Keywords\KeywordsController.cs" />
-    <Compile Include="Admin\Keywords\KeywordsRepository.cs" />
-    <Compile Include="Admin\Keywords\KeywordsService.cs" />
+    <Compile Include="Controllers\Formats\FormatsController.cs" />
+    <Compile Include="Controllers\Home\HomeController.cs" />
+    <Compile Include="Controllers\Keywords\KeywordModel.cs" />
+    <Compile Include="Controllers\Keywords\KeywordsController.cs" />
+    <Compile Include="Controllers\RecordQueryInputModel.cs" />
+    <Compile Include="Controllers\RecordQueryer.cs" />
+    <Compile Include="Controllers\RecordQueryOutputModel.cs" />
+    <Compile Include="Controllers\Records\RecordsController.cs" />
+    <Compile Include="Controllers\Roles\RolesController.cs" />
+    <Compile Include="Controllers\Sandbox\SandboxController.cs" />
     <Compile Include="Controllers\Seed\SeedController.cs" />
     <Compile Include="Controllers\Vocabularies\VocabulariesController.cs" />
     <Compile Include="Controllers\Vocabularies\VocabularyListController.cs" />
@@ -159,22 +166,13 @@
     <Compile Include="Controllers\ParameterHelper.cs" />
     <Compile Include="Controllers\Topics\TopicsController.cs" />
     <Compile Include="Controllers\Search\VocabularyTypeaheadController.cs" />
-    <Compile Include="Controllers\RolesController.cs" />
     <Compile Include="Controllers\Ingest\IngestController.cs" />
     <Compile Include="Customization\CustomWebApiAssembliesResolver.cs" />
     <Compile Include="Logging\ElmahHandledErrorLoggerFilter.cs" />
     <Compile Include="Logging\UnhandledExceptionFilter.cs" />
-    <Compile Include="Controllers\Search\SearchHelper.cs" />
-    <Compile Include="Controllers\Search\SearchInputModel.cs" />
-    <Compile Include="Controllers\Search\SearchType.cs" />
     <Compile Include="Settings.cs" />
     <Compile Include="Account\AccountController.cs" />
-    <Compile Include="Controllers\FormatsController.cs" />
-    <Compile Include="Controllers\HomeController.cs" />
-    <Compile Include="Controllers\RecordsController.cs" />
-    <Compile Include="Controllers\SandboxController.cs" />
     <Compile Include="Controllers\Search\SearchController.cs" />
-    <Compile Include="Controllers\Search\SearchOutputModel.cs" />
     <Compile Include="Validator\ValidatorController.cs" />
     <Compile Include="Validator\ValidatorInputModel.cs" />
     <Compile Include="Validator\ValidatorResult.cs" />
@@ -439,7 +437,34 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
-    <Service Include="{82A7F48D-3B50-4B1E-B82E-3ADA8210C358}" />
+    <Content Include="app\js\controllers\SearchController.js.map">
+      <DependentUpon>SearchController.js</DependentUpon>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="app\js\controllers\SearchController.min.js.map">
+      <DependentUpon>SearchController.min.js</DependentUpon>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="app\css\main.css.map">
+      <DependentUpon>main.css</DependentUpon>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="app\js\utilities.js.map">
+      <DependentUpon>utilities.js</DependentUpon>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="app\js\controllers\SandboxController.js.map">
+      <DependentUpon>SandboxController.js</DependentUpon>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="app\js\controllers\EditorController.min.js.map">
+      <DependentUpon>EditorController.min.js</DependentUpon>
+    </Content>
   </ItemGroup>
   <ItemGroup>
     <Content Include="app\js\controllers\VocabularyEditorController.js.map">
@@ -452,8 +477,28 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="app\css\main.css.map">
-      <DependentUpon>main.css</DependentUpon>
+    <Content Include="app\js\services.js.map">
+      <DependentUpon>services.js</DependentUpon>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="app\js\services.min.js.map">
+      <DependentUpon>services.min.js</DependentUpon>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="app\js\directives.js.map">
+      <DependentUpon>directives.js</DependentUpon>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="app\js\directives.min.js.map">
+      <DependentUpon>directives.min.js</DependentUpon>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="app\js\utilities.min.js.map">
+      <DependentUpon>utilities.min.js</DependentUpon>
     </Content>
   </ItemGroup>
   <ItemGroup>

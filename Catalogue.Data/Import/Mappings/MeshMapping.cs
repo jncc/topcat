@@ -42,7 +42,6 @@ namespace Catalogue.Data.Import.Mappings
                 where keyword.IsNotBlank()
                 select new MetadataKeyword
                 {
-                    // todo: map the source vocab IDs to "real" ones
                     Vocab = MapSourceVocabToRealVocab(vocab),
                     Value = MapSourceKeywordToRealKeyword(keyword),
                 };

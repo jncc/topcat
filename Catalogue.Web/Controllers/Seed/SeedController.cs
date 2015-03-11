@@ -6,6 +6,7 @@ using System.Web;
 using System.Web.Http;
 using Catalogue.Data.Seed;
 using Catalogue.Web.Code;
+using Raven.Abstractions.Data;
 using Raven.Client;
 
 namespace Catalogue.Web.Controllers.Seed
@@ -33,16 +34,27 @@ namespace Catalogue.Web.Controllers.Seed
             return new HttpResponseMessage();
         }
 
-//        /// <summary>
-//        /// Todo remove this
-//        /// Useful for non-live instances. Requires a PUT so is difficult to do by accident.
-//        /// </summary>
-//        public HttpResponseMessage Put()
-//        {
-//            Seeder.SeedVocabsOnly(WebApiApplication.DocumentStore);
-//
-//            return new HttpResponseMessage();
-//        }
+        /// <summary>
+        /// Todo remove this
+        /// </summary>
+        [HttpPost, Route("api/seed/vocabs")]
+        public HttpResponseMessage Vocabs()
+        {
+            Seeder.SeedVocabsOnly(WebApiApplication.DocumentStore);
+
+            return new HttpResponseMessage();
+        }
+        [HttpPost, Route("api/seed/deletemesh")]
+        public HttpResponseMessage DeleteMesh()
+        {
+            WebApiApplication.DocumentStore.DatabaseCommands.DeleteByIndex("RecordIndex",
+                new IndexQuery
+                {
+                    Query = "Keywords:\"http://vocab.jncc.gov.uk/jncc-broad-category/Seabed Habitat Maps\""
+                });
+
+            return new HttpResponseMessage();
+        }
 
         [HttpPost, Route("api/seed/inspire")]
         public HttpResponseMessage Inspire()
