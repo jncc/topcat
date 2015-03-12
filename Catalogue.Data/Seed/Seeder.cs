@@ -294,7 +294,7 @@ namespace Catalogue.Data.Seed
             var meshSeabedSurveyTechnique = new Vocabulary
             {
                 Id = "http://vocab.jncc.gov.uk/seabed-survey-technique",
-                Name = "Seabed Map Status",
+                Name = "Seabed Survey Technique",
                 Description = "Used by MESH",
                 PublicationDate = "2013",
                 Publishable = false,
