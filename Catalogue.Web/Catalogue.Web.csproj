@@ -288,6 +288,8 @@
     <Content Include="app\lib\jquery-placeholder-2.0.7\LICENSE-GPL.txt" />
     <Content Include="app\lib\jquery-placeholder-2.0.7\LICENSE-MIT.txt" />
     <Content Include="app\lib\jquery-ui-1.10.3\jquery-ui.min.js" />
+    <Content Include="app\lib\ng-grid-2.0.14\ng-grid.min.css" />
+    <Content Include="app\lib\ng-grid-2.0.14\ng-grid.min.js" />
     <Content Include="app\lib\qtip2-2.1.1\jquery.qtip.min.css" />
     <Content Include="app\lib\qtip2-2.1.1\jquery.qtip.min.js" />
     <Content Include="app\lib\qtip2-2.2.0\jquery.qtip.min.css" />
