@@ -9,6 +9,7 @@
     $timeout((function() {
       return $scope.app.starting = false;
     }), 500);
+    $scope.result = {};
     $scope.resultsView = 'list';
     updateUrl = function(query) {
       var blank;
@@ -124,8 +125,11 @@
       }
       return _results;
     };
-    return $scope.maxPages = function(total, pageLength) {
+    $scope.maxPages = function(total, pageLength) {
       return Math.ceil(total / pageLength) - 1;
+    };
+    return $scope.gridOptions = {
+      data: 'result'
     };
   });
 

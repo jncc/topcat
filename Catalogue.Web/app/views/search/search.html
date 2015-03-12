@@ -50,6 +50,7 @@
 <!--</div>-->
 
 <div ng-show="result.query" class="search-results-header layout-row">
+
     <div class="layout-col">
         Found
         <span ng-show="result.total > result.results.length">
@@ -92,7 +93,7 @@
     <hr />
 </div>
 
-<div ng-include="'views/search/searchgrid.html'"></div>
+
 
 <div ng-repeat="r in result.results" class="layout-row search-result">
     <div class="layout-col search-format">
@@ -117,6 +118,12 @@
         </div>
     </div>
 </div>
+
+<div class="layout-row">
+    <div class="gridStyle" ng-grid="gridOptions"></div>
+</div>
+
+<!--<div ng-include="'views/search/searchgrid.html'"></div>-->
 
 <!--<div class="text-center" ng-show="result.total > result.results.length">-->
 <!--    <ul class="pagination">-->

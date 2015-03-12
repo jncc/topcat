@@ -7,7 +7,8 @@
     'app.directives',
     'app.services',
     'app.controllers',
-    'filters'
+    'filters',
+    'ngGrid'
     ]
         
 angular.module 'app.utilities', []

@@ -6,6 +6,7 @@
         # angular skipping the initial animation - set app.starting to true for 500ms
         $scope.app = { starting: true };
         $timeout (-> $scope.app.starting = false), 500
+        $scope.result = {}
         
         # default results view style
         $scope.resultsView = 'list'
@@ -97,7 +98,7 @@
                 
         $scope.removeKeywordFromQuery = (keyword) ->
             $scope.query.k.splice ($.inArray keyword, $scope.query.k), 1
-        
+       
         # keyword helper functions            
         $scope.keywordToString = (k) ->
             s = if k.vocab then k.vocab + '/' + k.value else k.value
@@ -121,5 +122,8 @@
                 input.push(i);
         $scope.maxPages  = (total, pageLength) ->
             Math.ceil(total/pageLength)-1;
+            
+        # grid options
+        $scope.gridOptions = {data: 'result'}
             
            

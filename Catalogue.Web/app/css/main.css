@@ -387,4 +387,9 @@ form .ng-invalid {
 .nav > li > a {
   color: #666666;
 }
+.gridStyle {
+  border: 1px solid #d4d4d4;
+  width: 400px;
+  height: 300px;
+}
 /*# sourceMappingURL=main.css.map */
