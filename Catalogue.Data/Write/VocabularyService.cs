@@ -87,6 +87,8 @@ namespace Catalogue.Data.Write
 
         public VocabularyServiceResult Upsert(Vocabulary vocab)
         {
+            vocab.Keywords = vocab.Keywords.OrderBy(k => k.Value).ToList();
+
             var validation = validator.Validate(vocab);
 
             if (!validation.Errors.Any()) db.Store(vocab);
