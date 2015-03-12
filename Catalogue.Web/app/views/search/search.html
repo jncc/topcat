@@ -92,6 +92,8 @@
     <hr />
 </div>
 
+<div ng-include="'views/search/searchgrid.html'"></div>
+
 <div ng-repeat="r in result.results" class="layout-row search-result">
     <div class="layout-col search-format">
         <span class="dark glyphicon {{r.format.glyph}}" tc-tip title="{{r.format.group}}"></span>
