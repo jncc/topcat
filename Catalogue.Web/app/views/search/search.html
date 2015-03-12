@@ -79,9 +79,15 @@
                 <span class="glyphicon glyphicon-list"></span>
             </button>
         </div>
-        <a class="btn btn-default" role="button" tc-tip title="Export" style="width: 60px" ng-href="../api/export?{{querystring()}}">
-            <span class="glyphicon glyphicon-cloud-download"></span>
-        </a>
+        <div class="btn-group">
+            <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false" style="width: 60px" tc-tip title="Export">
+                <span class="glyphicon glyphicon-cloud-download"></span> <span class="caret"></span>
+            </button>
+            <ul class="dropdown-menu dropdown-menu-right" role="menu">
+                <li><a ng-href="../api/export?{{querystring()}}">Export as text file (tab-separated)</a></li>
+                <!--<li class="divider"></li> might be useful-->
+            </ul>
+        </div>
     </div>
     <hr />
 </div>
