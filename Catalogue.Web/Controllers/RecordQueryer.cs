@@ -34,7 +34,6 @@ namespace Catalogue.Web.Controllers
         /// <summary>
         /// A general-purpose query that returns records.
         /// Can be materialised as-is, or customised further (see SearchQuery method).
-        /// IMPORTANT! Does not apply Skip and Take!
         /// We may need to refactor this to support ravendb streaming for larger result sets.
         /// </summary>
         public IEnumerable<Record> RecordQuery(RecordQueryInputModel input)
