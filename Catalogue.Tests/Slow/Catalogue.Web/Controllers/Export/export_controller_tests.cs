@@ -24,7 +24,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Web.Controllers.Export
                 N = 25,
             };
 
-            var result = controller.GetRecords(input);
+            var result = controller.FetchRecords(input);
             result.Should().HaveCount(189); // the number of mesh records
         }
     }

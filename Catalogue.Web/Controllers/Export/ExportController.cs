@@ -24,7 +24,7 @@ namespace Catalogue.Web.Controllers.Export
 
         public HttpResponseMessage Get([FromUri] RecordQueryInputModel input)
         {
-            var records = GetRecords(input);
+            var records = FetchRecords(input);
 
             var writer = new StringWriter();
             new Exporter().Export(records, writer);
@@ -43,7 +43,7 @@ namespace Catalogue.Web.Controllers.Export
         /// <summary>
         /// This is public because I don't have time right now to split things up to test it any better.
         /// </summary>
-        public List<Record> GetRecords(RecordQueryInputModel input)
+        public List<Record> FetchRecords(RecordQueryInputModel input)
         {
             // todo will need to use ravendb streaming or increase db page size for larger exports            
 
