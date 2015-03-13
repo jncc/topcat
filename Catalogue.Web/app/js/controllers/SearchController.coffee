@@ -124,6 +124,6 @@
             Math.ceil(total/pageLength)-1;
             
         # grid options
-        $scope.gridOptions = {data: 'result'}
+        $scope.gridOptions = {data: 'result.results'}
             
            

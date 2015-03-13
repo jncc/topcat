@@ -129,7 +129,7 @@
       return Math.ceil(total / pageLength) - 1;
     };
     return $scope.gridOptions = {
-      data: 'result'
+      data: 'result.results'
     };
   });
 
