@@ -389,7 +389,7 @@ form .ng-invalid {
 }
 .gridStyle {
   border: 1px solid #d4d4d4;
-  width: 400px;
+  width: 100%;
   height: 300px;
 }
 /*# sourceMappingURL=main.css.map */

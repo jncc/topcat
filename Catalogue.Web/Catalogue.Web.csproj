@@ -318,7 +318,7 @@
     <Content Include="app\views\sandbox\dropdown.html" />
     <Content Include="app\views\sandbox\glyphs.html" />
     <Content Include="app\views\search\search.html" />
-    <Content Include="app\views\search\searchgrid.html" />
+    <Content Include="app\views\search\components\resultgrid.html" />
     <Content Include="app\views\Vocabularies\editor.html" />
     <Content Include="app\views\Vocabularies\vocabularies.html" />
     <Content Include="favicon.ico" />
@@ -393,9 +393,6 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="app\js\controllers\SandboxController.coffee" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="app\js\controllers\EditorController.map" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="app\js\controllers\IngestController.coffee" />
@@ -517,17 +514,15 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="app\js\controllers\EditorController.min.js.map">
-      <DependentUpon>EditorController.min.js</DependentUpon>
-    </Content>
-  </ItemGroup>
-  <ItemGroup>
     <Content Include="app\lib\bootstrap-3.3.2-dist\css\bootstrap-theme.css.map" />
     <Content Include="app\lib\bootstrap-3.3.2-dist\css\bootstrap.css.map" />
     <Content Include="app\lib\bootstrap-3.3.2-dist\fonts\glyphicons-halflings-regular.eot" />
     <Content Include="app\lib\bootstrap-3.3.2-dist\fonts\glyphicons-halflings-regular.ttf" />
     <Content Include="app\lib\bootstrap-3.3.2-dist\fonts\glyphicons-halflings-regular.woff" />
     <Content Include="app\lib\bootstrap-3.3.2-dist\fonts\glyphicons-halflings-regular.woff2" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="app\js\controllers\Components.coffee" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

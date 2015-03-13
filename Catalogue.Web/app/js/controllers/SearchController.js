@@ -9,7 +9,6 @@
     $timeout((function() {
       return $scope.app.starting = false;
     }), 500);
-    $scope.result = {};
     $scope.resultsView = 'list';
     updateUrl = function(query) {
       var blank;
