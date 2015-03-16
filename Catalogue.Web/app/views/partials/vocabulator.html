@@ -1,0 +1,40 @@
+﻿
+
+
+<div class="vocabulator modal-content">
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title">Vocabularies</h4>
+    </div>
+    <div class="modal-body">
+        <div class="vocabulator-search row">
+            <div class=" col-sm-7 col-sm-offset-2 ">
+                <div class="input-group">
+                    <span>
+                        <input ng-model="search.q" type="text" class="form-control" autofocus />
+                    </span>
+
+                    <span class="input-group-btn">
+                        <button class="btn btn-primary big-button" type="button"  ng-click="">
+                            <span class="glyphicon glyphicon-search"></span>
+                        </button>
+                    </span>
+                </div>                
+            </div>
+
+        </div>
+        <div class="row">
+            <div class="col-sm-6">
+                <h3>Vocabularies</h3>
+            </div>
+            <div class="col-sm-6">
+                <h3>Keywords</h3>
+            </div>
+        </div>
+    </div>
+    <div><pre>{{search}}</pre></div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary" ng-click="close()">Select</button>
+    </div>
+</div>

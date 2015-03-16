@@ -1,6 +1,6 @@
 ﻿angular.module('app.controllers').controller 'SearchController',
     
-    ($scope, $rootScope, $location, $http, $timeout, $q) ->
+    ($scope, $rootScope, $location, $http, $timeout, $q, $modal) ->
         
         # slightly hacky way of triggering animations on startup to work around
         # angular skipping the initial animation - set app.starting to true for 500ms
@@ -110,6 +110,16 @@
                 slash = s.lastIndexOf '/'
                 vocab: 'http://' + (s.substring 0, slash)
                 value: s.substring (slash + 1)
+                
+        # vocabulator
+        $scope.openVocabulator = ->
+            modal = $modal.open
+                controller:  'VocabulatorController'
+                templateUrl: 'views/partials/vocabulator.html?' + new Date().getTime() # stop iis express caching the html
+                size:        'lg'
+                scope:       $scope
+            modal.result
+                .then (k) -> $scope.addKeywordToQuery k
     
         # paging helper functions                
         $scope.setPage = (n) ->

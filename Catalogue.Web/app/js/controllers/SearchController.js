@@ -1,7 +1,7 @@
 ﻿(function() {
   var __indexOf = [].indexOf || function(item) { for (var i = 0, l = this.length; i < l; i++) { if (i in this && this[i] === item) return i; } return -1; };
 
-  angular.module('app.controllers').controller('SearchController', function($scope, $rootScope, $location, $http, $timeout, $q) {
+  angular.module('app.controllers').controller('SearchController', function($scope, $rootScope, $location, $http, $timeout, $q, $modal) {
     var blankQuery, parseQuerystring, queryKeywords, queryRecords, updateUrl;
     $scope.app = {
       starting: true
@@ -110,6 +110,18 @@
           value: s.substring(slash + 1)
         };
       }
+    };
+    $scope.openVocabulator = function() {
+      var modal;
+      modal = $modal.open({
+        controller: 'VocabulatorController',
+        templateUrl: 'views/partials/vocabulator.html?' + new Date().getTime(),
+        size: 'lg',
+        scope: $scope
+      });
+      return modal.result.then(function(k) {
+        return $scope.addKeywordToQuery(k);
+      });
     };
     $scope.setPage = function(n) {
       return $scope.query.p = n - 1;

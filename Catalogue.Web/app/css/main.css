@@ -87,6 +87,9 @@ hr {
 label {
   font-weight: normal;
 }
+.big-button {
+  width: 60px;
+}
 .header {
   display: table;
   width: 100%;
@@ -221,6 +224,12 @@ label {
   font-weight: 700;
   line-height: 16px;
   text-shadow: 0 1px #000;
+}
+.vocabulator {
+  padding: 1em;
+}
+.vocabulator .vocabulator-search {
+  margin: 1em 0;
 }
 .date-container {
   width: 11em;

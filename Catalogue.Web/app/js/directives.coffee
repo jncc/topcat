@@ -9,6 +9,10 @@ module.directive 'placeholder', () ->
 module.directive 'autofocus', () ->
     link: (scope, elem, attrs) -> elem[0].focus() # call focus on the raw dom object
 
+# specific autofocus directive (for modal dialogues)
+module.directive 'tcAutofocus', () ->
+    link: (scope, elem, attrs) -> elem[0].focus()
+
 # eat the click (used on the search page) for old IE
 module.directive 'tcEatClick', () ->
     link: (scope, elem, attrs) ->

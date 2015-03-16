@@ -1,7 +1,7 @@
 ﻿(function() {
   var module;
 
-  module = angular.module('app', ['ngAnimate', 'ngRoute', 'ngSanitize', 'ngCookies', 'app.utilities', 'app.directives', 'app.services', 'app.controllers', 'filters']);
+  module = angular.module('app', ['ngAnimate', 'ngRoute', 'ngSanitize', 'ngCookies', 'ui.bootstrap', 'app.utilities', 'app.directives', 'app.services', 'app.controllers', 'filters']);
 
   angular.module('app.utilities', []);
 

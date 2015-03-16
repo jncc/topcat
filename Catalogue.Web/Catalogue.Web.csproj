@@ -246,6 +246,12 @@
     <Content Include="app\js\controllers\VocabularyListController.min.js">
       <DependentUpon>VocabularyListController.coffee</DependentUpon>
     </Content>
+    <Content Include="app\js\controllers\VocabulatorController.js">
+      <DependentUpon>VocabulatorController.coffee</DependentUpon>
+    </Content>
+    <Content Include="app\js\controllers\VocabulatorController.min.js">
+      <DependentUpon>VocabulatorController.js</DependentUpon>
+    </Content>
     <Content Include="app\js\directives.js">
       <DependentUpon>directives.coffee</DependentUpon>
     </Content>
@@ -273,14 +279,14 @@
     <Content Include="app\lib\angular-1.2.28\ui-bootstrap-tpls-0.12.0.min.js" />
     <Content Include="app\lib\angular-strap-0.7.5\angular-strap-min.js" />
     <Content Include="app\lib\autosize-1.8.1\jquery.autosize.min.js" />
-    <Content Include="app\lib\bootstrap-3.3.2-dist\css\bootstrap-theme.css" />
-    <Content Include="app\lib\bootstrap-3.3.2-dist\css\bootstrap-theme.min.css" />
-    <Content Include="app\lib\bootstrap-3.3.2-dist\css\bootstrap.css" />
-    <Content Include="app\lib\bootstrap-3.3.2-dist\css\bootstrap.min.css" />
-    <Content Include="app\lib\bootstrap-3.3.2-dist\fonts\glyphicons-halflings-regular.svg" />
-    <Content Include="app\lib\bootstrap-3.3.2-dist\js\bootstrap.js" />
-    <Content Include="app\lib\bootstrap-3.3.2-dist\js\bootstrap.min.js" />
-    <Content Include="app\lib\bootstrap-3.3.2-dist\js\npm.js" />
+    <Content Include="app\lib\bootstrap-3.3.0-dist\dist\css\bootstrap-theme.css" />
+    <Content Include="app\lib\bootstrap-3.3.0-dist\dist\css\bootstrap-theme.min.css" />
+    <Content Include="app\lib\bootstrap-3.3.0-dist\dist\css\bootstrap.css" />
+    <Content Include="app\lib\bootstrap-3.3.0-dist\dist\css\bootstrap.min.css" />
+    <Content Include="app\lib\bootstrap-3.3.0-dist\dist\fonts\glyphicons-halflings-regular.svg" />
+    <Content Include="app\lib\bootstrap-3.3.0-dist\dist\js\bootstrap.js" />
+    <Content Include="app\lib\bootstrap-3.3.0-dist\dist\js\bootstrap.min.js" />
+    <Content Include="app\lib\bootstrap-3.3.0-dist\dist\js\npm.js" />
     <Content Include="app\lib\jquery-1.10.2\jquery.min.js" />
     <Content Include="app\lib\jquery-placeholder-2.0.7\demo.html" />
     <Content Include="app\lib\jquery-placeholder-2.0.7\jquery.placeholder.js" />
@@ -312,6 +318,7 @@
     <Content Include="app\lib\zeroclipboard-1.1.7\ZeroClipboard.swf" />
     <Content Include="app\views\ingest\ingest.html" />
     <Content Include="app\views\editor\editor.html" />
+    <Content Include="app\views\partials\vocabulator.html" />
     <Content Include="app\views\sandbox\colours.html" />
     <Content Include="app\views\sandbox\dropdown.html" />
     <Content Include="app\views\sandbox\glyphs.html" />
@@ -519,12 +526,18 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="app\lib\bootstrap-3.3.2-dist\css\bootstrap-theme.css.map" />
-    <Content Include="app\lib\bootstrap-3.3.2-dist\css\bootstrap.css.map" />
-    <Content Include="app\lib\bootstrap-3.3.2-dist\fonts\glyphicons-halflings-regular.eot" />
-    <Content Include="app\lib\bootstrap-3.3.2-dist\fonts\glyphicons-halflings-regular.ttf" />
-    <Content Include="app\lib\bootstrap-3.3.2-dist\fonts\glyphicons-halflings-regular.woff" />
-    <Content Include="app\lib\bootstrap-3.3.2-dist\fonts\glyphicons-halflings-regular.woff2" />
+    <None Include="app\js\controllers\VocabulatorController.coffee" />
+    <Content Include="app\js\controllers\VocabulatorController.js.map">
+      <DependentUpon>VocabulatorController.js</DependentUpon>
+    </Content>
+    <Content Include="app\js\controllers\VocabulatorController.min.js.map">
+      <DependentUpon>VocabulatorController.min.js</DependentUpon>
+    </Content>
+    <Content Include="app\lib\bootstrap-3.3.0-dist\dist\css\bootstrap-theme.css.map" />
+    <Content Include="app\lib\bootstrap-3.3.0-dist\dist\css\bootstrap.css.map" />
+    <Content Include="app\lib\bootstrap-3.3.0-dist\dist\fonts\glyphicons-halflings-regular.eot" />
+    <Content Include="app\lib\bootstrap-3.3.0-dist\dist\fonts\glyphicons-halflings-regular.ttf" />
+    <Content Include="app\lib\bootstrap-3.3.0-dist\dist\fonts\glyphicons-halflings-regular.woff" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

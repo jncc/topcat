@@ -3,6 +3,7 @@
     'ngRoute',
     'ngSanitize',
     'ngCookies',
+    'ui.bootstrap',
     'app.utilities',
     'app.directives',
     'app.services',
