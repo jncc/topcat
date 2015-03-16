@@ -19,10 +19,12 @@
     };
   });
 
-  module.directive('tcAutofocus', function() {
+  module.directive('tcFocus', function($timeout) {
     return {
       link: function(scope, elem, attrs) {
-        return elem[0].focus();
+        return $timeout((function() {
+          return elem[0].focus();
+        }), 100);
       }
     };
   });

@@ -10,8 +10,9 @@ module.directive 'autofocus', () ->
     link: (scope, elem, attrs) -> elem[0].focus() # call focus on the raw dom object
 
 # specific autofocus directive (for modal dialogues)
-module.directive 'tcAutofocus', () ->
-    link: (scope, elem, attrs) -> elem[0].focus()
+module.directive 'tcFocus', ($timeout) ->
+    link: (scope, elem, attrs) ->
+        $timeout (-> elem[0].focus()), 100 # timeout makes it work :-(
 
 # eat the click (used on the search page) for old IE
 module.directive 'tcEatClick', () ->
