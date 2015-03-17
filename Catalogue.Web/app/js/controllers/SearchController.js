@@ -124,11 +124,16 @@
       }
       return _results;
     };
-    $scope.maxPages = function(total, pageLength) {
+    return $scope.maxPages = function(total, pageLength) {
       return Math.ceil(total / pageLength) - 1;
     };
+  });
+
+  angular.module('app.controllers').controller('ResultGridController', function($scope) {
+    $scope.gridData = $scope.$parent.result.results;
+    debugger;
     return $scope.gridOptions = {
-      data: 'result.results'
+      data: 'gridData'
     };
   });
 

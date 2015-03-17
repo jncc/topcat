@@ -1,4 +1,15 @@
-﻿angular.module('app.controllers').controller 'SearchController',
+﻿#angular.module('app.components')        
+#        .directive('tcSearchResultGrid', ->
+#            scope : true,
+#            templateUrl : 'views/search/components/resultgrid.html',
+#            controllerAs : 'ctrl',
+#            controller : -> 
+#                # grid options
+#                $scope.gridOptions = {data: 'result.results'}
+#        ) 
+
+
+angular.module('app.controllers').controller 'SearchController',
     
     ($scope, $rootScope, $location, $http, $timeout, $q) ->
         
@@ -121,8 +132,9 @@
                 input.push(i);
         $scope.maxPages  = (total, pageLength) ->
             Math.ceil(total/pageLength)-1;
-            
-        # grid options
-        $scope.gridOptions = {data: 'result.results'}
-            
-           
+
+angular.module('app.controllers').controller 'ResultGridController',
+    ($scope) -> 
+        $scope.gridData = $scope.$parent.result.results
+        debugger
+        $scope.gridOptions = {data: 'gridData'}

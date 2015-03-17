@@ -15,6 +15,8 @@ angular.module 'app.utilities', []
 angular.module 'app.directives', []
 angular.module 'app.services', ['ngResource']
 angular.module 'app.controllers', ['ngCookies']
+#angular.module 'app.components', []
+
 
 module.config ($routeProvider) ->
     $routeProvider
