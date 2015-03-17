@@ -4,14 +4,14 @@
 <div class="vocabulator modal-content">
     <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-label="Close" ng-click="$dismiss()"><span aria-hidden="true">&times;</span></button>
-        <h4 class="modal-title">Vocabularies</h4>
+        <h4 class="modal-title">Browse Vocabs and Keywords</h4>
     </div>
     <div class="modal-body">
         <div class="vocabulator-search row">
             <div class=" col-sm-7 col-sm-offset-2 ">
                 <div class="input-group">
                     <span>
-                        <input ng-model="search.q" type="text" class="form-control" tc-focus />
+                        <input ng-model="find.text" type="text" class="form-control" tc-focus />
                     </span>
 
                     <span class="input-group-btn">
@@ -22,17 +22,33 @@
                 </div>
             </div>
         </div>
-
+        {{find.text}}
         <div class="row">
             <div class="col-sm-6">
                 <h3>Vocabularies</h3>
+
+                <!--                <select ng-model="current.vocab" ng-options="v as v.name for v in vocabs" size="20"></select>-->
+
+                <div class="vocabulator-vocab-list list-group">
+
+                    <a ng-repeat="v in vocabs.filtered" ng-href="" class="list-group-item" ng-class="{active: selected.vocab === v.id}"
+                       ng-click="selected.vocab = v.id">
+                        <div>
+                            {{v.name}}
+                            <br />
+                            <span class="small">{{v.id}}</span>
+                        </div>
+                    </a>
+
+                </div>
+
             </div>
             <div class="col-sm-6">
                 <h3>Keywords</h3>
             </div>
         </div>
     </div>
-    <div><pre>{{search}}</pre></div>
+
     <div class="modal-footer">
         <button type="button" class="btn btn-default" data-dismiss="modal" ng-click="$dismiss()">Close</button>
         <button type="button" class="btn btn-primary" ng-click="close()">Select</button>

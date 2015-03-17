@@ -13,7 +13,7 @@
   });
 
   module.factory('Vocabulary', function($resource) {
-    return $resource('../api/vocabularies/?id=:id', {}, {
+    return $resource('../api/vocabularies/:id', {}, {
       query: {
         method: 'GET',
         params: {
@@ -97,3 +97,5 @@
   });
 
 }).call(this);
+
+//# sourceMappingURL=services.js.map

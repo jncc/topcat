@@ -7,7 +7,7 @@ module.factory 'Account', ($http, $q) ->
     d.promise
 
 module.factory 'Vocabulary', ($resource) ->
-    $resource '../api/vocabularies/?id=:id', {},
+    $resource '../api/vocabularies/:id', {},
     query: {method:'GET', params: {id: '@id'}}
     update: {method:'PUT', params: {id: '@id'}}
     

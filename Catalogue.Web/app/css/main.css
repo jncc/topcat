@@ -231,6 +231,13 @@ label {
 .vocabulator .vocabulator-search {
   margin: 1em 0;
 }
+.vocabulator select {
+  width: 100%;
+}
+.vocabulator .vocabulator-vocab-list {
+  height: 20em;
+  overflow-y: scroll;
+}
 .date-container {
   width: 11em;
 }
