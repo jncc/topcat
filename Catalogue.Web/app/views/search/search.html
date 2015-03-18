@@ -36,7 +36,7 @@
 </div>
 
 <div class="search-keyword-suggestions" ng-show="keywordSuggestions[0]">
-    <span tc-tag ng-repeat="k in keywordSuggestions" ng-click="addKeywordToQuery(k)" class="pointable">
+    <span tc-tag-x ng-repeat="k in keywordSuggestions" k="k" ng-click="addKeywordToQuery(k)" class="pointable">
         <span ng-bind-html="k.value | highlight:query.q"></span>
     </span>
     <button ng-click="openVocabulator()" class="btn btn-default" style="height: 20px">&bull;&bull;&bull;</button>
@@ -58,11 +58,11 @@
         </span>
         {{result.total || 0}} records
         <!-- <span ng-show="result.speed">in {{(result.speed / 1000) | number:2}} seconds</span>-->
-        <span ng-show="result.query.k[0]" class="search-results-header-tagged">
+        <span ng-show="result.query.k[0]" class="search-results-header-tagged" ng-init="ks = $.map(result.query.k, function(k) { return keywordFromString(k); })">
             tagged
-            <span tc-tag ng-repeat="s in result.query.k" ng-init="k = keywordFromString(s)">
+            <span tc-tag-x ng-repeat="k in ks" k="k">
                 {{k.value}}
-                <span class="glyphicon glyphicon-remove" ng-click="removeKeywordFromQuery(s)" tc-tip title="Remove"></span>
+                <span class="glyphicon glyphicon-remove" ng-click="removeKeywordFromQuery(k)" tc-tip title="Remove"></span>
             </span>
         </span>
         <span ng-show="result.query.q">

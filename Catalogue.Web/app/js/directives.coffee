@@ -69,8 +69,29 @@ module.directive 'tcQtipTitle', () ->
                     my: 'top center',
                     at: 'bottom center'        
 
+
+# widget for tags (keywords)
+module.directive 'tcTagX', () ->
+    scope: { k: "=k" }
+    link: (scope, elem, attrs) ->
+        elem.addClass 'tag'
+        # prepend a coloured edging strip to represent the vocab
+        edge = if scope.k.vocab
+            colour = hashStringToColour scope.k.vocab
+            angular.element '<span class="vocabful-colour-edge" style="background-color:' + colour + '">&nbsp;</span>'
+        else
+            angular.element '<span class="vocabless-colour-edge"></span>'
+        elem.prepend edge
+        # call qtip with options constructed from the defaults
+        $(elem).qtip $.extend {}, qtipDefaults,
+            content: text: scope.k.vocab || "No vocabulary"
+            position:
+                my: 'top center'
+                at: 'bottom center'
+
 # widget for tags (keywords)
 module.directive 'tcTag', () ->
+    #scope: { x: "=" }
     link: (scope, elem, attrs) ->
         elem.addClass 'tag'
         # prepend a coloured edging strip to represent the vocab

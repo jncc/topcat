@@ -36,7 +36,7 @@
                             <span class="small">{{v.id}}</span>
                         </div>
                     </a>
-
+                    <div ng-show="vocabs.filtered.length == 0">No matches...</div>
                 </div>
 
             </div>
@@ -59,7 +59,14 @@
     </div>
 
     <div class="modal-footer">
-        <button type="button" class="btn btn-default" data-dismiss="modal" ng-click="$dismiss()">Close</button>
-        <button type="button" class="btn btn-primary" ng-click="close()">Select</button>
+        <div ng-if="!selected.keyword">
+            <button type="button" class="btn btn-default" data-dismiss="modal" ng-click="$dismiss()">CANCEL</button>
+        </div>
+        <div ng-if="selected.keyword">
+            <span tc-tag tc-tip ng-init="k = selected.keyword" class="pointable">
+                {{ k.value }}
+            </span>
+            <button type="button" class="btn btn-primary" ng-click="close()">ADD</button>
+        </div>
     </div>
 </div>
