@@ -17,6 +17,7 @@ angular.module('app.controllers').controller 'SearchController',
         # angular skipping the initial animation - set app.starting to true for 500ms
         $scope.app = { starting: true };
         $timeout (-> $scope.app.starting = false), 500
+        $scope.result = {results : {}}
         
         # default results view style
         $scope.resultsView = 'list'
@@ -134,7 +135,28 @@ angular.module('app.controllers').controller 'SearchController',
             Math.ceil(total/pageLength)-1;
 
 angular.module('app.controllers').controller 'ResultGridController',
-    ($scope) -> 
-        $scope.gridData = $scope.$parent.result.results
-        debugger
-        $scope.gridOptions = {data: 'gridData'}
+    ($scope) ->
+    
+        $scope.glyphColDef = {field: 'format.glyph', 
+        displayName: 'Format',
+        cellTemplate: '<div><span class="dark glyphicon {{ row.getProperty(col.field) }}"></span></div>'}
+
+        $scope.keywordColDef = {field: 'keywords', 
+        displayName: 'Keywords',
+        cellTemplate: '<div>
+            <span tc-tag ng-repeat="k in row.getProperty(col.field)" tc-tip class="pointable">
+                {{ k.value }}
+            </span>
+        </div>'}
+    
+        $scope.gridColDefs = [$scope.glyphColDef,
+        {field: 'title', displayName: 'Title'},
+        {field: 'snippet', displayName: 'Snippet'},
+        {field: 'topcopy', displayName: 'Top Copy'},
+        {field: 'date', displayName: 'Ref Date'},
+        {field: 'resourceType', displayName: 'Type'},
+        $scope.keywordColDef]
+    
+        $scope.gridOptions = {data: 'result.results',
+        columnDefs: 'gridColDefs'} 
+        

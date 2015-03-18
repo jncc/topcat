@@ -9,6 +9,9 @@
     $timeout((function() {
       return $scope.app.starting = false;
     }), 500);
+    $scope.result = {
+      results: {}
+    };
     $scope.resultsView = 'list';
     updateUrl = function(query) {
       var blank;
@@ -130,13 +133,38 @@
   });
 
   angular.module('app.controllers').controller('ResultGridController', function($scope) {
-    $scope.gridData = $scope.$parent.result.results;
-    debugger;
+    $scope.glyphColDef = {
+      field: 'format.glyph',
+      displayName: 'Format',
+      cellTemplate: '<div><span class="dark glyphicon {{ row.getProperty(col.field) }}"></span></div>'
+    };
+    $scope.keywordColDef = {
+      field: 'keywords',
+      displayName: 'Keywords',
+      cellTemplate: '<div> <span tc-tag ng-repeat="k in row.getProperty(col.field)" tc-tip class="pointable"> {{ k.value }} </span> </div>'
+    };
+    $scope.gridColDefs = [
+      $scope.glyphColDef, {
+        field: 'title',
+        displayName: 'Title'
+      }, {
+        field: 'snippet',
+        displayName: 'Snippet'
+      }, {
+        field: 'topcopy',
+        displayName: 'Top Copy'
+      }, {
+        field: 'date',
+        displayName: 'Ref Date'
+      }, {
+        field: 'resourceType',
+        displayName: 'Type'
+      }, $scope.keywordColDef
+    ];
     return $scope.gridOptions = {
-      data: 'gridData'
+      data: 'result.results',
+      columnDefs: 'gridColDefs'
     };
   });
 
 }).call(this);
-
-//# sourceMappingURL=SearchController.js.map
