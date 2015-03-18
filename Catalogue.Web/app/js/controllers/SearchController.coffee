@@ -138,27 +138,39 @@ angular.module('app.controllers').controller 'ResultGridController',
     ($scope) ->
     
         $scope.glyphColDef = {field: 'format.glyph', 
-        displayName: 'Format',
-        cellTemplate: '<div><span class="dark glyphicon {{ row.getProperty(col.field) }}"></span></div>'}
+        displayName: '',
+        cellTemplate: '<div><span class="dark glyphicon {{ row.entity.format.glyph }}"></span></div>'}
 
         $scope.keywordColDef = {field: 'keywords', 
         displayName: 'Keywords',
         cellTemplate: '<div>
-            <span tc-tag ng-repeat="k in row.getProperty(col.field)" tc-tip class="pointable">
+            <span tc-tag ng-repeat="k in row.entity.keywords" tc-tip class="pointable">
                 {{ k.value }}
             </span>
         </div>'}
         
         $scope.titleColDef = {field: 'title', 
         displayName: 'Title',
-        cellTemplate: '<span ng-bind-html="row.getProperty(col.field)"></span>'
+        cellTemplate: '<span ng-bind-html="row.entity.title"></span>'
         }
+        
+        $scope.snippetColDef = {field: 'snippet', 
+        displayName: 'Snippet',
+        cellTemplate: '<span ng-bind-html="row.entity.snippet"></span>'}
+        
+        $scope.topCopyColDef = {field: 'topCopy', 
+        displayName: 'Top Copy',
+        cellTemplate: '<span tc-top-copy-icon ng-show="row.entity.topCopy"></span>'}
+        
+        $scope.redDateCol = {field: 'date', 
+        displayName: 'Ref Date',
+        cellTemplate: '<span>{{ row.entity.date.substring(0, 4) }}</span>'}
     
         $scope.gridColDefs = [$scope.glyphColDef,
         $scope.titleColDef,
-        {field: 'snippet', displayName: 'Snippet'},
-        {field: 'topcopy', displayName: 'Top Copy'},
-        {field: 'date', displayName: 'Ref Date'},
+        $scope.snippetColDef,
+        $scope.topCopyColDef,
+        $scope.redDateCol,
         {field: 'resourceType', displayName: 'Type'},
         $scope.keywordColDef]
     
