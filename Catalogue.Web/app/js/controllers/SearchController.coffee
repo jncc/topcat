@@ -151,7 +151,7 @@ angular.module('app.controllers').controller 'ResultGridController',
         
         $scope.titleColDef = {field: 'title', 
         displayName: 'Title',
-        cellTemplate: '<span> {{ row.getProperty(col.field) }} </span>'
+        cellTemplate: '<span ng-bind-html="row.getProperty(col.field)"></span>'
         }
     
         $scope.gridColDefs = [$scope.glyphColDef,

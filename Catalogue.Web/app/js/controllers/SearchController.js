@@ -1,4 +1,4 @@
-﻿(function() {
+(function() {
   var __indexOf = [].indexOf || function(item) { for (var i = 0, l = this.length; i < l; i++) { if (i in this && this[i] === item) return i; } return -1; };
 
   angular.module('app.controllers').controller('SearchController', function($scope, $rootScope, $location, $http, $timeout, $q) {
@@ -31,9 +31,9 @@
     queryKeywords = function(query) {
       if (query.q) {
         return $http.get('../api/keywords?q=' + query.q).success(function(result) {
-          return $scope.keywordSuggestions = result;
-        }).error(function(e) {
-          return $scope.notifications.add('Oops! ' + e.message);
+          return $scope.keywordSuggestions = result.error(function(e) {
+            return $scope.notifications.add('Oops! ' + e.message);
+          });
         });
       } else {
         return $q.defer();
@@ -46,12 +46,12 @@
         $scope.busy.start();
         keywordsPromise = queryKeywords(query);
         recordsPromise = queryRecords(query);
-        return $q.all([keywordsPromise, recordsPromise])["finally"](function() {
+        return $q.all([keywordsPromise, recordsPromise]["finally"](function() {
           $scope.busy.stop();
           if (!$scope.result.query.q) {
             return $scope.keywordSuggestions = {};
           }
-        });
+        }));
       } else {
         $scope.keywordSuggestions = {};
         return $scope.result = {};
@@ -122,7 +122,7 @@
       step = step === void 0 ? 1 : step;
       input = [];
       _results = [];
-      for (i = _i = 0; step > 0 ? _i <= max : _i >= max; i = _i += step) {
+      for (i = _i = 0; 0 <= max ? _i <= max : _i >= max; i = _i += step) {
         _results.push(input.push(i));
       }
       return _results;
@@ -141,12 +141,16 @@
     $scope.keywordColDef = {
       field: 'keywords',
       displayName: 'Keywords',
-      cellTemplate: '<div> <span tc-tag ng-repeat="k in row.getProperty(col.field)" tc-tip class="pointable"> {{ k.value }} </span> </div>'
+      cellTemplate: '<div>\
+            <span tc-tag ng-repeat="k in row.getProperty(col.field)" tc-tip class="pointable">\
+                {{ k.value }}\
+            </span>\
+        </div>'
     };
     $scope.titleColDef = {
       field: 'title',
       displayName: 'Title',
-      cellTemplate: '<span> {{ row.getProperty(col.field) }} </span>'
+      cellTemplate: '<span ng-bind-html="row.getProperty(col.field)"></span>'
     };
     $scope.gridColDefs = [
       $scope.glyphColDef, $scope.titleColDef, {
