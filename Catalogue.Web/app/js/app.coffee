@@ -8,7 +8,8 @@
     'app.services',
     'app.controllers',
     'filters',
-    'ui.grid'
+    'ui.grid',
+    'ui.grid.resizeColumns'
     ]
         
 angular.module 'app.utilities', []

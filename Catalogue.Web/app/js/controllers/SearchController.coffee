@@ -135,8 +135,7 @@ angular.module('app.controllers').controller 'SearchController',
             Math.ceil(total/pageLength)-1;
 
 angular.module('app.controllers').controller 'ResultGridController',
-    ($scope) ->
-    
+    ($scope) ->    
         $scope.glyphColDef = {field: 'format.glyph', 
         displayName: '',
         cellTemplate: '<div><span class="dark glyphicon {{ row.entity.format.glyph }}"></span></div>'}
