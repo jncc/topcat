@@ -22,13 +22,10 @@
                 </div>
             </div>
         </div>
-        {{find.text}}
+
         <div class="row">
             <div class="col-sm-6">
                 <h3>Vocabularies</h3>
-
-                <!--                <select ng-model="current.vocab" ng-options="v as v.name for v in vocabs" size="20"></select>-->
-
                 <div class="vocabulator-vocab-list list-group">
 
                     <a ng-repeat="v in vocabs.filtered" ng-href="" class="list-group-item" ng-class="{active: selected.vocab === v.id}"

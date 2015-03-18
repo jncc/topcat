@@ -8,16 +8,23 @@
       return $scope.vocabs.filtered = result;
     });
     $scope.doFind = function(text) {
-      var v, _i, _len, _ref, _results;
-      _ref = $scope.vocabs.all;
-      _results = [];
-      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-        v = _ref[_i];
-        if (v.name.search(text) !== -1) {
-          _results.push($scope.vocabs.filtered = v);
-        }
+      var q, v;
+      if ($scope.vocabs.all) {
+        q = (function() {
+          var _i, _len, _ref, _results;
+          _ref = $scope.vocabs.all;
+          _results = [];
+          for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+            v = _ref[_i];
+            if (v.name.toLowerCase().indexOf(text.toLowerCase()) !== -1) {
+              _results.push(v);
+            }
+          }
+          return _results;
+        })();
+        console.log(q);
+        return $scope.vocabs.filtered = q;
       }
-      return _results;
     };
     $scope.$watch('find.text', $scope.doFind, true);
     $scope.selected.keyword = {

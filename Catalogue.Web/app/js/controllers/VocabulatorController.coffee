@@ -11,8 +11,11 @@
             $scope.vocabs.filtered = result
         
         $scope.doFind = (text) ->
-            #$scope.selected.vocab = null # ?
-            $scope.vocabs.filtered = v for v in $scope.vocabs.all when v.name.search(text) isnt -1
+            if $scope.vocabs.all
+                #console.log text.toLowerCase()
+                q = (v for v in $scope.vocabs.all when v.name.toLowerCase().indexOf(text.toLowerCase()) isnt -1) #when v.name.search(text) > 0
+                console.log q
+                $scope.vocabs.filtered = q
             
         # when the model search value is updated, do the search
         $scope.$watch 'find.text', $scope.doFind, true
