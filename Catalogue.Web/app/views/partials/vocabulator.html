@@ -4,18 +4,18 @@
 <div class="vocabulator modal-content">
     <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-label="Close" ng-click="$dismiss()"><span aria-hidden="true">&times;</span></button>
-        <h4 class="modal-title">Browse Vocabs and Keywords</h4>
+        <h4 class="modal-title"></h4>
     </div>
     <div class="modal-body">
         <div class="vocabulator-search row">
             <div class=" col-sm-7 col-sm-offset-2 ">
                 <div class="input-group">
                     <span>
-                        <input ng-model="find.text" type="text" class="form-control" tc-focus />
+                        <input ng-model="find.text" type="text" class="form-control" tc-focus placeholder="Search vocabularies and keywords" />
                     </span>
 
                     <span class="input-group-btn">
-                        <button class="btn btn-primary big-button" type="button" ng-click="">
+                        <button class="btn btn-primary big-button" type="button" ng-click="doFind">
                             <span class="glyphicon glyphicon-search"></span>
                         </button>
                     </span>
@@ -28,11 +28,11 @@
                 <h3>Vocabularies</h3>
                 <div class="vocabulator-vocab-list list-group">
 
-                    <a ng-repeat="v in vocabs.filtered" ng-href="" class="list-group-item" ng-class="{active: selected.vocab === v.id}"
-                       ng-click="selected.vocab = v.id">
+                    <a ng-repeat="v in vocabs.filtered" ng-href="" class="list-group-item" ng-class="{active: selected.vocab.id === v.id}"
+                       ng-click="selected.vocab = v">
                         <div>
-                            {{v.name}}
-                            <br />
+                            <span ng-bind-html="v.name | highlight:find.text"></span>
+                            <br/>
                             <span class="small">{{v.id}}</span>
                         </div>
                     </a>
@@ -42,6 +42,18 @@
             </div>
             <div class="col-sm-6">
                 <h3>Keywords</h3>
+                <div>
+                    <div class="vocabulator-keyword-list list-group">
+
+                        <a ng-repeat="k in found.keywords" ng-href="" class="list-group-item" ng-class="{active: selected.keyword === k}"
+                           ng-click="selected.keyword = k">
+                            <div>
+                                <span ng-bind-html="k.value | highlight:find.text"></span>
+                            </div>
+                        </a>
+
+                    </div>
+                </div>
             </div>
         </div>
     </div>

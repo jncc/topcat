@@ -238,6 +238,10 @@ label {
   height: 20em;
   overflow-y: scroll;
 }
+.vocabulator .vocabulator-keyword-list {
+  height: 20em;
+  overflow-y: scroll;
+}
 .date-container {
   width: 11em;
 }
