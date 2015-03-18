@@ -171,7 +171,7 @@
     ];
     return $scope.gridOptions = {
       data: 'result.results',
-      columnDefs: 'gridColDefs'
+      columnDefs: $scope.gridColDefs
     };
   });
 

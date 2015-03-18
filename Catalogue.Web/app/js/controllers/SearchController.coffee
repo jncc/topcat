@@ -175,5 +175,5 @@ angular.module('app.controllers').controller 'ResultGridController',
         $scope.keywordColDef]
     
         $scope.gridOptions = {data: 'result.results',
-        columnDefs: 'gridColDefs'} 
+        columnDefs: $scope.gridColDefs} 
         

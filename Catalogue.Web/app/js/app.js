@@ -1,7 +1,7 @@
 ﻿(function() {
   var module;
 
-  module = angular.module('app', ['ngAnimate', 'ngRoute', 'ngSanitize', 'ngCookies', 'app.utilities', 'app.directives', 'app.services', 'app.controllers', 'filters', 'ngGrid']);
+  module = angular.module('app', ['ngAnimate', 'ngRoute', 'ngSanitize', 'ngCookies', 'app.utilities', 'app.directives', 'app.services', 'app.controllers', 'filters', 'ui.grid']);
 
   angular.module('app.utilities', []);
 
@@ -84,5 +84,3 @@
   });
 
 }).call(this);
-
-//# sourceMappingURL=app.js.map
