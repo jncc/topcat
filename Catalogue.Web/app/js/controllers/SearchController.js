@@ -143,11 +143,13 @@
       displayName: 'Keywords',
       cellTemplate: '<div> <span tc-tag ng-repeat="k in row.getProperty(col.field)" tc-tip class="pointable"> {{ k.value }} </span> </div>'
     };
+    $scope.titleColDef = {
+      field: 'title',
+      displayName: 'Title',
+      cellTemplate: '<span> {{ row.getProperty(col.field) }} </span>'
+    };
     $scope.gridColDefs = [
-      $scope.glyphColDef, {
-        field: 'title',
-        displayName: 'Title'
-      }, {
+      $scope.glyphColDef, $scope.titleColDef, {
         field: 'snippet',
         displayName: 'Snippet'
       }, {

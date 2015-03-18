@@ -148,9 +148,14 @@ angular.module('app.controllers').controller 'ResultGridController',
                 {{ k.value }}
             </span>
         </div>'}
+        
+        $scope.titleColDef = {field: 'title', 
+        displayName: 'Title',
+        cellTemplate: '<span> {{ row.getProperty(col.field) }} </span>'
+        }
     
         $scope.gridColDefs = [$scope.glyphColDef,
-        {field: 'title', displayName: 'Title'},
+        $scope.titleColDef,
         {field: 'snippet', displayName: 'Snippet'},
         {field: 'topcopy', displayName: 'Top Copy'},
         {field: 'date', displayName: 'Ref Date'},
