@@ -239,6 +239,20 @@ label {
     }
 }
 
+// grid
+.grid-style {
+    border: 1px solid rgb(212,212,212);
+    width: 100%; 
+    height: 300px;
+    table-layout: fixed;
+
+    .nonOverflowingCell { 
+        white-space:nowrap;
+        overflow: hidden;
+    }
+}
+
+
 
 // ----
 // tags
@@ -488,15 +502,3 @@ form .ng-invalid {
     color: #666666;
 }
 
-// Temp thing
-.gridStyle {
-    border: 1px solid rgb(212,212,212);
-    width: 100%; 
-    height: 300px;
-    table-layout: fixed;
-}
-
-.nonOverflowingCell { 
-    white-space:nowrap;
-    overflow: hidden;
-}

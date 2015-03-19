@@ -1,4 +1,4 @@
-﻿html {
+html {
   overflow-y: scroll;
 }
 .icon-and-text-btn > span {
@@ -192,6 +192,16 @@ label {
 }
 .search-result .search-tags {
   margin-top: 6px;
+}
+.grid-style {
+  border: 1px solid #d4d4d4;
+  width: 100%;
+  height: 300px;
+  table-layout: fixed;
+}
+.grid-style .nonOverflowingCell {
+  white-space: nowrap;
+  overflow: hidden;
 }
 .tag {
   white-space: nowrap;
@@ -387,14 +397,3 @@ form .ng-invalid {
 .nav > li > a {
   color: #666666;
 }
-.gridStyle {
-  border: 1px solid #d4d4d4;
-  width: 100%;
-  height: 300px;
-  table-layout: fixed;
-}
-.nonOverflowingCell {
-  white-space: nowrap;
-  overflow: hidden;
-}
-/*# sourceMappingURL=main.css.map */
