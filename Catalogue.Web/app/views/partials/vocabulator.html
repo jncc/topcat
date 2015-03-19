@@ -63,7 +63,7 @@
             <button type="button" class="btn btn-default" data-dismiss="modal" ng-click="$dismiss()">CANCEL</button>
         </div>
         <div ng-if="selected.keyword">
-            <span tc-tag tc-tip ng-init="k = selected.keyword" class="pointable">
+            <span tc-tag ng-repeat="k in [selected.keyword]" tc-tip class="pointable">
                 {{ k.value }}
             </span>
             <button type="button" class="btn btn-primary" ng-click="close()">ADD</button>

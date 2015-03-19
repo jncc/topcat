@@ -118,29 +118,6 @@
     };
   });
 
-  module.directive('tcTagX', function() {
-    return {
-      scope: {
-        k: "=k"
-      },
-      link: function(scope, elem, attrs) {
-        var colour, edge;
-        elem.addClass('tag');
-        edge = scope.k.vocab ? (colour = hashStringToColour(scope.k.vocab), angular.element('<span class="vocabful-colour-edge" style="background-color:' + colour + '">&nbsp;</span>')) : angular.element('<span class="vocabless-colour-edge"></span>');
-        elem.prepend(edge);
-        return $(elem).qtip($.extend({}, qtipDefaults, {
-          content: {
-            text: scope.k.vocab || "No vocabulary"
-          },
-          position: {
-            my: 'top center',
-            at: 'bottom center'
-          }
-        }));
-      }
-    };
-  });
-
   module.directive('tcTag', function() {
     return {
       link: function(scope, elem, attrs) {
