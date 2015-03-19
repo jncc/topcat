@@ -138,12 +138,16 @@ angular.module('app.controllers').controller 'ResultGridController',
     ($scope) ->    
         $scope.glyphColDef = {field: 'format.glyph', 
         displayName: '',
-        cellTemplate: '<div><span class="dark glyphicon {{ row.entity.format.glyph }}"></span></div>'}
+        width: 20,
+        enableGridMenu: false,
+        cellTemplate: '<div>
+            <span class="dark glyphicon {{ row.entity.format.glyph }}"></span>
+        </div>'}
 
         $scope.keywordColDef = {field: 'keywords', 
         displayName: 'Keywords',
-        width: '500',
-        cellTemplate: '<div class="keywordCell">
+        width: 500,
+        cellTemplate: '<div class="nonOverflowingCell">
             <span tc-tag ng-repeat="k in row.entity.keywords" tc-tip class="pointable">
                 {{ k.value }}
             </span>
@@ -151,27 +155,30 @@ angular.module('app.controllers').controller 'ResultGridController',
         
         $scope.titleColDef = {field: 'title', 
         displayName: 'Title',
-        cellTemplate: '<span ng-bind-html="row.entity.title"></span>'
+        width: 300,
+        cellTemplate: '<div class="nonOverflowingCell">
+            <span ng-bind-html="row.entity.title"></span>
+        </div>'
         }
         
         $scope.snippetColDef = {field: 'snippet', 
         displayName: 'Snippet',
-        cellTemplate: '<span ng-bind-html="row.entity.snippet"></span>'}
-        
-        $scope.topCopyColDef = {field: 'topCopy', 
-        displayName: 'Top Copy',
-        cellTemplate: '<span tc-top-copy-icon ng-show="row.entity.topCopy"></span>'}
-        
+        width: 300,
+        cellTemplate: '<div class="nonOverflowingCell">
+            <span ng-bind-html="row.entity.snippet"></span>
+        </div>'}
+
         $scope.redDateCol = {field: 'date', 
         displayName: 'Ref Date',
-        cellTemplate: '<span>{{ row.entity.date.substring(0, 4) }}</span>'}
+        width: 100,
+        cellTemplate: '<span>{{ row.entity.date.substring(0, 4) }}</span>
+        <span tc-top-copy-icon ng-show="row.entity.topCopy"></span>'}
     
         $scope.gridColDefs = [$scope.glyphColDef,
         $scope.titleColDef,
         $scope.snippetColDef,
-        $scope.topCopyColDef,
         $scope.redDateCol,
-        {field: 'resourceType', displayName: 'Type'},
+        {field: 'resourceType', displayName: 'Type', width: 100},
         $scope.keywordColDef]
     
         $scope.gridOptions = {data: 'result.results',

@@ -393,8 +393,8 @@ form .ng-invalid {
   height: 300px;
   table-layout: fixed;
 }
-.keywordCell {
-  white-space: nowrap;
-  overflow: hidden;
+.nonOverflowingCell {
+  /*white-space:nowrap;*/
+  /*overflow: hidden;*/
 }
 /*# sourceMappingURL=main.css.map */
