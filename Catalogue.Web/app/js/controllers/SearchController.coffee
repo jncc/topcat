@@ -142,7 +142,8 @@ angular.module('app.controllers').controller 'ResultGridController',
 
         $scope.keywordColDef = {field: 'keywords', 
         displayName: 'Keywords',
-        cellTemplate: '<div>
+        width: '500',
+        cellTemplate: '<div class="keywordCell">
             <span tc-tag ng-repeat="k in row.entity.keywords" tc-tip class="pointable">
                 {{ k.value }}
             </span>

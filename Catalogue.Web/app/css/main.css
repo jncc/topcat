@@ -391,5 +391,10 @@ form .ng-invalid {
   border: 1px solid #d4d4d4;
   width: 100%;
   height: 300px;
+  table-layout: fixed;
+}
+.keywordCell {
+  white-space: nowrap;
+  overflow: hidden;
 }
 /*# sourceMappingURL=main.css.map */

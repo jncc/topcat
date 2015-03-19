@@ -141,7 +141,8 @@
     $scope.keywordColDef = {
       field: 'keywords',
       displayName: 'Keywords',
-      cellTemplate: '<div> <span tc-tag ng-repeat="k in row.entity.keywords" tc-tip class="pointable"> {{ k.value }} </span> </div>'
+      width: '500',
+      cellTemplate: '<div class="keywordCell"> <span tc-tag ng-repeat="k in row.entity.keywords" tc-tip class="pointable"> {{ k.value }} </span> </div>'
     };
     $scope.titleColDef = {
       field: 'title',
