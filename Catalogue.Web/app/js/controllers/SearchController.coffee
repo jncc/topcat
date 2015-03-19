@@ -147,7 +147,7 @@ angular.module('app.controllers').controller 'ResultGridController',
         $scope.keywordColDef = {field: 'keywords', 
         displayName: 'Keywords',
         width: 500,
-        cellTemplate: '<div class="nonOverflowingCell">
+        cellTemplate: '<div class="non-overflowing-cell cell-padding">
             <span tc-tag ng-repeat="k in row.entity.keywords" tc-tip class="pointable">
                 {{ k.value }}
             </span>
@@ -156,7 +156,7 @@ angular.module('app.controllers').controller 'ResultGridController',
         $scope.titleColDef = {field: 'title', 
         displayName: 'Title',
         width: 300,
-        cellTemplate: '<div class="nonOverflowingCell">
+        cellTemplate: '<div class="non-overflowing-cell cell-padding">
             <span ng-bind-html="row.entity.title"></span>
         </div>'
         }
@@ -164,15 +164,15 @@ angular.module('app.controllers').controller 'ResultGridController',
         $scope.snippetColDef = {field: 'snippet', 
         displayName: 'Snippet',
         width: 300,
-        cellTemplate: '<div class="nonOverflowingCell">
+        cellTemplate: '<div class="non-overflowing-cell cell-padding">
             <span ng-bind-html="row.entity.snippet"></span>
         </div>'}
 
         $scope.redDateCol = {field: 'date', 
         displayName: 'Ref Date',
         width: 100,
-        cellTemplate: '<span>{{ row.entity.date.substring(0, 4) }}</span>
-        <span tc-top-copy-icon ng-show="row.entity.topCopy"></span>'}
+        cellTemplate: '<div class="cell-padding"><span>{{ row.entity.date.substring(0, 4) }}</span>
+        <span tc-top-copy-icon ng-show="row.entity.topCopy"></span></div>'}
     
         $scope.gridColDefs = [$scope.glyphColDef,
         $scope.titleColDef,

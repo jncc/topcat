@@ -1,4 +1,4 @@
-html {
+﻿html {
   overflow-y: scroll;
 }
 .icon-and-text-btn > span {
@@ -199,9 +199,12 @@ label {
   height: 300px;
   table-layout: fixed;
 }
-.grid-style .nonOverflowingCell {
+.grid-style .non-overflowing-cell {
   white-space: nowrap;
   overflow: hidden;
+}
+.grid-style .cell-padding {
+  padding-left: 3px;
 }
 .tag {
   white-space: nowrap;
@@ -397,3 +400,4 @@ form .ng-invalid {
 .nav > li > a {
   color: #666666;
 }
+/*# sourceMappingURL=main.css.map */
