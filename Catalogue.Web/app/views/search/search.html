@@ -76,7 +76,7 @@
             <button class="btn" tc-tip title="List view" style="width: 60px" ng-click="resultsView = 'list'" ng-class="{ 'btn-primary': resultsView == 'list', 'btn-default': resultsView != 'list' }">
                 <span class="glyphicon glyphicon-align-left"></span>
             </button>
-            <button class="btn btn-default" tc-tip title="Grid view" style="width: 60px" ng-click="notifications.add('Sorry, grid view isn\'t implemented yet!')">
+            <button class="btn btn-default" tc-tip title="Grid view" style="width: 60px" ng-click="resultsView = 'grid'">
                 <span class="glyphicon glyphicon-list"></span>
             </button>
         </div>
@@ -94,35 +94,37 @@
 </div>
 
 
+<span ng-switch="resultsView">
+    <span ng-switch-when="list">
+        <div ng-repeat="r in result.results" class="layout-row search-result">
+            <div class="layout-col search-format">
+                <span class="dark glyphicon {{r.format.glyph}}" tc-tip title="{{r.format.group}}"></span>
+            </div>
+            <div class="layout-col">
+                <div class="search-title">
+                    <a ng-href="#/editor/{{r.id}}" ng-bind-html="r.title"></a>
+                    <span class="search-divider-bullet">&bull;</span>
+                    <span class="search-date" ng-show="r.date">{{r.date.substring(0, 4)}}</span>
+                    <span tc-top-copy-icon ng-show="r.topCopy" title="Top copy"></span>
+                </div>
+                <div>
+                    <span class="search-resource-type">{{r.resourceType }}</span>
+                    <span class="search-divider-bullet">&bull;</span>
+                    <span ng-bind-html="r.snippet"></span>
+                </div>
+                <div class="search-tags">
+                    <span tc-tag ng-repeat="k in r.keywords" tc-tip ng-click="addKeywordToQuery(k)" class="pointable">
+                        {{ k.value }}
+                    </span>
+                </div>
+            </div>
+        </div>
+    </span>
 
-<div ng-repeat="r in result.results" class="layout-row search-result">
-    <div class="layout-col search-format">
-        <span class="dark glyphicon {{r.format.glyph}}" tc-tip title="{{r.format.group}}"></span>
+    <div ng-switch-when="grid" class="layout-row" ng-controller="ResultGridController">
+        <div class="grid-style" ui-grid="gridOptions" ui-grid-resize-columns></div>
     </div>
-    <div class="layout-col">
-        <div class="search-title">
-            <a ng-href="#/editor/{{r.id}}" ng-bind-html="r.title"></a>
-            <span class="search-divider-bullet">&bull;</span>
-            <span class="search-date" ng-show="r.date">{{r.date.substring(0, 4)}}</span>
-            <span tc-top-copy-icon ng-show="r.topCopy" title="Top copy"></span>
-        </div>
-        <div>
-            <span class="search-resource-type">{{r.resourceType }}</span>
-            <span class="search-divider-bullet">&bull;</span>
-            <span ng-bind-html="r.snippet"></span>
-        </div>
-        <div class="search-tags">
-            <span tc-tag ng-repeat="k in r.keywords" tc-tip ng-click="addKeywordToQuery(k)" class="pointable">
-                {{ k.value }}
-            </span>
-        </div>
-    </div>
-</div>
-
-<div class="layout-row" ng-controller="ResultGridController">
-    <div class="grid-style" ui-grid="gridOptions" ui-grid-resize-columns></div>
-</div>
-
+</span>
 <!--<div ng-include="'views/search/searchgrid.html'"></div>-->
 
 <!--<div class="text-center" ng-show="result.total > result.results.length">-->
