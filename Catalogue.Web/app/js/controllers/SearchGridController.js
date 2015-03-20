@@ -27,7 +27,7 @@
     };
     $scope.redDateCol = {
       field: 'date',
-      displayName: 'Ref Date',
+      displayName: 'Date',
       width: 100,
       cellTemplate: '<div class="cell-padding"><span>{{ row.entity.date.substring(0, 4) }}</span> <span tc-top-copy-icon ng-show="row.entity.topCopy"></span></div>'
     };
