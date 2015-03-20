@@ -150,7 +150,7 @@
       field: 'title',
       displayName: 'Title',
       width: 300,
-      cellTemplate: '<div class="non-overflowing-cell cell-padding"> <span ng-bind-html="row.entity.title"></span> </div>'
+      cellTemplate: '<div class="non-overflowing-cell cell-padding"> <a ng-href="#/editor/{{row.entity.id}}" ng-bind-html="row.entity.title"></span> </div>'
     };
     $scope.snippetColDef = {
       field: 'snippet',

@@ -157,7 +157,7 @@ angular.module('app.controllers').controller 'ResultGridController',
         displayName: 'Title',
         width: 300,
         cellTemplate: '<div class="non-overflowing-cell cell-padding">
-            <span ng-bind-html="row.entity.title"></span>
+            <a ng-href="#/editor/{{row.entity.id}}" ng-bind-html="row.entity.title"></span>
         </div>'
         }
         
