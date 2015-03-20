@@ -316,6 +316,7 @@
     <Content Include="app\lib\respond-1.2.0\test\unit\tests.js" />
     <Content Include="app\lib\ui-grid-3.0.0-rc3\ui-grid-stable.min.css" />
     <Content Include="app\lib\ui-grid-3.0.0-rc3\ui-grid-stable.min.js" />
+    <Content Include="app\lib\ui-grid-3.0.0-rc3\ui-grid.svg" />
     <Content Include="app\lib\zeroclipboard-1.1.7\ZeroClipboard.min.js" />
     <Content Include="app\lib\zeroclipboard-1.1.7\ZeroClipboard.swf" />
     <Content Include="app\views\ingest\ingest.html" />
@@ -533,6 +534,10 @@
     <Content Include="app\js\controllers\SearchGridController.min.js.map">
       <DependentUpon>SearchGridController.min.js</DependentUpon>
     </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="app\lib\ui-grid-3.0.0-rc3\ui-grid.ttf" />
+    <Content Include="app\lib\ui-grid-3.0.0-rc3\ui-grid.woff" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

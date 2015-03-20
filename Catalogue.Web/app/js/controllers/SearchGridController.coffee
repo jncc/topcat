@@ -3,7 +3,7 @@
         $scope.glyphColDef = {field: 'format.glyph', 
         displayName: '',
         width: 20,
-        enableGridMenu: false,
+        enableColumnMenu: false,
         cellTemplate: '<div>
             <span class="dark glyphicon {{ row.entity.format.glyph }}"></span>
         </div>'}

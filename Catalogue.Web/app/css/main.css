@@ -193,17 +193,17 @@ label {
 .search-result .search-tags {
   margin-top: 6px;
 }
-.search-grid-style {
+.search-grid {
   border: 1px solid #d4d4d4;
   width: 100%;
-  height: 300px;
+  height: 100% ;
   table-layout: fixed;
 }
-.search-grid-style .non-overflowing-cell {
+.search-grid .non-overflowing-cell {
   white-space: nowrap;
   overflow: hidden;
 }
-.search-grid-style .cell-padding {
+.search-grid .cell-padding {
   padding-left: 3px;
 }
 .tag {
