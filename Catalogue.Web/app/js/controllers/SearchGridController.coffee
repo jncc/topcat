@@ -3,14 +3,14 @@
         $scope.glyphColDef = {field: 'format.glyph', 
         displayName: '',
         width: 20,
-        enableColumnMenu: false,
         cellTemplate: '<div>
             <span class="dark glyphicon {{ row.entity.format.glyph }}"></span>
         </div>'}
 
         $scope.keywordColDef = {field: 'keywords', 
         displayName: 'Keywords',
-        width: 500,
+        width: 1000,
+        enableSorting: false,
         cellTemplate: '<div class="non-overflowing-cell cell-padding">
             <span tc-tag ng-repeat="k in row.entity.keywords" tc-tip class="pointable">
                 {{ k.value }}
