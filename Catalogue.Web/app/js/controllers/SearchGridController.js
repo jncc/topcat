@@ -40,7 +40,8 @@
     ];
     return $scope.gridOptions = {
       data: 'result.results',
-      columnDefs: $scope.gridColDefs
+      columnDefs: $scope.gridColDefs,
+      enableGridMenu: true
     };
   });
 
