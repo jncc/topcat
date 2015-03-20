@@ -119,8 +119,8 @@
     </div>
 </div>
 
-<div class="layout-row">
-    <div ng-include="'views/search/resultgrid.html'"></div>
+<div class="layout-row" ng-controller="ResultGridController">
+    <div class="grid-style" ui-grid="gridOptions" ui-grid-resize-columns></div>
 </div>
 
 <!--<div ng-include="'views/search/searchgrid.html'"></div>-->
