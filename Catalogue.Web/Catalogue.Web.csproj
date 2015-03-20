@@ -148,6 +148,7 @@
   <ItemGroup>
     <Compile Include="Account\User.cs" />
     <Compile Include="Account\UserContext.cs" />
+    <Compile Include="Controllers\Dumps\DumpsController.cs" />
     <Compile Include="Controllers\Formats\FormatsController.cs" />
     <Compile Include="Controllers\Home\HomeController.cs" />
     <Compile Include="Controllers\Keywords\KeywordModel.cs" />

@@ -34,9 +34,6 @@ namespace Catalogue.Web.Controllers.Seed
             return new HttpResponseMessage();
         }
 
-        /// <summary>
-        /// Todo remove this
-        /// </summary>
         [HttpPost, Route("api/seed/vocabs")]
         public HttpResponseMessage Vocabs()
         {
@@ -44,9 +41,13 @@ namespace Catalogue.Web.Controllers.Seed
 
             return new HttpResponseMessage();
         }
+
         [HttpPost, Route("api/seed/deletemesh")]
         public HttpResponseMessage DeleteMesh()
         {
+            if (environment.Name == "Live")
+                throw new InvalidOperationException("Oops, you surely didn't mean to seed the live instance..?");
+
             WebApiApplication.DocumentStore.DatabaseCommands.DeleteByIndex("RecordIndex",
                 new IndexQuery
                 {

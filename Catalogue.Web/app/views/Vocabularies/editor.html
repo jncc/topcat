@@ -39,22 +39,26 @@
                 </div>
                 <div class="form-group">
                     <label for="publicationDate" class="control-label">Publication Date</label>
-                    <input name="publicationDate" type="text" ng-model="form.publicationDate" placeholder="Publication Date" class="form-control" />
+                    <input name="publicationDate" type="text" ng-model="form.publicationDate" placeholder="Publication Date" class="form-control"/>
                 </div>
-                <label for="valuesDiv" class="control-label">Values:</label>
-                <div name="valuesDiv" class="form-inline">
-                    <div ng-repeat="v in form.keywords track by $index">
-                        <input type="text" name="{{$parent.form.keywords[$index].id}}" ng-model="$parent.form.keywords[$index].value" placeholder="Value (keyword)" class="form-control" style="width:35%"/>
-                        <button class="btn btn-sm btn-primary" ng-click="removeKeyword($index)">
-                            <span style="font-size: small" class="glyphicon glyphicon-remove-sign"></span>
+
+                <div ng-show="form.controlled">
+                    <label for="valuesDiv" class="control-label">Values:</label>
+                    <div name="valuesDiv" class="form-inline">
+                        <div ng-repeat="v in form.keywords track by $index">
+                            <input type="text" name="{{$parent.form.keywords[$index].id}}" ng-model="$parent.form.keywords[$index].value" placeholder="Value (keyword)" class="form-control" style="width:35%" />
+                            <button class="btn btn-sm btn-primary" ng-click="removeKeyword($index)">
+                                <span style="font-size: small" class="glyphicon glyphicon-remove-sign"></span>
+                            </button>
+                            <br />
+                        </div>
+                        <button class="btn btn-primary icon-and-text-btn" ng-click="addKeyword()">
+                            <span class="glyphicon glyphicon-plus-sign"></span>
+                            ADD
                         </button>
-                        <br/>
-                    </div>
-                    <button class="btn btn-primary icon-and-text-btn" ng-click="addKeyword()">
-                        <span class="glyphicon glyphicon-plus-sign"></span>
-                        ADD
-                    </button>
+                    </div>                    
                 </div>
+
             </div>
             <!--Side panel-->
             <div class="col-md-3">

@@ -88,6 +88,7 @@ namespace Catalogue.Data.Import.Mappings
                     return "Grabs";
                 case "multibeam echo sounder":
                 case "multibeam echo scounder":
+                case "multibeam echosounder":
                     return "Multibeam echo sounder";
                 case "side scan sonar":
                     return "Side scan sonar";
