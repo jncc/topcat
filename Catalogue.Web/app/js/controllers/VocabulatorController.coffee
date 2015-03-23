@@ -3,6 +3,7 @@
     ($scope, $http) -> 
         
         $scope.vocabs = {}
+        $scope.vocab = {}
         $scope.find = {}
         $scope.found = {}
         $scope.selected = {}
@@ -32,7 +33,16 @@
                 
         # when the model search value is updated, do the search
         $scope.$watch 'find.text', $scope.doFind, true
-        #$scope.$watch 'selected.vocab', loadKeywordsForVocab, true
+        
+        loadVocab = (vocab) ->
+            if vocab
+                console.log vocab
+                $http.get('../api/vocabularies/' + encodeURIComponent vocab.id)
+                    .success (result) -> $scope.vocab = result
+                    .error (e) -> $scope.notifications.add 'Oops! ' + e.message
+                
+        # when a vocab is selected, load the full document (to show all its keywords)
+        $scope.$watch 'selected.vocab', loadVocab
                 
         $scope.selectKeyword = (k) -> $scope.selected.keyword = k
                         

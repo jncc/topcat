@@ -1,7 +1,8 @@
 ﻿(function() {
   angular.module('app.controllers').controller('VocabulatorController', function($scope, $http) {
-    var findKeywords, findVocabs;
+    var findKeywords, findVocabs, loadVocab;
     $scope.vocabs = {};
+    $scope.vocab = {};
     $scope.find = {};
     $scope.found = {};
     $scope.selected = {};
@@ -44,6 +45,17 @@
       return findKeywords();
     };
     $scope.$watch('find.text', $scope.doFind, true);
+    loadVocab = function(vocab) {
+      if (vocab) {
+        console.log(vocab);
+        return $http.get('../api/vocabularies/' + encodeURIComponent(vocab.id)).success(function(result) {
+          return $scope.vocab = result;
+        }).error(function(e) {
+          return $scope.notifications.add('Oops! ' + e.message);
+        });
+      }
+    };
+    $scope.$watch('selected.vocab', loadVocab);
     $scope.selectKeyword = function(k) {
       return $scope.selected.keyword = k;
     };
