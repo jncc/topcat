@@ -458,11 +458,6 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="app\js\utilities.js.map">
-      <DependentUpon>utilities.js</DependentUpon>
-    </Content>
-  </ItemGroup>
-  <ItemGroup>
     <Content Include="app\js\controllers\SandboxController.js.map">
       <DependentUpon>SandboxController.js</DependentUpon>
     </Content>
@@ -480,31 +475,6 @@
   <ItemGroup>
     <Content Include="app\js\controllers\VocabularyEditorController.min.js.map">
       <DependentUpon>VocabularyEditorController.min.js</DependentUpon>
-    </Content>
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="app\js\services.js.map">
-      <DependentUpon>services.js</DependentUpon>
-    </Content>
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="app\js\services.min.js.map">
-      <DependentUpon>services.min.js</DependentUpon>
-    </Content>
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="app\js\directives.js.map">
-      <DependentUpon>directives.js</DependentUpon>
-    </Content>
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="app\js\directives.min.js.map">
-      <DependentUpon>directives.min.js</DependentUpon>
-    </Content>
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="app\js\utilities.min.js.map">
-      <DependentUpon>utilities.min.js</DependentUpon>
     </Content>
   </ItemGroup>
   <ItemGroup>
@@ -539,6 +509,61 @@
   <ItemGroup>
     <Content Include="app\lib\ui-grid-3.0.0-rc3\ui-grid.ttf" />
     <Content Include="app\lib\ui-grid-3.0.0-rc3\ui-grid.woff" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="app\js\utilities.js.map">
+      <DependentUpon>utilities.js</DependentUpon>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="app\js\utilities.min.js.map">
+      <DependentUpon>utilities.min.js</DependentUpon>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="app\js\services.js.map">
+      <DependentUpon>services.js</DependentUpon>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="app\js\services.min.js.map">
+      <DependentUpon>services.min.js</DependentUpon>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="app\js\directives.js.map">
+      <DependentUpon>directives.js</DependentUpon>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="app\js\directives.min.js.map">
+      <DependentUpon>directives.min.js</DependentUpon>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="app\js\controllers\IngestController.min.js.map">
+      <DependentUpon>IngestController.min.js</DependentUpon>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="app\js\controllers\SandboxController.min.js.map">
+      <DependentUpon>SandboxController.min.js</DependentUpon>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="app\js\controllers\SearchGridController.js.map">
+      <DependentUpon>SearchGridController.js</DependentUpon>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="app\js\controllers\VocabularyListController.js.map">
+      <DependentUpon>VocabularyListController.js</DependentUpon>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="app\js\controllers\VocabularyListController.min.js.map">
+      <DependentUpon>VocabularyListController.min.js</DependentUpon>
+    </Content>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

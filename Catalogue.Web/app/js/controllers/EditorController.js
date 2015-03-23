@@ -52,7 +52,8 @@
                 field = _ref[_j];
                 try {
                   $scope.theForm[field].$setValidity('server', false);
-                } catch (e) {
+                } catch (_error) {
+                  e = _error;
                   console.log(field);
                   console.log(e);
                 }
