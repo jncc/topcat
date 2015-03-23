@@ -9,7 +9,7 @@ namespace Catalogue.Web.Controllers
     {
         public RecordQueryInputModel()
         {
-            N = 25;
+            N = 15;
             P = 0;
             Q = String.Empty;
             K = new string[0];

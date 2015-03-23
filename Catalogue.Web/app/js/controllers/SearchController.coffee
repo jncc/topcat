@@ -70,7 +70,7 @@ angular.module('app.controllers').controller 'SearchController',
             q: '',
             k: [],
             p: 0,
-            n: 25
+            n: 15
 
         parseQuerystring = ->
             o = $location.search() # angular api for getting the querystring as an object

@@ -47,5 +47,7 @@
     
         $scope.gridOptions = {data: 'result.results',
         columnDefs: $scope.gridColDefs,
-        enableGridMenu: true} 
+        enableGridMenu: true,
+        enableVerticalScrollbar: 0,
+        enableSorting: false} 
         
