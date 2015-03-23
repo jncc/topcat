@@ -29,12 +29,6 @@ module.config ($routeProvider) ->
         .when '/sandbox/colours',
             controller:     'SandboxController',
             templateUrl:    'views/sandbox/colours.html'
-        .when '/sandbox/glyphs',
-            controller:     'SandboxController',
-            templateUrl:    'views/sandbox/glyphs.html'
-        .when '/sandbox/dropdown',
-            controller:     'SandboxController',
-            templateUrl:    'views/sandbox/dropdown.html'
         .when '/vocabularies',
             controller:     'VocabularyListController',
             templateUrl:    'views/vocabularies/vocabularies.html'
@@ -45,6 +39,15 @@ module.config ($routeProvider) ->
             controller:     'VocabularyEditorController',
             templateUrl:    'views/vocabularies/editor.html',
             resolve:        'vocab': (VocabLoader) -> VocabLoader()
+        .when '/sandbox/glyphs',
+            controller:     'SandboxController',
+            templateUrl:    'views/sandbox/glyphs.html'
+        .when '/sandbox/dropdown',
+            controller:     'SandboxController',
+            templateUrl:    'views/sandbox/dropdown.html'
+        .when '/sandbox/vocabulator', # for developing the modal vocabulator more easily
+            controller:     'VocabulatorController',
+            templateUrl:    'views/partials/vocabulator.html'
         .otherwise
             redirectTo:     '/'
 

@@ -27,12 +27,6 @@
     }).when('/sandbox/colours', {
       controller: 'SandboxController',
       templateUrl: 'views/sandbox/colours.html'
-    }).when('/sandbox/glyphs', {
-      controller: 'SandboxController',
-      templateUrl: 'views/sandbox/glyphs.html'
-    }).when('/sandbox/dropdown', {
-      controller: 'SandboxController',
-      templateUrl: 'views/sandbox/dropdown.html'
     }).when('/vocabularies', {
       controller: 'VocabularyListController',
       templateUrl: 'views/vocabularies/vocabularies.html'
@@ -47,6 +41,15 @@
           return VocabLoader();
         }
       }
+    }).when('/sandbox/glyphs', {
+      controller: 'SandboxController',
+      templateUrl: 'views/sandbox/glyphs.html'
+    }).when('/sandbox/dropdown', {
+      controller: 'SandboxController',
+      templateUrl: 'views/sandbox/dropdown.html'
+    }).when('/sandbox/vocabulator', {
+      controller: 'VocabulatorController',
+      templateUrl: 'views/partials/vocabulator.html'
     }).otherwise({
       redirectTo: '/'
     });
