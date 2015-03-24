@@ -8,6 +8,8 @@
         $scope.found = {}
         $scope.selected = {}
         
+        $scope.colourHasher = colourHasher
+        
         # load all the vocabs - we'll filter them client-side
         $http.get('../api/vocabularylist').success (result) ->
             $scope.vocabs.all = result
@@ -36,8 +38,7 @@
         
         loadVocab = (vocab) ->
             if vocab
-                console.log vocab
-                $http.get '../api/vocabularies/' + encodeURIComponent vocab.id
+                $http.get '../api/vocabularies?id=' + encodeURIComponent vocab.id
                     .success (result) -> $scope.vocab = result
                     .error (e) -> $scope.notifications.add 'Oops! ' + e.message
                 

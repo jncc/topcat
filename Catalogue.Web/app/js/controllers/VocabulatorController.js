@@ -6,6 +6,7 @@
     $scope.find = {};
     $scope.found = {};
     $scope.selected = {};
+    $scope.colourHasher = colourHasher;
     $http.get('../api/vocabularylist').success(function(result) {
       $scope.vocabs.all = result;
       return $scope.vocabs.filtered = result;
@@ -47,8 +48,7 @@
     $scope.$watch('find.text', $scope.doFind, true);
     loadVocab = function(vocab) {
       if (vocab) {
-        console.log(vocab);
-        return $http.get('../api/vocabularies/' + encodeURIComponent(vocab.id)).success(function(result) {
+        return $http.get('../api/vocabularies?id=' + encodeURIComponent(vocab.id)).success(function(result) {
           return $scope.vocab = result;
         }).error(function(e) {
           return $scope.notifications.add('Oops! ' + e.message);
