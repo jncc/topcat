@@ -1,15 +1,4 @@
-﻿#angular.module('app.components')        
-#        .directive('tcSearchResultGrid', ->
-#            scope : true,
-#            templateUrl : 'views/search/components/resultgrid.html',
-#            controllerAs : 'ctrl',
-#            controller : -> 
-#                # grid options
-#                $scope.gridOptions = {data: 'result.results'}
-#        ) 
-
-
-angular.module('app.controllers').controller 'SearchController',
+﻿angular.module('app.controllers').controller 'SearchController',
     
     ($scope, $rootScope, $location, $http, $timeout, $q) ->
         
@@ -27,14 +16,14 @@ angular.module('app.controllers').controller 'SearchController',
             # update the url querystring to match the query object
             $location.search 'q', query.q || null
             $location.search 'k', query.k # angular does the right thing here
-            #$location.search('p', if query.p != blank.p then query.p else null) 
+            $location.search 'p', query.p || null
             #$location.search('n', $scope.query.n)
         
         queryRecords = (query) ->
             $http.get('../api/search?' + $.param query, true)
                 .success (result) ->
-                    #console.log query
-                    #console.log result.query
+                    console.log query
+                    console.log result.query
                     # don't overwrite with earlier but slower queries!
                     if angular.equals result.query, query
                         $scope.result = result
@@ -77,6 +66,7 @@ angular.module('app.controllers').controller 'SearchController',
             # when there is exactly one keyword, angular's $location.search does not return an array
             # so fix it up (make k an array of one keyword)
             o.k = [o.k] if o.k and not $.isArray o.k
+            o.p = o.p * 1 if o.p
             $.extend {}, blankQuery(), o
 
         # initialise the query to whatever is in the querystring

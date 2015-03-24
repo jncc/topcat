@@ -1,4 +1,4 @@
-(function() {
+﻿(function() {
   var __indexOf = [].indexOf || function(item) { for (var i = 0, l = this.length; i < l; i++) { if (i in this && this[i] === item) return i; } return -1; };
 
   angular.module('app.controllers').controller('SearchController', function($scope, $rootScope, $location, $http, $timeout, $q) {
@@ -17,10 +17,13 @@
       var blank;
       blank = blankQuery();
       $location.search('q', query.q || null);
-      return $location.search('k', query.k);
+      $location.search('k', query.k);
+      return $location.search('p', query.p || null);
     };
     queryRecords = function(query) {
       return $http.get('../api/search?' + $.param(query, true)).success(function(result) {
+        console.log(query);
+        console.log(result.query);
         if (angular.equals(result.query, query)) {
           return $scope.result = result;
         }
@@ -31,9 +34,9 @@
     queryKeywords = function(query) {
       if (query.q) {
         return $http.get('../api/keywords?q=' + query.q).success(function(result) {
-          return $scope.keywordSuggestions = result.error(function(e) {
-            return $scope.notifications.add('Oops! ' + e.message);
-          });
+          return $scope.keywordSuggestions = result;
+        }).error(function(e) {
+          return $scope.notifications.add('Oops! ' + e.message);
         });
       } else {
         return $q.defer();
@@ -46,12 +49,12 @@
         $scope.busy.start();
         keywordsPromise = queryKeywords(query);
         recordsPromise = queryRecords(query);
-        return $q.all([keywordsPromise, recordsPromise]["finally"](function() {
+        return $q.all([keywordsPromise, recordsPromise])["finally"](function() {
           $scope.busy.stop();
           if (!$scope.result.query.q) {
             return $scope.keywordSuggestions = {};
           }
-        }));
+        });
       } else {
         $scope.keywordSuggestions = {};
         return $scope.result = {};
@@ -70,6 +73,9 @@
       o = $location.search();
       if (o.k && !$.isArray(o.k)) {
         o.k = [o.k];
+      }
+      if (o.p) {
+        o.p = o.p * 1;
       }
       return $.extend({}, blankQuery(), o);
     };
@@ -122,7 +128,7 @@
       step = step === void 0 ? 1 : step;
       input = [];
       _results = [];
-      for (i = _i = 0; 0 <= max ? _i <= max : _i >= max; i = _i += step) {
+      for (i = _i = 0; step > 0 ? _i <= max : _i >= max; i = _i += step) {
         _results.push(input.push(i));
       }
       return _results;
@@ -133,3 +139,5 @@
   });
 
 }).call(this);
+
+//# sourceMappingURL=SearchController.js.map
