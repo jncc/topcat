@@ -293,6 +293,9 @@ label {
 
 
 .vocabulator {
+    .less-important {
+        color: #999;
+    }
     padding: 1em;
     .vocabulator-search {
         margin: 1em 0;
@@ -301,7 +304,20 @@ label {
         width: 100%;
     }
     .vocabulator-vocab-list {
-        height: 20em; overflow-y: scroll;
+        height: 20em;
+        overflow-y: scroll;
+        overflow-x: hidden;
+        white-space: nowrap;
+        .vocab-item:hover { background-color: @pale; }
+        .vocab-item {
+            .pointable;
+            border-left: 7px solid red;
+            margin-bottom: 7px;
+            padding: 1px 0 1px 5px;
+            &.active {
+                background-color: @lesspale;
+            }
+        }
     }
     .vocabulator-keyword-list {
         height: 20em; overflow-y: scroll;

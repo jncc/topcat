@@ -228,6 +228,9 @@ label {
 .vocabulator {
   padding: 1em;
 }
+.vocabulator .less-important {
+  color: #999;
+}
 .vocabulator .vocabulator-search {
   margin: 1em 0;
 }
@@ -237,6 +240,20 @@ label {
 .vocabulator .vocabulator-vocab-list {
   height: 20em;
   overflow-y: scroll;
+  overflow-x: hidden;
+  white-space: nowrap;
+}
+.vocabulator .vocabulator-vocab-list .vocab-item:hover {
+  background-color: #eeeeee;
+}
+.vocabulator .vocabulator-vocab-list .vocab-item {
+  cursor: pointer;
+  border-left: 7px solid red;
+  margin-bottom: 7px;
+  padding: 1px 0 1px 5px;
+}
+.vocabulator .vocabulator-vocab-list .vocab-item.active {
+  background-color: #dddddd;
 }
 .vocabulator .vocabulator-keyword-list {
   height: 20em;

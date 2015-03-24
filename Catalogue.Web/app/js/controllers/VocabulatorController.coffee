@@ -21,7 +21,7 @@
         
         findKeywords = ->
             if $scope.find.text
-                $http.get('../api/keywords?q=' + $scope.find.text)
+                $http.get '../api/keywords?q=' + $scope.find.text
                     .success (result) -> $scope.found.keywords = result
                     .error (e) -> $scope.notifications.add 'Oops! ' + e.message
             else
@@ -37,7 +37,7 @@
         loadVocab = (vocab) ->
             if vocab
                 console.log vocab
-                $http.get('../api/vocabularies/' + encodeURIComponent vocab.id)
+                $http.get '../api/vocabularies/' + encodeURIComponent vocab.id
                     .success (result) -> $scope.vocab = result
                     .error (e) -> $scope.notifications.add 'Oops! ' + e.message
                 

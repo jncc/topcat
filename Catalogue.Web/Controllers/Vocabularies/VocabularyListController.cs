@@ -13,6 +13,7 @@ namespace Catalogue.Web.Controllers.Vocabularies
     {
         public string Id { get; set; }
         public string Name { get; set; }
+        public string Description { get; set; }
     }
 
     public class VocabularyListController : ApiController
@@ -31,7 +32,8 @@ namespace Catalogue.Web.Controllers.Vocabularies
                     select new VocabularyListResult()
                         {
                             Id = v.Id,
-                            Name = v.Name
+                            Name = v.Name,
+                            Description = v.Description,
                         }).ToList();
                    
         }
