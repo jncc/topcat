@@ -1,5 +1,5 @@
 ﻿(function() {
-  angular.module('app.controllers').controller('VocabulatorController', function($scope, $http) {
+  angular.module('app.controllers').controller('VocabulatorController', function($scope, $http, colourHasher) {
     var findKeywords, findVocabs, loadVocab;
     $scope.vocabs = {};
     $scope.vocab = {};

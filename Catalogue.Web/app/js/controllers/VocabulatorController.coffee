@@ -1,13 +1,13 @@
 ﻿angular.module('app.controllers').controller 'VocabulatorController',
 
-    ($scope, $http) -> 
+    ($scope, $http, colourHasher) -> 
         
         $scope.vocabs = {}
         $scope.vocab = {}
         $scope.find = {}
         $scope.found = {}
         $scope.selected = {}
-
+        
         # load all the vocabs - we'll filter them client-side
         $http.get('../api/vocabularylist').success (result) ->
             $scope.vocabs.all = result
