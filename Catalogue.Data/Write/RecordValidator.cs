@@ -63,9 +63,19 @@ namespace Catalogue.Data.Write
             }
             else // (let's not add additional errors if it's just that it's blank)
             {
-                // path_must_be_a_valid_file_system_path
+                // path_must_be_an_acceptable_kind
+                // currently, a file system path or paul's experimental OGR connection string
                 Uri uri;
-                if (Uri.TryCreate(record.Path, UriKind.Absolute, out uri))
+
+                // allow OGR connection strings (experimental)
+                if (record.Path.StartsWith("PG:"))
+                {
+                    if (!Regex.IsMatch(record.Path, "PG:\".+\""))
+                    {
+                        result.Errors.Add("Path doesn't appear to be a valid OGR connection string");
+                    }
+                }
+                else if (Uri.TryCreate(record.Path, UriKind.Absolute, out uri))
                 {
                     if (uri.Scheme != Uri.UriSchemeFile)
                     {
@@ -74,7 +84,7 @@ namespace Catalogue.Data.Write
                 }
                 else
                 {
-                    result.Errors.Add("Path must be a file system path", r => r.Path);
+                    result.Errors.Add("Path is invalid. Normally should be a file system path", r => r.Path);
                 }
             }
         }
@@ -453,11 +463,17 @@ namespace Catalogue.Data.Write
         }
 
         [Test]
-        public void path_must_be_a_valid_file_system_path()
+        public void path_must_be_valid()
         {
-            var result = new RecordValidator().Validate(SimpleRecord().With(r => r.Path = "not a path"));
-
+            var result = new RecordValidator().Validate(SimpleRecord().With(r => r.Path = "not a valid path"));
             result.Errors.Single().Fields.Single().Should().Be("path");
+        }
+
+        [Test]
+        public void path_must_be_an_acceptable_kind([Values(@"X:\some\path", "PG:\"host=spatial-store dbname=spatial layer=SSSI_England_Units\"")] string path)
+        {
+            var result = new RecordValidator().Validate(SimpleRecord().With(r => r.Path = path));
+            result.Errors.Should().BeEmpty();
         }
 
         [Test]
