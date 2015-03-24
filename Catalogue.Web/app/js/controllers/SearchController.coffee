@@ -22,8 +22,6 @@
         queryRecords = (query) ->
             $http.get('../api/search?' + $.param query, true)
                 .success (result) ->
-                    console.log query
-                    console.log result.query
                     # don't overwrite with earlier but slower queries!
                     if angular.equals result.query, query
                         $scope.result = result
@@ -116,10 +114,12 @@
         # paging helper functions                
         $scope.setPage = (n) ->
             $scope.query.p = n-1
+            
         $scope.range  = (min, max, step) ->
             step = if step is undefined then 1 else step;
             input = [];
             for i in [0..max] by step
                 input.push(i);
+                
         $scope.maxPages  = (total, pageLength) ->
             Math.ceil(total/pageLength)-1;
