@@ -10,6 +10,10 @@
         
         $scope.colourHasher = colourHasher
         
+        clearCurrentVocab = ->
+            $scope.vocab = {}
+            $scope.selected.vocab = {}
+            
         # load all the vocabs - we'll filter them client-side
         $http.get('../api/vocabularylist').success (result) ->
             $scope.vocabs.all = result
@@ -27,9 +31,10 @@
                     .success (result) -> $scope.found.keywords = result
                     .error (e) -> $scope.notifications.add 'Oops! ' + e.message
             else
-               $scope.found.keywords = []
+                $scope.found.keywords = []
 
         $scope.doFind = ->
+            clearCurrentVocab()
             findVocabs()
             findKeywords()            
                 

@@ -1,12 +1,16 @@
 ﻿(function() {
   angular.module('app.controllers').controller('VocabulatorController', function($scope, $http, colourHasher) {
-    var findKeywords, findVocabs, loadVocab;
+    var clearCurrentVocab, findKeywords, findVocabs, loadVocab;
     $scope.vocabs = {};
     $scope.vocab = {};
     $scope.find = {};
     $scope.found = {};
     $scope.selected = {};
     $scope.colourHasher = colourHasher;
+    clearCurrentVocab = function() {
+      $scope.vocab = {};
+      return $scope.selected.vocab = {};
+    };
     $http.get('../api/vocabularylist').success(function(result) {
       $scope.vocabs.all = result;
       return $scope.vocabs.filtered = result;
@@ -42,6 +46,7 @@
       }
     };
     $scope.doFind = function() {
+      clearCurrentVocab();
       findVocabs();
       return findKeywords();
     };
