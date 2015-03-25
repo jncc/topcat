@@ -290,18 +290,13 @@ label {
 // vocabulator
 // -----------
 
-
-
 .vocabulator {
+    padding: 1em;
     .less-important {
         color: #999;
     }
-    padding: 1em;
     .vocabulator-search {
         margin: 1em 0;
-    }
-    select {
-        width: 100%;
     }
     .vocabulator-vocab-list {
         height: 20em;
@@ -315,8 +310,7 @@ label {
                 margin-bottom: -5px;
             } 
             .pointable;
-            //background-color: rgb(238, 238, 238);
-            border-left: 8px solid;
+            border-left: 7px solid;
             margin-bottom: 6px;
             padding: 2px 0 2px 6px;
             &.active {
@@ -324,14 +318,24 @@ label {
             }
             .vocab-item-id {
                 font-size: 11px;
-                font-family: 'Lucida Grande',sans-serif;
+                font-family: 'Lucida Grande', sans-serif;
                 font-weight: 700;
                 color:@grey;
             }
         }
     }
     .vocabulator-keyword-list {
-        height: 20em; overflow-y: scroll;
+        position:relative; // so we can make child elements absolute relative to this one (look at how css positioning works!)
+        .vocabulator-keyword-list-spec {
+            height: 20em;
+            overflow-y: scroll;
+            position: absolute;
+            top:0;
+            left:0;
+            right:0;
+        }
+        .found-keywords { .vocabulator-keyword-list-spec; }
+        .vocab-keywords { .vocabulator-keyword-list-spec; }
     }
 }
 

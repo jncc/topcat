@@ -234,9 +234,6 @@ label {
 .vocabulator .vocabulator-search {
   margin: 1em 0;
 }
-.vocabulator select {
-  width: 100%;
-}
 .vocabulator .vocabulator-vocab-list {
   height: 20em;
   overflow-y: scroll;
@@ -248,7 +245,7 @@ label {
 }
 .vocabulator .vocabulator-vocab-list .vocab-item {
   cursor: pointer;
-  border-left: 8px solid;
+  border-left: 7px solid;
   margin-bottom: 6px;
   padding: 2px 0 2px 6px;
 }
@@ -268,8 +265,31 @@ label {
   color: #bbbbbb;
 }
 .vocabulator .vocabulator-keyword-list {
+  position: relative;
+}
+.vocabulator .vocabulator-keyword-list .vocabulator-keyword-list-spec {
   height: 20em;
   overflow-y: scroll;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+}
+.vocabulator .vocabulator-keyword-list .found-keywords {
+  height: 20em;
+  overflow-y: scroll;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+}
+.vocabulator .vocabulator-keyword-list .vocab-keywords {
+  height: 20em;
+  overflow-y: scroll;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
 }
 .date-container {
   width: 11em;

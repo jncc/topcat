@@ -28,7 +28,7 @@
                 <h3>Vocabularies</h3>
                 <div class="vocabulator-vocab-list">
                     <div ng-repeat="v in vocabs.filtered" class="vocab-item"
-                         ng-class="{active: selected.vocab.id === v.id}"
+                         ng-class="{ active: selected.vocab.id === v.id }"
                          ng-click="selected.vocab = v"
                          ng-style="{ borderLeftColor: colourHasher.hashStringToColour(v.id) }">
                         <div>
@@ -43,17 +43,22 @@
             </div>
             <div class="col-sm-5">
                 <h3>Keywords</h3>
-                <div class="vocabulator-keyword-list">
-                    <div ng-repeat="k in found.keywords" ng-class="{active: selected.keyword == k}">
-                        <span tc-tag ng-click="selected.keyword = k" class="pointable">
-                            <span ng-bind-html="k.value | highlight:find.text"></span>
-                        </span>
+                <div class="vocabulator-keyword-list ">
+                    <div class="found-keywords">
+                        <div ng-repeat="k in found.keywords">
+                            <span tc-tag ng-click="selected.keyword = k" class="pointable">
+                                <span ng-bind-html="k.value | highlight:find.text"></span>
+                            </span>
+                        </div>
                     </div>
-                    <div ng-show="vocab.keywords" ng-repeat="x in vocab.keywords" ng-init="k = { vocab: vocab.id, value: x.value }" ng-class="{active: selected.keyword == k}">
-                        <span tc-tag vocab="{{vocab.id}}" ng-click="selected.keyword = k" class="pointable">
-                            {{k.value}}
-                        </span>
+                    <div class="vocab-keywords" ng-show="vocab.keywords">
+                        <div ng-repeat="x in vocab.keywords" ng-init="k = { vocab: vocab.id, value: x.value }" ng-class="{active: selected.keyword == k}">
+                            <span tc-tag vocab="{{vocab.id}}" ng-click="selected.keyword = k" class="pointable">
+                                {{k.value}}
+                            </span>
+                        </div>
                     </div>
+
                 </div>
             </div>
         </div>
