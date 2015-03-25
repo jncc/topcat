@@ -228,6 +228,9 @@ label {
 .vocabulator {
   padding: 1em;
 }
+.vocabulator h3 {
+  margin-bottom: 0.6em;
+}
 .vocabulator .close {
   margin-top: -0.8em;
 }
@@ -289,7 +292,7 @@ label {
   background-color: white;
 }
 .vocabulator .vocabulator-keyword-list .vocab-keywords.ng-enter {
-  transition: 0.1s all;
+  transition: 0.2s all;
   left: -15px;
   opacity: 0;
 }
