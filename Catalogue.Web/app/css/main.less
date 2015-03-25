@@ -310,12 +310,23 @@ label {
         white-space: nowrap;
         .vocab-item:hover { background-color: @pale; }
         .vocab-item {
+            >div {
+                :first-child { font-size: 16.7999992370605px; }
+                margin-bottom: -5px;
+            } 
             .pointable;
-            border-left: 7px solid;
-            margin-bottom: 7px;
-            padding: 2px 0 2px 5px;
+            //background-color: rgb(238, 238, 238);
+            border-left: 8px solid;
+            margin-bottom: 6px;
+            padding: 2px 0 2px 6px;
             &.active {
-                background-color: @lesspale;
+                background-color: @pale;
+            }
+            .vocab-item-id {
+                font-size: 11px;
+                font-family: 'Lucida Grande',sans-serif;
+                font-weight: 700;
+                color:@grey;
             }
         }
     }

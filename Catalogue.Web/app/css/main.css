@@ -248,12 +248,24 @@ label {
 }
 .vocabulator .vocabulator-vocab-list .vocab-item {
   cursor: pointer;
-  border-left: 7px solid;
-  margin-bottom: 7px;
-  padding: 2px 0 2px 5px;
+  border-left: 8px solid;
+  margin-bottom: 6px;
+  padding: 2px 0 2px 6px;
+}
+.vocabulator .vocabulator-vocab-list .vocab-item > div {
+  margin-bottom: -5px;
+}
+.vocabulator .vocabulator-vocab-list .vocab-item > div :first-child {
+  font-size: 16.7999992370605px;
 }
 .vocabulator .vocabulator-vocab-list .vocab-item.active {
-  background-color: #dddddd;
+  background-color: #eeeeee;
+}
+.vocabulator .vocabulator-vocab-list .vocab-item .vocab-item-id {
+  font-size: 11px;
+  font-family: 'Lucida Grande', sans-serif;
+  font-weight: 700;
+  color: #bbbbbb;
 }
 .vocabulator .vocabulator-keyword-list {
   height: 20em;
