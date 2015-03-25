@@ -272,10 +272,11 @@
                         <div class="form-group text-left selectContainer">
                             <select name="gemini.topicCategory"
                                     ng-model="form.gemini.topicCategory"
-                                    ng-options="topic.name for topic in lookups.topics"
+                                    ng-options="topic.name as topic.name|camelCaseFilter for topic in lookups.topics"
                                     class="form-control"
-                                    title="The main theme of the data resource">
-                                <option value="" disabled selected>Topic</option>
+                                    title="The main theme of the data resource"
+                                    tc-focus-tip>
+                                <option value="" disabled selected style="display: none">Topic</option>
                             </select>
                         </div>
 
@@ -312,6 +313,10 @@
                             <div>
                                 <input class="form-control" type="text" ng-model="form.gemini.responsibleOrganisation.email" placeholder="Email" title="An email for the point of contact in this responsible organisation" tc-focus-tip />
                             </div>
+                            {{form.gemini.responsibleOrganisation.role}}
+                            <br />
+                            {{lookups.roles}}
+
                             <div>
                                 <select data-ng-model="form.gemini.responsibleOrganisation.role"
                                         data-ng-options="role as role|camelCaseFilter for role in lookups.roles"
