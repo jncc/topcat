@@ -242,6 +242,7 @@ label {
   overflow-y: scroll;
   overflow-x: hidden;
   white-space: nowrap;
+  z-index: 100;
 }
 .vocabulator .vocabulator-vocab-list .vocab-item:hover {
   background-color: #eeeeee;
@@ -293,6 +294,14 @@ label {
   top: 0;
   left: 0;
   right: 0;
+  background-color: white;
+}
+.vocabulator .vocabulator-keyword-list .vocab-keywords.ng-enter {
+  transition: 0.2s;
+  left: -20px;
+}
+.vocabulator .vocabulator-keyword-list .vocab-keywords.ng-enter.ng-enter-active {
+  left: 0;
 }
 .vocabulator .add-the-tag {
   margin-right: 2px;

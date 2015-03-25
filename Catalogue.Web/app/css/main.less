@@ -304,6 +304,7 @@ label {
         overflow-y: scroll;
         overflow-x: hidden;
         white-space: nowrap;
+        z-index: 100; // make sure it stays in front of animated keyword list
         .vocab-item:hover { background-color: @pale; }
         .vocab-item {
             >div {
@@ -336,10 +337,19 @@ label {
             right:0;
         }
         .found-keywords { .vocabulator-keyword-list-spec; }
-        .vocab-keywords { .vocabulator-keyword-list-spec; }
+        .vocab-keywords {
+            .vocabulator-keyword-list-spec;
+            background-color: white; // to cover up what's beneath
+            &.ng-enter {
+                transition:0.2s;
+                left: -20px;
+                &.ng-enter-active { left: 0; }
+            }
+        }
     }
     .add-the-tag { margin-right: 2px; }
 }
+
 
 // ------
 // editor
@@ -503,6 +513,9 @@ form .ng-invalid {
         &.ng-hide-remove-active { opacity: 1; }
     }
 }
+
+
+
 
 // Create boxes for clicking on for use in the data formats
 // selector control

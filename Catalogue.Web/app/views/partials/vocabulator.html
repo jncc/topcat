@@ -51,7 +51,7 @@
                             </span>
                         </div>
                     </div>
-                    <div class="vocab-keywords" ng-show="vocab.keywords">
+                    <div class="vocab-keywords" ng-if="vocab.keywords">
                         <div ng-repeat="x in vocab.keywords" ng-init="k = { vocab: vocab.id, value: x.value }" ng-class="{active: selected.keyword == k}">
                             <span tc-tag vocab="{{vocab.id}}" ng-click="selected.keyword = k" class="pointable">
                                 {{k.value}}
@@ -74,6 +74,14 @@
                 {{ k.value }}
             </span>
             <button type="button" class="btn btn-primary" ng-click="close()">ADD</button>
+        </div>
+    </div>
+
+
+    <div ng-init="on=true">
+        <button ng-click="on=!on">Toggle On/Off</button>
+        <div class="my-boring-animation" ng-if="on">
+            This content will enter and leave
         </div>
     </div>
 </div>
