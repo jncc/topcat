@@ -14,16 +14,13 @@
             </div>
             <div class="col-md-6">
                 <div class="form-group pull-right">
-                    <button class="btn btn-default icon-and-text-btn" tc-back-button>
-                        <span class="dark glyphicon glyphicon-circle-arrow-left"></span>BACK
-                    </button>
                     <span>
                         <button ng-click="cancel()" ng-hide="isCancelHidden()" class="btn btn-primary">CANCEL</button>
                         <button ng-click="save()" ng-hide="isSaveHidden()" ng-disabled="isSaveDisabled()" class="btn btn-danger">SAVE</button>
                     </span>
-                    <button ng-click="clone()" ng-hide="isCloneHidden()" ng-disabled="isCloneDisabled()" class="btn btn-primary">
+                    <a ng-href="#/clone/{{form.id}}" target="_blank" ng-hide="isCloneHidden()" ng-disabled="isCloneDisabled()" tc-tip title="Clone this record" class="btn btn-default icon-and-text-btn">
                         <span class="dark glyphicon glyphicon-duplicate"></span>CLONE
-                    </button>
+                    </a>
                 </div>
             </div>
 
