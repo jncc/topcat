@@ -41,7 +41,7 @@ module.factory 'RecordCloner', (Record, $route, $q) ->
         Record.clone
             id: $route.current.params.recordId,
             (record) -> d.resolve record,
-            () -> d.reject 'Unable to fetch a cloan of record ' + $route.current.params.recordId
+            () -> d.reject 'Unable to fetch a clone of record ' + $route.current.params.recordId
         d.promise
 
 # just currently using this for a spike in SandboxController

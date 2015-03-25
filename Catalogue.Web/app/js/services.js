@@ -92,7 +92,7 @@
       }, function(record) {
         return d.resolve(record);
       }, function() {
-        return d.reject('Unable to fetch a cloan of record ' + $route.current.params.recordId);
+        return d.reject('Unable to fetch a clone of record ' + $route.current.params.recordId);
       });
       return d.promise;
     };
