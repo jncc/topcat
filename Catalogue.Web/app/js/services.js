@@ -57,6 +57,13 @@
         params: {
           id: '@id'
         }
+      },
+      clone: {
+        method: 'GET',
+        params: {
+          id: '@id',
+          clone: true
+        }
       }
     });
   });
@@ -71,6 +78,21 @@
         return d.resolve(record);
       }, function() {
         return d.reject('Unable to fetch record ' + $route.current.params.recordId);
+      });
+      return d.promise;
+    };
+  });
+
+  module.factory('RecordCloner', function(Record, $route, $q) {
+    return function() {
+      var d;
+      d = $q.defer();
+      Record.clone({
+        id: $route.current.params.recordId
+      }, function(record) {
+        return d.resolve(record);
+      }, function() {
+        return d.reject('Unable to fetch a cloan of record ' + $route.current.params.recordId);
       });
       return d.promise;
     };

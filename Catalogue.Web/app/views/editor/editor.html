@@ -21,6 +21,9 @@
                         <button ng-click="cancel()" ng-hide="isCancelHidden()" class="btn btn-primary">CANCEL</button>
                         <button ng-click="save()" ng-hide="isSaveHidden()" ng-disabled="isSaveDisabled()" class="btn btn-danger">SAVE</button>
                     </span>
+                    <button ng-click="clone()" ng-hide="isCloneHidden()" ng-disabled="isCloneDisabled()" class="btn btn-primary">
+                        <span class="dark glyphicon glyphicon-duplicate"></span>CLONE
+                    </button>
                 </div>
             </div>
 

@@ -25,6 +25,10 @@ module.config ($routeProvider) ->
             controller:     'SearchController',
             templateUrl:    'views/search/search.html',
             reloadOnSearch: false
+        .when '/clone/:recordId',
+            controller:     'EditorController',
+            templateUrl:    'views/editor/editor.html',
+            resolve:        'record': (RecordCloner) -> RecordCloner()
         .when '/editor/:recordId',
             controller:     'EditorController',
             templateUrl:    'views/editor/editor.html',
