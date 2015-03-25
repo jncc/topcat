@@ -65,10 +65,11 @@
     </div>
 
     <div class="modal-footer">
-        <div ng-if="!selected.keyword">
+        <div ng-if="!selected.keyword.value">
             <button type="button" class="btn btn-default" data-dismiss="modal" ng-click="$dismiss()">CANCEL</button>
         </div>
-        <div ng-if="selected.keyword">
+        <div ng-if="selected.keyword.value">
+            <span class="add-the-tag">Add the tag</span>
             <span tc-tag ng-repeat="k in [selected.keyword]" tc-tip class="pointable">
                 {{ k.value }}
             </span>

@@ -46,6 +46,10 @@
       }
     };
     $scope.doFind = function() {
+      $scope.selected.keyword = {
+        vocab: '',
+        value: $scope.find.text
+      };
       clearCurrentVocab();
       findVocabs();
       return findKeywords();

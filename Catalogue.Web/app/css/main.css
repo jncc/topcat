@@ -228,6 +228,9 @@ label {
 .vocabulator {
   padding: 1em;
 }
+.vocabulator .close {
+  margin-top: -0.8em;
+}
 .vocabulator .less-important {
   color: #999;
 }
@@ -290,6 +293,9 @@ label {
   top: 0;
   left: 0;
   right: 0;
+}
+.vocabulator .add-the-tag {
+  margin-right: 2px;
 }
 .date-container {
   width: 11em;

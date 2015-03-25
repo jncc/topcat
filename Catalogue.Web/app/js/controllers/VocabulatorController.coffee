@@ -34,6 +34,8 @@
                 $scope.found.keywords = []
 
         $scope.doFind = ->
+            # support adding vocabless keywords - just use what's been typed in!
+            $scope.selected.keyword = { vocab: '', value: $scope.find.text }
             clearCurrentVocab()
             findVocabs()
             findKeywords()            
