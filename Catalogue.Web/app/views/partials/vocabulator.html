@@ -11,7 +11,7 @@
             <div class=" col-sm-7 col-sm-offset-2 ">
                 <div class="input-group">
                     <span>
-                        <input ng-model="vocabulator.find.text" type="text" class="form-control" tc-focus placeholder="Search vocabularies and keywords" />
+                        <input ng-model="vocabulator.q" type="text" class="form-control" tc-focus placeholder="Search vocabularies and keywords" />
                     </span>
 
                     <span class="input-group-btn">
@@ -26,26 +26,26 @@
         <div class="row">
             <div class="col-sm-7">
                 <h3>Vocabularies</h3>
-                <div class="vocabulator-vocab-list">
+                <div class="vocabulator-vocab-list" tc-bind-scroll-position="vocabulator.VocabListScrollPostion">
                     <div ng-repeat="v in vocabulator.vocabs.filtered" class="vocab-item"
-                         ng-class="{ active: vocabulator.selected.vocab.id === v.id }"
-                         ng-click="vocabulator.selected.vocab = v"
+                         ng-class="{ active: vocabulator.selectedVocab.id === v.id }"
+                         ng-click="vocabulator.selectedVocab = v"
                          ng-style="{ borderLeftColor: colourHasher.hashStringToColour(v.id) }">
                         <div>
-                            <span ng-bind-html="v.name | highlight:vocabulator.find.text"></span>
+                            <span ng-bind-html="v.name | highlight:vocabulator.q"></span>
                             <span class="less-important">{{v.description}}</span>
                         </div>
                         <span class="vocab-item-id">{{v.id}}</span>
                     </div>
                     <div ng-show="vocabulator.vocabs.filtered.length == 0">No matches...</div>
                 </div>
-
+                {{foo}}
             </div>
             <div class="col-sm-5">
                 <h3>
                     Keywords
                     <span ng-show="vocabulator.vocab.keywords" class="pull-right">
-                        <button class="btn btn-default icon-and-text-btn" ng-click="vocabulator.selected.vocab = {}">
+                        <button class="btn btn-default icon-and-text-btn" ng-click="vocabulator.selectedVocab = {}">
                             <span class="dark glyphicon glyphicon-circle-arrow-left"></span>BACK
                         </button>
                     </span>
@@ -53,14 +53,14 @@
                 <div class="vocabulator-keyword-list ">
                     <div class="found-keywords">
                         <div ng-repeat="k in vocabulator.found.keywords">
-                            <span tc-tag ng-click="vocabulator.selected.keyword = k" class="pointable">
-                                <span ng-bind-html="k.value | highlight:vocabulator.find.text"></span>
+                            <span tc-tag ng-click="vocabulator.selectedKeyword = k" class="pointable">
+                                <span ng-bind-html="k.value | highlight:vocabulator.q"></span>
                             </span>
                         </div>
                     </div>
                     <div class="vocab-keywords" ng-if="vocabulator.vocab.keywords">
-                        <div ng-repeat="x in vocabulator.vocab.keywords" ng-init="k = { vocab: vocabulator.vocab.id, value: x.value }" ng-class="{active: vocabulator.selected.keyword == k}">
-                            <span tc-tag ng-click="vocabulator.selected.keyword = k" class="pointable">
+                        <div ng-repeat="x in vocabulator.vocab.keywords" ng-init="k = { vocab: vocabulator.vocab.id, value: x.value }" ng-class="{active: vocabulator.selectedKeyword == k}">
+                            <span tc-tag ng-click="vocabulator.selectedKeyword = k" class="pointable">
                                 {{k.value}}
                             </span>
                         </div>
@@ -72,12 +72,12 @@
     </div>
 
     <div class="modal-footer">
-        <div ng-if="!vocabulator.selected.keyword.value">
+        <div ng-if="!vocabulator.selectedKeyword.value">
             <button type="button" class="btn btn-default" data-dismiss="modal" ng-click="$dismiss()">CANCEL</button>
         </div>
-        <div ng-if="vocabulator.selected.keyword.value">
+        <div ng-if="vocabulator.selectedKeyword.value">
             <span class="add-the-tag">Add the tag</span>
-            <span tc-tag ng-repeat="k in [vocabulator.selected.keyword]" tc-tip class="pointable">
+            <span tc-tag ng-repeat="k in [vocabulator.selectedKeyword]" tc-tip class="pointable">
                 {{ k.value }}
             </span>
             <button type="button" class="btn btn-primary" ng-click="close()">ADD</button>

@@ -117,6 +117,15 @@ module.directive 'tcSpinner', ($rootScope) ->
         $rootScope.$on '$routeChangeSuccess', () ->
             elem.addClass 'ng-hide'
 
+module.directive 'tcBindScrollPosition', ($parse) ->
+    link: (scope, elem, attrs) ->
+        getter = $parse attrs.tcBindScrollPosition
+        console.log (getter scope)
+        elem[0].scrollTop = getter scope
+        elem.bind 'scroll', ->
+            getter.assign scope, elem[0].scrollTop
+            scope.$apply()
+            
 ### module.directive 'tcDatepicker', () ->
   link: (scope, elem, attrs) ->
         $(elem).datepicker

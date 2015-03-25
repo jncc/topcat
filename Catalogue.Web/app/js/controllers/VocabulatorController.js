@@ -2,18 +2,21 @@
   angular.module('app.controllers').controller('VocabulatorController', function($scope, $http, colourHasher) {
     var clearCurrentVocab, findKeywords, findVocabs, loadVocab;
     if (!$scope.vocabulator) {
-      $scope.vocabulator = {
-        vocabs: {},
-        vocab: {},
-        find: {},
-        found: {},
-        selected: {}
-      };
+      $scope.vocabulator = {};
+    }
+    if (!$scope.vocabulator.vocabs) {
+      $scope.vocabulator.vocabs = {};
+    }
+    if (!$scope.vocabulator.vocab) {
+      $scope.vocabulator.vocab = {};
+    }
+    if (!$scope.vocabulator.found) {
+      $scope.vocabulator.found = {};
     }
     $scope.colourHasher = colourHasher;
     clearCurrentVocab = function() {
       $scope.vocabulator.vocab = {};
-      return $scope.vocabulator.selected.vocab = {};
+      return $scope.vocabulator.selectedVocab = {};
     };
     $http.get('../api/vocabularylist').success(function(result) {
       $scope.vocabulator.vocabs.all = result;
@@ -22,7 +25,7 @@
     findVocabs = function() {
       var filtered, q, v;
       if ($scope.vocabulator.vocabs.all) {
-        q = $scope.vocabulator.find.text.toLowerCase();
+        q = $scope.vocabulator.q.toLowerCase();
         filtered = (function() {
           var _i, _len, _ref, _results;
           _ref = $scope.vocabulator.vocabs.all;
@@ -39,8 +42,8 @@
       }
     };
     findKeywords = function() {
-      if ($scope.vocabulator.find.text) {
-        return $http.get('../api/keywords?q=' + $scope.vocabulator.find.text).success(function(result) {
+      if ($scope.vocabulator.q) {
+        return $http.get('../api/keywords?q=' + $scope.vocabulator.q).success(function(result) {
           return $scope.vocabulator.found.keywords = result;
         }).error(function(e) {
           return $scope.notifications.add('Oops! ' + e.message);
@@ -49,16 +52,18 @@
         return $scope.vocabulator.found.keywords = [];
       }
     };
-    $scope.doFind = function() {
-      $scope.vocabulator.selected.keyword = {
-        vocab: '',
-        value: $scope.vocabulator.find.text
-      };
-      clearCurrentVocab();
-      findVocabs();
-      return findKeywords();
+    $scope.doFind = function(newer, older) {
+      if (newer !== older) {
+        $scope.vocabulator.selectedKeyword = {
+          vocab: '',
+          value: $scope.vocabulator.q
+        };
+        clearCurrentVocab();
+        findVocabs();
+        return findKeywords();
+      }
     };
-    $scope.$watch('vocabulator.find.text', $scope.doFind, true);
+    $scope.$watch('vocabulator.q', $scope.doFind, true);
     loadVocab = function(vocab) {
       if (vocab) {
         return $http.get('../api/vocabularies?id=' + encodeURIComponent(vocab.id)).success(function(result) {
@@ -68,12 +73,12 @@
         });
       }
     };
-    $scope.$watch('vocabulator.selected.vocab', loadVocab);
+    $scope.$watch('vocabulator.selectedVocab', loadVocab);
     $scope.selectKeyword = function(k) {
-      return $scope.vocabulator.selected.keyword = k;
+      return $scope.vocabulator.selectedKeyword = k;
     };
     return $scope.close = function() {
-      return $scope.$close($scope.vocabulator.selected.keyword);
+      return $scope.$close($scope.vocabulator.selectedKeyword);
     };
   });
 

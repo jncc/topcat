@@ -3,6 +3,9 @@
 
   angular.module('app.controllers').controller('SearchController', function($scope, $rootScope, $location, $http, $timeout, $q, $modal) {
     var blankQuery, parseQuerystring, queryKeywords, queryRecords, updateUrl;
+    $scope.vocabulator = {
+      f: 0
+    };
     $scope.app = {
       starting: true
     };

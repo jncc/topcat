@@ -186,6 +186,21 @@
     };
   });
 
+  module.directive('tcBindScrollPosition', function($parse) {
+    return {
+      link: function(scope, elem, attrs) {
+        var getter;
+        getter = $parse(attrs.tcBindScrollPosition);
+        console.log(getter(scope));
+        elem[0].scrollTop = getter(scope);
+        return elem.bind('scroll', function() {
+          getter.assign(scope, elem[0].scrollTop);
+          return scope.$apply();
+        });
+      }
+    };
+  });
+
 
   /* module.directive 'tcDatepicker', () ->
     link: (scope, elem, attrs) ->
