@@ -328,7 +328,7 @@ label {
     }
     .vocabulator-keyword-list {
         position:relative; // so we can make child elements absolute relative to this one (look at how css positioning works!)
-        .vocabulator-keyword-list-spec {
+        .keyword-list() {
             height: 20em;
             overflow-y: scroll;
             position: absolute;
@@ -336,14 +336,21 @@ label {
             left:0;
             right:0;
         }
-        .found-keywords { .vocabulator-keyword-list-spec; }
+        .found-keywords { .keyword-list(); }
         .vocab-keywords {
-            .vocabulator-keyword-list-spec;
+            .keyword-list();
             background-color: white; // to cover up what's beneath
             &.ng-enter {
-                transition:0.2s;
-                left: -20px;
-                &.ng-enter-active { left: 0; }
+                transition: 0.1s all;
+                left: -15px;
+                opacity:0;
+                &.ng-enter-active { left: 0; opacity: 1; }
+            }
+            &.ng-leave {
+                transition: 0.4s;
+                left: 0;
+                opacity: 1;
+                &.ng-leave-active { left: -15px; opacity: 0; }
             }
         }
     }

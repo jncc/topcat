@@ -271,14 +271,6 @@ label {
 .vocabulator .vocabulator-keyword-list {
   position: relative;
 }
-.vocabulator .vocabulator-keyword-list .vocabulator-keyword-list-spec {
-  height: 20em;
-  overflow-y: scroll;
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-}
 .vocabulator .vocabulator-keyword-list .found-keywords {
   height: 20em;
   overflow-y: scroll;
@@ -297,11 +289,22 @@ label {
   background-color: white;
 }
 .vocabulator .vocabulator-keyword-list .vocab-keywords.ng-enter {
-  transition: 0.2s;
-  left: -20px;
+  transition: 0.1s all;
+  left: -15px;
+  opacity: 0;
 }
 .vocabulator .vocabulator-keyword-list .vocab-keywords.ng-enter.ng-enter-active {
   left: 0;
+  opacity: 1;
+}
+.vocabulator .vocabulator-keyword-list .vocab-keywords.ng-leave {
+  transition: 0.4s;
+  left: 0;
+  opacity: 1;
+}
+.vocabulator .vocabulator-keyword-list .vocab-keywords.ng-leave.ng-leave-active {
+  left: -15px;
+  opacity: 0;
 }
 .vocabulator .add-the-tag {
   margin-right: 2px;

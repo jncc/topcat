@@ -42,7 +42,14 @@
 
             </div>
             <div class="col-sm-5">
-                <h3>Keywords</h3>
+                <h3>
+                    Keywords
+                    <span ng-show="vocab.keywords" class="pull-right">
+                        <button class="btn btn-default icon-and-text-btn" ng-click="selected.vocab = {}">
+                            <span class="dark glyphicon glyphicon-circle-arrow-left"></span>BACK
+                        </button>
+                    </span>
+                </h3>
                 <div class="vocabulator-keyword-list ">
                     <div class="found-keywords">
                         <div ng-repeat="k in found.keywords">
@@ -74,14 +81,6 @@
                 {{ k.value }}
             </span>
             <button type="button" class="btn btn-primary" ng-click="close()">ADD</button>
-        </div>
-    </div>
-
-
-    <div ng-init="on=true">
-        <button ng-click="on=!on">Toggle On/Off</button>
-        <div class="my-boring-animation" ng-if="on">
-            This content will enter and leave
         </div>
     </div>
 </div>
