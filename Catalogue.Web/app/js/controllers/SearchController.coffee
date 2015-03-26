@@ -7,6 +7,7 @@
         $scope.app = { starting: true };
         $timeout (-> $scope.app.starting = false), 500
         $scope.result = {results : {}}
+        $scope.pageSize = 15
         
         # default results view style
         $scope.resultsView = 'list'
@@ -57,7 +58,7 @@
             q: '',
             k: [],
             p: 0,
-            n: 15
+            n: $scope.pageSize
 
         parseQuerystring = ->
             o = $location.search() # angular api for getting the querystring as an object
@@ -111,9 +112,13 @@
                 vocab: 'http://' + (s.substring 0, slash)
                 value: s.substring (slash + 1)
     
-        # paging helper functions                
+        # paging helper functions 
+                           
         $scope.setPage = (n) ->
-            $scope.query.p = n-1
+            console.log n
+            if n > 0 and n <= ($scope.maxPages($scope.result.total, $scope.pageSize) + 1)
+                console.log 'setting value of p'
+                $scope.query.p = n-1
             
         $scope.range  = (min, max, step) ->
             step = if step is undefined then 1 else step;

@@ -128,11 +128,11 @@
 
 <div class="text-center" ng-show="result.total > result.results.length">
     <ul class="pagination">
-        <!--<li style="cursor: pointer;"><span ng-click="setpage(query.p - 1)">&laquo;</span></li>-->
-        <li style="cursor: pointer;" ng-repeat="n in range(0,maxPages(result.total, 15))" ng-class="(n===query.p+1) ? 'active' : ''">
+        <li style="cursor: pointer;"><span ng-click="setPage((query.p))">&laquo;</span></li>
+        <li style="cursor: pointer;" ng-repeat="n in range(0,maxPages(result.total, pageSize))" ng-class="(n===query.p+1) ? 'active' : ''">
             <span ng-bind="n" ng-click="setPage(n)">n</span>
         </li>
-        <!--<li style="cursor: pointer;"><span ng-click="setPage(query.p + 1)">&raquo;</span></li>-->
+        <li style="cursor: pointer;"><span ng-click="setPage((query.p + 2))">&raquo;</span></li>
     </ul>
 </div>
 

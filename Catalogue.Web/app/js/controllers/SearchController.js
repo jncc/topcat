@@ -12,6 +12,7 @@
     $scope.result = {
       results: {}
     };
+    $scope.pageSize = 15;
     $scope.resultsView = 'list';
     updateUrl = function(query) {
       var blank;
@@ -63,7 +64,7 @@
         q: '',
         k: [],
         p: 0,
-        n: 15
+        n: $scope.pageSize
       };
     };
     parseQuerystring = function() {
@@ -119,7 +120,11 @@
       }
     };
     $scope.setPage = function(n) {
-      return $scope.query.p = n - 1;
+      console.log(n);
+      if (n > 0 && n <= ($scope.maxPages($scope.result.total, $scope.pageSize) + 1)) {
+        console.log('setting value of p');
+        return $scope.query.p = n - 1;
+      }
     };
     $scope.range = function(min, max, step) {
       var i, input, _i, _results;
