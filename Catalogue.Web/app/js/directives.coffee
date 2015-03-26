@@ -117,13 +117,16 @@ module.directive 'tcSpinner', ($rootScope) ->
         $rootScope.$on '$routeChangeSuccess', () ->
             elem.addClass 'ng-hide'
 
-module.directive 'tcBindScrollPosition', ($parse) ->
+# (this is clever) binds the scrolltop value of the element to the supplied expression
+module.directive 'tcBindScrollPosition', ($parse, $timeout) ->
     link: (scope, elem, attrs) ->
-        getter = $parse attrs.tcBindScrollPosition
-        console.log (getter scope)
-        elem[0].scrollTop = getter scope
+        getter = $parse attrs.tcBindScrollPosition # see docs for $parse
+        value = getter scope
+        # hack: delay to avoid setting the scroll before it has content
+        ($timeout (-> elem[0].scrollTop = value), 0) if value
         elem.bind 'scroll', ->
-            getter.assign scope, elem[0].scrollTop
+            setter = getter.assign
+            setter scope, elem[0].scrollTop
             scope.$apply()
             
 ### module.directive 'tcDatepicker', () ->

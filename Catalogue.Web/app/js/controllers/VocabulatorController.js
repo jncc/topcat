@@ -18,10 +18,12 @@
       $scope.vocabulator.vocab = {};
       return $scope.vocabulator.selectedVocab = {};
     };
-    $http.get('../api/vocabularylist').success(function(result) {
-      $scope.vocabulator.vocabs.all = result;
-      return $scope.vocabulator.vocabs.filtered = result;
-    });
+    if (!$scope.vocabulator.vocabs.all) {
+      $http.get('../api/vocabularylist').success(function(result) {
+        $scope.vocabulator.vocabs.all = result;
+        return $scope.vocabulator.vocabs.filtered = result;
+      });
+    }
     findVocabs = function() {
       var filtered, q, v;
       if ($scope.vocabulator.vocabs.all) {
@@ -52,8 +54,8 @@
         return $scope.vocabulator.found.keywords = [];
       }
     };
-    $scope.doFind = function(newer, older) {
-      if (newer !== older) {
+    $scope.doFind = function(q, older) {
+      if (q !== older) {
         $scope.vocabulator.selectedKeyword = {
           vocab: '',
           value: $scope.vocabulator.q
@@ -63,9 +65,9 @@
         return findKeywords();
       }
     };
-    $scope.$watch('vocabulator.q', $scope.doFind, true);
-    loadVocab = function(vocab) {
-      if (vocab) {
+    $scope.$watch('vocabulator.q', $scope.doFind);
+    loadVocab = function(vocab, old) {
+      if (vocab && vocab !== old) {
         return $http.get('../api/vocabularies?id=' + encodeURIComponent(vocab.id)).success(function(result) {
           return $scope.vocabulator.vocab = result;
         }).error(function(e) {

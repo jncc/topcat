@@ -26,7 +26,7 @@
         <div class="row">
             <div class="col-sm-7">
                 <h3>Vocabularies</h3>
-                <div class="vocabulator-vocab-list" tc-bind-scroll-position="vocabulator.VocabListScrollPostion">
+                <div class="vocabulator-vocab-list" tc-bind-scroll-position="vocabulator.scrollPositions.vocabList">
                     <div ng-repeat="v in vocabulator.vocabs.filtered" class="vocab-item"
                          ng-class="{ active: vocabulator.selectedVocab.id === v.id }"
                          ng-click="vocabulator.selectedVocab = v"
@@ -51,14 +51,14 @@
                     </span>
                 </h3>
                 <div class="vocabulator-keyword-list-container">
-                    <div class="vocabulator-found-keyword-list">
+                    <div class="vocabulator-found-keyword-list" tc-bind-scroll-position="vocabulator.scrollPositions.foundKeywordList">
                         <div ng-repeat="k in vocabulator.found.keywords">
                             <span tc-tag ng-click="vocabulator.selectedKeyword = k" tabindex="0" class="pointable">
                                 <span ng-bind-html="k.value | highlight:vocabulator.q"></span>
                             </span>
                         </div>
                     </div>
-                    <div class="vocabulator-vocab-keyword-list" ng-if="vocabulator.vocab.keywords">
+                    <div class="vocabulator-vocab-keyword-list" ng-if="vocabulator.vocab.keywords" tc-bind-scroll-position="vocabulator.scrollPositions.vocabKeywordList">
                         <div ng-repeat="x in vocabulator.vocab.keywords" ng-init="k = { vocab: vocabulator.vocab.id, value: x.value }" ng-class="{active: vocabulator.selectedKeyword == k}">
                             <span tc-tag ng-click="vocabulator.selectedKeyword = k" class="pointable">
                                 {{k.value}}

@@ -186,15 +186,21 @@
     };
   });
 
-  module.directive('tcBindScrollPosition', function($parse) {
+  module.directive('tcBindScrollPosition', function($parse, $timeout) {
     return {
       link: function(scope, elem, attrs) {
-        var getter;
+        var getter, value;
         getter = $parse(attrs.tcBindScrollPosition);
-        console.log(getter(scope));
-        elem[0].scrollTop = getter(scope);
+        value = getter(scope);
+        if (value) {
+          $timeout((function() {
+            return elem[0].scrollTop = value;
+          }), 0);
+        }
         return elem.bind('scroll', function() {
-          getter.assign(scope, elem[0].scrollTop);
+          var setter;
+          setter = getter.assign;
+          setter(scope, elem[0].scrollTop);
           return scope.$apply();
         });
       }
