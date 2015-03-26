@@ -39,7 +39,9 @@
             <span ng-bind-html="k.value | highlight:query.q"></span>
         </span>
     </span>
-    <button ng-click="openVocabulator()" class="btn btn-default" style="height: 20px">&bull;&bull;&bull;</button>
+    <button ng-show="!result.query.k[0]" class="search-open-vocabulator btn btn-sm btn-dialogue" tc-tip title="Add tags (keywords) to query" ng-click="openVocabulator()">
+        &bull;&bull;&bull;
+    </button>
 </div>
 
 <!--<div class="row search-advanced" ng-show="advanced">-->
@@ -59,19 +61,26 @@
         </span>
         {{result.total || 0}} records
         <!-- <span ng-show="result.speed">in {{(result.speed / 1000) | number:2}} seconds</span>-->
-        <span ng-show="result.query.k[0]" class="search-results-header-tagged">
-            tagged
-            <span></span>
-            <span tc-tag ng-repeat="s in result.query.k" ng-init="k = keywordFromString(s)">
-                {{k.value}}
-                <span class="glyphicon glyphicon-remove" ng-click="removeKeywordFromQuery(k)" tc-tip title="Remove"></span>
+        <span ng-show="result.query.k[0]">
+            <span class="search-results-header-tagged">
+                tagged
+                <span></span>
+                <span tc-tag ng-repeat="s in result.query.k" ng-init="k = keywordFromString(s)">
+                    {{k.value}}
+                    <span class="glyphicon glyphicon-remove" ng-click="removeKeywordFromQuery(k)" tc-tip title="Remove"></span>
+                </span>
             </span>
+            <button class="search-open-vocabulator btn btn-sm btn-dialogue" tc-tip title="Add more tags (keywords) to query" ng-click="openVocabulator()">
+                &bull;&bull;&bull;
+            </button>
         </span>
+
         <span ng-show="result.query.q">
             matching <b>{{result.query.q}}</b>
             <span ng-show="result.query.k[0]" class="glyphicon glyphicon-remove" ng-click="query.q = ''" tc-tip title="Remove"></span>
         </span>
     </div>
+
     <!-- results view / export buttons -->
     <div class="layout-col" ng-show="result.total > 0" style="text-align: right;">
         <div class="search-results-view-picker btn-group" role="group">

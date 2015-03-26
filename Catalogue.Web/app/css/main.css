@@ -1,4 +1,4 @@
-html {
+﻿html {
   overflow-y: scroll;
 }
 .icon-and-text-btn > span {
@@ -143,6 +143,9 @@ label {
 }
 .search-results-header .search-results-header-tagged > span:last-child {
   margin-right: 0.2em;
+}
+.search-open-vocabulator {
+  margin: -3px 0.5em 0 0.5em;
 }
 .search-result {
   margin: 1.2em 0;
@@ -486,3 +489,4 @@ form .ng-invalid {
 .nav > li > a {
   color: #666666;
 }
+/*# sourceMappingURL=main.css.map */
