@@ -5,6 +5,7 @@
     $scope.editing = {};
     $scope.lookups = {};
     $scope.lookups.currentDataFormat = {};
+    $scope.vocabulator = {};
     $scope.$ = $;
     $http.get('../api/topics').success(function(result) {
       return $scope.lookups.topics = result;

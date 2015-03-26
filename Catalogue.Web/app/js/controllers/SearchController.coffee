@@ -3,7 +3,7 @@
     ($scope, $rootScope, $location, $http, $timeout, $q, $modal) ->
         
         # store a vocabulator scope here to save state between modal instances
-        $scope.vocabulator = {f:0}
+        $scope.vocabulator = {}
         
         # slightly hacky way of triggering animations on startup to work around
         # angular skipping the initial animation - set app.starting to true for 500ms
