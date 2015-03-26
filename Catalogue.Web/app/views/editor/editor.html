@@ -123,47 +123,19 @@
                 <div name="keywordsDiv" class="editor-keywords form-group">
                     <span tc-tag ng-repeat="k in form.gemini.keywords">
                         {{ k.value }}
+                        <span class="glyphicon glyphicon-remove" ng-show="editing.keywords" ng-click="removeKeyword(k)"></span>
                     </span>
                     <!--Hidden field for capturing errors against the gemini.keywords set-->
                     <input type="hidden" name="gemini.keywords" ng-model="form.gemini.keywords" />
                     <span ng-class="{'ng-invalid': $.isEmptyObject(theForm['gemini.keywords'].$error) == false}">
                         <button id="keywordsBtn" class="btn btn-sm btn-dialogue" tc-tip title="Edit tags (keywords)"
-                                ng-click="keywordEditorOpen = !keywordEditorOpen">
+                                ng-click="editKeywords()">
                             &bull;&bull;&bull;
                         </button>
                         <label ng-hide="form.gemini.keywords" for="keywordsBtn">Keywords</label>
                     </span>
                 </div>
 
-
-                <script type="text/ng-template" id="customTemplate.html">
-                    <a>
-                        <span bind-html-unsafe="match.model.vocab"></span>
-                        <br />
-                        <span bind-html-unsafe="match.model.value | typeaheadHighlight:query"></span>
-                    </a>
-                </script>
-
-                <!--typeahead-template-url="customTemplate.html"-->
-
-                <div ng-show="keywordEditorOpen" class="editor-keywords-editor form-inline">
-                    <div ng-repeat="k in form.gemini.keywords">
-                        <input type="text" ng-model="k.vocab" placeholder="Vocab (namespace)" class="form-control" disabled style="width:55%;" />
-                        <!--See: -- https://github.com/angular-ui/bootstrap/blob/91ac17c9ed691a99647b66b3f464e3585398be19/src/typeahead/test/typeahead.spec.js#L372 -->
-
-                        <input type="text" ng-model="k.value" placeholder="Value (keyword)" typeahead-on-select="setKeyword($item, k)" typeahead-template-url="customTemplate.html" typeahead-loading="loadingKeys" typeahead="keyword.value as keyword for keyword in getKeywords($viewValue)" class="form-control" style="width:35%" />
-                        <i ng-show="loadingKeys" class="glyphicon glyphicon-refresh"></i>
-
-
-                        <button class="btn btn-sm btn-primary" ng-click="removeKeyword(k)">
-                            <span style="font-size: small" class="glyphicon glyphicon-remove-sign"></span>
-                        </button>
-                    </div>
-                    <button class="btn btn-primary icon-and-text-btn" ng-click="addKeyword()">
-                        <span class="glyphicon glyphicon-plus-sign"></span>
-                        ADD
-                    </button>
-                </div>
 
                 <!-- abstract -->
                 <div class="editor-abstract form-group">
@@ -173,8 +145,6 @@
                               title="The abstract is a clear, brief summary of the resource's content"
                               tc-focus-tip tc-autosize></textarea>
                 </div>
-
-
 
                 <div class="editor-tabs" tabset>
 

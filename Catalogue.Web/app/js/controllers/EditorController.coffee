@@ -1,7 +1,8 @@
 ﻿angular.module('app.controllers').controller 'EditorController',
 
-    ($scope, $http, $routeParams, $location, record) -> 
+    ($scope, $http, $routeParams, $location, record, $modal) -> 
     
+        $scope.editing = {}
         $scope.lookups = {}
         $scope.lookups.currentDataFormat = {}
         
@@ -79,10 +80,23 @@
 
         $scope.hasUsageConstraints = () -> (!!$scope.form.gemini.limitationsOnPublicAccess and $scope.form.gemini.limitationsOnPublicAccess isnt 'no limitations') or (!!$scope.form.gemini.useConstraints and $scope.form.gemini.useConstraints isnt 'no conditions apply')
 
-        $scope.removeKeyword = (keyword) ->
-            $scope.form.gemini.keywords.splice ($.inArray keyword, $scope.form.gemini.keywords), 1
-        $scope.addKeyword = ->
-            $scope.form.gemini.keywords.push({ vocab: '', value: '' })
+        # keywords
+        $scope.removeKeyword = (k) ->
+            $scope.form.gemini.keywords.splice ($.inArray k, $scope.form.gemini.keywords), 1
+        $scope.addKeyword = (k) ->
+            $scope.form.gemini.keywords.push(k)
+        $scope.editKeywords = ->
+            # vocabulator
+            modal = $modal.open
+                controller:  'VocabulatorController'
+                templateUrl: 'views/partials/vocabulator.html?' + new Date().getTime() # stop iis express caching the html
+                size:        'lg'
+                scope:       $scope
+            modal.result
+                .then (k) -> 
+                    $scope.addKeyword k
+                .finally -> $scope.editing.keywords = true # doing this now looks better
+            
             
         $scope.removeExtent = (extent) ->
             $scope.form.gemini.extent.splice ($.inArray extent, $scope.form.gemini.extent), 1

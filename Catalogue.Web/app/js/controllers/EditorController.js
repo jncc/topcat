@@ -1,7 +1,8 @@
 ﻿(function() {
   var fakeValidationData, getDataFormatObj, getSecurityText, updateDataFormatObj;
 
-  angular.module('app.controllers').controller('EditorController', function($scope, $http, $routeParams, $location, record) {
+  angular.module('app.controllers').controller('EditorController', function($scope, $http, $routeParams, $location, record, $modal) {
+    $scope.editing = {};
     $scope.lookups = {};
     $scope.lookups.currentDataFormat = {};
     $scope.$ = $;
@@ -52,7 +53,8 @@
                 field = _ref[_j];
                 try {
                   $scope.theForm[field].$setValidity('server', false);
-                } catch (e) {
+                } catch (_error) {
+                  e = _error;
                   console.log(field);
                   console.log(e);
                 }
@@ -90,13 +92,24 @@
     $scope.hasUsageConstraints = function() {
       return (!!$scope.form.gemini.limitationsOnPublicAccess && $scope.form.gemini.limitationsOnPublicAccess !== 'no limitations') || (!!$scope.form.gemini.useConstraints && $scope.form.gemini.useConstraints !== 'no conditions apply');
     };
-    $scope.removeKeyword = function(keyword) {
-      return $scope.form.gemini.keywords.splice($.inArray(keyword, $scope.form.gemini.keywords), 1);
+    $scope.removeKeyword = function(k) {
+      return $scope.form.gemini.keywords.splice($.inArray(k, $scope.form.gemini.keywords), 1);
     };
-    $scope.addKeyword = function() {
-      return $scope.form.gemini.keywords.push({
-        vocab: '',
-        value: ''
+    $scope.addKeyword = function(k) {
+      return $scope.form.gemini.keywords.push(k);
+    };
+    $scope.editKeywords = function() {
+      var modal;
+      modal = $modal.open({
+        controller: 'VocabulatorController',
+        templateUrl: 'views/partials/vocabulator.html?' + new Date().getTime(),
+        size: 'lg',
+        scope: $scope
+      });
+      return modal.result.then(function(k) {
+        return $scope.addKeyword(k);
+      })["finally"](function() {
+        return $scope.editing.keywords = true;
       });
     };
     $scope.removeExtent = function(extent) {

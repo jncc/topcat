@@ -181,11 +181,7 @@ label {
 }
 
 .search-results-header {
-    .glyphicon-remove {
-        font-size: 75%;
-        color: @dark;
-        .pointable;
-    }
+
     .search-results-header-tagged {
         // make the spacing look better
         >span:first-child { margin-left:0.2em; }
@@ -267,6 +263,11 @@ label {
         width: 0;
         margin-right: 0.15em;
     }
+    .glyphicon-remove {
+        font-size: 75%;
+        color: @dark;
+        .pointable;
+    }
 }
 
 // ----
@@ -292,7 +293,7 @@ label {
 
 .vocabulator {
     padding: 1em;
-    h3 { margin-bottom: 0.6em; }
+    h3 { margin: 0.3em 0 0.8em 0; }
     .close { margin-top: -0.8em; } // vertically position the close 'x' button
     .less-important {
         color: #999;
@@ -327,19 +328,19 @@ label {
             }
         }
     }
-    .vocabulator-keyword-list {
+    .vocabulator-keyword-list-container {
         position:relative; // so we can make child elements absolute relative to this one (look at how css positioning works!)
-        .keyword-list() {
+        .vocabulator-found-keyword-list { 
+            height: 20em;
+            overflow-y: scroll;
+        }
+        .vocabulator-vocab-keyword-list {
             height: 20em;
             overflow-y: scroll;
             position: absolute;
             top:0;
             left:0;
             right:0;
-        }
-        .found-keywords { .keyword-list(); }
-        .vocab-keywords {
-            .keyword-list();
             background-color: white; // to cover up what's beneath
             &.ng-enter {
                 transition: 0.2s all;

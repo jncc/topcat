@@ -138,11 +138,6 @@ label {
 .search-results-view-picker button span {
   font-size: smaller;
 }
-.search-results-header .glyphicon-remove {
-  font-size: 75%;
-  color: #666666;
-  cursor: pointer;
-}
 .search-results-header .search-results-header-tagged > span:first-child {
   margin-left: 0.2em;
 }
@@ -216,6 +211,11 @@ label {
   width: 0;
   margin-right: 0.15em;
 }
+.tag .glyphicon-remove {
+  font-size: 75%;
+  color: #666666;
+  cursor: pointer;
+}
 .tip {
   max-width: 100%;
   color: #fff;
@@ -229,7 +229,7 @@ label {
   padding: 1em;
 }
 .vocabulator h3 {
-  margin-bottom: 0.6em;
+  margin: 0.3em 0 0.8em 0;
 }
 .vocabulator .close {
   margin-top: -0.8em;
@@ -271,18 +271,14 @@ label {
   font-weight: 700;
   color: #bbbbbb;
 }
-.vocabulator .vocabulator-keyword-list {
+.vocabulator .vocabulator-keyword-list-container {
   position: relative;
 }
-.vocabulator .vocabulator-keyword-list .found-keywords {
+.vocabulator .vocabulator-keyword-list-container .vocabulator-found-keyword-list {
   height: 20em;
   overflow-y: scroll;
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
 }
-.vocabulator .vocabulator-keyword-list .vocab-keywords {
+.vocabulator .vocabulator-keyword-list-container .vocabulator-vocab-keyword-list {
   height: 20em;
   overflow-y: scroll;
   position: absolute;
@@ -291,21 +287,21 @@ label {
   right: 0;
   background-color: white;
 }
-.vocabulator .vocabulator-keyword-list .vocab-keywords.ng-enter {
+.vocabulator .vocabulator-keyword-list-container .vocabulator-vocab-keyword-list.ng-enter {
   transition: 0.2s all;
   left: -15px;
   opacity: 0;
 }
-.vocabulator .vocabulator-keyword-list .vocab-keywords.ng-enter.ng-enter-active {
+.vocabulator .vocabulator-keyword-list-container .vocabulator-vocab-keyword-list.ng-enter.ng-enter-active {
   left: 0;
   opacity: 1;
 }
-.vocabulator .vocabulator-keyword-list .vocab-keywords.ng-leave {
+.vocabulator .vocabulator-keyword-list-container .vocabulator-vocab-keyword-list.ng-leave {
   transition: 0.4s;
   left: 0;
   opacity: 1;
 }
-.vocabulator .vocabulator-keyword-list .vocab-keywords.ng-leave.ng-leave-active {
+.vocabulator .vocabulator-keyword-list-container .vocabulator-vocab-keyword-list.ng-leave.ng-leave-active {
   left: -15px;
   opacity: 0;
 }
