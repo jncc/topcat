@@ -67,16 +67,21 @@
       };
       $scope.busy.start();
       if ($scope.isNew()) {
+        console.log('new thing');
         return $http.post('../api/records', $scope.form).then(processResult);
       } else {
+        console.log('not new thing');
         return $http.put('../api/records/' + record.id, $scope.form).then(processResult);
       }
+    };
+    $scope.clone = function() {
+      return $location.path('/clone/' + $scope.form.id);
     };
     $scope.reset = function() {
       return $scope.form = angular.copy(record);
     };
     $scope.isNew = function() {
-      return $routeParams.recordId === '00000000-0000-0000-0000-000000000000';
+      return $scope.form.id === '00000000-0000-0000-0000-000000000000';
     };
     $scope.isClean = function() {
       return angular.equals($scope.form, record);
@@ -89,6 +94,12 @@
     };
     $scope.isSaveDisabled = function() {
       return $scope.isClean();
+    };
+    $scope.isCloneHidden = function() {
+      return $scope.isNew();
+    };
+    $scope.isCloneDisabled = function() {
+      return !$scope.isClean();
     };
     $scope.hasUsageConstraints = function() {
       return (!!$scope.form.gemini.limitationsOnPublicAccess && $scope.form.gemini.limitationsOnPublicAccess !== 'no limitations') || (!!$scope.form.gemini.useConstraints && $scope.form.gemini.useConstraints !== 'no conditions apply');

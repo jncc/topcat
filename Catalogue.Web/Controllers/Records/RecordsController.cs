@@ -28,12 +28,25 @@ namespace Catalogue.Web.Controllers.Records
 
         // GET api/records/57d34691-9064-4c1e-90a7-7b0c112daa8d (get a record)
 
-        public Record Get(Guid id)
+        public Record Get(Guid id, bool clone = false)
         {
             if (id == Guid.Empty) // a nice empty record for making a new one
                 return MakeNewRecord();
+            else if (clone)
+                return Clone(db.Load<Record>(id));
             else
                 return db.Load<Record>(id);
+        }
+
+        private Record Clone(Record record)
+        {
+            var clonedRecord = record.Copy();
+
+            clonedRecord.Id = Guid.Empty;
+            clonedRecord.Path = String.Empty;
+            clonedRecord.Gemini.Title = String.Empty;
+
+            return clonedRecord;
         }
 
         // PUT api/records/57d34691-9064-4c1e-90a7-7b0c112daa8d (update/replace a record)

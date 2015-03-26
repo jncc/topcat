@@ -1,7 +1,7 @@
 ﻿(function() {
   var module;
 
-  module = angular.module('app', ['ngAnimate', 'ngRoute', 'ngSanitize', 'ngCookies', 'ui.bootstrap', 'app.utilities', 'app.directives', 'app.services', 'app.controllers', 'filters']);
+  module = angular.module('app', ['ngAnimate', 'ngRoute', 'ngSanitize', 'ngCookies', 'ui.bootstrap', 'app.utilities', 'app.directives', 'app.services', 'app.controllers', 'filters', 'ui.grid', 'ui.grid.resizeColumns']);
 
   angular.module('app.utilities', []);
 
@@ -16,6 +16,14 @@
       controller: 'SearchController',
       templateUrl: 'views/search/search.html',
       reloadOnSearch: false
+    }).when('/clone/:recordId', {
+      controller: 'EditorController',
+      templateUrl: 'views/editor/editor.html',
+      resolve: {
+        'record': function(RecordCloner) {
+          return RecordCloner();
+        }
+      }
     }).when('/editor/:recordId', {
       controller: 'EditorController',
       templateUrl: 'views/editor/editor.html',

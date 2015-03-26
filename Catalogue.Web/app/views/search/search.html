@@ -51,10 +51,11 @@
 <!--</div>-->
 
 <div ng-show="result.query" class="search-results-header layout-row">
+
     <div class="layout-col">
         Found
         <span ng-show="result.total > result.results.length">
-            {{result.query.p * 25 || 1}} to {{result.results.length + (query.p * 25) || 0}} of
+            {{result.query.p * 15 || 1}} to {{result.results.length + (query.p * 15) || 0}} of
         </span>
         {{result.total || 0}} records
         <!-- <span ng-show="result.speed">in {{(result.speed / 1000) | number:2}} seconds</span>-->
@@ -77,7 +78,7 @@
             <button class="btn big-button" tc-tip title="List view" ng-click="resultsView = 'list'" ng-class="{ 'btn-primary': resultsView == 'list', 'btn-default': resultsView != 'list' }">
                 <span class="glyphicon glyphicon-align-left"></span>
             </button>
-            <button class="btn btn-default big-button" tc-tip title="Grid view" ng-click="notifications.add('Sorry, grid view isn\'t implemented yet!')">
+            <button class="btn big-button" tc-tip title="Grid view" ng-click="resultsView = 'grid'" ng-class="{ 'btn-primary': resultsView == 'grid', 'btn-default': resultsView != 'grid' }">
                 <span class="glyphicon glyphicon-list"></span>
             </button>
         </div>
@@ -94,39 +95,48 @@
     <hr />
 </div>
 
-<div ng-repeat="r in result.results" class="layout-row search-result">
-    <div class="layout-col search-format">
-        <span class="dark glyphicon {{r.format.glyph}}" tc-tip title="{{r.format.group}}"></span>
+
+<div ng-switch="resultsView">
+    <div ng-switch-when="list">
+        <div ng-repeat="r in result.results" class="layout-row search-result">
+            <div class="layout-col search-format">
+                <span class="dark glyphicon {{r.format.glyph}}" tc-tip title="{{r.format.group}}"></span>
+            </div>
+            <div class="layout-col">
+                <div class="search-title">
+                    <a ng-href="#/editor/{{r.id}}" ng-bind-html="r.title"></a>
+                    <span class="search-divider-bullet">&bull;</span>
+                    <span class="search-date" ng-show="r.date">{{r.date.substring(0, 4)}}</span>
+                    <span tc-top-copy-icon ng-show="r.topCopy" title="Top copy"></span>
+                </div>
+                <div>
+                    <span class="search-resource-type">{{r.resourceType }}</span>
+                    <span class="search-divider-bullet">&bull;</span>
+                    <span ng-bind-html="r.snippet"></span>
+                </div>
+                <div class="search-tags">
+                    <span tc-tag ng-repeat="k in r.keywords" tc-tip ng-click="addKeywordToQuery(k)" class="pointable">
+                        {{ k.value }}
+                    </span>
+                </div>
+            </div>
+        </div>
     </div>
-    <div class="layout-col">
-        <div class="search-title">
-            <a ng-href="#/editor/{{r.id}}" ng-bind-html="r.title"></a>
-            <span class="search-divider-bullet">&bull;</span>
-            <span class="search-date" ng-show="r.date">{{r.date.substring(0, 4)}}</span>
-            <span tc-top-copy-icon ng-show="r.topCopy" title="Top copy"></span>
-        </div>
-        <div>
-            <span class="search-resource-type">{{r.resourceType }}</span>
-            <span class="search-divider-bullet">&bull;</span>
-            <span ng-bind-html="r.snippet"></span>
-        </div>
-        <div class="search-tags">
-            <span tc-tag ng-repeat="k in r.keywords" tc-tip ng-click="addKeywordToQuery(k)" class="pointable">
-                {{ k.value }}
-            </span>
-        </div>
+
+    <div ng-switch-when="grid" class="layout-row" ng-controller="ResultGridController">
+        <div class="search-grid" ui-grid="gridOptions" ui-grid-resize-columns></div>
     </div>
 </div>
 
-<!--<div class="text-center" ng-show="result.total > result.results.length">-->
-<!--    <ul class="pagination">-->
-<!--        $1$   <li class="disabled"><a href="">&laquo;</a></li>#1#-->
-<!--        <li style="cursor: pointer;" ng-repeat="n in range(0,maxPages(result.total, 25))" ng-class="(n===query.p+1) ? 'active' : ''">-->
-<!--            <span ng-click="setPage(n)"><span ng-bind="n">n</span></span>-->
-<!--        </li>-->
-<!--        $1$<li><span href="#">&raquo;</span></li>#1#-->
-<!--    </ul>-->
-<!--</div>-->
+<div class="text-center" ng-show="result.total > result.results.length">
+    <ul class="pagination">
+        <li style="cursor: pointer;"><span ng-click="setPage((query.p))">&laquo;</span></li>
+        <li style="cursor: pointer;" ng-repeat="n in range(0,maxPages(result.total, pageSize))" ng-class="(n===query.p+1) ? 'active' : ''">
+            <span ng-bind="n" ng-click="setPage(n)">n</span>
+        </li>
+        <li style="cursor: pointer;"><span ng-click="setPage((query.p + 2))">&raquo;</span></li>
+    </ul>
+</div>
 
 <div ng-show="!query.q && !query.k[0] && !app.starting" class="fade-in-with-delay">
     <div class="row">

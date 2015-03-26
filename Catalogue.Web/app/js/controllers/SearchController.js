@@ -10,12 +10,17 @@
     $timeout((function() {
       return $scope.app.starting = false;
     }), 500);
+    $scope.result = {
+      results: {}
+    };
+    $scope.pageSize = 15;
     $scope.resultsView = 'list';
     updateUrl = function(query) {
       var blank;
       blank = blankQuery();
       $location.search('q', query.q || null);
-      return $location.search('k', query.k);
+      $location.search('k', query.k);
+      return $location.search('p', query.p || null);
     };
     queryRecords = function(query) {
       return $http.get('../api/search?' + $.param(query, true)).success(function(result) {
@@ -60,7 +65,7 @@
         q: '',
         k: [],
         p: 0,
-        n: 25
+        n: $scope.pageSize
       };
     };
     parseQuerystring = function() {
@@ -68,6 +73,9 @@
       o = $location.search();
       if (o.k && !$.isArray(o.k)) {
         o.k = [o.k];
+      }
+      if (o.p) {
+        o.p = o.p * 1;
       }
       return $.extend({}, blankQuery(), o);
     };
@@ -125,7 +133,11 @@
       });
     };
     $scope.setPage = function(n) {
-      return $scope.query.p = n - 1;
+      console.log(n);
+      if (n > 0 && n <= ($scope.maxPages($scope.result.total, $scope.pageSize) + 1)) {
+        console.log('setting value of p');
+        return $scope.query.p = n - 1;
+      }
     };
     $scope.range = function(min, max, step) {
       var i, input, _i, _results;

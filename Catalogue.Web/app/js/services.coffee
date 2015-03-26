@@ -24,6 +24,7 @@ module.factory 'Record', ($resource) ->
     $resource '../api/records/:id', {},
     query: {method:'GET', params: {id: '@id'}}
     update: {method:'PUT', params: {id: '@id'}}
+    clone: {method:'GET', params: {id: '@id', clone: true}}
     
 module.factory 'RecordLoader', (Record, $route, $q) ->
     () ->
@@ -32,6 +33,15 @@ module.factory 'RecordLoader', (Record, $route, $q) ->
             id: $route.current.params.recordId,
             (record) -> d.resolve record,
             () -> d.reject 'Unable to fetch record ' + $route.current.params.recordId
+        d.promise
+
+module.factory 'RecordCloner', (Record, $route, $q) ->
+    () ->
+        d = $q.defer()
+        Record.clone
+            id: $route.current.params.recordId,
+            (record) -> d.resolve record,
+            () -> d.reject 'Unable to fetch a clone of record ' + $route.current.params.recordId
         d.promise
 
 # just currently using this for a spike in SandboxController
@@ -91,4 +101,5 @@ hslToRgb = (h, s, l) ->
     g = hue2rgb(p, q, h)
     b = hue2rgb(p, q, h - 1 / 3)
   [r * 255, g * 255, b * 255]
+
 

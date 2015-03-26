@@ -148,6 +148,7 @@
   <ItemGroup>
     <Compile Include="Account\User.cs" />
     <Compile Include="Account\UserContext.cs" />
+    <Compile Include="Controllers\Dumps\DumpsController.cs" />
     <Compile Include="Controllers\Formats\FormatsController.cs" />
     <Compile Include="Controllers\Home\HomeController.cs" />
     <Compile Include="Controllers\Keywords\KeywordModel.cs" />
@@ -234,6 +235,12 @@
     <Content Include="app\js\controllers\SearchController.min.js">
       <DependentUpon>SearchController.coffee</DependentUpon>
     </Content>
+    <Content Include="app\js\controllers\SearchGridController.js">
+      <DependentUpon>SearchGridController.coffee</DependentUpon>
+    </Content>
+    <Content Include="app\js\controllers\SearchGridController.min.js">
+      <DependentUpon>SearchGridController.js</DependentUpon>
+    </Content>
     <Content Include="app\js\controllers\VocabularyEditorController.js">
       <DependentUpon>VocabularyEditorController.coffee</DependentUpon>
     </Content>
@@ -314,6 +321,9 @@
     <Content Include="app\lib\respond-1.2.0\test\unit\test2.css" />
     <Content Include="app\lib\respond-1.2.0\test\unit\test3.css" />
     <Content Include="app\lib\respond-1.2.0\test\unit\tests.js" />
+    <Content Include="app\lib\ui-grid-3.0.0-rc3\ui-grid-stable.min.css" />
+    <Content Include="app\lib\ui-grid-3.0.0-rc3\ui-grid-stable.min.js" />
+    <Content Include="app\lib\ui-grid-3.0.0-rc3\ui-grid.svg" />
     <Content Include="app\lib\zeroclipboard-1.1.7\ZeroClipboard.min.js" />
     <Content Include="app\lib\zeroclipboard-1.1.7\ZeroClipboard.swf" />
     <Content Include="app\views\ingest\ingest.html" />
@@ -399,9 +409,6 @@
     <Content Include="app\js\controllers\SandboxController.coffee" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="app\js\controllers\EditorController.map" />
-  </ItemGroup>
-  <ItemGroup>
     <Content Include="app\js\controllers\IngestController.coffee" />
   </ItemGroup>
   <ItemGroup>
@@ -458,11 +465,6 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="app\js\utilities.js.map">
-      <DependentUpon>utilities.js</DependentUpon>
-    </Content>
-  </ItemGroup>
-  <ItemGroup>
     <Content Include="app\js\controllers\SandboxController.js.map">
       <DependentUpon>SandboxController.js</DependentUpon>
     </Content>
@@ -480,6 +482,49 @@
   <ItemGroup>
     <Content Include="app\js\controllers\VocabularyEditorController.min.js.map">
       <DependentUpon>VocabularyEditorController.min.js</DependentUpon>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="app\lib\angular-1.2.28\angular-cookies.min.js.map" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="app\js\app.js.map">
+      <DependentUpon>app.js</DependentUpon>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="app\js\app.min.js.map">
+      <DependentUpon>app.min.js</DependentUpon>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="app\lib\bootstrap-3.3.2-dist\css\bootstrap-theme.css.map" />
+    <Content Include="app\lib\bootstrap-3.3.2-dist\css\bootstrap.css.map" />
+    <Content Include="app\lib\bootstrap-3.3.2-dist\fonts\glyphicons-halflings-regular.eot" />
+    <Content Include="app\lib\bootstrap-3.3.2-dist\fonts\glyphicons-halflings-regular.ttf" />
+    <Content Include="app\lib\bootstrap-3.3.2-dist\fonts\glyphicons-halflings-regular.woff" />
+    <Content Include="app\lib\bootstrap-3.3.2-dist\fonts\glyphicons-halflings-regular.woff2" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="app\js\controllers\SearchGridController.coffee" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="app\js\controllers\SearchGridController.min.js.map">
+      <DependentUpon>SearchGridController.min.js</DependentUpon>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="app\lib\ui-grid-3.0.0-rc3\ui-grid.ttf" />
+    <Content Include="app\lib\ui-grid-3.0.0-rc3\ui-grid.woff" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="app\js\utilities.js.map">
+      <DependentUpon>utilities.js</DependentUpon>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="app\js\utilities.min.js.map">
+      <DependentUpon>utilities.min.js</DependentUpon>
     </Content>
   </ItemGroup>
   <ItemGroup>
@@ -503,26 +548,23 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="app\js\utilities.min.js.map">
-      <DependentUpon>utilities.min.js</DependentUpon>
+    <Content Include="app\js\controllers\IngestController.min.js.map">
+      <DependentUpon>IngestController.min.js</DependentUpon>
     </Content>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="app\lib\angular-1.2.28\angular-cookies.min.js.map" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="app\js\app.js.map">
-      <DependentUpon>app.js</DependentUpon>
+    <Content Include="app\js\controllers\SandboxController.min.js.map">
+      <DependentUpon>SandboxController.min.js</DependentUpon>
     </Content>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="app\js\app.min.js.map">
-      <DependentUpon>app.min.js</DependentUpon>
+    <Content Include="app\js\controllers\SearchGridController.js.map">
+      <DependentUpon>SearchGridController.js</DependentUpon>
     </Content>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="app\js\controllers\EditorController.min.js.map">
-      <DependentUpon>EditorController.min.js</DependentUpon>
+    <Content Include="app\js\controllers\VocabularyListController.js.map">
+      <DependentUpon>VocabularyListController.js</DependentUpon>
     </Content>
   </ItemGroup>
   <ItemGroup>
@@ -538,6 +580,11 @@
     <Content Include="app\lib\bootstrap-3.3.0-dist\dist\fonts\glyphicons-halflings-regular.eot" />
     <Content Include="app\lib\bootstrap-3.3.0-dist\dist\fonts\glyphicons-halflings-regular.ttf" />
     <Content Include="app\lib\bootstrap-3.3.0-dist\dist\fonts\glyphicons-halflings-regular.woff" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="app\js\controllers\VocabularyListController.min.js.map">
+      <DependentUpon>VocabularyListController.min.js</DependentUpon>
+    </Content>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

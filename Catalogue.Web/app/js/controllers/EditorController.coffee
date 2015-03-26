@@ -68,18 +68,25 @@
             $scope.busy.start()
 
             if $scope.isNew()
+                console.log 'new thing'
                 $http.post('../api/records', $scope.form).then processResult
             else
+                console.log 'not new thing'
                 $http.put('../api/records/' + record.id, $scope.form).then processResult
 
+        $scope.clone = ->
+            $location.path( '/clone/' + $scope.form.id )
+            
         $scope.reset = -> 
             $scope.form = angular.copy(record)
             
-        $scope.isNew = -> $routeParams.recordId is '00000000-0000-0000-0000-000000000000'
+        $scope.isNew = -> $scope.form.id is '00000000-0000-0000-0000-000000000000'
         $scope.isClean = -> angular.equals($scope.form, record)
         $scope.isSaveHidden = -> $scope.isClean() or record.readOnly
         $scope.isCancelHidden = -> $scope.isClean()
         $scope.isSaveDisabled = -> $scope.isClean() # || $scope.theForm.$invalid 
+        $scope.isCloneHidden = -> $scope.isNew()
+        $scope.isCloneDisabled = -> !$scope.isClean()
 
         $scope.hasUsageConstraints = () -> (!!$scope.form.gemini.limitationsOnPublicAccess and $scope.form.gemini.limitationsOnPublicAccess isnt 'no limitations') or (!!$scope.form.gemini.useConstraints and $scope.form.gemini.useConstraints isnt 'no conditions apply')
 

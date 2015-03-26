@@ -8,13 +8,17 @@
     'app.directives',
     'app.services',
     'app.controllers',
-    'filters'
+    'filters',
+    'ui.grid',
+    'ui.grid.resizeColumns'
     ]
         
 angular.module 'app.utilities', []
 angular.module 'app.directives', []
 angular.module 'app.services', ['ngResource']
 angular.module 'app.controllers', ['ngCookies']
+#angular.module 'app.components', []
+
 
 module.config ($routeProvider) ->
     $routeProvider
@@ -22,6 +26,10 @@ module.config ($routeProvider) ->
             controller:     'SearchController',
             templateUrl:    'views/search/search.html',
             reloadOnSearch: false
+        .when '/clone/:recordId',
+            controller:     'EditorController',
+            templateUrl:    'views/editor/editor.html',
+            resolve:        'record': (RecordCloner) -> RecordCloner()
         .when '/editor/:recordId',
             controller:     'EditorController',
             templateUrl:    'views/editor/editor.html',
@@ -76,3 +84,4 @@ module.animation '.my-special-animation', ->
 
   removeClass: (element, className, done) ->
     done()
+

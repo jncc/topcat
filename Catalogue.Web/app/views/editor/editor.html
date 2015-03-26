@@ -14,13 +14,13 @@
             </div>
             <div class="col-md-6">
                 <div class="form-group pull-right">
-                    <button class="btn btn-default icon-and-text-btn" tc-back-button>
-                        <span class="dark glyphicon glyphicon-circle-arrow-left"></span>BACK
-                    </button>
                     <span>
                         <button ng-click="cancel()" ng-hide="isCancelHidden()" class="btn btn-primary">CANCEL</button>
                         <button ng-click="save()" ng-hide="isSaveHidden()" ng-disabled="isSaveDisabled()" class="btn btn-danger">SAVE</button>
                     </span>
+                    <a ng-href="#/clone/{{form.id}}" target="_blank" ng-hide="isCloneHidden()" ng-disabled="isCloneDisabled()" tc-tip title="Clone this record" class="btn btn-default icon-and-text-btn">
+                        <span class="dark glyphicon glyphicon-send"></span>CLONE
+                    </a>
                 </div>
             </div>
 
@@ -242,10 +242,11 @@
                         <div class="form-group text-left selectContainer">
                             <select name="gemini.topicCategory"
                                     ng-model="form.gemini.topicCategory"
-                                    ng-options="topic.name for topic in lookups.topics"
+                                    ng-options="topic.name as topic.name|camelCaseFilter for topic in lookups.topics"
                                     class="form-control"
-                                    title="The main theme of the data resource">
-                                <option value="" disabled selected>Topic</option>
+                                    title="The main theme of the data resource"
+                                    tc-focus-tip>
+                                <option value="" disabled selected style="display: none">Topic</option>
                             </select>
                         </div>
 
@@ -282,6 +283,7 @@
                             <div>
                                 <input class="form-control" type="text" ng-model="form.gemini.responsibleOrganisation.email" placeholder="Email" title="An email for the point of contact in this responsible organisation" tc-focus-tip />
                             </div>
+
                             <div>
                                 <select data-ng-model="form.gemini.responsibleOrganisation.role"
                                         data-ng-options="role as role|camelCaseFilter for role in lookups.roles"

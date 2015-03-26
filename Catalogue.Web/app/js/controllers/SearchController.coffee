@@ -9,6 +9,8 @@
         # angular skipping the initial animation - set app.starting to true for 500ms
         $scope.app = { starting: true };
         $timeout (-> $scope.app.starting = false), 500
+        $scope.result = {results : {}}
+        $scope.pageSize = 15
         
         # default results view style
         $scope.resultsView = 'list'
@@ -18,14 +20,12 @@
             # update the url querystring to match the query object
             $location.search 'q', query.q || null
             $location.search 'k', query.k # angular does the right thing here
-            #$location.search('p', if query.p != blank.p then query.p else null) 
+            $location.search 'p', query.p || null
             #$location.search('n', $scope.query.n)
         
         queryRecords = (query) ->
             $http.get('../api/search?' + $.param query, true)
                 .success (result) ->
-                    #console.log query
-                    #console.log result.query
                     # don't overwrite with earlier but slower queries!
                     if angular.equals result.query, query
                         $scope.result = result
@@ -61,13 +61,14 @@
             q: '',
             k: [],
             p: 0,
-            n: 25
+            n: $scope.pageSize
 
         parseQuerystring = ->
             o = $location.search() # angular api for getting the querystring as an object
             # when there is exactly one keyword, angular's $location.search does not return an array
             # so fix it up (make k an array of one keyword)
             o.k = [o.k] if o.k and not $.isArray o.k
+            o.p = o.p * 1 if o.p
             $.extend {}, blankQuery(), o
 
         # initialise the query to whatever is in the querystring
@@ -100,7 +101,7 @@
                 
         $scope.removeKeywordFromQuery = (keyword) ->
             $scope.query.k.splice ($.inArray keyword, $scope.query.k), 1
-        
+       
         # keyword helper functions            
         $scope.keywordToString = (k) ->
             s = if k.vocab then k.vocab + '/' + k.value else k.value
@@ -124,15 +125,20 @@
             modal.result
                 .then (k) -> $scope.addKeywordToQuery k
     
-        # paging helper functions                
+        # paging helper functions 
+                           
         $scope.setPage = (n) ->
-            $scope.query.p = n-1
+            console.log n
+            if n > 0 and n <= ($scope.maxPages($scope.result.total, $scope.pageSize) + 1)
+                console.log 'setting value of p'
+                $scope.query.p = n-1
+            
         $scope.range  = (min, max, step) ->
             step = if step is undefined then 1 else step;
             input = [];
             for i in [0..max] by step
                 input.push(i);
+                
         $scope.maxPages  = (total, pageLength) ->
             Math.ceil(total/pageLength)-1;
-            
-           
+
