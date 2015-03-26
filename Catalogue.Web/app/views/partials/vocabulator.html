@@ -60,7 +60,7 @@
                     </div>
                     <div class="vocabulator-vocab-keyword-list" ng-if="vocabulator.vocab.keywords" tc-bind-scroll-position="vocabulator.scrollPositions.vocabKeywordList">
                         <div ng-repeat="x in vocabulator.vocab.keywords" ng-init="k = { vocab: vocabulator.vocab.id, value: x.value }" ng-class="{active: vocabulator.selectedKeyword == k}">
-                            <span tc-tag ng-click="vocabulator.selectedKeyword = k" class="pointable">
+                            <span tc-tag ng-click="vocabulator.selectedKeyword = k" ng-dblclick="close()" tabindex="0" class="pointable">
                                 {{k.value}}
                             </span>
                         </div>
@@ -72,15 +72,15 @@
     </div>
 
     <div class="modal-footer">
-        <div ng-if="!vocabulator.selectedKeyword.value">
+        <span class="pull-left">
             <button type="button" class="btn btn-default" data-dismiss="modal" ng-click="$dismiss()">CANCEL</button>
-        </div>
-        <div ng-if="vocabulator.selectedKeyword.value">
+        </span>
+        <span ng-if="vocabulator.selectedKeyword.value">
             <span class="add-the-tag">Add the tag</span>
             <span tc-tag ng-repeat="k in [vocabulator.selectedKeyword]" tc-tip class="pointable">
                 {{ k.value }}
             </span>
             <button type="button" class="btn btn-primary" ng-click="close()">ADD</button>
-        </div>
+        </span>
     </div>
 </div>
