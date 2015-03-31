@@ -1,13 +1,13 @@
 ﻿(function() {
 
-  angular.module('app.controllers').controller('MarkdownController', function($scope) {
-    $scope.text = {
-      value: ''
+  angular.module('app.controllers').controller('MarkdownController', function($scope, foo) {
+    console.log(foo);
+    $scope.md = {
+      text: foo
     };
-    return $scope.markdown = function(s) {
-      var showdown;
-      showdown = new Showdown.converter();
-      return showdown.makeHtml(s);
+    $scope.markdown = function(s) {};
+    return $scope.close = function() {
+      return $scope.$close($scope.md.text);
     };
   });
 

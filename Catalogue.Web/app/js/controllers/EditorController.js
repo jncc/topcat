@@ -54,8 +54,7 @@
                 field = _ref[_j];
                 try {
                   $scope.theForm[field].$setValidity('server', false);
-                } catch (_error) {
-                  e = _error;
+                } catch (e) {
                   console.log(field);
                   console.log(e);
                 }
@@ -122,6 +121,20 @@
         return $scope.addKeyword(k);
       })["finally"](function() {
         return $scope.editing.keywords = true;
+      });
+    };
+    $scope.editAbstract = function() {
+      var modal;
+      modal = $modal.open({
+        controller: 'MarkdownController',
+        templateUrl: 'views/partials/markdown.html?' + new Date().getTime(),
+        size: 'lg',
+        resolve: {
+          'foo': 'poo'
+        }
+      });
+      return modal.result.then(function(s) {
+        return $scope.form.gemini.abstract = s;
       });
     };
     $scope.removeExtent = function(extent) {
@@ -204,5 +217,3 @@
   };
 
 }).call(this);
-
-//# sourceMappingURL=EditorController.js.map

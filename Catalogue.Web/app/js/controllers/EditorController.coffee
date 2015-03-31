@@ -107,6 +107,15 @@
                     $scope.addKeyword k
                 .finally -> $scope.editing.keywords = true # doing this now looks better
             
+        $scope.editAbstract = ->
+            modal = $modal.open
+                controller:  'MarkdownController'
+                templateUrl: 'views/partials/markdown.html?' + new Date().getTime() # stop iis express caching the html
+                size:        'lg'
+                resolve:     'foo': 'poo'#$scope.form.gemini.abstract
+                #scope:       $scope
+            modal.result
+                .then (s) -> $scope.form.gemini.abstract = s
             
         $scope.removeExtent = (extent) ->
             $scope.form.gemini.extent.splice ($.inArray extent, $scope.form.gemini.extent), 1
