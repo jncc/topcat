@@ -139,7 +139,8 @@ namespace Catalogue.Data.Write
             return new Vocabulary
             {
                 Id = "http://some/vocab",
-                Name = "Some Name"
+                Name = "Some Name",
+                Keywords = new List<VocabularyKeyword>()
             };
         }
     }
