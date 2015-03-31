@@ -223,6 +223,12 @@
     <Content Include="app\js\controllers\MainController.min.js">
       <DependentUpon>MainController.coffee</DependentUpon>
     </Content>
+    <Content Include="app\js\controllers\MarkdownController.js">
+      <DependentUpon>MarkdownController.coffee</DependentUpon>
+    </Content>
+    <Content Include="app\js\controllers\MarkdownController.min.js">
+      <DependentUpon>MarkdownController.coffee</DependentUpon>
+    </Content>
     <Content Include="app\js\controllers\SandboxController.js">
       <DependentUpon>SandboxController.coffee</DependentUpon>
     </Content>
@@ -321,6 +327,20 @@
     <Content Include="app\lib\respond-1.2.0\test\unit\test2.css" />
     <Content Include="app\lib\respond-1.2.0\test\unit\test3.css" />
     <Content Include="app\lib\respond-1.2.0\test\unit\tests.js" />
+    <Content Include="app\lib\showdown-0.3.4\compressed\extensions\github.min.js" />
+    <Content Include="app\lib\showdown-0.3.4\compressed\extensions\prettify.min.js" />
+    <Content Include="app\lib\showdown-0.3.4\compressed\extensions\table.min.js" />
+    <Content Include="app\lib\showdown-0.3.4\compressed\extensions\twitter.min.js" />
+    <Content Include="app\lib\showdown-0.3.4\compressed\Showdown.js" />
+    <Content Include="app\lib\showdown-0.3.4\compressed\Showdown.min.js" />
+    <Content Include="app\lib\showdown-0.3.4\Gruntfile.js" />
+    <Content Include="app\lib\showdown-0.3.4\license.txt" />
+    <Content Include="app\lib\showdown-0.3.4\src\extensions\github.js" />
+    <Content Include="app\lib\showdown-0.3.4\src\extensions\prettify.js" />
+    <Content Include="app\lib\showdown-0.3.4\src\extensions\table.js" />
+    <Content Include="app\lib\showdown-0.3.4\src\extensions\twitter.js" />
+    <Content Include="app\lib\showdown-0.3.4\src\ng-showdown.js" />
+    <Content Include="app\lib\showdown-0.3.4\src\showdown.js" />
     <Content Include="app\lib\ui-grid-3.0.0-rc3\ui-grid-stable.min.css" />
     <Content Include="app\lib\ui-grid-3.0.0-rc3\ui-grid-stable.min.js" />
     <Content Include="app\lib\ui-grid-3.0.0-rc3\ui-grid.svg" />
@@ -328,6 +348,7 @@
     <Content Include="app\lib\zeroclipboard-1.1.7\ZeroClipboard.swf" />
     <Content Include="app\views\ingest\ingest.html" />
     <Content Include="app\views\editor\editor.html" />
+    <Content Include="app\views\partials\markdown.html" />
     <Content Include="app\views\partials\vocabulator.html" />
     <Content Include="app\views\sandbox\colours.html" />
     <Content Include="app\views\sandbox\dropdown.html" />
@@ -560,6 +581,7 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="app\js\controllers\MarkdownController.coffee" />
     <None Include="app\js\controllers\VocabulatorController.coffee" />
     <Content Include="app\js\controllers\VocabulatorController.js.map">
       <DependentUpon>VocabulatorController.js</DependentUpon>
@@ -572,6 +594,16 @@
     <Content Include="app\lib\bootstrap-3.3.0-dist\dist\fonts\glyphicons-halflings-regular.eot" />
     <Content Include="app\lib\bootstrap-3.3.0-dist\dist\fonts\glyphicons-halflings-regular.ttf" />
     <Content Include="app\lib\bootstrap-3.3.0-dist\dist\fonts\glyphicons-halflings-regular.woff" />
+    <Content Include="app\lib\showdown-0.3.4\.jshintignore" />
+    <Content Include="app\lib\showdown-0.3.4\.travis.yml" />
+    <Content Include="app\lib\showdown-0.3.4\bower.json" />
+    <Content Include="app\lib\showdown-0.3.4\compressed\extensions\github.min.js.map" />
+    <Content Include="app\lib\showdown-0.3.4\compressed\extensions\prettify.min.js.map" />
+    <Content Include="app\lib\showdown-0.3.4\compressed\extensions\table.min.js.map" />
+    <Content Include="app\lib\showdown-0.3.4\compressed\extensions\twitter.min.js.map" />
+    <Content Include="app\lib\showdown-0.3.4\compressed\Showdown.js.map" />
+    <Content Include="app\lib\showdown-0.3.4\package.json" />
+    <Content Include="app\lib\showdown-0.3.4\README.md" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="app\js\controllers\VocabularyListController.min.js.map">

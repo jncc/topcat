@@ -58,6 +58,9 @@
     }).when('/sandbox/vocabulator', {
       controller: 'VocabulatorController',
       templateUrl: 'views/partials/vocabulator.html'
+    }).when('/sandbox/markdown', {
+      controller: 'MarkdownController',
+      templateUrl: 'views/partials/markdown.html'
     }).otherwise({
       redirectTo: '/'
     });
@@ -95,5 +98,3 @@
   });
 
 }).call(this);
-
-//# sourceMappingURL=app.js.map

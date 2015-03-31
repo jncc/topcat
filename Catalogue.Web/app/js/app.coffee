@@ -53,9 +53,12 @@ module.config ($routeProvider) ->
         .when '/sandbox/dropdown',
             controller:     'SandboxController',
             templateUrl:    'views/sandbox/dropdown.html'
-        .when '/sandbox/vocabulator', # for developing the modal vocabulator more easily
+        .when '/sandbox/vocabulator', # for developing the vocabulator modal more easily
             controller:     'VocabulatorController',
             templateUrl:    'views/partials/vocabulator.html'
+        .when '/sandbox/markdown', # for developing the markdown modal more easily
+            controller:     'MarkdownController',
+            templateUrl:    'views/partials/markdown.html'
         .otherwise
             redirectTo:     '/'
 

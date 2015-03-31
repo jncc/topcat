@@ -1,0 +1,27 @@
+﻿
+
+
+<div class="markdown modal-content">
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close" ng-click="$dismiss()"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title">Abstract</h4>
+    </div>
+    <div class="modal-body">
+
+        <div class="row">
+            <div class="col-sm-6">
+                <textarea rows="10" ng-model="text.value" type="text"></textarea>
+            </div>
+            <div class="col-sm-6">
+                <div ng-bind-html="markdown(text.value)"></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal-footer">
+        <span class="pull-left">
+            <button type="button" class="btn btn-default" data-dismiss="modal" ng-click="$dismiss()">CANCEL</button>
+        </span>
+        <button type="button" class="btn btn-primary" ng-click="close()">ADD</button>
+    </div>
+</div>
