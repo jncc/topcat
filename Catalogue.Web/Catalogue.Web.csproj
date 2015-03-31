@@ -498,14 +498,6 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="app\lib\bootstrap-3.3.2-dist\css\bootstrap-theme.css.map" />
-    <Content Include="app\lib\bootstrap-3.3.2-dist\css\bootstrap.css.map" />
-    <Content Include="app\lib\bootstrap-3.3.2-dist\fonts\glyphicons-halflings-regular.eot" />
-    <Content Include="app\lib\bootstrap-3.3.2-dist\fonts\glyphicons-halflings-regular.ttf" />
-    <Content Include="app\lib\bootstrap-3.3.2-dist\fonts\glyphicons-halflings-regular.woff" />
-    <Content Include="app\lib\bootstrap-3.3.2-dist\fonts\glyphicons-halflings-regular.woff2" />
-  </ItemGroup>
-  <ItemGroup>
     <Content Include="app\js\controllers\SearchGridController.coffee" />
   </ItemGroup>
   <ItemGroup>
