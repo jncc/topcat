@@ -582,6 +582,12 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="app\js\controllers\MarkdownController.coffee" />
+    <Content Include="app\js\controllers\MarkdownController.js.map">
+      <DependentUpon>MarkdownController.js</DependentUpon>
+    </Content>
+    <Content Include="app\js\controllers\MarkdownController.min.js.map">
+      <DependentUpon>MarkdownController.min.js</DependentUpon>
+    </Content>
     <None Include="app\js\controllers\VocabulatorController.coffee" />
     <Content Include="app\js\controllers\VocabulatorController.js.map">
       <DependentUpon>VocabulatorController.js</DependentUpon>

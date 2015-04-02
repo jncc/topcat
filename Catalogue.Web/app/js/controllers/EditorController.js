@@ -54,7 +54,8 @@
                 field = _ref[_j];
                 try {
                   $scope.theForm[field].$setValidity('server', false);
-                } catch (e) {
+                } catch (_error) {
+                  e = _error;
                   console.log(field);
                   console.log(e);
                 }
@@ -130,7 +131,9 @@
         templateUrl: 'views/partials/markdown.html?' + new Date().getTime(),
         size: 'lg',
         resolve: {
-          'foo': 'poo'
+          'markdown': function() {
+            return $scope.form.gemini.abstract;
+          }
         }
       });
       return modal.result.then(function(s) {
@@ -217,3 +220,5 @@
   };
 
 }).call(this);
+
+//# sourceMappingURL=EditorController.js.map

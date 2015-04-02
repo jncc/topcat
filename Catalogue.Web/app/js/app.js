@@ -60,7 +60,12 @@
       templateUrl: 'views/partials/vocabulator.html'
     }).when('/sandbox/markdown', {
       controller: 'MarkdownController',
-      templateUrl: 'views/partials/markdown.html'
+      templateUrl: 'views/partials/markdown.html',
+      resolve: {
+        'markdown': function() {
+          return '#test text';
+        }
+      }
     }).otherwise({
       redirectTo: '/'
     });
@@ -98,3 +103,5 @@
   });
 
 }).call(this);
+
+//# sourceMappingURL=app.js.map

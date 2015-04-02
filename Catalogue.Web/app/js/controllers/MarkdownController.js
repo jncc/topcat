@@ -1,14 +1,16 @@
 ﻿(function() {
-
-  angular.module('app.controllers').controller('MarkdownController', function($scope, foo) {
-    console.log(foo);
-    $scope.md = {
-      text: foo
+  angular.module('app.controllers').controller('MarkdownController', function($scope, markdown) {
+    $scope.markdown = markdown;
+    $scope.getHtml = function(s) {
+      var showdown;
+      showdown = new Showdown.converter();
+      return showdown.makeHtml(s);
     };
-    $scope.markdown = function(s) {};
     return $scope.close = function() {
-      return $scope.$close($scope.md.text);
+      return $scope.$close($scope.markdown);
     };
   });
 
 }).call(this);
+
+//# sourceMappingURL=MarkdownController.js.map

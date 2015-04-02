@@ -59,6 +59,7 @@ module.config ($routeProvider) ->
         .when '/sandbox/markdown', # for developing the markdown modal more easily
             controller:     'MarkdownController',
             templateUrl:    'views/partials/markdown.html'
+            resolve:        'markdown' : () -> '#test text'
         .otherwise
             redirectTo:     '/'
 

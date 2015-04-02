@@ -112,8 +112,7 @@
                 controller:  'MarkdownController'
                 templateUrl: 'views/partials/markdown.html?' + new Date().getTime() # stop iis express caching the html
                 size:        'lg'
-                resolve:     'foo': 'poo'#$scope.form.gemini.abstract
-                #scope:       $scope
+                resolve:     'markdown': -> $scope.form.gemini.abstract
             modal.result
                 .then (s) -> $scope.form.gemini.abstract = s
             
@@ -126,8 +125,6 @@
                 
         # initially set up form
         $scope.reset()
-
-        #$scope.validation = fakeValidationData
         
         $scope.getKeywords = (term) -> $http.get('../api/keywords?q='+term).then (response) -> 
             response.data

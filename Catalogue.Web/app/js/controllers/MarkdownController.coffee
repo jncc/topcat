@@ -1,12 +1,11 @@
 ﻿angular.module('app.controllers').controller 'MarkdownController',
 
-    ($scope, foo) -> 
+    ($scope, markdown) -> 
 
-        console.log foo
-        $scope.md = { text: foo }
+        $scope.markdown = markdown
 
-        $scope.markdown = (s) ->
-        #    showdown = new Showdown.converter()
-        #    showdown.makeHtml s
+        $scope.getHtml = (s) ->
+            showdown = new Showdown.converter()
+            showdown.makeHtml s
         
-        $scope.close = -> $scope.$close($scope.md.text)
+        $scope.close = -> $scope.$close($scope.markdown)

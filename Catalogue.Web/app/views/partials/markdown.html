@@ -10,10 +10,10 @@
 
         <div class="row">
             <div class="col-sm-6">
-                <textarea rows="10" ng-model="md.text" type="text"></textarea>
+                <textarea rows="10" ng-model="markdown" type="text"></textarea>
             </div>
             <div class="col-sm-6">
-                <div ng-bind-html="markdown(md.text)"></div>
+                <div ng-bind-html="getHtml(markdown)"></div>
             </div>
         </div>
     </div>
