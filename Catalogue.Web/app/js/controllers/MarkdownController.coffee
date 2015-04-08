@@ -3,6 +3,8 @@
     ($scope, markdown) -> 
 
         $scope.markdown = markdown
+        
+        $scope.showHelp = false
 
         $scope.getHtml = (s) ->
             showdown = new Showdown.converter()

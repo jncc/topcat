@@ -1,6 +1,7 @@
 ﻿(function() {
   angular.module('app.controllers').controller('MarkdownController', function($scope, markdown) {
     $scope.markdown = markdown;
+    $scope.showHelp = false;
     $scope.getHtml = function(s) {
       var showdown;
       showdown = new Showdown.converter();

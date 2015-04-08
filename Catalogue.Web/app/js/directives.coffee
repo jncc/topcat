@@ -231,4 +231,6 @@ module.directive 'tcDropdown', ($timeout) ->
         $scope.items = []
         $scope.hide = false
         this.activate = (item) -> $scope.active = item
-        
+
+
+    

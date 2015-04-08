@@ -7,15 +7,15 @@
         <h4 class="modal-title">Abstract</h4>
     </div>
     <div class="modal-body">
-
         <div class="row">
             <div class="col-sm-6">
-                <textarea rows="10" ng-model="markdown" type="text"></textarea>
+                <textarea rows="20" tc-auto-grow ng-model="markdown" type="text"></textarea>
             </div>
             <div class="col-sm-6">
-                <div ng-bind-html="getHtml(markdown)"></div>
+                <div class="viewPanel" ng-bind-html="getHtml(markdown)"></div>
             </div>
         </div>
+        <a href="http://daringfireball.net/projects/markdown/syntax" target="_blank">Markdown syntax</a>
     </div>
 
     <div class="modal-footer">
