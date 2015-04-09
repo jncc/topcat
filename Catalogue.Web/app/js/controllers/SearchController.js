@@ -133,9 +133,7 @@
       });
     };
     $scope.setPage = function(n) {
-      console.log(n);
       if (n > 0 && n <= ($scope.maxPages($scope.result.total, $scope.pageSize) + 1)) {
-        console.log('setting value of p');
         return $scope.query.p = n - 1;
       }
     };
