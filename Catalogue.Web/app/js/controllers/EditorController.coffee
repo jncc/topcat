@@ -57,8 +57,6 @@
                             for field in e.fields
                                 try
                                     $scope.theForm[field].$setValidity('server', false)
-                                                                
-                                
                 $scope.busy.stop()
 
             $scope.busy.start()

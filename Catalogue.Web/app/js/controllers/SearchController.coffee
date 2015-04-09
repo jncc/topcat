@@ -100,7 +100,8 @@
                 $scope.query = $.extend {}, blankQuery(), { 'k': k }
                 
         $scope.removeKeywordFromQuery = (keyword) ->
-            $scope.query.k.splice ($.inArray keyword, $scope.query.k), 1
+            s = $scope.keywordToString keyword
+            $scope.query.k.splice ($.inArray s, $scope.query.k), 1
        
         # keyword helper functions            
         $scope.keywordToString = (k) ->
