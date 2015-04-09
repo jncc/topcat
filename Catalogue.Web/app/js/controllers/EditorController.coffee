@@ -53,25 +53,17 @@
                     errors = response.data.validation.errors
                     if errors.length > 0
                         $scope.notifications.add 'There were errors'
-                        #console.log errors
                         for e in errors
                             for field in e.fields
                                 try
                                     $scope.theForm[field].$setValidity('server', false)
-                                catch e 
-                                    console.log field
-                                    console.log e
-                                                                
-                                
                 $scope.busy.stop()
 
             $scope.busy.start()
 
             if $scope.isNew()
-                console.log 'new thing'
                 $http.post('../api/records', $scope.form).then processResult
             else
-                console.log 'not new thing'
                 $http.put('../api/records/' + record.id, $scope.form).then processResult
 
         $scope.clone = ->

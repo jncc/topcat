@@ -98,7 +98,9 @@
       }
     };
     $scope.removeKeywordFromQuery = function(keyword) {
-      return $scope.query.k.splice($.inArray(keyword, $scope.query.k), 1);
+      var s;
+      s = $scope.keywordToString(keyword);
+      return $scope.query.k.splice($.inArray(s, $scope.query.k), 1);
     };
     $scope.keywordToString = function(k) {
       var s;
@@ -133,9 +135,7 @@
       });
     };
     $scope.setPage = function(n) {
-      console.log(n);
       if (n > 0 && n <= ($scope.maxPages($scope.result.total, $scope.pageSize) + 1)) {
-        console.log('setting value of p');
         return $scope.query.p = n - 1;
       }
     };

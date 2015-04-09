@@ -54,11 +54,7 @@
                 field = _ref[_j];
                 try {
                   $scope.theForm[field].$setValidity('server', false);
-                } catch (_error) {
-                  e = _error;
-                  console.log(field);
-                  console.log(e);
-                }
+                } catch (_error) {}
               }
             }
           }
@@ -67,10 +63,8 @@
       };
       $scope.busy.start();
       if ($scope.isNew()) {
-        console.log('new thing');
         return $http.post('../api/records', $scope.form).then(processResult);
       } else {
-        console.log('not new thing');
         return $http.put('../api/records/' + record.id, $scope.form).then(processResult);
       }
     };

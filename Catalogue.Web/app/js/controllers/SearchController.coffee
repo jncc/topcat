@@ -100,7 +100,8 @@
                 $scope.query = $.extend {}, blankQuery(), { 'k': k }
                 
         $scope.removeKeywordFromQuery = (keyword) ->
-            $scope.query.k.splice ($.inArray keyword, $scope.query.k), 1
+            s = $scope.keywordToString keyword
+            $scope.query.k.splice ($.inArray s, $scope.query.k), 1
        
         # keyword helper functions            
         $scope.keywordToString = (k) ->
@@ -128,9 +129,7 @@
         # paging helper functions 
                            
         $scope.setPage = (n) ->
-            console.log n
             if n > 0 and n <= ($scope.maxPages($scope.result.total, $scope.pageSize) + 1)
-                console.log 'setting value of p'
                 $scope.query.p = n-1
             
         $scope.range  = (min, max, step) ->
