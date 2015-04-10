@@ -18,6 +18,7 @@ namespace Catalogue.Data.Export
         {
             var csv = new CsvWriter(writer);
             csv.Configuration.Delimiter = "\t";
+            csv.Configuration.PrefixReferenceHeaders = true;
             TypeConverterFactory.AddConverter<List<MetadataKeyword>>(new MetadataKeywordConverter());
             TypeConverterFactory.AddConverter<List<Extent>>(new ExtentListConverter());
             csv.WriteRecords(records);
