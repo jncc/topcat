@@ -1,13 +1,15 @@
 ﻿(function() {
   var module;
 
-  module = angular.module('app', ['ngAnimate', 'ngRoute', 'ngSanitize', 'ngCookies', 'ui.bootstrap', 'app.utilities', 'app.directives', 'app.services', 'app.controllers', 'filters', 'ui.grid', 'ui.grid.resizeColumns']);
+  module = angular.module('app', ['ngAnimate', 'ngRoute', 'ngSanitize', 'ngCookies', 'ui.bootstrap', 'app.utilities', 'app.directives', 'app.services', 'app.filters', 'app.controllers', 'ui.grid', 'ui.grid.resizeColumns']);
 
   angular.module('app.utilities', []);
 
   angular.module('app.directives', []);
 
   angular.module('app.services', ['ngResource']);
+
+  angular.module('app.filters', []);
 
   angular.module('app.controllers', ['ngCookies']);
 
@@ -69,12 +71,6 @@
     }).otherwise({
       redirectTo: '/'
     });
-  });
-
-  angular.module('filters', []).filter('camelCaseFilter', function() {
-    return function(input) {
-      return input.charAt(0).toUpperCase() + input.substr(1).replace(/[A-Z]/g, ' $&');
-    };
   });
 
   module.animation('.my-special-animation', function() {

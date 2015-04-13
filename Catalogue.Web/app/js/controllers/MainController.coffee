@@ -38,10 +38,3 @@
             if not supported
                 $timeout ( -> $scope.notifications.add 'Heads up! Topcat currently works best in Chrome'), 3000
 
-# todo move this! used for highlighting suggested keywords
-angular.module('filters').filter 'highlight', ($sce) -> 
-    (text, q) ->
-        regex = new RegExp '(' + q + ')', 'gi'
-        if q
-            text = text.replace regex, '<b>$1</b>'
-        $sce.trustAsHtml text

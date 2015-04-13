@@ -271,6 +271,12 @@
     <Content Include="app\js\directives.min.js">
       <DependentUpon>directives.coffee</DependentUpon>
     </Content>
+    <Content Include="app\js\filters.js">
+      <DependentUpon>filters.coffee</DependentUpon>
+    </Content>
+    <Content Include="app\js\filters.min.js">
+      <DependentUpon>filters.js</DependentUpon>
+    </Content>
     <Content Include="app\js\services.js">
       <DependentUpon>services.coffee</DependentUpon>
     </Content>
@@ -610,6 +616,13 @@
     <Content Include="app\lib\showdown-0.3.4\compressed\Showdown.js.map" />
     <Content Include="app\lib\showdown-0.3.4\package.json" />
     <Content Include="app\lib\showdown-0.3.4\README.md" />
+    <Content Include="app\js\filters.coffee" />
+    <Content Include="app\js\filters.js.map">
+      <DependentUpon>filters.js</DependentUpon>
+    </Content>
+    <Content Include="app\js\filters.min.js.map">
+      <DependentUpon>filters.min.js</DependentUpon>
+    </Content>
   </ItemGroup>
   <ItemGroup>
     <Content Include="app\js\controllers\VocabularyListController.min.js.map">

@@ -7,8 +7,8 @@
     'app.utilities',
     'app.directives',
     'app.services',
+    'app.filters',
     'app.controllers',
-    'filters',
     'ui.grid',
     'ui.grid.resizeColumns'
     ]
@@ -16,9 +16,8 @@
 angular.module 'app.utilities', []
 angular.module 'app.directives', []
 angular.module 'app.services', ['ngResource']
+angular.module 'app.filters', []
 angular.module 'app.controllers', ['ngCookies']
-#angular.module 'app.components', []
-
 
 module.config ($routeProvider) ->
     $routeProvider
@@ -63,12 +62,8 @@ module.config ($routeProvider) ->
         .otherwise
             redirectTo:     '/'
 
-# todo erm, move or remove this
-angular.module('filters', []).filter('camelCaseFilter', () -> 
-    (input) -> 
-        input.charAt(0).toUpperCase() + input.substr(1).replace(/[A-Z]/g, ' $&')
-)
 
+# just playing....
 module.animation '.my-special-animation', ->
   enter: (element, done) ->
     $(element).slideDown 500
