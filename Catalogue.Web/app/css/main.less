@@ -163,7 +163,7 @@ label {
 // ------
 
 .search-box {
-    margin-bottom: 3em;
+    margin-bottom: 2em;
 }
     
 .search-advanced {
@@ -171,7 +171,7 @@ label {
 }
 
 .search-keyword-suggestions {
-    margin-bottom: 1.5em;
+    margin-bottom: 1em;
 }
 
 .search-results-view-picker {
@@ -181,6 +181,9 @@ label {
 }
 
 .search-results-header {
+
+    border-top: 1px solid @pale; // divider line
+    padding-top: 1em;
 
     .search-results-header-tagged {
         // make the spacing look better
@@ -192,15 +195,10 @@ label {
 .search-open-vocabulator { margin: -3px 0.5em 0 0.5em; }
 
 .search-result {
-    a {
-        text-decoration: underline;
-    }
-    // bold snippet highlights look too black
-    p b {
-        color: #555;
-    }
     margin: 1.2em 0;
-
+    a { text-decoration: underline; } // underlined titles easier to read (?)
+    p b { color: #555; } // bold snippet highlights look too black
+    
     .search-format {
         width: 1px; // as small as necessary
         vertical-align: top;
@@ -241,6 +239,12 @@ label {
     }
 }
 
+// map
+.search-map {
+    margin: 1.2em 0;
+    height: 50em;
+}
+
 // grid
 .search-grid {
     border: 1px solid rgb(212,212,212);
@@ -258,6 +262,13 @@ label {
     }
 }
 
+
+// general buttons
+.glyphicon-remove {
+    font-size: 75%;
+    color: @dark;
+    .pointable;
+}
 
 
 // ----
@@ -282,11 +293,6 @@ label {
         display: inline-block;
         width: 0;
         margin-right: 0.15em;
-    }
-    .glyphicon-remove {
-        font-size: 75%;
-        color: @dark;
-        .pointable;
     }
 }
 

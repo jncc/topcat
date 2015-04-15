@@ -127,16 +127,20 @@ label {
   padding-left: 3em;
 }
 .search-box {
-  margin-bottom: 3em;
+  margin-bottom: 2em;
 }
 .search-advanced {
   margin-top: 1em;
 }
 .search-keyword-suggestions {
-  margin-bottom: 1.5em;
+  margin-bottom: 1em;
 }
 .search-results-view-picker button span {
   font-size: smaller;
+}
+.search-results-header {
+  border-top: 1px solid #eeeeee;
+  padding-top: 1em;
 }
 .search-results-header .search-results-header-tagged > span:first-child {
   margin-left: 0.2em;
@@ -194,6 +198,10 @@ label {
 .search-result .search-tags {
   margin-top: 6px;
 }
+.search-map {
+  margin: 1.2em 0;
+  height: 50em;
+}
 .search-grid {
   border: 1px solid #d4d4d4;
   width: 100%;
@@ -206,6 +214,11 @@ label {
 }
 .search-grid .cell-padding {
   padding-left: 3px;
+}
+.glyphicon-remove {
+  font-size: 75%;
+  color: #666666;
+  cursor: pointer;
 }
 .tag {
   white-space: nowrap;
@@ -226,11 +239,6 @@ label {
   display: inline-block;
   width: 0;
   margin-right: 0.15em;
-}
-.tag .glyphicon-remove {
-  font-size: 75%;
-  color: #666666;
-  cursor: pointer;
 }
 .tip {
   max-width: 100%;

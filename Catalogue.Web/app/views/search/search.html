@@ -76,7 +76,7 @@
         </span>
 
         <span ng-show="result.query.q">
-            matching <b>{{result.query.q}}</b>
+            matching '<b>{{result.query.q}}</b>'
             <span ng-show="result.query.k[0]" class="glyphicon glyphicon-remove" ng-click="query.q = ''" tc-tip title="Remove"></span>
         </span>
     </div>
@@ -101,33 +101,40 @@
             </ul>
         </div>
     </div>
-    <hr />
+
 </div>
 
 
 <div ng-switch="resultsView">
-    <div ng-switch-when="list">
-        <div ng-repeat="r in result.results" class="layout-row search-result">
-            <div class="layout-col search-format">
-                <span class="dark glyphicon {{r.format.glyph}}" tc-tip title="{{r.format.group}}"></span>
+    <div ng-switch-when="list" class="row">
+        <div class="col-md-9">
+            <div ng-repeat="r in result.results" class="layout-row search-result">
+                <div class="layout-col search-format">
+                    <span class="dark glyphicon {{r.format.glyph}}" tc-tip title="{{r.format.group}}"></span>
+                </div>
+                <div class="layout-col">
+                    <div class="search-title">
+                        <a ng-href="#/editor/{{r.id}}" ng-bind-html="r.title"></a>
+                        <span class="search-divider-bullet">&bull;</span>
+                        <span class="search-date" ng-show="r.date">{{r.date.substring(0, 4)}}</span>
+                        <span tc-top-copy-icon ng-show="r.topCopy" title="Top copy"></span>
+                    </div>
+                    <div>
+                        <span class="search-resource-type">{{r.resourceType }}</span>
+                        <span class="search-divider-bullet">&bull;</span>
+                        <span ng-bind-html="r.snippet"></span>
+                    </div>
+                    <div class="search-tags">
+                        <span tc-tag ng-repeat="k in r.keywords" tc-tip ng-click="addKeywordToQuery(k)" class="pointable">
+                            {{ k.value }}
+                        </span>
+                    </div>
+                </div>
             </div>
-            <div class="layout-col">
-                <div class="search-title">
-                    <a ng-href="#/editor/{{r.id}}" ng-bind-html="r.title"></a>
-                    <span class="search-divider-bullet">&bull;</span>
-                    <span class="search-date" ng-show="r.date">{{r.date.substring(0, 4)}}</span>
-                    <span tc-top-copy-icon ng-show="r.topCopy" title="Top copy"></span>
-                </div>
-                <div>
-                    <span class="search-resource-type">{{r.resourceType }}</span>
-                    <span class="search-divider-bullet">&bull;</span>
-                    <span ng-bind-html="r.snippet"></span>
-                </div>
-                <div class="search-tags">
-                    <span tc-tag ng-repeat="k in r.keywords" tc-tip ng-click="addKeywordToQuery(k)" class="pointable">
-                        {{ k.value }}
-                    </span>
-                </div>
+
+        </div>
+        <div class="col-md-3">
+            <div class="search-map" id="damap" tc-search-map>
             </div>
         </div>
     </div>
