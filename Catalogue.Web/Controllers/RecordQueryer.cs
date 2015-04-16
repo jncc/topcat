@@ -101,6 +101,7 @@ namespace Catalogue.Web.Controllers
                                 TopCopy = r.TopCopy,
                                 Date = r.Gemini.DatasetReferenceDate,
                                 ResourceType = r.Gemini.ResourceType.FirstCharToUpper(),
+                                Box = r.Gemini.BoundingBox,
                             };
 
             // materializing the query will populate our stats, so do it before we try to use them!

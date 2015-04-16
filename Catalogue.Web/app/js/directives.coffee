@@ -145,30 +145,24 @@ module.directive 'tcServerValidation', ($http) ->
 
 module.directive 'tcSearchMap', () ->
     link: (scope, elem, attrs) ->
-        map = L.map('damap').setView([
-            51.505
-            -0.09
-        ], 13)
+        map = L.map 'damap'
         L.tileLayer('https://{s}.tiles.mapbox.com/v3/{id}/{z}/{x}/{y}.png',
             maxZoom: 18
             attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, ' + '<a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, ' + 'Imagery © <a href="http://mapbox.com">Mapbox</a>'
             id: 'examples.map-i875mjb7').addTo map
-        L.polygon([
-          [
-            51.509
-            -0.08
-          ]
-          [
-            51.503
-            -0.06
-          ]
-          [
-            51.51
-            -0.047
-          ]
-        ]).addTo(map).bindPopup 'I am a polygon.'
+
+        addBox = (box) ->
+            #console.log result
+            bounds = [
+                [box.south, box.west],
+                [box.north, box.east] ]
+            L.rectangle(bounds, {color: "#ff7800", weight: 1}).addTo map 
+            map.fitBounds bounds
+        scope.$watch 'result.results', (results) ->
+            addBox r.box for r in results when r.box
 
 # sticks the element to the top of the viewport when scrolled past
+# used for the search map - untested for use elsewhere!
 module.directive 'tcStickToTop', ($window, $timeout) ->
     link: (scope, elem, attrs) ->
         win = angular.element($window)
@@ -189,6 +183,7 @@ module.directive 'tcStickToTop', ($window, $timeout) ->
                     elem.removeClass 'stick-to-top'
                     elem.css 'width', ''
         $timeout f, 100 # delay to allow page to render so we can initial position
+
 
 module.directive 'tcCopyPathToClipboard', ($timeout) ->
     link: (scope, elem, attrs) ->
