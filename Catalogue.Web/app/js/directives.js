@@ -3,6 +3,89 @@
 
   module = angular.module('app.directives');
 
+  module.directive('tcSearchMap', function() {
+    return {
+      link: function(scope, elem, attrs) {
+        var group, map;
+        map = L.map('damap');
+        L.tileLayer('https://{s}.tiles.mapbox.com/v3/{id}/{z}/{x}/{y}.png', {
+          maxZoom: 18,
+          attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, ' + '<a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, ' + 'Imagery © <a href="http://mapbox.com">Mapbox</a>',
+          id: 'examples.map-i875mjb7'
+        }).addTo(map);
+        group = L.layerGroup().addTo(map);
+        return scope.$watch('result.results', function(results) {
+          var bounds, r, x, xs, _i, _len;
+          xs = (function() {
+            var _i, _len, _results;
+            _results = [];
+            for (_i = 0, _len = results.length; _i < _len; _i++) {
+              r = results[_i];
+              if (!r.box) {
+                continue;
+              }
+              bounds = [[r.box.south, r.box.west], [r.box.north, r.box.east]];
+              _results.push({
+                bounds: bounds,
+                rect: L.rectangle(bounds, {
+                  color: "#444",
+                  weight: 1
+                })
+              });
+            }
+            return _results;
+          })();
+          group.clearLayers();
+          for (_i = 0, _len = xs.length; _i < _len; _i++) {
+            x = xs[_i];
+            group.addLayer(x.rect);
+          }
+          return map.fitBounds((function() {
+            var _j, _len1, _results;
+            _results = [];
+            for (_j = 0, _len1 = xs.length; _j < _len1; _j++) {
+              x = xs[_j];
+              _results.push(x.bounds);
+            }
+            return _results;
+          })());
+        });
+      }
+    };
+  });
+
+  module.directive('tcStickToTop', function($window, $timeout) {
+    return {
+      link: function(scope, elem, attrs) {
+        var f, getPositions, win;
+        win = angular.element($window);
+        getPositions = function() {
+          return {
+            v: win.scrollTop(),
+            e: elem.offset().top,
+            w: elem.width()
+          };
+        };
+        f = function() {
+          var initial;
+          initial = getPositions();
+          return win.bind('scroll', function() {
+            var current;
+            current = getPositions();
+            if (current.v > current.e) {
+              elem.addClass('stick-to-top');
+              return elem.css('width', initial.w);
+            } else if (current.v < initial.e) {
+              elem.removeClass('stick-to-top');
+              return elem.css('width', '');
+            }
+          });
+        };
+        return $timeout(f, 100);
+      }
+    };
+  });
+
   module.directive('placeholder', function() {
     return {
       link: function(scope, elem, attrs) {
@@ -227,72 +310,6 @@
             return ctrl.$setValidity('myErrorKey', data.valid);
           });
         });
-      }
-    };
-  });
-
-  module.directive('tcSearchMap', function() {
-    return {
-      link: function(scope, elem, attrs) {
-        var addBox, map;
-        map = L.map('damap');
-        L.tileLayer('https://{s}.tiles.mapbox.com/v3/{id}/{z}/{x}/{y}.png', {
-          maxZoom: 18,
-          attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, ' + '<a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, ' + 'Imagery © <a href="http://mapbox.com">Mapbox</a>',
-          id: 'examples.map-i875mjb7'
-        }).addTo(map);
-        addBox = function(box) {
-          var bounds;
-          bounds = [[box.south, box.west], [box.north, box.east]];
-          L.rectangle(bounds, {
-            color: "#ff7800",
-            weight: 1
-          }).addTo(map);
-          return map.fitBounds(bounds);
-        };
-        return scope.$watch('result.results', function(results) {
-          var r, _i, _len, _results;
-          _results = [];
-          for (_i = 0, _len = results.length; _i < _len; _i++) {
-            r = results[_i];
-            if (r.box) {
-              _results.push(addBox(r.box));
-            }
-          }
-          return _results;
-        });
-      }
-    };
-  });
-
-  module.directive('tcStickToTop', function($window, $timeout) {
-    return {
-      link: function(scope, elem, attrs) {
-        var f, getPositions, win;
-        win = angular.element($window);
-        getPositions = function() {
-          return {
-            v: win.scrollTop(),
-            e: elem.offset().top,
-            w: elem.width()
-          };
-        };
-        f = function() {
-          var initial;
-          initial = getPositions();
-          return win.bind('scroll', function() {
-            var current;
-            current = getPositions();
-            if (current.v > current.e) {
-              elem.addClass('stick-to-top');
-              return elem.css('width', initial.w);
-            } else if (current.v < initial.e) {
-              elem.removeClass('stick-to-top');
-              return elem.css('width', '');
-            }
-          });
-        };
-        return $timeout(f, 100);
       }
     };
   });

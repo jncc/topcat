@@ -1,5 +1,53 @@
 ﻿module = angular.module 'app.directives'
 
+
+module.directive 'tcSearchMap', () ->
+    link: (scope, elem, attrs) ->
+        map = L.map 'damap'
+        L.tileLayer('https://{s}.tiles.mapbox.com/v3/{id}/{z}/{x}/{y}.png',
+            maxZoom: 18
+            attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, ' + '<a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, ' + 'Imagery © <a href="http://mapbox.com">Mapbox</a>'
+            id: 'examples.map-i875mjb7').addTo map
+        group = L.layerGroup().addTo map
+        scope.$watch 'result.results', (results) ->
+            xs = for r in results when r.box
+                bounds = [[r.box.south, r.box.west], [r.box.north, r.box.east]]
+                bounds: bounds
+                rect  : L.rectangle(bounds, {color: "#444", weight: 1})
+            group.clearLayers()
+            group.addLayer x.rect for x in xs
+            map.fitBounds (x.bounds for x in xs)
+
+
+# sticks the element to the top of the viewport when scrolled past
+# used for the search map - untested for use elsewhere!
+module.directive 'tcStickToTop', ($window, $timeout) ->
+    link: (scope, elem, attrs) ->
+        win = angular.element($window)
+        getPositions = ->
+            v: win.scrollTop()
+            e: elem.offset().top
+            w: elem.width()
+        f = ->
+            initial = getPositions()
+            # stick when the window is below the element
+            # unstick when the window is above the original element position
+            win.bind 'scroll', ->
+                current = getPositions()
+                if current.v > current.e
+                    elem.addClass 'stick-to-top'
+                    elem.css 'width', initial.w # workaround disappearing map
+                else if current.v < initial.e
+                    elem.removeClass 'stick-to-top'
+                    elem.css 'width', ''
+        $timeout f, 100 # delay to allow page to render so we can get initial position
+
+
+
+
+
+
+
 # use jquery placeholder plugin (for old IE)
 # in angular, we can use a custom directive with the same name as the html5 attribute!
 module.directive 'placeholder', () -> 
@@ -143,46 +191,7 @@ module.directive 'tcServerValidation', ($http) ->
                 .success (data) ->
                     ctrl.$setValidity('myErrorKey', data.valid)
 
-module.directive 'tcSearchMap', () ->
-    link: (scope, elem, attrs) ->
-        map = L.map 'damap'
-        L.tileLayer('https://{s}.tiles.mapbox.com/v3/{id}/{z}/{x}/{y}.png',
-            maxZoom: 18
-            attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, ' + '<a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, ' + 'Imagery © <a href="http://mapbox.com">Mapbox</a>'
-            id: 'examples.map-i875mjb7').addTo map
 
-        addBox = (box) ->
-            #console.log result
-            bounds = [
-                [box.south, box.west],
-                [box.north, box.east] ]
-            L.rectangle(bounds, {color: "#ff7800", weight: 1}).addTo map 
-            map.fitBounds bounds
-        scope.$watch 'result.results', (results) ->
-            addBox r.box for r in results when r.box
-
-# sticks the element to the top of the viewport when scrolled past
-# used for the search map - untested for use elsewhere!
-module.directive 'tcStickToTop', ($window, $timeout) ->
-    link: (scope, elem, attrs) ->
-        win = angular.element($window)
-        getPositions = ->
-            v: win.scrollTop()
-            e: elem.offset().top
-            w: elem.width()
-        f = ->
-            initial = getPositions()
-            # stick when the window is below the element
-            # unstick when the window is above the original element position
-            win.bind 'scroll', ->
-                current = getPositions()
-                if current.v > current.e
-                    elem.addClass 'stick-to-top'
-                    elem.css 'width', initial.w # workaround disappearing map
-                else if current.v < initial.e
-                    elem.removeClass 'stick-to-top'
-                    elem.css 'width', ''
-        $timeout f, 100 # delay to allow page to render so we can initial position
 
 
 module.directive 'tcCopyPathToClipboard', ($timeout) ->
