@@ -26,6 +26,8 @@ namespace Catalogue.Web.Controllers
 
         public string TemporalExtentFrom { get; set; }
         public string TemporalExtentTo { get; set; }
+
+        public BoundingBox BoundingBox { get; set; }
     }
 
     public class FormatOutputModel

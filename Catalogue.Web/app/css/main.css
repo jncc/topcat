@@ -90,6 +90,10 @@ label {
 .big-button {
   width: 60px;
 }
+.stick-to-top {
+  position: fixed;
+  top: 0;
+}
 .header {
   display: table;
   width: 100%;

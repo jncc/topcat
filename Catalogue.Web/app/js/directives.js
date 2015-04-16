@@ -246,6 +246,38 @@
     };
   });
 
+  module.directive('tcStickToTop', function($window, $timeout) {
+    return {
+      link: function(scope, elem, attrs) {
+        var f, getPositions, win;
+        win = angular.element($window);
+        getPositions = function() {
+          return {
+            v: win.scrollTop(),
+            e: elem.offset().top,
+            w: elem.width()
+          };
+        };
+        f = function() {
+          var initial;
+          initial = getPositions();
+          return win.bind('scroll', function() {
+            var current;
+            current = getPositions();
+            if (current.v > current.e) {
+              elem.addClass('stick-to-top');
+              return elem.css('width', initial.w);
+            } else if (current.v < initial.e) {
+              elem.removeClass('stick-to-top');
+              return elem.css('width', '');
+            }
+          });
+        };
+        return $timeout(f, 100);
+      }
+    };
+  });
+
   module.directive('tcCopyPathToClipboard', function($timeout) {
     return {
       link: function(scope, elem, attrs) {

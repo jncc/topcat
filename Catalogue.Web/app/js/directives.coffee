@@ -168,8 +168,27 @@ module.directive 'tcSearchMap', () ->
           ]
         ]).addTo(map).bindPopup 'I am a polygon.'
 
-
-    
+# sticks the element to the top of the viewport when scrolled past
+module.directive 'tcStickToTop', ($window, $timeout) ->
+    link: (scope, elem, attrs) ->
+        win = angular.element($window)
+        getPositions = ->
+            v: win.scrollTop()
+            e: elem.offset().top
+            w: elem.width()
+        f = ->
+            initial = getPositions()
+            # stick when the window is below the element
+            # unstick when the window is above the original element position
+            win.bind 'scroll', ->
+                current = getPositions()
+                if current.v > current.e
+                    elem.addClass 'stick-to-top'
+                    elem.css 'width', initial.w # workaround disappearing map
+                else if current.v < initial.e
+                    elem.removeClass 'stick-to-top'
+                    elem.css 'width', ''
+        $timeout f, 100 # delay to allow page to render so we can initial position
 
 module.directive 'tcCopyPathToClipboard', ($timeout) ->
     link: (scope, elem, attrs) ->
