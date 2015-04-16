@@ -142,7 +142,7 @@ namespace Catalogue.Data.Analyzers
             tokenizer.MaxTokenLength = 255;
             TokenStream filter = new StandardFilter(tokenizer);
             filter = new LowerCaseFilter(filter);
-            filter = new NGramTokenFilter(filter, 2, 10);
+            filter = new NGramTokenFilter(filter, 2, 30);
 
             return filter;
         }
