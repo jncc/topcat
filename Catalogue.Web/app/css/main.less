@@ -210,6 +210,9 @@ label {
     a { text-decoration: underline; } // underlined titles easier to read (?)
     p b { color: #555; } // bold snippet highlights look too black
     
+    border-right: 10px solid white;
+    &.highlighted { border-right-color: rgb(66, 139, 202); }
+
     .search-format {
         width: 1px; // as small as necessary
         vertical-align: top;
@@ -253,7 +256,7 @@ label {
 // map
 .search-map {
     margin: 1.2em 0;
-    height: 50em;
+    height: 40em;
 }
 
 // grid

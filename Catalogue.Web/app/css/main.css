@@ -157,12 +157,16 @@ label {
 }
 .search-result {
   margin: 1.2em 0;
+  border-right: 10px solid white;
 }
 .search-result a {
   text-decoration: underline;
 }
 .search-result p b {
   color: #555;
+}
+.search-result.highlighted {
+  border-right-color: #428bca;
 }
 .search-result .search-format {
   width: 1px;
@@ -204,7 +208,7 @@ label {
 }
 .search-map {
   margin: 1.2em 0;
-  height: 50em;
+  height: 40em;
 }
 .search-grid {
   border: 1px solid #d4d4d4;

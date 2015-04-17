@@ -1,22 +1,34 @@
 ﻿module = angular.module 'app.directives'
 
 
-module.directive 'tcSearchMap', () ->
+module.directive 'tcSearchMap', ->
     link: (scope, elem, attrs) ->
-        map = L.map 'damap'
+        map = L.map elem[0]
         L.tileLayer('https://{s}.tiles.mapbox.com/v3/{id}/{z}/{x}/{y}.png',
             maxZoom: 18
             attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, ' + '<a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, ' + 'Imagery © <a href="http://mapbox.com">Mapbox</a>'
             id: 'examples.map-i875mjb7').addTo map
         group = L.layerGroup().addTo map
+        xs = {}
+        normal = color: '#444', opacity: 0.5, weight: 1
+        hilite = color: 'red', opacity: 1, weight: 1
         scope.$watch 'result.results', (results) ->
-            xs = for r in results when r.box
-                bounds = [[r.box.south, r.box.west], [r.box.north, r.box.east]]
-                bounds: bounds
-                rect  : L.rectangle(bounds, {color: "#444", weight: 1})
+            xs = for r in results when r.box 
+                do (r) -> # 'do' makes coffee loop closures behave properly
+                    bounds = [[r.box.south, r.box.west], [r.box.north, r.box.east]]
+                    rect = L.rectangle bounds, normal
+                    rect.on 'mouseover', -> scope.$apply -> scope.highlighted.result = r
+                    rect.on 'mouseout', -> scope.$apply -> scope.highlighted.result = {}
+                    { result: r, bounds, rect }
             group.clearLayers()
             group.addLayer x.rect for x in xs
-            map.fitBounds (x.bounds for x in xs)
+            map.fitBounds (x.bounds for x in xs) if xs.length > 0
+            
+        scope.$watch 'highlighted.result', (newer, older) ->
+            (x.rect for x in xs when x.result is older)[0]?.setStyle normal
+            newRect = (x.rect for x in xs when x.result is newer)[0]
+            newRect.setStyle hilite if newRect
+            
 
 
 # sticks the element to the top of the viewport when scrolled past

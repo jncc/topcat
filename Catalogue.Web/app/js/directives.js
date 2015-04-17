@@ -6,32 +6,54 @@
   module.directive('tcSearchMap', function() {
     return {
       link: function(scope, elem, attrs) {
-        var group, map;
-        map = L.map('damap');
+        var group, hilite, map, normal, xs;
+        map = L.map(elem[0]);
         L.tileLayer('https://{s}.tiles.mapbox.com/v3/{id}/{z}/{x}/{y}.png', {
           maxZoom: 18,
           attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, ' + '<a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, ' + 'Imagery © <a href="http://mapbox.com">Mapbox</a>',
           id: 'examples.map-i875mjb7'
         }).addTo(map);
         group = L.layerGroup().addTo(map);
-        return scope.$watch('result.results', function(results) {
-          var bounds, r, x, xs, _i, _len;
+        xs = {};
+        normal = {
+          color: '#444',
+          opacity: 0.5,
+          weight: 1
+        };
+        hilite = {
+          color: 'red',
+          opacity: 1,
+          weight: 1
+        };
+        scope.$watch('result.results', function(results) {
+          var r, x, _i, _len;
           xs = (function() {
             var _i, _len, _results;
             _results = [];
             for (_i = 0, _len = results.length; _i < _len; _i++) {
               r = results[_i];
-              if (!r.box) {
-                continue;
+              if (r.box) {
+                _results.push((function(r) {
+                  var bounds, rect;
+                  bounds = [[r.box.south, r.box.west], [r.box.north, r.box.east]];
+                  rect = L.rectangle(bounds, normal);
+                  rect.on('mouseover', function() {
+                    return scope.$apply(function() {
+                      return scope.highlighted.result = r;
+                    });
+                  });
+                  rect.on('mouseout', function() {
+                    return scope.$apply(function() {
+                      return scope.highlighted.result = {};
+                    });
+                  });
+                  return {
+                    result: r,
+                    bounds: bounds,
+                    rect: rect
+                  };
+                })(r));
               }
-              bounds = [[r.box.south, r.box.west], [r.box.north, r.box.east]];
-              _results.push({
-                bounds: bounds,
-                rect: L.rectangle(bounds, {
-                  color: "#444",
-                  weight: 1
-                })
-              });
             }
             return _results;
           })();
@@ -40,15 +62,47 @@
             x = xs[_i];
             group.addLayer(x.rect);
           }
-          return map.fitBounds((function() {
-            var _j, _len1, _results;
+          if (xs.length > 0) {
+            return map.fitBounds((function() {
+              var _j, _len1, _results;
+              _results = [];
+              for (_j = 0, _len1 = xs.length; _j < _len1; _j++) {
+                x = xs[_j];
+                _results.push(x.bounds);
+              }
+              return _results;
+            })());
+          }
+        });
+        return scope.$watch('highlighted.result', function(newer, older) {
+          var newRect, x, _ref;
+          if ((_ref = ((function() {
+            var _i, _len, _results;
             _results = [];
-            for (_j = 0, _len1 = xs.length; _j < _len1; _j++) {
-              x = xs[_j];
-              _results.push(x.bounds);
+            for (_i = 0, _len = xs.length; _i < _len; _i++) {
+              x = xs[_i];
+              if (x.result === older) {
+                _results.push(x.rect);
+              }
             }
             return _results;
-          })());
+          })())[0]) != null) {
+            _ref.setStyle(normal);
+          }
+          newRect = ((function() {
+            var _i, _len, _results;
+            _results = [];
+            for (_i = 0, _len = xs.length; _i < _len; _i++) {
+              x = xs[_i];
+              if (x.result === newer) {
+                _results.push(x.rect);
+              }
+            }
+            return _results;
+          })())[0];
+          if (newRect) {
+            return newRect.setStyle(hilite);
+          }
         });
       }
     };

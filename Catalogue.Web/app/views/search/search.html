@@ -80,7 +80,7 @@
             <span ng-show="result.query.k[0]" class="glyphicon glyphicon-remove" ng-click="query.q = ''" tc-tip title="Remove"></span>
         </span>
     </div>
-
+    
     <!-- results view / export buttons -->
     <div class="layout-col" ng-show="result.total > 0" style="text-align: right;">
         <div class="search-results-view-picker btn-group" role="group">
@@ -104,11 +104,12 @@
 
 </div>
 
-
 <div ng-if="result.query" ng-switch="resultsView">
     <div ng-switch-when="list" class="row">
         <div class="col-md-9">
-            <div ng-repeat="r in result.results" class="layout-row search-result">
+            <div ng-repeat="r in result.results" class="layout-row search-result"
+                 ng-class="{highlighted: highlighted.result === r }"
+                 ng-mouseenter="highlighted.result = r">
                 <div class="layout-col search-format">
                     <span class="dark glyphicon {{r.format.glyph}}" tc-tip title="{{r.format.group}}"></span>
                 </div>
@@ -135,7 +136,7 @@
         </div>
         <div class="col-md-3">
             <div tc-stick-to-top>
-                <div class="search-map" id="damap" tc-search-map></div>
+                <div tc-search-map class="search-map"></div>
             </div>
         </div>
     </div>

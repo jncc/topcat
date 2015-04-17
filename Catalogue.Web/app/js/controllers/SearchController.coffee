@@ -2,18 +2,16 @@
     
     ($scope, $rootScope, $location, $http, $timeout, $q, $modal) ->
         
-        # store a vocabulator scope here to save state between modal instances
-        $scope.vocabulator = {}
-        
-        # slightly hacky way of triggering animations on startup to work around
+        # trigger startup fade-in animation on startup to work around
         # angular skipping the initial animation - set app.starting to true for 500ms
-        $scope.app = { starting: true };
+        $scope.app = starting: true
         $timeout (-> $scope.app.starting = false), 500
-        $scope.result = {results : {}}
-        $scope.pageSize = 15
         
-        # default results view style
-        $scope.resultsView = 'list'
+        $scope.result = results: {}     # the search results
+        $scope.highlighted = result: {} # the currently highlighted result stack
+        $scope.pageSize = 15            # the paging size (todo: why is there on the scope?)
+        $scope.vocabulator = {}         # vocabulator scope to save state between modal instances
+        $scope.resultsView = 'list'     # results view style (list|grid)
 
         updateUrl = (query) ->
             blank = blankQuery()
@@ -29,6 +27,7 @@
                     # don't overwrite with earlier but slower queries!
                     if angular.equals result.query, query
                         $scope.result = result
+                        $scope.highlighted.result = result.results[0] if result.results[0] # start by highlighting the first result
                 .error (e) -> $scope.notifications.add 'Oops! ' + e.message
         
         queryKeywords = (query) ->
@@ -109,11 +108,10 @@
             s.replace 'http://', ''
         $scope.keywordFromString = (s) -> 
             if (s.indexOf '/') == -1
-                vocab: ''
-                value: s
+                vocab: '', value: s
             else
                 slash = s.lastIndexOf '/'
-                vocab: 'http://' + (s.substring 0, slash)
+                vocab: 'http://' + (s.substring 0, slash),
                 value: s.substring (slash + 1)
                 
         # vocabulator

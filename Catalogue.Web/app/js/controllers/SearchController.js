@@ -3,7 +3,6 @@
 
   angular.module('app.controllers').controller('SearchController', function($scope, $rootScope, $location, $http, $timeout, $q, $modal) {
     var blankQuery, parseQuerystring, queryKeywords, queryRecords, updateUrl;
-    $scope.vocabulator = {};
     $scope.app = {
       starting: true
     };
@@ -13,7 +12,11 @@
     $scope.result = {
       results: {}
     };
+    $scope.highlighted = {
+      result: {}
+    };
     $scope.pageSize = 15;
+    $scope.vocabulator = {};
     $scope.resultsView = 'list';
     updateUrl = function(query) {
       var blank;
@@ -25,7 +28,10 @@
     queryRecords = function(query) {
       return $http.get('../api/search?' + $.param(query, true)).success(function(result) {
         if (angular.equals(result.query, query)) {
-          return $scope.result = result;
+          $scope.result = result;
+          if (result.results[0]) {
+            return $scope.highlighted.result = result.results[0];
+          }
         }
       }).error(function(e) {
         return $scope.notifications.add('Oops! ' + e.message);
