@@ -116,7 +116,7 @@ namespace Catalogue.Data.Analyzers
             TokenStream filter = new StandardFilter(tokenizer);
             filter = new LowerCaseFilter(filter);
             filter = new StopFilter(false, filter, StandardAnalyzer.STOP_WORDS_SET);
-            filter = new NGramTokenFilter(filter, 2, 10); // needed to change the default max to 10 to get sensible instant results
+            filter = new NGramTokenFilter(filter, 2, 255);
 
             return filter;
         }
@@ -142,7 +142,7 @@ namespace Catalogue.Data.Analyzers
             tokenizer.MaxTokenLength = 255;
             TokenStream filter = new StandardFilter(tokenizer);
             filter = new LowerCaseFilter(filter);
-            filter = new NGramTokenFilter(filter, 2, 30);
+            filter = new NGramTokenFilter(filter, 2, 255);
 
             return filter;
         }
