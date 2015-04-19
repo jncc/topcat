@@ -166,7 +166,7 @@ label {
   color: #555;
 }
 .search-result.highlighted {
-  border-right-color: #999;
+  border-right-color: rgba(217, 38, 103, 0.8);
 }
 .search-result .search-format {
   width: 1px;
@@ -208,7 +208,7 @@ label {
 }
 .search-map {
   margin: 1.2em 0;
-  height: 40em;
+  height: 45em;
 }
 .search-grid {
   border: 1px solid #d4d4d4;

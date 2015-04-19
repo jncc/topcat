@@ -16,7 +16,7 @@
         group = L.layerGroup().addTo(map);
         xs = {};
         normal = {
-          color: '#444',
+          color: '#222',
           fillOpacity: 0.2,
           weight: 1
         };
@@ -73,7 +73,9 @@
                 _results.push(x.bounds);
               }
               return _results;
-            })());
+            })(), {
+              padding: [5, 5]
+            });
           }
         });
         return scope.$watch('highlighted.result', function(newer, older) {
@@ -102,6 +104,31 @@
             }
             return _results;
           })())[0]) != null ? _ref1.setStyle(hilite) : void 0;
+        });
+      }
+    };
+  });
+
+  module.directive('tcBlah', function($window) {
+    return {
+      link: function(scope, elem, attrs) {
+        var win;
+        win = angular.element($window);
+        return win.bind('scroll', function() {
+          var el, xs;
+          xs = (function() {
+            var _i, _len, _ref, _results;
+            _ref = elem.children();
+            _results = [];
+            for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+              el = _ref[_i];
+              if (angular.element(el).offset().top > win.scrollTop()) {
+                _results.push(el);
+              }
+            }
+            return _results;
+          })();
+          return console.log(xs[0]);
         });
       }
     };

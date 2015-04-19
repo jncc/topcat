@@ -3,15 +3,15 @@
 
 module.directive 'tcSearchMap', ($location, $anchorScroll) ->
     link: (scope, elem, attrs) ->
-        #L.mapbox.accessToken = 'pk.eyJ1IjoicGV0bW9uIiwiYSI6ImdjaXJLTEEifQ.cLlYNK1-bfT0Vv4xUHhDBA'
-        map = L.map elem[0] #, 'petmon.lp99j25j'
+        map = L.map elem[0]
         L.tileLayer('https://{s}.tiles.mapbox.com/v4/petmon.lp99j25j/{z}/{x}/{y}.png?access_token=pk.eyJ1IjoicGV0bW9uIiwiYSI6ImdjaXJLTEEifQ.cLlYNK1-bfT0Vv4xUHhDBA',
             maxZoom: 18
             attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, ' + '<a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, ' + 'Imagery © <a href="http://mapbox.com">Mapbox</a>'
             id: 'petmon.lp99j25j').addTo map
+            
         group = L.layerGroup().addTo map
         xs = {}
-        normal = color: '#444', fillOpacity: 0.2, weight: 1
+        normal = color: '#222', fillOpacity: 0.2, weight: 1
         hilite = color: 'rgb(217,38,103)', fillOpacity: 0.6, weight: 1
         scope.$watch 'result.results', (results) ->
             xs = for r in results when r.box 
@@ -19,23 +19,35 @@ module.directive 'tcSearchMap', ($location, $anchorScroll) ->
                     bounds = [[r.box.south, r.box.west], [r.box.north, r.box.east]]
                     rect = L.rectangle bounds, normal
                     rect.on 'mouseover', -> scope.$apply -> scope.highlighted.result = r
-                    #rect.on 'mouseout', -> scope.$apply -> scope.highlighted.result = {}
                     rect.on 'click', -> scope.$apply ->
                         scope.highlighted.result = r
-                        #scope.highlighted.scroll = r
                         $location.hash(r.id);
                         $anchorScroll();    
                     { result: r, bounds, rect }
             group.clearLayers()
             group.addLayer x.rect for x in xs
-            map.fitBounds (x.bounds for x in xs) if xs.length > 0            
+            map.fitBounds (x.bounds for x in xs), padding: [5,5] if xs.length > 0            
         scope.$watch 'highlighted.result', (newer, older) ->
             (x.rect for x in xs when x.result is older)[0]?.setStyle normal
             (x.rect for x in xs when x.result is newer)[0]?.setStyle hilite
+
+module.directive 'tcBlah', ($window) ->
+    link: (scope, elem, attrs) ->
+        #scope.$watch (-> $location.hash), (id) -> alert id
+        win = angular.element($window)
+        win.bind 'scroll', ->
+            xs = (el for el in elem.children() when angular.element(el).offset().top > win.scrollTop())
+            scope.highlighted.id = xs[0]
+        #scope.$watch 'highlighted.id', (id) ->
             
+                        
 module.directive 'tcSearchHighlightScroller', ($window) ->
     link: (scope, elem, attrs) ->
-        scope.$watch 'highlighted.scroll', (newer, older) ->
+        scope.$watch 'highlighted.id', id) ->
+            console.log elem.attr 'id'
+            #if id is (elem.attr 'id')
+                
+        #scope.$watch 'highlighted.scroll', (newer, older) ->
             #if newer isnt older and newer is scope.r
                 #y = elem.offset().top
                 #$window.scrollTo 0, (y - 20)
