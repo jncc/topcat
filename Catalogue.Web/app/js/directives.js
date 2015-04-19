@@ -3,26 +3,26 @@
 
   module = angular.module('app.directives');
 
-  module.directive('tcSearchMap', function() {
+  module.directive('tcSearchMap', function($location, $anchorScroll) {
     return {
       link: function(scope, elem, attrs) {
         var group, hilite, map, normal, xs;
         map = L.map(elem[0]);
-        L.tileLayer('https://{s}.tiles.mapbox.com/v3/{id}/{z}/{x}/{y}.png', {
+        L.tileLayer('https://{s}.tiles.mapbox.com/v4/petmon.lp99j25j/{z}/{x}/{y}.png?access_token=pk.eyJ1IjoicGV0bW9uIiwiYSI6ImdjaXJLTEEifQ.cLlYNK1-bfT0Vv4xUHhDBA', {
           maxZoom: 18,
           attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, ' + '<a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, ' + 'Imagery © <a href="http://mapbox.com">Mapbox</a>',
-          id: 'examples.map-i875mjb7'
+          id: 'petmon.lp99j25j'
         }).addTo(map);
         group = L.layerGroup().addTo(map);
         xs = {};
         normal = {
           color: '#444',
-          opacity: 0.5,
+          fillOpacity: 0.2,
           weight: 1
         };
         hilite = {
-          color: 'red',
-          opacity: 1,
+          color: 'rgb(217,38,103)',
+          fillOpacity: 0.6,
           weight: 1
         };
         scope.$watch('result.results', function(results) {
@@ -42,9 +42,11 @@
                       return scope.highlighted.result = r;
                     });
                   });
-                  rect.on('mouseout', function() {
+                  rect.on('click', function() {
                     return scope.$apply(function() {
-                      return scope.highlighted.result = {};
+                      scope.highlighted.result = r;
+                      $location.hash(r.id);
+                      return $anchorScroll();
                     });
                   });
                   return {
@@ -75,7 +77,7 @@
           }
         });
         return scope.$watch('highlighted.result', function(newer, older) {
-          var newRect, x, _ref;
+          var x, _ref, _ref1;
           if ((_ref = ((function() {
             var _i, _len, _results;
             _results = [];
@@ -89,7 +91,7 @@
           })())[0]) != null) {
             _ref.setStyle(normal);
           }
-          newRect = ((function() {
+          return (_ref1 = ((function() {
             var _i, _len, _results;
             _results = [];
             for (_i = 0, _len = xs.length; _i < _len; _i++) {
@@ -99,11 +101,16 @@
               }
             }
             return _results;
-          })())[0];
-          if (newRect) {
-            return newRect.setStyle(hilite);
-          }
+          })())[0]) != null ? _ref1.setStyle(hilite) : void 0;
         });
+      }
+    };
+  });
+
+  module.directive('tcSearchHighlightScroller', function($window) {
+    return {
+      link: function(scope, elem, attrs) {
+        return scope.$watch('highlighted.scroll', function(newer, older) {});
       }
     };
   });

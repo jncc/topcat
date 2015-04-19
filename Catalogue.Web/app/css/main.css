@@ -157,7 +157,7 @@ label {
 }
 .search-result {
   margin: 1.2em 0;
-  border-right: 10px solid white;
+  border-right: 8px solid white;
 }
 .search-result a {
   text-decoration: underline;
@@ -166,7 +166,7 @@ label {
   color: #555;
 }
 .search-result.highlighted {
-  border-right-color: #428bca;
+  border-right-color: #999;
 }
 .search-result .search-format {
   width: 1px;

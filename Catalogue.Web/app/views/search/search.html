@@ -108,8 +108,9 @@
     <div ng-switch-when="list" class="row">
         <div class="col-md-9">
             <div ng-repeat="r in result.results" class="layout-row search-result"
-                 ng-class="{highlighted: highlighted.result === r }"
-                 ng-mouseenter="highlighted.result = r">
+                 ng-class="{highlighted: highlighted.result === r && r.box.north }"
+                 ng-mouseenter="highlighted.result = r"
+                 tc-search-highlight-scroller id="{{r.id}}">
                 <div class="layout-col search-format">
                     <span class="dark glyphicon {{r.format.glyph}}" tc-tip title="{{r.format.group}}"></span>
                 </div>
