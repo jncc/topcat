@@ -109,8 +109,7 @@
         <div class="col-md-9" tc-blah>
             <div ng-repeat="r in result.results" class="layout-row search-result"
                  ng-class="{highlighted: highlighted.id == r.id && r.box.north }"
-<!--                 ng-mouseenter="highlighted.id = r.id"-->
-                 id="{{r.id}}">
+                 id="{{r.id}}"> <!--ng-mouseenter="highlighted.id = r.id"-->
                 <div class="layout-col search-format">
                     <span class="dark glyphicon {{r.format.glyph}}" tc-tip title="{{r.format.group}}"></span>
                 </div>
