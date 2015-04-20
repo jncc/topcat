@@ -4,6 +4,7 @@
     'ngSanitize',
     'ngCookies',
     'ui.bootstrap',
+    'app.map',
     'app.utilities',
     'app.directives',
     'app.services',
@@ -13,6 +14,7 @@
     'ui.grid.resizeColumns'
     ]
         
+angular.module 'app.map', []
 angular.module 'app.utilities', []
 angular.module 'app.directives', []
 angular.module 'app.services', ['ngResource']

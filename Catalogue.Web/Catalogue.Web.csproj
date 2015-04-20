@@ -277,6 +277,12 @@
     <Content Include="app\js\filters.min.js">
       <DependentUpon>filters.js</DependentUpon>
     </Content>
+    <Content Include="app\js\map.js">
+      <DependentUpon>map.coffee</DependentUpon>
+    </Content>
+    <Content Include="app\js\map.min.js">
+      <DependentUpon>map.js</DependentUpon>
+    </Content>
     <Content Include="app\js\services.js">
       <DependentUpon>services.coffee</DependentUpon>
     </Content>
@@ -313,6 +319,14 @@
     <Content Include="app\lib\jquery-placeholder-2.0.7\LICENSE-GPL.txt" />
     <Content Include="app\lib\jquery-placeholder-2.0.7\LICENSE-MIT.txt" />
     <Content Include="app\lib\jquery-ui-1.10.3\jquery-ui.min.js" />
+    <Content Include="app\lib\leaflet-0.7.3\images\layers-2x.png" />
+    <Content Include="app\lib\leaflet-0.7.3\images\layers.png" />
+    <Content Include="app\lib\leaflet-0.7.3\images\marker-icon-2x.png" />
+    <Content Include="app\lib\leaflet-0.7.3\images\marker-icon.png" />
+    <Content Include="app\lib\leaflet-0.7.3\images\marker-shadow.png" />
+    <Content Include="app\lib\leaflet-0.7.3\leaflet-src.js" />
+    <Content Include="app\lib\leaflet-0.7.3\leaflet.css" />
+    <Content Include="app\lib\leaflet-0.7.3\leaflet.js" />
     <Content Include="app\lib\qtip2-2.1.1\jquery.qtip.min.css" />
     <Content Include="app\lib\qtip2-2.1.1\jquery.qtip.min.js" />
     <Content Include="app\lib\qtip2-2.2.0\jquery.qtip.min.css" />
@@ -622,6 +636,13 @@
     </Content>
     <Content Include="app\js\filters.min.js.map">
       <DependentUpon>filters.min.js</DependentUpon>
+    </Content>
+    <Content Include="app\js\map.coffee" />
+    <Content Include="app\js\map.js.map">
+      <DependentUpon>map.js</DependentUpon>
+    </Content>
+    <Content Include="app\js\map.min.js.map">
+      <DependentUpon>map.min.js</DependentUpon>
     </Content>
   </ItemGroup>
   <ItemGroup>
