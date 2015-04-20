@@ -39,18 +39,18 @@
                   rect = L.rectangle(bounds, normal);
                   rect.on('mouseover', function() {
                     return scope.$apply(function() {
-                      return scope.highlighted.result = r;
+                      return scope.highlighted.id = r.id;
                     });
                   });
                   rect.on('click', function() {
                     return scope.$apply(function() {
-                      scope.highlighted.result = r;
+                      scope.highlighted.id = r.id;
                       $location.hash(r.id);
                       return $anchorScroll();
                     });
                   });
                   return {
-                    result: r,
+                    id: r.id,
                     bounds: bounds,
                     rect: rect
                   };
@@ -65,6 +65,7 @@
             group.addLayer(x.rect);
           }
           if (xs.length > 0) {
+            scope.highlighted.id = xs[0].id;
             return map.fitBounds((function() {
               var _j, _len1, _results;
               _results = [];
@@ -78,14 +79,14 @@
             });
           }
         });
-        return scope.$watch('highlighted.result', function(newer, older) {
+        return scope.$watch('highlighted.id', function(newer, older) {
           var x, _ref, _ref1;
           if ((_ref = ((function() {
             var _i, _len, _results;
             _results = [];
             for (_i = 0, _len = xs.length; _i < _len; _i++) {
               x = xs[_i];
-              if (x.result === older) {
+              if (x.id === older) {
                 _results.push(x.rect);
               }
             }
@@ -98,7 +99,7 @@
             _results = [];
             for (_i = 0, _len = xs.length; _i < _len; _i++) {
               x = xs[_i];
-              if (x.result === newer) {
+              if (x.id === newer) {
                 _results.push(x.rect);
               }
             }
@@ -115,8 +116,8 @@
         var win;
         win = angular.element($window);
         return win.bind('scroll', function() {
-          var el, xs;
-          xs = (function() {
+          var el, q;
+          q = (function() {
             var _i, _len, _ref, _results;
             _ref = elem.children();
             _results = [];
@@ -128,16 +129,12 @@
             }
             return _results;
           })();
-          return console.log(xs[0]);
+          if (q.length > 0) {
+            return scope.$apply(function() {
+              return scope.highlighted.id = q[0].id;
+            });
+          }
         });
-      }
-    };
-  });
-
-  module.directive('tcSearchHighlightScroller', function($window) {
-    return {
-      link: function(scope, elem, attrs) {
-        return scope.$watch('highlighted.scroll', function(newer, older) {});
       }
     };
   });

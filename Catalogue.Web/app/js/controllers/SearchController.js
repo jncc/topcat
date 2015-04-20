@@ -12,8 +12,11 @@
     $scope.result = {
       results: {}
     };
+    $scope.result = {
+      results: {}
+    };
     $scope.highlighted = {
-      result: {}
+      id: {}
     };
     $scope.pageSize = 15;
     $scope.vocabulator = {};

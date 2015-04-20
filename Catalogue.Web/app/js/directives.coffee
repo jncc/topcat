@@ -8,7 +8,6 @@ module.directive 'tcSearchMap', ($location, $anchorScroll) ->
             maxZoom: 18
             attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, ' + '<a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, ' + 'Imagery © <a href="http://mapbox.com">Mapbox</a>'
             id: 'petmon.lp99j25j').addTo map
-            
         group = L.layerGroup().addTo map
         xs = {}
         normal = color: '#222', fillOpacity: 0.2, weight: 1
@@ -18,33 +17,34 @@ module.directive 'tcSearchMap', ($location, $anchorScroll) ->
                 do (r) ->
                     bounds = [[r.box.south, r.box.west], [r.box.north, r.box.east]]
                     rect = L.rectangle bounds, normal
-                    rect.on 'mouseover', -> scope.$apply -> scope.highlighted.result = r
+                    rect.on 'mouseover', -> scope.$apply -> scope.highlighted.id = r.id
                     rect.on 'click', -> scope.$apply ->
-                        scope.highlighted.result = r
+                        scope.highlighted.id = r.id
                         $location.hash(r.id);
                         $anchorScroll();    
-                    { result: r, bounds, rect }
+                    { id: r.id, bounds, rect }
             group.clearLayers()
             group.addLayer x.rect for x in xs
-            map.fitBounds (x.bounds for x in xs), padding: [5,5] if xs.length > 0            
-        scope.$watch 'highlighted.result', (newer, older) ->
-            (x.rect for x in xs when x.result is older)[0]?.setStyle normal
-            (x.rect for x in xs when x.result is newer)[0]?.setStyle hilite
+            if xs.length > 0
+                scope.highlighted.id = xs[0].id
+                map.fitBounds (x.bounds for x in xs), padding: [5,5]
+        scope.$watch 'highlighted.id', (newer, older) ->
+            (x.rect for x in xs when x.id is older)[0]?.setStyle normal
+            (x.rect for x in xs when x.id is newer)[0]?.setStyle hilite
 
 module.directive 'tcBlah', ($window) ->
     link: (scope, elem, attrs) ->
-        #scope.$watch (-> $location.hash), (id) -> alert id
         win = angular.element($window)
         win.bind 'scroll', ->
-            xs = (el for el in elem.children() when angular.element(el).offset().top > win.scrollTop())
-            scope.highlighted.id = xs[0]
-        #scope.$watch 'highlighted.id', (id) ->
+            # find the results below the top of the viewport and highlight the first one
+            q = (el for el in elem.children() when angular.element(el).offset().top > win.scrollTop())
+            (scope.$apply -> scope.highlighted.id = q[0].id) if q.length > 0
             
                         
-module.directive 'tcSearchHighlightScroller', ($window) ->
-    link: (scope, elem, attrs) ->
-        scope.$watch 'highlighted.id', id) ->
-            console.log elem.attr 'id'
+#module.directive 'tcSearchHighlightScroller', ($window) ->
+    #link: (scope, elem, attrs) ->
+        #scope.$watch 'highlighted.id', (id) ->
+            #console.log elem.attr 'id'
             #if id is (elem.attr 'id')
                 
         #scope.$watch 'highlighted.scroll', (newer, older) ->
