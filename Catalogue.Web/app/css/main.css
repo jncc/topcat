@@ -28,6 +28,13 @@
 .hoverable-glyphicon:hover {
   color: #444444;
 }
+.hoverable-glyphbutton {
+  color: #bbbbbb;
+  cursor: pointer;
+}
+.hoverable-glyphbutton:hover {
+  color: #444444;
+}
 h1,
 h2,
 h3 {
@@ -183,11 +190,21 @@ label {
 .search-result .search-title a {
   font-size: larger;
 }
-.search-result .search-title .glyphicon {
+.search-result .search-title .search-result-top-copy {
   margin-left: 0.3em;
   color: #666666;
 }
-.search-result .search-title .glyphicon:hover {
+.search-result .search-title .search-result-top-copy:hover {
+  color: #444444;
+}
+.search-result .search-title .search-result-map-buttons {
+  margin-left: 0.5em;
+}
+.search-result .search-title .search-result-map-buttons .search-result-map-button {
+  color: #bbbbbb;
+  cursor: pointer;
+}
+.search-result .search-title .search-result-map-buttons .search-result-map-button:hover {
   color: #444444;
 }
 .search-result .search-title .search-date {
@@ -208,7 +225,7 @@ label {
 }
 .search-map {
   margin: 1.2em 0;
-  height: 45em;
+  height: 40em;
 }
 .search-grid {
   border: 1px solid #d4d4d4;

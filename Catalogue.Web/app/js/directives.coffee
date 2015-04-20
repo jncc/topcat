@@ -88,17 +88,6 @@ module.directive 'tcTag', (colourHasher) ->
                 my: 'top center'
                 at: 'bottom center'
 
-# top-copy icon
-module.directive 'tcTopCopyIcon', () ->
-    link: (scope, elem, attrs) ->
-        $(elem).addClass('dark glyphicon glyphicon-leaf')
-        # call qtip with options constructed from the defaults
-        $(elem).qtip $.extend {}, qtipDefaults,
-            position:
-                my: 'left center',
-                at: 'right center',
-
-
 # use jquery autosize plugin to auto-expand textareas
 module.directive 'tcAutosize', ($timeout) -> 
     link: (scope, elem, attrs) ->

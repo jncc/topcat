@@ -1,14 +1,13 @@
 ﻿module = angular.module 'app.map'
 
-heightToBottomOfViewport = ($window, elem) ->
+heightForFullHeight = ($window, elem) ->
     viewTop = angular.element($window).innerHeight()
-    elemtop = angular.element(elem).offset().top
-    (viewTop - elemTop) + 'px'
+    elemTop = angular.element(elem).offset().top
+    (viewTop - elemTop - 50) + 'px' # 50 for a bit of space
 
 module.directive 'tcSearchMap', ($window, $location, $anchorScroll) ->
     link: (scope, elem, attrs) ->
-        #heightToBottomOfViewport $window, elem
-        #elem.css 'height', heightToBottomOfViewport $window, elem
+        elem.css 'height', heightForFullHeight $window, elem
         map = L.map elem[0]
         L.tileLayer('https://{s}.tiles.mapbox.com/v4/petmon.lp99j25j/{z}/{x}/{y}.png?access_token=pk.eyJ1IjoicGV0bW9uIiwiYSI6ImdjaXJLTEEifQ.cLlYNK1-bfT0Vv4xUHhDBA',
             maxZoom: 18

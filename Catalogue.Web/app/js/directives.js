@@ -138,20 +138,6 @@
     };
   });
 
-  module.directive('tcTopCopyIcon', function() {
-    return {
-      link: function(scope, elem, attrs) {
-        $(elem).addClass('dark glyphicon glyphicon-leaf');
-        return $(elem).qtip($.extend({}, qtipDefaults, {
-          position: {
-            my: 'left center',
-            at: 'right center'
-          }
-        }));
-      }
-    };
-  });
-
   module.directive('tcAutosize', function($timeout) {
     return {
       link: function(scope, elem, attrs) {

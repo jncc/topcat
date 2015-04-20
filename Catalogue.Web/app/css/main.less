@@ -54,6 +54,12 @@ html { overflow-y: scroll; }
     &:hover { color: @darker; }
 }
 
+.hoverable-glyphbutton {
+    color: @grey;
+    &:hover { color: @darker; }
+    .pointable;
+}
+
 h1, h2, h3 { color: #888; }
 
 hr {
@@ -218,17 +224,19 @@ label {
         vertical-align: top;
         padding-right: 0.4em;
         font-size: x-large;
-        .glyphicon {
-            .hoverable-glyphicon;
-        }
+        .glyphicon { .hoverable-glyphicon; }
     }
 
     .search-title {
         a { font-size: larger; }
 
-        .glyphicon {
+        .search-result-top-copy {
             margin-left: 0.3em;
             .hoverable-glyphicon;
+        }
+        .search-result-map-buttons { 
+            margin-left: 0.5em;
+            .search-result-map-button { .hoverable-glyphbutton; }
         }
 
         .search-date {
@@ -256,7 +264,7 @@ label {
 // map
 .search-map {
     margin: 1.2em 0;
-    height: 45em;
+    height: 40em; // default; may get changed dynamically
 }
 
 // grid
