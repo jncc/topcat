@@ -16,7 +16,7 @@
       results: {}
     };
     $scope.highlighted = {
-      id: {}
+      result: {}
     };
     $scope.pageSize = 15;
     $scope.vocabulator = {};
@@ -31,10 +31,7 @@
     queryRecords = function(query) {
       return $http.get('../api/search?' + $.param(query, true)).success(function(result) {
         if (angular.equals(result.query, query)) {
-          $scope.result = result;
-          if (result.results[0]) {
-            return $scope.highlighted.result = result.results[0];
-          }
+          return $scope.result = result;
         }
       }).error(function(e) {
         return $scope.notifications.add('Oops! ' + e.message);

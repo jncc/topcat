@@ -54,12 +54,6 @@ html { overflow-y: scroll; }
     &:hover { color: @darker; }
 }
 
-.hoverable-glyphbutton {
-    color: @grey;
-    &:hover { color: @darker; }
-    .pointable;
-}
-
 h1, h2, h3 { color: #888; }
 
 hr {
@@ -217,7 +211,6 @@ label {
     p b { color: #555; } // bold snippet highlights look too black
     
     border-right: 8px solid white;
-    &.highlighted { border-right-color: rgba(217,38,103, 0.8); }
 
     .search-format {
         width: 1px; // as small as necessary
@@ -236,7 +229,18 @@ label {
         }
         .search-result-map-buttons { 
             margin-left: 0.5em;
-            .search-result-map-button { .hoverable-glyphbutton; }
+            .search-result-map-button {
+                color: @grey;
+                &:hover { color: @darker; }
+                .pointable;
+            }
+        }
+        .search-result-map-control {
+            color: @grey;
+            font-size: large;
+            .pointable;
+            &:hover { color: @darker; }
+            &.highlighted { color: rgba(217,38,103, 0.8); }
         }
 
         .search-date {
@@ -263,7 +267,7 @@ label {
 
 // map
 .search-map {
-    margin: 1.2em 0;
+    margin: 1.4em 0;
     height: 40em; // default; may get changed dynamically
 }
 

@@ -28,13 +28,6 @@
 .hoverable-glyphicon:hover {
   color: #444444;
 }
-.hoverable-glyphbutton {
-  color: #bbbbbb;
-  cursor: pointer;
-}
-.hoverable-glyphbutton:hover {
-  color: #444444;
-}
 h1,
 h2,
 h3 {
@@ -172,9 +165,6 @@ label {
 .search-result p b {
   color: #555;
 }
-.search-result.highlighted {
-  border-right-color: rgba(217, 38, 103, 0.8);
-}
 .search-result .search-format {
   width: 1px;
   vertical-align: top;
@@ -207,6 +197,17 @@ label {
 .search-result .search-title .search-result-map-buttons .search-result-map-button:hover {
   color: #444444;
 }
+.search-result .search-title .search-result-map-control {
+  color: #bbbbbb;
+  font-size: large;
+  cursor: pointer;
+}
+.search-result .search-title .search-result-map-control:hover {
+  color: #444444;
+}
+.search-result .search-title .search-result-map-control.highlighted {
+  color: rgba(217, 38, 103, 0.8);
+}
 .search-result .search-title .search-date {
   font-size: larger;
   color: #666666;
@@ -224,7 +225,7 @@ label {
   margin-top: 6px;
 }
 .search-map {
-  margin: 1.2em 0;
+  margin: 1.4em 0;
   height: 40em;
 }
 .search-grid {

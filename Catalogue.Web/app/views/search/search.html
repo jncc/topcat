@@ -106,9 +106,8 @@
 
 <div ng-if="result.results" ng-switch="resultsView">
     <div ng-switch-when="list" class="row">
-        <div class="col-md-9" tc-blah>
+        <div class="col-md-9" tc-search-result-scroll-highlighter>
             <div ng-repeat="r in result.results" class="layout-row search-result"
-                 ng-class="{highlighted: highlighted.id == r.id && r.box.north }"
                  id="{{r.id}}">
                 <div class="layout-col search-format">
                     <span class="dark glyphicon {{r.format.glyph}}" tc-tip title="{{r.format.group}}"></span>
@@ -120,8 +119,13 @@
                         <span class="search-date" ng-show="r.date">{{r.date.substring(0, 4)}}</span>
                         <span class="search-result-top-copy dark glyphicon glyphicon-leaf" ng-show="r.topCopy" title="Top copy" tc-tip></span>
                         <span class="search-result-map-buttons" ng-show="r.box.north">
-                            <span class="search-result-map-button glyphicon glyphicon-map-marker" title="Highlight on map" tc-tip ng-click="highlighted.id = r.id"></span>
-                            <span class="search-result-map-button glyphicon glyphicon-zoom-in" title="Zoom on map" tc-tip ng-click="highlighted.goto = r.id"></span>
+                            <span class="search-result-map-button glyphicon glyphicon-map-marker" title="Highlight on map" tc-tip ng-click="highlighted.result = r"></span>
+                            <span class="search-result-map-button glyphicon glyphicon-zoom-in" title="Zoom on map" tc-tip ng-click="highlighted.goto = r"></span>
+                        </span>
+                        <span class="pull-right">
+                            <span class="search-result-map-control glyphicon glyphicon-map-marker"
+                                  title="Show on map" tc-tip ng-click="highlighted.result = r"
+                                  ng-class="{highlighted: highlighted.result == r && r.box.north }"></span>
                         </span>
                     </div>
                     <div>

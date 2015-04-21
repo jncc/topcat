@@ -1,84 +1,91 @@
 ﻿(function() {
-  var heightForFullHeight, module;
+  var baseLayer, calculateBestHeightForMap, hilite, makeTuple, module, normal, tuples;
 
   module = angular.module('app.map');
 
-  heightForFullHeight = function($window, elem) {
+  calculateBestHeightForMap = function($window, elem) {
     var elemTop, viewTop;
     viewTop = angular.element($window).innerHeight();
     elemTop = angular.element(elem).offset().top;
-    return (viewTop - elemTop - 50) + 'px';
+    return (viewTop - elemTop - 10) + 'px';
+  };
+
+  baseLayer = L.tileLayer('https://{s}.tiles.mapbox.com/v4/petmon.lp99j25j/{z}/{x}/{y}.png?access_token=pk.eyJ1IjoicGV0bW9uIiwiYSI6ImdjaXJLTEEifQ.cLlYNK1-bfT0Vv4xUHhDBA', {
+    maxZoom: 18,
+    attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, ' + '<a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, ' + 'Imagery © <a href="http://mapbox.com">Mapbox</a>',
+    id: 'petmon.lp99j25j'
+  });
+
+  normal = {
+    fillOpacity: 0.2,
+    weight: 1,
+    color: '#222'
+  };
+
+  hilite = {
+    fillOpacity: 0.6,
+    weight: 1,
+    color: 'rgb(217,38,103)'
+  };
+
+  tuples = {};
+
+  makeTuple = function(r, scope) {
+    var bounds, rect;
+    bounds = [[r.box.south, r.box.west], [r.box.north, r.box.east]];
+    rect = L.rectangle(bounds, normal);
+    rect.on('mouseover', function() {
+      return scope.$apply(function() {
+        return scope.highlighted.result = r;
+      });
+    });
+    rect.on('click', function() {
+      return scope.$apply(function() {
+        return scope.highlighted.result = r;
+      });
+    });
+    return {
+      r: r,
+      bounds: bounds,
+      rect: rect
+    };
   };
 
   module.directive('tcSearchMap', function($window, $location, $anchorScroll) {
     return {
       link: function(scope, elem, attrs) {
-        var group, hilite, map, normal, query;
-        elem.css('height', heightForFullHeight($window, elem));
+        var group, map;
         map = L.map(elem[0]);
-        L.tileLayer('https://{s}.tiles.mapbox.com/v4/petmon.lp99j25j/{z}/{x}/{y}.png?access_token=pk.eyJ1IjoicGV0bW9uIiwiYSI6ImdjaXJLTEEifQ.cLlYNK1-bfT0Vv4xUHhDBA', {
-          maxZoom: 18,
-          attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, ' + '<a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, ' + 'Imagery © <a href="http://mapbox.com">Mapbox</a>',
-          id: 'petmon.lp99j25j'
-        }).addTo(map);
+        map.addLayer(baseLayer);
         group = L.layerGroup().addTo(map);
-        query = {};
-        normal = {
-          color: '#222',
-          fillOpacity: 0.2,
-          weight: 1
-        };
-        hilite = {
-          color: 'rgb(217,38,103)',
-          fillOpacity: 0.6,
-          weight: 1
-        };
         scope.$watch('result.results', function(results) {
           var r, x, _i, _len;
-          query = (function() {
+          tuples = (function() {
             var _i, _len, _results;
             _results = [];
             for (_i = 0, _len = results.length; _i < _len; _i++) {
               r = results[_i];
               if (r.box) {
                 _results.push((function(r) {
-                  var bounds, rect;
-                  bounds = [[r.box.south, r.box.west], [r.box.north, r.box.east]];
-                  rect = L.rectangle(bounds, normal);
-                  rect.on('mouseover', function() {
-                    return scope.$apply(function() {
-                      return scope.highlighted.id = r.id;
-                    });
-                  });
-                  rect.on('click', function() {
-                    return scope.$apply(function() {
-                      scope.highlighted.id = r.id;
-                      $location.hash(r.id);
-                      return $anchorScroll();
-                    });
-                  });
-                  return {
-                    id: r.id,
-                    bounds: bounds,
-                    rect: rect
-                  };
+                  return makeTuple(r, scope);
                 })(r));
               }
             }
             return _results;
           })();
           group.clearLayers();
-          for (_i = 0, _len = query.length; _i < _len; _i++) {
-            x = query[_i];
+          for (_i = 0, _len = tuples.length; _i < _len; _i++) {
+            x = tuples[_i];
             group.addLayer(x.rect);
           }
-          if (query.length > 0) {
-            scope.highlighted.id = query[0].id;
+          elem.css('height', calculateBestHeightForMap($window, elem));
+          if (tuples.length > 0) {
+            scope.highlighted.result = tuples[0].r;
             return map.fitBounds((function() {
               var _j, _len1, _results;
               _results = [];
-              for (_j = 0, _len1 = query.length; _j < _len1; _j++) {
-                x = query[_j];
+              for (_j = 0, _len1 = tuples.length; _j < _len1; _j++) {
+                x = tuples[_j];
                 _results.push(x.bounds);
               }
               return _results;
@@ -87,14 +94,14 @@
             });
           }
         });
-        return scope.$watch('highlighted.id', function(newer, older) {
+        return scope.$watch('highlighted.result', function(newer, older) {
           var x, _ref, _ref1;
           if ((_ref = ((function() {
             var _i, _len, _results;
             _results = [];
-            for (_i = 0, _len = query.length; _i < _len; _i++) {
-              x = query[_i];
-              if (x.id === older) {
+            for (_i = 0, _len = tuples.length; _i < _len; _i++) {
+              x = tuples[_i];
+              if (x.r === older) {
                 _results.push(x.rect);
               }
             }
@@ -105,9 +112,9 @@
           return (_ref1 = ((function() {
             var _i, _len, _results;
             _results = [];
-            for (_i = 0, _len = query.length; _i < _len; _i++) {
-              x = query[_i];
-              if (x.id === newer) {
+            for (_i = 0, _len = tuples.length; _i < _len; _i++) {
+              x = tuples[_i];
+              if (x.r === newer) {
                 _results.push(x.rect);
               }
             }
@@ -118,14 +125,14 @@
     };
   });
 
-  module.directive('tcBlah', function($window) {
+  module.directive('tcSearchResultScrollHighlighter', function($window) {
     return {
       link: function(scope, elem, attrs) {
         var win;
         win = angular.element($window);
         return win.bind('scroll', function() {
-          var el, query;
-          query = (function() {
+          var el, q, result, x;
+          q = (function() {
             var _i, _len, _ref, _results;
             _ref = elem.children();
             _results = [];
@@ -137,9 +144,22 @@
             }
             return _results;
           })();
-          if (query.length > 0) {
+          console.log(q[0]);
+          result = ((function() {
+            var _i, _len, _results;
+            _results = [];
+            for (_i = 0, _len = tuples.length; _i < _len; _i++) {
+              x = tuples[_i];
+              if (x.r.id === q[0].id) {
+                _results.push(x.r);
+              }
+            }
+            return _results;
+          })())[0];
+          console.log(result);
+          if (result) {
             return scope.$apply(function() {
-              return scope.highlighted.id = query[0].id;
+              return scope.highlighted.result = result;
             });
           }
         });

@@ -7,12 +7,12 @@
         $scope.app = starting: true
         $timeout (-> $scope.app.starting = false), 500
         
-        $scope.result = results: {} # the search results
-        $scope.result = results: {} # the search results
-        $scope.highlighted = id: {} # the currently highlighted result
-        $scope.pageSize = 15        # the paging size (todo: why is there on the scope?)
-        $scope.vocabulator = {}     # vocabulator scope to save state between modal instances
-        $scope.resultsView = 'list' # results view style (list|grid)
+        $scope.result = results: {}     # the search results
+        $scope.result = results: {}     # the search results
+        $scope.highlighted = result: {} # the currently highlighted result
+        $scope.pageSize = 15            # the paging size (todo: why is there on the scope?)
+        $scope.vocabulator = {}         # vocabulator scope to save state between modal instances
+        $scope.resultsView = 'list'     # results view style (list|grid)
 
         updateUrl = (query) ->
             blank = blankQuery()
@@ -28,7 +28,6 @@
                     # don't overwrite with earlier but slower queries!
                     if angular.equals result.query, query
                         $scope.result = result
-                        $scope.highlighted.result = result.results[0] if result.results[0] # start by highlighting the first result
                 .error (e) -> $scope.notifications.add 'Oops! ' + e.message
         
         queryKeywords = (query) ->
