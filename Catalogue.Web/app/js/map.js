@@ -1,5 +1,5 @@
 ﻿(function() {
-  var baseLayer, calculateBestHeightForMap, hilite, makeTuple, module, normal, tuples;
+  var baseLayer, calculateBestHeightForMap, getBestPadding, hilite, makeTuple, module, normal, tuples;
 
   module = angular.module('app.map');
 
@@ -46,6 +46,18 @@
     };
   };
 
+  getBestPadding = function(tuples) {
+    if (tuples.length === 1) {
+      return {
+        padding: [50, 50]
+      };
+    } else {
+      return {
+        padding: [5, 5]
+      };
+    }
+  };
+
   module.directive('tcSearchMap', function($window, $location, $anchorScroll) {
     return {
       link: function(scope, elem, attrs) {
@@ -74,7 +86,6 @@
             group.addLayer(x.rect);
           }
           elem.css('height', calculateBestHeightForMap($window, elem));
-          console.log(tuples.length);
           if (tuples.length > 0) {
             return scope.highlighted.result = tuples[0].r;
           }
@@ -96,9 +107,7 @@
                 _results.push(x.bounds);
               }
               return _results;
-            })(), {
-              padding: [5, 5]
-            });
+            })(), getBestPadding(tuples));
           }
           if ((_ref = ((function() {
             var _i, _len, _results;

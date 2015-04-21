@@ -27,6 +27,12 @@ makeTuple = (r, scope) ->
         #$anchorScroll();
     { r, bounds, rect }
 
+getBestPadding = (tuples) ->
+    if tuples.length == 1
+        padding: [50, 50]
+    else
+        padding: [5, 5]
+
 module.directive 'tcSearchMap', ($window, $location, $anchorScroll) ->
     link: (scope, elem, attrs) ->
         map = L.map elem[0]
@@ -38,13 +44,13 @@ module.directive 'tcSearchMap', ($window, $location, $anchorScroll) ->
             group.clearLayers()
             group.addLayer x.rect for x in tuples
             elem.css 'height', calculateBestHeightForMap $window, elem
-            console.log tuples.length
             if tuples.length > 0
                 scope.highlighted.result = tuples[0].r
         map.on 'zoomend', -> scope.$evalAsync -> scope.highlighted.goto = null
         scope.$watch 'highlighted.result', (newer, older) ->
             scope.highlighted.goto = null
-            (map.fitBounds (x.bounds for x in tuples), padding: [5, 5]) if tuples.length
+            if tuples.length
+                map.fitBounds (x.bounds for x in tuples), getBestPadding tuples
             (x.rect for x in tuples when x.r is older)[0]?.setStyle normal
             (x.rect for x in tuples when x.r is newer)[0]?.setStyle hilite
         scope.$watch 'highlighted.goto', (newer) ->
