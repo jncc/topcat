@@ -192,10 +192,8 @@ label {
 }
 
 .search-results-header {
-
-    border-top: 1px solid @pale; // divider line
-    padding-top: 1em;
-
+    .tag { margin-bottom: 0; } // remove tag margin for vertical centering
+    margin-bottom: 0.2em;
     .search-results-header-tagged {
         // make the spacing look better
         >span:first-child { margin-left:0.2em; }
@@ -210,10 +208,20 @@ label {
     a { text-decoration: underline; } // underlined titles easier to read (?)
     p b { color: #555; } // bold snippet highlights look too black
     
-    border-right: 8px solid white;
+    padding-right: 0.7em;
+    @rad: 4px;
+    -webkit-border-top-right-radius: @rad;
+    -webkit-border-bottom-right-radius: @rad;
+    -moz-border-radius-topright: @rad;
+    -moz-border-radius-bottomright: @rad;
+    border-top-right-radius: @rad;
+    border-bottom-right-radius: @rad;
+
+    border-right: 10px solid white;
+    &.highlighted { border-right-color:  rgba(217,38,103, 0.8); }
 
     .search-format {
-        width: 1px; // as small as necessary
+        width: 2px; // as small as necessary
         vertical-align: top;
         padding-right: 0.4em;
         font-size: x-large;
@@ -237,7 +245,6 @@ label {
         }
         .search-result-map-control {
             color: @grey;
-            font-size: large;
             .pointable;
             &:hover { color: @darker; }
             &.highlighted { color: rgba(217,38,103, 0.8); }

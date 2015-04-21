@@ -52,53 +52,58 @@
 <!--    </div>-->
 <!--</div>-->
 
-<div ng-show="result.query" class="search-results-header layout-row">
+<div ng-show="result.query" class="search-results-header well well-sm">
 
-    <div class="layout-col">
-        Found
-        <span ng-show="result.total > result.results.length">
-            {{result.query.p * 15 || 1}} to {{result.results.length + (query.p * 15) || 0}} of
-        </span>
-        {{result.total || 0}} records
-        <!-- <span ng-show="result.speed">in {{(result.speed / 1000) | number:2}} seconds</span>-->
-        <span ng-show="result.query.k[0]">
-            <span class="search-results-header-tagged">
-                tagged
-                <span></span>
-                <span tc-tag ng-repeat="s in result.query.k" ng-init="k = keywordFromString(s)">
-                    {{k.value}}
-                    <span class="glyphicon glyphicon-remove" ng-click="removeKeywordFromQuery(k)" tc-tip title="Remove"></span>
+    <div class="layout-row">
+        <div class="layout-col">
+            <div>
+                Found
+                <span ng-show="result.total > result.results.length">
+                    {{result.query.p * 15 || 1}} to {{result.results.length + (query.p * 15) || 0}} of
                 </span>
-            </span>
-            <button class="search-open-vocabulator btn btn-sm btn-dialogue" tc-tip title="Add more tags (keywords) to query" ng-click="openVocabulator()">
-                &bull;&bull;&bull;
-            </button>
-        </span>
+                {{result.total || 0}} records
+                <!-- <span ng-show="result.speed">in {{(result.speed / 1000) | number:2}} seconds</span>-->
+                <span ng-show="result.query.k[0]">
+                    <span class="search-results-header-tagged">
+                        tagged
+                        <span></span>
+                        <span tc-tag ng-repeat="s in result.query.k" ng-init="k = keywordFromString(s)">
+                            {{k.value}}
+                            <span class="glyphicon glyphicon-remove" ng-click="removeKeywordFromQuery(k)" tc-tip title="Remove"></span>
+                        </span>
+                    </span>
+                    <button class="search-open-vocabulator btn btn-sm btn-dialogue" tc-tip title="Add more tags (keywords) to query" ng-click="openVocabulator()">
+                        &bull;&bull;&bull;
+                    </button>
+                </span>
 
-        <span ng-show="result.query.q">
-            matching '<b>{{result.query.q}}</b>'
-            <span ng-show="result.query.k[0]" class="glyphicon glyphicon-remove" ng-click="query.q = ''" tc-tip title="Remove"></span>
-        </span>
-    </div>
-    
-    <!-- results view / export buttons -->
-    <div class="layout-col" ng-show="result.total > 0" style="text-align: right;">
-        <div class="search-results-view-picker btn-group" role="group">
-            <button class="btn big-button" tc-tip title="List view" ng-click="resultsView = 'list'" ng-class="{ 'btn-primary': resultsView == 'list', 'btn-default': resultsView != 'list' }">
-                <span class="glyphicon glyphicon-align-left"></span>
-            </button>
-            <button class="btn big-button" tc-tip title="Grid view" ng-click="resultsView = 'grid'" ng-class="{ 'btn-primary': resultsView == 'grid', 'btn-default': resultsView != 'grid' }">
-                <span class="glyphicon glyphicon-list"></span>
-            </button>
+                <span ng-show="result.query.q">
+                    matching '<b>{{result.query.q}}</b>'
+                    <span ng-show="result.query.k[0]" class="glyphicon glyphicon-remove" ng-click="query.q = ''" tc-tip title="Remove"></span>
+                </span>                
+            </div>
+
         </div>
-        <div class="btn-group">
-            <button type="button" class="btn btn-default big-button dropdown-toggle" data-toggle="dropdown" aria-expanded="false" tc-tip title="Export">
-                <span class="glyphicon glyphicon-cloud-download"></span> <span class="caret"></span>
-            </button>
-            <ul class="dropdown-menu dropdown-menu-right" role="menu">
-                <li><a ng-href="../api/export?{{querystring()}}">Export as text file (tab-separated)</a></li>
-                <!--<li class="divider"></li> might be useful-->
-            </ul>
+
+        <!-- results view / export buttons -->
+        <div class="layout-col" ng-show="result.total > 0" style="text-align: right;">
+            <div class="search-results-view-picker btn-group" role="group">
+                <button class="btn big-button" tc-tip title="List view" ng-click="resultsView = 'list'" ng-class="{ 'btn-primary': resultsView == 'list', 'btn-default': resultsView != 'list' }">
+                    <span class="glyphicon glyphicon-align-left"></span>
+                </button>
+                <button class="btn big-button" tc-tip title="Grid view" ng-click="resultsView = 'grid'" ng-class="{ 'btn-primary': resultsView == 'grid', 'btn-default': resultsView != 'grid' }">
+                    <span class="glyphicon glyphicon-list"></span>
+                </button>
+            </div>
+            <div class="btn-group">
+                <button type="button" class="btn btn-default big-button dropdown-toggle" data-toggle="dropdown" aria-expanded="false" tc-tip title="Export">
+                    <span class="glyphicon glyphicon-cloud-download"></span> <span class="caret"></span>
+                </button>
+                <ul class="dropdown-menu dropdown-menu-right" role="menu">
+                    <li><a ng-href="../api/export?{{querystring()}}">Export as text file (tab-separated)</a></li>
+                    <!--<li class="divider"></li> might be useful-->
+                </ul>
+            </div>
         </div>
     </div>
 
@@ -108,6 +113,7 @@
     <div ng-switch-when="list" class="row">
         <div class="col-md-9" tc-search-result-scroll-highlighter>
             <div ng-repeat="r in result.results" class="layout-row search-result"
+                 ng-class="{highlighted: highlighted.result == r && r.box.north }"
                  id="{{r.id}}">
                 <div class="layout-col search-format">
                     <span class="dark glyphicon {{r.format.glyph}}" tc-tip title="{{r.format.group}}"></span>
@@ -118,14 +124,12 @@
                         <span class="search-divider-bullet">&bull;</span>
                         <span class="search-date" ng-show="r.date">{{r.date.substring(0, 4)}}</span>
                         <span class="search-result-top-copy dark glyphicon glyphicon-leaf" ng-show="r.topCopy" title="Top copy" tc-tip></span>
-                        <span class="search-result-map-buttons" ng-show="r.box.north">
-                            <span class="search-result-map-button glyphicon glyphicon-map-marker" title="Highlight on map" tc-tip ng-click="highlighted.result = r"></span>
-                            <span class="search-result-map-button glyphicon glyphicon-zoom-in" title="Zoom on map" tc-tip ng-click="highlighted.goto = r"></span>
-                        </span>
-                        <span class="pull-right">
+                        <span ng-show="r.box.north" class="pull-right">
+                            <span class="search-result-map-control glyphicon glyphicon-zoom-in"
+                                  title="Zoom on map" tc-tip ng-click="highlighted.goto = r"
+                                  ng-show="highlighted.result == r"></span>
                             <span class="search-result-map-control glyphicon glyphicon-map-marker"
-                                  title="Show on map" tc-tip ng-click="highlighted.result = r"
-                                  ng-class="{highlighted: highlighted.result == r && r.box.north }"></span>
+                                  title="Show on map" tc-tip ng-click="highlighted.result = r"></span>
                         </span>
                     </div>
                     <div>
