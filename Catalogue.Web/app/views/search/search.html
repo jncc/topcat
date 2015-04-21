@@ -56,33 +56,30 @@
 
     <div class="layout-row">
         <div class="layout-col">
-            <div>
-                Found
-                <span ng-show="result.total > result.results.length">
-                    {{result.query.p * 15 || 1}} to {{result.results.length + (query.p * 15) || 0}} of
-                </span>
-                {{result.total || 0}} records
-                <!-- <span ng-show="result.speed">in {{(result.speed / 1000) | number:2}} seconds</span>-->
-                <span ng-show="result.query.k[0]">
-                    <span class="search-results-header-tagged">
-                        tagged
-                        <span></span>
-                        <span tc-tag ng-repeat="s in result.query.k" ng-init="k = keywordFromString(s)">
-                            {{k.value}}
-                            <span class="glyphicon glyphicon-remove" ng-click="removeKeywordFromQuery(k)" tc-tip title="Remove"></span>
-                        </span>
+            Found
+            <span ng-show="result.total > result.results.length">
+                {{result.query.p * 15 || 1}} to {{result.results.length + (query.p * 15) || 0}} of
+            </span>
+            {{result.total || 0}} records
+            <!-- <span ng-show="result.speed">in {{(result.speed / 1000) | number:2}} seconds</span>-->
+            <span ng-show="result.query.k[0]">
+                <span class="search-results-header-tagged">
+                    tagged
+                    <span></span>
+                    <span tc-tag ng-repeat="s in result.query.k" ng-init="k = keywordFromString(s)">
+                        {{k.value}}
+                        <span class="glyphicon glyphicon-remove" ng-click="removeKeywordFromQuery(k)" tc-tip title="Remove"></span>
                     </span>
-                    <button class="search-open-vocabulator btn btn-sm btn-dialogue" tc-tip title="Add more tags (keywords) to query" ng-click="openVocabulator()">
-                        &bull;&bull;&bull;
-                    </button>
                 </span>
+                <button class="search-open-vocabulator btn btn-sm btn-dialogue" tc-tip title="Add more tags (keywords) to query" ng-click="openVocabulator()">
+                    &bull;&bull;&bull;
+                </button>
+            </span>
 
-                <span ng-show="result.query.q">
-                    matching '<b>{{result.query.q}}</b>'
-                    <span ng-show="result.query.k[0]" class="glyphicon glyphicon-remove" ng-click="query.q = ''" tc-tip title="Remove"></span>
-                </span>                
-            </div>
-
+            <span ng-show="result.query.q">
+                matching '<b>{{result.query.q}}</b>'
+                <span ng-show="result.query.k[0]" class="glyphicon glyphicon-remove" ng-click="query.q = ''" tc-tip title="Remove"></span>
+            </span>
         </div>
 
         <!-- results view / export buttons -->
@@ -126,7 +123,7 @@
                         <span class="search-result-top-copy dark glyphicon glyphicon-leaf" ng-show="r.topCopy" title="Top copy" tc-tip></span>
                         <span ng-show="r.box.north" class="pull-right">
                             <span class="search-result-map-control glyphicon glyphicon-zoom-in"
-                                  title="Zoom on map" tc-tip ng-click="highlighted.goto = r"
+                                  title="Go to on map" tc-tip ng-click="highlighted.goto = r"
                                   ng-show="highlighted.result == r"></span>
                             <span class="search-result-map-control glyphicon glyphicon-map-marker"
                                   title="Show on map" tc-tip ng-click="highlighted.result = r"></span>

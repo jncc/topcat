@@ -20,7 +20,7 @@ tuples = {}
 makeTuple = (r, scope) ->
     bounds = [[r.box.south, r.box.west], [r.box.north, r.box.east]]
     rect = L.rectangle bounds, normal
-    rect.on 'mouseover', -> scope.$apply -> scope.highlighted.result = r
+    #rect.on 'mouseover', -> scope.$apply -> scope.highlighted.result = r
     rect.on 'click', -> scope.$apply ->
         scope.highlighted.result = r
         #$location.hash(r.id);
@@ -33,17 +33,23 @@ module.directive 'tcSearchMap', ($window, $location, $anchorScroll) ->
         map.addLayer baseLayer
         group = L.layerGroup().addTo map # a group for the rectangles
         scope.$watch 'result.results', (results) ->
-            tuples = for r in results when r.box 
+            tuples = for r in results when r.box.north 
                 do (r) -> makeTuple r, scope
             group.clearLayers()
             group.addLayer x.rect for x in tuples
             elem.css 'height', calculateBestHeightForMap $window, elem
+            console.log tuples.length
             if tuples.length > 0
                 scope.highlighted.result = tuples[0].r
-                map.fitBounds (x.bounds for x in tuples), padding: [5,5]
+        map.on 'zoomend', -> scope.$evalAsync -> scope.highlighted.goto = null
         scope.$watch 'highlighted.result', (newer, older) ->
+            scope.highlighted.goto = null
+            (map.fitBounds (x.bounds for x in tuples), padding: [5, 5]) if tuples.length
             (x.rect for x in tuples when x.r is older)[0]?.setStyle normal
             (x.rect for x in tuples when x.r is newer)[0]?.setStyle hilite
+        scope.$watch 'highlighted.goto', (newer) ->
+            rectangle = (x.rect for x in tuples when x.r is newer)[0]
+            (map.fitBounds rectangle, padding: [50, 50]) if rectangle
 
 
 module.directive 'tcSearchResultScrollHighlighter', ($window) ->
@@ -52,22 +58,8 @@ module.directive 'tcSearchResultScrollHighlighter', ($window) ->
         win.bind 'scroll', ->
             # find the results below the top of the viewport and highlight the first one
             q = (el for el in elem.children() when angular.element(el).offset().top > win.scrollTop())
-            console.log q[0]
             result = (x.r for x in tuples when x.r.id is q[0].id)[0]
-            console.log result
             (scope.$apply -> scope.highlighted.result = result) if result 
-            
-                        
-#module.directive 'tcSearchHighlightScroller', ($window) ->
-    #link: (scope, elem, attrs) ->
-        #scope.$watch 'highlighted.id', (id) ->
-            #console.log elem.attr 'id'
-            #if id is (elem.attr 'id')
-                
-        #scope.$watch 'highlighted.scroll', (newer, older) ->
-            #if newer isnt older and newer is scope.r
-                #y = elem.offset().top
-                #$window.scrollTo 0, (y - 20)
 
 # sticks the element to the top of the viewport when scrolled past
 # used for the search map - untested for use elsewhere!

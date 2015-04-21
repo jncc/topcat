@@ -34,11 +34,6 @@
     var bounds, rect;
     bounds = [[r.box.south, r.box.west], [r.box.north, r.box.east]];
     rect = L.rectangle(bounds, normal);
-    rect.on('mouseover', function() {
-      return scope.$apply(function() {
-        return scope.highlighted.result = r;
-      });
-    });
     rect.on('click', function() {
       return scope.$apply(function() {
         return scope.highlighted.result = r;
@@ -65,7 +60,7 @@
             _results = [];
             for (_i = 0, _len = results.length; _i < _len; _i++) {
               r = results[_i];
-              if (r.box) {
+              if (r.box.north) {
                 _results.push((function(r) {
                   return makeTuple(r, scope);
                 })(r));
@@ -79,13 +74,25 @@
             group.addLayer(x.rect);
           }
           elem.css('height', calculateBestHeightForMap($window, elem));
+          console.log(tuples.length);
           if (tuples.length > 0) {
-            scope.highlighted.result = tuples[0].r;
-            return map.fitBounds((function() {
-              var _j, _len1, _results;
+            return scope.highlighted.result = tuples[0].r;
+          }
+        });
+        map.on('zoomend', function() {
+          return scope.$evalAsync(function() {
+            return scope.highlighted.goto = null;
+          });
+        });
+        scope.$watch('highlighted.result', function(newer, older) {
+          var x, _ref, _ref1;
+          scope.highlighted.goto = null;
+          if (tuples.length) {
+            map.fitBounds((function() {
+              var _i, _len, _results;
               _results = [];
-              for (_j = 0, _len1 = tuples.length; _j < _len1; _j++) {
-                x = tuples[_j];
+              for (_i = 0, _len = tuples.length; _i < _len; _i++) {
+                x = tuples[_i];
                 _results.push(x.bounds);
               }
               return _results;
@@ -93,9 +100,6 @@
               padding: [5, 5]
             });
           }
-        });
-        return scope.$watch('highlighted.result', function(newer, older) {
-          var x, _ref, _ref1;
           if ((_ref = ((function() {
             var _i, _len, _results;
             _results = [];
@@ -121,6 +125,25 @@
             return _results;
           })())[0]) != null ? _ref1.setStyle(hilite) : void 0;
         });
+        return scope.$watch('highlighted.goto', function(newer) {
+          var rectangle, x;
+          rectangle = ((function() {
+            var _i, _len, _results;
+            _results = [];
+            for (_i = 0, _len = tuples.length; _i < _len; _i++) {
+              x = tuples[_i];
+              if (x.r === newer) {
+                _results.push(x.rect);
+              }
+            }
+            return _results;
+          })())[0];
+          if (rectangle) {
+            return map.fitBounds(rectangle, {
+              padding: [50, 50]
+            });
+          }
+        });
       }
     };
   });
@@ -144,7 +167,6 @@
             }
             return _results;
           })();
-          console.log(q[0]);
           result = ((function() {
             var _i, _len, _results;
             _results = [];
@@ -156,7 +178,6 @@
             }
             return _results;
           })())[0];
-          console.log(result);
           if (result) {
             return scope.$apply(function() {
               return scope.highlighted.result = result;
