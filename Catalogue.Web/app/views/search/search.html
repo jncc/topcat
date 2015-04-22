@@ -122,11 +122,10 @@
                         <span class="search-date" ng-show="r.date">{{r.date.substring(0, 4)}}</span>
                         <span class="search-result-top-copy dark glyphicon glyphicon-leaf" ng-show="r.topCopy" title="Top copy" tc-tip></span>
                         <span ng-show="r.box.north" class="pull-right">
-                            <span class="search-result-map-control glyphicon glyphicon-zoom-in"
-                                  title="Go to on map" tc-tip ng-click="current.zoomed = r"
-                                  ng-show="current.selected == r"></span>
                             <span class="search-result-map-control glyphicon glyphicon-map-marker"
                                   title="Select on map" tc-tip ng-click="current.selected = r"></span>
+                            <span class="search-result-map-control glyphicon glyphicon-zoom-in"
+                                  title="Centre on map" tc-tip ng-click="current.zoomed = r"></span>
                         </span>
                     </div>
                     <div>

@@ -79,7 +79,7 @@
             });
             rect.on('click', function() {
               return scope.$apply(function() {
-                return scope.current.selected = r;
+                return scope.current.zoomed = r;
               });
             });
             return {
@@ -113,6 +113,7 @@
             group.addLayer(x.rect);
           }
           elem.css('height', calculateBestHeightForMap($window, elem));
+          scope.current.zoomed = null;
           if (tuples.length > 0) {
             scope.current.selected = tuples[0].r;
             return map.fitBounds((function() {
@@ -146,11 +147,13 @@
         });
         return scope.$watch('current.zoomed', function(newer, older) {
           var tuple;
-          if (newer !== older) {
+          if (newer && newer !== older) {
             tuple = _(tuples).find(function(x) {
               return x.r === newer;
             });
-            map.fitBounds(tuple.bounds, getBestPadding([tuple]));
+            map.fitBounds(tuple.bounds, {
+              padding: [100, 100]
+            });
             return scope.current.selected = newer;
           }
         });

@@ -37,7 +37,7 @@ updateTuples = (results, scope) ->
             rect.on 'mouseover', -> rect.setStyle fillOpacity: 0.4
             rect.on 'mouseout', -> rect.setStyle fillOpacity: 0.2
             rect.on 'click', -> scope.$apply ->
-                scope.current.selected = r
+                scope.current.zoomed = r
                 #$location.hash(r.id);
                 #$anchorScroll();
             { r, bounds, rect }
@@ -53,10 +53,11 @@ module.directive 'tcSearchMap', ($window, $location, $anchorScroll) ->
             ordered = _(tuples).sortBy((x) -> getArea x.bounds).reverse().value()
             group.addLayer x.rect for x in ordered
             elem.css 'height', calculateBestHeightForMap $window, elem
+            scope.current.zoomed = null
             # select the first result initially
             if tuples.length > 0
                 scope.current.selected = tuples[0].r
-                map.fitBounds (x.bounds for x in tuples), getBestPadding tuples                
+                map.fitBounds (x.bounds for x in tuples), getBestPadding tuples
         #map.on 'zoomend', -> scope.$apply -> scope.map.current.selected = null
         scope.$watch 'current.topmost', (result) ->
             if not scope.current.zoomed
@@ -67,14 +68,11 @@ module.directive 'tcSearchMap', ($window, $location, $anchorScroll) ->
                 _(tuples).find((x) -> x.r is newer)?.rect.setStyle select
                 _(tuples).find((x) -> x.r is older)?.rect.setStyle normal
         scope.$watch 'current.zoomed', (newer, older) ->
-            if newer isnt older
+            if newer and newer isnt older
                 # zoom in and set current.selected
                 tuple = _(tuples).find((x) -> x.r is newer)
-                map.fitBounds tuple.bounds, getBestPadding [tuple]
+                map.fitBounds tuple.bounds, padding: [100, 100]
                 scope.current.selected = newer
-            
-                
-            
 
 module.directive 'tcSearchResultScrollHighlighter', ($window) ->
     link: (scope, elem, attrs) ->

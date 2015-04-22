@@ -214,9 +214,6 @@ label {
 .search-result .search-title .search-result-map-control:hover {
   color: #444444;
 }
-.search-result .search-title .search-result-map-control.highlighted {
-  color: rgba(217, 38, 103, 0.8);
-}
 .search-result .search-title .search-date {
   font-size: larger;
   color: #666666;
