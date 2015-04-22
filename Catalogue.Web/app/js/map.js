@@ -79,7 +79,7 @@
             });
             rect.on('click', function() {
               return scope.$apply(function() {
-                return scope.map.current.selected = r;
+                return scope.current.selected = r;
               });
             });
             return {
@@ -97,7 +97,7 @@
   module.directive('tcSearchMap', function($window, $location, $anchorScroll) {
     return {
       link: function(scope, elem, attrs) {
-        var f, group, map;
+        var group, map;
         map = L.map(elem[0]);
         map.addLayer(baseLayer);
         group = L.layerGroup().addTo(map);
@@ -114,56 +114,46 @@
           }
           elem.css('height', calculateBestHeightForMap($window, elem));
           if (tuples.length > 0) {
-            return scope.map.current.highlighted = tuples[0].r;
-          }
-        });
-        f = function(newer, older) {
-          var normals, rectangle, selects, x, _i, _len, _ref, _ref1, _results;
-          console.log('hi');
-          if (newer.selected !== older.selected) {
-            newer.highlighted = null;
-            rectangle = ((function() {
-              var _i, _len, _results;
+            scope.current.selected = tuples[0].r;
+            return map.fitBounds((function() {
+              var _j, _len1, _results;
               _results = [];
-              for (_i = 0, _len = tuples.length; _i < _len; _i++) {
-                x = tuples[_i];
-                if (x.r === newer) {
-                  _results.push(x.rect);
-                }
-              }
-              return _results;
-            })())[0];
-            if (rectangle) {
-              map.fitBounds(rectangle, {
-                padding: [50, 50]
-              });
-            }
-          }
-          if (tuples.length) {
-            map.fitBounds((function() {
-              var _i, _len, _results;
-              _results = [];
-              for (_i = 0, _len = tuples.length; _i < _len; _i++) {
-                x = tuples[_i];
+              for (_j = 0, _len1 = tuples.length; _j < _len1; _j++) {
+                x = tuples[_j];
                 _results.push(x.bounds);
               }
               return _results;
             })(), getBestPadding(tuples));
           }
-          _ref = _.partition(tuples, function(x) {
-            return x.r === newer.highlighted || x.r === newer.selected;
-          }), selects = _ref[0], normals = _ref[1];
-          if ((_ref1 = selects[0]) != null) {
-            _ref1.rect.setStyle(select);
+        });
+        scope.$watch('current.topmost', function(result) {
+          if (!scope.current.zoomed) {
+            return scope.current.selected = result;
           }
-          _results = [];
-          for (_i = 0, _len = normals.length; _i < _len; _i++) {
-            x = normals[_i];
-            _results.push(x.rect.setStyle(normal));
+        });
+        scope.$watch('current.selected', function(newer, older) {
+          var _ref, _ref1;
+          if (newer !== older) {
+            if ((_ref = _(tuples).find(function(x) {
+              return x.r === newer;
+            })) != null) {
+              _ref.rect.setStyle(select);
+            }
+            return (_ref1 = _(tuples).find(function(x) {
+              return x.r === older;
+            })) != null ? _ref1.rect.setStyle(normal) : void 0;
           }
-          return _results;
-        };
-        return scope.$watch('map.current', f, true);
+        });
+        return scope.$watch('current.zoomed', function(newer, older) {
+          var tuple;
+          if (newer !== older) {
+            tuple = _(tuples).find(function(x) {
+              return x.r === newer;
+            });
+            map.fitBounds(tuple.bounds, getBestPadding([tuple]));
+            return scope.current.selected = newer;
+          }
+        });
       }
     };
   });
@@ -200,7 +190,7 @@
           })())[0];
           if (result) {
             return scope.$apply(function() {
-              return scope.map.current.highlighted = result;
+              return scope.current.topmost = result;
             });
           }
         });

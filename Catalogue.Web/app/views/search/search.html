@@ -110,7 +110,7 @@
     <div ng-switch-when="list" class="row">
         <div class="col-md-9" tc-search-result-scroll-highlighter>
             <div ng-repeat="r in result.results" class="layout-row search-result"
-                 ng-class="{highlighted: r.box.north && (map.current.selected == r || map.current.highlighted == r)  }"
+                 ng-class="{highlighted: r.box.north && current.selected == r  }"
                  id="{{r.id}}">
                 <div class="layout-col search-format">
                     <span class="dark glyphicon {{r.format.glyph}}" tc-tip title="{{r.format.group}}"></span>
@@ -123,10 +123,10 @@
                         <span class="search-result-top-copy dark glyphicon glyphicon-leaf" ng-show="r.topCopy" title="Top copy" tc-tip></span>
                         <span ng-show="r.box.north" class="pull-right">
                             <span class="search-result-map-control glyphicon glyphicon-zoom-in"
-                                  title="Go to on map" tc-tip ng-click="map.current.selected = r"
-                                  ng-show="map.current.highlighted == r || map.current.selected == r"></span>
+                                  title="Go to on map" tc-tip ng-click="current.zoomed = r"
+                                  ng-show="current.selected == r"></span>
                             <span class="search-result-map-control glyphicon glyphicon-map-marker"
-                                  title="Show on map" tc-tip ng-click="map.current.highlighted = r"></span>
+                                  title="Select on map" tc-tip ng-click="current.selected = r"></span>
                         </span>
                     </div>
                     <div>

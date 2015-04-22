@@ -15,9 +15,7 @@
     $scope.result = {
       results: {}
     };
-    $scope.map = {
-      current: {}
-    };
+    $scope.current = {};
     $scope.pageSize = 15;
     $scope.vocabulator = {};
     $scope.resultsView = 'list';

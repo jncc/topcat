@@ -37,7 +37,7 @@ updateTuples = (results, scope) ->
             rect.on 'mouseover', -> rect.setStyle fillOpacity: 0.4
             rect.on 'mouseout', -> rect.setStyle fillOpacity: 0.2
             rect.on 'click', -> scope.$apply ->
-                scope.map.current.selected = r
+                scope.current.selected = r
                 #$location.hash(r.id);
                 #$anchorScroll();
             { r, bounds, rect }
@@ -53,23 +53,28 @@ module.directive 'tcSearchMap', ($window, $location, $anchorScroll) ->
             ordered = _(tuples).sortBy((x) -> getArea x.bounds).reverse().value()
             group.addLayer x.rect for x in ordered
             elem.css 'height', calculateBestHeightForMap $window, elem
+            # select the first result initially
             if tuples.length > 0
-                scope.map.current.highlighted = tuples[0].r
+                scope.current.selected = tuples[0].r
+                map.fitBounds (x.bounds for x in tuples), getBestPadding tuples                
         #map.on 'zoomend', -> scope.$apply -> scope.map.current.selected = null
-        f = (newer, older) ->
-            console.log 'hi'
-            # when something is selected, clear highlighted
-            if (newer.selected isnt older.selected)
-                newer.highlighted = null
-                rectangle = (x.rect for x in tuples when x.r is newer)[0]
-                (map.fitBounds rectangle, padding: [50, 50]) if rectangle
-            if tuples.length
-                map.fitBounds (x.bounds for x in tuples), getBestPadding tuples
-            # apply the correct styles
-            [selects, normals] = _.partition tuples, (x) -> x.r is newer.highlighted or x.r is newer.selected
-            selects[0]?.rect.setStyle select
-            x.rect.setStyle normal for x in normals
-        scope.$watch 'map.current', f, true
+        scope.$watch 'current.topmost', (result) ->
+            if not scope.current.zoomed
+                scope.current.selected = result
+        scope.$watch 'current.selected', (newer, older) ->
+            if newer isnt older
+                # hilite selected box
+                _(tuples).find((x) -> x.r is newer)?.rect.setStyle select
+                _(tuples).find((x) -> x.r is older)?.rect.setStyle normal
+        scope.$watch 'current.zoomed', (newer, older) ->
+            if newer isnt older
+                # zoom in and set current.selected
+                tuple = _(tuples).find((x) -> x.r is newer)
+                map.fitBounds tuple.bounds, getBestPadding [tuple]
+                scope.current.selected = newer
+            
+                
+            
 
 module.directive 'tcSearchResultScrollHighlighter', ($window) ->
     link: (scope, elem, attrs) ->
@@ -78,7 +83,7 @@ module.directive 'tcSearchResultScrollHighlighter', ($window) ->
             # find the results below the top of the viewport and highlight the first one
             q = (el for el in elem.children() when angular.element(el).offset().top > win.scrollTop())
             result = (x.r for x in tuples when x.r.id is q[0].id)[0]
-            (scope.$apply -> scope.map.current.highlighted = result) if result 
+            (scope.$apply -> scope.current.topmost = result) if result 
 
 # sticks the element to the top of the viewport when scrolled past
 # used for the search map - untested for use elsewhere!
