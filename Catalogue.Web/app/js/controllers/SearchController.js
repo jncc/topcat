@@ -15,8 +15,8 @@
     $scope.result = {
       results: {}
     };
-    $scope.highlighted = {
-      result: {}
+    $scope.map = {
+      current: {}
     };
     $scope.pageSize = 15;
     $scope.vocabulator = {};

@@ -11,52 +11,65 @@ baseLayer = L.tileLayer 'https://{s}.tiles.mapbox.com/v4/petmon.lp99j25j/{z}/{x}
     id: 'petmon.lp99j25j'
     
 normal = fillOpacity: 0.2, weight: 1, color: '#222'
-hilite = fillOpacity: 0.6, weight: 1, color: 'rgb(217,38,103)'
-
-# the records to show on the map, paired with additional map-related
-tuples = {}
-
-# make a single element for the query - a tuple of { record, coordinate bounds, leaflet rectangle }
-makeTuple = (r, scope) ->
-    bounds = [[r.box.south, r.box.west], [r.box.north, r.box.east]]
-    rect = L.rectangle bounds, normal
-    #rect.on 'mouseover', -> scope.$apply -> scope.highlighted.result = r
-    rect.on 'click', -> scope.$apply ->
-        scope.highlighted.result = r
-        #$location.hash(r.id);
-        #$anchorScroll();
-    { r, bounds, rect }
+select = fillOpacity: 0.5, weight: 1, color: 'rgb(217,38,103)'
 
 getBestPadding = (tuples) ->
-    if tuples.length == 1
-        padding: [50, 50]
-    else
-        padding: [5, 5]
+    switch tuples.length
+        when 1 then padding: [50, 50]
+        when 2 then padding: [20, 20]
+        else        padding: [5, 5]
 
+getArea = (bounds) ->
+    [[s, w], [n, e]] = bounds
+    x = e - w
+    y = n - s
+    Math.abs (x * y)
+
+# the records to show on the map, paired with additional map-related
+# tuples of { record, coordinate bounds, leaflet rectangle }
+tuples = {}
+
+updateTuples = (results, scope) ->
+    tuples = for r in results when r.box.north 
+        do (r) ->
+            bounds = [[r.box.south, r.box.west], [r.box.north, r.box.east]]
+            rect = L.rectangle bounds, normal
+            rect.on 'mouseover', -> rect.setStyle fillOpacity: 0.4
+            rect.on 'mouseout', -> rect.setStyle fillOpacity: 0.2
+            rect.on 'click', -> scope.$apply ->
+                scope.map.current.selected = r
+                #$location.hash(r.id);
+                #$anchorScroll();
+            { r, bounds, rect }
+    
 module.directive 'tcSearchMap', ($window, $location, $anchorScroll) ->
     link: (scope, elem, attrs) ->
         map = L.map elem[0]
         map.addLayer baseLayer
         group = L.layerGroup().addTo map # a group for the rectangles
         scope.$watch 'result.results', (results) ->
-            tuples = for r in results when r.box.north 
-                do (r) -> makeTuple r, scope
+            updateTuples results, scope
             group.clearLayers()
-            group.addLayer x.rect for x in tuples
+            ordered = _(tuples).sortBy((x) -> getArea x.bounds).reverse().value()
+            group.addLayer x.rect for x in ordered
             elem.css 'height', calculateBestHeightForMap $window, elem
             if tuples.length > 0
-                scope.highlighted.result = tuples[0].r
-        map.on 'zoomend', -> scope.$evalAsync -> scope.highlighted.goto = null
-        scope.$watch 'highlighted.result', (newer, older) ->
-            scope.highlighted.goto = null
+                scope.map.current.highlighted = tuples[0].r
+        #map.on 'zoomend', -> scope.$apply -> scope.map.current.selected = null
+        f = (newer, older) ->
+            console.log 'hi'
+            # when something is selected, clear highlighted
+            if (newer.selected isnt older.selected)
+                newer.highlighted = null
+                rectangle = (x.rect for x in tuples when x.r is newer)[0]
+                (map.fitBounds rectangle, padding: [50, 50]) if rectangle
             if tuples.length
                 map.fitBounds (x.bounds for x in tuples), getBestPadding tuples
-            (x.rect for x in tuples when x.r is older)[0]?.setStyle normal
-            (x.rect for x in tuples when x.r is newer)[0]?.setStyle hilite
-        scope.$watch 'highlighted.goto', (newer) ->
-            rectangle = (x.rect for x in tuples when x.r is newer)[0]
-            (map.fitBounds rectangle, padding: [50, 50]) if rectangle
-
+            # apply the correct styles
+            [selects, normals] = _.partition tuples, (x) -> x.r is newer.highlighted or x.r is newer.selected
+            selects[0]?.rect.setStyle select
+            x.rect.setStyle normal for x in normals
+        scope.$watch 'map.current', f, true
 
 module.directive 'tcSearchResultScrollHighlighter', ($window) ->
     link: (scope, elem, attrs) ->
@@ -65,7 +78,7 @@ module.directive 'tcSearchResultScrollHighlighter', ($window) ->
             # find the results below the top of the viewport and highlight the first one
             q = (el for el in elem.children() when angular.element(el).offset().top > win.scrollTop())
             result = (x.r for x in tuples when x.r.id is q[0].id)[0]
-            (scope.$apply -> scope.highlighted.result = result) if result 
+            (scope.$apply -> scope.map.current.highlighted = result) if result 
 
 # sticks the element to the top of the viewport when scrolled past
 # used for the search map - untested for use elsewhere!

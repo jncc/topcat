@@ -9,7 +9,7 @@
         
         $scope.result = results: {}     # the search results
         $scope.result = results: {}     # the search results
-        $scope.highlighted = result: {} # the currently highlighted result
+        $scope.map = current: {}        # the currently selected and/or highlighted result
         $scope.pageSize = 15            # the paging size (todo: why is there on the scope?)
         $scope.vocabulator = {}         # vocabulator scope to save state between modal instances
         $scope.resultsView = 'list'     # results view style (list|grid)
@@ -114,6 +114,11 @@
                 vocab: 'http://' + (s.substring 0, slash),
                 value: s.substring (slash + 1)
                 
+        # map
+        #$scope.selectResultOnMap = (r) ->
+        #    $scope.map.selected = r
+        #    $scope.map.highlighted = r
+        
         # vocabulator
         $scope.openVocabulator = ->
             modal = $modal.open

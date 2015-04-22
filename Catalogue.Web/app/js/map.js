@@ -1,5 +1,5 @@
 ﻿(function() {
-  var baseLayer, calculateBestHeightForMap, getBestPadding, hilite, makeTuple, module, normal, tuples;
+  var baseLayer, calculateBestHeightForMap, getArea, getBestPadding, module, normal, select, tuples, updateTuples;
 
   module = angular.module('app.map');
 
@@ -22,82 +22,123 @@
     color: '#222'
   };
 
-  hilite = {
-    fillOpacity: 0.6,
+  select = {
+    fillOpacity: 0.5,
     weight: 1,
     color: 'rgb(217,38,103)'
   };
 
-  tuples = {};
-
-  makeTuple = function(r, scope) {
-    var bounds, rect;
-    bounds = [[r.box.south, r.box.west], [r.box.north, r.box.east]];
-    rect = L.rectangle(bounds, normal);
-    rect.on('click', function() {
-      return scope.$apply(function() {
-        return scope.highlighted.result = r;
-      });
-    });
-    return {
-      r: r,
-      bounds: bounds,
-      rect: rect
-    };
+  getBestPadding = function(tuples) {
+    switch (tuples.length) {
+      case 1:
+        return {
+          padding: [50, 50]
+        };
+      case 2:
+        return {
+          padding: [20, 20]
+        };
+      default:
+        return {
+          padding: [5, 5]
+        };
+    }
   };
 
-  getBestPadding = function(tuples) {
-    if (tuples.length === 1) {
-      return {
-        padding: [50, 50]
-      };
-    } else {
-      return {
-        padding: [5, 5]
-      };
-    }
+  getArea = function(bounds) {
+    var e, n, s, w, x, y, _ref, _ref1;
+    (_ref = bounds[0], s = _ref[0], w = _ref[1]), (_ref1 = bounds[1], n = _ref1[0], e = _ref1[1]);
+    x = e - w;
+    y = n - s;
+    return Math.abs(x * y);
+  };
+
+  tuples = {};
+
+  updateTuples = function(results, scope) {
+    var r;
+    return tuples = (function() {
+      var _i, _len, _results;
+      _results = [];
+      for (_i = 0, _len = results.length; _i < _len; _i++) {
+        r = results[_i];
+        if (r.box.north) {
+          _results.push((function(r) {
+            var bounds, rect;
+            bounds = [[r.box.south, r.box.west], [r.box.north, r.box.east]];
+            rect = L.rectangle(bounds, normal);
+            rect.on('mouseover', function() {
+              return rect.setStyle({
+                fillOpacity: 0.4
+              });
+            });
+            rect.on('mouseout', function() {
+              return rect.setStyle({
+                fillOpacity: 0.2
+              });
+            });
+            rect.on('click', function() {
+              return scope.$apply(function() {
+                return scope.map.current.selected = r;
+              });
+            });
+            return {
+              r: r,
+              bounds: bounds,
+              rect: rect
+            };
+          })(r));
+        }
+      }
+      return _results;
+    })();
   };
 
   module.directive('tcSearchMap', function($window, $location, $anchorScroll) {
     return {
       link: function(scope, elem, attrs) {
-        var group, map;
+        var f, group, map;
         map = L.map(elem[0]);
         map.addLayer(baseLayer);
         group = L.layerGroup().addTo(map);
         scope.$watch('result.results', function(results) {
-          var r, x, _i, _len;
-          tuples = (function() {
-            var _i, _len, _results;
-            _results = [];
-            for (_i = 0, _len = results.length; _i < _len; _i++) {
-              r = results[_i];
-              if (r.box.north) {
-                _results.push((function(r) {
-                  return makeTuple(r, scope);
-                })(r));
-              }
-            }
-            return _results;
-          })();
+          var ordered, x, _i, _len;
+          updateTuples(results, scope);
           group.clearLayers();
-          for (_i = 0, _len = tuples.length; _i < _len; _i++) {
-            x = tuples[_i];
+          ordered = _(tuples).sortBy(function(x) {
+            return getArea(x.bounds);
+          }).reverse().value();
+          for (_i = 0, _len = ordered.length; _i < _len; _i++) {
+            x = ordered[_i];
             group.addLayer(x.rect);
           }
           elem.css('height', calculateBestHeightForMap($window, elem));
           if (tuples.length > 0) {
-            return scope.highlighted.result = tuples[0].r;
+            return scope.map.current.highlighted = tuples[0].r;
           }
         });
-        map.on('zoomend', function() {
-          return scope.$evalAsync(function() {
-            return scope.highlighted.goto = null;
-          });
-        });
-        scope.$watch('highlighted.result', function(newer, older) {
-          var x, _ref, _ref1;
-          scope.highlighted.goto = null;
+        f = function(newer, older) {
+          var normals, rectangle, selects, x, _i, _len, _ref, _ref1, _results;
+          console.log('hi');
+          if (newer.selected !== older.selected) {
+            newer.highlighted = null;
+            rectangle = ((function() {
+              var _i, _len, _results;
+              _results = [];
+              for (_i = 0, _len = tuples.length; _i < _len; _i++) {
+                x = tuples[_i];
+                if (x.r === newer) {
+                  _results.push(x.rect);
+                }
+              }
+              return _results;
+            })())[0];
+            if (rectangle) {
+              map.fitBounds(rectangle, {
+                padding: [50, 50]
+              });
+            }
+          }
           if (tuples.length) {
             map.fitBounds((function() {
               var _i, _len, _results;
@@ -109,50 +150,20 @@
               return _results;
             })(), getBestPadding(tuples));
           }
-          if ((_ref = ((function() {
-            var _i, _len, _results;
-            _results = [];
-            for (_i = 0, _len = tuples.length; _i < _len; _i++) {
-              x = tuples[_i];
-              if (x.r === older) {
-                _results.push(x.rect);
-              }
-            }
-            return _results;
-          })())[0]) != null) {
-            _ref.setStyle(normal);
+          _ref = _.partition(tuples, function(x) {
+            return x.r === newer.highlighted || x.r === newer.selected;
+          }), selects = _ref[0], normals = _ref[1];
+          if ((_ref1 = selects[0]) != null) {
+            _ref1.rect.setStyle(select);
           }
-          return (_ref1 = ((function() {
-            var _i, _len, _results;
-            _results = [];
-            for (_i = 0, _len = tuples.length; _i < _len; _i++) {
-              x = tuples[_i];
-              if (x.r === newer) {
-                _results.push(x.rect);
-              }
-            }
-            return _results;
-          })())[0]) != null ? _ref1.setStyle(hilite) : void 0;
-        });
-        return scope.$watch('highlighted.goto', function(newer) {
-          var rectangle, x;
-          rectangle = ((function() {
-            var _i, _len, _results;
-            _results = [];
-            for (_i = 0, _len = tuples.length; _i < _len; _i++) {
-              x = tuples[_i];
-              if (x.r === newer) {
-                _results.push(x.rect);
-              }
-            }
-            return _results;
-          })())[0];
-          if (rectangle) {
-            return map.fitBounds(rectangle, {
-              padding: [50, 50]
-            });
+          _results = [];
+          for (_i = 0, _len = normals.length; _i < _len; _i++) {
+            x = normals[_i];
+            _results.push(x.rect.setStyle(normal));
           }
-        });
+          return _results;
+        };
+        return scope.$watch('map.current', f, true);
       }
     };
   });
@@ -189,7 +200,7 @@
           })())[0];
           if (result) {
             return scope.$apply(function() {
-              return scope.highlighted.result = result;
+              return scope.map.current.highlighted = result;
             });
           }
         });
