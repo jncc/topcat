@@ -181,11 +181,11 @@
             return _results;
           })();
           result = ((function() {
-            var _i, _len, _results;
+            var _i, _len, _ref, _results;
             _results = [];
             for (_i = 0, _len = tuples.length; _i < _len; _i++) {
               x = tuples[_i];
-              if (x.r.id === q[0].id) {
+              if (x.r.id === ((_ref = q[0]) != null ? _ref.id : void 0)) {
                 _results.push(x.r);
               }
             }

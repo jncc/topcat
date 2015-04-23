@@ -80,7 +80,7 @@ module.directive 'tcSearchResultScrollHighlighter', ($window) ->
         win.bind 'scroll', ->
             # find the results below the top of the viewport and highlight the first one
             q = (el for el in elem.children() when angular.element(el).offset().top > win.scrollTop())
-            result = (x.r for x in tuples when x.r.id is q[0].id)[0]
+            result = (x.r for x in tuples when x.r.id is q[0]?.id)[0]
             (scope.$apply -> scope.current.topmost = result) if result 
 
 # sticks the element to the top of the viewport when scrolled past
