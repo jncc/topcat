@@ -92,7 +92,7 @@
                     <span>Currently Selected: <span class="dark glyphicon" ng-class="lookups.currentDataFormat.glyph"></span><span> {{lookups.currentDataFormat.type}} - {{lookups.currentDataFormat.text}}<span ng-show="lookups.currentDataFormat.code">{{'(' + lookups.currentDataFormat.code + ')'}}</span></span></span>
                     <span style="float:right;"><button type="button" class="close" aria-hidden="true" ng-click="collapseDataFormatSelector = !collapseDataFormatSelector">&times;</button></span>
                 </div>
-                <div>
+                <div class="row">
                     <tabset>
                         <tab ng-repeat="format in lookups.formats">
                             <tab-heading class="tab-heading">
