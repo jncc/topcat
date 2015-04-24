@@ -607,10 +607,10 @@
 
                             <button type="button" class="btn"
                                     ng-click="form.status = (form.status + 1) % 2"
-                                    ng-class="{ 'btn-default': form.status == 0, 'btn-success': form.status == 1 }"
+                                    ng-class="{ 'btn-danger': form.status == 0, 'btn-success': form.status == 1 }"
                                     title="Is the resource for internal use only, or is it for publishing externally?"
                                     tc-tip>
-                                <span class="glyphicon glyphicon-repeat" ng-class="{ 'dark': form.status == 0 }"></span>
+                                <span class="glyphicon glyphicon-repeat"></span>
                                 {{ form.status == 0 ? 'Internal' : 'Publishable' }}
                             </button>
 
