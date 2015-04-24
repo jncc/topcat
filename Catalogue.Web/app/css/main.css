@@ -107,7 +107,6 @@ label {
 }
 .header .logo h1 {
   margin: 0;
-  opacity: .5;
 }
 .header .user-info {
   display: table-cell;
