@@ -14,13 +14,21 @@
             </div>
             <div class="col-md-6">
                 <div class="form-group pull-right">
+                    <a ng-href="#/clone/{{form.id}}" target="_blank" ng-hide="isCloneHidden()" ng-disabled="isCloneDisabled()" tc-tip title="Clone this record" class="btn btn-default icon-and-text-btn">
+                        <span class="dark glyphicon glyphicon-send"></span>CLONE
+                    </a>
+                    <div class="btn-group">
+                        <button type="button" class="btn btn-default big-button dropdown-toggle" data-toggle="dropdown" aria-expanded="false" tc-tip title="Export">
+                            <span class="glyphicon glyphicon-cloud-download"></span> <span class="caret"></span>
+                        </button>
+                        <ul class="dropdown-menu dropdown-menu-right" role="menu">
+                            <li><a ng-href="../api/download/{{form.id}}">Download as ISO XML file</a></li>
+                        </ul>
+                    </div>
                     <span>
                         <button ng-click="cancel()" ng-hide="isCancelHidden()" class="btn btn-primary">CANCEL</button>
                         <button ng-click="save()" ng-hide="isSaveHidden()" ng-disabled="isSaveDisabled()" class="btn btn-danger">SAVE</button>
                     </span>
-                    <a ng-href="#/clone/{{form.id}}" target="_blank" ng-hide="isCloneHidden()" ng-disabled="isCloneDisabled()" tc-tip title="Clone this record" class="btn btn-default icon-and-text-btn">
-                        <span class="dark glyphicon glyphicon-send"></span>CLONE
-                    </a>
                 </div>
             </div>
 
@@ -145,7 +153,7 @@
                               title="The abstract is a clear, brief summary of the resource's content"
                               tc-focus-tip tc-autosize></textarea>
                     <button class="btn btn-sm btn-dialogue" tc-tip title="Edit abstract" ng-click="editAbstract()">
-                            &bull;&bull;&bull;
+                        &bull;&bull;&bull;
                     </button>
                 </div>
 
@@ -314,11 +322,11 @@
                         <!-- public access and use contraints-->
                         <div ng-show="form.gemini.useConstraints">Use constraints</div>
                         <textarea type="text" name="gemini.useConstraints" ng-model="form.gemini.useConstraints" class="form-control"
-                                    rows="2"
-                                    placeholder="Use constraints"
-                                    title="Usage and legal constraints (such as &copy; copyright) on using the data resource"
-                                    tc-focus-tip tc-autosize></textarea>
-                        
+                                  rows="2"
+                                  placeholder="Use constraints"
+                                  title="Usage and legal constraints (such as &copy; copyright) on using the data resource"
+                                  tc-focus-tip tc-autosize></textarea>
+
                         <br />
 
                         <div ng-show="form.gemini.limitationsOnPublicAccess">Limitations on public access</div>
@@ -442,7 +450,7 @@
                                             <span>No Extents Provided</span>
                                         </div>
                                         <div style="float:left;" ng-if="form.gemini.extent.length > 0">
-                                            <span ng-repeat="extent in form.gemini.extent" title="{{extent.authority}}" tc-focus-tip  class="tag">
+                                            <span ng-repeat="extent in form.gemini.extent" title="{{extent.authority}}" tc-focus-tip class="tag">
                                                 {{ extent.authority }} - {{ extent.code }}
                                             </span>
                                         </div>

@@ -1,7 +1,10 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿using System;
+using System.Net;
+using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Web.Http;
 using Catalogue.Data.Model;
+using Catalogue.Gemini.Encoding;
 using Raven.Client;
 
 namespace Catalogue.Web.Controllers.Download
@@ -15,23 +18,21 @@ namespace Catalogue.Web.Controllers.Download
             this.db = db;
         }
 
-        public List<Record> Get(string k)
+        public HttpResponseMessage Get(Guid id)
         {
-            // todo use the RecordQueryer instead, and/or think about combining with ExportController??
-            var keyword = ParameterHelper.ParseKeywords(new[] { k }).Single(); // for now, support only one
+            var record = db.Load<Record>(id);
 
-            var q = from r in db.Query<Record>()
-                    where r.Gemini.Keywords.Any(x => x.Vocab == keyword.Vocab && x.Value == keyword.Value)
-                    select r;
+            var xml = new XmlEncoder().Create(record.Id, record.Gemini);
+            var result = new HttpResponseMessage(HttpStatusCode.OK) { Content = new StringContent(xml.ToString()) };
 
-            return q.ToList();
+            result.Content.Headers.ContentDisposition = new ContentDispositionHeaderValue("attachment")
+            {
+                FileName = "topcat-record-" + record.Id.ToString().ToLower() + ".xml"
+            };
+            result.Content.Headers.ContentType = new MediaTypeHeaderValue("application/xml");
+
+            return result;
         }
 
-//        [HttpGet, Route("api/download/iso")]
-//        public object Xml(RecordQueryInputModel input)
-//        {
-//            var keyword = ParameterHelper.ParseKeywords(new[] { input..K }).Single(); // for now, support only one
-//
-//        }
     }
 }
