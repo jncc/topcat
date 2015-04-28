@@ -135,7 +135,7 @@
                     </div>
                     <div class="search-tags">
                         <span tc-tag ng-repeat="k in r.keywords" tc-tip ng-click="addKeywordToQuery(k)" class="pointable">
-                            {{ k.value }}
+                            <span ng-bind-html="k.value | highlight:query.q"></span>
                         </span>
                     </div>
                 </div>

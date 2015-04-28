@@ -1,6 +1,8 @@
 ﻿using System.Linq;
 using Catalogue.Data.Analyzers;
 using Catalogue.Data.Model;
+using Lucene.Net.Analysis;
+using Lucene.Net.Analysis.Standard;
 using Raven.Abstractions.Indexing;
 using Raven.Client.Indexes;
 
@@ -18,6 +20,7 @@ namespace Catalogue.Data.Indexes
             public string   Abstract  { get; set; }
             public string   AbstractN { get; set; }
             public string[] Keywords  { get; set; }
+            public string[] KeywordsN { get; set; }
         }
 
         public RecordIndex()
@@ -30,7 +33,8 @@ namespace Catalogue.Data.Indexes
                                      TitleN = record.Gemini.Title, 
                                      Abstract = record.Gemini.Abstract,
                                      AbstractN = record.Gemini.Abstract,
-                                     Keywords = record.Gemini.Keywords.Select(k => k.Vocab + "/" + k.Value)
+                                     Keywords = record.Gemini.Keywords.Select(k => k.Vocab + "/" + k.Value), // for filtering exactly on keywords
+                                     KeywordsN = record.Gemini.Keywords.Select(k => k.Value), // for full-text search matching on keywords
                                  };
 
             // store and analyse the Title field
@@ -48,6 +52,11 @@ namespace Catalogue.Data.Indexes
             Analyze(x => x.AbstractN, typeof(NGramAnalyzer).AssemblyQualifiedName);
             Stores.Add(x => x.AbstractN, FieldStorage.Yes);
             TermVector(x => x.AbstractN, FieldTermVector.WithPositionsAndOffsets);
+
+            // store and analyse the Keywords field for full-text search
+            Analyze(x => x.KeywordsN, typeof(NGramAnalyzer).AssemblyQualifiedName);
+            Stores.Add(x => x.KeywordsN, FieldStorage.Yes);
+            TermVector(x => x.KeywordsN, FieldTermVector.WithPositionsAndOffsets);
         }
     }
 }
