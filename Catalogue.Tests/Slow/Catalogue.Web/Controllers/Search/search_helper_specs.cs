@@ -15,7 +15,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Web.Controllers.Search
             var input = new RecordQueryInputModel
                 {
                     Q = "",
-                    K = new [] { "vocab.jncc.gov.uk/jncc-broad-category/Seabed Habitat Maps" },
+                    K = new [] { "vocab.jncc.gov.uk/jncc-category/Seabed Habitat Maps" },
                     P = 0,
                     N = 25
                 };

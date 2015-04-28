@@ -20,7 +20,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Data.Indexes
         {
             Db.Query<RecordKeywordIndex.Result, RecordKeywordIndex>()
                 .Where(
-                    k => k.Vocab == "http://vocab.jncc.gov.uk/jncc-broad-category" && k.Value == "Seabed Habitat Maps")
+                    k => k.Vocab == "http://vocab.jncc.gov.uk/jncc-category" && k.Value == "Seabed Habitat Maps")
                 .Count().Should().Be(1);
         }
 

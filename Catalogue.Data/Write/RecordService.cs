@@ -77,7 +77,8 @@ namespace Catalogue.Data.Write
         void CorrectlyOrderKeywords(Record record)
         {
             record.Gemini.Keywords = record.Gemini.Keywords
-                .OrderByDescending(k => k.Vocab == "http://vocab.jncc.gov.uk/jncc-broad-category")
+                .OrderByDescending(k => k.Vocab == "http://vocab.jncc.gov.uk/jncc-domain")
+                .ThenByDescending(k => k.Vocab == "http://vocab.jncc.gov.uk/jncc-category")
                 .ThenByDescending(k => k.Vocab.IsNotBlank())
                 .ThenBy(k => k.Vocab)
                 .ThenBy(k => k.Value)
@@ -227,7 +228,7 @@ namespace Catalogue.Data.Write
         [Test]
         public void should_save_keywords_in_correct_order()
         {
-            // should be sorted by vocab, then value, but with distinguished vocab "jncc broad category" first!
+            // should be sorted by vocab, then value, but with distinguished jncc vocabs first!
             // finally, keywords with no namespace should be last
 
             var database = Mock.Of<IDocumentSession>();
@@ -240,8 +241,9 @@ namespace Catalogue.Data.Write
                             { "a-vocab-beginning-with-a", "bravo" },
                             { "boring-vocab-beginning-with-b", "some-keyword" },
                             { "a-vocab-beginning-with-a", "alpha" },
-                            { "http://vocab.jncc.gov.uk/jncc-broad-category", "bravo" },
-                            { "http://vocab.jncc.gov.uk/jncc-broad-category", "alpha" },
+                            { "http://vocab.jncc.gov.uk/jncc-category", "bravo" },
+                            { "http://vocab.jncc.gov.uk/jncc-category", "alpha" },
+                            { "http://vocab.jncc.gov.uk/jncc-domain", "some-domain" },
                             { "", "some-keyword" },
                         }.ToKeywordList();
                 });
@@ -250,8 +252,9 @@ namespace Catalogue.Data.Write
 
             var expected = new StringPairList
                 {
-                    { "http://vocab.jncc.gov.uk/jncc-broad-category", "alpha" },
-                    { "http://vocab.jncc.gov.uk/jncc-broad-category", "bravo" },
+                    { "http://vocab.jncc.gov.uk/jncc-domain", "some-domain" },
+                    { "http://vocab.jncc.gov.uk/jncc-category", "alpha" },
+                    { "http://vocab.jncc.gov.uk/jncc-category", "bravo" },
                     { "a-vocab-beginning-with-a", "alpha" },
                     { "a-vocab-beginning-with-a", "bravo" },
                     { "boring-vocab-beginning-with-b", "some-keyword" },

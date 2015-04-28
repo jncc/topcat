@@ -34,14 +34,6 @@ namespace Catalogue.Web.Controllers.Seed
             return new HttpResponseMessage();
         }
 
-        [HttpPost, Route("api/seed/vocabs")]
-        public HttpResponseMessage Vocabs()
-        {
-            Seeder.SeedVocabsOnly(WebApiApplication.DocumentStore);
-
-            return new HttpResponseMessage();
-        }
-
         [HttpPost, Route("api/seed/deletemesh")]
         public HttpResponseMessage DeleteMesh()
         {

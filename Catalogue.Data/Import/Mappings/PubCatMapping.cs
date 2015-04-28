@@ -22,16 +22,18 @@ namespace Catalogue.Data.Import.Mappings
             {
                 return new List<Vocabulary>
                 {
-                    new Vocabulary
-                        {
-                            Id = "http://vocab.jncc.gov.uk/jncc-broad-category",
-                            Name = "JNCC Broad Categories",
-                            Description = "The broad dataset categories used within JNCC.",
-                            Controlled = true,
-                            Publishable = true,
-                            PublicationDate = "2015",
-                            Keywords = new List<VocabularyKeyword>()
-                        },
+                    // do we need to add jncc-domain and jncc-category ??
+
+//                    new Vocabulary
+//                        {
+//                            Id = "http://vocab.jncc.gov.uk/jncc-category",
+//                            Name = "JNCC Category",
+//                            Description = "The broad dataset categories used within JNCC.",
+//                            Controlled = true,
+//                            Publishable = true,
+//                            PublicationDate = "2015",
+//                            Keywords = new List<VocabularyKeyword>()
+//                        },
                     new Vocabulary
                         {
                             Id = "http://vocab.jncc.gov.uk/publications",
@@ -171,8 +173,9 @@ namespace Catalogue.Data.Import.Mappings
                 AddKeyword(keywords, "http://vocab.jncc.gov.uk/publications", "Discontinued");
             }
 
-            //All pubcat elements are marked with this.
-            AddKeyword(keywords, "http://vocab.jncc.gov.uk/jncc-broad-category", "Publications");
+            // not sure yet how to categorise publications
+            AddKeyword(keywords, "http://vocab.jncc.gov.uk/jncc-domain", "to do!");
+            AddKeyword(keywords, "http://vocab.jncc.gov.uk/jncc-category", "Publications");
 
             return keywords;
         }

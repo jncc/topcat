@@ -35,7 +35,7 @@ namespace Catalogue.Data.Import.Mappings
 
         public static List<MetadataKeyword> ParseMeshKeywords(string input)
         {
-            IEnumerable<MetadataKeyword> q = from m in Regex.Matches(input, @"\{(.*?)\}").Cast<Match>()
+            var q = from m in Regex.Matches(input, @"\{(.*?)\}").Cast<Match>()
                 let pair = m.Groups.Cast<Group>().Select(g => g.Value).Skip(1).First().Split(',')
                 let vocab = pair.ElementAt(0).Trim().Trim('"').Trim()
                 let keyword = pair.ElementAt(1).Trim().Trim('"').Trim()
@@ -46,7 +46,10 @@ namespace Catalogue.Data.Import.Mappings
                     Value = MapSourceKeywordToRealKeyword(keyword),
                 };
 
-            return q.ToList();
+            var keywords = q.ToList();
+            keywords.Insert(0, new MetadataKeyword { Vocab = "http://vocab.jncc.gov.uk/jncc-domain", Value = "Marine" });
+
+            return keywords;
         }
 
         public static string MapSourceVocabToRealVocab(string v)
@@ -54,7 +57,7 @@ namespace Catalogue.Data.Import.Mappings
             switch (v)
             {
                 case "jncc-broad-category":
-                    return "http://vocab.jncc.gov.uk/jncc-broad-category";
+                    return "http://vocab.jncc.gov.uk/jncc-category";
                 case "SeabedSurveyPurpose":
                     return "http://vocab.jncc.gov.uk/seabed-survey-purpose";
                 case "SeabedSurveyTechnique":
@@ -199,12 +202,13 @@ namespace Catalogue.Data.Import.Mappings
             string input =
                 "{\"jncc-broad-category\", \"SeabedHabitatMaps\"}, {\"OriginalSeabedClassificationSystem\", \"Local\"}, {\"SeabedMapStatus\", \"Show on webGIS\"}, {\"SeabedMapStatus\", \"Translated to EUNIS\"}, {\"SeabedMapStatus\", \"Data Provider Agreement signed FULL ACCESS\"}";
 
-            List<MetadataKeyword> keywords = MeshMapping.ParseMeshKeywords(input);
+            var keywords = MeshMapping.ParseMeshKeywords(input);
 
-            keywords.Should().HaveCount(5);
+            keywords.Should().HaveCount(6);
             keywords.Select(k => k.Vocab).Should().ContainInOrder(new[]
             {
-                "http://vocab.jncc.gov.uk/jncc-broad-category",
+                "http://vocab.jncc.gov.uk/jncc-domain",
+                "http://vocab.jncc.gov.uk/jncc-category",
                 "http://vocab.jncc.gov.uk/original-seabed-classification-system",
                 "http://vocab.jncc.gov.uk/seabed-map-status",
                 "http://vocab.jncc.gov.uk/seabed-map-status",

@@ -11,8 +11,6 @@ using Catalogue.Gemini.DataFormats;
 using Catalogue.Gemini.Model;
 using Catalogue.Gemini.Templates;
 using Catalogue.Utilities.Clone;
-using Catalogue.Utilities.Diagnostics;
-using Catalogue.Utilities.Text;
 using Raven.Client;
 
 namespace Catalogue.Data.Seed
@@ -46,19 +44,6 @@ namespace Catalogue.Data.Seed
             }
         }
 
-        /// <summary>
-        /// todo remove this, just for bootstrapping first live instance
-        /// </summary>
-        public static void SeedVocabsOnly(IDocumentStore store)
-        {
-            using (var db = store.OpenSession())
-            {
-                var s = new Seeder(db, new RecordService(db, new RecordValidator()));
-                s.AddVocabularies();
-                db.SaveChanges();
-            }
-        }
-
         Record MakeExampleSeedRecord()
         {
             return new Record
@@ -66,7 +51,8 @@ namespace Catalogue.Data.Seed
                 Gemini = Library.Blank().With(m =>
                     {
                         m.ResourceType = "dataset";
-                        m.Keywords.Add(new MetadataKeyword { Vocab = "http://vocab.jncc.gov.uk/jncc-broad-category", Value = "Example Records" });
+                        m.Keywords.Add(new MetadataKeyword { Vocab = "http://vocab.jncc.gov.uk/jncc-domain", Value = "Terrestrial" });
+                        m.Keywords.Add(new MetadataKeyword { Vocab = "http://vocab.jncc.gov.uk/jncc-category", Value = "Example Records" });
                         m.Keywords.Add(new MetadataKeyword { Vocab = "http://vocab.jncc.gov.uk/example", Value = "example" });
                     }),
             };
@@ -226,22 +212,74 @@ namespace Catalogue.Data.Seed
 
         void AddVocabularies()
         {
-            var jnccCategories = new Vocabulary
+            var jnccDomain = new Vocabulary
+            {
+                Id = "http://vocab.jncc.gov.uk/jncc-domain",
+                Name = "JNCC Domain",
+                Description = "Groups metadata records into broad areas.",
+                PublicationDate = "2015",
+                Publishable = true,
+                Controlled = true,
+                Keywords = new List<VocabularyKeyword>
+                        {
+                            new VocabularyKeyword { Value = "Marine" },
+                            new VocabularyKeyword { Value = "Freshwater" },
+                            new VocabularyKeyword { Value = "Terrestrial" },
+                            new VocabularyKeyword { Value = "Atmosphere" },
+                        }
+            };
+            db.Store(jnccDomain);
+
+            var jnccCategory = new Vocabulary
                 {
-                    Id = "http://vocab.jncc.gov.uk/jncc-broad-category",
-                    Name = "JNCC Broad Categories",
-                    Description = "The broad dataset categories used within JNCC.",
-                    PublicationDate = "2013",
+                    Id = "http://vocab.jncc.gov.uk/jncc-category",
+                    Name = "JNCC Category",
+                    Description = "Groups metadata records into collections.",
+                    PublicationDate = "2015",
                     Publishable = true,
                     Controlled = true,
                     Keywords = new List<VocabularyKeyword>
                         {
                             new VocabularyKeyword { Value = "Seabed Habitat Maps" },
-                            new VocabularyKeyword { Value = "Marine Human Activities" },
+                            new VocabularyKeyword { Value = "Human Activities" },
                             new VocabularyKeyword { Value = "Publications" },
                         }
                 };
-            db.Store(jnccCategories);
+            db.Store(jnccCategory);
+
+            var domain = new Vocabulary
+            {
+                Id = "http://vocab.jncc.gov.uk/jncc-domain",
+                Name = "JNCC Domain",
+                Description = "The broad domain within JNCC.",
+                PublicationDate = "2015",
+                Publishable = true,
+                Controlled = true,
+                Keywords = new List<VocabularyKeyword>
+                        {
+                            new VocabularyKeyword { Value = "Marine" },
+                            new VocabularyKeyword { Value = "Freshwater" },
+                            new VocabularyKeyword { Value = "Terrestrial" },
+                            new VocabularyKeyword { Value = "Atmosphere" },
+                        }
+            };
+            db.Store(domain);
+
+            var category = new Vocabulary
+            {
+                Id = "http://vocab.jncc.gov.uk/jncc-category",
+                Name = "JNCC Category",
+                Description = "The data category within JNCC.",
+                PublicationDate = "2015",
+                Publishable = true,
+                Controlled = true,
+                Keywords = new List<VocabularyKeyword>
+                        {
+                            new VocabularyKeyword { Value = "Seabed Habitat Maps" },
+                            new VocabularyKeyword { Value = "Protected Areas" },
+                        }
+            };
+            db.Store(category);
 
             var referenceManagerCode = new Vocabulary
                 {

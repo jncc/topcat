@@ -100,9 +100,14 @@ namespace Catalogue.Data.Write
 
         void ValidateKeywords(Record record, ValidationResult<Record> ValidationResult)
         {
-            if (!record.Gemini.Keywords.Any(k => k.Vocab == "http://vocab.jncc.gov.uk/jncc-broad-category"))
+            if (!record.Gemini.Keywords.Any(k => k.Vocab == "http://vocab.jncc.gov.uk/jncc-domain"))
             {
-                ValidationResult.Errors.Add(String.Format("Must specify a JNCC Broad Category keyword"),
+                ValidationResult.Errors.Add(String.Format("Must specify a JNCC Domain keyword"),
+                    r => r.Gemini.Keywords);
+            }
+            if (!record.Gemini.Keywords.Any(k => k.Vocab == "http://vocab.jncc.gov.uk/jncc-category"))
+            {
+                ValidationResult.Errors.Add(String.Format("Must specify a JNCC Category keyword"),
                     r => r.Gemini.Keywords);
             }
 
@@ -428,7 +433,8 @@ namespace Catalogue.Data.Write
                         m.Title = "Some title";
                         m.Keywords = new StringPairList
                             {
-                                { "http://vocab.jncc.gov.uk/jncc-broad-category", "Example Category" },
+                                { "http://vocab.jncc.gov.uk/jncc-domain", "Example Domain" },
+                                { "http://vocab.jncc.gov.uk/jncc-category", "Example Category" },
                             }
                             .ToKeywordList();
                     }),
@@ -477,13 +483,13 @@ namespace Catalogue.Data.Write
         }
 
         [Test]
-        public void jncc_broad_category_must_be_provided()
+        public void jncc_keywords_must_be_provided()
         {
             // should not validate on empty list
             var r1 =
                new RecordValidator().Validate(SimpleRecord().With(r => r.Gemini.Keywords = new List<MetadataKeyword>()));
 
-            r1.Errors.Single().Message.Should().StartWith("Must specify a JNCC Broad Category");
+            r1.Errors.First().Message.Should().StartWith("Must specify a JNCC Domain");
         }
 
         [Test]

@@ -52,7 +52,7 @@ namespace Catalogue.Web.Controllers
         [Test]
         public void should_parse_keywords()
         {
-            string urlKeyword = "vocab.jncc.gov.uk/jncc-broad-category/Seabed Habitat Maps";
+            string urlKeyword = "vocab.jncc.gov.uk/jncc-category/Seabed Habitat Maps";
 
             var results = ParameterHelper.ParseKeywords(new [] { urlKeyword });
 
