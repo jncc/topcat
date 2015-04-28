@@ -35,8 +35,8 @@ namespace Catalogue.Web.Controllers.Vocabularies
                             Description = v.Description,
                         })
                         .ToList()
-                        .OrderBy(v => v.Id == "http://vocab.jncc.gov.uk/jncc-domain")
-                        .ThenBy(v => v.Id == "http://vocab.jncc.gov.uk/jncc-category")
+                        .OrderByDescending(v => v.Id == "http://vocab.jncc.gov.uk/jncc-domain")
+                        .ThenByDescending(v => v.Id == "http://vocab.jncc.gov.uk/jncc-category")
                         .ThenBy(v => v.Name)
                         .ToList();
         }
