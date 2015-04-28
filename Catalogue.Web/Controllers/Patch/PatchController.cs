@@ -74,5 +74,50 @@ namespace Catalogue.Web.Controllers.Patch
             return new HttpResponseMessage();
         }
 
+        [HttpPost, Route("api/patch/fixupvocabs")]
+        public HttpResponseMessage FixUpVocabs()
+        {
+            var broad = db.Load<Vocabulary>("http://vocab.jncc.gov.uk/jncc-broad-category");
+
+            db.Delete(broad);
+
+            var domain = new Vocabulary
+            {
+                Id = "http://vocab.jncc.gov.uk/jncc-domain",
+                Name = "JNCC Domain",
+                Description = "The broad domain within JNCC.",
+                PublicationDate = "2015",
+                Publishable = true,
+                Controlled = true,
+                Keywords = new List<VocabularyKeyword>
+                        {
+                            new VocabularyKeyword { Value = "Marine" },
+                            new VocabularyKeyword { Value = "Freshwater" },
+                            new VocabularyKeyword { Value = "Terrestrial" },
+                            new VocabularyKeyword { Value = "Atmosphere" },
+                        }
+            };
+            db.Store(domain);
+
+            var category = new Vocabulary
+            {
+                Id = "http://vocab.jncc.gov.uk/jncc-category",
+                Name = "JNCC Category",
+                Description = "The data category within JNCC.",
+                PublicationDate = "2015",
+                Publishable = true,
+                Controlled = true,
+                Keywords = new List<VocabularyKeyword>
+                        {
+                            new VocabularyKeyword { Value = "Seabed Habitat Maps" },
+                            new VocabularyKeyword { Value = "Protected Areas" },
+                        }
+            };
+            db.Store(category);
+
+
+            db.SaveChanges();
+            return new HttpResponseMessage();
+        }
     }
 }
