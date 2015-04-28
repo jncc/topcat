@@ -197,8 +197,8 @@
     <Content Include="app\css\main.min.css">
       <DependentUpon>main.less</DependentUpon>
     </Content>
-    <Content Include="app\img\logo.gif" />
     <Content Include="app\img\spinner.gif" />
+    <Content Include="app\img\topcat.png" />
     <Content Include="app\index.html" />
     <Content Include="app\js\app.js">
       <DependentUpon>app.coffee</DependentUpon>
