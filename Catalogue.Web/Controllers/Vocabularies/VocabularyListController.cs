@@ -27,15 +27,18 @@ namespace Catalogue.Web.Controllers.Vocabularies
 
         public ICollection<VocabularyListResult> Get()
         {
-            return (from v in _db.Query<Vocabulary>()
-                    orderby v.Name
-                    select new VocabularyListResult()
+            return _db.Query<Vocabulary>().Select(v =>
+                    new VocabularyListResult
                         {
                             Id = v.Id,
                             Name = v.Name,
                             Description = v.Description,
-                        }).ToList();
-                   
+                        })
+                        .ToList()
+                        .OrderBy(v => v.Id == "http://vocab.jncc.gov.uk/jncc-domain")
+                        .ThenBy(v => v.Id == "http://vocab.jncc.gov.uk/jncc-category")
+                        .ThenBy(v => v.Name)
+                        .ToList();
         }
     }
 }
