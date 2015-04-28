@@ -94,10 +94,10 @@ namespace Catalogue.Web.Controllers
                                         Glyph = format.Glyph,
                                         Name = format.Name,
                                     },
-                                Keywords = r.Gemini.Keywords
-                                            .OrderBy(k => k.Vocab != "http://vocab.jncc.gov.uk/jncc-broad-category") // show first
-                                            .ThenBy(k => k.Vocab.IsBlank())
-                                            .ThenBy(k => k.Vocab).ToList(),
+                                Keywords = r.Gemini.Keywords,
+                                            //.OrderBy(k => k.Vocab != "http://vocab.jncc.gov.uk/jncc-broad-category") // show first
+                                            //.ThenBy(k => k.Vocab.IsBlank())
+                                            //.ThenBy(k => k.Vocab).ToList(),
                                 TopCopy = r.TopCopy,
                                 Date = r.Gemini.DatasetReferenceDate,
                                 ResourceType = r.Gemini.ResourceType.FirstCharToUpper(),

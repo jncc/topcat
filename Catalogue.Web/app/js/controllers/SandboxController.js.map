@@ -1,1 +1,1 @@
-﻿{"version":3,"file":"SandboxController.js","sources":["SandboxController.coffee"],"names":[],"mappings":"AAAA;AAAA,EAAA,OAAO,CAAC,MAAR,CAAe,iBAAf,CAAiC,CAAC,UAAlC,CAA6C,mBAA7C,EAEI,SAAC,MAAD,GAAA;WAEI,MAAM,CAAC,CAAP,GAAW,EAFf;EAAA,CAFJ,CAAA,CAAA;AAAA"}
+﻿{"version":3,"file":"SandboxController.js","sources":["SandboxController.coffee"],"names":[],"mappings":"AAAA;AAAA,EAAA,OAAO,CAAC,MAAR,CAAe,iBAAf,CAAiC,CAAC,UAAlC,CAA6C,mBAA7C,EAEI,SAAC,MAAD,EAAS,YAAT,GAAA;AAEI,IAAA,MAAM,CAAC,iBAAP,GAA2B,YAAY,CAAC,kBAAxC,CAAA;WACA,MAAM,CAAC,CAAP,GAAW,EAHf;EAAA,CAFJ,CAAA,CAAA;AAAA"}

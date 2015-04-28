@@ -122,12 +122,17 @@
     return {
       hashStringToColour: function(s) {
         var hue, rgb;
-        if (s === 'http://vocab.jncc.gov.uk/jncc-broad-category') {
-          return 'rgb(38,110,217)';
-        } else {
-          hue = Math.abs(s.hashCode() % 99) * 0.01;
-          rgb = hslToRgb(hue, 0.7, 0.5);
-          return 'rgb(' + rgb[0].toFixed(0) + ',' + rgb[1].toFixed(0) + ',' + rgb[2].toFixed(0) + ')';
+        switch (s) {
+          case 'http://vocab.jncc.gov.uk/jncc-domain':
+            return 'rgb(38,110,217)';
+          case 'http://vocab.jncc.gov.uk/jncc-category':
+            return 'rgb(217,38,103)';
+          case 'http://vocab.jncc.gov.uk/seabed-survey-purpose':
+            return 'rgb(192,217,38)';
+          default:
+            hue = Math.abs(s.hashCode() % 99) * 0.01;
+            rgb = hslToRgb(hue, 0.7, 0.5);
+            return 'rgb(' + rgb[0].toFixed(0) + ',' + rgb[1].toFixed(0) + ',' + rgb[2].toFixed(0) + ')';
         }
       }
     };

@@ -63,12 +63,14 @@ module.factory 'defaults', ->
 # create a colour from a (vocab) string
 module.factory 'colourHasher', ->
     hashStringToColour : (s) ->
-        if s == 'http://vocab.jncc.gov.uk/jncc-broad-category'
-            'rgb(38,110,217)' # special case to make this one look good
-        else
-            hue = Math.abs(s.hashCode() % 99) * 0.01
-            rgb = hslToRgb(hue, 0.7, 0.5)
-            'rgb(' + rgb[0].toFixed(0) + ',' + rgb[1].toFixed(0) + ',' + rgb[2].toFixed(0) + ')';
+        switch s # special case to look good
+            when 'http://vocab.jncc.gov.uk/jncc-domain' then 'rgb(38,110,217)'
+            when 'http://vocab.jncc.gov.uk/jncc-category' then 'rgb(217,38,103)'
+            when 'http://vocab.jncc.gov.uk/seabed-survey-purpose' then 'rgb(192,217,38)'
+            else
+                hue = Math.abs(s.hashCode() % 99) * 0.01
+                rgb = hslToRgb(hue, 0.7, 0.5)
+                'rgb(' + rgb[0].toFixed(0) + ',' + rgb[1].toFixed(0) + ',' + rgb[2].toFixed(0) + ')';
 
 ###
 Converts an HSL color value to RGB. Conversion formula
