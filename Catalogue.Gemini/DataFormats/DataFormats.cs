@@ -28,7 +28,7 @@ namespace Catalogue.Gemini.DataFormats
                     { "xlsx", "Microsoft Excel for Windows" },
                 }
             },
-            { "Documents", "glyphicon-font", new DataFormatCollection
+            { "Documents", "glyphicon-file", new DataFormatCollection
                 {
                     { "medin", "Documents"}, // http://vocab.ndg.nerc.ac.uk/term/M010/1/DOC
                     { "medin", "Text" }, // http://vocab.ndg.nerc.ac.uk/term/M010/1/TXT
