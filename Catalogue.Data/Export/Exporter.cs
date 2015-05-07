@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Catalogue.Data.Import.Mappings;
 using Catalogue.Data.Model;
 using Catalogue.Gemini.Model;
 using CsvHelper;
@@ -17,10 +18,9 @@ namespace Catalogue.Data.Export
         public void Export(IEnumerable<Record> records, TextWriter writer)
         {
             var csv = new CsvWriter(writer);
-            csv.Configuration.Delimiter = "\t";
-            csv.Configuration.PrefixReferenceHeaders = true;
-            TypeConverterFactory.AddConverter<List<MetadataKeyword>>(new MetadataKeywordConverter());
-            TypeConverterFactory.AddConverter<List<Extent>>(new ExtentListConverter());
+
+            TopcatMapping.ApplyStandardTopcatCsvConfiguration(csv.Configuration);
+
             csv.WriteRecords(records);
         }
 

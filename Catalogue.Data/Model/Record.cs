@@ -17,7 +17,7 @@ namespace Catalogue.Data.Model
         public Status     Status     { get; set; }
         public Validation Validation { get; set; }
         public Security   Security   { get; set; }
-        public DateTime?   Review     { get; set; }
+        public DateTime?  Review     { get; set; }
         public string     Notes      { get; set; }
 
         /// <summary>

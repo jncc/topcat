@@ -79,6 +79,7 @@
   <ItemGroup>
     <Compile Include="Analyzers\NGramAnalyzer.cs" />
     <Compile Include="DatabaseFactory.cs" />
+    <Compile Include="Exchange\TopcatExchangeFormat.cs" />
     <Compile Include="Export\Exporter.cs" />
     <Compile Include="Import\FileSystem.cs" />
     <Compile Include="Import\Mappings\ActivitiesMapping.cs" />

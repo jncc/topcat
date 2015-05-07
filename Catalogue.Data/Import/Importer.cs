@@ -74,15 +74,18 @@ namespace Catalogue.Data.Import
                 keywords.AddRange(result.Record.Gemini.Keywords);
             }
 
-            foreach (var vocab in mapping.RequiredVocabularies)
+            if (mapping.RequiredVocabularies != null)
             {
-                try
+                foreach (var vocab in mapping.RequiredVocabularies)
                 {
-                    vocabularyService.Insert(vocab);
-                }
-                catch (InvalidOperationException)
-                {
-                    //ignore this - trying to insert an existing vocab.
+                    try
+                    {
+                        vocabularyService.Insert(vocab);
+                    }
+                    catch (InvalidOperationException)
+                    {
+                        //ignore this - trying to insert an existing vocab.
+                    }
                 }
             }
 

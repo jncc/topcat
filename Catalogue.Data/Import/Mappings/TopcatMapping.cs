@@ -19,11 +19,18 @@ namespace Catalogue.Data.Import.Mappings
         
         public void Apply(CsvConfiguration config)
         {
+            ApplyStandardTopcatCsvConfiguration(config);
+            // do nothing else! for this import mapping we're going to use defaults
+        }
+
+        public static CsvConfiguration ApplyStandardTopcatCsvConfiguration(CsvConfiguration config)
+        {
             config.Delimiter = "\t";
+            config.PrefixReferenceHeaders = true;
             TypeConverterFactory.AddConverter<List<MetadataKeyword>>(new Exporter.MetadataKeywordConverter());
             TypeConverterFactory.AddConverter<List<Extent>>(new Exporter.ExtentListConverter());
 
-            // do nothing! for this import mapping we're going to use defaults
+            return config;
         }
     }
 }
