@@ -57,3 +57,4 @@ You can deploy Raven in various ways; the recommended is using the Windows insta
 When deploying a new database instance, the **Versioning bundle** needs to be enabled.
 
 **Important** The Catalogue.Data.dll must be dpeloyed into Raven/Analyzers folder because RavenDB needs to be able to load the custom Lucene analyzer we use.  
+
