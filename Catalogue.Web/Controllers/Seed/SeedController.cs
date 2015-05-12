@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
+using System.Text;
 using System.Web;
 using System.Web.Http;
 using Catalogue.Data.Seed;
@@ -31,7 +32,19 @@ namespace Catalogue.Web.Controllers.Seed
 
             Seeder.Seed(WebApiApplication.DocumentStore);
 
-            return new HttpResponseMessage();
+            return new HttpResponseMessage { Content = new StringContent("Done") };
+        }
+
+        [HttpPost, Route("api/seed/wipedb")]
+        public HttpResponseMessage WipeDB()
+        {
+            if (environment.Name == "Live")
+                throw new InvalidOperationException("Oops, you definitely didn't mean to delete the live instance.");
+
+            WebApiApplication.DocumentStore.DatabaseCommands.DeleteByIndex("Raven/DocumentsByEntityName",
+                new IndexQuery());
+
+            return new HttpResponseMessage { Content = new StringContent("Done") };
         }
 
         [HttpPost, Route("api/seed/deletemesh")]
@@ -46,13 +59,7 @@ namespace Catalogue.Web.Controllers.Seed
                     Query = "Keywords:\"http://vocab.jncc.gov.uk/jncc-broad-category/Seabed Habitat Maps\""
                 });
 
-            return new HttpResponseMessage();
-        }
-
-        [HttpPost, Route("api/seed/inspire")]
-        public HttpResponseMessage Inspire()
-        {
-            return new HttpResponseMessage();
+            return new HttpResponseMessage { Content = new StringContent("Done") };
         }
     }
 }
