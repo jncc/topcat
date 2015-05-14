@@ -1,8 +1,13 @@
 ﻿angular.module('app.controllers').controller 'SandboxController',
 
-    ($scope, colourHasher) ->  #, Formats
+    ($scope, $http, colourHasher) ->  #, Formats
 
         $scope.hashStringToColor = colourHasher.hashStringToColour
         $scope.x = 3;
-#        Formats.then (formats) -> $scope.formats = formats
+        
+        $scope.lookups =  {}
+        $http.get('../api/topics').success (result) -> $scope.lookups.topics = result
+        $http.get('../api/formats?q=').success (result) -> $scope.lookups.formats = result
+        
+        #Formats.then (formats) -> $scope.formats = formats
 

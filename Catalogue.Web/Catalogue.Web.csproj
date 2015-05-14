@@ -375,6 +375,7 @@
     <Content Include="app\views\sandbox\colours.html" />
     <Content Include="app\views\sandbox\dropdown.html" />
     <Content Include="app\views\sandbox\glyphs.html" />
+    <Content Include="app\views\sandbox\lookups.html" />
     <Content Include="app\views\search\search.html" />
     <Content Include="app\views\Vocabularies\editor.html" />
     <Content Include="app\views\Vocabularies\vocabularies.html" />

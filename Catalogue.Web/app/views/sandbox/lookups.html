@@ -1,0 +1,17 @@
+﻿
+
+<div ng-repeat="t in lookups.topics">
+    <div>* **{{t.name}}** - {{t.description}}</div>
+</div>
+
+<div ng-repeat="f in lookups.formats">
+    * {{f.name}}
+    <div ng-repeat="x in f.formats">
+    &nbsp;&nbsp;* **{{x.name}}**
+    </div>
+
+</div>
+
+
+<hr />
+{{lookups.formats}}
