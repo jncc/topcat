@@ -32,15 +32,15 @@ namespace Catalogue.Data.Export
                 return type == typeof(string);
             }
 
+            public override bool CanConvertFrom(Type type)
+            {
+                return type == typeof(string);
+            }
+
             public override string ConvertToString(TypeConverterOptions options, object value)
             {
                 var v = (List<MetadataKeyword>)value;
                 return JsonConvert.SerializeObject(v);
-            }
-
-            public override bool CanConvertFrom(Type type)
-            {
-                return type == typeof(string);
             }
 
             public override object ConvertFromString(TypeConverterOptions options, string text)

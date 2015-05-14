@@ -35,7 +35,7 @@ namespace Catalogue.Data.Seed
                 var s = new Seeder(db, new RecordService(db, new RecordValidator()));
                 s.AddVocabularies();
                 s.AddMeshRecords();
-                s.AddSimpleExampleRecord();
+                s.AddSimpleGeminiExampleRecord();
                 s.AddRecordWithLotsOfVocablessTags();
                 s.AddReadOnlyRecord();
                 s.AddSecureRecords();
@@ -83,16 +83,18 @@ namespace Catalogue.Data.Seed
             }
         }
 
-        void AddSimpleExampleRecord()
+        void AddSimpleGeminiExampleRecord()
         {
             var record = MakeExampleSeedRecord().With(r =>
             {
                 r.Id = new Guid("679434f5-baab-47b9-98e4-81c8e3a1a6f9");
                 r.Path = @"X:\path\to\record\data";
+                r.TopCopy = true;
+                r.Validation = Validation.Gemini;
                 r.Gemini = r.Gemini.With(m =>
                     {
-                        m.Title = "A simple example record";
-                        m.Abstract = "This is a simple example record.";
+                        m.Title = "A simple Gemini-compliant example record";
+                        m.Abstract = "This is a simple Gemini-compliant example record.";
                         m.TopicCategory = "environment";
                         m.TemporalExtent = new TemporalExtent { Begin = "1998", End = "2005" };
                         m.DatasetReferenceDate = "2015-04-14";

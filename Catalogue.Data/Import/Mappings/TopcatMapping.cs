@@ -11,7 +11,7 @@ using CsvHelper.TypeConversion;
 namespace Catalogue.Data.Import.Mappings
 {
     /// <summary>
-    /// Supports the standard Topcat tab-separated record format (as created by the exporter).
+    /// Supports a standard Topcat tab-separated record format (as created by the exporter).
     /// </summary>
     public class TopcatMapping : IMapping
     {
