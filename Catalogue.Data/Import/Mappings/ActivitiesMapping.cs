@@ -123,9 +123,9 @@ namespace Catalogue.Data.Import.Mappings
             config.RegisterClassMap<GeminiMap>();
         }
 
-        public class RecordMap : CsvClassMap<Record>
+        public sealed class RecordMap : CsvClassMap<Record>
         {
-            public override void CreateMap()
+            public RecordMap()
             {
                 Map(m => m.Path).Name("JNCC Location");
                 Map(m => m.TopCopy).ConvertUsing(row => false); // activities data is not top copy
@@ -147,9 +147,9 @@ namespace Catalogue.Data.Import.Mappings
             }
         }
 
-        public class GeminiMap : CsvClassMap<Metadata>
+        public sealed class GeminiMap : CsvClassMap<Metadata>
         {
-            public override void CreateMap()
+            public GeminiMap()
             {
                 Map(m => m.Title).Name("Resource Title");
                 Map(m => m.Abstract).Name("Resource Abstract");
