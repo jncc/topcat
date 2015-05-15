@@ -25,79 +25,89 @@ namespace Catalogue.Data.Import.Mappings
                 {
                     Vocabularies.JnccCategory,
                     Vocabularies.JnccDomain,
-                new Vocabulary()
-                {
-                    Id = "http://www.bmapa.org/documents/BMAPA_Glossary.pdf",
-                    Name = "BMAPA",
-                    Description = "http://www.bmapa.org/documents/BMAPA_Glossary.pdf",
-                    Controlled = false //we may want to change this if we can get a defenitive list, or after import
-                },
+                    new Vocabulary()
+                    {
+                        Id = "http://www.bmapa.org/documents/BMAPA_Glossary.pdf",
+                        Name = "BMAPA",
+                        Description = "http://www.bmapa.org/documents/BMAPA_Glossary.pdf",
+                        Controlled = false,
+                        Keywords = new List<VocabularyKeyword>(),
+                    },
 
-                new Vocabulary()
-                {
-                    Id = "http://www.fao.org/fi/glossary/aquaculture/",
-                    Name = "FAO",
-                    Description = "http://www.fao.org/faoterm/collection/aquaculture/en/",
-                    Controlled = false //we may want to change this if we can get a defenitive list, or after import
-                },
+                    new Vocabulary()
+                    {
+                        Id = "http://www.fao.org/fi/glossary/aquaculture/",
+                        Name = "FAO",
+                        Description = "http://www.fao.org/faoterm/collection/aquaculture/en/",
+                        Controlled = false,
+                        Keywords = new List<VocabularyKeyword>(),
+                    },
 
-                new Vocabulary()
-                {
-                    Id = "http://www.generalcable.com/GeneralCable/en-US/Resources/Glossary/",
-                    Name = "General Cable",
-                    Description = "http://www.generalcable.com/GeneralCable/en-US/Resources/Glossary/",
-                    Controlled = false //we may want to change this if we can get a defenitive list, or after import
-                },
+                    new Vocabulary()
+                    {
+                        Id = "http://www.generalcable.com/GeneralCable/en-US/Resources/Glossary/",
+                        Name = "General Cable",
+                        Description = "http://www.generalcable.com/GeneralCable/en-US/Resources/Glossary/",
+                        Controlled = false,
+                        Keywords = new List<VocabularyKeyword>(),
+                    },
 
-                new Vocabulary()
-                {
-                    Id = "http://www.snh.org.uk/publications/on-line/heritagemanagement/erosion/7.1.shtml",
-                    Name = "SNH",
-                    Description = "http://www.snh.org.uk/publications/on-line/heritagemanagement/erosion/7.1.shtml",
-                    Controlled = false //we may want to change this if we can get a defenitive list, or after import
-                },
-                new Vocabulary()
-                {
-                    Id = "http://evidence.environment-agency.gov.uk/FCERM/Libraries/Fluvial_Documents/Glossary.sflb.ashx",
-                    Name = "EA",
-                    Description = "http://evidence.environment-agency.gov.uk/FCERM/Libraries/Fluvial_Documents/Glossary.sflb.ashx",
-                    Controlled = false //we may want to change this if we can get a defenitive list, or after import
-                },
-                new Vocabulary()
-                {
-                    Id = "http://www.bgs.ac.uk/mineralsUK/glossary.html",
-                    Name = "BGS",
-                    Description = "http://www.bgs.ac.uk/mineralsUK/glossary.html",
-                    Controlled = false //we may want to change this if we can get a defenitive list, or after import
-                },
-                new Vocabulary()
-                {
-                    Id = "http://en.wikipedia.org/wiki/Glossary_of_nautical_terms",
-                    Name = "WikiShipping",
-                    Description = "http://en.wikipedia.org/wiki/Glossary_of_nautical_terms",
-                    Controlled = false //we may want to change this if we can get a defenitive list, or after import
-                },
-                new Vocabulary()
-                {
-                    Id = "http://www.dtic.mil/doctrine/dod_dictionary/",
-                    Name = "DOD",
-                    Description = "http://www.dtic.mil/doctrine/dod_dictionary/",
-                    Controlled = false //we may want to change this if we can get a defenitive list, or after import
-                },
-                new Vocabulary()
-                {
-                    Id = "http://en.wikipedia.org/wiki/Glossary_of_fishery_terms",
-                    Name = "WikiFish",
-                    Description = "http://en.wikipedia.org/wiki/Glossary_of_fishery_terms",
-                    Controlled = false //we may want to change this if we can get a defenitive list, or after import
-                },
-                new Vocabulary()
-                {
-                    Id = "http://www.enchantedlearning.com/wordlist/energy.shtml",
-                    Name = "Entergy",
-                    Description = "http://www.enchantedlearning.com/wordlist/energy.shtml",
-                    Controlled = false //we may want to change this if we can get a defenitive list, or after import
-                },
+                    new Vocabulary()
+                    {
+                        Id = "http://www.snh.org.uk/publications/on-line/heritagemanagement/erosion/7.1.shtml",
+                        Name = "SNH",
+                        Description = "http://www.snh.org.uk/publications/on-line/heritagemanagement/erosion/7.1.shtml",
+                        Controlled = false,
+                        Keywords = new List<VocabularyKeyword>(),
+                    },
+                    new Vocabulary()
+                    {
+                        Id = "http://evidence.environment-agency.gov.uk/FCERM/Libraries/Fluvial_Documents/Glossary.sflb.ashx",
+                        Name = "EA",
+                        Description = "http://evidence.environment-agency.gov.uk/FCERM/Libraries/Fluvial_Documents/Glossary.sflb.ashx",
+                        Controlled = false,
+                        Keywords = new List<VocabularyKeyword>(),
+                    },
+                    new Vocabulary()
+                    {
+                        Id = "http://www.bgs.ac.uk/mineralsUK/glossary.html",
+                        Name = "BGS",
+                        Description = "http://www.bgs.ac.uk/mineralsUK/glossary.html",
+                        Controlled = false,
+                        Keywords = new List<VocabularyKeyword>(),
+                    },
+                    new Vocabulary()
+                    {
+                        Id = "http://en.wikipedia.org/wiki/Glossary_of_nautical_terms",
+                        Name = "WikiShipping",
+                        Description = "http://en.wikipedia.org/wiki/Glossary_of_nautical_terms",
+                        Controlled = false,
+                        Keywords = new List<VocabularyKeyword>(),
+                    },
+                    new Vocabulary()
+                    {
+                        Id = "http://www.dtic.mil/doctrine/dod_dictionary/",
+                        Name = "DOD",
+                        Description = "http://www.dtic.mil/doctrine/dod_dictionary/",
+                        Controlled = false,
+                        Keywords = new List<VocabularyKeyword>(),
+                    },
+                    new Vocabulary()
+                    {
+                        Id = "http://en.wikipedia.org/wiki/Glossary_of_fishery_terms",
+                        Name = "WikiFish",
+                        Description = "http://en.wikipedia.org/wiki/Glossary_of_fishery_terms",
+                        Controlled = false,
+                        Keywords = new List<VocabularyKeyword>(),
+                    },
+                    new Vocabulary()
+                    {
+                        Id = "http://www.enchantedlearning.com/wordlist/energy.shtml",
+                        Name = "Entergy",
+                        Description = "http://www.enchantedlearning.com/wordlist/energy.shtml",
+                        Controlled = false,
+                        Keywords = new List<VocabularyKeyword>(),
+                    },
                 };
             }
         }
@@ -117,13 +127,12 @@ namespace Catalogue.Data.Import.Mappings
         {
             public override void CreateMap()
             {
-
                 Map(m => m.Path).Name("JNCC Location");
                 Map(m => m.TopCopy).ConvertUsing(row => false); // activities data is not top copy
                 Map(m => m.Status).ConvertUsing(row => Status.Internal); // activities data is not publishable
                 Map(m => m.Notes).Name("JNCC Notes");
                 //Map(m => m.Validation).ConvertUsing(row => Validation.Gemini); //Validate to Gemini standard
-                Map(m => m.Review).ConvertUsing<DateTime?>(row => null);
+                //Map(m => m.Review).ConvertUsing<DateTime?>(row => null);
                 Map(m => m.Notes).ConvertUsing(row =>
                 {
                     var notes = new StringBuilder();
@@ -211,7 +220,7 @@ namespace Catalogue.Data.Import.Mappings
                 Map(m => m.LimitationsOnPublicAccess).Name("Limitations on public access");
                 Map(m => m.UseConstraints).Name("Use constraints");
                 Map(m => m.SpatialReferenceSystem).Name("Spatial reference system");
-                Map(m => m.MetadataDate).ConvertUsing(row => ImportUtility.ParseDate(row.GetField("Metadata date")));
+                Map(m => m.MetadataDate).ConvertUsing(row => DateTime.Parse(ImportUtility.ParseDate(row.GetField("Metadata date"))));
                 Map(m => m.ResourceType).ConvertUsing(row => "dataset"); // only use dataset atm
                 Map(m => m.MetadataPointOfContact).ConvertUsing(row =>
                 {
@@ -331,8 +340,8 @@ namespace Catalogue.Data.Import.Mappings
             using (var db = store.OpenSession())
             {
                 var importer = Importer.CreateImporter<ActivitiesMapping>(db);
-                //importer.SkipBadRecords = true; // todo remove this
-                importer.Import(@"C:\Work\pressures-data\Human_Activities_Metadata_Catalogue.csv");
+                importer.SkipBadRecords = true; // todo remove this
+                importer.Import(@"C:\Work\Catalogue.csv");
                 db.SaveChanges();
 
                 imported = db.Query<Record>()
@@ -521,6 +530,13 @@ namespace Catalogue.Data.Import.Mappings
             // not done yet
             imported.Select(r => r.Gemini.SpatialReferenceSystem)
                 .Should().Contain("todo");
+        }
+
+        [Test]
+        public void should_import_metadata_date_correctly()
+        {
+            // make sure it parsed the right way round
+            imported.Select(r => r.Gemini.MetadataDate).Should().Contain(dt => dt.Year == 2015);
         }
 
         [Test]
