@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -11,6 +12,7 @@ using Catalogue.Gemini.Model;
 using Catalogue.Utilities.Text;
 using CsvHelper.Configuration;
 using FluentAssertions;
+using Newtonsoft.Json;
 using NUnit.Framework;
 
 namespace Catalogue.Data.Import.Mappings
@@ -341,7 +343,13 @@ namespace Catalogue.Data.Import.Mappings
             {
                 var importer = Importer.CreateImporter<ActivitiesMapping>(db);
                 importer.SkipBadRecords = true; // todo remove this
-                importer.Import(@"C:\Work\Catalogue.csv");
+                importer.Import(@"C:\work\Catalogue.csv");
+
+                var errors = importer.Results
+                    .Where(r => !r.Success)
+                    .Select(r => r.Record.Gemini.Title + Environment.NewLine + JsonConvert.SerializeObject(r.Validation) + Environment.NewLine);
+                File.WriteAllLines(@"C:\work\activities-errors.txt", errors);
+
                 db.SaveChanges();
 
                 imported = db.Query<Record>()
@@ -383,8 +391,14 @@ namespace Catalogue.Data.Import.Mappings
         [Test]
         public void should_import_title()
         {
-            imported.First().Gemini.Title.Should().Be("Marine Aggregate Application Areas");
-            imported.Last().Gemini.Title.Should().Be("MMO Legacy Food and Environment Protection Agency (FEPA) license");
+            imported.Select(r => r.Gemini.TemporalExtent).Should().Contain("Anonymised AIS derived track lines 2011");
+        }
+
+        [Test]
+        public void should_import_first_and_last_record()
+        {
+            imported.First().Gemini.Title.Should().Be("Anonymised AIS derived track lines 2011");
+            imported.Last().Gemini.Title.Should().Be("Windfarm Cable routes");
         }
 
         [Test]
@@ -405,10 +419,7 @@ namespace Catalogue.Data.Import.Mappings
         [Test]
         public void should_import_jncc_category_keyword()
         {
-            // activities data is categorised as 'Human Activities'
-            imported.Count(r => r.Gemini.Keywords
-                .Any(k => k.Vocab == "http://vocab.jncc.gov.uk/jncc-category" && k.Value == "Human Activities"))
-                .Should().Be(97);
+            imported.SelectMany(r => r.Gemini.Keywords).Should().Contain(k => k.Vocab == "http://vocab.jncc.gov.uk/jncc-category" && k.Value == "Human Activities");
         }
 
         [Test]
@@ -443,13 +454,6 @@ namespace Catalogue.Data.Import.Mappings
         }
 
         [Test]
-        public void should_import_temporal_extent_with_single_date()
-        {
-            imported.Should().Contain(r =>
-                r.Gemini.TemporalExtent.Begin.StartsWith("2010") && r.Gemini.TemporalExtent.End.StartsWith("2010"));
-        }
-
-        [Test]
         public void should_not_import_temporal_extent_with_multiple_dates()
         {
             // todo remove https://github.com/JNCC-dev-team/catalogue/issues/18
@@ -459,26 +463,13 @@ namespace Catalogue.Data.Import.Mappings
         [Test]
         public void should_import_dataset_reference_date()
         {
-            //imported.Should().Contain(r => r.Gemini.DatasetReferenceDate == "2011-07");
-            imported.Should().Contain(r => r.Gemini.DatasetReferenceDate.Equals(new DateTime(2012,08,15)));
+            imported.Select(r => r.Gemini.DatasetReferenceDate).Should().Contain("2015-01-07");
         }
 
         [Test]
         public void should_import_lineage()
         {
             imported.Should().Contain(r => r.Gemini.Lineage == "Anchorage areas provided by Chamber of Shipping.");
-        }
-
-        [Test]
-        public void should_not_import_resource_locator() // although now appears to
-        {
-            imported.Should().NotContain(r => r.Gemini.ResourceLocator != null);
-        }
-
-        [Test]
-        public void should_not_import_additional_information_source()
-        {
-            imported.Should().NotContain(r => r.Gemini.AdditionalInformationSource != null);
         }
 
         [Test]
