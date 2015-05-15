@@ -5,6 +5,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Catalogue.Data.Model;
+using Catalogue.Data.Seed;
 using Catalogue.Gemini.Model;
 using Catalogue.Utilities.Text;
 using CsvHelper;
@@ -22,18 +23,8 @@ namespace Catalogue.Data.Import.Mappings
             {
                 return new List<Vocabulary>
                 {
-                    // do we need to add jncc-domain and jncc-category ??
-
-//                    new Vocabulary
-//                        {
-//                            Id = "http://vocab.jncc.gov.uk/jncc-category",
-//                            Name = "JNCC Category",
-//                            Description = "The broad dataset categories used within JNCC.",
-//                            Controlled = true,
-//                            Publishable = true,
-//                            PublicationDate = "2015",
-//                            Keywords = new List<VocabularyKeyword>()
-//                        },
+                    Vocabularies.JnccCategory,
+                    Vocabularies.JnccDomain,
                     new Vocabulary
                         {
                             Id = "http://vocab.jncc.gov.uk/publications",
@@ -57,6 +48,7 @@ namespace Catalogue.Data.Import.Mappings
                             Controlled = false,
                             Publishable = true,
                             PublicationDate = "2015",
+                            Keywords = new List<VocabularyKeyword>()
                         },
                         new Vocabulary
                         {
@@ -66,6 +58,7 @@ namespace Catalogue.Data.Import.Mappings
                             Controlled = false,
                             Publishable = true,
                             PublicationDate = "2015",
+                            Keywords = new List<VocabularyKeyword>()
                         },
                         new Vocabulary
                         {
@@ -75,6 +68,7 @@ namespace Catalogue.Data.Import.Mappings
                             Controlled = false,
                             Publishable = true,
                             PublicationDate = "2015",
+                            Keywords = new List<VocabularyKeyword>()
                         }
                 };
             }

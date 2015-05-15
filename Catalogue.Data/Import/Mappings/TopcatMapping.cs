@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Catalogue.Data.Export;
+using Catalogue.Data.Seed;
 using Catalogue.Gemini.Model;
 using CsvHelper.Configuration;
 using CsvHelper.TypeConversion;
@@ -15,7 +16,18 @@ namespace Catalogue.Data.Import.Mappings
     /// </summary>
     public class TopcatMapping : IMapping
     {
-        public IEnumerable<Vocabulary> RequiredVocabularies { get; private set; }
+        public IEnumerable<Vocabulary> RequiredVocabularies
+        {
+            get
+            {
+                return new List<Vocabulary>
+                {
+                    Vocabularies.JnccCategory,
+                    Vocabularies.JnccDomain,
+                };
+            }
+        }
+
         
         public void Apply(CsvConfiguration config)
         {
