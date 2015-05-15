@@ -112,8 +112,11 @@ UpgradeLog*.XML
 build/output
 build/output.zip
 Catalogue.Web/local.config
+# ravendb adds these for whatever reason
+Catalogue.Web/Assemblies
+Catalogue.Web/CompiledIndexCache
 Catalogue.Web/Raven
-__emails/
+# what are all these for?
 WE-settings.xml
 packages/Newtonsoft.Json.4.5.11/Newtonsoft.Json.4.5.11.nupkg
 packages/Newtonsoft.Json.4.5.11/lib/net20/Newtonsoft.Json.dll
