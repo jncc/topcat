@@ -156,7 +156,7 @@ namespace Catalogue.Data.Write
                 Uri url;
                 if (Uri.TryCreate(record.Gemini.ResourceLocator, UriKind.Absolute, out url))
                 {
-                    if (url.Scheme != Uri.UriSchemeHttp)
+                    if (url.Scheme != Uri.UriSchemeHttp && url.Scheme != Uri.UriSchemeHttps)
                     {
                         result.Errors.Add("Resource locator must be an http url",
                             r => r.Gemini.ResourceLocator);

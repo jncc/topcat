@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -121,6 +122,7 @@ namespace Catalogue.Data.Import.Mappings
             config.Delimiter = "\t";
             config.QuoteAllFields = true;
             config.TrimFields = true;
+            config.SkipEmptyRecords = true;
             config.RegisterClassMap<RecordMap>();
             config.RegisterClassMap<GeminiMap>();
         }
@@ -170,7 +172,7 @@ namespace Catalogue.Data.Import.Mappings
                         {
                             keywords.Add(new MetadataKeyword
                             {
-                                Vocab = "http://vocab.jncc.gov.uk/human-activities/",
+                                Vocab = "http://vocab.jncc.gov.uk/human-activity",
                                 Value = activity
                             });
                         }
@@ -210,7 +212,7 @@ namespace Catalogue.Data.Import.Mappings
                     s.AppendLine(row.GetField("Address"));
                     return s.ToString();
                 });
-                Map(m => m.DataFormat).Name("Data format");
+                Map(m => m.DataFormat).ConvertUsing(row => FixUpDataFormats(row.GetField("Data format")));
 
                 Map(m => m.ResponsibleOrganisation).ConvertUsing(row => new ResponsibleParty
                     {
@@ -222,7 +224,19 @@ namespace Catalogue.Data.Import.Mappings
                 Map(m => m.LimitationsOnPublicAccess).Name("Limitations on public access");
                 Map(m => m.UseConstraints).Name("Use constraints");
                 Map(m => m.SpatialReferenceSystem).Name("Spatial reference system");
-                Map(m => m.MetadataDate).ConvertUsing(row => DateTime.Parse(ImportUtility.ParseDate(row.GetField("Metadata date"))));
+                Map(m => m.MetadataDate).ConvertUsing(row =>
+                {
+                    string d = ImportUtility.ParseDate(row.GetField("Metadata date"));
+
+                    if (d.IsBlank())
+                        return DateTime.Now;
+                    else
+                    {
+                        DateTime dt;
+                        bool b = DateTime.TryParse(d, out dt);
+                        return dt;
+                    }
+                });
                 Map(m => m.ResourceType).ConvertUsing(row => "dataset"); // only use dataset atm
                 Map(m => m.MetadataPointOfContact).ConvertUsing(row =>
                 {
@@ -255,11 +269,15 @@ namespace Catalogue.Data.Import.Mappings
                     return new BoundingBox { North = north, South = south, East = east, West = west };
                 });
             }
+
         }
 
-        public static List<MetadataKeyword> ParseKeywords(string input)
+        static List<MetadataKeyword> ParseKeywords(string input)
         {
-            var keywords = (from each in input.Split(',') // keywords are separated by commas
+            string fixedUp = FixUpKeywordMistake(input);
+
+            var keywords = (from each in fixedUp.Split(',') // keywords are separated by commas
+                            where each != ":: Keyword" // bad record
                             select ParseKeywordHelper(each)).ToList();
 
             // remove keywords with no value (?)
@@ -304,16 +322,21 @@ namespace Catalogue.Data.Import.Mappings
             var map = new Dictionary<string, string>
                 {
                     { "BMAPA",  "http://www.bmapa.org/documents/BMAPA_Glossary.pdf" },
-                    { "FAO",  "http://www.fao.org/fi/glossary/aquaculture/" },
-                    { "General Cable",  "http://www.generalcable.com/GeneralCable/en-US/Resources/Glossary/" },
+                    { "FAO",  "http://www.fao.org/fi/glossary/aquaculture" },
+                    { "General Cable",  "http://www.generalcable.com/GeneralCable/en-US/Resources/Glossary" },
                     { "SNH",  "http://www.snh.org.uk/publications/on-line/heritagemanagement/erosion/7.1.shtml" },
                     { "EA",  "http://evidence.environment-agency.gov.uk/FCERM/Libraries/Fluvial_Documents/Glossary.sflb.ashx" },
                     { "BGS",  "http://www.bgs.ac.uk/mineralsUK/glossary.html" },
-                    { "Wiki",  "http://en.wikipedia.org/wiki/Glossary_of_nautical_terms" },
-                    { "DOD",  "http://www.dtic.mil/doctrine/dod_dictionary/" },
+                    { "WikiShipList",  "http://en.wikipedia.org/wiki/Glossary_of_nautical_terms" },
+                    { "WikiList",  "http://en.wikipedia.org/wiki/Glossary_of_nautical_terms" },
+                    { "Wiki List",  "http://en.wikipedia.org/wiki/Glossary_of_nautical_terms" },
+                    { "DOD",  "http://www.dtic.mil/doctrine/dod_dictionary" },
                     { "Oil&GasUK",  "http://www.oilandgasuk.co.uk/glossary.cfm" },
                     { "WikiFish",  "http://en.wikipedia.org/wiki/Glossary_of_fishery_terms" },
                     { "Energy",  "http://www.enchantedlearning.com/wordlist/energy.shtml" },
+                    { "GeneralList",  "" },
+                    { "RecreationList",  "http://vocab.jncc.gov.uk/recreation" },
+                    { "UKHOList",  "http://vocab.jncc.gov.uk/ukho" },
                 };
 
             string real = (from p in map
@@ -326,6 +349,58 @@ namespace Catalogue.Data.Import.Mappings
                 throw new Exception("Unsupported vocab " + vocab);
 
             return real;
+        }
+
+        static string FixUpDataFormats(string value)
+        {
+            switch (value)
+            {
+                case "Geospatial (vector polyline)":
+                case "Geospatial (vector point, line and polygon)":
+                    return "Geospatial (vector polygon)";
+                default:
+                    return value;
+            }
+        }
+
+        static string FixUpKeywordMistake(string input)
+        {
+            var split = input.Split(',');
+            var keywordsInActivitiesEncoding = FixUpKeywordMistakeHelper(split);
+            return String.Join(", ", keywordsInActivitiesEncoding);
+        }
+
+        static IEnumerable<string> FixUpKeywordMistakeHelper(string[] split)
+        {
+            string vocab = "";
+            string value = "";
+            foreach (var s in split)
+            {
+                if (s.Contains("::"))
+                {
+                    var pair = s.Split(new[] {"::"}, StringSplitOptions.None);
+                    vocab = pair[0];
+                    value = pair[1];
+                }
+                else
+                {
+                    value = s;
+                }
+
+                yield return vocab.Trim() + ":: " + value.Trim();
+            }
+        }
+
+        [Test]
+        public void fix_up_keyword_mistake_test()
+        {
+            string input1 = "WikiShipList:: Ship, Automatic Identification System";
+            string fixed1 = FixUpKeywordMistake(input1);
+            fixed1.Should().Be("WikiShipList:: Ship, WikiShipList:: Automatic Identification System");
+
+            string input2 = "BMAPA list:: Maintenance Dredging,  Capital Dredging,  Dredging, Oil&GasUK List:: Oil, Natural Gas, Pipelines, Construction, Coastal Management, Coastal Defence";
+            string fixed2 = FixUpKeywordMistake(input2);
+            fixed2.Should().Be("BMAPA list:: Maintenance Dredging, BMAPA list:: Capital Dredging, BMAPA list:: Dredging, Oil&GasUK List:: Oil, Oil&GasUK List:: Natural Gas, Oil&GasUK List:: Pipelines, Oil&GasUK List:: Construction, Oil&GasUK List:: Coastal Management, Oil&GasUK List:: Coastal Defence");
         }
     }
 
@@ -342,13 +417,13 @@ namespace Catalogue.Data.Import.Mappings
             using (var db = store.OpenSession())
             {
                 var importer = Importer.CreateImporter<ActivitiesMapping>(db);
-                importer.SkipBadRecords = true; // todo remove this
-                importer.Import(@"C:\work\Catalogue.csv");
+                importer.SkipBadRecords = true; // see log for skipped bad records
+                importer.Import(@"C:\work\activities\Catalogue2.txt");
 
                 var errors = importer.Results
                     .Where(r => !r.Success)
                     .Select(r => r.Record.Gemini.Title + Environment.NewLine + JsonConvert.SerializeObject(r.Validation) + Environment.NewLine);
-                File.WriteAllLines(@"C:\work\activities-errors.txt", errors);
+                File.WriteAllLines(@"C:\work\activities\activities-errors.txt", errors);
 
                 db.SaveChanges();
 
@@ -361,7 +436,7 @@ namespace Catalogue.Data.Import.Mappings
         [Test]
         public void should_import_every_record()
         {
-            imported.Count().Should().Be(97);
+            imported.Count().Should().Be(108);
         }
 
         [Test]
@@ -391,7 +466,7 @@ namespace Catalogue.Data.Import.Mappings
         [Test]
         public void should_import_title()
         {
-            imported.Select(r => r.Gemini.TemporalExtent).Should().Contain("Anonymised AIS derived track lines 2011");
+            imported.Select(r => r.Gemini.Title).Should().Contain("Anonymised AIS derived track lines 2011");
         }
 
         [Test]
@@ -444,7 +519,6 @@ namespace Catalogue.Data.Import.Mappings
             imported.SelectMany(r => r.Gemini.Keywords)
                 .Should().Contain(k => k.Vocab == "http://en.wikipedia.org/wiki/Glossary_of_nautical_terms");
         }
-
 
         [Test]
         public void should_import_temporal_extent()
@@ -546,6 +620,4 @@ namespace Catalogue.Data.Import.Mappings
 //                    .Should().Be(189);
         }
     }
-
-
 }
