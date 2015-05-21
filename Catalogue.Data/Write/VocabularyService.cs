@@ -86,7 +86,7 @@ namespace Catalogue.Data.Write
         public VocabularyServiceResult Upsert(Vocabulary vocab)
         {
             vocab.Keywords = (from k in vocab.Keywords
-                             group k by k.Value.ToLower() into g // distinct by Value
+                             group k by k.Value.ToLower().Trim() into g // distinct by Value
                              select g.First() into n
                              orderby n.Value
                              select n).ToList();
