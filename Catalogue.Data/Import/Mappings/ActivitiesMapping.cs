@@ -147,7 +147,7 @@ namespace Catalogue.Data.Import.Mappings
         {
             public RecordMap()
             {
-                Map(m => m.Path).Name("JNCC Location");
+                Map(m => m.Path).ConvertUsing(row => Path.Combine(row.GetField("JNCC Location"), row.GetField("JNCC File Name")));
                 Map(m => m.TopCopy).ConvertUsing(row => false); // activities data is not top copy
                 Map(m => m.Status).ConvertUsing(row => Status.Internal); // activities data is not publishable
                 Map(m => m.Notes).Name("JNCC Notes");
