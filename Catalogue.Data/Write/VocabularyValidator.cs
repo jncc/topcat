@@ -42,6 +42,11 @@ namespace Catalogue.Data.Write
                 result.Errors.Add("The Id must not be blank", v => v.Id);
             }
 
+            if (vocab.Id.EndsWith("/"))
+            {
+                result.Errors.Add("The Id must not end with a slash", v => v.Id);
+            }
+
             //todo: validate ID format
         }
     }

@@ -39,7 +39,7 @@ namespace Catalogue.Data.Import.Mappings
 
                     new Vocabulary()
                     {
-                        Id = "http://www.fao.org/fi/glossary/aquaculture/",
+                        Id = "http://www.fao.org/fi/glossary/aquaculture/en",
                         Name = "FAO Glossary of Aquaculture ",
                         Description = "See http://www.fao.org/faoterm/collection/aquaculture/en/",
                         Controlled = true,
@@ -48,7 +48,7 @@ namespace Catalogue.Data.Import.Mappings
 
                     new Vocabulary()
                     {
-                        Id = "http://www.generalcable.com/GeneralCable/en-US/Resources/Glossary/",
+                        Id = "http://www.generalcable.com/GeneralCable/en-US/Resources/Glossary",
                         Name = "General Cable Glossary",
                         Description = "See http://www.generalcable.com/GeneralCable/en-US/Resources/Glossary/",
                         Controlled = true,
@@ -89,7 +89,7 @@ namespace Catalogue.Data.Import.Mappings
                     },
                     new Vocabulary()
                     {
-                        Id = "http://www.dtic.mil/doctrine/dod_dictionary/",
+                        Id = "http://www.dtic.mil/doctrine/dod_dictionary",
                         Name = "DOD Dictionary of Military Terms",
                         Description = "See http://www.dtic.mil/doctrine/dod_dictionary/",
                         Controlled = true,
@@ -338,7 +338,7 @@ namespace Catalogue.Data.Import.Mappings
             var map = new Dictionary<string, string>
                 {
                     { "BMAPA",  "http://www.bmapa.org/documents/BMAPA_Glossary.pdf" },
-                    { "FAO",  "http://www.fao.org/fi/glossary/aquaculture" },
+                    { "FAO",  "http://www.fao.org/fi/glossary/aquaculture/en" },
                     { "General Cable",  "http://www.generalcable.com/GeneralCable/en-US/Resources/Glossary" },
                     { "SNH",  "http://www.snh.org.uk/publications/on-line/heritagemanagement/erosion/7.1.shtml" },
                     { "EA",  "http://evidence.environment-agency.gov.uk/FCERM/Libraries/Fluvial_Documents/Glossary.sflb.ashx" },
