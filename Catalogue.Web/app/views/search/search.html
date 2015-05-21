@@ -117,7 +117,7 @@
                 </div>
                 <div class="layout-col">
                     <div class="search-title">
-                        <a ng-href="#/editor/{{r.id}}" ng-bind-html="r.title"></a>
+                        <a ng-href="#/editor/{{r.id}}" target="_blank" ng-bind-html="r.title"></a>
                         <span class="search-divider-bullet">&bull;</span>
                         <span class="search-date" ng-show="r.date">{{r.date.substring(0, 4)}}</span>
                         <span class="search-result-top-copy dark glyphicon glyphicon-leaf" ng-show="r.topCopy" title="Top copy" tc-tip></span>
