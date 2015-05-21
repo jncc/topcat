@@ -115,7 +115,7 @@ namespace Catalogue.Data.Import.Mappings
                     {
                         Id = "http://vocab.jncc.gov.uk/recreation",
                         Name = "JNCC Recreation Vocabulary",
-                        Description = "Used by Marine Human Activities",
+                        Description = "Used by Marine Human Activities. The lineage of this keyword set is uncertain!",
                         Controlled = true,
                         Keywords = new List<VocabularyKeyword>(),
                     },
@@ -123,7 +123,7 @@ namespace Catalogue.Data.Import.Mappings
                     {
                         Id = "http://vocab.jncc.gov.uk/ukho",
                         Name = "UKHO Vocabulary",
-                        Description = "Used by Marine Human Activities",
+                        Description = "Used by Marine Human Activities. The lineage of this keyword set is uncertain!",
                         Controlled = true,
                         Keywords = new List<VocabularyKeyword>(),
                     },
