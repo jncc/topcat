@@ -76,7 +76,6 @@
             <button type="button" class="btn btn-default" data-dismiss="modal" ng-click="$dismiss()">CANCEL</button>
         </span>
         <span ng-if="vocabulator.selectedKeyword.value">
-            <span class="add-the-tag">Add the tag</span>
             <span tc-tag ng-repeat="k in [vocabulator.selectedKeyword]" tc-tip class="pointable">
                 {{ k.value }}
             </span>
