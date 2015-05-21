@@ -74,23 +74,13 @@ namespace Catalogue.Data.Import
                 keywords.AddRange(result.Record.Gemini.Keywords);
             }
 
-            if (mapping.RequiredVocabularies != null)
+            // import new vocabs and keywords
+            foreach (var vocab in mapping.RequiredVocabularies)
             {
-                foreach (var vocab in mapping.RequiredVocabularies)
-                {
-                    try
-                    {
-                        vocabularyService.Insert(vocab);
-                    }
-                    catch (InvalidOperationException)
-                    {
-                        //ignore this - trying to insert an existing vocab.
-                    }
-                }
+                // if vocab already exists, Insert returns a VocabularyServiceResult with Success=false, which we just ignore
+                vocabularyService.Insert(vocab);
             }
-
-            vocabularyService.Import(keywords);
-            
+            vocabularyService.AddKeywordsToExistingControlledVocabs(keywords);
         }
     }
 

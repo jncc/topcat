@@ -31,84 +31,100 @@ namespace Catalogue.Data.Import.Mappings
                     new Vocabulary()
                     {
                         Id = "http://www.bmapa.org/documents/BMAPA_Glossary.pdf",
-                        Name = "BMAPA",
-                        Description = "http://www.bmapa.org/documents/BMAPA_Glossary.pdf",
-                        Controlled = false,
+                        Name = "BMAPA Marine Aggregate Terminology",
+                        Description = "See http://www.bmapa.org/documents/BMAPA_Glossary.pdf",
+                        Controlled = true,
                         Keywords = new List<VocabularyKeyword>(),
                     },
 
                     new Vocabulary()
                     {
                         Id = "http://www.fao.org/fi/glossary/aquaculture/",
-                        Name = "FAO",
-                        Description = "http://www.fao.org/faoterm/collection/aquaculture/en/",
-                        Controlled = false,
+                        Name = "FAO Glossary of Aquaculture ",
+                        Description = "See http://www.fao.org/faoterm/collection/aquaculture/en/",
+                        Controlled = true,
                         Keywords = new List<VocabularyKeyword>(),
                     },
 
                     new Vocabulary()
                     {
                         Id = "http://www.generalcable.com/GeneralCable/en-US/Resources/Glossary/",
-                        Name = "General Cable",
-                        Description = "http://www.generalcable.com/GeneralCable/en-US/Resources/Glossary/",
-                        Controlled = false,
+                        Name = "General Cable Glossary",
+                        Description = "See http://www.generalcable.com/GeneralCable/en-US/Resources/Glossary/",
+                        Controlled = true,
                         Keywords = new List<VocabularyKeyword>(),
                     },
 
                     new Vocabulary()
                     {
                         Id = "http://www.snh.org.uk/publications/on-line/heritagemanagement/erosion/7.1.shtml",
-                        Name = "SNH",
-                        Description = "http://www.snh.org.uk/publications/on-line/heritagemanagement/erosion/7.1.shtml",
-                        Controlled = false,
+                        Name = "SNH Erosion Glossary",
+                        Description = "See http://www.snh.org.uk/publications/on-line/heritagemanagement/erosion/7.1.shtml",
+                        Controlled = true,
                         Keywords = new List<VocabularyKeyword>(),
                     },
                     new Vocabulary()
                     {
                         Id = "http://evidence.environment-agency.gov.uk/FCERM/Libraries/Fluvial_Documents/Glossary.sflb.ashx",
-                        Name = "EA",
-                        Description = "http://evidence.environment-agency.gov.uk/FCERM/Libraries/Fluvial_Documents/Glossary.sflb.ashx",
-                        Controlled = false,
+                        Name = "EA Fluvial Glossary",
+                        Description = "See http://evidence.environment-agency.gov.uk/FCERM/Libraries/Fluvial_Documents/Glossary.sflb.ashx",
+                        Controlled = true,
                         Keywords = new List<VocabularyKeyword>(),
                     },
                     new Vocabulary()
                     {
                         Id = "http://www.bgs.ac.uk/mineralsUK/glossary.html",
-                        Name = "BGS",
-                        Description = "http://www.bgs.ac.uk/mineralsUK/glossary.html",
-                        Controlled = false,
+                        Name = "BGS Minerals UK Glossary",
+                        Description = "See http://www.bgs.ac.uk/mineralsUK/glossary.html",
+                        Controlled = true,
                         Keywords = new List<VocabularyKeyword>(),
                     },
                     new Vocabulary()
                     {
                         Id = "http://en.wikipedia.org/wiki/Glossary_of_nautical_terms",
-                        Name = "WikiShipping",
-                        Description = "http://en.wikipedia.org/wiki/Glossary_of_nautical_terms",
-                        Controlled = false,
+                        Name = "Wikipedia Glossary of Nautical Terms",
+                        Description = "See http://en.wikipedia.org/wiki/Glossary_of_nautical_terms",
+                        Controlled = true,
                         Keywords = new List<VocabularyKeyword>(),
                     },
                     new Vocabulary()
                     {
                         Id = "http://www.dtic.mil/doctrine/dod_dictionary/",
-                        Name = "DOD",
-                        Description = "http://www.dtic.mil/doctrine/dod_dictionary/",
-                        Controlled = false,
+                        Name = "DOD Dictionary of Military Terms",
+                        Description = "See http://www.dtic.mil/doctrine/dod_dictionary/",
+                        Controlled = true,
                         Keywords = new List<VocabularyKeyword>(),
                     },
                     new Vocabulary()
                     {
                         Id = "http://en.wikipedia.org/wiki/Glossary_of_fishery_terms",
-                        Name = "WikiFish",
-                        Description = "http://en.wikipedia.org/wiki/Glossary_of_fishery_terms",
-                        Controlled = false,
+                        Name = "Wikipedia Glossary of Fishery Terms",
+                        Description = "See http://en.wikipedia.org/wiki/Glossary_of_fishery_terms",
+                        Controlled = true,
                         Keywords = new List<VocabularyKeyword>(),
                     },
                     new Vocabulary()
                     {
                         Id = "http://www.enchantedlearning.com/wordlist/energy.shtml",
-                        Name = "Entergy",
-                        Description = "http://www.enchantedlearning.com/wordlist/energy.shtml",
-                        Controlled = false,
+                        Name = "Enchanted Learning Energy Word List",
+                        Description = "See http://www.enchantedlearning.com/wordlist/energy.shtml",
+                        Controlled = true,
+                        Keywords = new List<VocabularyKeyword>(),
+                    },
+                    new Vocabulary()
+                    {
+                        Id = "http://vocab.jncc.gov.uk/recreation",
+                        Name = "JNCC Recreation Vocabulary",
+                        Description = "Used by Marine Human Activities",
+                        Controlled = true,
+                        Keywords = new List<VocabularyKeyword>(),
+                    },
+                    new Vocabulary()
+                    {
+                        Id = "http://vocab.jncc.gov.uk/ukho",
+                        Name = "UKHO Vocabulary",
+                        Description = "Used by Marine Human Activities",
+                        Controlled = true,
                         Keywords = new List<VocabularyKeyword>(),
                     },
                 };

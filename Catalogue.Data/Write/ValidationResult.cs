@@ -52,7 +52,7 @@ namespace Catalogue.Data.Write
         private List<Expression<Func<T, object>>> FieldExpressions { get; set; }
 
         /// <summary>
-        ///     A representation of the property accessor expression(s) suitable for eg a json client.
+        /// A representation of the property accessor expression(s) suitable for a JSON client.
         /// </summary>
         public List<string> Fields
         {

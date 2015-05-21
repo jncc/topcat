@@ -2,7 +2,6 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.InteropServices;
 using Catalogue.Gemini.Model;
 using Catalogue.Utilities.Text;
 using Moq;
@@ -15,7 +14,7 @@ namespace Catalogue.Data.Write
     {
         VocabularyServiceResult Insert(Vocabulary vocab);
         VocabularyServiceResult Update(Vocabulary vocab);
-        void Import(List<MetadataKeyword> keywords);
+        void AddKeywordsToExistingControlledVocabs(List<MetadataKeyword> keywords);
     }
 
     public class VocabularyService : IVocabularyService
@@ -23,7 +22,6 @@ namespace Catalogue.Data.Write
         private readonly IVocabularyValidator validator;
 
         private readonly IDocumentSession db;
-//        private readonly IVocabularyValidator validator;
 
         public VocabularyService(IDocumentSession db, IVocabularyValidator validator)
         {
@@ -31,16 +29,20 @@ namespace Catalogue.Data.Write
             this.validator = validator;
         }
 
-
-
         public VocabularyServiceResult Insert(Vocabulary vocab)
         {
-            //Only insert new vocabs
             var existingVocab = db.Load<Vocabulary>(vocab.Id);
 
-            if (existingVocab != null) throw new InvalidOperationException("Cannot insert an existing record.");
-               
-            return Upsert(vocab);          
+            if (existingVocab == null)
+            {
+                return Upsert(vocab);
+            }
+            else
+            {
+                var validation = new ValidationResult<Vocabulary>();
+                validation.Errors.Add("Vocabulary already exists", v => v.Id);
+                return new VocabularyServiceResult { Vocab = vocab, Validation =  validation };
+            }
         }
 
         public VocabularyServiceResult Update(Vocabulary vocab)
@@ -48,43 +50,37 @@ namespace Catalogue.Data.Write
             return Upsert(vocab);
         }
 
-        public void Import(List<MetadataKeyword> keywords)
+        /// <summary>
+        /// Specifically for imports. Adds the keywords to existing controlled vocabs.
+        /// </summary>
+        public void AddKeywordsToExistingControlledVocabs(List<MetadataKeyword> keywords)
         {
-            // (specifically for imports) adds the keywords to existing controlled vocabs
-            foreach (var source in SeparateKeywordsIntoVocabularies(keywords))
+            foreach (var group in GroupKeywordsByVocabularyAndEnsureNoDuplicates(keywords))
             {
-                var vocabulary = db.Load<Vocabulary>(source.Id);
+                var vocabulary = db.Load<Vocabulary>(group.Key);
 
                 if (vocabulary != null && vocabulary.Controlled)
                 {
-                    var newKeywords = source.Keywords.Except(vocabulary.Keywords);
+                    var newKeywords = group.Value.Except(vocabulary.Keywords);
                     vocabulary.Keywords.AddRange(newKeywords);
                     db.Store(vocabulary);
                 }
             }
         }
 
-        /// <summary>
-        /// Creates Vocabulary objects given a bunch of keywords. For importing.
-        /// </summary>
-        List<Vocabulary> SeparateKeywordsIntoVocabularies(List<MetadataKeyword> keywords)
+        Dictionary<string, List<VocabularyKeyword>> GroupKeywordsByVocabularyAndEnsureNoDuplicates(List<MetadataKeyword> keywords)
         {
             var q = from k in keywords
                     where k.Vocab.IsNotBlank() // only want keywords with vocabs, obviously
                     group k by k.Vocab into g // groups of keywords (vocabs)
-                    select new Vocabulary
-                    {
-                        Id = g.Key,
-                        Name = g.Key,
-                        Description = String.Empty,
-                        PublicationDate = DateTime.Now.ToString("yyyy-MM"),
-                        Publishable = false,
-                        Keywords = g.Select(k => k.Value)
-                            .Distinct()
-                            .Select(v => new VocabularyKeyword { Value = v }).ToList()
-                    };
+                    let vocab = g.Key
+                    let distinctKeywords = g.Select(k => k.Value)
+                        .Distinct()
+                        .Select(v => new VocabularyKeyword { Value = v })
+                        .ToList()
+                    select new { vocab, keywords = distinctKeywords};
 
-            return q.ToList();
+            return q.ToDictionary(g => g.vocab, g => g.keywords);
         }
 
         public VocabularyServiceResult Upsert(Vocabulary vocab)
@@ -118,7 +114,6 @@ namespace Catalogue.Data.Write
         public bool Success { get { return !Validation.Errors.Any(); } }
     }
 
-    [TestFixture]
     public class when_upserting_a_vocabulary
     {
 
@@ -209,5 +204,4 @@ namespace Catalogue.Data.Write
 
 
     }
-
 }
