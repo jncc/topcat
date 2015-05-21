@@ -63,7 +63,7 @@ namespace Catalogue.Data.Write
                 {
                     var newKeywords = group.Value.Except(vocabulary.Keywords);
                     vocabulary.Keywords.AddRange(newKeywords);
-                    db.Store(vocabulary);
+                    Update(vocabulary);
                 }
             }
         }
@@ -86,7 +86,7 @@ namespace Catalogue.Data.Write
         public VocabularyServiceResult Upsert(Vocabulary vocab)
         {
             vocab.Keywords = (from k in vocab.Keywords
-                             group k by k.Value.ToLower() into g
+                             group k by k.Value.ToLower() into g // distinct by Value
                              select g.First() into n
                              orderby n.Value
                              select n).ToList();
@@ -101,9 +101,6 @@ namespace Catalogue.Data.Write
                 Validation = validation
             };
         }
-
-
-
     }
 
 
