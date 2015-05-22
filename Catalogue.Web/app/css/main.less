@@ -47,6 +47,11 @@ html { overflow-y: scroll; }
     }
 }
 
+// temp?
+.inline-div {
+    display:inline-block;
+}
+
 .pointable { cursor: pointer; }
 
 .hoverable-glyphicon {
@@ -94,7 +99,13 @@ hr {
     }
     &:focus { color: white; }
 }
-.btn-danger { background-color: @pink; }
+.btn-danger {
+    background-color: @pink;
+    &:hover {
+        background-color: @pink;
+        border-color: @pink;
+    }
+}
 .btn-danger[disabled] { background-color: @pink; }
 // end cheese
 
@@ -492,12 +503,16 @@ label {
 
 .editor-abstract {
     padding-top: 0.3em; // feels like it needs a bit of space
-    padding-bottom: 0.5em;
+    padding-bottom: 1.5em;
     textarea {
         resize: none; // resize ability looks bad with scrollbar
         max-height: 8em;
         padding-right:2em;
     }
+}
+
+.editor-edit-abstract { // just shift this down a bit without taking up any vertical space
+    position: relative; top:10px;
 }
 
 .editor-tabs {

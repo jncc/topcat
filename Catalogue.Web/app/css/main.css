@@ -19,6 +19,9 @@
   display: table-cell;
   vertical-align: middle;
 }
+.inline-div {
+  display: inline-block;
+}
 .pointable {
   cursor: pointer;
 }
@@ -73,6 +76,10 @@ hr {
 }
 .btn-danger {
   background-color: #d92687;
+}
+.btn-danger:hover {
+  background-color: #d92687;
+  border-color: #d92687;
 }
 .btn-danger[disabled] {
   background-color: #d92687;
@@ -427,12 +434,16 @@ label {
 }
 .editor-abstract {
   padding-top: 0.3em;
-  padding-bottom: 0.5em;
+  padding-bottom: 1.5em;
 }
 .editor-abstract textarea {
   resize: none;
   max-height: 8em;
   padding-right: 2em;
+}
+.editor-edit-abstract {
+  position: relative;
+  top: 10px;
 }
 .editor-tabs .tab-content {
   margin-top: 1.5em;

@@ -1,6 +1,6 @@
 ﻿<div>
 
-    <form name="theForm" novalidate>
+    <div ng-form name="theForm">
 
         <!-- top row of buttons etc.  -->
         <div class="row">
@@ -53,7 +53,7 @@
         </div>
 
         <!-- format and path -->
-        <div class="row form-group">
+        <div class="row">
             <div class="col-md-1 editor-format pull-left">
                 <div class="panel panel-default" tc-qtip-title tabindex="0" ng-click="collapseDataFormatSelector = !collapseDataFormatSelector">
                     <span class="dark glyphicon" ng-class="lookups.currentDataFormat.glyph"></span>
@@ -92,7 +92,6 @@
                 </div>
             </div>
         </div>
-
         <!-- data format selector -->
         <div collapse="collapseDataFormatSelector" class="form-group">
             <div style="display:block;">
@@ -144,19 +143,20 @@
                     </span>
                 </div>
 
-
                 <!-- abstract -->
-                <div class="editor-abstract form-group">
-                    <textarea id="abstractArea" name="gemini.abstract" type="text" ng-model="form.gemini.abstract" class="form-control"
+                <div class="editor-abstract form-group" ng-init="fx=false">
+                    <textarea name="gemini.abstract" type="text" ng-model="form.gemini.abstract" class="form-control"
                               rows="2"
                               placeholder="Abstract"
                               title="The abstract is a clear, brief summary of the resource's content"
-                              tc-focus-tip tc-autosize></textarea>
-                    <button class="btn btn-sm btn-dialogue" tc-tip title="Edit abstract" ng-click="editAbstract()">
+                              tc-focus-tip tc-autosize
+                              ng-focus="fx=true" ng-blur="fx=false"
+                              ng-style="{'max-height': fx ? '16em' : '8em'}"></textarea>
+                    <button class="editor-edit-abstract btn btn-sm btn-dialogue pull-right"
+                            tc-tip title="Edit abstract" ng-click="editAbstract()">
                         &bull;&bull;&bull;
                     </button>
                 </div>
-
                 <div class="editor-tabs" tabset>
 
                     <div tab>
@@ -193,23 +193,18 @@
                                             </div>
                                             <div class="form-group">
                                                 <!-- dateset reference date -->
-                                                <div class="input-group" style="width:10em">
+                                                <div class="input-group date-container">
+                                                    <span class="input-group-addon well-input-group-addon"
+                                                          tc-tip title="The dataset reference date (yyyy, yyyy-mm, or yyyy-mm-dd)">
+                                                        <span class="dark glyphicon glyphicon-calendar"></span>
+                                                    </span>
                                                     <input type="text" class="form-control"
                                                            name="gemini.datasetReferenceDate"
                                                            ng-model="form.gemini.datasetReferenceDate"
                                                            placeholder="yyyy-mm-dd"
-                                                           datepicker-popup="yyyy-MM-dd"
                                                            tc-focus-tip
-                                                           is-open="datasetReferenceDate"
-                                                           close-text="Close"
-                                                           ng-click="open($event,'datasetReferenceDate')"
                                                            title="The dataset reference date" />
-                                                    <span class="input-group-addon" ng-click="open($event,'datasetReferenceDate')">
-                                                        <span class="dark glyphicon glyphicon-calendar"></span>
-                                                    </span>
                                                 </div>
-
-
                                             </div>
 
                                         </div>
@@ -373,23 +368,20 @@
 
                         <!-- metadata date, lang -->
                         <div class="layout-row form-horizontal">
-                            <label for="metadataDate" class="col-md-6 control-label" style="text-align:left;">Metadata Date</label>
-                            <div id="metadataDate" class="col-md-6 input-group">
+                            <label class="col-md-6 control-label">Metadata Date</label>
+
+                            <div class="input-group date-container">
+                                <span class="input-group-addon well-input-group-addon"
+                                      tc-tip title="The metadata (last updated) date (yyyy, yyyy-mm, or yyyy-mm-dd)">
+                                    <span class="dark glyphicon glyphicon-calendar"></span>
+                                </span>
                                 <input type="text" class="form-control"
                                        name="gemini.metadataDate"
                                        ng-model="form.gemini.metadataDate"
                                        placeholder="yyyy-mm-dd"
-                                       datepicker-popup="yyyy-MM-dd"
                                        tc-focus-tip
-                                       is-open="metadataDate"
-                                       close-text="Close"
-                                       ng-click="open($event,'metadataDate')"
-                                       title="The dates covered by the data resource" />
-                                <span class="input-group-addon" ng-click="open($event,'metadataDate')">
-                                    <span class="dark glyphicon glyphicon-calendar"></span>
-                                </span>
+                                       title="The metadata (last updated) date" />
                             </div>
-
                         </div>
 
                     </div>
@@ -400,46 +392,44 @@
                         </tab-heading>
 
                         <!-- temporal extent-->
-                        <div class="form-horizontal form-group">
-                            <label for="temporalExtentDiv" class="col-md-2 control-label">Temporal Extent</label>
-                            <div id="temporalExtentDiv" class="col-md-3 input-group">
-                                <input type="text" class="form-control"
-                                       name="gemini.temporalExtent.begin"
-                                       ng-model="form.gemini.temporalExtent.begin"
-                                       placeholder="yyyy-mm-dd"
-                                       datepicker-popup="yyyy-MM-dd"
-                                       tc-focus-tip
-                                       is-open="extentBegin"
-                                       close-text="Close"
-                                       ng-click="open($event,'extentBegin')"
-                                       title="The dates covered by the data resource" />
-                                <span class="input-group-addon" ng-click="open($event,'extentBegin')">
-                                    <span class="dark glyphicon glyphicon-calendar"></span>
-                                </span>
+                        <div class="">
+                            <div class="inline-div">
+                                <label>Temporal Extent</label>
                             </div>
-                            <div class="col-md-1">
-                                <span class="glyphicon glyphicon-chevron-right" style="margin-left: 1em;padding-top: 5px;"></span>
+                            <div class="inline-div">
+                                <div class="input-group date-container">
+                                    <span class="input-group-addon well-input-group-addon"
+                                          tc-tip title="The earliest date covered by the data resource (yyyy, yyyy-mm, or yyyy-mm-dd)">
+                                        <span class="dark glyphicon glyphicon-calendar"></span>
+                                    </span>
+                                    <input type="text" class="form-control"
+                                           name="gemini.temporalExtent.begin"
+                                           ng-model="form.gemini.temporalExtent.begin"
+                                           placeholder="yyyy-mm-dd"
+                                           tc-focus-tip
+                                           title="The earliest date covered by the data resource" />
+                                </div>
                             </div>
-                            <div class="col-md-3 input-group">
-                                <input type="text" class="form-control"
-                                       name="gemini.temporalExtent.end"
-                                       ng-model="form.gemini.temporalExtent.end"
-                                       placeholder="yyyy-mm-dd"
-                                       datepicker-popup="yyyy-MM-dd"
-                                       tc-focus-tip
-                                       is-open="extentEnd"
-                                       close-text="Close"
-                                       ng-click="open($event,'extentEnd')"
-                                       title="The dates covered by the data resource" />
-                                <span class="input-group-addon" ng-click="open($event,'extentEnd')">
-                                    <span class="dark glyphicon glyphicon-calendar"></span>
-                                </span>
+                            <div class="inline-div">
+                                to
+                            </div>
+                            <div class="inline-div">
+                                <div class="input-group date-container">
+                                    <span class="input-group-addon well-input-group-addon"
+                                          tc-tip title="The latest date covered by the data resource (yyyy, yyyy-mm, or yyyy-mm-dd)">
+                                        <span class="dark glyphicon glyphicon-calendar"></span>
+                                    </span>
+                                    <input type="text" class="form-control"
+                                           name="gemini.temporalExtent.end"
+                                           ng-model="form.gemini.temporalExtent.end"
+                                           placeholder="yyyy-mm-dd"
+                                           tc-focus-tip
+                                           title="The latest date covered by the data resource" />
+                                </div>
                             </div>
                         </div>
-                        <br />
-                        <br />
-                        <hr />
 
+                        <hr />
 
                         <div>
                             <div id="spatialDataDiv" class="form-horizontal">
@@ -568,13 +558,33 @@
 
                     <hr />
 
+                    <div class="editor-status layout-row">
+                        <div class="layout-col">
+                            <span>Status</span>
+                        </div>
+                        <div class="layout-col pull-right">
+
+                            <button type="button" class="btn"
+                                    ng-click="form.status = (form.status + 1) % 2"
+                                    ng-class="{ 'btn-default': form.status != 1, 'btn-danger': form.status == 1 }"
+                                    title="Is the resource for internal use only, or is it for publishing externally?"
+                                    tc-tip>
+                                <span class="glyphicon glyphicon-repeat"></span>
+                                {{ form.status == 0 ? 'Internal' : 'Publishable' }}
+                            </button>
+
+                        </div>
+                    </div>
+
+                    <hr />
+
                     <div class="editor-validation layout-row">
                         <div class="layout-col">
                             <span>Validation</span>
                         </div>
                         <div class="layout-col pull-right">
 
-                            <button type="button" class="btn btn-default"
+                            <button type="button" class="btn"
                                     ng-click="form.validation = (form.validation + 1) % 2"
                                     ng-class="{ 'btn-default': form.validation == 0, 'btn-primary': form.validation == 1}"
                                     title="The level of validation to perform on the record"
@@ -607,26 +617,6 @@
                     </div>
 
                     <hr />
-                    <div class="editor-status layout-row">
-                        <div class="layout-col">
-                            <span>Status</span>
-                        </div>
-                        <div class="layout-col pull-right">
-
-                            <button type="button" class="btn"
-                                    ng-click="form.status = (form.status + 1) % 2"
-                                    ng-class="{ 'btn-danger': form.status == 0, 'btn-success': form.status == 1 }"
-                                    title="Is the resource for internal use only, or is it for publishing externally?"
-                                    tc-tip>
-                                <span class="glyphicon glyphicon-repeat"></span>
-                                {{ form.status == 0 ? 'Internal' : 'Publishable' }}
-                            </button>
-
-                        </div>
-                    </div>
-
-                    <hr />
-
                     <div class="editor-review layout-row">
                         <div class="layout-col">
                             <span>Review</span>
@@ -665,5 +655,5 @@
             </div>
         </div>
         <pre>{{form}}</pre>
-    </form>
+    </div>
 </div>
