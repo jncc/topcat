@@ -392,11 +392,9 @@
                         </tab-heading>
 
                         <!-- temporal extent-->
-                        <div class="">
-                            <div class="inline-div">
+                        <div class="form-inline">
+                            <div class="form-group">
                                 <label>Temporal Extent</label>
-                            </div>
-                            <div class="inline-div">
                                 <div class="input-group date-container">
                                     <span class="input-group-addon well-input-group-addon"
                                           tc-tip title="The earliest date covered by the data resource (yyyy, yyyy-mm, or yyyy-mm-dd)">
@@ -410,10 +408,8 @@
                                            title="The earliest date covered by the data resource" />
                                 </div>
                             </div>
-                            <div class="inline-div">
-                                to
-                            </div>
-                            <div class="inline-div">
+                            <div class="form-group">
+                                <span class="glyphicon glyphicon-chevron-right"></span>
                                 <div class="input-group date-container">
                                     <span class="input-group-addon well-input-group-addon"
                                           tc-tip title="The latest date covered by the data resource (yyyy, yyyy-mm, or yyyy-mm-dd)">
@@ -429,7 +425,7 @@
                             </div>
                         </div>
 
-                        <hr />
+                        <br />
 
                         <div>
                             <div id="spatialDataDiv" class="form-horizontal">
@@ -473,10 +469,10 @@
                                     </div>
                                 </div>
 
-                                <br />
+                                <hr />
 
                                 <div>
-                                    <label for="boundingBoxDiv">Bounding Box</label>
+                                    <label for="boundingBoxDiv">Bounding Box (always in WGS84)</label>
                                     <div id="boundingBoxDiv" class="form-horizontal">
                                         <div class="form-horizontal">
                                             <div class="col-md-6">
