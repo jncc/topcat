@@ -51,6 +51,7 @@ namespace Catalogue.Data.Write
         {
             CorrectlyOrderKeywords(record);
             StandardiseUnconditionalUseConstraints(record);
+            UpdateMetadataDateToNow(record);
 
             var validation = validator.Validate(record);
 
@@ -91,6 +92,11 @@ namespace Catalogue.Data.Write
 
             if (record.Gemini.UseConstraints.IsNotBlank() && record.Gemini.UseConstraints.ToLowerInvariant().Trim() == unconditional)
                 record.Gemini.UseConstraints = unconditional;
+        }
+
+        void UpdateMetadataDateToNow(Record record)
+        {
+            record.Gemini.MetadataDate = DateTime.Now;
         }
     }
 
