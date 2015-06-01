@@ -56,7 +56,7 @@ namespace Catalogue.Web.Controllers.Seed
             WebApiApplication.DocumentStore.DatabaseCommands.DeleteByIndex("RecordIndex",
                 new IndexQuery
                 {
-                    Query = "Keywords:\"http://vocab.jncc.gov.uk/jncc-broad-category/Seabed Habitat Maps\""
+                    Query = "Keywords:\"http://vocab.jncc.gov.uk/jncc-category/Seabed Habitat Maps\""
                 });
 
             return new HttpResponseMessage { Content = new StringContent("Done") };
