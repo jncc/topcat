@@ -123,7 +123,7 @@ namespace Catalogue.Data.Write
         void ValidateDatasetReferenceDate(Record record, ValidationResult<Record> result)
         {
             // dataset_reference_date_must_be_valid_date
-            if (!IsValidDate(record.Gemini.DatasetReferenceDate))
+            if (!String.IsNullOrWhiteSpace(record.Gemini.DatasetReferenceDate) && !IsValidDate(record.Gemini.DatasetReferenceDate))
             {
                 result.Errors.Add("Dataset reference date is not a valid date", r => r.Gemini.DatasetReferenceDate);
             }
@@ -237,15 +237,16 @@ namespace Catalogue.Data.Write
             }
         }
 
-        bool IsValidDate(string date)
+        internal static bool IsValidDate(string date)
         {
             //todo: Disabled for mest data testing.
-            return true;
             var yearOnly = new Regex(@"^\d\d\d\d$");
             var yearAndMonth = new Regex(@"^\d\d\d\d-(0[1-9]|1[012])$");
             var yearMonthAndDay = new Regex(@"^\d\d\d\d-(0[1-9]|1[012])-(0[1-9]|[12][0-9]|3[01])$");
 
-            return yearOnly.IsMatch(date) || yearAndMonth.IsMatch(date) || yearMonthAndDay.IsMatch(date);
+            DateTime parsedDateTime;
+            return yearOnly.IsMatch(date) || yearAndMonth.IsMatch(date) || (yearMonthAndDay.IsMatch(date) && DateTime.TryParse(date, out parsedDateTime))
+            ;
         }
 
         void PerformGeminiValidation(Record record, ValidationResult<Record> ValidationResult)
@@ -441,6 +442,8 @@ namespace Catalogue.Data.Write
             };
         }
 
+
+
         [Test]
         public void should_produce_no_warnings_by_default()
         {
@@ -610,6 +613,24 @@ namespace Catalogue.Data.Write
             });
             var result = new RecordValidator().Validate(record);
             result.Errors.Single().Fields.Should().Contain("gemini.metadataPointOfContact.role");
+        }
+
+        [Test]
+        public void should_validate_valid_dates()
+        {
+            RecordValidator.IsValidDate("2017").Should().BeTrue();
+            RecordValidator.IsValidDate("2017-01").Should().BeTrue();
+            RecordValidator.IsValidDate("2017-01-01").Should().BeTrue();
+            RecordValidator.IsValidDate("2012-02-29").Should().BeTrue(); //leap year
+
+        }
+
+        [Test]
+        public void should_not_validate_invalid_dates()
+        {
+            RecordValidator.IsValidDate("aaa").Should().BeFalse();
+            RecordValidator.IsValidDate("August 2009").Should().BeFalse();
+            RecordValidator.IsValidDate("2013-02-29").Should().BeFalse(); //not a leap year
         }
     }
 
