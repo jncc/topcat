@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using Catalogue.Data.Model;
 using Catalogue.Data.Seed;
 using Catalogue.Data.Test;
+using Catalogue.Data.Write;
 using Catalogue.Gemini.Model;
 using Catalogue.Utilities.Text;
 using CsvHelper;
@@ -138,7 +139,13 @@ namespace Catalogue.Data.Import.Mappings
 
                 });
             //Invalid dates handled by exporter - go to comments field with note
-            Map(m => m.DatasetReferenceDate).Name("PublicationDate");
+            Map(m => m.DatasetReferenceDate)
+                .ConvertUsing(
+                    row =>
+                        RecordValidator.IsValidDate(row.GetField("PublicationDate"))
+                            ? row.GetField("PublicationDate")
+                            : String.Empty);
+
             Map(m => m.Keywords).ConvertUsing(GetKeywords);
             Map(m => m.ResourceLocator).ConvertUsing(row => "http://some/example/public/location");
             Map(m => m.DataFormat).ConvertUsing(row => "Documents");
@@ -214,7 +221,20 @@ namespace Catalogue.Data.Import.Mappings
             Map(m => m.Path).Name("Path");
             Map(m => m.TopCopy).ConvertUsing(row => true);
             Map(m => m.Status).ConvertUsing(row  => Status.Publishable);
-            Map(m => m.Notes).ConvertUsing(row => "PageId: " + row.GetField("PageId"));
+            Map(m => m.Notes).ConvertUsing(row =>
+            {
+                var notes = new StringBuilder();
+                notes.AppendLine("PageId: " + row.GetField("PageId"));
+                
+                if (! RecordValidator.IsValidDate(row.GetField("PublicationDate")))
+                {
+                    notes.AppendLine();
+                    notes.AppendLine("Invalid dataset reference date (Publication date) : " +
+                                     row.GetField("PublicationDate"));
+                }
+
+                return notes.ToString();
+            });
 
             References<GeminiMap>(m => m.Gemini);
         }
@@ -234,7 +254,7 @@ namespace Catalogue.Data.Import.Mappings
             using (IDocumentSession db = store.OpenSession())
             {
                 var importer = Importer.CreateImporter<PubCatMapping>(db);
-                importer.SkipBadRecords = false;
+                importer.SkipBadRecords = true;
 
                 importer.Import(@"C:\Working\pubcat.csv");
 
@@ -254,7 +274,7 @@ namespace Catalogue.Data.Import.Mappings
         [Test]
         public void should_import_all_records()
         {
-            imported.Count().Should().Be(1018);
+            imported.Count().Should().Be(863);
         }
     }
 
