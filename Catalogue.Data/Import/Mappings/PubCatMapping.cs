@@ -57,6 +57,16 @@ namespace Catalogue.Data.Import.Mappings
                         },
                         new Vocabulary
                         {
+                            Id = "http://vocab.jncc.gov.uk/jncc-report-series-number",
+                            Name = "JNCC Report series number",
+                            Description = "JNCC Report series number",
+                            Controlled = false,
+                            Publishable = true,
+                            PublicationDate = "2015",
+                            Keywords = new List<VocabularyKeyword>()
+                        },
+                        new Vocabulary
+                        {
                             Id = "http://vocab.jncc.gov.uk/NHBS",
                             Name = "NHBS Numbers",
                             Description = "NHBS Number",
@@ -162,16 +172,16 @@ namespace Catalogue.Data.Import.Mappings
             AddKeyword(keywords, "http://vocab.jncc.gov.uk/NHBS",  row.GetField("NhbsNumber"));
             AddKeyword(keywords, "http://vocab.jncc.gov.uk/ISBN", row.GetField("IsbnNumber"));
             AddKeyword(keywords, "http://vocab.jncc.gov.uk/ISSN", row.GetField("IssnNumber"));
-            AddKeyword(keywords, "http://vocab.jncc.gov.uk/JnccReportSeriesNumber", row.GetField("JnccReportSeriesNumber"));
+            AddKeyword(keywords, "http://vocab.jncc.gov.uk/jncc-report-series-number", row.GetField("JnccReportSeriesNumber"));
 
             if (row.GetField("Free") == "1")
             {
-                AddKeyword(keywords, "http://vocab.jncc.gov.uk/publications", "Free");
+                AddKeyword(keywords, "http://vocab.jncc.gov.uk/publication-status", "Free");
             }
 
             if (row.GetField("Discontinued") == "1")
             {
-                AddKeyword(keywords, "http://vocab.jncc.gov.uk/publications", "Discontinued");
+                AddKeyword(keywords, "http://vocab.jncc.gov.uk/publication-status", "Discontinued");
             }
 
             // not sure yet how to categorise publications
