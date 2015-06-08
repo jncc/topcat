@@ -43,7 +43,7 @@ namespace Catalogue.Web.Controllers.Ingest
         {
             var importer = Importer.CreateImporter<T>(db);
             importer.SkipBadRecords = model.SkipBadRecords;
-            importer.Import(model.FileName);
+            importer.Import(model.FileName.Trim('"'));
             db.SaveChanges();
 
             return new IngestResult { Success = true };
