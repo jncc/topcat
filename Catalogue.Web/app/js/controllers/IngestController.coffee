@@ -7,6 +7,7 @@
             {id: 1, name: 'Activities'},
             {id: 2, name: 'Mesh'},
             {id: 3, name: 'Publications'}]
+            {id: 4, name: 'Meow'}]
                 
                 
                 

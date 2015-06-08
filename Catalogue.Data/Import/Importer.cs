@@ -58,6 +58,7 @@ namespace Catalogue.Data.Import
             foreach (var record in records)
             {
                 var result = recordService.Insert(record);
+                //File.AppendAllText(@"C:\delete-me.txt", record.Gemini.Title);
 
                 if (!result.Success)
                 {
