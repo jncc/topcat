@@ -120,5 +120,27 @@ namespace Catalogue.Web.Controllers.Patch
             db.SaveChanges();
             return new HttpResponseMessage();
         }
+
+        [HttpPost, Route("api/patch/fixupactivitiesemailaddress")]
+        public HttpResponseMessage FixUpActivitiesEmailAddress()
+        {
+            var query = new RecordQueryInputModel
+            {
+                K = new[] { "vocab.jncc.gov.uk/jncc-category/Human Activities" },
+                P = 0,
+                N = 1024,
+            };
+
+            var records = queryer.RecordQuery(query);
+
+            foreach (var record in records)
+            {
+                record.Gemini.MetadataPointOfContact.Email = record.Gemini.MetadataPointOfContact.Email.Replace("jnccc", "jncc");
+            }
+
+            db.SaveChanges();
+
+            return new HttpResponseMessage();
+        }
     }
 }
