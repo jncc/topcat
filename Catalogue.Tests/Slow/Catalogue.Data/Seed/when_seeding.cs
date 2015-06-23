@@ -29,7 +29,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Data.Seed
         [Test]
         public void should_seed_vocabs()
         {
-            Db.Query<Vocabulary>().Count().Should().Be(7);
+            Db.Query<Vocabulary>().Count().Should().Be(8);
         }
     }
 }
