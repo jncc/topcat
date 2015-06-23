@@ -282,6 +282,23 @@ namespace Catalogue.Data.Seed
                 };
             db.Store(jnccCategory);
 
+            var metadataAdmin = new Vocabulary
+                {
+                    Id = "http://vocab.jncc.gov.uk/metadata-admin",
+                    Name = "Metadata Admin",
+                    Description = "Tags for managing Topcat records.",
+                    PublicationDate = "2015",
+                    Publishable = false,
+                    Controlled = true,
+                    Keywords = new List<VocabularyKeyword>
+                        {
+                            new VocabularyKeyword { Value = "Delete" },
+                            new VocabularyKeyword { Value = "Improve" },
+                            new VocabularyKeyword { Value = "Suspect" },
+                        }
+                };
+            db.Store(metadataAdmin);
+
             var referenceManagerCode = new Vocabulary
                 {
                     Id = "http://vocab.jncc.gov.uk/reference-manager-code",

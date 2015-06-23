@@ -110,5 +110,24 @@ namespace Catalogue.Tests.Explicit
 
             Console.WriteLine(watch.ElapsedMilliseconds);
         }
+
+        [Explicit, Test]
+        public void fizz_buzz()
+        {
+            foreach (int n in Enumerable.Range(1, 100))
+            {
+                bool isMultipleOf3 = n%3 == 0;
+                bool isMultipleOf5 = n%5 == 0;
+
+                if (isMultipleOf3 && isMultipleOf5)
+                    Console.Write("FizzBuzz");
+                else if (isMultipleOf5)
+                    Console.Write("Buzz");
+                else if (isMultipleOf3)
+                    Console.Write("Fizz");
+                else
+                    Console.Write(n);
+            }
+        }
     }
 }
