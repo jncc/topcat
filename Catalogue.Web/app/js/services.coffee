@@ -66,6 +66,7 @@ module.factory 'colourHasher', ->
         switch s # special case to look good
             when 'http://vocab.jncc.gov.uk/jncc-domain' then 'rgb(38,110,217)'
             when 'http://vocab.jncc.gov.uk/jncc-category' then 'rgb(217,38,103)'
+            when 'http://vocab.jncc.gov.uk/metadata-admin' then 'rgb(102,102,102)'
             when 'http://vocab.jncc.gov.uk/seabed-survey-purpose' then 'rgb(192,217,38)'
             else
                 hue = Math.abs(s.hashCode() % 99) * 0.01

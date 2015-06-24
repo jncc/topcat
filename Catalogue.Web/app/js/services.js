@@ -127,6 +127,8 @@
             return 'rgb(38,110,217)';
           case 'http://vocab.jncc.gov.uk/jncc-category':
             return 'rgb(217,38,103)';
+          case 'http://vocab.jncc.gov.uk/metadata-admin':
+            return 'rgb(102,102,102)';
           case 'http://vocab.jncc.gov.uk/seabed-survey-purpose':
             return 'rgb(192,217,38)';
           default:
