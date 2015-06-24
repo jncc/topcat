@@ -8,6 +8,7 @@ using System.Web.Http;
 using Catalogue.Data.Seed;
 using Catalogue.Gemini.Model;
 using Catalogue.Web.Code;
+using Raven.Abstractions.Commands;
 using Raven.Abstractions.Data;
 using Raven.Client;
 
@@ -65,27 +66,14 @@ namespace Catalogue.Web.Controllers.Seed
             return new HttpResponseMessage { Content = new StringContent("Done") };
         }
 
-        // todo delete when created on live
-        [HttpPost, Route("api/seed/createmetadataadmin")]
-        public HttpResponseMessage MetadataAdmin()
+        // todo delete when used on live
+        [HttpPost, Route("api/seed/deletebadvocab")]
+        public HttpResponseMessage DeleteBadVocab()
         {
-            var metadataAdmin = new Vocabulary
-            {
-                Id = "http://vocab.jncc.gov.uk/metadata-admin",
-                Name = "Metadata Admin",
-                Description = "Tags for managing Topcat records.",
-                PublicationDate = "2015",
-                Publishable = false,
-                Controlled = true,
-                Keywords = new List<VocabularyKeyword>
-                        {
-                            new VocabularyKeyword { Value = "Delete" },
-                            new VocabularyKeyword { Value = "Improve" },
-                            new VocabularyKeyword { Value = "Suspect" },
-                        }
-            };
-            db.Store(metadataAdmin);
-            db.SaveChanges();
+            WebApiApplication.DocumentStore.DatabaseCommands.Batch(new[]
+                {
+                    new DeleteCommandData { Key = "http://vocab.jncc.gov.uk/metadata-administration" }
+                });
 
             return new HttpResponseMessage { Content = new StringContent("Done") };
         }
