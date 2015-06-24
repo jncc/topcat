@@ -66,13 +66,13 @@ namespace Catalogue.Web.Controllers.Seed
             return new HttpResponseMessage { Content = new StringContent("Done") };
         }
 
-        // todo delete when used on live
-        [HttpPost, Route("api/seed/deletebadvocab")]
-        public HttpResponseMessage DeleteBadVocab()
+        [HttpPost, Route("api/seed/batchdelete")]
+        public HttpResponseMessage BatchDelete()
         {
-            WebApiApplication.DocumentStore.DatabaseCommands.Batch(new[]
+            WebApiApplication.DocumentStore.DatabaseCommands.DeleteByIndex("RecordIndex",
+                new IndexQuery
                 {
-                    new DeleteCommandData { Key = "http://vocab.jncc.gov.uk/metadata-administration" }
+                    Query = "Keywords:\"http://vocab.jncc.gov.uk/metadata-admin/Delete\""
                 });
 
             return new HttpResponseMessage { Content = new StringContent("Done") };
