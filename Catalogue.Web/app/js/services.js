@@ -13,7 +13,7 @@
   });
 
   module.factory('Vocabulary', function($resource) {
-    return $resource('../api/vocabularies/:id', {}, {
+    return $resource('../api/vocabularies?id=:id', {}, {
       query: {
         method: 'GET',
         params: {
