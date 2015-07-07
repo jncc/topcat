@@ -100,30 +100,20 @@ namespace Catalogue.Data.Import.Mappings
 
         }
 
-        public void Apply(CsvConfiguration config)
+        internal class GeminiMap : CsvClassMap<Metadata>
         {
-            config.Delimiter = "\t";
-            config.QuoteAllFields = true;
-            config.TrimFields = true;
-            config.RegisterClassMap<RecordMap>();
-            config.RegisterClassMap<GeminiMap>();
-        }
-    }
-
-    public class GeminiMap : CsvClassMap<Metadata>
-    {
-        public override void CreateMap()
-        {
-            Map(m => m.Title).Name("Title");
-            Map(m => m.ResponsibleOrganisation).ConvertUsing(row =>
+            public override void CreateMap()
+            {
+                Map(m => m.Title).Name("Title");
+                Map(m => m.ResponsibleOrganisation).ConvertUsing(row =>
                 {
                     string name = row.GetField("Authors");
                     string email = String.Empty;
                     string role = "author";
 
-                    return new ResponsibleParty {Name = name, Email = email, Role = role};
+                    return new ResponsibleParty { Name = name, Email = email, Role = role };
                 });
-            Map(m => m.Abstract).ConvertUsing(row =>
+                Map(m => m.Abstract).ConvertUsing(row =>
                 {
                     var sb = new StringBuilder();
 
@@ -153,107 +143,118 @@ namespace Catalogue.Data.Import.Mappings
 
                     return sb.ToString();
                 });
-            //Invalid dates handled by exporter - go to comments field with note
-            Map(m => m.DatasetReferenceDate)
-                .ConvertUsing(
-                    row =>
-                        RecordValidator.IsValidDate(row.GetField("PublicationDate"))
-                            ? row.GetField("PublicationDate")
-                            : String.Empty);
+                //Invalid dates handled by exporter - go to comments field with note
+                Map(m => m.DatasetReferenceDate)
+                    .ConvertUsing(
+                        row =>
+                            RecordValidator.IsValidDate(row.GetField("PublicationDate"))
+                                ? row.GetField("PublicationDate")
+                                : String.Empty);
 
-            Map(m => m.Keywords).ConvertUsing(GetKeywords);
-            Map(m => m.ResourceLocator).ConvertUsing(row => "http://some/example/public/location");
-            Map(m => m.DataFormat).ConvertUsing(row => "Documents");
-            Map(m => m.ResourceType).ConvertUsing(row => "publication");
-        }
-
-
-        private List<MetadataKeyword> GetKeywords(ICsvReaderRow row)
-        {
-            var keywords = new List<MetadataKeyword>();
-
-            keywords.AddRange(ParsePageKeywords(row.GetField("Keywords")));
-
-            AddKeyword(keywords, "http://vocab.jncc.gov.uk/NHBS",  row.GetField("NhbsNumber"));
-            AddKeyword(keywords, "http://vocab.jncc.gov.uk/ISBN", row.GetField("IsbnNumber"));
-            AddKeyword(keywords, "http://vocab.jncc.gov.uk/ISSN", row.GetField("IssnNumber"));
-            AddKeyword(keywords, "http://vocab.jncc.gov.uk/jncc-report-series-number", row.GetField("JnccReportSeriesNumber"));
-
-            if (row.GetField("Free") == "1")
-            {
-                AddKeyword(keywords, "http://vocab.jncc.gov.uk/publication-status", "Free");
+                Map(m => m.Keywords).ConvertUsing(GetKeywords);
+                Map(m => m.ResourceLocator).ConvertUsing(row => "http://some/example/public/location");
+                Map(m => m.DataFormat).ConvertUsing(row => "Documents");
+                Map(m => m.ResourceType).ConvertUsing(row => "publication");
             }
 
-            if (row.GetField("Discontinued") == "1")
+
+            private List<MetadataKeyword> GetKeywords(ICsvReaderRow row)
             {
-                AddKeyword(keywords, "http://vocab.jncc.gov.uk/publication-status", "Discontinued");
+                var keywords = new List<MetadataKeyword>();
+
+                keywords.AddRange(ParsePageKeywords(row.GetField("Keywords")));
+
+                AddKeyword(keywords, "http://vocab.jncc.gov.uk/NHBS", row.GetField("NhbsNumber"));
+                AddKeyword(keywords, "http://vocab.jncc.gov.uk/ISBN", row.GetField("IsbnNumber"));
+                AddKeyword(keywords, "http://vocab.jncc.gov.uk/ISSN", row.GetField("IssnNumber"));
+                AddKeyword(keywords, "http://vocab.jncc.gov.uk/jncc-report-series-number", row.GetField("JnccReportSeriesNumber"));
+
+                if (row.GetField("Free") == "1")
+                {
+                    AddKeyword(keywords, "http://vocab.jncc.gov.uk/publication-status", "Free");
+                }
+
+                if (row.GetField("Discontinued") == "1")
+                {
+                    AddKeyword(keywords, "http://vocab.jncc.gov.uk/publication-status", "Discontinued");
+                }
+
+                // not sure yet how to categorise publications
+                AddKeyword(keywords, "http://vocab.jncc.gov.uk/jncc-domain", "to do!");
+                AddKeyword(keywords, "http://vocab.jncc.gov.uk/jncc-category", "Publications");
+
+                return keywords;
             }
 
-            // not sure yet how to categorise publications
-            AddKeyword(keywords, "http://vocab.jncc.gov.uk/jncc-domain", "to do!");
-            AddKeyword(keywords, "http://vocab.jncc.gov.uk/jncc-category", "Publications");
+            private void AddKeyword(List<MetadataKeyword> keywords, string vocab, string value)
+            {
+                if (value.IsBlank()) return;
 
-            return keywords;
-        }
-
-        private void AddKeyword(List<MetadataKeyword> keywords, string vocab, string value)
-        {
-            if (value.IsBlank()) return;
-
-            keywords.Add(new MetadataKeyword()
+                keywords.Add(new MetadataKeyword()
                 {
                     Vocab = vocab,
                     Value = value
                 });
-        }
+            }
 
-        private IEnumerable<MetadataKeyword> ParsePageKeywords(string input)
-        {
-
-            if (input.IsBlank()) return new List<MetadataKeyword>();
-
-            return (from m in Regex.Matches(input, @"\{(.*?)\}").Cast<Match>()
-                let keyword = m.Groups.Cast<Group>().Select(g => g.Value).Skip(1).First().Split(',')
-                from k in keyword
-                where k.IsNotBlank()
-                select new MetadataKeyword
-                {
-                    Vocab = "http://vocab.jncc.gov.uk/publication-category",
-                    Value = k.Replace("&","and")
-                        .ToCharArray()
-                        .Where(c => !char.IsPunctuation(c))
-                        .Aggregate("", (current, c) => current + c)
-                        .Trim()
-                });
-        } 
-
-    }
-
-    public class RecordMap : CsvClassMap<Record>
-    {
-        public override void CreateMap()
-        {
-            Map(m => m.Path).Name("Path");
-            Map(m => m.TopCopy).ConvertUsing(row => true);
-            Map(m => m.Status).ConvertUsing(row  => Status.Publishable);
-            Map(m => m.Notes).ConvertUsing(row =>
+            private IEnumerable<MetadataKeyword> ParsePageKeywords(string input)
             {
-                var notes = new StringBuilder();
-                notes.AppendLine("PageId: " + row.GetField("PageId"));
-                
-                if (! RecordValidator.IsValidDate(row.GetField("PublicationDate")))
+
+                if (input.IsBlank()) return new List<MetadataKeyword>();
+
+                return (from m in Regex.Matches(input, @"\{(.*?)\}").Cast<Match>()
+                        let keyword = m.Groups.Cast<Group>().Select(g => g.Value).Skip(1).First().Split(',')
+                        from k in keyword
+                        where k.IsNotBlank()
+                        select new MetadataKeyword
+                        {
+                            Vocab = "http://vocab.jncc.gov.uk/publication-category",
+                            Value = k.Replace("&", "and")
+                                .ToCharArray()
+                                .Where(c => !char.IsPunctuation(c))
+                                .Aggregate("", (current, c) => current + c)
+                                .Trim()
+                        });
+            }
+
+        }
+
+        internal class RecordMap : CsvClassMap<Record>
+        {
+            public override void CreateMap()
+            {
+                Map(m => m.Path).Name("Path");
+                Map(m => m.TopCopy).ConvertUsing(row => true);
+                Map(m => m.Status).ConvertUsing(row => Status.Publishable);
+                Map(m => m.Notes).ConvertUsing(row =>
                 {
-                    notes.AppendLine();
-                    notes.AppendLine("Invalid dataset reference date (Publication date) : " +
-                                     row.GetField("PublicationDate"));
-                }
+                    var notes = new StringBuilder();
+                    notes.AppendLine("PageId: " + row.GetField("PageId"));
 
-                return notes.ToString();
-            });
+                    if (!RecordValidator.IsValidDate(row.GetField("PublicationDate")))
+                    {
+                        notes.AppendLine();
+                        notes.AppendLine("Invalid dataset reference date (Publication date) : " +
+                                         row.GetField("PublicationDate"));
+                    }
 
-            References<GeminiMap>(m => m.Gemini);
+                    return notes.ToString();
+                });
+
+                References<GeminiMap>(m => m.Gemini);
+            }
+        }
+
+        public void Apply(CsvConfiguration config)
+        {
+            config.Delimiter = "\t";
+            config.QuoteAllFields = true;
+            config.TrimFields = true;
+            config.RegisterClassMap<RecordMap>();
+            config.RegisterClassMap<GeminiMap>();
         }
     }
+
 
     [Explicit]
     internal class when_importing_pubcat_data
