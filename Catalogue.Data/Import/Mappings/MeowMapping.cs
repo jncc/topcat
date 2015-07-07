@@ -18,10 +18,7 @@ using NUnit.Framework;
 
 namespace Catalogue.Data.Import.Mappings
 {
-    /// <summary>
-    ///  Basically the same as the TopcatMapping.
-    /// </summary>
-    public class MeowMapping  :IMapping
+    public class MeowMapping : IMapping
     {
         public IEnumerable<Vocabulary> RequiredVocabularies
         {
@@ -51,8 +48,8 @@ namespace Catalogue.Data.Import.Mappings
         {
             public GeminiMap()
             {
-                Map(m => m.Title).Name("Gemini.Title");
-                Map(m => m.Abstract).Name("Gemini.Abstract");
+                Map(m => m.Title).Name("Gemini.Abstract");
+                Map(m => m.Abstract).ConvertUsing(row => "This dataset was created as part of the Making Earth Observation Work project. The data and metadata record was provided by Environment Systems Ltd.");
                 Map(m => m.TopicCategory).ConvertUsing(row =>
                 {
                     string value = row.GetField("Gemini.TopicCategory");

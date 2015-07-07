@@ -18,6 +18,9 @@
       }, {
         id: 3,
         name: 'Publications'
+      }, {
+        id: 4,
+        name: 'Meow'
       }
     ];
     return $scope.runImport = function() {

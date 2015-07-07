@@ -96,6 +96,12 @@ namespace Catalogue.Data.Write
             {
                 result.Errors.Add("Title must not be blank", r => r.Gemini.Title);
             }
+
+            // title must be reasonable length
+            if (record.Gemini.Title.Length > 150)
+            {
+                result.Errors.Add("Title is too long. 150 characters or less, please", r => r.Gemini.Title);
+            }
         }
 
         void ValidateKeywords(Record record, ValidationResult<Record> ValidationResult)
