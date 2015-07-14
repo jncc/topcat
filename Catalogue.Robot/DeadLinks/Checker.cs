@@ -22,7 +22,7 @@ namespace Catalogue.Robot.DeadLinks
 
         public List<LinkCheckResult> CheckAll()
         {
-            var query = db.Query<Record, RecordPathStreamingIndex>();
+            var query = db.Query<Record, RecordStreamingIndex>();
             var enumerator = db.Advanced.Stream(query);
 
             var results = new List<LinkCheckResult>();
