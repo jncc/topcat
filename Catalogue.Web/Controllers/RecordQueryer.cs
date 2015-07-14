@@ -65,6 +65,11 @@ namespace Catalogue.Web.Controllers
                 }
             }
 
+            if (input.D != null)
+            {
+                query = query.Where(r => r.MetadataDate >= input.D);
+            }
+
             return query.As<Record>() // ravendb method to project from the index result type to the actual document type
                     .Skip(input.P * input.N)
                     .Take(input.N)

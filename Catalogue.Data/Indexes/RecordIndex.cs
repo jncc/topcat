@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using Catalogue.Data.Analyzers;
 using Catalogue.Data.Model;
 using Lucene.Net.Analysis;
@@ -15,12 +16,13 @@ namespace Catalogue.Data.Indexes
     {
         public class Result
         {
-            public string   Title     { get; set; }
-            public string   TitleN    { get; set; }
-            public string   Abstract  { get; set; }
-            public string   AbstractN { get; set; }
-            public string[] Keywords  { get; set; }
-            public string[] KeywordsN { get; set; }
+            public string   Title        { get; set; }
+            public string   TitleN       { get; set; }
+            public string   Abstract     { get; set; }
+            public string   AbstractN    { get; set; }
+            public string[] Keywords     { get; set; }
+            public string[] KeywordsN    { get; set; }
+            public DateTime MetadataDate { get; set; }
         }
 
         public RecordIndex()
@@ -35,6 +37,7 @@ namespace Catalogue.Data.Indexes
                                      AbstractN = record.Gemini.Abstract,
                                      Keywords = record.Gemini.Keywords.Select(k => k.Vocab + "/" + k.Value), // for filtering exactly on keywords
                                      KeywordsN = record.Gemini.Keywords.Select(k => k.Value), // for full-text search matching on keywords
+                                     MetadataDate = record.Gemini.MetadataDate
                                  };
 
             // store and analyse the Title field

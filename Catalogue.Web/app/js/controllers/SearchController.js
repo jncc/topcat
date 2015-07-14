@@ -24,7 +24,8 @@
       blank = blankQuery();
       $location.search('q', query.q || null);
       $location.search('k', query.k);
-      return $location.search('p', query.p || null);
+      $location.search('p', query.p || null);
+      return $location.search('d', query.d || null);
     };
     queryRecords = function(query) {
       return $http.get('../api/search?' + $.param(query, true)).success(function(result) {
@@ -69,7 +70,8 @@
         q: '',
         k: [],
         p: 0,
-        n: $scope.pageSize
+        n: $scope.pageSize,
+        d: null
       };
     };
     parseQuerystring = function() {
