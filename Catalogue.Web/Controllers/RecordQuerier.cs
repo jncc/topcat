@@ -15,11 +15,11 @@ namespace Catalogue.Web.Controllers
         IEnumerable<Record> RecordQuery(RecordQueryInputModel input);
     }
 
-    public class RecordQueryer : IRecordQueryer
+    public class RecordQuerier : IRecordQueryer
     {
         private readonly IDocumentSession _db;
 
-        public RecordQueryer(IDocumentSession db)
+        public RecordQuerier(IDocumentSession db)
         {
             _db = db;
         }

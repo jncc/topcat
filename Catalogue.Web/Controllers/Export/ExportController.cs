@@ -15,11 +15,11 @@ namespace Catalogue.Web.Controllers.Export
 {
     public class ExportController : ApiController
     {
-        RecordQueryer queryer;
+        RecordQuerier _querier;
 
-        public ExportController(RecordQueryer queryer)
+        public ExportController(RecordQuerier _querier)
         {
-            this.queryer = queryer;
+            this._querier = _querier;
         }
 
         public HttpResponseMessage Get([FromUri] RecordQueryInputModel input)
@@ -53,7 +53,7 @@ namespace Catalogue.Web.Controllers.Export
                     x.N = 1024;
                 });
 
-            var results = queryer.RecordQuery(query).ToList();
+            var results = _querier.RecordQuery(query).ToList();
 
             if (results.Count >= 1024)
                 throw new InvalidOperationException("We don't support exports this large yet.");

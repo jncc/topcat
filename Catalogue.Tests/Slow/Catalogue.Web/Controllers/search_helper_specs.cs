@@ -13,7 +13,7 @@ using Raven.Database.Indexing.Collation;
 
 namespace Catalogue.Tests.Slow.Catalogue.Web.Controllers.Search
 {
-    class search_helper_specs : DatabaseTestFixture
+    class record_querier_specs : DatabaseTestFixture
     {
         private Record SimpleRecord()
         {
@@ -36,7 +36,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Web.Controllers.Search
         [Test]
         public void keyword_search_test()
         {
-            var helper = new RecordQueryer(Db);
+            var helper = new RecordQuerier(Db);
 
             var input = new RecordQueryInputModel
                 {
@@ -62,12 +62,6 @@ namespace Catalogue.Tests.Slow.Catalogue.Web.Controllers.Search
                     Gemini = Library.Blank().With(m =>
                     {
                         m.Title = "Some title";
-                        m.Keywords = new StringPairList
-                        {
-                            {"http://vocab.jncc.gov.uk/jncc-domain", "Example Domain"},
-                            {"http://vocab.jncc.gov.uk/jncc-category", "Example Category"},
-                        }
-                            .ToKeywordList();
                         m.MetadataDate = DateTime.Parse("2020-01-01");
                     }),
                 };
@@ -78,7 +72,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Web.Controllers.Search
 
             using (var db2 = ReusableDocumentStore.OpenSession())
             {
-                var helper = new RecordQueryer(db2);
+                var helper = new RecordQuerier(db2);
 
                 var input = new RecordQueryInputModel
                 {

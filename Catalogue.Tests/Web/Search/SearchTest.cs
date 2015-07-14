@@ -19,19 +19,19 @@ namespace Catalogue.Tests.Web.Search
             P= 0
         };
 
-        private RecordQueryer _recordQueryer;
+        private RecordQuerier _recordQuerier;
         private const int PageSize = 25;
 
         [TestFixtureSetUp]
         public void setUp()
         {
-            _recordQueryer = new RecordQueryer(Db);
+            _recordQuerier = new RecordQuerier(Db);
         }
         [Test]
         public void WhenPagingCheckCountIsAsExpected()
         {
             // do not perform a full text search, so should be fewer results
-            var results = _recordQueryer.SearchQuery(_recordQueryInputModel);
+            var results = _recordQuerier.SearchQuery(_recordQueryInputModel);
             Assert.AreEqual(results.Results.Count, 25);
             var totalReturned = results.Results.Count;
             // loop through each page
@@ -39,7 +39,7 @@ namespace Catalogue.Tests.Web.Search
             for (int i = 1; i <= pages; i++)
             {
                 _recordQueryInputModel.P = i;
-                results = _recordQueryer.SearchQuery(_recordQueryInputModel);
+                results = _recordQuerier.SearchQuery(_recordQueryInputModel);
                 totalReturned += results.Results.Count;
             }
             Assert.AreEqual(results.Total,totalReturned);

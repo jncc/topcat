@@ -15,7 +15,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Web.Controllers.Export
         [Test]
         public void export_sanity_check()
         {
-            var controller = new ExportController(new RecordQueryer(Db));
+            var controller = new ExportController(new RecordQuerier(Db));
             var input = new RecordQueryInputModel
             {
                 Q = "",

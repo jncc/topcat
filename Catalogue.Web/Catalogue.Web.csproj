@@ -156,7 +156,7 @@
     <Compile Include="Controllers\Keywords\KeywordsController.cs" />
     <Compile Include="Controllers\Patch\PatchController.cs" />
     <Compile Include="Controllers\RecordQueryInputModel.cs" />
-    <Compile Include="Controllers\RecordQueryer.cs" />
+    <Compile Include="Controllers\RecordQuerier.cs" />
     <Compile Include="Controllers\RecordQueryOutputModel.cs" />
     <Compile Include="Controllers\Records\RecordsController.cs" />
     <Compile Include="Controllers\Roles\RolesController.cs" />
