@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Net.Http;
 using System.Web;
@@ -28,6 +29,12 @@ namespace Catalogue.Web.Controllers.Admin
             var results = checker.CheckAll();
 
             return results;
+        }
+
+        [HttpGet, Route("api/admin/seepath")]
+        public bool SeePath()
+        {
+            return Directory.Exists(@"C:\topcat");
         }
     }
 }
