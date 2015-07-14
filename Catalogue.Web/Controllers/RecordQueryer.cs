@@ -56,6 +56,11 @@ namespace Catalogue.Web.Controllers
                     .Search(r => r.KeywordsN, input.Q);
             }
 
+            if (input.D != null)
+            {
+                query = query.Where(r => r.LastModified >= input.D.Value);
+            }
+
             if (input.HasKeywords())
             {
                 foreach (var keyword in ParameterHelper.ParseKeywords(input.K))

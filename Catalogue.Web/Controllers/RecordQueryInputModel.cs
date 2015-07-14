@@ -13,7 +13,12 @@ namespace Catalogue.Web.Controllers
             P = 0;
             Q = String.Empty;
             K = new string[0];
+            D = null;
         }
+        /// <summary>
+        /// The earliest last modified date of the records to search, or null exclude from search
+        /// </summary>
+        public DateTime? D { get; set; }
 
         /// <summary>
         /// The number of records (page size).
