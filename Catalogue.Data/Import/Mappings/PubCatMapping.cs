@@ -272,12 +272,12 @@ namespace Catalogue.Data.Import.Mappings
                 var importer = Importer.CreateImporter<PubCatMapping>(db);
                 importer.SkipBadRecords = true;
 
-                importer.Import(@"C:\Working\pubcat\pubcat.csv");
+                importer.Import(@"C:\Working\pubcat.csv");
 
                 var errors = importer.Results
                    .Where(r => !r.Success)
                    .Select(r => r.Record.Gemini.Title + Environment.NewLine + JsonConvert.SerializeObject(r.Validation) + Environment.NewLine);
-                File.WriteAllLines(@"C:\Working\pubcat\pubcat-errors.txt", errors);
+                File.WriteAllLines(@"C:\working\pubcat-errors.txt", errors);
 
                 db.SaveChanges();
 

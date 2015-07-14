@@ -1,5 +1,4 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 using Catalogue.Data.Analyzers;
 using Catalogue.Data.Model;
 using Lucene.Net.Analysis;
@@ -22,7 +21,6 @@ namespace Catalogue.Data.Indexes
             public string   AbstractN { get; set; }
             public string[] Keywords  { get; set; }
             public string[] KeywordsN { get; set; }
-            public DateTime LastModified { get; set; }
         }
 
         public RecordIndex()
@@ -37,7 +35,6 @@ namespace Catalogue.Data.Indexes
                                      AbstractN = record.Gemini.Abstract,
                                      Keywords = record.Gemini.Keywords.Select(k => k.Vocab + "/" + k.Value), // for filtering exactly on keywords
                                      KeywordsN = record.Gemini.Keywords.Select(k => k.Value), // for full-text search matching on keywords
-                                     LastModified = MetadataFor(record).Value<DateTime>("Last-Modified")
                                  };
 
             // store and analyse the Title field

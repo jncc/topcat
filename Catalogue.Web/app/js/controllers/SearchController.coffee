@@ -20,7 +20,6 @@
             $location.search 'q', query.q || null
             $location.search 'k', query.k # angular does the right thing here
             $location.search 'p', query.p || null
-            $location.search 'd', query.d || null
             #$location.search('n', $scope.query.n)
         
         queryRecords = (query) ->
@@ -61,8 +60,7 @@
             q: '',
             k: [],
             p: 0,
-            n: $scope.pageSize,
-            d: null
+            n: $scope.pageSize
 
         parseQuerystring = ->
             o = $location.search() # angular api for getting the querystring as an object
