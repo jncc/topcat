@@ -148,6 +148,7 @@
   <ItemGroup>
     <Compile Include="Account\User.cs" />
     <Compile Include="Account\UserContext.cs" />
+    <Compile Include="Controllers\Admin\AdminController.cs" />
     <Compile Include="Controllers\Dumps\DumpsController.cs" />
     <Compile Include="Controllers\Formats\FormatsController.cs" />
     <Compile Include="Controllers\Home\HomeController.cs" />
@@ -422,6 +423,10 @@
     <ProjectReference Include="..\Catalogue.Gemini\Catalogue.Gemini.csproj">
       <Project>{b4789e53-cc5c-4e4e-8358-fc9739846ccc}</Project>
       <Name>Catalogue.Gemini</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Catalogue.Robot\Catalogue.Robot.csproj">
+      <Project>{27fdaf42-45d1-4ccf-9c5e-d6af36cd15ac}</Project>
+      <Name>Catalogue.Robot</Name>
     </ProjectReference>
     <ProjectReference Include="..\Catalogue.Utilities\Catalogue.Utilities.csproj">
       <Project>{b6b90aa2-bf70-4460-a975-5192ab5ecdca}</Project>
