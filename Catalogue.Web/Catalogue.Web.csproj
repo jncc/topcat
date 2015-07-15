@@ -149,6 +149,8 @@
     <Compile Include="Account\User.cs" />
     <Compile Include="Account\UserContext.cs" />
     <Compile Include="Controllers\Admin\AdminController.cs" />
+    <Compile Include="Controllers\AsyncRecordQuerier.cs" />
+    <Compile Include="Controllers\CmsExport\CmsExportController.cs" />
     <Compile Include="Controllers\Dumps\DumpsController.cs" />
     <Compile Include="Controllers\Formats\FormatsController.cs" />
     <Compile Include="Controllers\Home\HomeController.cs" />
