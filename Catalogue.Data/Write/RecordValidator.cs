@@ -448,7 +448,11 @@ namespace Catalogue.Data.Write
             };
         }
 
-
+        [Test]
+        public void should_fail()
+        {
+            3.Should().Be(4);
+        }
 
         [Test]
         public void should_produce_no_warnings_by_default()
