@@ -161,7 +161,6 @@
     <Compile Include="Controllers\Records\RecordsController.cs" />
     <Compile Include="Controllers\Roles\RolesController.cs" />
     <Compile Include="Controllers\Sandbox\SandboxController.cs" />
-    <Compile Include="Controllers\Seed\SeedController.cs" />
     <Compile Include="Controllers\Vocabularies\VocabulariesController.cs" />
     <Compile Include="Controllers\Vocabularies\VocabularyListController.cs" />
     <Compile Include="Controllers\Download\DownloadController.cs" />
