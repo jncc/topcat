@@ -46,7 +46,7 @@ namespace Catalogue.Tests.Explicit
                 Func<string, FieldHighlightings> execute = q =>
                 {
                     FieldHighlightings lites;
-                    db.Advanced.LuceneQuery<Item>("SearchIndex")
+                    db.Advanced.DocumentQuery<Item>("SearchIndex")
                         .WaitForNonStaleResultsAsOfNow()
                         .Highlight("Title", 128, 2, out lites)
                         .Search("Title", q)

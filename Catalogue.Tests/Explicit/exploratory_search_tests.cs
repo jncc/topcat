@@ -17,7 +17,7 @@ namespace Catalogue.Tests.Explicit
             Db.Query<Record>().Count().Should().BeGreaterThan(100);
 
             string q = "broad bio";
-            List<Record> list = Db.Advanced.LuceneQuery<Record>("Records/SearchQuery")
+            List<Record> list = Db.Advanced.DocumentQuery<Record>("Records/SearchQuery")
                 .Search("Title", q + "*").Boost(10)
                 .ToList();
 
@@ -34,7 +34,7 @@ namespace Catalogue.Tests.Explicit
         {
             FieldHighlightings lites;
 
-            List<Record> results = Db.Advanced.LuceneQuery<Record>("Records/SearchQuery")
+            List<Record> results = Db.Advanced.DocumentQuery<Record>("Records/SearchQuery")
                 .Highlight("Title", 128, 2, out lites)
                 .SetHighlighterTags("<strong>", "</strong>")
                 .Search("Title", "north").Boost(10)
