@@ -430,7 +430,7 @@ namespace Catalogue.Data.Write
 
     internal class when_validating_at_basic_level
     {
-        private Record SimpleRecord()
+        Record SimpleRecord()
         {
             return new Record
             {
@@ -446,12 +446,6 @@ namespace Catalogue.Data.Write
                             .ToKeywordList();
                     }),
             };
-        }
-
-        [Test]
-        public void should_fail()
-        {
-            3.Should().Be(4);
         }
 
         [Test]

@@ -1,5 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 using Catalogue.Data.Indexes;
 using Catalogue.Data.Model;
 using Catalogue.Gemini.DataFormats;
@@ -7,7 +10,7 @@ using Catalogue.Utilities.Text;
 using Raven.Client;
 using Raven.Client.Linq;
 
-namespace Catalogue.Web.Controllers
+namespace Catalogue.Data.Query
 {
     public interface IRecordQueryer
     {
@@ -85,25 +88,25 @@ namespace Catalogue.Web.Controllers
                                        ?? r.Gemini.Abstract.TruncateNicely(200)
                         let format = DataFormatQueries.GetDataFormatInfo(r.Gemini.DataFormat)
                         select new ResultOutputModel
+                        {
+                            Id = r.Id,
+                            Title = title, // could be better; always want the whole title, highlighted
+                            Snippet = snippet,
+                            Format = new FormatOutputModel
                             {
-                                Id = r.Id,
-                                Title = title, // could be better; always want the whole title, highlighted
-                                Snippet = snippet,
-                                Format = new FormatOutputModel
-                                    {
-                                        Group = format.Group,
-                                        Glyph = format.Glyph,
-                                        Name = format.Name,
-                                    },
-                                Keywords = r.Gemini.Keywords,
-                                            //.OrderBy(k => k.Vocab != "http://vocab.jncc.gov.uk/jncc-broad-category") // show first
-                                            //.ThenBy(k => k.Vocab.IsBlank())
-                                            //.ThenBy(k => k.Vocab).ToList(),
-                                TopCopy = r.TopCopy,
-                                Date = r.Gemini.DatasetReferenceDate,
-                                ResourceType = r.Gemini.ResourceType.FirstCharToUpper(),
-                                Box = r.Gemini.BoundingBox,
-                            };
+                                Group = format.Group,
+                                Glyph = format.Glyph,
+                                Name = format.Name,
+                            },
+                            Keywords = r.Gemini.Keywords,
+                            //.OrderBy(k => k.Vocab != "http://vocab.jncc.gov.uk/jncc-broad-category") // show first
+                            //.ThenBy(k => k.Vocab.IsBlank())
+                            //.ThenBy(k => k.Vocab).ToList(),
+                            TopCopy = r.TopCopy,
+                            Date = r.Gemini.DatasetReferenceDate,
+                            ResourceType = r.Gemini.ResourceType.FirstCharToUpper(),
+                            Box = r.Gemini.BoundingBox,
+                        };
 
             // materializing the query will populate our stats, so do it before we try to use them!
             var results = query.ToList();

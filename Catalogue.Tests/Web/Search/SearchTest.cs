@@ -1,15 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Catalogue.Gemini.Model;
-using Catalogue.Web.Controllers;
-using Catalogue.Web.Controllers.Search;
+﻿using Catalogue.Data.Query;
 using NUnit.Framework;
 
 namespace Catalogue.Tests.Web.Search
 {
+    // no idea what this test is for
+
     internal class SearchTest : DatabaseTestFixture
     {
         private readonly RecordQueryInputModel _recordQueryInputModel = new RecordQueryInputModel()

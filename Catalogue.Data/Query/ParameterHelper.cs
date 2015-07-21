@@ -1,14 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using System.Text.RegularExpressions;
-using System.Web;
+using System.Threading.Tasks;
 using Catalogue.Gemini.Model;
 using Catalogue.Utilities.Text;
 using FluentAssertions;
 using NUnit.Framework;
 
-namespace Catalogue.Web.Controllers
+namespace Catalogue.Data.Query
 {
     public static class ParameterHelper
     {
@@ -20,24 +21,24 @@ namespace Catalogue.Web.Controllers
             List<MetadataKeyword> result = new List<MetadataKeyword>();
 
             var k1 = (from k in keywords
-                        where k.IsNotBlank() && k.IndexOf('/') == -1
-                        select new MetadataKeyword
-                            {
-                                Vocab = String.Empty,
-                                Value = k
-                            }).ToList();
+                      where k.IsNotBlank() && k.IndexOf('/') == -1
+                      select new MetadataKeyword
+                      {
+                          Vocab = String.Empty,
+                          Value = k
+                      }).ToList();
 
             result.AddRange(k1);
 
-            var k2 =  (from k in keywords
-                    where k.IsNotBlank()
-                    from m in Regex.Matches(k, @"^([\w\s/\.-]*)/([\w\s-]*)$", RegexOptions.IgnoreCase).Cast<Match>()
-                    let pair = m.Groups.Cast<Group>().Select(g => g.Value).Skip(1)
-                    select new MetadataKeyword
-                    {
-                        Vocab = "http://" + pair.ElementAt(0).Trim(),
-                        Value = pair.ElementAt(1).Trim()
-                    }
+            var k2 = (from k in keywords
+                      where k.IsNotBlank()
+                      from m in Regex.Matches(k, @"^([\w\s/\.-]*)/([\w\s-]*)$", RegexOptions.IgnoreCase).Cast<Match>()
+                      let pair = m.Groups.Cast<Group>().Select(g => g.Value).Skip(1)
+                      select new MetadataKeyword
+                      {
+                          Vocab = "http://" + pair.ElementAt(0).Trim(),
+                          Value = pair.ElementAt(1).Trim()
+                      }
                    ).ToList();
 
             result.AddRange(k2);
@@ -54,7 +55,7 @@ namespace Catalogue.Web.Controllers
         {
             string urlKeyword = "vocab.jncc.gov.uk/jncc-category/Seabed Habitat Maps";
 
-            var results = ParameterHelper.ParseKeywords(new [] { urlKeyword });
+            var results = ParameterHelper.ParseKeywords(new[] { urlKeyword });
 
             results.Should().HaveCount(1);
         }
@@ -64,7 +65,7 @@ namespace Catalogue.Web.Controllers
         {
             string urlKeyword = "Seabed Habitat Maps";
 
-            var results = ParameterHelper.ParseKeywords(new [] { urlKeyword });
+            var results = ParameterHelper.ParseKeywords(new[] { urlKeyword });
 
             results.Should().HaveCount(1);
         }
@@ -80,4 +81,5 @@ namespace Catalogue.Web.Controllers
             results.Should().HaveCount(0);
         }
     }
+
 }
