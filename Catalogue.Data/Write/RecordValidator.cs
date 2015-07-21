@@ -98,7 +98,7 @@ namespace Catalogue.Data.Write
             }
 
             // title must be reasonable length
-            if (record.Gemini.Title.Length > 150)
+            if (record.Gemini.Title != null && record.Gemini.Title.Length > 150)
             {
                 result.Errors.Add("Title is too long. 150 characters or less, please", r => r.Gemini.Title);
             }
