@@ -33,6 +33,7 @@ namespace Catalogue.Data.Seed
             using (var db = store.OpenSession())
             {
                 var s = new Seeder(db, new RecordService(db, new RecordValidator()));
+                
                 s.AddVocabularies();
                 s.AddMeshRecords();
                 s.AddSimpleGeminiExampleRecord();
@@ -41,7 +42,9 @@ namespace Catalogue.Data.Seed
                 s.AddSecureRecords();
                 s.AddNonTopCopyRecord();
                 s.AddVariousDataFormatRecords();
+                s.AddRecordWithUnusualCharactersInKeywords();
                 s.AddBboxes();
+
                 db.SaveChanges();
             }
         }
@@ -226,6 +229,23 @@ namespace Catalogue.Data.Seed
 
                 recordService.Insert(record);
             }
+        }
+
+        void AddRecordWithUnusualCharactersInKeywords()
+        {
+            var record = MakeExampleSeedRecord().With(r =>
+            {
+                r.Id = new Guid("1b875458-2c17-44f8-aae0-f6ed9902e70b");
+                r.Path = @"X:\path\for\record\with\unusual\characters\in\keywords";
+                r.Gemini = r.Gemini.With(m =>
+                {
+                    m.Title = "A record with unusual characters in keywords";
+                });
+                r.Gemini.Keywords.Add(new MetadataKeyword { Vocab = "http://vocab.jncc.gov.uk/human-activity", Value = "Extraction – Water (abstraction)" });
+                r.Gemini.Keywords.Add(new MetadataKeyword { Vocab = "http://vocab.jncc.gov.uk/some-vocab", Value = "Two words" });
+            });
+
+            recordService.Insert(record);
         }
 
         void AddBboxes()

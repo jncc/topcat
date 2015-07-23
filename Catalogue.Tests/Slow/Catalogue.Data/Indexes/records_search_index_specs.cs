@@ -21,11 +21,5 @@ namespace Catalogue.Tests.Slow.Catalogue.Data.Indexes
             results.Any(r => r.Gemini.Title.Contains("Study")).Should().BeTrue();
             results.Any(r => r.Gemini.Title.Contains("Estuaries")).Should().BeTrue();
         }
-
-//        [Test]
-//        public void can_search_by_keyword()
-//        {
-//            var result = 
-//        }
     }
 }

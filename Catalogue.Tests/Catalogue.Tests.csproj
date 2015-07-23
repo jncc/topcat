@@ -78,11 +78,13 @@
     <Compile Include="Explicit\feasibility_tests.cs" />
     <Compile Include="Explicit\Catalogue.Gemini\Vocabs\topic_category_codes.cs" />
     <Compile Include="Explicit\highlighting_wildcard_queries.cs" />
+    <Compile Include="Explicit\reproduce_unexpected_query_result.cs" />
     <Compile Include="Explicit\versioning_proof_of_concept.cs" />
     <Compile Include="ISOLanguage.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Slow\Catalogue.Data\Indexes\keywords_search_index_specs.cs" />
     <Compile Include="Slow\Catalogue.Data\Indexes\records_search_index_specs.cs" />
+    <Compile Include="Slow\Catalogue.Data\Query\record_queryer_specs.cs" />
     <Compile Include="Slow\Catalogue.Data\Seed\when_seeding.cs" />
     <Compile Include="Slow\Catalogue.Data\Versioning\versioning_specs.cs" />
     <Compile Include="Slow\Catalogue.Gemini\Validation\when_validating_the_example_document.cs" />

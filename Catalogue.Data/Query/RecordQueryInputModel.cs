@@ -6,8 +6,6 @@ namespace Catalogue.Data.Query
 {
     public class RecordQueryInputModel
     {
-        private string q;
-
         public RecordQueryInputModel()
         {
             N = 15;
@@ -25,6 +23,8 @@ namespace Catalogue.Data.Query
         /// The page number.
         /// </summary>
         public int P { get; set; }
+
+        string q;
 
         /// <summary>
         /// The full-text search query.

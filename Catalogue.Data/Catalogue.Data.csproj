@@ -90,6 +90,7 @@
     <Compile Include="Import\ImportUtility.cs" />
     <Compile Include="Import\Mappings\TopcatMapping.cs" />
     <Compile Include="Indexes\FieldNames.cs" />
+    <Compile Include="Indexes\MyIndex.cs" />
     <Compile Include="Indexes\RecordStreamingIndex.cs" />
     <Compile Include="Indexes\VocabularyIndex.cs" />
     <Compile Include="Indexes\VocabularyKeywordIndex.cs" />
