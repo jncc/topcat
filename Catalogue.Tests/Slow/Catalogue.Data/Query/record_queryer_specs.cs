@@ -37,7 +37,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Data.Query
         };
 
         [Test, TestCaseSource("KeywordTestCases")]
-        public void should_return_exact_matches_for_keywords(string keyword, int expected)
+        public void should_return_correct_result_count_for_keywords(string keyword, int expected)
         {
             var input = EmptyQuery().With(q => q.K = new [] { keyword });
             var output = new RecordQueryer(Db).SearchQuery(input);

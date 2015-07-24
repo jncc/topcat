@@ -59,9 +59,9 @@ namespace Catalogue.Data.Query
                     .Search(r => r.KeywordsN, input.Q);
             }
 
-            if (input.HasKeywords())
+            if (input.K != null && input.K.Any())
             {
-                foreach (var keyword in ParameterHelper.ParseKeywords(input.K))
+                foreach (var keyword in ParameterHelper.ParseMetadataKeywords(input.K))
                 {
                     string k = keyword.Vocab + "/" + keyword.Value;
                     query = query.Where(r => r.Keywords.Contains(k));

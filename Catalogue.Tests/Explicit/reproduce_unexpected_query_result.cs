@@ -39,14 +39,14 @@ namespace Catalogue.Tests.Explicit
             {
                 Action<string, int> testCase = (k, n) =>
                 {
-                    var query = db.Query<MyIndex.Result, MyIndex>()
-                        .Where(r => r.Keywords.Contains(k));
-                    var results = query.As<Record>().Take(10).ToList();
-                    results.Count.Should().Be(n);
+//                    var query = db.Query<MyIndex.Result, MyIndex>()
+//                        .Where(r => r.Keywords.Contains(k));
+//                    var results = query.As<Record>().Take(10).ToList();
+//                    results.Count.Should().Be(n);
 
-//                    var input = EmptyQuery().With(q => q.K = new[] { k });
-//                    var output = new RecordQueryer(db).SearchQuery(input);
-//                    output.Total.Should().Be(n);
+                    var input = EmptyQuery().With(q => q.K = new[] { k });
+                    var output = new RecordQueryer(db).SearchQuery(input);
+                    output.Total.Should().Be(n);
                 };
 
                 // todo how to deal with empty keyword?

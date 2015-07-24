@@ -1,9 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 using Catalogue.Gemini.Model;
 using Catalogue.Utilities.Text;
 using FluentAssertions;
@@ -16,69 +12,41 @@ namespace Catalogue.Data.Query
         /// <summary>
         /// Parses keywords from the format we use in URL parameters.
         /// </summary>
-        public static List<MetadataKeyword> ParseKeywords(IEnumerable<string> keywords)
+        public static IEnumerable<MetadataKeyword> ParseMetadataKeywords(IEnumerable<string> keywords)
         {
-            List<MetadataKeyword> result = new List<MetadataKeyword>();
+            foreach (string s in keywords)
+            {
+                int lastIndexOfSlash = s.LastIndexOf('/');
 
-            var k1 = (from k in keywords
-                      where k.IsNotBlank() && k.IndexOf('/') == -1
-                      select new MetadataKeyword
-                      {
-                          Vocab = String.Empty,
-                          Value = k
-                      }).ToList();
-
-            result.AddRange(k1);
-
-            var k2 = (from k in keywords
-                      where k.IsNotBlank()
-                      from m in Regex.Matches(k, @"^([\w\s/\.-]*)/([\w\s-]*)$", RegexOptions.IgnoreCase).Cast<Match>()
-                      let pair = m.Groups.Cast<Group>().Select(g => g.Value).Skip(1)
-                      select new MetadataKeyword
-                      {
-                          Vocab = "http://" + pair.ElementAt(0).Trim(),
-                          Value = pair.ElementAt(1).Trim()
-                      }
-                   ).ToList();
-
-            result.AddRange(k2);
-
-            return result;
+                if (lastIndexOfSlash == -1)
+                    yield return new MetadataKeyword { Vocab = String.Empty, Value = s.Trim() };
+                else
+                    yield return new MetadataKeyword
+                        {
+                            Vocab = "http://" + s.Substring(0, lastIndexOfSlash).Trim(),
+                            Value = s.Substring(lastIndexOfSlash + 1).Trim()
+                        };
+            }
         }
-
     }
 
     class parameter_helper_tests
     {
-        [Test]
-        public void should_parse_keywords()
+        static readonly object[] KeywordTestCases =
         {
-            string urlKeyword = "vocab.jncc.gov.uk/jncc-category/Seabed Habitat Maps";
+            new object[] { "", "", "" },
+            new object[] { "Seabed Habitat Maps", "", "Seabed Habitat Maps" },
+            new object[] { "vocab.jncc.gov.uk/jncc-category/Seabed Habitat Maps", "http://vocab.jncc.gov.uk/jncc-category", "Seabed Habitat Maps" },
+            new object[] { "vocab.jncc.gov.uk/some-vocab/Maps", "http://vocab.jncc.gov.uk/some-vocab", "Maps" },
+            new object[] { "vocab.jncc.gov.uk/some-vocab/Maps ", "http://vocab.jncc.gov.uk/some-vocab", "Maps" }, // space removed
+            new object[] { "vocab.jncc.gov.uk/some-vocab/Maps (brackets)", "http://vocab.jncc.gov.uk/some-vocab", "Maps (brackets)" },
+        };
 
-            var results = ParameterHelper.ParseKeywords(new[] { urlKeyword });
-
-            results.Should().HaveCount(1);
-        }
-
-        [Test]
-        public void should_parse_keywords_with_no_vocab()
+        [Test, TestCaseSource("KeywordTestCases")]
+        public void should_parse_keywords_as_expected(string input, string expectedVocab, string expectedValue)
         {
-            string urlKeyword = "Seabed Habitat Maps";
-
-            var results = ParameterHelper.ParseKeywords(new[] { urlKeyword });
-
-            results.Should().HaveCount(1);
-        }
-
-
-        [Test]
-        public void should_handle_empty_set_nicely()
-        {
-            string urlKeyword = String.Empty;
-
-            var results = ParameterHelper.ParseKeywords(new[] { urlKeyword });
-
-            results.Should().HaveCount(0);
+            var output = ParameterHelper.ParseMetadataKeywords(new[] { input });
+            output.Should().Contain(x => x.Vocab == expectedVocab && x.Value == expectedValue);
         }
     }
 

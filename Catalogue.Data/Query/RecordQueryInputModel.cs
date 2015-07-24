@@ -39,11 +39,5 @@ namespace Catalogue.Data.Query
         /// The keywords to restrict the query to.
         /// </summary>
         public string[] K { get; set; }
-
-        public bool HasKeywords()
-        {
-            return this.K != null && this.K.Any() && this.K.First().IsNotBlank();
-        }
     }
-
 }
