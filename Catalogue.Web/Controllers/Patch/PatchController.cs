@@ -15,12 +15,12 @@ namespace Catalogue.Web.Controllers.Patch
     public class PatchController : ApiController
     {
         readonly IDocumentSession db;
-        readonly IRecordQueryer queryer;
+        readonly IRecordQuerier querier;
 
-        public PatchController(IDocumentSession db, IRecordQueryer queryer)
+        public PatchController(IDocumentSession db, IRecordQuerier querier)
         {
             this.db = db;
-            this.queryer = queryer;
+            this.querier = querier;
         }
 
         [HttpPost, Route("api/patch/fixupkeywords")]
@@ -34,7 +34,7 @@ namespace Catalogue.Web.Controllers.Patch
 //                    N = 1024,
 //                };
 //
-//            var records1 = queryer.RecordQuery(query1);
+//            var records1 = querier.RecordQuery(query1);
 //
 //            foreach (var record in records1)
 //            {
@@ -56,7 +56,7 @@ namespace Catalogue.Web.Controllers.Patch
                 N = 1024,
             };
 
-            var records2 = queryer.RecordQuery(query2);
+            var records2 = querier.RecordQuery(query2);
 
             foreach (var record in records2)
             {
@@ -132,7 +132,7 @@ namespace Catalogue.Web.Controllers.Patch
                 N = 1024,
             };
 
-            var records = queryer.RecordQuery(query);
+            var records = querier.RecordQuery(query);
 
             foreach (var record in records)
             {

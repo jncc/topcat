@@ -10,13 +10,13 @@ using Raven.Client.Linq;
 
 namespace Catalogue.Web.Controllers
 {
-    public interface IRecordQueryer
+    public interface IRecordQuerier
     {
         RecordQueryOutputModel SearchQuery(RecordQueryInputModel input);
         IEnumerable<Record> RecordQuery(RecordQueryInputModel input);
     }
 
-    public class RecordQuerier : IRecordQueryer
+    public class RecordQuerier : IRecordQuerier
     {
         private readonly IDocumentSession _db;
 
