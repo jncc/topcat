@@ -4,6 +4,7 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
+using Catalogue.Data.Query;
 using Catalogue.Gemini.Model;
 using Catalogue.Utilities.Clone;
 using Catalogue.Web.Injection;

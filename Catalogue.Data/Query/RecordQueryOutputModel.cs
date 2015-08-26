@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using Catalogue.Gemini.Model;
 
-namespace Catalogue.Web.Controllers
+namespace Catalogue.Data.Query
 {
     public class RecordQueryOutputModel
     {

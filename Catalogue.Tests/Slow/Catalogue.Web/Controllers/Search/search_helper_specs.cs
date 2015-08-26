@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Runtime.InteropServices;
 using Catalogue.Data.Model;
+using Catalogue.Data.Query;
 using Catalogue.Gemini.Helpers;
 using Catalogue.Gemini.Templates;
 using Catalogue.Utilities.Clone;

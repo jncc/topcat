@@ -98,7 +98,7 @@ namespace Catalogue.Data.Write
             }
 
             // title must be reasonable length
-            if (record.Gemini.Title.Length > 150)
+            if (record.Gemini.Title != null && record.Gemini.Title.Length > 150)
             {
                 result.Errors.Add("Title is too long. 150 characters or less, please", r => r.Gemini.Title);
             }
@@ -430,7 +430,7 @@ namespace Catalogue.Data.Write
 
     internal class when_validating_at_basic_level
     {
-        private Record SimpleRecord()
+        Record SimpleRecord()
         {
             return new Record
             {
@@ -447,8 +447,6 @@ namespace Catalogue.Data.Write
                     }),
             };
         }
-
-
 
         [Test]
         public void should_produce_no_warnings_by_default()

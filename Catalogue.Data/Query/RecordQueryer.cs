@@ -1,14 +1,16 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 using Catalogue.Data.Indexes;
 using Catalogue.Data.Model;
-using Catalogue.Data.Query;
 using Catalogue.Gemini.DataFormats;
 using Catalogue.Utilities.Text;
 using Raven.Client;
 using Raven.Client.Linq;
 
-namespace Catalogue.Web.Controllers
+namespace Catalogue.Data.Query
 {
     public interface IRecordQueryer
     {
@@ -16,11 +18,11 @@ namespace Catalogue.Web.Controllers
         IEnumerable<Record> RecordQuery(RecordQueryInputModel input);
     }
 
-    public class RecordQuerier : IRecordQueryer
+    public class RecordQueryer : IRecordQueryer
     {
         private readonly IDocumentSession _db;
 
-        public RecordQuerier(IDocumentSession db)
+        public RecordQueryer(IDocumentSession db)
         {
             _db = db;
         }
@@ -57,18 +59,13 @@ namespace Catalogue.Web.Controllers
                     .Search(r => r.KeywordsN, input.Q);
             }
 
-            if (input.HasKeywords())
+            if (input.K != null && input.K.Any())
             {
                 foreach (var keyword in ParameterHelper.ParseMetadataKeywords(input.K))
                 {
                     string k = keyword.Vocab + "/" + keyword.Value;
                     query = query.Where(r => r.Keywords.Contains(k));
                 }
-            }
-
-            if (input.D != null)
-            {
-                query = query.Where(r => r.MetadataDate >= input.D);
             }
 
             return query.As<Record>() // ravendb method to project from the index result type to the actual document type
@@ -91,25 +88,25 @@ namespace Catalogue.Web.Controllers
                                        ?? r.Gemini.Abstract.TruncateNicely(200)
                         let format = DataFormatQueries.GetDataFormatInfo(r.Gemini.DataFormat)
                         select new ResultOutputModel
+                        {
+                            Id = r.Id,
+                            Title = title, // could be better; always want the whole title, highlighted
+                            Snippet = snippet,
+                            Format = new FormatOutputModel
                             {
-                                Id = r.Id,
-                                Title = title, // could be better; always want the whole title, highlighted
-                                Snippet = snippet,
-                                Format = new FormatOutputModel
-                                    {
-                                        Group = format.Group,
-                                        Glyph = format.Glyph,
-                                        Name = format.Name,
-                                    },
-                                Keywords = r.Gemini.Keywords,
-                                            //.OrderBy(k => k.Vocab != "http://vocab.jncc.gov.uk/jncc-broad-category") // show first
-                                            //.ThenBy(k => k.Vocab.IsBlank())
-                                            //.ThenBy(k => k.Vocab).ToList(),
-                                TopCopy = r.TopCopy,
-                                Date = r.Gemini.DatasetReferenceDate,
-                                ResourceType = r.Gemini.ResourceType.FirstCharToUpper(),
-                                Box = r.Gemini.BoundingBox,
-                            };
+                                Group = format.Group,
+                                Glyph = format.Glyph,
+                                Name = format.Name,
+                            },
+                            Keywords = r.Gemini.Keywords,
+                            //.OrderBy(k => k.Vocab != "http://vocab.jncc.gov.uk/jncc-broad-category") // show first
+                            //.ThenBy(k => k.Vocab.IsBlank())
+                            //.ThenBy(k => k.Vocab).ToList(),
+                            TopCopy = r.TopCopy,
+                            Date = r.Gemini.DatasetReferenceDate,
+                            ResourceType = r.Gemini.ResourceType.FirstCharToUpper(),
+                            Box = r.Gemini.BoundingBox,
+                        };
 
             // materializing the query will populate our stats, so do it before we try to use them!
             var results = query.ToList();

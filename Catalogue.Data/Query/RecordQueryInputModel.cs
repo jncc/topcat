@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using Catalogue.Utilities.Text;
 
-namespace Catalogue.Web.Controllers
+namespace Catalogue.Data.Query
 {
     public class RecordQueryInputModel
     {
@@ -26,11 +26,16 @@ namespace Catalogue.Web.Controllers
         /// </summary>
         public int P { get; set; }
 
+        string q;
+
         /// <summary>
         /// The full-text search query.
         /// </summary>
-        [DisplayFormat(ConvertEmptyStringToNull = false)]
-        public string Q { get; set; }
+        public string Q
+        {
+            get { return q ?? String.Empty; } // makes things easier on the client
+            set { q = value; }
+        }
 
         /// <summary>
         /// The keywords to restrict the query to.

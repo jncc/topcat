@@ -2,6 +2,7 @@
 using System.Linq;
 using Catalogue.Data.Indexes;
 using Catalogue.Data.Model;
+using Catalogue.Data.Query;
 using Catalogue.Gemini.DataFormats;
 using Catalogue.Utilities.Text;
 using Raven.Client;
@@ -37,7 +38,7 @@ namespace Catalogue.Web.Controllers
 
             if (input.HasKeywords())
             {
-                foreach (var keyword in ParameterHelper.ParseKeywords(input.K))
+                foreach (var keyword in ParameterHelper.ParseMetadataKeywords(input.K))
                 {
                     string k = keyword.Vocab + "/" + keyword.Value;
                     query = query.Where(r => r.Keywords.Contains(k));

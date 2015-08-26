@@ -1,4 +1,5 @@
 ﻿using System.Web.Http;
+using Catalogue.Data.Query;
 
 namespace Catalogue.Web.Controllers.Search
 {

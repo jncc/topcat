@@ -19,13 +19,12 @@ namespace Catalogue.Data
             return store;
         }
 
-        public static IDocumentStore InMemory()
+        public static IDocumentStore InMemory(int port = 8888)
         {
             return new InMemoryDatabaseHelper
             {
                 PreInitializationAction = store =>
                 {
-                    const int port = 8888;
                     store.Configuration.Port = port;
                     NonAdminHttp.EnsureCanListenToWhenInNonAdminContext(port);
                     store.UseEmbeddedHttpServer = true;

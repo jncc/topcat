@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Catalogue.Data.Query;
 using Catalogue.Web.Controllers;
 using Catalogue.Web.Controllers.Export;
 using FluentAssertions;

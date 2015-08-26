@@ -8,6 +8,7 @@ using System.Text;
 using System.Web.Http;
 using Catalogue.Data.Indexes;
 using Catalogue.Data.Model;
+using Catalogue.Data.Query;
 using Newtonsoft.Json;
 using Raven.Client;
 using Raven.Client.Document.Async;

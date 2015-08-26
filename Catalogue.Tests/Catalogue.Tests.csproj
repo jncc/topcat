@@ -78,17 +78,19 @@
     <Compile Include="Explicit\feasibility_tests.cs" />
     <Compile Include="Explicit\Catalogue.Gemini\Vocabs\topic_category_codes.cs" />
     <Compile Include="Explicit\highlighting_wildcard_queries.cs" />
+    <Compile Include="Explicit\reproduce_unexpected_query_result.cs" />
     <Compile Include="Explicit\versioning_proof_of_concept.cs" />
     <Compile Include="ISOLanguage.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Slow\Catalogue.Data\Indexes\keywords_search_index_specs.cs" />
     <Compile Include="Slow\Catalogue.Data\Indexes\records_search_index_specs.cs" />
+    <Compile Include="Slow\Catalogue.Data\Query\record_queryer_specs.cs" />
     <Compile Include="Slow\Catalogue.Data\Seed\when_seeding.cs" />
     <Compile Include="Slow\Catalogue.Data\Versioning\versioning_specs.cs" />
     <Compile Include="Slow\Catalogue.Gemini\Validation\when_validating_the_example_document.cs" />
     <Compile Include="Slow\Catalogue.Import\when_importing_mesh_data.cs" />
     <Compile Include="Slow\Catalogue.Web\Controllers\Export\export_controller_tests.cs" />
-    <Compile Include="Slow\Catalogue.Web\Controllers\search_helper_specs.cs" />
+    <Compile Include="Slow\Catalogue.Web\Controllers\Search\search_helper_specs.cs" />
     <Compile Include="Slow\Spatial\when_querying_spatial_test_data.cs" />
     <Compile Include="Slow\when_testing_this_application.cs" />
     <Compile Include="DatabaseTestFixture.cs" />
@@ -98,9 +100,7 @@
     <None Include="app.config" />
     <None Include="packages.config" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Slow\Catalogue.Web\Controllers\Search\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <ProjectReference Include="..\Catalogue.Data\Catalogue.Data.csproj">
       <Project>{3ad6b61c-cab1-4cc4-8895-ba2dd3b58c59}</Project>

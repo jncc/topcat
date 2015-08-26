@@ -8,6 +8,7 @@ using System.Net.Http.Headers;
 using System.Web.Http;
 using Catalogue.Data.Export;
 using Catalogue.Data.Model;
+using Catalogue.Data.Query;
 using Catalogue.Utilities.Clone;
 using Raven.Client;
 
