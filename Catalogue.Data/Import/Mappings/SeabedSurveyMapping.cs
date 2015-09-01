@@ -31,6 +31,44 @@ namespace Catalogue.Data.Import.Mappings
                 {
                     Vocabularies.JnccCategory,
                     Vocabularies.JnccDomain,
+//                    new Vocabulary
+//                    {
+//                        Id = "http://vocab.jncc.gov.uk/seabed-survey-vessel",
+//                        Name = "Survey Vessel",
+//                        Description = "Management keyword for Offshore Seabed Survey",
+//                        Controlled = false,
+//                        Keywords = new List<VocabularyKeyword>(),
+//                    },
+//                    new Vocabulary
+//                    {
+//                        Id = "http://vocab.jncc.gov.uk/location",
+//                        Name = "Location",
+//                        Description = "Location keyword. Could be moved to the Gemini location field.",
+//                        Controlled = false,
+//                        Keywords = new List<VocabularyKeyword>(),
+//                    },
+//                    new Vocabulary
+//                    {
+//                        Id = "http://vocab.jncc.gov.uk/seabed-survey-technique",
+//                        Name = "Seabed Survey Technique",
+//                        Description = "Used by MESH",
+//                        PublicationDate = "2013",
+//                        Publishable = false,
+//                        Controlled = true,
+//                        Keywords = new List<VocabularyKeyword>()
+//                    },
+//                    new Vocabulary
+//                    {
+//                        Id = "http://vocab.jncc.gov.uk/seabed-survey-data-type",
+//                        Name = "Seabed Survey Data Type",
+//                        Description = "Used by MESH",
+//                        Publishable = false,
+//                        Controlled = true,
+//                        Keywords = new List<VocabularyKeyword>
+//                        {
+//                            new VocabularyKeyword { Value = "Processed" }
+//                        }
+//                    },
                 };
             }
         }
@@ -50,12 +88,29 @@ namespace Catalogue.Data.Import.Mappings
                 Map(m => m.Title).Field("Gemini.Title");
                 Map(m => m.Abstract).Field("Gemini.Abstract");
                 Map(m => m.TopicCategory).Field("Gemini.TopicCategory", value => value.FirstCharToLower());
-                Map(m => m.Keywords).Value(new List<MetadataKeyword>
+                Map(m => m.Keywords).ConvertUsing(row =>
+                {
+                    string surveyVessel = row.GetField("Gemini.Keywords.Survey vessel ");
+                    string cruiseId = row.GetField("Gemini.Keywords.Cruise ID ");
+                    string site = row.GetField("Gemini.Keywords.Site ");
+                    string technique = row.GetField("Gemini.Keywords.Seabed Survey Technique  ");
+                    string dataType = row.GetField("Gemini.Keywords.Data Type  ");
+
+                    var keywords = new List<MetadataKeyword>
                     {
-                        new MetadataKeyword { Vocab = "http://vocab.jncc.gov.uk/jncc-domain", Value = "Marine" },
-                        new MetadataKeyword { Vocab = "http://vocab.jncc.gov.uk/jncc-category", Value = "Seabed Survey"},
-                    });
-                //todo additional columns
+                        new MetadataKeyword {Vocab = "http://vocab.jncc.gov.uk/jncc-domain", Value = "Marine"},
+                        new MetadataKeyword {Vocab = "http://vocab.jncc.gov.uk/jncc-category", Value = "Seabed Survey"},
+                        new MetadataKeyword {Vocab = "http://vocab.jncc.gov.uk/seabed-survey-vessel", Value = surveyVessel},
+                        new MetadataKeyword {Vocab = "http://vocab.jncc.gov.uk/seabed-survey-cruise-id", Value = cruiseId },
+                        new MetadataKeyword {Vocab = "http://vocab.jncc.gov.uk/location", Value = site },
+                        new MetadataKeyword {Vocab = "http://vocab.jncc.gov.uk/seabed-survey-data-type", Value = dataType},
+                    };
+
+                    if (technique.IsNotBlank())
+                        keywords.Add(new MetadataKeyword {Vocab = "http://vocab.jncc.gov.uk/seabed-survey-technique", Value = technique });
+
+                    return keywords;
+                });
                 Map(m => m.TemporalExtent).ConvertUsing(row => new TemporalExtent
                     {
                         Begin = row.GetField("TemporalExtent.Begin"),
@@ -159,7 +214,7 @@ namespace Catalogue.Data.Import.Mappings
         [Test]
         public void should_import_expected_number_of_records()
         {
-            imported.Count().Should().Be(700);
+            imported.Count().Should().Be(45);
         }
     }
 
