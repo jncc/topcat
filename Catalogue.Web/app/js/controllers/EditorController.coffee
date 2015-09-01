@@ -9,6 +9,7 @@
         # store a vocabulator scope here to save state between modal instances
         $scope.vocabulator = {}
         
+        # todo please delete this now
         #Allow jQuery calls so we can use some of it's convenient tests, No DOM mods please
         $scope.$ = $
         
