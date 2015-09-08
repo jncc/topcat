@@ -44,6 +44,7 @@ namespace Catalogue.Data.Import.Mappings
             // there's no id field because they deleted it
             config.WillThrowOnMissingField = false;
         }
+
         public sealed class GeminiMap : CsvClassMap<Metadata>
         {
             public GeminiMap()
