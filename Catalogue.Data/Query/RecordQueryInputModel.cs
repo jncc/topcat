@@ -17,7 +17,7 @@ namespace Catalogue.Data.Query
         }
 
         /// <summary>
-        /// The number of records (page size).
+        /// The number of records (page size). Use a negative value for no paging.
         /// </summary>
         public int N { get; set; }
 

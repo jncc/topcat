@@ -25,6 +25,24 @@ namespace Catalogue.Data.Export
         }
 
 
+        public void ExportHeader(TextWriter writer)
+        {
+            var csv = new CsvWriter(writer);
+
+            TopcatMapping.ApplyStandardTopcatCsvConfiguration(csv.Configuration);
+
+            csv.WriteHeader<Record>();
+        }
+
+        public void ExportRecord(Record record, TextWriter writer)
+        {
+            var csv = new CsvWriter(writer);
+
+            TopcatMapping.ApplyStandardTopcatCsvConfiguration(csv.Configuration);
+
+            csv.WriteRecord(record);
+        }
+
         public class MetadataKeywordConverter : DefaultTypeConverter
         {
             public override bool CanConvertTo(Type type)
@@ -63,5 +81,6 @@ namespace Catalogue.Data.Export
             }
         }
     }
+
 
 }

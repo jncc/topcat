@@ -37,4 +37,33 @@ namespace Catalogue.Tests
             Db.Dispose();
         }
     }
+
+
+    public class AsyncDatabaseTestFixture
+    {
+        public static IDocumentStore ReusableDocumentStore { get; set; }
+
+        static AsyncDatabaseTestFixture()  
+        {
+            // initialise the ResusableDocumentStore once, in this static constructor
+            ReusableDocumentStore = DatabaseFactory.InMemory();
+        }
+
+        /// <summary>
+        /// An Async document session open for the lifetime of the test fixture.
+        /// </summary>
+        protected IAsyncDocumentSession Db;
+
+        [TestFixtureSetUp]
+        public void TestFixtureSetUp()
+        {
+            Db = ReusableDocumentStore.OpenAsyncSession();
+        }
+
+        [TestFixtureTearDown]
+        public void TestFixtureTearDown()
+        {
+            Db.Dispose();
+        }
+    }
 }

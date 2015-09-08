@@ -5,61 +5,67 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
+using System.Text;
 using System.Web.Http;
 using Catalogue.Data.Export;
 using Catalogue.Data.Model;
 using Catalogue.Data.Query;
 using Catalogue.Utilities.Clone;
+using Newtonsoft.Json;
 using Raven.Client;
 
 namespace Catalogue.Web.Controllers.Export
 {
     public class ExportController : ApiController
     {
-        RecordQuerier _querier;
+        IDocumentSession _db;
+        IRecordQueryer recordQueryer;
 
-        public ExportController(RecordQuerier _querier)
+        public ExportController(IDocumentSession db, IRecordQueryer recordQueryer)
         {
-            this._querier = _querier;
+            this._db = db;
+            this.recordQueryer = recordQueryer;
         }
 
         public HttpResponseMessage Get([FromUri] RecordQueryInputModel input)
         {
-            var records = FetchRecords(input);
+            using (var adb = _db.Advanced.DocumentStore.OpenAsyncSession())
+            {
+                var response = new HttpResponseMessage();
 
-            var writer = new StringWriter();
-            new Exporter().Export(records, writer);
+                response.Content = new PushStreamContent(
+                    async (stream,  content,  context) =>
+                    {
+                        using (stream)
+                        using (var enumerator = await adb.Advanced.StreamAsync(recordQueryer.AsyncRecordQuery(adb,input)))
+                        {
+                            var writeHeaders = true;
+                            while (await enumerator.MoveNextAsync())
+                            {
+                                var writer = new StringWriter();
+                                var exporter = new Exporter();
+                                if (writeHeaders)
+                                {
+                                    exporter.ExportHeader(writer);
+                                    writeHeaders = false;
+                                }
 
-            var result = new HttpResponseMessage(HttpStatusCode.OK) {Content = new StringContent(writer.ToString())};
+                                exporter.ExportRecord(enumerator.Current.Document, writer);
+                                var data = UTF8Encoding.UTF8.GetBytes(writer.ToString());
 
-            result.Content.Headers.ContentDisposition = new ContentDispositionHeaderValue("attachment")
+                                await stream.WriteAsync(data, 0, data.Length);
+                            }
+                        }
+                    });
+
+                response.Content.Headers.ContentDisposition = new ContentDispositionHeaderValue("attachment")
                 {
-                    FileName = "topcat-export-" + DateTime.Now.ToString("yyyyMMdd-HHmmss") + ".txt"
+                    FileName = "topcat-export-" + DateTime.Now.ToString("yyyyMMdd-HHmmss") + ".csv"
                 };
-            result.Content.Headers.ContentType = new MediaTypeHeaderValue("application/octet-stream");
+                response.Content.Headers.ContentType = new MediaTypeHeaderValue("application/octet-stream");
 
-            return result;
-        }
-
-        /// <summary>
-        /// This is public because I don't have time right now to split things up to test it any better.
-        /// </summary>
-        public List<Record> FetchRecords(RecordQueryInputModel input)
-        {
-            // todo will need to use ravendb streaming or increase db page size for larger exports            
-
-            var query = input.With(x =>
-                {
-                    x.P = 0;
-                    x.N = 1024;
-                });
-
-            var results = _querier.RecordQuery(query).ToList();
-
-            if (results.Count >= 1024)
-                throw new InvalidOperationException("We don't support exports this large yet.");
-
-            return results;
+                return response;
+            }
         }
     }
 }

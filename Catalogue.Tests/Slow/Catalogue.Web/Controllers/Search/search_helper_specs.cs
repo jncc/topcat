@@ -11,6 +11,7 @@ using Catalogue.Web.Controllers;
 using FluentAssertions;
 using NUnit.Framework;
 using Raven.Database.Indexing.Collation;
+using RecordQueryer = Catalogue.Web.Controllers.RecordQueryer;
 
 namespace Catalogue.Tests.Slow.Catalogue.Web.Controllers.Search
 {
@@ -37,7 +38,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Web.Controllers.Search
         [Test]
         public void keyword_search_test()
         {
-            var helper = new RecordQuerier(Db);
+            var helper = new RecordQueryer(Db);
 
             var input = new RecordQueryInputModel
                 {
@@ -73,7 +74,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Web.Controllers.Search
 
             using (var db2 = ReusableDocumentStore.OpenSession())
             {
-                var helper = new RecordQuerier(db2);
+                var helper = new RecordQueryer(db2);
 
                 var input = new RecordQueryInputModel
                 {

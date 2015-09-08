@@ -1,6 +1,7 @@
 ﻿using Catalogue.Data.Query;
 using Catalogue.Web.Controllers;
 using NUnit.Framework;
+using RecordQueryer = Catalogue.Web.Controllers.RecordQueryer;
 
 namespace Catalogue.Tests.Web.Search
 {
@@ -15,19 +16,19 @@ namespace Catalogue.Tests.Web.Search
             P= 0
         };
 
-        private RecordQuerier _recordQuerier;
+        private RecordQueryer _recordQueryer;
         private const int PageSize = 25;
 
         [TestFixtureSetUp]
         public void setUp()
         {
-            _recordQuerier = new RecordQuerier(Db);
+            _recordQueryer = new RecordQueryer(Db);
         }
         [Test]
         public void WhenPagingCheckCountIsAsExpected()
         {
             // do not perform a full text search, so should be fewer results
-            var results = _recordQuerier.SearchQuery(_recordQueryInputModel);
+            var results = _recordQueryer.SearchQuery(_recordQueryInputModel);
             Assert.AreEqual(results.Results.Count, 25);
             var totalReturned = results.Results.Count;
             // loop through each page
@@ -35,7 +36,7 @@ namespace Catalogue.Tests.Web.Search
             for (int i = 1; i <= pages; i++)
             {
                 _recordQueryInputModel.P = i;
-                results = _recordQuerier.SearchQuery(_recordQueryInputModel);
+                results = _recordQueryer.SearchQuery(_recordQueryInputModel);
                 totalReturned += results.Results.Count;
             }
             Assert.AreEqual(results.Total,totalReturned);

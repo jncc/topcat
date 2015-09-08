@@ -32,10 +32,6 @@ namespace Catalogue.Web.Injection
                 .ToMethod(x => WebApiApplication.DocumentStore.OpenSession())
                 .InRequestScope();
 
-            Bind<IAsyncDocumentSession>()
-                .ToMethod(x => WebApiApplication.DocumentStore.OpenAsyncSession())
-                .InRequestScope();
-
             // convenience binding for the asp.net-provided current user
             // which is used by the once-per-request user context object
             Bind<IPrincipal>().ToMethod(x => HttpContext.Current.User);

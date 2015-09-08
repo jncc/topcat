@@ -10,17 +10,18 @@ using Raven.Client.Linq;
 
 namespace Catalogue.Web.Controllers
 {
-    public interface IRecordQuerier
+    public interface IRecordQueryer
     {
         RecordQueryOutputModel SearchQuery(RecordQueryInputModel input);
         IEnumerable<Record> RecordQuery(RecordQueryInputModel input);
+        IQueryable<Record> AsyncRecordQuery(IAsyncDocumentSession adb, RecordQueryInputModel input);
     }
 
-    public class RecordQuerier : IRecordQuerier
+    public class RecordQueryer : IRecordQueryer
     {
         private readonly IDocumentSession _db;
 
-        public RecordQuerier(IDocumentSession db)
+        public RecordQueryer(IDocumentSession db)
         {
             _db = db;
         }
@@ -32,14 +33,23 @@ namespace Catalogue.Web.Controllers
         FieldHighlightings abstractLites;
         FieldHighlightings abstractNLites;
 
+        public IQueryable<Record> AsyncRecordQuery(IAsyncDocumentSession adb, RecordQueryInputModel input)
+        {
+            var query =  adb.Query<RecordIndex.Result, RecordIndex>()
+                .Statistics(out stats);
+
+            return RecordQueryImpl(input, query);
+        }
+
+
         /// <summary>
         /// A general-purpose query that returns records.
         /// Can be materialised as-is, or customised further (see SearchQuery method).
-        /// We may need to refactor this to support ravendb streaming for larger result sets.
         /// </summary>
         public IEnumerable<Record> RecordQuery(RecordQueryInputModel input)
         {
-            var query = _db.Query<RecordIndex.Result, RecordIndex>()
+            
+            var query =  _db.Query<RecordIndex.Result, RecordIndex>()
                 .Statistics(out stats)
                 .Customize(x => x.Highlight("Title", 202, 1, out titleLites))
                 .Customize(x => x.Highlight("TitleN", 202, 1, out titleNLites))
@@ -47,6 +57,12 @@ namespace Catalogue.Web.Controllers
                 .Customize(x => x.Highlight("AbstractN", 202, 1, out abstractNLites))
                 .Customize(x => x.SetHighlighterTags("<b>", "</b>"));
 
+            return RecordQueryImpl(input, query).ToList();
+
+        }
+        
+        IQueryable<Record> RecordQueryImpl(RecordQueryInputModel input, IQueryable<RecordIndex.Result> query)
+        {
             if (input.Q.IsNotBlank())
             {
                 query = query
@@ -71,11 +87,19 @@ namespace Catalogue.Web.Controllers
                 query = query.Where(r => r.MetadataDate >= input.D);
             }
 
-            return query.As<Record>() // ravendb method to project from the index result type to the actual document type
-                    .Skip(input.P * input.N)
-                    .Take(input.N)
-                    .ToList();
+            var recordQuery = query.As<Record>(); // ravendb method to project from the index result type to the actual document type
+
+            // allow N to be negative
+            if (input.N >= 0)
+            {
+                recordQuery = recordQuery.Skip(input.P * input.N).Take(input.N);
+            }
+
+
+            return recordQuery;
         }
+
+
 
         /// <summary>
         /// A query for the Google-style search results page.

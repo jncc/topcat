@@ -18,20 +18,20 @@ namespace Catalogue.Tests.Explicit.Catalogue.Data.Export
     class octonaughts_lets_do_this : DatabaseTestFixture
     {
 
-        [Test, Explicit]
-        public void foo()
-        {
-            var query = Db.Query<Record>().Where(r => r.Gemini.Title == "Broadscale remote survey and mapping of sublittoral habitats and their associated biota in the Firth of Lorn: biotopes");
-            var records = query.ToList();
+        //[Test, Explicit]
+        //public void foo()
+        //{
+        //    var query = Db.Query<Record>().Where(r => r.Gemini.Title == "Broadscale remote survey and mapping of sublittoral habitats and their associated biota in the Firth of Lorn: biotopes");
+        //    var records = query.ToList();
 
-            records.Any().Should().BeTrue();
+        //    records.Any().Should().BeTrue();
 
-            using (var writer = File.CreateText(@"c:\deleteme.txt"))
-            {
-                var exporter = new Exporter();
-                exporter.Export(records, writer);
-            }
-        }
+        //    using (var writer = File.CreateText(@"c:\deleteme.txt"))
+        //    {
+        //        var exporter = new Exporter(writer);
+        //        exporter.Export(records, writer);
+        //    }
+        //}
 
         [Test, Explicit]
         public void go()
