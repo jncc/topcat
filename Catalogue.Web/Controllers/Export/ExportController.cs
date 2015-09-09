@@ -27,8 +27,14 @@ namespace Catalogue.Web.Controllers.Export
             this.recordQueryer = recordQueryer;
         }
 
+        /// <summary>
+        /// Exports a csv file of records using the standard export format. 
+        /// Ignores the paging parameter P and size parameter N
+        /// </summary>
         public HttpResponseMessage Get([FromUri] RecordQueryInputModel input)
         {
+            input.P = 0;
+            input.N = -1; 
             using (var adb = _db.Advanced.DocumentStore.OpenAsyncSession())
             {
                 var response = new HttpResponseMessage();
