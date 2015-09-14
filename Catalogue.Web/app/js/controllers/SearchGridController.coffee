@@ -1,4 +1,4 @@
-﻿angular.module('app.controllers').controller 'ResultGridController',
+﻿angular.module('app.controllers').controller 'SearchGridController',
     ($scope) ->    
         $scope.glyphColDef = {field: 'format.glyph', 
         displayName: '',
@@ -21,7 +21,7 @@
         displayName: 'Title',
         width: 300,
         cellTemplate: '<div class="non-overflowing-cell cell-padding">
-            <a ng-href="#/editor/{{row.entity.id}}" ng-bind-html="row.entity.title"></span>
+            <a target="_blank" ng-href="#/editor/{{row.entity.id}}" ng-bind-html="row.entity.title"></span>
         </div>'
         }
         

@@ -1,5 +1,5 @@
 ﻿(function() {
-  angular.module('app.controllers').controller('ResultGridController', function($scope) {
+  angular.module('app.controllers').controller('SearchGridController', function($scope) {
     $scope.glyphColDef = {
       field: 'format.glyph',
       displayName: '',
@@ -17,7 +17,7 @@
       field: 'title',
       displayName: 'Title',
       width: 300,
-      cellTemplate: '<div class="non-overflowing-cell cell-padding"> <a ng-href="#/editor/{{row.entity.id}}" ng-bind-html="row.entity.title"></span> </div>'
+      cellTemplate: '<div class="non-overflowing-cell cell-padding"> <a target="_blank" ng-href="#/editor/{{row.entity.id}}" ng-bind-html="row.entity.title"></span> </div>'
     };
     $scope.snippetColDef = {
       field: 'snippet',
