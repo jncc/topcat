@@ -5,10 +5,11 @@
         $scope.vocabulator = {} if !$scope.vocabulator
         m = $scope.vocabulator
 
-        m.allVocabs = {} if !m.allVocabs                            # all vocabs, loaded at the start
-        m.filteredVocabs = {} if !m.filteredVocabs                  # filtered vocabs after typing / searching
-        m.selectedVocab = {} if !m.selectedVocab                    # the currently selected vocab object out of allVocabs
-        m.loadedVocab = null if !m.loadedVocab                      # the curently loaded full vocab entity
+        m.allVocabs = {} if !m.allVocabs            # all vocabs, loaded at the start
+        m.filteredVocabs = {} if !m.filteredVocabs  # filtered vocabs after typing / searching
+        m.selectedVocab = {} if !m.selectedVocab    # the currently selected vocab object out of allVocabs
+        m.loadedVocab = null if !m.loadedVocab      # the curently loaded full vocab entity
+        m.foundKeywords = [] if !m.foundKewords     # keywords found after typing / searching
         
         $scope.vocabulator.found  = {} if !$scope.vocabulator.found
         
@@ -38,10 +39,10 @@
         findKeywords = ->
             if $scope.vocabulator.q
                 $http.get '../api/keywords?q=' + $scope.vocabulator.q
-                    .success (result) -> $scope.vocabulator.found.keywords = result
+                    .success (result) -> $scope.vocabulator.foundKeywords = result
                     .error (e) -> $scope.notifications.add 'Oops! ' + e.message
             else
-                $scope.vocabulator.found.keywords = []
+                $scope.vocabulator.foundKeywords = []
 
         $scope.doFind = (q, older) ->
             if q isnt older # do nothing initially

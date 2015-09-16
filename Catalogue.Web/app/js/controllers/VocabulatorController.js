@@ -17,6 +17,9 @@
     if (!m.loadedVocab) {
       m.loadedVocab = null;
     }
+    if (!m.foundKewords) {
+      m.foundKeywords = [];
+    }
     if (!$scope.vocabulator.found) {
       $scope.vocabulator.found = {};
     }
@@ -54,12 +57,12 @@
     findKeywords = function() {
       if ($scope.vocabulator.q) {
         return $http.get('../api/keywords?q=' + $scope.vocabulator.q).success(function(result) {
-          return $scope.vocabulator.found.keywords = result;
+          return $scope.vocabulator.foundKeywords = result;
         }).error(function(e) {
           return $scope.notifications.add('Oops! ' + e.message);
         });
       } else {
-        return $scope.vocabulator.found.keywords = [];
+        return $scope.vocabulator.foundKeywords = [];
       }
     };
     $scope.doFind = function(q, older) {
