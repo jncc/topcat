@@ -111,7 +111,7 @@ module.directive 'tcBindScrollPosition', ($parse, $timeout) ->
     link: (scope, elem, attrs) ->
         getter = $parse attrs.tcBindScrollPosition # see docs for $parse
         value = getter scope
-        # hack: delay to avoid setting the scroll before it has content
+        # delay to avoid setting the scroll before it has content
         ($timeout (-> elem[0].scrollTop = value), 0) if value
         elem.bind 'scroll', ->
             setter = getter.assign
