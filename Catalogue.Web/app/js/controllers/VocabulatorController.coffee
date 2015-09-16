@@ -3,27 +3,37 @@
     ($scope, $http, colourHasher) -> 
         
         $scope.vocabulator = {} if !$scope.vocabulator
-        $scope.vocabulator.vocabs = {} if !$scope.vocabulator.vocabs
-        $scope.vocabulator.vocab  = {} if !$scope.vocabulator.vocab
+        m = $scope.vocabulator
+
+        m.allVocabs = {} if !m.allVocabs                            # all vocabs, loaded at the start
+        m.filteredVocabs = {} if !m.filteredVocabs                  # filtered vocabs after typing / searching
+        m.selectedVocab = {} if !m.selectedVocab                    # the currently selected vocab object out of allVocabs
+        m.loadedVocab = null if !m.loadedVocab                      # the curently loaded full vocab entity
+        
         $scope.vocabulator.found  = {} if !$scope.vocabulator.found
-                    
-        $scope.colourHasher = colourHasher
+        
+        # selectedKeyword
+        # keywords??
+        # scrollPositions
+        
+        $scope.colourHasher = colourHasher # make available in view
         
         clearCurrentVocab = ->
-            $scope.vocabulator.vocab = {}
-            $scope.vocabulator.selectedVocab = {}
+            m.loadedVocab = {}
+            m.selectedVocab = {}
             
         # load all the vocabs if not already loaded - we'll filter them client-side
-        if !$scope.vocabulator.vocabs.all
+        if angular.equals m.allVocabs, {}
             $http.get('../api/vocabularylist').success (result) ->
-                $scope.vocabulator.vocabs.all = result
-                $scope.vocabulator.vocabs.filtered = result
+                m.allVocabs = result
+                m.filteredVocabs = result
         
         findVocabs = ->
-            if $scope.vocabulator.vocabs.all # check they've all loaded
+            if !angular.equals m.allVocabs, {} # check they've all loaded
                 q = $scope.vocabulator.q.toLowerCase()
-                filtered = (v for v in $scope.vocabulator.vocabs.all when v.name.toLowerCase().indexOf(q) isnt -1)
-                $scope.vocabulator.vocabs.filtered = filtered
+                console.log q
+                filtered = (v for v in m.allVocabs when v.name.toLowerCase().indexOf(q) isnt -1)
+                m.filteredVocabs = filtered
         
         findKeywords = ->
             if $scope.vocabulator.q
@@ -47,7 +57,7 @@
         loadVocab = (vocab, old) ->
             if vocab and vocab isnt old
                 $http.get '../api/vocabularies?id=' + encodeURIComponent vocab.id
-                    .success (result) -> $scope.vocabulator.vocab = result
+                    .success (result) -> m.loadedVocab = result
                     .error (e) -> $scope.notifications.add 'Oops! ' + e.message
                 
         # when a vocab is selected, load the full document (to show all its keywords)
