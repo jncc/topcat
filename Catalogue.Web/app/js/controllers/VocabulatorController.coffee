@@ -8,17 +8,16 @@ angular.module('app.controllers').controller 'VocabulatorController',
         # because we want to save the state of the vocabulator dialog when closed
         if angular.equals {}, $scope.vocabulator
             angular.extend $scope.vocabulator,
-                q:               ''  # the vocabulator search string
-                allVocabs:       []  # all vocabs, loaded at the start
-                filteredVocabs:  []  # filtered vocabs after searching
-                selectedVocab:   {}  # the currently selected vocab object from the allVocabs list
-                loadedVocab:     {}  # the curently loaded full vocab entity
-                foundKeywords:   []  # keywords found after searching
-                selectedKeyword: {}  # the currently selected keyword
+                q:                ''  # the vocabulator search string
+                allVocabs:        []  # list of all vocabs, loaded at the start
+                filteredVocabs:   []  # filtered vocabs after searching
+                selectedVocab:    {}  # the currently selected vocab object from the allVocabs list
+                loadedVocab:      {}  # the curently loaded full vocab entity
+                foundKeywords:    []  # keywords found after searching
+                selectedKeywords: []  # the currently selected keyword(s)
         m = $scope.vocabulator
         
         $scope.colourHasher = colourHasher # make available to the view
-        
             
         # load all the vocabs if not already loaded - we'll filter them client-side
         if !m.allVocabs.length
@@ -43,7 +42,7 @@ angular.module('app.controllers').controller 'VocabulatorController',
                         .error (e) -> $scope.notifications.add 'Oops! ' + e.message
             if q isnt older # do nothing initially
                 # support adding vocabless keywords - just use what's been typed in!
-                m.selectedKeyword = { vocab: '', value: m.q }
+                #m.selectedKeyword = { vocab: '', value: m.q }
                 clearCurrentVocab()
                 findVocabs()
                 findKeywords()            
@@ -60,7 +59,10 @@ angular.module('app.controllers').controller 'VocabulatorController',
         # when a vocab is selected, load the full document (to show all its keywords)
         $scope.$watch 'vocabulator.selectedVocab', loadVocab
                 
-        $scope.selectKeyword = (k) -> m.selectedKeyword = k
+        $scope.selectKeyword = (k) -> m.selectedKeywords.push k
                         
-        $scope.close = -> $scope.$close(m.selectedKeyword)
+        $scope.close = ->
+            selectedKeywords = m.selectedKeywords
+            m.selectedKeywords = [] # clear the selected keywords for next time
+            $scope.$close(selectedKeywords)
         

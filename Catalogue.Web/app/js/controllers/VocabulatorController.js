@@ -9,7 +9,7 @@
         selectedVocab: {},
         loadedVocab: {},
         foundKeywords: [],
-        selectedKeyword: {}
+        selectedKeywords: []
       });
     }
     m = $scope.vocabulator;
@@ -55,10 +55,6 @@
         }
       };
       if (q !== older) {
-        m.selectedKeyword = {
-          vocab: '',
-          value: m.q
-        };
         clearCurrentVocab();
         findVocabs();
         return findKeywords();
@@ -76,10 +72,13 @@
     };
     $scope.$watch('vocabulator.selectedVocab', loadVocab);
     $scope.selectKeyword = function(k) {
-      return m.selectedKeyword = k;
+      return m.selectedKeywords.push(k);
     };
     return $scope.close = function() {
-      return $scope.$close(m.selectedKeyword);
+      var selectedKeywords;
+      selectedKeywords = m.selectedKeywords;
+      m.selectedKeywords = [];
+      return $scope.$close(selectedKeywords);
     };
   });
 

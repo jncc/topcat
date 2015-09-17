@@ -33,7 +33,7 @@
             $scope.lookups.currentDataFormat = getDataFormatObj $scope.form.gemini.dataFormat, $scope.lookups.formats
             $scope.notifications.add 'Edits cancelled'
         
-        # todo er, what's this?!
+        # todo er, what's this?!?
         $scope.open = ($event, elem) ->
             $event.preventDefault();
             $event.stopPropagation();
@@ -83,11 +83,11 @@
 
         $scope.hasUsageConstraints = () -> (!!$scope.form.gemini.limitationsOnPublicAccess and $scope.form.gemini.limitationsOnPublicAccess isnt 'no limitations') or (!!$scope.form.gemini.useConstraints and $scope.form.gemini.useConstraints isnt 'no conditions apply')
 
-        # keywords
-        $scope.removeKeyword = (k) ->
-            $scope.form.gemini.keywords.splice ($.inArray k, $scope.form.gemini.keywords), 1
-        $scope.addKeyword = (k) ->
-            $scope.form.gemini.keywords.push(k)
+        # keywords # update arg name and use cs in
+        $scope.removeKeyword = (keyword) ->
+            $scope.form.gemini.keywords.splice ($.inArray keyword, $scope.form.gemini.keywords), 1
+        $scope.addKeywords = (keywords) ->
+            $scope.form.gemini.keywords.push k for k in keywords
         $scope.editKeywords = ->
             # vocabulator
             modal = $modal.open
@@ -96,8 +96,8 @@
                 size:        'lg'
                 scope:       $scope
             modal.result
-                .then (k) -> 
-                    $scope.addKeyword k
+                .then (keywords) -> 
+                    $scope.addKeywords keywords
                 .finally -> $scope.editing.keywords = true # doing this now looks better
             
         $scope.editAbstract = ->
