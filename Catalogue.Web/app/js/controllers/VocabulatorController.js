@@ -1,4 +1,6 @@
 ﻿(function() {
+  var __indexOf = [].indexOf || function(item) { for (var i = 0, l = this.length; i < l; i++) { if (i in this && this[i] === item) return i; } return -1; };
+
   angular.module('app.controllers').controller('VocabulatorController', function($scope, $http, colourHasher) {
     var loadVocab, m;
     if (angular.equals({}, $scope.vocabulator)) {
@@ -72,7 +74,12 @@
     };
     $scope.$watch('vocabulator.selectedVocab', loadVocab);
     $scope.selectKeyword = function(k) {
-      return m.selectedKeywords.push(k);
+      if (__indexOf.call(m.selectedKeywords, k) < 0) {
+        return m.selectedKeywords.push(k);
+      }
+    };
+    $scope.unselectKeyword = function(k) {
+      return m.selectedKeywords.splice(m.selectedKeywords.indexOf(k), 1);
     };
     return $scope.close = function() {
       var selectedKeywords;

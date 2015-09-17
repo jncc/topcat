@@ -53,14 +53,14 @@
                 <div class="vocabulator-keyword-list-container">
                     <div class="vocabulator-found-keyword-list" tc-bind-scroll-position="vocabulator.scrollPositions.foundKeywordList">
                         <div ng-repeat="k in vocabulator.foundKeywords">
-                            <span tc-tag ng-click="vocabulator.selectedKeywords.push(k)" ng-dblclick="close()" tabindex="0" class="pointable">
+                            <span tc-tag ng-click="selectKeyword(k)" ng-dblclick="close()" tabindex="0" class="pointable">
                                 <span ng-bind-html="k.value | highlight:vocabulator.q"></span>
                             </span>
                         </div>
                     </div>
                     <div class="vocabulator-vocab-keyword-list" ng-if="vocabulator.loadedVocab.keywords" tc-bind-scroll-position="vocabulator.scrollPositions.vocabKeywordList">
                         <div ng-repeat="x in vocabulator.loadedVocab.keywords" ng-init="k = { vocab: vocabulator.loadedVocab.id, value: x.value }" ng-class="{active: vocabulator.selectedKeyword == k}">
-                            <span tc-tag ng-click="vocabulator.selectedKeywords.push(k)" ng-dblclick="close()" tabindex="0" class="pointable">
+                            <span tc-tag ng-click="selectKeyword(k)" ng-dblclick="close()" tabindex="0" class="pointable">
                                 {{k.value}}
                             </span>
                         </div>
@@ -78,6 +78,7 @@
         <span ng-if="vocabulator.selectedKeywords.length">
             <span tc-tag ng-repeat="k in vocabulator.selectedKeywords" tc-tip class="pointable">
                 {{ k.value }}
+                <span class="glyphicon glyphicon-remove" ng-click="unselectKeyword(k)"></span>
             </span>
             <button type="button" class="btn btn-primary" ng-click="close()">ADD</button>
         </span>

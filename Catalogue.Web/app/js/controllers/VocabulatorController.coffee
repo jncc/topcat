@@ -59,7 +59,10 @@ angular.module('app.controllers').controller 'VocabulatorController',
         # when a vocab is selected, load the full document (to show all its keywords)
         $scope.$watch 'vocabulator.selectedVocab', loadVocab
                 
-        $scope.selectKeyword = (k) -> m.selectedKeywords.push k
+        $scope.selectKeyword = (k) ->
+            m.selectedKeywords.push k unless k in m.selectedKeywords
+        $scope.unselectKeyword = (k) ->
+            m.selectedKeywords.splice (m.selectedKeywords.indexOf k), 1
                         
         $scope.close = ->
             selectedKeywords = m.selectedKeywords
