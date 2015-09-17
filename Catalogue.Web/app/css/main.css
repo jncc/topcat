@@ -336,9 +336,9 @@ label {
 }
 .vocabulator .vocabulator-vocab-list .vocab-item-arrow {
   opacity: 0.2;
-  font-size: 40px;
+  font-size: 35px;
   position: absolute;
-  top: 1px;
+  top: 4px;
   right: 10px;
 }
 .vocabulator .vocabulator-vocab-list .vocab-item-arrow.ng-enter {

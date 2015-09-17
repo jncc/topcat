@@ -36,7 +36,7 @@
                             <span class="less-important">{{v.description}}</span>
                         </div>
                         <span class="vocab-item-id">{{v.id}}</span>
-                        <span class="vocab-item-arrow glyphicon glyphicon-forward" ng-if="vocabulator.selectedVocab.id === v.id"></span>
+                        <span class="vocab-item-arrow glyphicon glyphicon-circle-arrow-right" ng-if="vocabulator.selectedVocab.id === v.id"></span>
                     </div>
                     <div ng-show="vocabulator.filteredVocabs.length == 0">No matches...</div>
                 </div>
@@ -45,8 +45,8 @@
                 <h3>
                     Keywords
                     <span ng-show="vocabulator.loadedVocab.keywords" class="pull-right">
-                        <button class="btn btn-default icon-and-text-btn" ng-click="vocabulator.selectedVocab = {}">
-                            <span class="dark glyphicon glyphicon-circle-arrow-left"></span>BACK
+                        <button class="btn btn-default" ng-click="vocabulator.selectedVocab = {}">
+                            <span class="dark glyphicon glyphicon-circle-arrow-left"></span>
                         </button>
                     </span>
                 </h3>
@@ -71,7 +71,15 @@
         </div>
     </div>
 
-    xxx
+    <div ng-if="vocabulator.q">
+        <hr/>
+        <div>
+            <span tc-tag ng-repeat="k in parsedVocablessKeywords" tc-tip class="pointable">
+                {{ k.value }}
+            </span>
+
+        </div>
+    </div>
 
     <div class="modal-footer">
         <span class="pull-left">

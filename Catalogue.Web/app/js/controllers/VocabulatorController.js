@@ -27,6 +27,12 @@
     }
     $scope.doFind = function(q, older) {
       var clearCurrentVocab, findKeywords, findVocabs;
+      $scope.parsedVocablessKeywords = [
+        {
+          vocab: '',
+          value: q
+        }
+      ];
       clearCurrentVocab = function() {
         m.loadedVocab = {};
         return m.selectedVocab = {};

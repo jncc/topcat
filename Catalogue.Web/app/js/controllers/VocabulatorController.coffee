@@ -19,6 +19,8 @@ angular.module('app.controllers').controller 'VocabulatorController',
         m = $scope.vocabulator
         
         $scope.colourHasher = colourHasher # make available to the view
+        
+        #########parseVocablessKeywords = (q) -> _(q.split /(,;)+/).value()
             
         # load all the vocabs if not already loaded - we'll filter them client-side
         if !m.allVocabs.length
@@ -27,6 +29,9 @@ angular.module('app.controllers').controller 'VocabulatorController',
                 m.filteredVocabs = result
 
         $scope.doFind = (q, older) ->
+            $scope.parsedVocablessKeywords = [
+                vocab: '',
+                value: q ]
             clearCurrentVocab = ->
                 m.loadedVocab = {}
                 m.selectedVocab = {}
@@ -43,7 +48,6 @@ angular.module('app.controllers').controller 'VocabulatorController',
                         .error (e) -> $scope.notifications.add 'Oops! ' + e.message
             if q isnt older # do nothing initially
                 # support adding vocabless keywords - just use what's been typed in!
-                #m.selectedKeyword = { vocab: '', value: m.q }
                 clearCurrentVocab()
                 findVocabs()
                 findKeywords()            
