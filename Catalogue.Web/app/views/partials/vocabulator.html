@@ -36,10 +36,10 @@
                             <span class="less-important">{{v.description}}</span>
                         </div>
                         <span class="vocab-item-id">{{v.id}}</span>
+                        <span class="vocab-item-arrow glyphicon glyphicon-forward" ng-if="vocabulator.selectedVocab.id === v.id"></span>
                     </div>
                     <div ng-show="vocabulator.filteredVocabs.length == 0">No matches...</div>
                 </div>
-                {{foo}}
             </div>
             <div class="col-sm-5">
                 <h3>
@@ -70,6 +70,8 @@
             </div>
         </div>
     </div>
+
+    xxx
 
     <div class="modal-footer">
         <span class="pull-left">

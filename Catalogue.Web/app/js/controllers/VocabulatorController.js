@@ -3,6 +3,9 @@
 
   angular.module('app.controllers').controller('VocabulatorController', function($scope, $http, colourHasher) {
     var loadVocab, m;
+    if (!$scope.vocabulator) {
+      $scope.vocabulator = {};
+    }
     if (angular.equals({}, $scope.vocabulator)) {
       angular.extend($scope.vocabulator, {
         q: '',

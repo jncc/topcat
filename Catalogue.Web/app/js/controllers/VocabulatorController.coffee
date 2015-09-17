@@ -4,6 +4,7 @@ angular.module('app.controllers').controller 'VocabulatorController',
     ($scope, $http, colourHasher) -> 
         
         # define the model
+        $scope.vocabulator = {} if !$scope.vocabulator
         # we extend (don't overwrite) the object reference from the parent page
         # because we want to save the state of the vocabulator dialog when closed
         if angular.equals {}, $scope.vocabulator

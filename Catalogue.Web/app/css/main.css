@@ -313,6 +313,7 @@ label {
   background-color: #eeeeee;
 }
 .vocabulator .vocabulator-vocab-list .vocab-item {
+  position: relative;
   cursor: pointer;
   border-left: 7px solid;
   margin-bottom: 6px;
@@ -332,6 +333,31 @@ label {
   font-family: 'Lucida Grande', sans-serif;
   font-weight: 700;
   color: #bbbbbb;
+}
+.vocabulator .vocabulator-vocab-list .vocab-item-arrow {
+  opacity: 0.2;
+  font-size: 40px;
+  position: absolute;
+  top: 1px;
+  right: 10px;
+}
+.vocabulator .vocabulator-vocab-list .vocab-item-arrow.ng-enter {
+  transition: 0.2s all;
+  right: 30px;
+  opacity: 0;
+}
+.vocabulator .vocabulator-vocab-list .vocab-item-arrow.ng-enter.ng-enter-active {
+  right: 10px;
+  opacity: 0.2;
+}
+.vocabulator .vocabulator-vocab-list .vocab-item-arrow.ng-leave {
+  transition: 0.4s;
+  right: 10px;
+  opacity: 0.2;
+}
+.vocabulator .vocabulator-vocab-list .vocab-item-arrow.ng-leave.ng-leave-active {
+  right: 30px;
+  opacity: 0;
 }
 .vocabulator .vocabulator-keyword-list-container {
   position: relative;
