@@ -35,8 +35,9 @@ angular.module('app.controllers').controller 'VocabulatorController',
                         m.selectedKeywords = []
                     # parse the search string to suggest vocabless keywords
                     else if q isnt ''
-                        suggestedKeywords = _(m.q.split /[,;]+/)
-                            .map (v) -> { vocab: '', value: v.trim() }
+                        suggestedKeywords = _(m.q.split /[,;]+/) # split on ',' and ';'
+                            .map (s) -> { vocab: '', value: s.trim() }
+                            .filter (k) -> k.value isnt ''
                             .value()
                         m.selectedKeywords = suggestedKeywords
             clearCurrentVocab = ->

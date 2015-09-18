@@ -35,11 +35,13 @@
           if (q === '' && older !== '') {
             return m.selectedKeywords = [];
           } else if (q !== '') {
-            suggestedKeywords = _(m.q.split(/[,;]+/)).map(function(v) {
+            suggestedKeywords = _(m.q.split(/[,;]+/)).map(function(s) {
               return {
                 vocab: '',
-                value: v.trim()
+                value: s.trim()
               };
+            }).filter(function(k) {
+              return k.value !== '';
             }).value();
             return m.selectedKeywords = suggestedKeywords;
           }
