@@ -27,12 +27,18 @@ angular.module('app.controllers').controller 'VocabulatorController',
                 m.filteredVocabs = result
 
         $scope.doFind = (q, older) ->
-            # if there are no vocabful keywords selected, add vocabless ones from the search string
-            if (!_.some m.selectedKeywords, (k) -> k.vocab isnt '')
-                if q is '' and older isnt ''
-                    m.selectedKeywords = []
-                else if q isnt ''
-                    m.selectedKeywords = [{ vocab: '', value: q }]
+            updateSelectedKeywords = ->
+                # if there are no vocabful keywords selected, add vocabless ones from the search string
+                if (!_.some m.selectedKeywords, (k) -> k.vocab isnt '')
+                    # clear selected keywords when search string is deleted
+                    if q is '' and older isnt ''
+                        m.selectedKeywords = []
+                    # parse the search string to suggest vocabless keywords
+                    else if q isnt ''
+                        suggestedKeywords = _(m.q.split /[,;]+/)
+                            .map (v) -> { vocab: '', value: v.trim() }
+                            .value()
+                        m.selectedKeywords = suggestedKeywords
             clearCurrentVocab = ->
                 m.loadedVocab = {}
                 m.selectedVocab = {}
@@ -47,6 +53,8 @@ angular.module('app.controllers').controller 'VocabulatorController',
                     $http.get '../api/keywords?q=' + m.q
                         .success (result) -> m.foundKeywords = result
                         .error (e) -> $scope.notifications.add 'Oops! ' + e.message
+            # the main function body starts here!
+            updateSelectedKeywords()
             if q isnt older # do nothing initially
                 clearCurrentVocab()
                 findVocabs()

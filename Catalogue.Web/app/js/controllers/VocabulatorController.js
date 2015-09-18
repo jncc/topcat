@@ -26,21 +26,25 @@
       });
     }
     $scope.doFind = function(q, older) {
-      var clearCurrentVocab, findKeywords, findVocabs;
-      if (!_.some(m.selectedKeywords, function(k) {
-        return k.vocab !== '';
-      })) {
-        if (q === '' && older !== '') {
-          m.selectedKeywords = [];
-        } else if (q !== '') {
-          m.selectedKeywords = [
-            {
-              vocab: '',
-              value: q
-            }
-          ];
+      var clearCurrentVocab, findKeywords, findVocabs, updateSelectedKeywords;
+      updateSelectedKeywords = function() {
+        var suggestedKeywords;
+        if (!_.some(m.selectedKeywords, function(k) {
+          return k.vocab !== '';
+        })) {
+          if (q === '' && older !== '') {
+            return m.selectedKeywords = [];
+          } else if (q !== '') {
+            suggestedKeywords = _(m.q.split(/[,;]+/)).map(function(v) {
+              return {
+                vocab: '',
+                value: v.trim()
+              };
+            }).value();
+            return m.selectedKeywords = suggestedKeywords;
+          }
         }
-      }
+      };
       clearCurrentVocab = function() {
         m.loadedVocab = {};
         return m.selectedVocab = {};
@@ -73,6 +77,7 @@
           });
         }
       };
+      updateSelectedKeywords();
       if (q !== older) {
         clearCurrentVocab();
         findVocabs();
