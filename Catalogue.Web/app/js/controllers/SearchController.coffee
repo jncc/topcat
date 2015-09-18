@@ -89,7 +89,7 @@
         # function to get the current querystring in the view (for constructing export url)
         $scope.querystring = -> $.param $scope.query, true # true means traditional serialization (no square brackets for arrays)
 
-        addKeywordsToQuery = (keywords) ->
+        $scope.addKeywordsToQuery = (keywords) ->
             [keywordsAlreadyInQuery, keywordsToAddToQuery] = _(keywords)
                 .map $scope.keywordToString
                 .partition (k) -> k in $scope.query.k
@@ -130,7 +130,7 @@
                 size:        'lg'
                 scope:       $scope
             modal.result
-                .then (keywords) -> addKeywordsToQuery keywords
+                .then (keywords) -> $scope.addKeywordsToQuery keywords
     
         # paging helper functions 
                            

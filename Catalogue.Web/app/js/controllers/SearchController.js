@@ -2,7 +2,7 @@
   var __indexOf = [].indexOf || function(item) { for (var i = 0, l = this.length; i < l; i++) { if (i in this && this[i] === item) return i; } return -1; };
 
   angular.module('app.controllers').controller('SearchController', function($scope, $rootScope, $location, $http, $timeout, $q, $modal) {
-    var addKeywordsToQuery, blankQuery, parseQuerystring, queryKeywords, queryRecords, updateUrl;
+    var blankQuery, parseQuerystring, queryKeywords, queryRecords, updateUrl;
     $scope.app = {
       starting: true
     };
@@ -87,7 +87,7 @@
     $scope.querystring = function() {
       return $.param($scope.query, true);
     };
-    addKeywordsToQuery = function(keywords) {
+    $scope.addKeywordsToQuery = function(keywords) {
       var k, keywordsAlreadyInQuery, keywordsToAddToQuery, _i, _j, _len, _len1, _ref;
       _ref = _(keywords).map($scope.keywordToString).partition(function(k) {
         return __indexOf.call($scope.query.k, k) >= 0;
@@ -140,7 +140,7 @@
         scope: $scope
       });
       return modal.result.then(function(keywords) {
-        return addKeywordsToQuery(keywords);
+        return $scope.addKeywordsToQuery(keywords);
       });
     };
     $scope.setPage = function(n) {
