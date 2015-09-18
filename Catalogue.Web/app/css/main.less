@@ -363,6 +363,7 @@ label {
   .modal-lg { width: 1100px; }
 }
 .vocabulator {
+    @height: 50vh;
     padding: 1em;
     h3 { margin: 0.3em 0 0.8em 0; }
     .close { margin-top: -0.8em; } // vertically position the close 'x' button
@@ -373,7 +374,7 @@ label {
         margin: 1em 0;
     }
     .vocabulator-vocab-list {
-        height: 30em;
+        height: @height;
         overflow-y: scroll;
         overflow-x: hidden;
         white-space: nowrap;
@@ -422,11 +423,11 @@ label {
     .vocabulator-keyword-list-container {
         position:relative; // so we can make child elements absolute relative to this one (look at how css positioning works!)
         .vocabulator-found-keyword-list { 
-            height: 30em;
+            height: @height;
             overflow-y: scroll;
         }
         .vocabulator-vocab-keyword-list {
-            height: 30em;
+            height: @height;
             overflow-y: scroll;
             position: absolute;
             top:0;

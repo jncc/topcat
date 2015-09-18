@@ -27,12 +27,20 @@
     }
     $scope.doFind = function(q, older) {
       var clearCurrentVocab, findKeywords, findVocabs;
-      $scope.parsedVocablessKeywords = [
-        {
-          vocab: '',
-          value: q
+      if (!_.some(m.selectedKeywords, function(k) {
+        return k.vocab !== '';
+      })) {
+        if (q === '' && older !== '') {
+          m.selectedKeywords = [];
+        } else if (q !== '') {
+          m.selectedKeywords = [
+            {
+              vocab: '',
+              value: q
+            }
+          ];
         }
-      ];
+      }
       clearCurrentVocab = function() {
         m.loadedVocab = {};
         return m.selectedVocab = {};
@@ -83,6 +91,9 @@
     };
     $scope.$watch('vocabulator.selectedVocab', loadVocab);
     $scope.selectKeyword = function(k) {
+      _.remove(m.selectedKeywords, function(k) {
+        return k.vocab === '';
+      });
       if (__indexOf.call(m.selectedKeywords, k) < 0) {
         return m.selectedKeywords.push(k);
       }

@@ -20,8 +20,6 @@ angular.module('app.controllers').controller 'VocabulatorController',
         
         $scope.colourHasher = colourHasher # make available to the view
         
-        #########parseVocablessKeywords = (q) -> _(q.split /(,;)+/).value()
-            
         # load all the vocabs if not already loaded - we'll filter them client-side
         if !m.allVocabs.length
             $http.get('../api/vocabularylist').success (result) ->
@@ -29,9 +27,12 @@ angular.module('app.controllers').controller 'VocabulatorController',
                 m.filteredVocabs = result
 
         $scope.doFind = (q, older) ->
-            $scope.parsedVocablessKeywords = [
-                vocab: '',
-                value: q ]
+            # if there are no vocabful keywords selected, add vocabless ones from the search string
+            if (!_.some m.selectedKeywords, (k) -> k.vocab isnt '')
+                if q is '' and older isnt ''
+                    m.selectedKeywords = []
+                else if q isnt ''
+                    m.selectedKeywords = [{ vocab: '', value: q }]
             clearCurrentVocab = ->
                 m.loadedVocab = {}
                 m.selectedVocab = {}
@@ -47,7 +48,6 @@ angular.module('app.controllers').controller 'VocabulatorController',
                         .success (result) -> m.foundKeywords = result
                         .error (e) -> $scope.notifications.add 'Oops! ' + e.message
             if q isnt older # do nothing initially
-                # support adding vocabless keywords - just use what's been typed in!
                 clearCurrentVocab()
                 findVocabs()
                 findKeywords()            
@@ -61,10 +61,12 @@ angular.module('app.controllers').controller 'VocabulatorController',
                     .success (result) -> m.loadedVocab = result
                     .error (e) -> $scope.notifications.add 'Oops! ' + e.message
                 
-        # when a vocab is selected, load the full document (to show all its keywords)
+        # when a vocab is selected, load the full vocab entity (to show all its keywords)
         $scope.$watch 'vocabulator.selectedVocab', loadVocab
                 
         $scope.selectKeyword = (k) ->
+            # remove vocabless keywords (ie what's been entered in the search box)
+            _.remove m.selectedKeywords, (k) -> k.vocab is ''
             m.selectedKeywords.push k unless k in m.selectedKeywords
         $scope.unselectKeyword = (k) ->
             m.selectedKeywords.splice (m.selectedKeywords.indexOf k), 1

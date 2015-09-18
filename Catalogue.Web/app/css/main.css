@@ -313,7 +313,7 @@ label {
   margin: 1em 0;
 }
 .vocabulator .vocabulator-vocab-list {
-  height: 30em;
+  height: 50vh;
   overflow-y: scroll;
   overflow-x: hidden;
   white-space: nowrap;
@@ -373,11 +373,11 @@ label {
   position: relative;
 }
 .vocabulator .vocabulator-keyword-list-container .vocabulator-found-keyword-list {
-  height: 30em;
+  height: 50vh;
   overflow-y: scroll;
 }
 .vocabulator .vocabulator-keyword-list-container .vocabulator-vocab-keyword-list {
-  height: 30em;
+  height: 50vh;
   overflow-y: scroll;
   position: absolute;
   top: 0;
