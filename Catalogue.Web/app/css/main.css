@@ -287,6 +287,16 @@ label {
   line-height: 16px;
   text-shadow: 0 1px #000;
 }
+@media (min-width: 992px) {
+  .modal-lg {
+    width: 900px;
+  }
+}
+@media (min-width: 1200px) {
+  .modal-lg {
+    width: 1100px;
+  }
+}
 .vocabulator {
   padding: 1em;
 }
@@ -303,7 +313,7 @@ label {
   margin: 1em 0;
 }
 .vocabulator .vocabulator-vocab-list {
-  height: 20em;
+  height: 30em;
   overflow-y: scroll;
   overflow-x: hidden;
   white-space: nowrap;
@@ -363,11 +373,11 @@ label {
   position: relative;
 }
 .vocabulator .vocabulator-keyword-list-container .vocabulator-found-keyword-list {
-  height: 20em;
+  height: 30em;
   overflow-y: scroll;
 }
 .vocabulator .vocabulator-keyword-list-container .vocabulator-vocab-keyword-list {
-  height: 20em;
+  height: 30em;
   overflow-y: scroll;
   position: absolute;
   top: 0;
