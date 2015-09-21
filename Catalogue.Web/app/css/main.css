@@ -287,6 +287,16 @@ label {
   line-height: 16px;
   text-shadow: 0 1px #000;
 }
+@media (min-width: 992px) {
+  .modal-lg {
+    width: 900px;
+  }
+}
+@media (min-width: 1200px) {
+  .modal-lg {
+    width: 1100px;
+  }
+}
 .vocabulator {
   padding: 1em;
 }
@@ -303,7 +313,7 @@ label {
   margin: 1em 0;
 }
 .vocabulator .vocabulator-vocab-list {
-  height: 20em;
+  height: 50vh;
   overflow-y: scroll;
   overflow-x: hidden;
   white-space: nowrap;
@@ -313,6 +323,7 @@ label {
   background-color: #eeeeee;
 }
 .vocabulator .vocabulator-vocab-list .vocab-item {
+  position: relative;
   cursor: pointer;
   border-left: 7px solid;
   margin-bottom: 6px;
@@ -333,15 +344,40 @@ label {
   font-weight: 700;
   color: #bbbbbb;
 }
+.vocabulator .vocabulator-vocab-list .vocab-item-arrow {
+  opacity: 0.2;
+  font-size: 35px;
+  position: absolute;
+  top: 4px;
+  right: 10px;
+}
+.vocabulator .vocabulator-vocab-list .vocab-item-arrow.ng-enter {
+  transition: 0.2s all;
+  right: 30px;
+  opacity: 0;
+}
+.vocabulator .vocabulator-vocab-list .vocab-item-arrow.ng-enter.ng-enter-active {
+  right: 10px;
+  opacity: 0.2;
+}
+.vocabulator .vocabulator-vocab-list .vocab-item-arrow.ng-leave {
+  transition: 0.4s;
+  right: 10px;
+  opacity: 0.2;
+}
+.vocabulator .vocabulator-vocab-list .vocab-item-arrow.ng-leave.ng-leave-active {
+  right: 30px;
+  opacity: 0;
+}
 .vocabulator .vocabulator-keyword-list-container {
   position: relative;
 }
 .vocabulator .vocabulator-keyword-list-container .vocabulator-found-keyword-list {
-  height: 20em;
+  height: 50vh;
   overflow-y: scroll;
 }
 .vocabulator .vocabulator-keyword-list-container .vocabulator-vocab-keyword-list {
-  height: 20em;
+  height: 50vh;
   overflow-y: scroll;
   position: absolute;
   top: 0;

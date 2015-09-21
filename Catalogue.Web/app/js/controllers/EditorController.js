@@ -98,11 +98,17 @@
     $scope.hasUsageConstraints = function() {
       return (!!$scope.form.gemini.limitationsOnPublicAccess && $scope.form.gemini.limitationsOnPublicAccess !== 'no limitations') || (!!$scope.form.gemini.useConstraints && $scope.form.gemini.useConstraints !== 'no conditions apply');
     };
-    $scope.removeKeyword = function(k) {
-      return $scope.form.gemini.keywords.splice($.inArray(k, $scope.form.gemini.keywords), 1);
+    $scope.removeKeyword = function(keyword) {
+      return $scope.form.gemini.keywords.splice($.inArray(keyword, $scope.form.gemini.keywords), 1);
     };
-    $scope.addKeyword = function(k) {
-      return $scope.form.gemini.keywords.push(k);
+    $scope.addKeywords = function(keywords) {
+      var k, _i, _len, _results;
+      _results = [];
+      for (_i = 0, _len = keywords.length; _i < _len; _i++) {
+        k = keywords[_i];
+        _results.push($scope.form.gemini.keywords.push(k));
+      }
+      return _results;
     };
     $scope.editKeywords = function() {
       var modal;
@@ -112,8 +118,8 @@
         size: 'lg',
         scope: $scope
       });
-      return modal.result.then(function(k) {
-        return $scope.addKeyword(k);
+      return modal.result.then(function(keywords) {
+        return $scope.addKeywords(keywords);
       })["finally"](function() {
         return $scope.editing.keywords = true;
       });

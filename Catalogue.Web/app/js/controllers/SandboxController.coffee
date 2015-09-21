@@ -1,7 +1,7 @@
 ﻿angular.module('app.controllers').controller 'SandboxController',
 
     ($scope, $http, colourHasher) ->  #, Formats
-
+    
         $scope.hashStringToColor = colourHasher.hashStringToColour
         $scope.x = 3;
         

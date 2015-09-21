@@ -35,7 +35,7 @@
 
 <div class="search-keyword-suggestions" ng-show="keywordSuggestions[0]">
     <span ng-repeat="k in keywordSuggestions">
-        <span tc-tag vocab="{{k.vocab}}" ng-click="addKeywordToQuery(k)" class="pointable">
+        <span tc-tag vocab="{{k.vocab}}" ng-click="addKeywordsToQuery([k])" class="pointable">
             <span ng-bind-html="k.value | highlight:query.q"></span>
         </span>
     </span>
@@ -134,7 +134,7 @@
                         <span ng-bind-html="r.snippet"></span>
                     </div>
                     <div class="search-tags">
-                        <span tc-tag ng-repeat="k in r.keywords" tc-tip ng-click="addKeywordToQuery(k)" class="pointable">
+                        <span tc-tag ng-repeat="k in r.keywords" tc-tip ng-click="addKeywordsToQuery([k])" class="pointable">
                             <span ng-bind-html="k.value | highlight:query.q"></span>
                         </span>
                     </div>
@@ -149,7 +149,7 @@
         </div>
     </div>
 
-    <div ng-switch-when="grid" class="layout-row" ng-controller="ResultGridController">
+    <div ng-switch-when="grid" class="layout-row" ng-controller="SearchGridController">
         <div class="search-grid" ui-grid="gridOptions" ui-grid-resize-columns></div>
     </div>
 </div>

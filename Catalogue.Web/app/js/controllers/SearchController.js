@@ -12,9 +12,6 @@
     $scope.result = {
       results: {}
     };
-    $scope.result = {
-      results: {}
-    };
     $scope.current = {};
     $scope.pageSize = 15;
     $scope.vocabulator = {};
@@ -90,16 +87,22 @@
     $scope.querystring = function() {
       return $.param($scope.query, true);
     };
-    $scope.addKeywordToQuery = function(keyword) {
-      var k, s;
-      s = $scope.keywordToString(keyword);
-      if (__indexOf.call($scope.query.k, s) >= 0) {
-        return $scope.notifications.add('Your query already contains this keyword');
-      } else {
-        k = $scope.query.k;
-        k.push(s);
-        return $scope.query = $.extend({}, blankQuery(), {
-          'k': k
+    $scope.addKeywordsToQuery = function(keywords) {
+      var k, keywordsAlreadyInQuery, keywordsToAddToQuery, _i, _j, _len, _len1, _ref;
+      _ref = _(keywords).map($scope.keywordToString).partition(function(k) {
+        return __indexOf.call($scope.query.k, k) >= 0;
+      }).value(), keywordsAlreadyInQuery = _ref[0], keywordsToAddToQuery = _ref[1];
+      for (_i = 0, _len = keywordsToAddToQuery.length; _i < _len; _i++) {
+        k = keywordsToAddToQuery[_i];
+        $scope.query.k.push(k);
+      }
+      for (_j = 0, _len1 = keywordsAlreadyInQuery.length; _j < _len1; _j++) {
+        k = keywordsAlreadyInQuery[_j];
+        $scope.notifications.add("Your query already contains the '" + ($scope.keywordFromString(k).value) + "' keyword");
+      }
+      if (keywordsToAddToQuery.length) {
+        return $scope.query = angular.extend({}, blankQuery(), {
+          'k': $scope.query.k
         });
       }
     };
@@ -136,8 +139,8 @@
         size: 'lg',
         scope: $scope
       });
-      return modal.result.then(function(k) {
-        return $scope.addKeywordToQuery(k);
+      return modal.result.then(function(keywords) {
+        return $scope.addKeywordsToQuery(keywords);
       });
     };
     $scope.setPage = function(n) {

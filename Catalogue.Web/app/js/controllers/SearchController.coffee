@@ -8,7 +8,6 @@
         $timeout (-> $scope.app.starting = false), 500
         
         $scope.result = results: {}     # the search results
-        $scope.result = results: {}     # the search results
         $scope.current = {}             # the currently selected, zoomed and top result
         $scope.pageSize = 15            # the paging size (todo: why is there on the scope?)
         $scope.vocabulator = {}         # vocabulator scope to save state between modal instances
@@ -90,15 +89,17 @@
         # function to get the current querystring in the view (for constructing export url)
         $scope.querystring = -> $.param $scope.query, true # true means traditional serialization (no square brackets for arrays)
 
-        $scope.addKeywordToQuery = (keyword) ->
-            s = $scope.keywordToString(keyword)
-            if s in $scope.query.k
-                $scope.notifications.add 'Your query already contains this keyword'
-            else
-                # for usability, when keywords are added, clear the current query
-                k = $scope.query.k
-                k.push s
-                $scope.query = $.extend {}, blankQuery(), { 'k': k }
+        $scope.addKeywordsToQuery = (keywords) ->
+            [keywordsAlreadyInQuery, keywordsToAddToQuery] = _(keywords)
+                .map $scope.keywordToString
+                .partition (k) -> k in $scope.query.k
+                .value()
+            # add keywords not already in the query
+            $scope.query.k.push k for k in keywordsToAddToQuery
+            $scope.notifications.add "Your query already contains the '#{ $scope.keywordFromString(k).value }' keyword" for k in keywordsAlreadyInQuery
+            # for usability, when keywords are added, clear the rest of the current query
+            if keywordsToAddToQuery.length
+                $scope.query = angular.extend {}, blankQuery(), { 'k': $scope.query.k }
                 
         $scope.removeKeywordFromQuery = (keyword) ->
             s = $scope.keywordToString keyword
@@ -129,7 +130,7 @@
                 size:        'lg'
                 scope:       $scope
             modal.result
-                .then (k) -> $scope.addKeywordToQuery k
+                .then (keywords) -> $scope.addKeywordsToQuery keywords
     
         # paging helper functions 
                            

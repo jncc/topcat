@@ -356,8 +356,14 @@ label {
 // -----------
 // vocabulator
 // -----------
-
+@media (min-width: 992px) {
+  .modal-lg { width: 900px; }
+}
+@media (min-width: 1200px) {
+  .modal-lg { width: 1100px; }
+}
 .vocabulator {
+    @height: 50vh;
     padding: 1em;
     h3 { margin: 0.3em 0 0.8em 0; }
     .close { margin-top: -0.8em; } // vertically position the close 'x' button
@@ -368,17 +374,18 @@ label {
         margin: 1em 0;
     }
     .vocabulator-vocab-list {
-        height: 20em;
+        height: @height;
         overflow-y: scroll;
         overflow-x: hidden;
         white-space: nowrap;
         z-index: 100; // make sure it stays in front of animated keyword list
         .vocab-item:hover { background-color: @pale; }
         .vocab-item {
+            position: relative;
             >div {
                 :first-child { font-size: 16.7999992370605px; }
                 margin-bottom: -5px;
-            } 
+            }
             .pointable;
             border-left: 7px solid;
             margin-bottom: 6px;
@@ -393,33 +400,41 @@ label {
                 color:@grey;
             }
         }
+        .vocab-item-arrow {
+            opacity: 0.2;
+            font-size: 35px;
+            position: absolute;
+            top: 4px;
+            right: 10px;
+                &.ng-enter {
+                    transition: 0.2s all;
+                    right: 30px;
+                    opacity:0;
+                    &.ng-enter-active { right: 10px; opacity: 0.2; }
+                }
+                &.ng-leave {
+                    transition: 0.4s;
+                    right: 10px;
+                    opacity: 0.2;
+                    &.ng-leave-active { right: 30px; opacity: 0; }
+                }
+        }
     }
     .vocabulator-keyword-list-container {
         position:relative; // so we can make child elements absolute relative to this one (look at how css positioning works!)
         .vocabulator-found-keyword-list { 
-            height: 20em;
+            height: @height;
             overflow-y: scroll;
         }
         .vocabulator-vocab-keyword-list {
-            height: 20em;
+            height: @height;
             overflow-y: scroll;
             position: absolute;
             top:0;
             left:0;
             right:0;
             background-color: white; // to cover up what's beneath
-            &.ng-enter {
-                transition: 0.2s all;
-                left: -15px;
-                opacity:0;
-                &.ng-enter-active { left: 0; opacity: 1; }
-            }
-            &.ng-leave {
-                transition: 0.4s;
-                left: 0;
-                opacity: 1;
-                &.ng-leave-active { left: -15px; opacity: 0; }
-            }
+            .animate-with-fadey-slide();
         }
     }
 }
@@ -605,7 +620,20 @@ form .ng-invalid {
     }
 }
 
-
+.animate-with-fadey-slide() {
+    &.ng-enter {
+        transition: 0.2s all;
+        left: -15px;
+        opacity:0;
+        &.ng-enter-active { left: 0; opacity: 1; }
+    }
+    &.ng-leave {
+        transition: 0.4s;
+        left: 0;
+        opacity: 1;
+        &.ng-leave-active { left: -15px; opacity: 0; }
+    }
+}
 
 
 // Create boxes for clicking on for use in the data formats
