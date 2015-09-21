@@ -152,6 +152,7 @@ namespace Catalogue.Data.Import.Mappings
                                 : String.Empty);
 
                 Map(m => m.Keywords).ConvertUsing(GetKeywords);
+                //todo: needed to pass validation
                 Map(m => m.ResourceLocator).ConvertUsing(row => "http://some/example/public/location");
                 Map(m => m.DataFormat).ConvertUsing(row => "Documents");
                 Map(m => m.ResourceType).ConvertUsing(row => "publication");
