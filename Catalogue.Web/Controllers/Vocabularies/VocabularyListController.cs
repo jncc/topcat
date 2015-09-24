@@ -14,6 +14,7 @@ namespace Catalogue.Web.Controllers.Vocabularies
         public string Id { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
+        public bool Controlled { get; set; }
     }
 
     public class VocabularyListController : ApiController
@@ -33,6 +34,7 @@ namespace Catalogue.Web.Controllers.Vocabularies
                             Id = v.Id,
                             Name = v.Name,
                             Description = v.Description,
+                            Controlled = v.Controlled,
                         })
                         .ToList()
                         .OrderByDescending(v => v.Id == "http://vocab.jncc.gov.uk/jncc-domain")

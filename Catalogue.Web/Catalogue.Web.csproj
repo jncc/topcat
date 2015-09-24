@@ -371,6 +371,7 @@
     <Content Include="app\lib\zeroclipboard-1.1.7\ZeroClipboard.swf" />
     <Content Include="app\views\ingest\ingest.html" />
     <Content Include="app\views\editor\editor.html" />
+    <Content Include="app\views\partials\jncc-categories.html" />
     <Content Include="app\views\partials\markdown.html" />
     <Content Include="app\views\partials\vocabulator.html" />
     <Content Include="app\views\sandbox\colours.html" />

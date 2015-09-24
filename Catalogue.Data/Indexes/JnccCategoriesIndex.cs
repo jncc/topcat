@@ -12,8 +12,8 @@ namespace Catalogue.Data.Indexes
     {
         public class Result
         {
-            public string Category { get; set; }
-            public int Count { get; set; }
+            public string CategoryName { get; set; }
+            public int RecordCount { get; set; }
         }
 
         public JnccCategoriesIndex()
@@ -24,16 +24,16 @@ namespace Catalogue.Data.Indexes
                              select new
                              {
                                  // todo need to account for records with multiple categories
-                                 Category = keyword.Value,
-                                 Count = 1
+                                 CategoryName = keyword.Value,
+                                 RecordCount = 1
                              };
 
             Reduce = results => from result in results
-                                group result by result.Category into g
+                                group result by result.CategoryName into g
                                 select new
                                 {
-                                    Category = g.Key,
-                                    Count = g.Sum(r => r.Count)
+                                    CategoryName = g.Key,
+                                    RecordCount = g.Sum(r => r.RecordCount)
                                 };
         }
     }

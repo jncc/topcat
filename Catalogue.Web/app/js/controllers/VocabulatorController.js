@@ -2,20 +2,24 @@
   var __indexOf = [].indexOf || function(item) { for (var i = 0, l = this.length; i < l; i++) { if (i in this && this[i] === item) return i; } return -1; };
 
   angular.module('app.controllers').controller('VocabulatorController', function($scope, $http, colourHasher) {
-    var loadVocab, m;
-    if (!$scope.vocabulator) {
-      $scope.vocabulator = {};
-    }
-    if (angular.equals({}, $scope.vocabulator)) {
-      angular.extend($scope.vocabulator, {
+    var blankModel, loadVocab, m;
+    blankModel = function() {
+      return {
         q: '',
         allVocabs: [],
         filteredVocabs: [],
         selectedVocab: {},
         loadedVocab: {},
         foundKeywords: [],
-        selectedKeywords: []
-      });
+        selectedKeywords: [],
+        newUncontrolledKeyword: ''
+      };
+    };
+    if (!$scope.vocabulator) {
+      $scope.vocabulator = {};
+    }
+    if (angular.equals({}, $scope.vocabulator)) {
+      angular.extend($scope.vocabulator, blankModel());
     }
     m = $scope.vocabulator;
     $scope.colourHasher = colourHasher;
@@ -26,24 +30,27 @@
       });
     }
     $scope.doFind = function(q, older) {
-      var clearCurrentVocab, findKeywords, findVocabs, updateSelectedKeywords;
-      updateSelectedKeywords = function() {
+      var clearCurrentVocab, findKeywords, findVocabs, suggestKeywordsFromSearchString, updateSelectedKeywords;
+      suggestKeywordsFromSearchString = function(s) {
         var suggestedKeywords;
+        suggestedKeywords = _(m.q.split(/[,;]+/)).map(function(s) {
+          return {
+            vocab: '',
+            value: s.trim()
+          };
+        }).filter(function(k) {
+          return k.value !== '';
+        }).value();
+        return suggestedKeywords;
+      };
+      updateSelectedKeywords = function() {
         if (!_.some(m.selectedKeywords, function(k) {
           return k.vocab !== '';
         })) {
           if (q === '' && older !== '') {
             return m.selectedKeywords = [];
           } else if (q !== '') {
-            suggestedKeywords = _(m.q.split(/[,;]+/)).map(function(s) {
-              return {
-                vocab: '',
-                value: s.trim()
-              };
-            }).filter(function(k) {
-              return k.value !== '';
-            }).value();
-            return m.selectedKeywords = suggestedKeywords;
+            return m.selectedKeywords = suggestKeywordsFromSearchString(q);
           }
         }
       };
@@ -111,7 +118,7 @@
     return $scope.close = function() {
       var selectedKeywords;
       selectedKeywords = m.selectedKeywords;
-      m.selectedKeywords = [];
+      angular.extend($scope.vocabulator, blankModel());
       return $scope.$close(selectedKeywords);
     };
   });
