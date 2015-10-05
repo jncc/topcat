@@ -4,14 +4,15 @@ angular.module('app.controllers').controller 'VocabulatorController',
     ($scope, $http, colourHasher) -> 
         
         blankModel = ->
-            q:                      ''  # the vocabulator search string
-            allVocabs:              []  # list of all vocabs, loaded at the start
-            filteredVocabs:         []  # filtered vocabs after searching
-            selectedVocab:          {}  # the currently selected vocab object from the allVocabs list
-            loadedVocab:            {}  # the curently loaded full vocab entity
-            foundKeywords:          []  # keywords found after searching
-            selectedKeywords:       []  # the currently selected keyword(s)
-            newUncontrolledKeyword: ''  # a new keyword with the currently selected (uncontrolled) vocab
+            q:                ''  # the vocabulator search string
+            allVocabs:        []  # list of all vocabs, loaded at the start
+            filteredVocabs:   []  # filtered vocabs after searching
+            selectedVocab:    {}  # the currently selected vocab object from the allVocabs list
+            loadedVocab:      {}  # the curently loaded full vocab entity
+            foundKeywords:    []  # keywords found after searching
+            selectedKeywords: []  # the currently selected keyword(s)
+            newUncontrolledKeywordValue: '' # a new keyword for the currently selected (uncontrolled) vocab
+            newUncontrolledKeyword: {}
         
         # we extend (don't overwrite) the object reference from the parent page
         # because we want to save the state of the vocabulator dialog when closed
@@ -67,21 +68,22 @@ angular.module('app.controllers').controller 'VocabulatorController',
         # when the model search value is updated, do the search
         $scope.$watch 'vocabulator.q', $scope.doFind
         
-        loadVocab = (vocab, old) ->
+        # when a vocab is selected, load the full vocab entity (to show all its keywords)
+        $scope.$watch 'vocabulator.selectedVocab', (vocab, old) ->
             if vocab and vocab isnt old
                 $http.get '../api/vocabularies?id=' + encodeURIComponent vocab.id
-                    .success (result) -> m.loadedVocab = result
+                    .success (result) ->
+                        m.loadedVocab = result
+                        m.newUncontrolledKeyword.vocab = m.loadedVocab.id
                     .error (e) -> $scope.notifications.add 'Oops! ' + e.message
-                
-        # when a vocab is selected, load the full vocab entity (to show all its keywords)
-        $scope.$watch 'vocabulator.selectedVocab', loadVocab
         
-        $scope.$watch 'vocabulator.newUncontrolledKeyword', (keyword, old) ->
-            if keyword isnt '' and keyword isnt old
+        $scope.$watch 'vocabulator.newUncontrolledKeywordValue', (value, old) ->
+            if value isnt old
                 # clear keywords that may have been suggested by a search the query
                 if (!_.some getSelectedVocabfulKeywords())
                     m.selectedKeywords.length = 0
-                
+                m.newUncontrolledKeyword.value = value
+                           
         $scope.selectKeyword = (k) ->
             # remove vocabless keywords (ie what's been entered in the search box)
             _.remove m.selectedKeywords, (k) -> k.vocab is ''
@@ -90,8 +92,9 @@ angular.module('app.controllers').controller 'VocabulatorController',
             m.selectedKeywords.splice (m.selectedKeywords.indexOf k), 1
                         
         $scope.close = ->
-            # clear the model for next time before returning the result of the dialog
             selectedKeywords = m.selectedKeywords
+            newUncontrolledKeyword = if m.newUncontrolledKeyword.value then [m.newUncontrolledKeyword] else []
+            # clear the model for next time before returning the result of the dialog
             angular.extend $scope.vocabulator, blankModel()
-            $scope.$close(selectedKeywords)
+            $scope.$close selectedKeywords.concat(newUncontrolledKeyword) 
         

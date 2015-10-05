@@ -66,7 +66,7 @@
                         </div>
                     </div>
                     <div class="vocabulator-new-uncontrolled-keyword" ng-if="vocabulator.selectedVocab.id && !vocabulator.selectedVocab.controlled">
-                        <input ng-model="vocabulator.newUncontrolledKeyword" type="text" class="form-control" tc-focus placeholder="Add a new keyword" />
+                        <input ng-model="vocabulator.newUncontrolledKeywordValue" type="text" class="form-control" tc-focus placeholder="Add a new keyword" />
                     </div>
 
                 </div>
@@ -78,18 +78,17 @@
         <span class="pull-left">
             <button type="button" class="btn btn-default" data-dismiss="modal" ng-click="$dismiss()">CANCEL</button>
         </span>
-        <span ng-if="vocabulator.selectedKeywords.length || vocabulator.newUncontrolledKeyword">
+        <span ng-if="vocabulator.selectedKeywords.length || vocabulator.newUncontrolledKeywordValue">
             <span tc-tag ng-repeat="k in vocabulator.selectedKeywords" tc-tip class="pointable">
                 {{ k.value }}
                 <span class="glyphicon glyphicon-remove" ng-click="unselectKeyword(k)"></span>
             </span>
 
-            <span tc-tag ng-repeat="k in [0]" tc-tip class="pointable">
-                {{ vocabulator.newUncontrolledKeyword }}
+            <span tc-tag ng-repeat="k in [vocabulator.newUncontrolledKeyword]" ng-if="vocabulator.newUncontrolledKeyword.value" tc-tip class="pointable">
+                {{ k.value }}
             </span>
 
             <button type="button" class="btn btn-primary" ng-click="close()">ADD</button>
         </span>
     </div>
-    {{vocabulator.selectedVocab}}
 </div>
