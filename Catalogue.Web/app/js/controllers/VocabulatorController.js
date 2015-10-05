@@ -2,7 +2,7 @@
   var __indexOf = [].indexOf || function(item) { for (var i = 0, l = this.length; i < l; i++) { if (i in this && this[i] === item) return i; } return -1; };
 
   angular.module('app.controllers').controller('VocabulatorController', function($scope, $http, colourHasher) {
-    var blankModel, loadVocab, m;
+    var blankModel, getSelectedVocabfulKeywords, loadVocab, m;
     blankModel = function() {
       return {
         q: '',
@@ -29,11 +29,15 @@
         return m.filteredVocabs = result;
       });
     }
+    getSelectedVocabfulKeywords = function() {
+      return _.filter(m.selectedKeywords, function(k) {
+        return k.vocab !== '';
+      });
+    };
     $scope.doFind = function(q, older) {
       var clearCurrentVocab, findKeywords, findVocabs, suggestKeywordsFromSearchString, updateSelectedKeywords;
       suggestKeywordsFromSearchString = function(s) {
-        var suggestedKeywords;
-        suggestedKeywords = _(m.q.split(/[,;]+/)).map(function(s) {
+        return _(m.q.split(/[,;]+/)).map(function(s) {
           return {
             vocab: '',
             value: s.trim()
@@ -41,12 +45,9 @@
         }).filter(function(k) {
           return k.value !== '';
         }).value();
-        return suggestedKeywords;
       };
       updateSelectedKeywords = function() {
-        if (!_.some(m.selectedKeywords, function(k) {
-          return k.vocab !== '';
-        })) {
+        if (!_.some(getSelectedVocabfulKeywords())) {
           if (q === '' && older !== '') {
             return m.selectedKeywords = [];
           } else if (q !== '') {
@@ -104,6 +105,13 @@
       }
     };
     $scope.$watch('vocabulator.selectedVocab', loadVocab);
+    $scope.$watch('vocabulator.newUncontrolledKeyword', function(keyword, old) {
+      if (keyword !== '' && keyword !== old) {
+        if (!_.some(getSelectedVocabfulKeywords())) {
+          return m.selectedKeywords.length = 0;
+        }
+      }
+    });
     $scope.selectKeyword = function(k) {
       _.remove(m.selectedKeywords, function(k) {
         return k.vocab === '';

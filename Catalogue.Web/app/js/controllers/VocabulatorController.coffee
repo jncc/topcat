@@ -11,7 +11,7 @@ angular.module('app.controllers').controller 'VocabulatorController',
             loadedVocab:            {}  # the curently loaded full vocab entity
             foundKeywords:          []  # keywords found after searching
             selectedKeywords:       []  # the currently selected keyword(s)
-            newUncontrolledKeyword: ''  # the value of a new keyword with the currently selected (uncontrolled) vocab
+            newUncontrolledKeyword: ''  # a new keyword with the currently selected (uncontrolled) vocab
         
         # we extend (don't overwrite) the object reference from the parent page
         # because we want to save the state of the vocabulator dialog when closed
@@ -27,17 +27,17 @@ angular.module('app.controllers').controller 'VocabulatorController',
                 m.allVocabs = result
                 m.filteredVocabs = result
 
+        getSelectedVocabfulKeywords = -> _.filter m.selectedKeywords, (k) -> k.vocab isnt ''
+        
         $scope.doFind = (q, older) ->
             suggestKeywordsFromSearchString = (s) ->
-                suggestedKeywords = _(m.q.split /[,;]+/) # split on ',' and ';'
+                _(m.q.split /[,;]+/) # split on ',' and ';'
                     .map (s) -> { vocab: '', value: s.trim() }
                     .filter (k) -> k.value isnt ''
                     .value()
-                suggestedKeywords
-                
             updateSelectedKeywords = ->
-                # if there are no vocabful keywords selected, add vocabless ones from the search string
-                if (!_.some m.selectedKeywords, (k) -> k.vocab isnt '')
+                # if no vocabful keywords already selected, add vocabless ones from the search string
+                if (!_.some getSelectedVocabfulKeywords())
                     # clear selected keywords when search string is deleted
                     if q is '' and older isnt ''
                         m.selectedKeywords = []
@@ -76,6 +76,12 @@ angular.module('app.controllers').controller 'VocabulatorController',
         # when a vocab is selected, load the full vocab entity (to show all its keywords)
         $scope.$watch 'vocabulator.selectedVocab', loadVocab
         
+        $scope.$watch 'vocabulator.newUncontrolledKeyword', (keyword, old) ->
+            if keyword isnt '' and keyword isnt old
+                # clear keywords that may have been suggested by a search the query
+                if (!_.some getSelectedVocabfulKeywords())
+                    m.selectedKeywords.length = 0
+                
         $scope.selectKeyword = (k) ->
             # remove vocabless keywords (ie what's been entered in the search box)
             _.remove m.selectedKeywords, (k) -> k.vocab is ''
