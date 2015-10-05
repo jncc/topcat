@@ -51,7 +51,7 @@
                     </span>
                 </h3>
                 <div class="vocabulator-keyword-list-container">
-                    <div class="vocabulator-found-keyword-list" tc-bind-scroll-position="vocabulator.scrollPositions.foundKeywordList">
+                    <div class="vocabulator-found-keyword-list" ng-show="vocabulator.foundKeywords" tc-bind-scroll-position="vocabulator.scrollPositions.foundKeywordList">
                         <div ng-repeat="k in vocabulator.foundKeywords">
                             <span tc-tag ng-click="selectKeyword(k)" ng-dblclick="close()" tabindex="0" class="pointable">
                                 <span ng-bind-html="k.value | highlight:vocabulator.q"></span>
