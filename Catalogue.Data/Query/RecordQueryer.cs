@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Catalogue.Data.Indexes;
 using Catalogue.Data.Model;
 using Catalogue.Gemini.DataFormats;
+using Catalogue.Gemini.Model;
 using Catalogue.Utilities.Text;
 using Raven.Client;
 using Raven.Client.Linq;
@@ -16,6 +17,7 @@ namespace Catalogue.Data.Query
     {
         RecordQueryOutputModel SearchQuery(RecordQueryInputModel input);
         IEnumerable<Record> RecordQuery(RecordQueryInputModel input);
+        IQueryable<Record> AsyncRecordQuery(IAsyncDocumentSession adb, RecordQueryInputModel input);
     }
 
     public class RecordQueryer : IRecordQueryer
@@ -34,13 +36,22 @@ namespace Catalogue.Data.Query
         FieldHighlightings abstractLites;
         FieldHighlightings abstractNLites;
 
+        public IQueryable<Record> AsyncRecordQuery(IAsyncDocumentSession adb, RecordQueryInputModel input)
+        {
+            var query = adb.Query<RecordIndex.Result, RecordIndex>()
+                .Statistics(out stats);
+
+            return RecordQueryImpl(input, query);
+        }
+
+
         /// <summary>
         /// A general-purpose query that returns records.
         /// Can be materialised as-is, or customised further (see SearchQuery method).
-        /// We may need to refactor this to support ravendb streaming for larger result sets.
         /// </summary>
         public IEnumerable<Record> RecordQuery(RecordQueryInputModel input)
         {
+
             var query = _db.Query<RecordIndex.Result, RecordIndex>()
                 .Statistics(out stats)
                 .Customize(x => x.Highlight("Title", 202, 1, out titleLites))
@@ -49,6 +60,12 @@ namespace Catalogue.Data.Query
                 .Customize(x => x.Highlight("AbstractN", 202, 1, out abstractNLites))
                 .Customize(x => x.SetHighlighterTags("<b>", "</b>"));
 
+            return RecordQueryImpl(input, query).ToList();
+
+        }
+
+        IQueryable<Record> RecordQueryImpl(RecordQueryInputModel input, IQueryable<RecordIndex.Result> query)
+        {
             if (input.Q.IsNotBlank())
             {
                 query = query
@@ -59,7 +76,7 @@ namespace Catalogue.Data.Query
                     .Search(r => r.KeywordsN, input.Q);
             }
 
-            if (input.K != null && input.K.Any())
+            if (input.HasKeywords())
             {
                 foreach (var keyword in ParameterHelper.ParseMetadataKeywords(input.K))
                 {
@@ -68,11 +85,24 @@ namespace Catalogue.Data.Query
                 }
             }
 
-            return query.As<Record>() // ravendb method to project from the index result type to the actual document type
-                    .Skip(input.P * input.N)
-                    .Take(input.N)
-                    .ToList();
+            if (input.D != null)
+            {
+                query = query.Where(r => r.MetadataDate >= input.D);
+            }
+
+            var recordQuery = query.As<Record>(); // ravendb method to project from the index result type to the actual document type
+
+            // allow N to be negative
+            if (input.N >= 0)
+            {
+                recordQuery = recordQuery.Skip(input.P * input.N).Take(input.N);
+            }
+
+
+            return recordQuery;
         }
+
+
 
         /// <summary>
         /// A query for the Google-style search results page.
@@ -98,7 +128,7 @@ namespace Catalogue.Data.Query
                                 Glyph = format.Glyph,
                                 Name = format.Name,
                             },
-                            Keywords = r.Gemini.Keywords,
+                            Keywords = MakeKeywordOutputModelList(r.Gemini.Keywords).ToList(),
                             //.OrderBy(k => k.Vocab != "http://vocab.jncc.gov.uk/jncc-broad-category") // show first
                             //.ThenBy(k => k.Vocab.IsBlank())
                             //.ThenBy(k => k.Vocab).ToList(),
@@ -119,5 +149,26 @@ namespace Catalogue.Data.Query
                 Query = input
             };
         }
+
+        IEnumerable<MetadataKeywordOutputModel> MakeKeywordOutputModelList(List<MetadataKeyword> keywords)
+        {
+            // the MetadataKeywordOutputModel has an additional property "Squash"
+            // to tell the consumer (UI) that the keyword may be bunched up to save space
+            // (when there are many keywords in the same vocab)
+
+            var output = from k in keywords
+                         group k by k.Vocab into g
+                         let groupIsBig = g.Count() >= 5 // we'll squash groups of 5 or more
+                         from k in g
+                         let keywordIsLastInGroup = k == g.Last() // we don't squash the last keyword in the group
+                         select new MetadataKeywordOutputModel
+                         {
+                             Vocab = k.Vocab,
+                             Value = k.Value,
+                             Squash = groupIsBig && !keywordIsLastInGroup,
+                         };
+
+            return output;
+        }    
     }
 }

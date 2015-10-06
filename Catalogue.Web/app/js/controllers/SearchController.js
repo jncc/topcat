@@ -158,8 +158,13 @@
       }
       return _results;
     };
-    return $scope.maxPages = function(total, pageLength) {
+    $scope.maxPages = function(total, pageLength) {
       return Math.ceil(total / pageLength) - 1;
+    };
+    return $scope.blah = function(i) {
+      var left;
+      left = i * i * i;
+      return left + 'px';
     };
   });
 

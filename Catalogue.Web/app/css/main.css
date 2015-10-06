@@ -278,6 +278,16 @@ label {
   width: 0;
   margin-right: 0.15em;
 }
+.tag.squashed-tag {
+  width: 50px;
+  overflow: hidden;
+  margin-right: 0;
+  border-right: 1px solid white;
+  background: linear-gradient(to right, #eeeeee, #ffffff 100%);
+}
+.tag.squashed-tag:hover {
+  background: linear-gradient(to right, #dddddd, #ffffff 100%);
+}
 .tip {
   max-width: 100%;
   color: #fff;

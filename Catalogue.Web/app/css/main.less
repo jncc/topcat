@@ -334,6 +334,14 @@ label {
         width: 0;
         margin-right: 0.15em;
     }
+    &.squashed-tag {
+        width: 50px;
+        overflow: hidden;
+        margin-right: 0;
+        border-right: 1px solid white;
+        background:linear-gradient(to right, @pale, @white 100%);
+        &:hover { background:linear-gradient(to right, @lesspale, @white 100%);}
+    }
 }
 
 // ----

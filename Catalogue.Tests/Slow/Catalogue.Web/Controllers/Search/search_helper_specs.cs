@@ -11,7 +11,6 @@ using Catalogue.Web.Controllers;
 using FluentAssertions;
 using NUnit.Framework;
 using Raven.Database.Indexing.Collation;
-using RecordQueryer = Catalogue.Web.Controllers.RecordQueryer;
 
 namespace Catalogue.Tests.Slow.Catalogue.Web.Controllers.Search
 {

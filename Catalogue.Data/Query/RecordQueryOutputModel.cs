@@ -19,7 +19,7 @@ namespace Catalogue.Data.Query
         public string Title { get; set; }
         public FormatOutputModel Format { get; set; }
         public string Snippet { get; set; }
-        public List<MetadataKeyword> Keywords { get; set; }
+        public List<MetadataKeywordOutputModel> Keywords { get; set; }
         public bool TopCopy { get; set; }
         public string Date { get; set; }
         public string ResourceType { get; set; }
@@ -35,5 +35,12 @@ namespace Catalogue.Data.Query
         public string Name { get; set; }
         public string Group { get; set; }
         public string Glyph { get; set; }
+    }
+
+    public class MetadataKeywordOutputModel
+    {
+        public string Value { get; set; }
+        public string Vocab { get; set; }
+        public bool Squash { get; set; }
     }
 }
