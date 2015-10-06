@@ -46,10 +46,5 @@ namespace Catalogue.Data.Query
         /// The earliest metadata date from which records should be returned.
         /// </summary>
         public DateTime? D { get; set; }
-
-        public bool HasKeywords()
-        {
-            return this.K != null && this.K.Any() && this.K.First().IsNotBlank();
-        }
     }
 }

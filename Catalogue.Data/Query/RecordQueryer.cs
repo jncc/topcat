@@ -76,7 +76,7 @@ namespace Catalogue.Data.Query
                     .Search(r => r.KeywordsN, input.Q);
             }
 
-            if (input.HasKeywords())
+            if (input.K != null && input.K.Any())
             {
                 foreach (var keyword in ParameterHelper.ParseMetadataKeywords(input.K))
                 {
