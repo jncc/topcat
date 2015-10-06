@@ -264,6 +264,7 @@ label {
   background-color: #eeeeee;
   padding-right: 0.5em;
   margin: 0 0.8em 0.45em 0;
+  position: relative;
 }
 .tag:hover {
   background-color: #dddddd;
@@ -279,14 +280,19 @@ label {
   margin-right: 0.15em;
 }
 .tag.squashed-tag {
-  width: 50px;
-  overflow: hidden;
+  width: 60px;
   margin-right: 0;
-  border-right: 1px solid white;
-  background: linear-gradient(to right, #eeeeee, #ffffff 100%);
+  overflow: hidden;
+  vertical-align: top;
 }
-.tag.squashed-tag:hover {
-  background: linear-gradient(to right, #dddddd, #ffffff 100%);
+.tag.squashed-tag::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 1.5em;
+  height: 100%;
+  background: linear-gradient(to right, rgba(238, 238, 238, 0), #ffffff 70%);
 }
 .tip {
   max-width: 100%;

@@ -315,6 +315,7 @@ label {
 // tags
 // ----
 
+.tag-container { }
 .tag {
     white-space:nowrap;
     display: inline-block;
@@ -334,13 +335,21 @@ label {
         width: 0;
         margin-right: 0.15em;
     }
+    position:relative; // so that the squashed-tag::after element can be positioned absolute
     &.squashed-tag {
-        width: 50px;
-        overflow: hidden;
+        width: 60px;
         margin-right: 0;
-        border-right: 1px solid white;
-        background:linear-gradient(to right, @pale, @white 100%);
-        &:hover { background:linear-gradient(to right, @lesspale, @white 100%);}
+        // hide long keyword values from sticking out under the next tag to the right; vertical-align stops heights messing up
+        overflow: hidden; vertical-align: top;
+        &::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 1.5em;
+            height: 100%;
+            background:linear-gradient(to right, rgba(238,238,238, 0), @white 70%);
+        }
     }
 }
 

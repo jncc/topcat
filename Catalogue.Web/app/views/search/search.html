@@ -133,7 +133,7 @@
                         <span class="search-divider-bullet">&bull;</span>
                         <span ng-bind-html="r.snippet"></span>
                     </div>
-                    <div class="search-tags">
+                    <div class="search-tags tag-container">
                         <span tc-tag ng-repeat="k in r.keywords" tc-tip ng-click="addKeywordsToQuery([k])" class="pointable" ng-class="{'squashed-tag': k.squash}">
                             <span ng-bind-html="k.value | highlight:query.q"></span>
                         </span>
