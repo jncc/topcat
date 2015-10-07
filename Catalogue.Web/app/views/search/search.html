@@ -169,40 +169,31 @@
 
 <div ng-show="!query.q && !query.k[0] && !app.starting" > <!--class="fade-in-with-delay"-->
     <div class="row">
-        <div class="col-md-8">
+        <div class="col-md-8 welcome">
             <h1>
                 <b>Discover and organise</b> the data we hold at JNCC with <b>Topcat</b>, our new metadata catalogue
 
             </h1>
 <!--            <p style="font-size: large;">Collections already on Topcat</p>-->
 
-            <div class="row">
-                <div class="col-sm-6">
-                    <h2>Human Activities</h2>
-                    <div ng-init="k = { vocab: 'http://vocab.jncc.gov.uk/jncc-categoryx', value: 'Human Activities'}">
-                        <span tc-tag ng-click="addKeywordsToQuery([k])" class="pointable">
-                            blah
-                        </span>
-                        
-                        {{k}}
+            <div class="row" ng-repeat="row in collections">
+                <div class="col-sm-6" ng-repeat="col in row">
+                    <h2>{{col.name}}</h2>
+                    <div class="collection-description">
+                        <div>
+                            <span tc-tag ng-init="k = { vocab: 'http://vocab.jncc.gov.uk/jncc-category', value: col.name}" ng-click="addKeywordsToQuery([k])" class="pointable">
+                                {{k.value}}
+                            </span>
+                        </div>
+                        <div>
+                            {{col.description}}
+                        </div>
+                        <div class="record-count">
+                            {{col.recordCount}}
+                        </div>                        
                     </div>
-                </div>
-                <div class="col-sm-6">
-                    <h2>MESH</h2>
-                    <div ng-init="k = { vocab: 'http://vocab.jncc.gov.uk/jncc-category', value: 'Seabed Habitat Maps'}">
-                        <span tc-tag>
-                            blah
-                        </span>
-                        {{k}}
-
-                    </div>
-                    <p>
-                        Topcat is the new home for the metadata for the <a href="http://jncc.defra.gov.uk/page-1583">Mapping European Seabed Habitats</a> (MESH)
-                        project. Thanks to Helen Ellwood and Graeme Duncan.
-                    </p>
                 </div>
             </div>
-            {{collections}}
         </div>
         <div class="col-md-4 roadmap">
 
@@ -216,7 +207,7 @@
                     <li>Google-style search <span class="label label-success">Done</span></li>
                     <li>Keyword filtering <span class="label label-success">Done</span></li>
                     <li>Authenticate without passwords <span class="label label-success">Done</span></li>
-                    <li>Metadata editor <span class="label label-danger">In progress</span></li>
+                    <li>Metadata editor <span class="label label-info">In progress</span></li>
                     <li>Validation (basic and Gemini) <span class="label label-success">Done</span></li>
                     <li>Export / download <span class="label label-success">Done</span></li>
                 </ul>
@@ -226,7 +217,7 @@
                     <li>Spatial search</li>
                     <li>Bounding box editor UI</li>
                     <li>Advanced search</li>
-                    <li>Vocabularies <span class="label label-danger">In progress</span></li>
+                    <li>Vocabularies <span class="label label-info">In progress</span></li>
                     <li>Known locations &amp; bounding boxes</li>
                 </ul>
             </div>

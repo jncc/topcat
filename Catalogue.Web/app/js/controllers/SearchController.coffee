@@ -147,6 +147,7 @@
         $scope.maxPages  = (total, pageLength) ->
             Math.ceil(total/pageLength)-1;
             
-        $http.get('../api/collections').success (result) -> $scope.collections = result
-
+        $http.get('../api/collections').success (result) ->
+            # chunk the collections into two columns [ [a, b], [c, d] ... ]
+            $scope.collections = _.chunk result, 2
 

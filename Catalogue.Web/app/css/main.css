@@ -125,8 +125,22 @@ label {
   font-size: 123%;
   color: #666666;
 }
-.headline {
+.welcome .headline {
   padding-right: 5em;
+}
+.welcome .collection-description {
+  position: relative;
+}
+.welcome .collection-description .record-count {
+  position: absolute;
+  right: 0;
+  top: 0;
+  font-size: 7em;
+  font-weight: bold;
+  line-height: 0.7em;
+  color: #eeeeee;
+  float: right;
+  z-index: -10000;
 }
 .why-topcat > ul > li {
   margin-bottom: 0.5em;

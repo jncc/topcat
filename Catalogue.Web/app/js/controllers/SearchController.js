@@ -162,7 +162,7 @@
       return Math.ceil(total / pageLength) - 1;
     };
     return $http.get('../api/collections').success(function(result) {
-      return $scope.collections = result;
+      return $scope.collections = _.chunk(result, 2);
     });
   });
 

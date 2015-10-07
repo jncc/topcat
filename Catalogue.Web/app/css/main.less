@@ -168,8 +168,26 @@ label {
 // home page
 // ---------
 
-.headline {
-    padding-right: 5em;
+.welcome {
+    .headline {
+        padding-right: 5em;
+    }
+    .collection-description {
+        position:relative;
+        .record-count {
+            position:absolute;
+            right:0;
+            top: 0;
+            font-size: 7em;
+            font-weight: bold;
+//          font-kerning:unset;
+            line-height: 0.7em;
+            color: @pale;
+            float: right;
+            z-index: -10000;
+        }
+    }
+
 }
 .why-topcat {
     // extra spacing on the lists methinks
