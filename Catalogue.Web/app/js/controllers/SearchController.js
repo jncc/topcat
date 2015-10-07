@@ -161,11 +161,9 @@
     $scope.maxPages = function(total, pageLength) {
       return Math.ceil(total / pageLength) - 1;
     };
-    return $scope.blah = function(i) {
-      var left;
-      left = i * i * i;
-      return left + 'px';
-    };
+    return $http.get('../api/collections').success(function(result) {
+      return $scope.collections = result;
+    });
   });
 
 }).call(this);

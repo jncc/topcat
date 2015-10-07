@@ -147,7 +147,6 @@
         $scope.maxPages  = (total, pageLength) ->
             Math.ceil(total/pageLength)-1;
             
-        $scope.blah = (i) ->
-            left = i * i * i;
-            left + 'px'
+        $http.get('../api/collections').success (result) -> $scope.collections = result
+
 

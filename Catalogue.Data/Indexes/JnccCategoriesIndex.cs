@@ -35,6 +35,8 @@ namespace Catalogue.Data.Indexes
                                     CategoryName = g.Key,
                                     RecordCount = g.Sum(r => r.RecordCount)
                                 };
+
+            
         }
     }
 }

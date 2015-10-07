@@ -125,10 +125,13 @@ label {
   font-size: 123%;
   color: #666666;
 }
-.welcome > ul > li {
+.headline {
+  padding-right: 5em;
+}
+.why-topcat > ul > li {
   margin-bottom: 0.5em;
 }
-.welcome > ul > li > ul > li:first-child {
+.why-topcat > ul > li > ul > li:first-child {
   margin-top: 0.5em;
 }
 .roadmap {

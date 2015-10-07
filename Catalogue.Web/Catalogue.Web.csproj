@@ -156,6 +156,8 @@
     <Compile Include="Controllers\Dumps\DumpsController.cs" />
     <Compile Include="Controllers\Formats\FormatsController.cs" />
     <Compile Include="Controllers\Home\HomeController.cs" />
+    <Compile Include="Controllers\Collections\CollectionsController.cs" />
+    <Compile Include="Controllers\Collections\CollectionOutputModel.cs" />
     <Compile Include="Controllers\Keywords\KeywordModel.cs" />
     <Compile Include="Controllers\Keywords\KeywordsController.cs" />
     <Compile Include="Controllers\Patch\PatchController.cs" />
@@ -373,6 +375,7 @@
     <Content Include="app\views\partials\jncc-categories.html" />
     <Content Include="app\views\partials\markdown.html" />
     <Content Include="app\views\partials\vocabulator.html" />
+    <Content Include="app\views\partials\why-topcat.html" />
     <Content Include="app\views\sandbox\colours.html" />
     <Content Include="app\views\sandbox\dropdown.html" />
     <Content Include="app\views\sandbox\glyphs.html" />
