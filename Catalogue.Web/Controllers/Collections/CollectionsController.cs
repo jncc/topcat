@@ -27,8 +27,8 @@ namespace Catalogue.Web.Controllers.Collections
             var joined = from k in vocab.Keywords
                          from r in counts
                          where r.KeywordValue == k.Value
-                         orderby r.KeywordValue != "Human Activities",
-                            r.KeywordValue != "Seabed Habitat Maps"
+                         orderby r.KeywordValue != "Human Activities", r.KeywordValue != "Seabed Habitat Maps" // show these first
+                         where r.KeywordValue != "GIS Strategy" // this is a temporary one
                          select new CollectionOutputModel
                          {
                              Name = k.Value,
@@ -38,7 +38,7 @@ namespace Catalogue.Web.Controllers.Collections
 
             var output = joined.ToList();
 
-            // add some future collections with records yet to be added to...
+            // add some intended future collections with no records yet
             output.AddRange(from k in vocab.Keywords
                             where k.Value == "Natural Capital Library" || k.Value == "JNCC Publications"
                             where !counts.Any(c => c.KeywordValue == k.Value) // no records for these collections

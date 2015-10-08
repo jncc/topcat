@@ -334,7 +334,7 @@ namespace Catalogue.Data.Seed
                     Keywords = new List<VocabularyKeyword>
                         {
                             new VocabularyKeyword { Value = "Seabed Habitat Maps", Description = "Geospatial datasets from the Mapping European Seabed Habitats (MESH) project."},
-                            new VocabularyKeyword { Value = "Human Activities", Description = "Geospatial datasets of activities undertaken by humans in the UK marine environment. These datasets are held, not created, by JNCC."},
+                            new VocabularyKeyword { Value = "Human Activities", Description = "Geospatial datasets of activities undertaken by humans in the UK marine environment."},
                             new VocabularyKeyword { Value = "JNCC Publications", Description = "Official publications produced by Joint Nature Conservation Committee (JNCC)."},
                             new VocabularyKeyword { Value = "Natural Capital Library", Description = "Reports, briefings and publications related to the Natural Capital concept."},
                             new VocabularyKeyword { Value = "Example Collection", Description = "A collection of example records for development and testing."},

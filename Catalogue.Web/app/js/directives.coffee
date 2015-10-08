@@ -5,10 +5,6 @@
 module.directive 'placeholder', () -> 
     link: (scope, elem, attrs) -> $(elem).placeholder()
 
-# make autofocus work for old IE
-module.directive 'autofocus', () ->
-    link: (scope, elem, attrs) -> elem[0].focus() # call focus on the raw dom object
-
 # specific autofocus directive (for modal dialogues)
 module.directive 'tcFocus', ($timeout) ->
     link: (scope, elem, attrs) ->
