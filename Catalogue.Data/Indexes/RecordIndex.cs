@@ -23,6 +23,7 @@ namespace Catalogue.Data.Indexes
             public string[] Keywords     { get; set; }
             public string[] KeywordsN    { get; set; }
             public DateTime MetadataDate { get; set; }
+            public string   Target       { get; set; }
         }
 
         public RecordIndex()
