@@ -27,38 +27,16 @@
             <div class="col-md-9">
                 <div class="form-group">
                     <label for="id" class="control-label">Vocabulary Id</label>
-                    <input name="id" type="text" ng-model="form.id" placeholder="Vocab Id (URI)" class="form-control" ng-disabled="!newVocab"  />
+                    <input name="id" type="text" ng-model="form.id" placeholder="Vocab Id (URI)" class="form-control" ng-disabled="!newVocab"/>
                 </div>
                 <div class="form-group">
                     <label for="name">Vocabulary Name</label>
-                    <input name="name" type="text" ng-model="form.name" placeholder="Name" class="form-control" />
+                    <input name="name" type="text" ng-model="form.name" placeholder="Name" class="form-control"/>
                 </div>
                 <div class="form-group">
                     <label for="descriptionArea" class="control-label">Description</label>
-                    <textarea id="descriptionArea" type="text" rows="2" ng-model="form.description" placeholder="Description" class="form-control" />
+                    <textarea id="descriptionArea" type="text" rows="2" ng-model="form.description" placeholder="Description" class="form-control"/>
                 </div>
-                <div class="form-group">
-                    <label for="publicationDate" class="control-label">Publication Date</label>
-                    <input name="publicationDate" type="text" ng-model="form.publicationDate" placeholder="Publication Date" class="form-control"/>
-                </div>
-
-                <div ng-show="form.controlled">
-                    <label for="valuesDiv" class="control-label">Values:</label>
-                    <div name="valuesDiv" class="form-inline">
-                        <div ng-repeat="v in form.keywords track by $index">
-                            <input type="text" name="{{$parent.form.keywords[$index].id}}" ng-model="$parent.form.keywords[$index].value" placeholder="Value (keyword)" class="form-control" style="width:35%" />
-                            <button class="btn btn-sm btn-primary" ng-click="removeKeyword($index)">
-                                <span style="font-size: small" class="glyphicon glyphicon-remove-sign"></span>
-                            </button>
-                            <br />
-                        </div>
-                        <button class="btn btn-primary icon-and-text-btn" ng-click="addKeyword()">
-                            <span class="glyphicon glyphicon-plus-sign"></span>
-                            ADD
-                        </button>
-                    </div>                    
-                </div>
-
             </div>
             <!--Side panel-->
             <div class="col-md-3">
@@ -75,7 +53,7 @@
                             </button>
                         </div>
                     </div>
-                    <hr />
+                    <hr/>
                     <div class="layout-row">
                         <div class="layout-col">
                             <span class="control-label">Publishable</span>
@@ -85,15 +63,42 @@
                                     ng-click="form.publishable = !form.publishable"
                                     ng-class="{ 'btn-default': !form.publishable, 'btn-success': form.publishable }"
                                     title="Blah blah?"
-                                    tc-tip
-                                >
+                                    tc-tip>
                                 <span class="glyphicon glyphicon-repeat" ng-class="{ 'dark': form.status == 0 }"></span>
                                 {{ form.publishable ? 'Publishable' : 'Internal' }}
                             </button>
                         </div>
                     </div>
+
+                    <hr />
+                    <div class="form-group">
+                        <label for="publicationDate" class="control-label">Publication Date</label>
+                        <input name="publicationDate" type="text" ng-model="form.publicationDate" placeholder="YYYY" class="form-control" />
+                    </div>
+
                 </div>
             </div>
+
         </div>
+
+        <div ng-show="form.controlled">
+            <h3>Keywords</h3>
+            <div class="form-inline">
+                <div ng-repeat="v in form.keywords track by $index">
+                    <input type="text" ng-model="$parent.form.keywords[$index].value" placeholder="Keyword" class="form-control" style="width: 20%"/>
+                    <input type="text" ng-model="$parent.form.keywords[$index].description" placeholder="Description" class="form-control" style="width: 75%"/>
+                    <button class="btn btn-sm btn-primary" ng-click="removeKeyword($index)">
+                        <span style="font-size: small" class="glyphicon glyphicon-remove-sign"></span>
+                    </button>
+                    <br/>
+                </div>
+                <br />
+                <button class="btn btn-primary icon-and-text-btn" ng-click="addKeyword()">
+                    <span class="glyphicon glyphicon-plus-sign"></span>
+                    ADD
+                </button>
+            </div>
+        </div>
+
     </form>
 </div>
