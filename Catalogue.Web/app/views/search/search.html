@@ -167,14 +167,12 @@
 
 
 
-<div ng-show="!query.q && !query.k[0] && !app.starting" > <!--class="fade-in-with-delay"-->
+<div ng-show="!query.q && !query.k[0] && !app.starting" class="fade-in-with-delay">
     <div class="row">
         <div class="col-md-8 welcome">
             <h1>
                 <b>Discover and organise</b> the data we hold at JNCC with <b>Topcat</b>, our new metadata catalogue
-
             </h1>
-<!--            <p style="font-size: large;">Collections already on Topcat</p>-->
 
             <div class="row" ng-repeat="row in collections">
                 <div class="col-sm-6" ng-repeat="col in row">
@@ -185,12 +183,8 @@
                                 {{k.value}}
                             </span>
                         </div>
-                        <div>
-                            {{col.description}}
-                        </div>
-                        <div class="record-count">
-                            {{col.recordCount}}
-                        </div>                        
+                        <div>{{col.description}}</div>
+                        <div class="record-count">{{col.recordCount}}</div>
                     </div>
                 </div>
             </div>
@@ -199,7 +193,7 @@
 
             <br />
 
-<!--            <h3>Something new <span class="label label-default">New</span></h3>-->
+            <!--            <h3>Something new <span class="label label-default">New</span></h3>-->
 
             <div class="well well-sm">
                 <h2>Roadmap</h2>

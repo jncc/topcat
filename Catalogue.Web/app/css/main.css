@@ -135,9 +135,9 @@ label {
   position: absolute;
   right: 0;
   top: 0;
-  font-size: 7em;
+  font-size: 6.5em;
   font-weight: bold;
-  line-height: 0.7em;
+  line-height: 0.8em;
   color: #eeeeee;
   float: right;
   z-index: -10000;
