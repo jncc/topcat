@@ -169,6 +169,26 @@ label {
 // ---------
 
 .welcome {
+    .headline {
+        padding-right: 5em;
+    }
+    .collection-description {
+        position:relative;
+        .record-count {
+            position:absolute;
+            right:0;
+            top: 0;
+            font-size: 6.5em;
+            font-weight: bold;
+            line-height: 0.8em;
+            color: @pale;
+            float: right;
+            z-index: -10000;
+        }
+    }
+
+}
+.why-topcat {
     // extra spacing on the lists methinks
     > ul > li { margin-bottom: 0.5em; }
     > ul > li > ul > li:first-child { margin-top: 0.5em; }
@@ -315,6 +335,7 @@ label {
 // tags
 // ----
 
+.tag-container { }
 .tag {
     white-space:nowrap;
     display: inline-block;
@@ -333,6 +354,22 @@ label {
         display: inline-block;
         width: 0;
         margin-right: 0.15em;
+    }
+    position:relative; // so that the squashed-tag::after element can be positioned absolute
+    &.squashed-tag {
+        width: 60px;
+        margin-right: 0;
+        // hide long keyword values from sticking out under the next tag to the right; vertical-align stops heights messing up
+        overflow: hidden; vertical-align: top;
+        &::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 1.5em;
+            height: 100%;
+            background:linear-gradient(to right, rgba(238,238,238, 0), @white 70%);
+        }
     }
 }
 
@@ -356,6 +393,7 @@ label {
 // -----------
 // vocabulator
 // -----------
+// make the modal big!
 @media (min-width: 992px) {
   .modal-lg { width: 900px; }
 }

@@ -1,7 +1,6 @@
 ﻿using Catalogue.Data.Query;
 using Catalogue.Web.Controllers;
 using NUnit.Framework;
-using RecordQueryer = Catalogue.Web.Controllers.RecordQueryer;
 
 namespace Catalogue.Tests.Web.Search
 {

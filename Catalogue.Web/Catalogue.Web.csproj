@@ -156,10 +156,11 @@
     <Compile Include="Controllers\Dumps\DumpsController.cs" />
     <Compile Include="Controllers\Formats\FormatsController.cs" />
     <Compile Include="Controllers\Home\HomeController.cs" />
+    <Compile Include="Controllers\Collections\CollectionsController.cs" />
+    <Compile Include="Controllers\Collections\CollectionOutputModel.cs" />
     <Compile Include="Controllers\Keywords\KeywordModel.cs" />
     <Compile Include="Controllers\Keywords\KeywordsController.cs" />
     <Compile Include="Controllers\Patch\PatchController.cs" />
-    <Compile Include="Controllers\RecordQueryer.cs" />
     <Compile Include="Controllers\Records\RecordsController.cs" />
     <Compile Include="Controllers\Roles\RolesController.cs" />
     <Compile Include="Controllers\Sandbox\SandboxController.cs" />
@@ -371,8 +372,10 @@
     <Content Include="app\lib\zeroclipboard-1.1.7\ZeroClipboard.swf" />
     <Content Include="app\views\ingest\ingest.html" />
     <Content Include="app\views\editor\editor.html" />
+    <Content Include="app\views\partials\jncc-categories.html" />
     <Content Include="app\views\partials\markdown.html" />
     <Content Include="app\views\partials\vocabulator.html" />
+    <Content Include="app\views\partials\why-topcat.html" />
     <Content Include="app\views\sandbox\colours.html" />
     <Content Include="app\views\sandbox\dropdown.html" />
     <Content Include="app\views\sandbox\glyphs.html" />

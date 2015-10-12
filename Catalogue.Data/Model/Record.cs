@@ -15,6 +15,7 @@ namespace Catalogue.Data.Model
         public string     Path       { get; set; }
         public bool       TopCopy    { get; set; }
         public Status     Status     { get; set; }
+        public string     Target     { get; set; } // publication target, e.g. "data.gov.uk."
         public Validation Validation { get; set; }
         public Security   Security   { get; set; }
         public DateTime?  Review     { get; set; }

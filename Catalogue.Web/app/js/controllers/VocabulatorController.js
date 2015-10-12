@@ -2,20 +2,25 @@
   var __indexOf = [].indexOf || function(item) { for (var i = 0, l = this.length; i < l; i++) { if (i in this && this[i] === item) return i; } return -1; };
 
   angular.module('app.controllers').controller('VocabulatorController', function($scope, $http, colourHasher) {
-    var loadVocab, m;
-    if (!$scope.vocabulator) {
-      $scope.vocabulator = {};
-    }
-    if (angular.equals({}, $scope.vocabulator)) {
-      angular.extend($scope.vocabulator, {
+    var blankModel, getSelectedVocabfulKeywords, m;
+    blankModel = function() {
+      return {
         q: '',
         allVocabs: [],
         filteredVocabs: [],
         selectedVocab: {},
         loadedVocab: {},
         foundKeywords: [],
-        selectedKeywords: []
-      });
+        selectedKeywords: [],
+        newUncontrolledKeywordValue: '',
+        newUncontrolledKeyword: {}
+      };
+    };
+    if (!$scope.vocabulator) {
+      $scope.vocabulator = {};
+    }
+    if (angular.equals({}, $scope.vocabulator)) {
+      angular.extend($scope.vocabulator, blankModel());
     }
     m = $scope.vocabulator;
     $scope.colourHasher = colourHasher;
@@ -25,25 +30,29 @@
         return m.filteredVocabs = result;
       });
     }
+    getSelectedVocabfulKeywords = function() {
+      return _.filter(m.selectedKeywords, function(k) {
+        return k.vocab !== '';
+      });
+    };
     $scope.doFind = function(q, older) {
-      var clearCurrentVocab, findKeywords, findVocabs, updateSelectedKeywords;
+      var clearCurrentVocab, findKeywords, findVocabs, suggestKeywordsFromSearchString, updateSelectedKeywords;
+      suggestKeywordsFromSearchString = function(s) {
+        return _(m.q.split(/[,;]+/)).map(function(s) {
+          return {
+            vocab: '',
+            value: s.trim()
+          };
+        }).filter(function(k) {
+          return k.value !== '';
+        }).value();
+      };
       updateSelectedKeywords = function() {
-        var suggestedKeywords;
-        if (!_.some(m.selectedKeywords, function(k) {
-          return k.vocab !== '';
-        })) {
+        if (!_.some(getSelectedVocabfulKeywords())) {
           if (q === '' && older !== '') {
             return m.selectedKeywords = [];
           } else if (q !== '') {
-            suggestedKeywords = _(m.q.split(/[,;]+/)).map(function(s) {
-              return {
-                vocab: '',
-                value: s.trim()
-              };
-            }).filter(function(k) {
-              return k.value !== '';
-            }).value();
-            return m.selectedKeywords = suggestedKeywords;
+            return m.selectedKeywords = suggestKeywordsFromSearchString(q);
           }
         }
       };
@@ -87,16 +96,24 @@
       }
     };
     $scope.$watch('vocabulator.q', $scope.doFind);
-    loadVocab = function(vocab, old) {
+    $scope.$watch('vocabulator.selectedVocab', function(vocab, old) {
       if (vocab && vocab !== old) {
         return $http.get('../api/vocabularies?id=' + encodeURIComponent(vocab.id)).success(function(result) {
-          return m.loadedVocab = result;
+          m.loadedVocab = result;
+          return m.newUncontrolledKeyword.vocab = m.loadedVocab.id;
         }).error(function(e) {
           return $scope.notifications.add('Oops! ' + e.message);
         });
       }
-    };
-    $scope.$watch('vocabulator.selectedVocab', loadVocab);
+    });
+    $scope.$watch('vocabulator.newUncontrolledKeywordValue', function(value, old) {
+      if (value !== old) {
+        if (!_.some(getSelectedVocabfulKeywords())) {
+          m.selectedKeywords.length = 0;
+        }
+        return m.newUncontrolledKeyword.value = value;
+      }
+    });
     $scope.selectKeyword = function(k) {
       _.remove(m.selectedKeywords, function(k) {
         return k.vocab === '';
@@ -109,10 +126,11 @@
       return m.selectedKeywords.splice(m.selectedKeywords.indexOf(k), 1);
     };
     return $scope.close = function() {
-      var selectedKeywords;
+      var newUncontrolledKeyword, selectedKeywords;
       selectedKeywords = m.selectedKeywords;
-      m.selectedKeywords = [];
-      return $scope.$close(selectedKeywords);
+      newUncontrolledKeyword = m.newUncontrolledKeyword.value ? [m.newUncontrolledKeyword] : [];
+      angular.extend($scope.vocabulator, blankModel());
+      return $scope.$close(selectedKeywords.concat(newUncontrolledKeyword));
     };
   });
 

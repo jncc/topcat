@@ -125,10 +125,27 @@ label {
   font-size: 123%;
   color: #666666;
 }
-.welcome > ul > li {
+.welcome .headline {
+  padding-right: 5em;
+}
+.welcome .collection-description {
+  position: relative;
+}
+.welcome .collection-description .record-count {
+  position: absolute;
+  right: 0;
+  top: 0;
+  font-size: 6.5em;
+  font-weight: bold;
+  line-height: 0.8em;
+  color: #eeeeee;
+  float: right;
+  z-index: -10000;
+}
+.why-topcat > ul > li {
   margin-bottom: 0.5em;
 }
-.welcome > ul > li > ul > li:first-child {
+.why-topcat > ul > li > ul > li:first-child {
   margin-top: 0.5em;
 }
 .roadmap {
@@ -264,6 +281,7 @@ label {
   background-color: #eeeeee;
   padding-right: 0.5em;
   margin: 0 0.8em 0.45em 0;
+  position: relative;
 }
 .tag:hover {
   background-color: #dddddd;
@@ -277,6 +295,21 @@ label {
   display: inline-block;
   width: 0;
   margin-right: 0.15em;
+}
+.tag.squashed-tag {
+  width: 60px;
+  margin-right: 0;
+  overflow: hidden;
+  vertical-align: top;
+}
+.tag.squashed-tag::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 1.5em;
+  height: 100%;
+  background: linear-gradient(to right, rgba(238, 238, 238, 0), #ffffff 70%);
 }
 .tip {
   max-width: 100%;

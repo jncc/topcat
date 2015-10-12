@@ -158,9 +158,12 @@
       }
       return _results;
     };
-    return $scope.maxPages = function(total, pageLength) {
+    $scope.maxPages = function(total, pageLength) {
       return Math.ceil(total / pageLength) - 1;
     };
+    return $http.get('../api/collections').success(function(result) {
+      return $scope.collections = _.chunk(result, 2);
+    });
   });
 
 }).call(this);

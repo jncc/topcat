@@ -8,7 +8,6 @@ using Catalogue.Web.Controllers;
 using Catalogue.Web.Controllers.Export;
 using FluentAssertions;
 using NUnit.Framework;
-using RecordQueryer = Catalogue.Web.Controllers.RecordQueryer;
 
 namespace Catalogue.Tests.Slow.Catalogue.Web.Controllers.Export
 {

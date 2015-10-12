@@ -36,6 +36,8 @@ namespace Catalogue.Data.Seed
                 
                 s.AddVocabularies();
                 s.AddMeshRecords();
+                s.AddHumanActivitiesRecord();
+                s.AddOverseasTerritoriesRecord();
                 s.AddSimpleGeminiExampleRecord();
                 s.AddRecordWithLotsOfVocablessTags();
                 s.AddReadOnlyRecord();
@@ -57,7 +59,7 @@ namespace Catalogue.Data.Seed
                     {
                         m.ResourceType = "dataset";
                         m.Keywords.Add(new MetadataKeyword { Vocab = "http://vocab.jncc.gov.uk/jncc-domain", Value = "Terrestrial" });
-                        m.Keywords.Add(new MetadataKeyword { Vocab = "http://vocab.jncc.gov.uk/jncc-category", Value = "Example Records" });
+                        m.Keywords.Add(new MetadataKeyword { Vocab = "http://vocab.jncc.gov.uk/jncc-category", Value = "Example Collection" });
                         m.Keywords.Add(new MetadataKeyword { Vocab = "", Value = "example" });
                     }),
             };
@@ -84,6 +86,42 @@ namespace Catalogue.Data.Seed
 //
 //                string log = ObjectDumper.String(probs);
             }
+        }
+
+        void AddHumanActivitiesRecord()
+        {
+            var record = new Record().With(r =>
+            {
+                r.Id = new Guid("d8b438dc-4cd3-4d4f-9fa7-1160ea2336fd");
+                r.Path = @"X:\path\to\human\activities\data";
+                r.Gemini = new Metadata().With(m =>
+                {
+                    m.Title = "A simple Human Activity example record";
+                    m.Keywords.Add(new MetadataKeyword { Vocab = "http://vocab.jncc.gov.uk/jncc-domain", Value = "Marine" });
+                    m.Keywords.Add(new MetadataKeyword { Vocab = "http://vocab.jncc.gov.uk/jncc-category", Value = "Human Activities" });
+                    m.ResourceType = "dataset";
+                });
+            });
+
+            recordService.Insert(record);
+        }
+
+        void AddOverseasTerritoriesRecord()
+        {
+            var record = new Record().With(r =>
+            {
+                r.Id = new Guid("d836cd57-7c94-43b6-931b-3d63a58e3541");
+                r.Path = @"X:\path\to\overseas\territories\data";
+                r.Gemini = new Metadata().With(m =>
+                {
+                    m.Title = "A simple Overseas Territories example record";
+                    m.Keywords.Add(new MetadataKeyword { Vocab = "http://vocab.jncc.gov.uk/jncc-domain", Value = "Marine" });
+                    m.Keywords.Add(new MetadataKeyword { Vocab = "http://vocab.jncc.gov.uk/jncc-category", Value = "Overseas Territories" });
+                    m.ResourceType = "dataset";
+                });
+            });
+
+            recordService.Insert(record);
         }
 
         void AddSimpleGeminiExampleRecord()
@@ -295,9 +333,11 @@ namespace Catalogue.Data.Seed
                     Controlled = true,
                     Keywords = new List<VocabularyKeyword>
                         {
-                            new VocabularyKeyword { Value = "Seabed Habitat Maps" },
-                            new VocabularyKeyword { Value = "Human Activities" },
-                            new VocabularyKeyword { Value = "Publications" },
+                            new VocabularyKeyword { Value = "Seabed Habitat Maps", Description = "Geospatial datasets from the Mapping European Seabed Habitats (MESH) project."},
+                            new VocabularyKeyword { Value = "Human Activities", Description = "Geospatial datasets of activities undertaken by humans in the UK marine environment."},
+                            new VocabularyKeyword { Value = "JNCC Publications", Description = "Official publications produced by Joint Nature Conservation Committee (JNCC)."},
+                            new VocabularyKeyword { Value = "Natural Capital Library", Description = "Reports, briefings and publications related to the Natural Capital concept."},
+                            new VocabularyKeyword { Value = "Example Collection", Description = "A collection of example records for development and testing."},
                         }
                 };
             db.Store(jnccCategory);

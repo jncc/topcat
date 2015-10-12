@@ -11,14 +11,6 @@
     };
   });
 
-  module.directive('autofocus', function() {
-    return {
-      link: function(scope, elem, attrs) {
-        return elem[0].focus();
-      }
-    };
-  });
-
   module.directive('tcFocus', function($timeout) {
     return {
       link: function(scope, elem, attrs) {
