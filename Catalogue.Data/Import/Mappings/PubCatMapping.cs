@@ -183,7 +183,7 @@ namespace Catalogue.Data.Import.Mappings
 
                 keywords.AddRange(
                     GetDomain(keywords.Where(x => x.Vocab == "http://vocab.jncc.gov.uk/publication-category").ToList()));
-                AddKeyword(keywords, "http://vocab.jncc.gov.uk/jncc-category", "Publications");
+                AddKeyword(keywords, "http://vocab.jncc.gov.uk/jncc-category", "JNCC Publications");
 
                 return keywords;
             }
