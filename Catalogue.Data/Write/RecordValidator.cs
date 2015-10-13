@@ -100,11 +100,11 @@ namespace Catalogue.Data.Write
             // title must be reasonable length
             if (record.Gemini.Title != null && (record.Gemini.Title.Length > 150))
             {
-                if (record.Gemini.ResourceType == "Publication" && record.Gemini.Title.Length > 250)
+                if (record.Gemini.ResourceType == "publication" && record.Gemini.Title.Length > 250)
                 {
                     result.Errors.Add("Title is too long. 250 characters or less, please", r => r.Gemini.Title);
                 }
-                else 
+                else if (record.Gemini.ResourceType != "publication")
                 {
                     result.Errors.Add("Title is too long. 150 characters or less, please", r => r.Gemini.Title);
                 }
@@ -472,6 +472,41 @@ namespace Catalogue.Data.Write
 
             result.Errors.Single().Message.Should().StartWith("Title must not be blank");
             result.Errors.Single().Fields.Single().Should().Be("gemini.title");
+        }
+
+        [Test]
+        public void title_must_not_be_londer_then_150([Values("", " ", null)] string blank)
+        {
+            var result =
+                new RecordValidator().Validate(SimpleRecord().With(r => r.Gemini.Title = new String('x', 151)));
+
+            result.Errors.Single().Message.Should().StartWith("Title is too long. 150 characters or less, please");
+            result.Errors.Single().Fields.Single().Should().Be("gemini.title");
+        }
+
+        [Test]
+        public void publication_title_must_not_be_londer_then_250([Values("", " ", null)] string blank)
+        {
+            var result =
+                new RecordValidator().Validate(SimpleRecord().With(r => { r.Gemini.Title = new String('x', 251);
+                                                                            r.Gemini.ResourceType = "publication";
+                }));
+
+            result.Errors.Single().Message.Should().StartWith("Title is too long. 250 characters or less, please");
+            result.Errors.Single().Fields.Single().Should().Be("gemini.title");
+        }
+
+        [Test]
+        public void publication_title_can_be_londer_then_150([Values("", " ", null)] string blank)
+        {
+            var result =
+                new RecordValidator().Validate(SimpleRecord().With(r =>
+                {
+                    r.Gemini.Title = new String('x', 155);
+                    r.Gemini.ResourceType = "publication";
+                }));
+
+            result.Errors.Count().Should().Be(0);
         }
 
         [Test]
