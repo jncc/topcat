@@ -336,7 +336,7 @@ namespace Catalogue.Data.Import.Mappings
         [Test]
         public void should_import_all_records()
         {
-            imported.Count().Should().Be(692);
+            imported.Count().Should().Be(716);
         }
     }
 
