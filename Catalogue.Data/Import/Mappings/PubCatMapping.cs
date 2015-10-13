@@ -14,6 +14,7 @@ using Catalogue.Utilities.Text;
 using CsvHelper;
 using CsvHelper.Configuration;
 using FluentAssertions;
+using Lucene.Net.Search;
 using Newtonsoft.Json;
 using NUnit.Framework;
 using Raven.Client;
@@ -119,7 +120,7 @@ namespace Catalogue.Data.Import.Mappings
 
                     if (!String.IsNullOrWhiteSpace(row.GetField("ShortSummary")))
                     {
-                        sb.AppendLine("#Short Summary");
+                        sb.AppendLine("### Short Summary");
                         sb.AppendLine(row.GetField("ShortSummary"));
                     }
 
@@ -180,8 +181,8 @@ namespace Catalogue.Data.Import.Mappings
                     AddKeyword(keywords, "http://vocab.jncc.gov.uk/publication-status", "Discontinued");
                 }
 
-                // not sure yet how to categorise publications
-                AddKeyword(keywords, "http://vocab.jncc.gov.uk/jncc-domain", "to do!");
+                keywords.AddRange(
+                    GetDomain(keywords.Where(x => x.Vocab == "http://vocab.jncc.gov.uk/publication-category").ToList()));
                 AddKeyword(keywords, "http://vocab.jncc.gov.uk/jncc-category", "Publications");
 
                 return keywords;
@@ -196,6 +197,50 @@ namespace Catalogue.Data.Import.Mappings
                     Vocab = vocab,
                     Value = value
                 });
+            }
+
+
+            private List<MetadataKeyword> GetDomain(List<MetadataKeyword> keywords)
+            {
+                var domainVocab = "http://vocab.jncc.gov.uk/jncc-domain";
+
+                var result = new List<MetadataKeyword>();
+
+                if (keywords.Any(k => (new[] { "Species Status"
+                    , "Higher plants"
+                    , "Lower plants"
+                    , "Mammals"
+                    , "Grassland"
+                    , "Heathland"
+                    , "Lowland Wetland"
+                    , "Uplands"
+                    , "Woodland"
+                    , "Geological Conservation Review Series"
+                    , "Urban"}).Contains(k.Value, StringComparer.InvariantCultureIgnoreCase)))
+                {
+                    result.Add(new MetadataKeyword() { Value = "Terrestrial", Vocab = domainVocab});
+                }
+
+                if (keywords.Any(k => (new[] { "Aquatic plants", "Freshwater" }).Contains(k.Value, StringComparer.InvariantCultureIgnoreCase)))
+                {
+                    result.Add(new MetadataKeyword() { Value = "Freshwater", Vocab = domainVocab });
+                }
+
+                if (keywords.Any(k => (new[] { "Coastal & Estuarine", "Marine" }).Contains(k.Value, StringComparer.InvariantCultureIgnoreCase)))
+                {
+                    result.Add(new MetadataKeyword() { Value = "Marine", Vocab = domainVocab });
+                }
+
+                if (keywords.Any(k => (new[] { "Pollution" }).Contains(k.Value, StringComparer.InvariantCultureIgnoreCase)
+                    && !(new[] { "Pesticides and Toxic Substances" }).Contains(k.Value, StringComparer.InvariantCultureIgnoreCase)))
+                {
+                    result.Add(new MetadataKeyword() {Value = "Atmosphere", Vocab = domainVocab});
+                }
+
+
+                if (!result.Any()) result.Add(new MetadataKeyword() {Value = "To Do!", Vocab = domainVocab});
+
+                return result;
             }
 
             private IEnumerable<MetadataKeyword> ParsePageKeywords(string input)
@@ -291,7 +336,7 @@ namespace Catalogue.Data.Import.Mappings
         [Test]
         public void should_import_all_records()
         {
-            imported.Count().Should().Be(863);
+            imported.Count().Should().Be(692);
         }
     }
 
