@@ -33,7 +33,7 @@ namespace Catalogue.Data.Seed
         }
 
         public static Vocabulary JnccCategory
-        {
+        {http://vocab.jncc.gov.uk/metadata-admin
             get
             {
                 return new Vocabulary
@@ -50,6 +50,29 @@ namespace Catalogue.Data.Seed
                             new VocabularyKeyword { Value = "Human Activities" },
                             new VocabularyKeyword { Value = "JNCC Publications" },
                         }
+                };
+            }
+        }
+
+        public static Vocabulary MetadataAdmin
+        {
+            get
+            {
+                return new Vocabulary
+                {
+                    Id = "http://vocab.jncc.gov.uk/metadata-admin",
+                    Name = "Metadata Admin",
+                    Description = "Tags for managing Topcat records.",
+                    PublicationDate = "2015",
+                    Publishable = false,
+                    Controlled = true,
+                    Keywords = new List<VocabularyKeyword>
+                    {
+                        new VocabularyKeyword {Value = "Improve"},
+                        new VocabularyKeyword {Value = "Delete"},
+                        new VocabularyKeyword {Value = "Suspect"}
+
+                    }
                 };
             }
         }

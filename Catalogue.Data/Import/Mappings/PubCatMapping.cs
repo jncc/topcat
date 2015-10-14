@@ -22,8 +22,16 @@ using Raven.Client.Document;
 
 namespace Catalogue.Data.Import.Mappings
 {
+
     public class PubCatMapping : IMapping
     {
+        private const string publicationStatusVocab = "http://vocab.jncc.gov.uk/jncc-publication-status";
+        private const string publicationCategoryVocab = "http://vocab.jncc.gov.uk/jncc-publication-category";
+        private const string reportSeriesNoVocab = "http://vocab.jncc.gov.uk/jncc-report-series-number";
+        private const string nhbsVocab = "http://vocab.jncc.gov.uk/NHBS";
+        private const string isbnVocab = "http://vocab.jncc.gov.uk/ISBN";
+        private const string issnVocab = "http://vocab.jncc.gov.uk/ISSN";
+
         public IEnumerable<Vocabulary> RequiredVocabularies {
             get
             {
@@ -31,9 +39,10 @@ namespace Catalogue.Data.Import.Mappings
                 {
                     Vocabularies.JnccCategory,
                     Vocabularies.JnccDomain,
+                    Vocabularies.MetadataAdmin,
                     new Vocabulary
                         {
-                            Id = "http://vocab.jncc.gov.uk/publication-status",
+                            Id = publicationStatusVocab,
                             Name = "Publication status",
                             Description = "Describes various properties of JNCC Publications",
                             Controlled = true,
@@ -48,7 +57,7 @@ namespace Catalogue.Data.Import.Mappings
                         },
                         new Vocabulary
                         {
-                            Id = "http://vocab.jncc.gov.uk/publication-category",
+                            Id = publicationCategoryVocab,
                             Name = "Publication category",
                             Description = "Publication category",
                             Controlled = true,
@@ -58,7 +67,7 @@ namespace Catalogue.Data.Import.Mappings
                         },
                         new Vocabulary
                         {
-                            Id = "http://vocab.jncc.gov.uk/jncc-report-series-number",
+                            Id = reportSeriesNoVocab,
                             Name = "JNCC Report series number",
                             Description = "JNCC Report series number",
                             Controlled = false,
@@ -68,7 +77,7 @@ namespace Catalogue.Data.Import.Mappings
                         },
                         new Vocabulary
                         {
-                            Id = "http://vocab.jncc.gov.uk/NHBS",
+                            Id = nhbsVocab,
                             Name = "NHBS Numbers",
                             Description = "NHBS Number",
                             Controlled = false,
@@ -78,7 +87,7 @@ namespace Catalogue.Data.Import.Mappings
                         },
                         new Vocabulary
                         {
-                            Id = "http://vocab.jncc.gov.uk/ISBN",
+                            Id = isbnVocab,
                             Name = "ISBN Numbers",
                             Description = "ISBN Numbers",
                             Controlled = false,
@@ -88,7 +97,7 @@ namespace Catalogue.Data.Import.Mappings
                         },
                         new Vocabulary
                         {
-                            Id = "http://vocab.jncc.gov.uk/ISSN",
+                            Id = issnVocab,
                             Name = "ISSN Numbers",
                             Description = "ISSN Numbers",
                             Controlled = false,
@@ -154,7 +163,7 @@ namespace Catalogue.Data.Import.Mappings
 
                 Map(m => m.Keywords).ConvertUsing(GetKeywords);
                 //todo: needed to pass validation
-                Map(m => m.ResourceLocator).ConvertUsing(row => "http://some/example/public/location");
+                Map(m => m.ResourceLocator).ConvertUsing(row => "http://jncc.defra.gov.uk/publications-catalogue/");
                 Map(m => m.DataFormat).ConvertUsing(row => "Documents");
                 Map(m => m.ResourceType).ConvertUsing(row => "publication");
             }
@@ -164,26 +173,28 @@ namespace Catalogue.Data.Import.Mappings
             {
                 var keywords = new List<MetadataKeyword>();
 
+                keywords.Add(new MetadataKeyword(){Value = "Improve", Vocab = Vocabularies.MetadataAdmin.Id});
+
                 keywords.AddRange(ParsePageKeywords(row.GetField("Keywords")));
 
-                AddKeyword(keywords, "http://vocab.jncc.gov.uk/NHBS", row.GetField("NhbsNumber"));
-                AddKeyword(keywords, "http://vocab.jncc.gov.uk/ISBN", row.GetField("IsbnNumber"));
-                AddKeyword(keywords, "http://vocab.jncc.gov.uk/ISSN", row.GetField("IssnNumber"));
-                AddKeyword(keywords, "http://vocab.jncc.gov.uk/jncc-report-series-number", row.GetField("JnccReportSeriesNumber"));
+                AddKeyword(keywords, nhbsVocab, row.GetField("NhbsNumber"));
+                AddKeyword(keywords, isbnVocab, row.GetField("IsbnNumber"));
+                AddKeyword(keywords, issnVocab, row.GetField("IssnNumber"));
+                AddKeyword(keywords, reportSeriesNoVocab, row.GetField("JnccReportSeriesNumber"));
 
                 if (row.GetField("Free") == "1")
                 {
-                    AddKeyword(keywords, "http://vocab.jncc.gov.uk/publication-status", "Free");
+                    AddKeyword(keywords, publicationStatusVocab, "Free");
                 }
 
                 if (row.GetField("Discontinued") == "1")
                 {
-                    AddKeyword(keywords, "http://vocab.jncc.gov.uk/publication-status", "Discontinued");
+                    AddKeyword(keywords, publicationStatusVocab, "Discontinued");
                 }
 
                 keywords.AddRange(
-                    GetDomain(keywords.Where(x => x.Vocab == "http://vocab.jncc.gov.uk/publication-category").ToList()));
-                AddKeyword(keywords, "http://vocab.jncc.gov.uk/jncc-category", "JNCC Publications");
+                    GetDomain(keywords.Where(x => x.Vocab == publicationCategoryVocab).ToList()));
+                AddKeyword(keywords, Vocabularies.JnccCategory.Id, "JNCC Publications");
 
                 return keywords;
             }
@@ -202,7 +213,7 @@ namespace Catalogue.Data.Import.Mappings
 
             private List<MetadataKeyword> GetDomain(List<MetadataKeyword> keywords)
             {
-                var domainVocab = "http://vocab.jncc.gov.uk/jncc-domain";
+                var domainVocab = Vocabularies.JnccDomain.Id;
 
                 var result = new List<MetadataKeyword>();
 
@@ -254,7 +265,7 @@ namespace Catalogue.Data.Import.Mappings
                         where k.IsNotBlank()
                         select new MetadataKeyword
                         {
-                            Vocab = "http://vocab.jncc.gov.uk/publication-category",
+                            Vocab = publicationCategoryVocab,
                             Value = k.Replace("&", "and")
                                 .ToCharArray()
                                 .Where(c => !char.IsPunctuation(c))
