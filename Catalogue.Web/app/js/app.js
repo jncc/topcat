@@ -73,6 +73,9 @@
           return '#test text';
         }
       }
+    }).when('/content/whytopcat', {
+      controller: 'ContentController',
+      templateUrl: 'views/partials/why-topcat.html'
     }).otherwise({
       redirectTo: '/'
     });

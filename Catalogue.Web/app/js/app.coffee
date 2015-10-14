@@ -64,6 +64,9 @@ module.config ($routeProvider) ->
             controller:     'MarkdownController',
             templateUrl:    'views/partials/markdown.html'
             resolve:        'markdown' : () -> '#test text'
+        .when '/content/whytopcat',
+            controller:     'ContentController',
+            templateUrl:    'views/partials/why-topcat.html'
         .otherwise
             redirectTo:     '/'
 
