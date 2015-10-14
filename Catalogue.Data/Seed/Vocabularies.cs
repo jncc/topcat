@@ -33,7 +33,7 @@ namespace Catalogue.Data.Seed
         }
 
         public static Vocabulary JnccCategory
-        {http://vocab.jncc.gov.uk/metadata-admin
+        {
             get
             {
                 return new Vocabulary
