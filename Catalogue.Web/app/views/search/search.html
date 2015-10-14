@@ -167,7 +167,8 @@
 
 
 
-<div ng-show="!query.q && !query.k[0] && !app.starting" class="fade-in-with-delay">
+<div ng-show="!query.q && !query.k[0] && !app.starting">
+    <!--class="fade-in-with-delay"-->
     <div class="row">
         <div class="col-md-8 welcome">
             <h1>
@@ -188,21 +189,39 @@
                     </div>
                 </div>
             </div>
+
+            <br />
+
+            <h2>Why are we building Topcat?</h2>
+            <p>
+                For <a href="content/whytopcat">lots of good reasons</a>. There is a clear need in many teams we can meet with a shared solution.
+                Please check out our roadmap (right) and get in touch
+                with <a href="mailto:Pete.Montgomery@jncc.gov.uk">Pete Montgomery</a> in Data Services if you want to help influence the project.
+            </p>
         </div>
         <div class="col-md-4 roadmap">
 
             <br />
 
-            <!--            <h3>Something new <span class="label label-default">New</span></h3>-->
+            <div class="well well-sm">
+                <h2>Open Data Accelerator</h2>
+                <p>
+                    The Secretary of State <a href="https://defradigital.blog.gov.uk/2015/06/25/opendefra/">recently promised</a>
+                    to release vast amounts of data from across Defra as <b>open data</b>.
+                </p>
+                <p>We have an extremely ambitious and binding timescale to catalogue and release our JNCC-owned data.</p>
+                <p><b>We want your data!</b> Please contact <a href="mailto:Lynn.Heeley@jncc.gov.uk">Lynn Heely</a> in Data Services.</p>
+            </div>
 
             <div class="well well-sm">
-                <h2>Roadmap</h2>
+                <h2>Topcat Roadmap</h2>
                 <ul>
+                    <li>Full data.gov.uk targeting <span class="label label-info">In progress</span></li>
                     <li>Keyword browser <span class="label label-success">Done</span></li>
                     <li>Spatial visualisation <span class="label label-success">Done</span></li>
                     <li>Export & download <span class="label label-success">Done</span></li>
                     <li>Standardised bounding boxes <span class="label label-info">In progress</span></li>
-                    <li>Metadata entry wizard <span class="label label-info">In progress</span></li>
+                    <li>Metadata entry wizard</li>
                     <li>Better validation</li>
                     <li>Spatial search</li>
                     <li>Bounding box editor</li>
