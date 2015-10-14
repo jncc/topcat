@@ -128,9 +128,9 @@ namespace Catalogue.Data.Import.Mappings
                     var sb = new StringBuilder();
 
                     if (!String.IsNullOrWhiteSpace(row.GetField("ShortSummary")))
-                    {
-                        sb.AppendLine("### Short Summary");
+                    {              
                         sb.AppendLine(row.GetField("ShortSummary"));
+                        sb.AppendLine();
                     }
 
                     sb.AppendLine(row.GetField("ParsedPageContent"));
