@@ -27,14 +27,3 @@
         # tooltips hanging visible when the element has gone
         $rootScope.$on '$locationChangeStart', -> $('.qtip').qtip 'hide'
         
-        # a hopefully temporary message while jncc still uses ie8
-        # this will break when we next update angular!
-        # see https://docs.angularjs.org/api/ngCookies/service/$cookies
-        browserCheckedForSupport = $cookies.browserCheckedForSupport
-        if not browserCheckedForSupport
-            $cookies.browserCheckedForSupport = true
-            ua = navigator.userAgent.toLowerCase()
-            supported = ua.indexOf('chrome') > 0
-            if not supported
-                $timeout ( -> $scope.notifications.add 'Heads up! Topcat currently works best in Chrome'), 3000
-
