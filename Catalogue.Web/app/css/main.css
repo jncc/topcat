@@ -19,9 +19,6 @@
   display: table-cell;
   vertical-align: middle;
 }
-.inline-div {
-  display: inline-block;
-}
 .pointable {
   cursor: pointer;
 }
