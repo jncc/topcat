@@ -38,7 +38,10 @@ Topcat runs with no special setup in Visual Studio for local development.
 Here's what you need to do to create a production instance:
 
 ###Build
-Run the `build/built.targets` MSBuild file (or use `build.bat`). You may need to correct the Git tool path. Use the the Developer Command Prompt for Visual Studio, else you may need to fix up (copy) the `Microsoft.WebApplication.targets` into the neceesary place in the MSBuild installation. 
+Run the `build/built.targets` MSBuild file (or use `build.bat`).
+* Use the the Developer Command Prompt for Visual Studio, else you may need to fix up (copy) the `Microsoft.WebApplication.targets` into the necessary place in the MSBuild installation.
+* You may need to install / correct the path for Git.
+* You may need to install / correct the path for NUnit-console.
 
 ###Windows Authentication
 This is an corporate / intranet application and user account details and authentication rely on
