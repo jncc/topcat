@@ -20,6 +20,7 @@
     <IISExpressAnonymousAuthentication>enabled</IISExpressAnonymousAuthentication>
     <IISExpressWindowsAuthentication>enabled</IISExpressWindowsAuthentication>
     <IISExpressUseClassicPipelineMode />
+    <UseGlobalApplicationHostFile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -161,6 +162,7 @@
     <Compile Include="Controllers\Keywords\KeywordModel.cs" />
     <Compile Include="Controllers\Keywords\KeywordsController.cs" />
     <Compile Include="Controllers\Patch\PatchController.cs" />
+    <Compile Include="Controllers\Queries\QueriesController.cs" />
     <Compile Include="Controllers\Records\RecordsController.cs" />
     <Compile Include="Controllers\Roles\RolesController.cs" />
     <Compile Include="Controllers\Sandbox\SandboxController.cs" />
