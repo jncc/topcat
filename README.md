@@ -10,8 +10,7 @@ Development
 -----------
 
 ###Web Essentials
-Install the [Visual Studio Web Essentials](http://vswebessentials.com/) extensions pack for design-time support for CoffeeScript (.coffee) and LESS (.less).
-These are essential if you want to edit the application's Javascript or CSS.
+Install the Visual Studio Web Essentials extensions pack (using Visual Studio Tools > Extensions) for design-time support for CoffeeScript (.coffee) and LESS (.less). These are essential if you want to edit the application's Javascript or CSS.
 
 There are no build-time or run-time steps used to compile Coffeescript and LESS - the Visual Studio extensions are simpler.
 The application will expect the correct .js and .css files to have been design-time generated.
@@ -62,5 +61,5 @@ You can deploy Raven in various ways; the recommended is using the Windows insta
 
 When deploying a new database instance, the **Versioning bundle** needs to be enabled.
 
-**Important** The Catalogue.Data.dll must be dpeloyed into Raven/Analyzers folder because RavenDB needs to be able to load the custom Lucene analyzer we use.  
+**Important** The Catalogue.Data.dll must be deployed into Raven/Analyzers folder because RavenDB needs to be able to load the custom Lucene analyzer we use.  
 
