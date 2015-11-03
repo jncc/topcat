@@ -5,6 +5,7 @@ using System.Xml;
 using System.Xml.Linq;
 using System.Xml.XPath;
 using Catalogue.Gemini.Model;
+using Catalogue.Utilities.Text;
 
 namespace Catalogue.Gemini.Encoding
 {
@@ -190,6 +191,10 @@ namespace Catalogue.Gemini.Encoding
 
         XElement MakeBoundingBox(Metadata metadata)
         {
+            if (metadata.BoundingBox == null)
+            {
+                return null;
+            }
             return new XElement(gmd + "geographicElement",
                 new XElement(gmd + "EX_GeographicBoundingBox",
                     new XElement(gmd + "westBoundLongitude",
@@ -244,6 +249,9 @@ namespace Catalogue.Gemini.Encoding
         {
             public static XElement MakeResponsiblePartyNode(ResponsibleParty c)
             {
+                if (c == null || c.Name.IsBlank())
+                    return null;
+
                 return new XElement(gmd + "CI_ResponsibleParty",
                     new XElement(gmd + "organisationName",
                         new XElement(gco + "CharacterString", c.Name)),
