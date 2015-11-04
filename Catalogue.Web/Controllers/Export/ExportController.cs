@@ -96,7 +96,7 @@ namespace Catalogue.Web.Controllers.Export
             // encode the records as iso xml elements
             var elements = from record in records
                            let doc = new XmlEncoder().Create(record.Id, record.Gemini)
-                           select new XElement("topcat-record", new XAttribute("id", record.Id), doc.Root);
+                           select new XElement("topcat-record", new XAttribute("id", record.Id), new XAttribute("path", record.Path), doc.Root);
 
             var output = new XDocument(new XElement("topcat-export", elements)).ToString();
 
