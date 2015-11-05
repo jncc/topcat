@@ -74,7 +74,7 @@ namespace Catalogue.Web.Controllers.Export
 
                 response.Content.Headers.ContentDisposition = new ContentDispositionHeaderValue("attachment")
                 {
-                    FileName = "topcat-export-" + DateTime.Now.ToString("yyyyMMdd-HHmmss") + ".csv"
+                    FileName = "topcat-export-" + DateTime.Now.ToString("yyyyMMdd-HHmmss") + ".tsv"
                 };
                 response.Content.Headers.ContentType = new MediaTypeHeaderValue("application/octet-stream");
 
