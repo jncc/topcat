@@ -38,7 +38,7 @@ namespace Catalogue.Web.Controllers.Collections
 
             var output = joined.ToList();
 
-            // add some intended future collections with no records yet
+            // temp: add some intended future collections with no records yet
             output.AddRange(from k in vocab.Keywords
                             where k.Value == "Natural Capital Library" || k.Value == "JNCC Publications"
                             where !counts.Any(c => c.KeywordValue == k.Value) // no records for these collections
@@ -49,7 +49,7 @@ namespace Catalogue.Web.Controllers.Collections
                                 RecordCount = 0,
                             });
 
-            return output;
+            return output.OrderBy(x => x.Name == "Unclassified").ToList();
         }
     }
 }
