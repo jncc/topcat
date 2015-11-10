@@ -199,7 +199,7 @@ namespace Catalogue.Data.Import.Mappings
                 {
                     var importer = Importer.CreateImporter<SeabedSurveyMapping>(db);
                     importer.SkipBadRecords = true; // see log for skipped bad records
-                    importer.Import(@"C:\work\Offshore_survey_TopCat_data_MN.csv");
+                    importer.Import(@"C:\Work\Offshore_survey_TopCat_data_part1.csv");
 
                     var errors = importer.Results
                         .Where(r => !r.Success)
@@ -224,7 +224,7 @@ namespace Catalogue.Data.Import.Mappings
         [Test]
         public void should_import_expected_number_of_records()
         {
-            imported.Count().Should().Be(45);
+            imported.Count().Should().Be(148);
         }
     }
 
