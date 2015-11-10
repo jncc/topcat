@@ -18,7 +18,6 @@ namespace Catalogue.Data.Import.Mappings
     /// <summary>
     /// Steps: 
     /// Get the spreadsheet from Mike
-    /// Remove the first line
     /// Save as CSV (MS-DOS)
     /// </summary>
     public class SeabedSurveyMapping : IMapping
@@ -31,44 +30,53 @@ namespace Catalogue.Data.Import.Mappings
                 {
                     Vocabularies.JnccCategory,
                     Vocabularies.JnccDomain,
-//                    new Vocabulary
-//                    {
-//                        Id = "http://vocab.jncc.gov.uk/seabed-survey-vessel",
-//                        Name = "Survey Vessel",
-//                        Description = "Management keyword for Offshore Seabed Survey",
-//                        Controlled = false,
-//                        Keywords = new List<VocabularyKeyword>(),
-//                    },
-//                    new Vocabulary
-//                    {
-//                        Id = "http://vocab.jncc.gov.uk/location",
-//                        Name = "Location",
-//                        Description = "Location keyword. Could be moved to the Gemini location field.",
-//                        Controlled = false,
-//                        Keywords = new List<VocabularyKeyword>(),
-//                    },
-//                    new Vocabulary
-//                    {
-//                        Id = "http://vocab.jncc.gov.uk/seabed-survey-technique",
-//                        Name = "Seabed Survey Technique",
-//                        Description = "Used by MESH",
-//                        PublicationDate = "2013",
-//                        Publishable = false,
-//                        Controlled = true,
-//                        Keywords = new List<VocabularyKeyword>()
-//                    },
-//                    new Vocabulary
-//                    {
-//                        Id = "http://vocab.jncc.gov.uk/seabed-survey-data-type",
-//                        Name = "Seabed Survey Data Type",
-//                        Description = "Used by MESH",
-//                        Publishable = false,
-//                        Controlled = true,
-//                        Keywords = new List<VocabularyKeyword>
-//                        {
-//                            new VocabularyKeyword { Value = "Processed" }
-//                        }
-//                    },
+                    new Vocabulary
+                    {
+                        Id = "http://vocab.jncc.gov.uk/seabed-survey-cruise-id",
+                        Name = "Cruise ID",
+                        Description = "Management keyword for Offshore Seabed Survey",
+                        Controlled = false,
+                        PublicationDate = "2015",
+                        Keywords = new List<VocabularyKeyword>(),
+                    },
+                    new Vocabulary
+                    {
+                        Id = "http://vocab.jncc.gov.uk/seabed-survey-vessel",
+                        Name = "Survey Vessel",
+                        Description = "Management keyword for Offshore Seabed Survey",
+                        Controlled = false,
+                        PublicationDate = "2015",
+                        Keywords = new List<VocabularyKeyword>(),
+                    },
+                    new Vocabulary
+                    {
+                        Id = "http://vocab.jncc.gov.uk/location",
+                        Name = "Location",
+                        Description = "Location keyword. Could be moved to the Gemini location field.",
+                        Controlled = false,
+                        PublicationDate = "2015",
+                        Keywords = new List<VocabularyKeyword>(),
+                    },
+                    new Vocabulary
+                    {
+                        Id = "http://vocab.jncc.gov.uk/seabed-survey-technique",
+                        Name = "Seabed Survey Technique",
+                        Description = "Used by MESH",
+                        Keywords = new List<VocabularyKeyword>()
+                    },
+                    new Vocabulary
+                    {
+                        Id = "http://vocab.jncc.gov.uk/seabed-survey-data-type",
+                        Name = "Seabed Survey Data Type",
+                        Description = "Management keyword for Offshore Seabed Survey",
+                        Publishable = false,
+                        Controlled = true,
+                        Keywords = new List<VocabularyKeyword>
+                        {
+                            new VocabularyKeyword { Value = "Raw" },
+                            new VocabularyKeyword { Value = "Processed" }
+                        }
+                    },
                 };
             }
         }
@@ -99,15 +107,17 @@ namespace Catalogue.Data.Import.Mappings
                     var keywords = new List<MetadataKeyword>
                     {
                         new MetadataKeyword {Vocab = "http://vocab.jncc.gov.uk/jncc-domain", Value = "Marine"},
-                        new MetadataKeyword {Vocab = "http://vocab.jncc.gov.uk/jncc-category", Value = "Seabed Survey"},
+                        new MetadataKeyword {Vocab = "http://vocab.jncc.gov.uk/jncc-category", Value = "Offshore Seabed Survey"},
                         new MetadataKeyword {Vocab = "http://vocab.jncc.gov.uk/seabed-survey-vessel", Value = surveyVessel},
                         new MetadataKeyword {Vocab = "http://vocab.jncc.gov.uk/seabed-survey-cruise-id", Value = cruiseId },
                         new MetadataKeyword {Vocab = "http://vocab.jncc.gov.uk/location", Value = site },
-                        new MetadataKeyword {Vocab = "http://vocab.jncc.gov.uk/seabed-survey-data-type", Value = dataType},
                     };
 
                     if (technique.IsNotBlank())
                         keywords.Add(new MetadataKeyword {Vocab = "http://vocab.jncc.gov.uk/seabed-survey-technique", Value = technique });
+
+                    if (dataType.IsNotBlank())
+                        keywords.Add(new MetadataKeyword { Vocab = "http://vocab.jncc.gov.uk/seabed-survey-data-type", Value = dataType });
 
                     return keywords;
                 });
