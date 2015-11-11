@@ -110,8 +110,15 @@ namespace Catalogue.Data.Import.Mappings
                         new MetadataKeyword {Vocab = "http://vocab.jncc.gov.uk/jncc-category", Value = "Offshore Seabed Survey"},
                         new MetadataKeyword {Vocab = "http://vocab.jncc.gov.uk/seabed-survey-vessel", Value = surveyVessel},
                         new MetadataKeyword {Vocab = "http://vocab.jncc.gov.uk/seabed-survey-cruise-id", Value = cruiseId },
-                        new MetadataKeyword {Vocab = "http://vocab.jncc.gov.uk/location", Value = site },
                     };
+
+                    if (site.IsNotBlank())
+                    {
+                        var sites = site.Split(';')
+                            .Select(s => s.Trim())
+                            .Select(s => new MetadataKeyword { Vocab = "http://vocab.jncc.gov.uk/location", Value = s });
+                        keywords.AddRange(sites);
+                    }
 
                     if (technique.IsNotBlank())
                         keywords.Add(new MetadataKeyword {Vocab = "http://vocab.jncc.gov.uk/seabed-survey-technique", Value = technique });
