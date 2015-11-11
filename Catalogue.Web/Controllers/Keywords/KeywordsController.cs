@@ -33,6 +33,8 @@ namespace Catalogue.Web.Controllers.Keywords
             return vocabfulKeywords.Concat(vocablessKeywords.Except(vocabfulKeywords))
                 .Select(x => new KeywordModel { Vocab = x.Vocab, Value = x.Value })
                 .Take(take)
+                .OrderBy(x => x.Vocab != "http://vocab.jncc.gov.uk/jncc-domain")
+                .ThenBy(x => x.Vocab != "http://vocab.jncc.gov.uk/jncc-category")
                 .ToList();
         }
     }
