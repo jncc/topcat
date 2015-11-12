@@ -134,7 +134,7 @@ namespace Catalogue.Data.Import.Mappings
                         End = row.GetField("TemporalExtent.End")
                     });
                 Map(m => m.DatasetReferenceDate).Value("2015-09-01");
-                Map(m => m.Lineage).Field("Gemini.Lineage");
+                Map(m => m.Lineage).Value("This dataset is an output of an Offshore Seabed Survey undertaken by the Joint Nature Conservation Committee."); // .Field("Gemini.Lineage");
                 Map(m => m.ResourceLocator).Ignore();
                 Map(m => m.AdditionalInformationSource).Ignore();
                 Map(m => m.DataFormat).Field("Gemini.DataFormat");
@@ -153,7 +153,7 @@ namespace Catalogue.Data.Import.Mappings
                 Map(m => m.MetadataDate).Value(DateTime.Now);
                 Map(m => m.MetadataPointOfContact).ConvertUsing(row =>
                     {
-                        string name = row.GetField("JNCC");
+                        string name = "Joint Nature Conservation Committee";
                         string email = "data@jncc.gov.uk";
                         string role = "pointOfContact";
                         return new ResponsibleParty { Name = name, Email = email, Role = role };
@@ -177,6 +177,7 @@ namespace Catalogue.Data.Import.Mappings
             {
                 Map(m => m.Path);
                 Map(m => m.TopCopy);
+                Map(m => m.Validation).Value(Validation.Gemini);
                 Map(m => m.Status);
                 Map(m => m.Security);
                 Map(m => m.Review);

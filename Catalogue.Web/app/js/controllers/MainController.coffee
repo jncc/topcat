@@ -2,6 +2,9 @@
 
     ($scope, $rootScope, $timeout, $cookies, Account) ->
 
+        # page title
+        $scope.page = title: 'Topcat'
+        
         # implement busy spinner feature
         busyCount = 0
         $scope.busy =
@@ -23,7 +26,6 @@
         Account.then (user) -> $scope.user = user
         
         # horrid hack to ensure qtips hide when url (location) changes
-        # don't know why qtip can't cope with this naturally but it leaves
-        # tooltips hanging visible when the element has gone
+        # (tooltips left hanging visible when the element has gone)
         $rootScope.$on '$locationChangeStart', -> $('.qtip').qtip 'hide'
         

@@ -310,7 +310,7 @@ namespace Catalogue.Data.Write
             // 10 Lineage is mandatory
             if (record.Gemini.Lineage.IsBlank())
             {
-                ValidationResult.Errors.Add("Lineage msut be provided" + GeminiSuffix, r => r.Gemini.Lineage);
+                ValidationResult.Errors.Add("Lineage must be provided" + GeminiSuffix, r => r.Gemini.Lineage);
             }
 
             // 15 extent is optional and not used
@@ -323,14 +323,8 @@ namespace Catalogue.Data.Write
 
             // 19 resource location, conditional
             // when online access is availble, should be a valid url
-            // resource_locator_must_be_a_well_formed_http_url
             // when do not yet perform a get request and get a 200 response, the only true way to validate a url
-            if (record.Gemini.ResourceLocator.IsBlank())
-            {
-                ValidationResult.Errors.Add("Resource locator must be provided" + GeminiSuffix,
-                      r => r.Gemini.ResourceLocator);
-            }
-            else
+            if (record.Gemini.ResourceLocator.IsNotBlank())
             {
                 Uri url;
 
@@ -348,7 +342,6 @@ namespace Catalogue.Data.Write
                         r => r.Gemini.ResourceLocator);
                 }
             }
-
 
             // 21 DataFormat optional 
 

@@ -10,7 +10,7 @@ Development
 -----------
 
 ###Web Essentials
-Install the Visual Studio Web Essentials extensions pack (using Visual Studio Tools > Extensions) for design-time support for CoffeeScript (.coffee) and LESS (.less). These are essential if you want to edit the application's Javascript or CSS.
+Install the Visual Studio Web Essentials extensions pack (and now the "Web Compiler" extension) for design-time support for CoffeeScript (.coffee) and LESS (.less). These are essential if you want to edit the application's Javascript or CSS.
 
 There are no build-time or run-time steps used to compile Coffeescript and LESS - the Visual Studio extensions are simpler.
 The application will expect the correct .js and .css files to have been design-time generated.
