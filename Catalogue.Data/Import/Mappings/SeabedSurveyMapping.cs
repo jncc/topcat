@@ -229,14 +229,16 @@ namespace Catalogue.Data.Import.Mappings
             }
         }
 
-        [Test]
-        [Explicit] // this isn't seed data, so these tests are (were) only used for the "one-off" import
+        [Test, Explicit] // this isn't seed data, so these tests are (were) only used for the "one-off" import
         public void should_import_expected_number_of_records()
         {
-            //imported.Count().Should().Be(148);
-            imported.Count().Should().Be(146);
+            imported.Count().Should().Be(316);
+        }
 
 
+        [Test, Explicit]
+        void MakeAnXmlFile()
+        {
             var record = imported.Single(r => r.Gemini.Title == "Locations of grab samples with Particle Size Analysis (PSA) results from Bassurelle Sandbank SCI");
             record.Gemini.ResourceLocator = $"http://example.com/{record.Id}";
             var xml = new global::Catalogue.Gemini.Encoding.XmlEncoder().Create(record.Id, record.Gemini);

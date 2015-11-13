@@ -36,8 +36,8 @@ namespace Catalogue.Data.Import.Mappings
 
         public void Apply(CsvConfiguration config)
         {
-            config.RegisterClassMap<SeabedSurveyMapping.RecordMap>();
-            config.RegisterClassMap<SeabedSurveyMapping.GeminiMap>();
+            config.RegisterClassMap<RecordMap>();
+            config.RegisterClassMap<GeminiMap>();
 
             config.WillThrowOnMissingField = false;
             config.TrimFields = true;
@@ -122,7 +122,7 @@ namespace Catalogue.Data.Import.Mappings
                 Map(m => m.SourceIdentifier);
                 Map(m => m.ReadOnly).Value(true);
 
-                References<SeabedSurveyMapping.GeminiMap>(m => m.Gemini);
+                References<GeminiMap>(m => m.Gemini);
             }
         }
     }

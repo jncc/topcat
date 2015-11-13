@@ -36,8 +36,8 @@ namespace Catalogue.Data.Import.Mappings
 
         public void Apply(CsvConfiguration config)
         {
-            config.RegisterClassMap<SeabedSurveyMapping.RecordMap>();
-            config.RegisterClassMap<SeabedSurveyMapping.GeminiMap>();
+            config.RegisterClassMap<MarineRecorderMapping.RecordMap>();
+            config.RegisterClassMap<MarineRecorderMapping.GeminiMap>();
 
             config.WillThrowOnMissingField = false;
             config.TrimFields = true;
@@ -52,16 +52,16 @@ namespace Catalogue.Data.Import.Mappings
                 Map(m => m.TopicCategory).Field("Gemini.TopicCategory", value => value.FirstCharToLower());
                 Map(m => m.Keywords).ConvertUsing(row =>
                 {
-                    string keyword1 = row.GetField("Gemini.Keywords.Keyword1");
+                    string surveyId = row.GetField("Gemini.Keywords.SurveyKey");
+                    string surveyType = row.GetField("Geminin.Keywords.SurveyType");
 
                     var keywords = new List<MetadataKeyword>
                     {
                         new MetadataKeyword {Vocab = "http://vocab.jncc.gov.uk/jncc-domain", Value = "Marine"},
                         new MetadataKeyword {Vocab = "http://vocab.jncc.gov.uk/jncc-category", Value = "Marine Recorder"},
+                        new MetadataKeyword {Vocab = "http://vocab.jncc.gov.uk/survey-id", Value = surveyId },
+                        new MetadataKeyword {Vocab = "http://vocab.jncc.gov.uk/survey-type", Value = surveyType },
                     };
-
-                    if (keyword1.IsNotBlank())
-                        keywords.Add(new MetadataKeyword { Vocab = "http://vocab.jncc.gov.uk/BLAH", Value = keyword1 });
 
                     return keywords;
                 });
@@ -122,7 +122,7 @@ namespace Catalogue.Data.Import.Mappings
                 Map(m => m.SourceIdentifier);
                 Map(m => m.ReadOnly).Value(true);
 
-                References<SeabedSurveyMapping.GeminiMap>(m => m.Gemini);
+                References<MarineRecorderMapping.GeminiMap>(m => m.Gemini);
             }
         }
     }
@@ -134,6 +134,9 @@ namespace Catalogue.Data.Import.Mappings
         [TestFixtureSetUp]
         public void SetUp()
         {
+//          var paths = new { input = @"C:\work\marine-recorder-dump\biotopeMetadata.csv", errors = @"C:\work\marine-recorder-dump\biotope-errors.txt" };
+            var paths = new { input = @"C:\work\marine-recorder-dump\speciesMetadata.csv", errors = @"C:\work\marine-recorder-dump\species-errors.txt" };
+
             var store = new InMemoryDatabaseHelper().Create();
 
             using (var db = store.OpenSession())
@@ -142,12 +145,12 @@ namespace Catalogue.Data.Import.Mappings
                 {
                     var importer = Importer.CreateImporter<MarineRecorderMapping>(db);
                     importer.SkipBadRecords = true;
-                    importer.Import(@"C:\Work\marine-recorder-dump.csv");
+                    importer.Import(paths.input);
 
                     var errors = importer.Results
                         .Where(r => !r.Success)
                         .Select(r => r.Record.Gemini.Title + Environment.NewLine + JsonConvert.SerializeObject(r.Validation) + Environment.NewLine);
-                    File.WriteAllLines(@"C:\work\marine-recorder-errors.txt", errors);
+                    File.WriteAllLines(paths.errors, errors);
 
                     db.SaveChanges();
 
@@ -167,7 +170,7 @@ namespace Catalogue.Data.Import.Mappings
         [Test, Explicit] // this isn't seed data, so these tests are (were) only used for the "one-off" import
         public void should_import_expected_number_of_records()
         {
-            imported.Count().Should().Be(146);
+            imported.Count().Should().Be(247);
         }
     }
 }
