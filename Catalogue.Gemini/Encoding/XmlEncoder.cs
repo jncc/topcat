@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Xml;
 using System.Xml.Linq;
-using System.Xml.XPath;
 using Catalogue.Gemini.Model;
 using Catalogue.Utilities.Text;
 
@@ -59,7 +57,8 @@ namespace Catalogue.Gemini.Encoding
                                     MakeTemporalExtent(m))))),
                     new XElement(gmd + "distributionInfo",
                         new XElement(gmd + "MD_Distribution",
-                            MakeDataFormat(m))),
+                            MakeDataFormat(m),
+                            MakeResourceLocator(m))),
                     MakeLineage(m)));
         }
 
@@ -227,6 +226,16 @@ namespace Catalogue.Gemini.Encoding
                     new XElement(gmd + "version",
                         new XElement(gco + "CharacterString", "Unknown")))); 
             // not supporting versions for data format
+        }
+
+        XElement MakeResourceLocator(Metadata metadata)
+        {
+            return new XElement(gmd + "transferOptions",
+                new XElement(gmd + "MD_DigitalTransferOptions",
+                    new XElement(gmd + "onLine",
+                        new XElement(gmd + "CI_OnlineResource",
+                            new XElement(gmd + "linkage",
+                                new XElement(gmd + "URL", metadata.ResourceLocator))))));
         }
 
         XElement MakeLineage(Metadata metadata)
