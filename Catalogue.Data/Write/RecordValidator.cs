@@ -687,7 +687,7 @@ namespace Catalogue.Data.Write
         }
 
         [Test]
-        public void blanck_lineage_is_not_allowed([Values("", " ", null)] string blank)
+        public void blank_lineage_is_not_allowed([Values("", " ", null)] string blank)
         {
             var record = SimpleRecord().With(r => r.Gemini.Lineage = blank);
             var result = new RecordValidator().Validate(record);
