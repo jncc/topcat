@@ -670,6 +670,10 @@
     <Content Include="app\js\map.min.js.map">
       <DependentUpon>map.min.js</DependentUpon>
     </Content>
+    <None Include="compilerconfig.json" />
+    <Content Include="compilerconfig.json.defaults">
+      <DependentUpon>compilerconfig.json</DependentUpon>
+    </Content>
   </ItemGroup>
   <ItemGroup>
     <Content Include="app\js\controllers\VocabularyListController.min.js.map">

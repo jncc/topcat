@@ -8,9 +8,8 @@
             {id: 2, name: 'Mesh'},
             {id: 3, name: 'Publications'}
             {id: 4, name: 'Meow'}
-            {id: 5, name: 'SeabedSurvey'}]
-                
-                
+            {id: 5, name: 'SeabedSurvey'}
+            {id: 6, name: 'MarineRecorder'}]
                 
         $scope.runImport = ->
             processResult = (response) ->
