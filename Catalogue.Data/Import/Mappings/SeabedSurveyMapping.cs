@@ -87,6 +87,7 @@ namespace Catalogue.Data.Import.Mappings
             config.RegisterClassMap<GeminiMap>();
 
             config.WillThrowOnMissingField = false;
+            config.TrimFields = true;
         }
 
         public sealed class GeminiMap : CsvClassMap<Metadata>
@@ -134,17 +135,17 @@ namespace Catalogue.Data.Import.Mappings
                         End = row.GetField("TemporalExtent.End")
                     });
                 Map(m => m.DatasetReferenceDate).Value("2015-09-01");
-                Map(m => m.Lineage).Value("This dataset is an output of an Offshore Seabed Survey undertaken by the Joint Nature Conservation Committee."); // .Field("Gemini.Lineage");
+                Map(m => m.Lineage).Value("This dataset is an output of an Offshore Seabed Survey undertaken by Joint Nature Conservation Committee.");
                 Map(m => m.ResourceLocator).Ignore();
                 Map(m => m.AdditionalInformationSource).Ignore();
                 Map(m => m.DataFormat).Field("Gemini.DataFormat");
                 Map(m => m.ResponsibleOrganisation).ConvertUsing(row =>
                     {
-                        string name = row.GetField("ResponsibleOrganisation.Name");
-                        string email = row.GetField("ResponsibleOrganisation.Email");
-                        string role = row.GetField("ResponsibleOrganisation.Role").FirstCharToLower();
+                        string name = row.GetField("ResponsibleOrganisation.Name").Trim();
+                        string email = row.GetField("ResponsibleOrganisation.Email").Trim();
+                        string role = row.GetField("ResponsibleOrganisation.Role").FirstCharToLower().Trim();
 
-                        return new ResponsibleParty { Name = name, Email = email, Role = role };
+                        return new ResponsibleParty { Name = name == "JNCC" ? "Joint Nature Conservation Committee (JNCC)" : name, Email = email, Role = role };
                     });
                 Map(m => m.LimitationsOnPublicAccess).Field("Gemini.LimitationsOnPublicAccess");
                 Map(m => m.UseConstraints).Field("Gemini.UseConstraints");
@@ -191,7 +192,6 @@ namespace Catalogue.Data.Import.Mappings
 
     }
 
-    [Explicit] // this isn't seed data, so these tests are (were) only used for the "one-off" import
     class when_importing_seabed_survey_spreadsheet
     {
         List<Record> imported;
@@ -230,9 +230,19 @@ namespace Catalogue.Data.Import.Mappings
         }
 
         [Test]
+        [Explicit] // this isn't seed data, so these tests are (were) only used for the "one-off" import
         public void should_import_expected_number_of_records()
         {
-            imported.Count().Should().Be(148);
+            //imported.Count().Should().Be(148);
+            imported.Count().Should().Be(146);
+
+
+            var record = imported.Single(r => r.Gemini.Title == "Locations of grab samples with Particle Size Analysis (PSA) results from Bassurelle Sandbank SCI");
+            record.Gemini.ResourceLocator = $"http://example.com/{record.Id}";
+            var xml = new global::Catalogue.Gemini.Encoding.XmlEncoder().Create(record.Id, record.Gemini);
+            //var ceh = new global::Catalogue.Gemini.Validation.Validator().Validate(xml);
+            string filename = "topcat-record-" + record.Id.ToString().ToLower() + ".xml";
+            xml.Save(Path.Combine(@"C:\work", filename));
         }
     }
 
