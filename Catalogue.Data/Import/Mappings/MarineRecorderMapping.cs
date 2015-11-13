@@ -71,7 +71,7 @@ namespace Catalogue.Data.Import.Mappings
                     End = row.GetField("TemporalExtent.End")
                 });
                 Map(m => m.DatasetReferenceDate).Field("Gemini.DatasetReferenceDate");
-                Map(m => m.Lineage).Value("This dataset come from BLAH.");
+                Map(m => m.Lineage).Field("Gemini.Lineage");
                 Map(m => m.ResourceLocator).Ignore();
                 Map(m => m.AdditionalInformationSource).Field("Gemini.AdditionalInformationSource");
                 Map(m => m.DataFormat).Field("Gemini.DataFormat");
