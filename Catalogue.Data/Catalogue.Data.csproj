@@ -84,6 +84,7 @@
     <Compile Include="Import\CsvHelperHelpers.cs" />
     <Compile Include="Import\FileSystem.cs" />
     <Compile Include="Import\Mappings\ActivitiesMapping.cs" />
+    <Compile Include="Import\Mappings\MarineRecorderMapping.cs" />
     <Compile Include="Import\Mappings\MeowMapping.cs" />
     <Compile Include="Import\Mappings\MeshMapping.cs" />
     <Compile Include="Import\Importer.cs" />
@@ -91,6 +92,7 @@
     <Compile Include="Import\Mappings\SeabedSurveyMapping.cs" />
     <Compile Include="Import\Mappings\PubCatMapping.cs" />
     <Compile Include="Import\ImportUtility.cs" />
+    <Compile Include="Import\Mappings\StandardishMapping.cs" />
     <Compile Include="Import\Mappings\TopcatMapping.cs" />
     <Compile Include="Indexes\FieldNames.cs" />
     <Compile Include="Indexes\RecordCountForKeywordIndex.cs" />
