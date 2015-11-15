@@ -84,7 +84,7 @@ namespace Catalogue.Data.Import.Mappings
                     return new ResponsibleParty { Name = name == "JNCC" ? "Joint Nature Conservation Committee (JNCC)" : name, Email = email, Role = role };
                 });
                 Map(m => m.LimitationsOnPublicAccess).Field("Gemini.LimitationsOnPublicAccess");
-                Map(m => m.UseConstraints).Field("Gemini.UseConstraints");
+                Map(m => m.UseConstraints).Value("Open Government Licence v3.0");
                 Map(m => m.SpatialReferenceSystem).Field("Gemini.SpatialReferenceSystem", value => value == "N/A" ? null : value);
                 Map(m => m.Extent).Ignore();
                 Map(m => m.MetadataDate).Value(DateTime.Now);

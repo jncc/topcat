@@ -37,5 +37,7 @@ namespace Catalogue.Data.Model
         /// Used by the infrastructure when representing a particular revision of the record.
         /// </summary>
         public int Revision { get; internal set; }
+
+        public PublicationInfo Publication { get; internal set;  }
     }
 }
