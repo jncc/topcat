@@ -48,7 +48,7 @@ namespace Catalogue.Data.Import.Mappings
             public GeminiMap()
             {
                 Map(m => m.Title).Field("Gemini.Title");
-                Map(m => m.Abstract).Field("Gemini.Abstract");
+                Map(m => m.Abstract).Field("Gemini.Abstract", s => s.IsNotBlank() ? s : "This is a placeholder abstract.");
                 Map(m => m.TopicCategory).Field("Gemini.TopicCategory", value => value.FirstCharToLower());
                 Map(m => m.Keywords).ConvertUsing(row =>
                 {
@@ -90,8 +90,8 @@ namespace Catalogue.Data.Import.Mappings
                 Map(m => m.MetadataDate).Value(DateTime.Now);
                 Map(m => m.MetadataPointOfContact).ConvertUsing(row =>
                 {
-                    string name = "Joint Nature Conservation Committee (JNCC)";
-                    string email = "data@jncc.gov.uk";
+                    string name = "Roweena Patel";
+                    string email = "Roweena.Patel@jncc.gov.uk";
                     string role = "pointOfContact";
                     return new ResponsibleParty { Name = name, Email = email, Role = role };
                 });
@@ -122,7 +122,7 @@ namespace Catalogue.Data.Import.Mappings
                 Map(m => m.SourceIdentifier);
                 Map(m => m.ReadOnly).Value(true);
 
-                References<MarineRecorderMapping.GeminiMap>(m => m.Gemini);
+                References<GeminiMap>(m => m.Gemini);
             }
         }
     }
@@ -134,8 +134,8 @@ namespace Catalogue.Data.Import.Mappings
         [TestFixtureSetUp]
         public void SetUp()
         {
-//          var paths = new { input = @"C:\work\marine-recorder-dump\biotopeMetadata.csv", errors = @"C:\work\marine-recorder-dump\biotope-errors.txt" };
-            var paths = new { input = @"C:\work\marine-recorder-dump\speciesMetadata.csv", errors = @"C:\work\marine-recorder-dump\species-errors.txt" };
+            var paths = new { input = @"C:\work\data\habitatMetadata.csv", errors = @"C:\work\data\habitat-errors.txt" };
+//          var paths = new { input = @"C:\work\data\speciesMetadata.csv", errors = @"C:\work\data\species-errors.txt" };
 
             var store = new InMemoryDatabaseHelper().Create();
 
@@ -170,7 +170,8 @@ namespace Catalogue.Data.Import.Mappings
         [Test, Explicit] // this isn't seed data, so these tests are (were) only used for the "one-off" import
         public void should_import_expected_number_of_records()
         {
-            imported.Count().Should().Be(247);
+            imported.Count().Should().Be(246); // habitat
+            //imported.Count().Should().Be(247); // species
         }
     }
 }
