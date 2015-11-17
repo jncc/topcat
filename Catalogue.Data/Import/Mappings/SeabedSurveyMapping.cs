@@ -135,7 +135,7 @@ namespace Catalogue.Data.Import.Mappings
                         End = row.GetField("TemporalExtent.End")
                     });
                 Map(m => m.DatasetReferenceDate).Value("2015-09-01");
-                Map(m => m.Lineage).Value("This dataset is an output of an Offshore Seabed Survey undertaken by Joint Nature Conservation Committee.");
+                Map(m => m.Lineage).Value("This dataset is an output of a collaborative offshore seabed survey undertaken by Joint Nature Conservation Committee (JNCC).");
                 Map(m => m.ResourceLocator).Ignore();
                 Map(m => m.AdditionalInformationSource).Ignore();
                 Map(m => m.DataFormat).Field("Gemini.DataFormat");
@@ -162,12 +162,20 @@ namespace Catalogue.Data.Import.Mappings
                 Map(m => m.ResourceType).Field("Gemini.ResourceType", value => value.FirstCharToLower());
                 Map(m => m.BoundingBox).ConvertUsing(row =>
                     {
-                        decimal north = Convert.ToDecimal(row.GetField("BoundingBox.North"));
-                        decimal south = Convert.ToDecimal(row.GetField("BoundingBox.South"));
-                        decimal east = Convert.ToDecimal(row.GetField("BoundingBox.East"));
-                        decimal west = Convert.ToDecimal(row.GetField("BoundingBox.West"));
+                        string n = row.GetField("BoundingBox.North");
+                        if (n.IsNotBlank() && n != "NA")
+                        {
+                            decimal north = Convert.ToDecimal(row.GetField("BoundingBox.North"));
+                            decimal south = Convert.ToDecimal(row.GetField("BoundingBox.South"));
+                            decimal east = Convert.ToDecimal(row.GetField("BoundingBox.East"));
+                            decimal west = Convert.ToDecimal(row.GetField("BoundingBox.West"));
 
-                        return new BoundingBox { North = north, South = south, East = east, West = west };
+                            return new BoundingBox { North = north, South = south, East = east, West = west };
+                        }
+                        else
+                        {
+                            return null;
+                        }
                     });
             }
         }
@@ -207,12 +215,12 @@ namespace Catalogue.Data.Import.Mappings
                 {
                     var importer = Importer.CreateImporter<SeabedSurveyMapping>(db);
                     importer.SkipBadRecords = true; // see log for skipped bad records
-                    importer.Import(@"C:\Work\Offshore_survey_TopCat_data_part1.csv");
+                    importer.Import(@"C:\Work\data\Offshore_survey_TopCat_data_part1.csv");
 
                     var errors = importer.Results
                         .Where(r => !r.Success)
                         .Select(r => r.Record.Gemini.Title + Environment.NewLine + JsonConvert.SerializeObject(r.Validation) + Environment.NewLine);
-                    File.WriteAllLines(@"C:\work\seabed-survey-errors.txt", errors);
+                    File.WriteAllLines(@"C:\work\data\offshore-seabed-survey-errors.txt", errors);
 
                     db.SaveChanges();
 
@@ -232,7 +240,7 @@ namespace Catalogue.Data.Import.Mappings
         [Test, Explicit] // this isn't seed data, so these tests are (were) only used for the "one-off" import
         public void should_import_expected_number_of_records()
         {
-            imported.Count().Should().Be(316);
+            imported.Count().Should().Be(276);
         }
 
 
