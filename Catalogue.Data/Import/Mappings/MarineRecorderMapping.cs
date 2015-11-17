@@ -43,12 +43,14 @@ namespace Catalogue.Data.Import.Mappings
             config.TrimFields = true;
         }
 
+        const string genericAbstract = @"This survey was carried out as part of the Marine Nature Conservation Review (MNCR). The MNCR was started in 1987 by the Nature Conservancy Council and subsequent to the Environment Protection Act 1990, was undertaken by JNCC on behalf of the conservation agencies up to its completion in 1998. The MNCR was initiated to provide a comprehensive baseline of information on marine habitats and species, to aid coastal zone and sea-use management and to contribute to the identification of areas of marine natural heritage importance throughout Great Britain. Data collected through the MNCR was stored in the Marine Recorder database, and has been extracted from Marine Recorder to produce this dataset. For more details, see http://jncc.defra.gov.uk/page-1596.";
+ 
         public sealed class GeminiMap : CsvClassMap<Metadata>
         {
             public GeminiMap()
             {
                 Map(m => m.Title).Field("Gemini.Title");
-                Map(m => m.Abstract).Field("Gemini.Abstract", s => s.IsNotBlank() ? s : "This is a placeholder abstract.");
+                Map(m => m.Abstract).Field("Gemini.Abstract", s => s.IsNotBlank() ? s : genericAbstract);
                 Map(m => m.TopicCategory).Field("Gemini.TopicCategory", value => value.FirstCharToLower());
                 Map(m => m.Keywords).ConvertUsing(row =>
                 {
@@ -60,7 +62,8 @@ namespace Catalogue.Data.Import.Mappings
                         new MetadataKeyword {Vocab = "http://vocab.jncc.gov.uk/jncc-domain", Value = "Marine"},
                         new MetadataKeyword {Vocab = "http://vocab.jncc.gov.uk/jncc-category", Value = "Marine Recorder"},
                         new MetadataKeyword {Vocab = "http://vocab.jncc.gov.uk/survey-id", Value = surveyId },
-                        new MetadataKeyword {Vocab = "http://vocab.jncc.gov.uk/survey-type", Value = surveyType },
+                        new MetadataKeyword {Vocab = "", Value = surveyType },
+                        new MetadataKeyword {Vocab = "", Value = "MNCR"},
                     };
 
                     return keywords;
@@ -71,7 +74,7 @@ namespace Catalogue.Data.Import.Mappings
                     End = row.GetField("TemporalExtent.End")
                 });
                 Map(m => m.DatasetReferenceDate).Field("Gemini.DatasetReferenceDate");
-                Map(m => m.Lineage).Field("Gemini.Lineage");
+                Map(m => m.Lineage).Field("Gemini.Lineage").Value("This survey was extracted from a Marine Recorder snapshot.");
                 Map(m => m.ResourceLocator).Ignore();
                 Map(m => m.AdditionalInformationSource).Field("Gemini.AdditionalInformationSource");
                 Map(m => m.DataFormat).Field("Gemini.DataFormat");
