@@ -114,6 +114,9 @@
         return m.newUncontrolledKeyword.value = value;
       }
     });
+    $scope.isUncontrolledVocabCurrentlySelected = function() {
+      return m.selectedVocab.id !== void 0 && !m.selectedVocab.controlled;
+    };
     $scope.selectKeyword = function(k) {
       _.remove(m.selectedKeywords, function(k) {
         return k.vocab === '';

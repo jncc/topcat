@@ -76,6 +76,7 @@ namespace Catalogue.Web.Controllers.Admin
 
         /// <summary>
         /// Deletes all the records in the given category.
+        /// May need to use the querystring, e.g http://topcat-beta/api/admin/deletejncccategory?category=Marine+Recorder
         /// </summary>
         [HttpPost, Route("api/admin/deletejncccategory")]
         public HttpResponseMessage DeleteJnccCategory(string category)

@@ -83,7 +83,9 @@ angular.module('app.controllers').controller 'VocabulatorController',
                 if (!_.some getSelectedVocabfulKeywords())
                     m.selectedKeywords.length = 0
                 m.newUncontrolledKeyword.value = value
-                           
+
+        $scope.isUncontrolledVocabCurrentlySelected = -> m.selectedVocab.id isnt undefined && !m.selectedVocab.controlled                           
+        
         $scope.selectKeyword = (k) ->
             # remove vocabless keywords (ie what's been entered in the search box)
             _.remove m.selectedKeywords, (k) -> k.vocab is ''

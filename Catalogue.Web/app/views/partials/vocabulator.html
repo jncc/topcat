@@ -51,27 +51,27 @@
                     </span>
                 </h3>
                 <div class="vocabulator-keyword-list-container">
-                    <div class="vocabulator-found-keyword-list" ng-show="vocabulator.foundKeywords" tc-bind-scroll-position="vocabulator.scrollPositions.foundKeywordList">
+                    <div class="vocabulator-found-keyword-list" ng-show="vocabulator.foundKeywords && !isUncontrolledVocabCurrentlySelected()" tc-bind-scroll-position="vocabulator.scrollPositions.foundKeywordList">
                         <div ng-repeat="k in vocabulator.foundKeywords">
                             <span tc-tag ng-click="selectKeyword(k)" ng-dblclick="close()" tabindex="0" class="pointable">
                                 <span ng-bind-html="k.value | highlight:vocabulator.q"></span>
                             </span>
                         </div>
                     </div>
-                    <div class="vocabulator-vocab-keyword-list" ng-if="vocabulator.loadedVocab.keywords" tc-bind-scroll-position="vocabulator.scrollPositions.vocabKeywordList">
+                    <div class="vocabulator-vocab-keyword-list" ng-if="vocabulator.loadedVocab.keywords && !isUncontrolledVocabCurrentlySelected()" tc-bind-scroll-position="vocabulator.scrollPositions.vocabKeywordList">
                         <div ng-repeat="x in vocabulator.loadedVocab.keywords" ng-init="k = { vocab: vocabulator.loadedVocab.id, value: x.value }" ng-class="{active: vocabulator.selectedKeyword == k}">
                             <span tc-tag ng-click="selectKeyword(k)" ng-dblclick="close()" tabindex="0" class="pointable">
                                 {{k.value}}
                             </span>
                         </div>
                     </div>
-                    <div class="vocabulator-new-uncontrolled-keyword" ng-if="vocabulator.selectedVocab.id && !vocabulator.selectedVocab.controlled">
-                        <input ng-model="vocabulator.newUncontrolledKeywordValue" type="text" class="form-control" tc-focus placeholder="Add a new keyword" />
+                    <div class="vocabulator-new-uncontrolled-keyword" ng-if="isUncontrolledVocabCurrentlySelected()">
+                        <input ng-model="vocabulator.newUncontrolledKeywordValue" type="text" class="form-control" tc-focus placeholder="Add a new keyword"/>
                     </div>
-
                 </div>
             </div>
         </div>
+        {{isUncontrolledVocabCurrentlySelected()}}
     </div>
 
     <div class="modal-footer">
