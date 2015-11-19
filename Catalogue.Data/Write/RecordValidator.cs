@@ -242,12 +242,13 @@ namespace Catalogue.Data.Write
 
         void ValidatePublishableInvariants(Record record, ValidationResult<Record> result)
         {
+            // disabled until publishing mechanism created
             // publishable_records_must_have_a_resource_locator
-            if (record.Status == Status.Publishable && record.Gemini.ResourceLocator.IsBlank())
-            {
-                result.Errors.Add("Publishable records must have a resource locator",
-                    r => r.Status, r => r.Gemini.ResourceLocator);
-            }
+//            if (record.Status == Status.Publishable && record.Gemini.ResourceLocator.IsBlank())
+//            {
+//                result.Errors.Add("Publishable records must have a resource locator",
+//                    r => r.Status, r => r.Gemini.ResourceLocator);
+//            }
         }
 
         internal static bool IsValidDate(string date)
@@ -596,20 +597,20 @@ namespace Catalogue.Data.Write
             result.Errors.Single().Fields.Should().Contain("gemini.limitationsOnPublicAccess");
         }
 
-        [Test]
-        public void publishable_records_must_have_a_resource_locator([Values("", " ", null)] string blank)
-        {
-            var record = SimpleRecord().With(r =>
-            {
-                r.Status = Status.Publishable;
-                r.Gemini.ResourceLocator = blank;
-            });
-
-            var result = new RecordValidator().Validate(record);
-
-            result.Errors.Single().Fields.Should().Contain("status");
-            result.Errors.Single().Fields.Should().Contain("gemini.resourceLocator");
-        }
+//        [Test]
+//        public void publishable_records_must_have_a_resource_locator([Values("", " ", null)] string blank)
+//        {
+//            var record = SimpleRecord().With(r =>
+//            {
+//                r.Status = Status.Publishable;
+//                r.Gemini.ResourceLocator = blank;
+//            });
+//
+//            var result = new RecordValidator().Validate(record);
+//
+//            result.Errors.Single().Fields.Should().Contain("status");
+//            result.Errors.Single().Fields.Should().Contain("gemini.resourceLocator");
+//        }
 
         [Test]
         public void resource_locator_must_be_a_well_formed_http_url(
