@@ -135,7 +135,7 @@ namespace Catalogue.Data.Import.Mappings
                         End = row.GetField("TemporalExtent.End")
                     });
                 Map(m => m.DatasetReferenceDate).Value("2015-09-01");
-                Map(m => m.Lineage).Value("This dataset is an output of a collaborative offshore seabed survey undertaken by Joint Nature Conservation Committee (JNCC).");
+                Map(m => m.Lineage).Value("This dataset is an output of a collaborative offshore seabed survey undertaken with Joint Nature Conservation Committee (JNCC).");
                 Map(m => m.ResourceLocator).Ignore();
                 Map(m => m.AdditionalInformationSource).Ignore();
                 Map(m => m.DataFormat).Field("Gemini.DataFormat");
