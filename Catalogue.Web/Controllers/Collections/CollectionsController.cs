@@ -27,7 +27,7 @@ namespace Catalogue.Web.Controllers.Collections
             var joined = from k in vocab.Keywords
                          from r in counts
                          where r.KeywordValue == k.Value
-                         orderby r.KeywordValue != "Human Activities", r.KeywordValue != "Seabed Habitat Maps" // show these first
+                         orderby r.KeywordValue != "Human Activities", r.KeywordValue != "Seabed Habitats and Geology", r.RecordCount descending 
                          where r.KeywordValue != "GIS Strategy" // this is a temporary one
                          select new CollectionOutputModel
                          {
