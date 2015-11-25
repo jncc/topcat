@@ -95,12 +95,33 @@ namespace Catalogue.Web.Controllers.Admin
             return new HttpResponseMessage { Content = new StringContent("Done") };
         }
 
-//        [HttpPost, Route("api/admin/renamekeyword")]
-//        public List<LinkCheckResult> RenameKeyword()
-//        {
-////            var query = new RecordQueryInputModel { k}
-////            this.recordQueryer.Query()
-//        }
+        [HttpPost, Route("api/admin/renamekeyword")]
+        public string RenameKeyword(string keyword, string newValue)
+        {
+            var query = new RecordQueryInputModel
+            {
+                K = new[] { keyword },
+                N = 1024,
+            };
+
+            int count = recordQueryer.Query(query).Count();
+
+            var records = recordQueryer.Query(query).ToList();
+
+            if (records.Count != count)
+                throw new Exception("Too many records.");
+
+            foreach (var record in records)
+            {
+                var kword = ParameterHelper.ParseMetadataKeywords(new [] { keyword }).Single();
+                var keywordToChange = record.Gemini.Keywords.Single(k => k.Vocab == kword.Vocab && k.Value == kword.Value);
+                keywordToChange.Value = newValue;
+            }
+
+            db.SaveChanges();
+
+            return String.Format("{0} records updated.", count);
+        }
 
         [HttpGet, Route("api/admin/linkchecker")]
         public List<LinkCheckResult> LinkChecker()
