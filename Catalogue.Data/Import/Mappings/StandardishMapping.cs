@@ -127,6 +127,7 @@ namespace Catalogue.Data.Import.Mappings
         }
     }
 
+    [Explicit]
     class when_importing_standardish_import
     {
         List<Record> imported;

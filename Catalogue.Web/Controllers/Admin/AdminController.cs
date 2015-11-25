@@ -5,6 +5,7 @@ using System.Linq;
 using System.Net.Http;
 using System.Web;
 using System.Web.Http;
+using Catalogue.Data.Query;
 using Catalogue.Data.Seed;
 using Catalogue.Robot.DeadLinks;
 using Catalogue.Web.Code;
@@ -20,11 +21,13 @@ namespace Catalogue.Web.Controllers.Admin
     {
         readonly IDocumentSession db;
         readonly IEnvironment environment;
+        readonly IRecordQueryer recordQueryer;
 
-        public AdminController(IDocumentSession db, IEnvironment environment)
+        public AdminController(IDocumentSession db, IEnvironment environment, IRecordQueryer recordQueryer)
         {
             this.db = db;
             this.environment = environment;
+            this.recordQueryer = recordQueryer;
         }
 
         void ThrowIfLiveEnvironment()
@@ -91,6 +94,13 @@ namespace Catalogue.Web.Controllers.Admin
 
             return new HttpResponseMessage { Content = new StringContent("Done") };
         }
+
+//        [HttpPost, Route("api/admin/renamekeyword")]
+//        public List<LinkCheckResult> RenameKeyword()
+//        {
+////            var query = new RecordQueryInputModel { k}
+////            this.recordQueryer.Query()
+//        }
 
         [HttpGet, Route("api/admin/linkchecker")]
         public List<LinkCheckResult> LinkChecker()

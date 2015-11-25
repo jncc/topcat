@@ -51,7 +51,7 @@ namespace Catalogue.Web.Controllers.Export
                     async (stream,  content,  context) =>
                     {
                         using (stream)
-                        using (var enumerator = await adb.Advanced.StreamAsync(recordQueryer.AsyncRecordQuery(adb,input)))
+                        using (var enumerator = await adb.Advanced.StreamAsync(recordQueryer.AsyncQuery(adb,input)))
                         {
                             var writeHeaders = true;
                             while (await enumerator.MoveNextAsync())
@@ -91,7 +91,7 @@ namespace Catalogue.Web.Controllers.Export
         {
             RemovePagingParametersFromRecordQuery(input);
 
-            var records = recordQueryer.RecordQuery(input);
+            var records = recordQueryer.Query(input).ToList();
 
             // encode the records as iso xml elements
             var elements = from record in records

@@ -15,9 +15,10 @@ namespace Catalogue.Data.Query
 {
     public interface IRecordQueryer
     {
-        RecordQueryOutputModel SearchQuery(RecordQueryInputModel input);
-        IEnumerable<Record> RecordQuery(RecordQueryInputModel input);
-        IQueryable<Record> AsyncRecordQuery(IAsyncDocumentSession adb, RecordQueryInputModel input);
+        SearchOutputModel Search(RecordQueryInputModel input);
+
+        IQueryable<Record> Query(RecordQueryInputModel input);
+        IQueryable<Record> AsyncQuery(IAsyncDocumentSession adb, RecordQueryInputModel input);
     }
 
     public class RecordQueryer : IRecordQueryer
@@ -36,7 +37,7 @@ namespace Catalogue.Data.Query
         FieldHighlightings abstractLites;
         FieldHighlightings abstractNLites;
 
-        public IQueryable<Record> AsyncRecordQuery(IAsyncDocumentSession adb, RecordQueryInputModel input)
+        public IQueryable<Record> AsyncQuery(IAsyncDocumentSession adb, RecordQueryInputModel input)
         {
             var query = adb.Query<RecordIndex.Result, RecordIndex>()
                 .Statistics(out stats);
@@ -49,7 +50,7 @@ namespace Catalogue.Data.Query
         /// A general-purpose query that returns records.
         /// Can be materialised as-is, or customised further (see SearchQuery method).
         /// </summary>
-        public IEnumerable<Record> RecordQuery(RecordQueryInputModel input)
+        public IQueryable<Record> Query(RecordQueryInputModel input)
         {
 
             var query = _db.Query<RecordIndex.Result, RecordIndex>()
@@ -60,7 +61,7 @@ namespace Catalogue.Data.Query
                 .Customize(x => x.Highlight("AbstractN", 202, 1, out abstractNLites))
                 .Customize(x => x.SetHighlighterTags("<b>", "</b>"));
 
-            return RecordQueryImpl(input, query).ToList();
+            return RecordQueryImpl(input, query);
 
         }
 
@@ -107,9 +108,11 @@ namespace Catalogue.Data.Query
         /// <summary>
         /// A query for the Google-style search results page.
         /// </summary>
-        public RecordQueryOutputModel SearchQuery(RecordQueryInputModel input)
+        public SearchOutputModel Search(RecordQueryInputModel input)
         {
-            var query = from r in RecordQuery(input)
+            // materializing the query will populate our stats
+
+            var results = from r in Query(input).ToList()
                         let titleFragments = titleLites.GetFragments("records/" + r.Id).Concat(titleNLites.GetFragments("records/" + r.Id))
                         let abstractFragments = abstractLites.GetFragments("records/" + r.Id).Concat(abstractNLites.GetFragments("records/" + r.Id))
                         let title = titleFragments.Select(f => f.TruncateNicely(200)).FirstOrDefault()
@@ -138,13 +141,11 @@ namespace Catalogue.Data.Query
                             Box = r.Gemini.BoundingBox,
                         };
 
-            // materializing the query will populate our stats, so do it before we try to use them!
-            var results = query.ToList();
 
-            return new RecordQueryOutputModel
+            return new SearchOutputModel
             {
                 Total = stats.TotalResults,
-                Results = results,
+                Results = results.ToList(),
                 Speed = stats.DurationMilliseconds,
                 Query = input
             };

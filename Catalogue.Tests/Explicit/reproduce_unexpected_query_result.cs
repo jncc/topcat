@@ -45,7 +45,7 @@ namespace Catalogue.Tests.Explicit
 //                    results.Count.Should().Be(n);
 
                     var input = EmptyQuery().With(q => q.K = new[] { k });
-                    var output = new RecordQueryer(db).SearchQuery(input);
+                    var output = new RecordQueryer(db).Search(input);
                     output.Total.Should().Be(n);
                 };
 

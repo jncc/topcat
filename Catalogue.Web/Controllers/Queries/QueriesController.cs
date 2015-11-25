@@ -31,7 +31,7 @@ namespace Catalogue.Web.Controllers.Queries
                     K = new [] { "vocab.jncc.gov.uk/jncc-category/Seabed Habitat Maps" },
                 };
 
-            var records = recordQueryer.RecordQuery(query);
+            var records = recordQueryer.Query(query).ToList();
 
             var q = from r in records
                     where !(from k in r.Gemini.Keywords

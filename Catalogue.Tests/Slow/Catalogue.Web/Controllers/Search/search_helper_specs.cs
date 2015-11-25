@@ -48,7 +48,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Web.Controllers.Search
                     D = null
                 };
 
-            helper.SearchQuery(input).Results.Count().Should().Be(25);
+            helper.Search(input).Results.Count().Should().Be(25);
         }
 
         [Test]
@@ -84,7 +84,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Web.Controllers.Search
                     D = DateTime.Parse("2020-01-01")
                 };
 
-                helper.RecordQuery(input).Count().Should().Be(1);
+                helper.Query(input).Count().Should().Be(1);
 
             }
         }
