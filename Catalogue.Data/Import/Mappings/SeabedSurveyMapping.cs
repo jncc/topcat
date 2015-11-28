@@ -245,9 +245,9 @@ namespace Catalogue.Data.Import.Mappings
 
 
         [Test, Explicit]
-        void MakeAnXmlFile()
+        public void MakeAnXmlFile()
         {
-            var record = imported.Single(r => r.Gemini.Title == "Locations of grab samples with Particle Size Analysis (PSA) results from Bassurelle Sandbank SCI");
+            var record = imported.Single(r => r.Gemini.Title == "Seabed still images from Bassurelle Sandbanks SCI");
             record.Gemini.ResourceLocator = String.Format("http://example.com/{0}", record.Id);
             var xml = new global::Catalogue.Gemini.Encoding.XmlEncoder().Create(record.Id, record.Gemini);
             //var ceh = new global::Catalogue.Gemini.Validation.Validator().Validate(xml);
