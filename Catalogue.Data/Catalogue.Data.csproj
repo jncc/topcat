@@ -105,6 +105,7 @@
     <Compile Include="Indexes\RecordSpatialIndex.cs" />
     <Compile Include="Indexes\RecordIndex.cs" />
     <Compile Include="Model\PublicationInfo.cs" />
+    <Compile Include="Model\Publisher.cs" />
     <Compile Include="Model\Record.cs" />
     <Compile Include="Model\Security.cs" />
     <Compile Include="Model\Status.cs" />

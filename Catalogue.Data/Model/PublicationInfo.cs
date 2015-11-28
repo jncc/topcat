@@ -8,6 +8,7 @@ namespace Catalogue.Data.Model
 {
     public class PublicationInfo
     {
-        public DateTime LastSuccess { get; set; }
+        //public List<Publisher> Publishers { get; set; } ?
+        public Publisher DataGovUkPublisher { get; set; }
     }
 }

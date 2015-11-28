@@ -4,14 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Catalogue.Robot.Publishing
+namespace Catalogue.Data.Model
 {
     public abstract class Publisher
     {
-        // publication = { List<SuccessfulPublication> Publications, PublicationTarget[Type] target }
-
-        // foreach target we support
-
         public abstract void Publish();
+        public DateTime LastSuccess { get; set; }
     }
 }

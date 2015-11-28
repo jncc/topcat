@@ -12,12 +12,6 @@ namespace Catalogue.Robot.Publishing.DataGovUk
 {
     public class DataGovUkPublisher : Publisher
     {
-        IDocumentSession db;
-
-        public DataGovUkPublisher(IDocumentSession db)
-        {
-            this.db = db;
-        }
 
         public override void Publish()
         {
