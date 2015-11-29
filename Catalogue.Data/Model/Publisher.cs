@@ -9,6 +9,13 @@ namespace Catalogue.Data.Model
     public abstract class Publisher
     {
         public abstract void Publish();
-        public DateTime LastSuccess { get; set; }
+        public List<PublicationAttempt> Attempts { get; set; } 
+    }
+
+    public class PublicationAttempt
+    {
+        public DateTime DateUtc { get; set; }
+        public bool Successful { get; set; }
+        public string Message { get; set; }
     }
 }
