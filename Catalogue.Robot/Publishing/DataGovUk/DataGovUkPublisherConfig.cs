@@ -8,7 +8,8 @@ namespace Catalogue.Robot.Publishing.DataGovUk
 {
     public class DataGovUkPublisherConfig
     {
-        public string FtpUrl { get; set; }
+        public string HttpRootUrl { get; set; }
+        public string FtpRootUrl { get; set; }
         public string FtpUsername { get; set; }
         public string FtpPassword { get; set; }
     }

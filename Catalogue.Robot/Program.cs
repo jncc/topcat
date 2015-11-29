@@ -106,11 +106,16 @@ namespace Catalogue.Robot
                 publisher.Attempts.Add(attempt);
                 db.SaveChanges();
 
+                // upload the data file
                 var c = new WebClient();
                 c.Credentials = new NetworkCredential(config.FtpUsername, config.FtpPassword);
                 string filename = WebUtility.UrlEncode(Path.GetFileName(record.Path));
                 string uploadPath = String.Format("{0}/{1}/{2}", config.FtpUrl, record.Id, filename);
                 c.UploadFile(uploadPath, "STOR", record.Path);
+
+                // update the index.html
+                string indexHtmlDocPath = String.Format("{0}/index.html", config.FtpUrl);
+                string indexHtml = c.DownloadString(indexHtmlDocPath);
 
                 // mark the attempt successful
                 attempt.Successful = true;

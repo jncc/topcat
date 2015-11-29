@@ -14,12 +14,23 @@ namespace Catalogue.Tests.Explicit.Catalogue.Robot
         [Explicit, Test]
         public void blah()
         {
-            string html = "<html><body></body></html> ";
-            var doc = XElement.Parse(html);
-            var body = doc.Element("body");
+            var html = XElement.Parse(indexHtmlDoc);
+            var body = html.Element("body");
             body.Add(new XElement("a", new XAttribute("href", "some-topcat-record.xml")));
 
-            body.Elements().Count().Should().Be(1);
+            body.Elements("a").Count().Should().Be(1);
         }
+
+        private string indexHtmlDoc = @"<!DOCTYPE html>
+            <html lang=""en"">
+            <head>
+            <title>The HTML5 Herald</title>
+            <meta name = ""description"" content= ""The HTML5 Herald"" />
+            <link rel= ""stylesheet"" href= ""css/styles.css"" />
+            </head>
+            <body>
+            <script src= ""js/scripts.js"" ></script>
+            </body>
+            </html>";
     }
 }
