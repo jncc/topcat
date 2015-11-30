@@ -1,9 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Linq;
+using Catalogue.Robot.Publishing.DataGovUk;
 using FluentAssertions;
 using NUnit.Framework;
 
@@ -12,25 +15,17 @@ namespace Catalogue.Tests.Explicit.Catalogue.Robot
     class try_out_stuff
     {
         [Explicit, Test]
-        public void blah()
+        public void try_ftp_client()
         {
-            var html = XElement.Parse(indexHtmlDoc);
-            var body = html.Element("body");
-            body.Add(new XElement("a", new XAttribute("href", "some-topcat-record.xml")));
+            string password = "password";
+            var c = new FtpClient("topcat", password);
 
-            body.Elements("a").Count().Should().Be(1);
+            string s = c.DownloadString("ftp://data.jncc.gov.uk/waf/index.html");
+            Console.WriteLine(s);
+
+            string filePath = @"C:\Work\test-data.csv";
+            File.Exists(filePath).Should().BeTrue();
+            c.UploadFile("ftp://data.jncc.gov.uk/" + new FileInfo(filePath).Name, filePath);
         }
-
-        private string indexHtmlDoc = @"<!DOCTYPE html>
-            <html lang=""en"">
-            <head>
-            <title>The HTML5 Herald</title>
-            <meta name = ""description"" content= ""The HTML5 Herald"" />
-            <link rel= ""stylesheet"" href= ""css/styles.css"" />
-            </head>
-            <body>
-            <script src= ""js/scripts.js"" ></script>
-            </body>
-            </html>";
     }
 }

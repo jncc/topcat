@@ -50,7 +50,8 @@ namespace Catalogue.Robot
                     if (record.Publication == null)
                         record.Publication = new PublicationInfo();
 
-                    record.Publication.DataGovUkPublisher = new DataGovUkPublisher();
+                    if (record.Publication.DataGovUk == null)
+                        record.Publication.DataGovUk = new DataGovUkPublicationInfo();
                 }
 
                 db.SaveChanges();
@@ -67,71 +68,29 @@ namespace Catalogue.Robot
             string configJson = File.ReadAllText(configPath);
             var config = JsonConvert.DeserializeObject<DataGovUkPublisherConfig>(configJson);
 
+            var ids = new List<Guid>();
             using (var db = DocumentStore.OpenSession())
             {
-                var recordIds = db.Query<Record>()
-                    .Where(r => r.Publication.DataGovUkPublisher != null)
+                ids = db.Query<Record>()
+                    .Where(r => r.Publication.DataGovUk != null)
                     .Take(1000)
                     .ToList()
                     .Select(r => r.Id) // why can't ravendb manage to project the id?!
                     .ToList();
+            }
 
-                foreach (var recordId in recordIds)
+                foreach (var id in ids)
                 {
-                    Console.WriteLine("Publishing record {0}", recordId);
-                    PublishRecordToDataGovUk(recordId, config);
+                    var ftpClient = new FtpClient(config.FtpUsername, config.FtpPassword);
+                    using (var db = DocumentStore.OpenSession())
+                    {
+                        new RecordPublisher(db, config, ftpClient).PublishRecord(id);
+                    }
                 }
-                Console.WriteLine("Published {0} records to data.gov.uk.", recordIds.Count);
-            }
+
+                Console.WriteLine("Published {0} records to data.gov.uk.", ids.Count);
         }
 
-        static void PublishRecordToDataGovUk(Guid recordId, DataGovUkPublisherConfig config)
-        {
-            using (var db = DocumentStore.OpenSession())
-            {
-                var record = db.Load<Record>(recordId);
-                var publisher = record.Publication.DataGovUkPublisher;
-
-                Console.WriteLine("Publishing '{0}' to '{1}'.", record.Gemini.Title, config.FtpRootUrl);
-
-                // note the attempt
-                if (publisher.Attempts == null)
-                    publisher.Attempts = new List<PublicationAttempt>();
-                var attempt = new PublicationAttempt { DateUtc = DateTime.UtcNow };
-                publisher.Attempts.Add(attempt);
-                db.SaveChanges();
-
-                var c = new WebClient { Credentials = new NetworkCredential(config.FtpUsername, config.FtpPassword) };
-
-                // upload the data file
-                string dataFilename = WebUtility.UrlEncode(Path.GetFileName(record.Path));
-                string dataFtpPath = String.Format("{0}/{1}/{2}/{3}", config.FtpRootUrl, "data", record.Id, dataFilename);
-                string dataHttpPath = String.Format("{0}/{1}/{2}/{3}", config.HttpRootUrl, "data", record.Id, dataFilename);
-                c.UploadFile(dataFtpPath, "STOR", record.Path);
-
-                // update the resource locator in the metadata record
-                record.Gemini.ResourceLocator = dataHttpPath;
-
-                // upload the metadata document
-                string metaFtpPath = String.Format("{0}/{1}/{2}", config.FtpRootUrl, "waf", record.Id + ".xml");
-                string metaXmlDoc = new global::Catalogue.Gemini.Encoding.XmlEncoder().Create(record.Id, record.Gemini).ToString();
-                c.UploadString(metaFtpPath, "STOR", metaXmlDoc);
-
-                // update the index.html
-                string indexDocFtpPath = String.Format("{0}/waf/index.html", config.FtpRootUrl);
-                string indexDocHtml = c.DownloadString(indexDocFtpPath);
-                var html = XDocument.Parse(indexDocHtml);
-                var body = html.Element("body");
-                body.Add(new XElement("a", new XAttribute("href", record.Id + ".xml")));
-                c.UploadString(indexDocFtpPath, "STOR", html.ToString());
-
-                // mark the attempt successful
-                attempt.Successful = true;
-
-                // commit the changes (to the resource locator and the attempt log)
-                db.SaveChanges();
-            }
-        }
 
         static List<Record> GetRecords(IDocumentSession db, string keyword)
         {
