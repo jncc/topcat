@@ -7,6 +7,7 @@ using System.Net;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml.Linq;
 using Catalogue.Data;
 using Catalogue.Data.Model;
 using Catalogue.Data.Query;
@@ -35,12 +36,6 @@ namespace Catalogue.Robot
             {
                 Publish1000RecordsToDataGovUk();
             }
-
-            //            var record = Db.Load<Record>(new Guid("679434f5-baab-47b9-98e4-81c8e3a1a6f9"));
-            //            record.Gemini.ResourceLocator = String.Format("http://example.com/{0}", record.Id);
-            //            var xml = new global::Catalogue.Gemini.Encoding.XmlEncoder().Create(record.Id, record.Gemini);
-            //            string filename = "topcat-record-" + record.Id.ToString().ToLower() + ".xml";
-            //            xml.Save(Path.Combine(@"C:\work", filename));
         }
 
         static void MarkRecordsAsPublishableToDataGovUk(string keyword)
@@ -97,7 +92,7 @@ namespace Catalogue.Robot
                 var record = db.Load<Record>(recordId);
                 var publisher = record.Publication.DataGovUkPublisher;
 
-                Console.WriteLine("Publishing '{0}' to '{1}'.", record.Gemini.Title, config.FtpUrl);
+                Console.WriteLine("Publishing '{0}' to '{1}'.", record.Gemini.Title, config.FtpRootUrl);
 
                 // note the attempt
                 if (publisher.Attempts == null)
@@ -106,19 +101,34 @@ namespace Catalogue.Robot
                 publisher.Attempts.Add(attempt);
                 db.SaveChanges();
 
+                var c = new WebClient { Credentials = new NetworkCredential(config.FtpUsername, config.FtpPassword) };
+
                 // upload the data file
-                var c = new WebClient();
-                c.Credentials = new NetworkCredential(config.FtpUsername, config.FtpPassword);
-                string filename = WebUtility.UrlEncode(Path.GetFileName(record.Path));
-                string uploadPath = String.Format("{0}/{1}/{2}", config.FtpUrl, record.Id, filename);
-                c.UploadFile(uploadPath, "STOR", record.Path);
+                string dataFilename = WebUtility.UrlEncode(Path.GetFileName(record.Path));
+                string dataFtpPath = String.Format("{0}/{1}/{2}", config.FtpRootUrl, record.Id, dataFilename);
+                string dataHttpPath = String.Format("{0}/{1}/{2}", config.HttpRootUrl, record.Id, dataFilename);
+                c.UploadFile(dataFtpPath, "STOR", record.Path);
+
+                // update the resource locator in the metadata record
+                record.Gemini.ResourceLocator = dataHttpPath;
+
+                // upload the metadata document
+                string metaFtpPath = String.Format("{0}/{1}", config.FtpRootUrl, record.Id + ".xml");
+                string metaXmlDoc = new global::Catalogue.Gemini.Encoding.XmlEncoder().Create(record.Id, record.Gemini).ToString();
+                c.UploadString(metaFtpPath, "STOR", metaXmlDoc);
 
                 // update the index.html
-                string indexHtmlDocPath = String.Format("{0}/index.html", config.FtpUrl);
-                string indexHtml = c.DownloadString(indexHtmlDocPath);
+                string indexDocFtpPath = String.Format("{0}/index.html", config.FtpRootUrl);
+                string indexDocHtml = c.DownloadString(indexDocFtpPath);
+                var html = XDocument.Parse(indexDocHtml);
+                var body = html.Element("body");
+                body.Add(new XElement("a", new XAttribute("href", record.Id + ".xml")));
+                c.UploadString(indexDocFtpPath, "STOR", html.ToString());
 
                 // mark the attempt successful
                 attempt.Successful = true;
+
+                // commit the changes (to the resource locator and the attempt log)
                 db.SaveChanges();
             }
         }
