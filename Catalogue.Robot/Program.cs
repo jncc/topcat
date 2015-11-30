@@ -105,20 +105,20 @@ namespace Catalogue.Robot
 
                 // upload the data file
                 string dataFilename = WebUtility.UrlEncode(Path.GetFileName(record.Path));
-                string dataFtpPath = String.Format("{0}/{1}/{2}", config.FtpRootUrl, record.Id, dataFilename);
-                string dataHttpPath = String.Format("{0}/{1}/{2}", config.HttpRootUrl, record.Id, dataFilename);
+                string dataFtpPath = String.Format("{0}/{1}/{2}/{3}", config.FtpRootUrl, "data", record.Id, dataFilename);
+                string dataHttpPath = String.Format("{0}/{1}/{2}/{3}", config.HttpRootUrl, "data", record.Id, dataFilename);
                 c.UploadFile(dataFtpPath, "STOR", record.Path);
 
                 // update the resource locator in the metadata record
                 record.Gemini.ResourceLocator = dataHttpPath;
 
                 // upload the metadata document
-                string metaFtpPath = String.Format("{0}/{1}", config.FtpRootUrl, record.Id + ".xml");
+                string metaFtpPath = String.Format("{0}/{1}/{2}", config.FtpRootUrl, "waf", record.Id + ".xml");
                 string metaXmlDoc = new global::Catalogue.Gemini.Encoding.XmlEncoder().Create(record.Id, record.Gemini).ToString();
                 c.UploadString(metaFtpPath, "STOR", metaXmlDoc);
 
                 // update the index.html
-                string indexDocFtpPath = String.Format("{0}/index.html", config.FtpRootUrl);
+                string indexDocFtpPath = String.Format("{0}/waf/index.html", config.FtpRootUrl);
                 string indexDocHtml = c.DownloadString(indexDocFtpPath);
                 var html = XDocument.Parse(indexDocHtml);
                 var body = html.Element("body");
