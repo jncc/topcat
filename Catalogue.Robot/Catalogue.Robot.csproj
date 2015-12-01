@@ -60,6 +60,7 @@
   <ItemGroup>
     <Compile Include="DeadLinks\Checker.cs" />
     <Compile Include="DeadLinks\FileLinkChecker.cs" />
+    <Compile Include="Importing\ImportHandler.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Publishing\DataGovUk\DataGovUkPublisher.cs" />

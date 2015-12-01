@@ -30,8 +30,7 @@ namespace Catalogue.Robot.Publishing.DataGovUk
             Console.WriteLine("Publishing '{0}' to '{1}'.", record.Gemini.Title, config.FtpRootUrl);
 
             string metaPath = String.Format("waf/{0}.xml", record.Id);
-          //string dataPath = String.Format("data/{0}/{1}", record.Id, WebUtility.UrlEncode(Path.GetFileName(record.Path)));
-            string dataPath = String.Format("data/{0}", WebUtility.UrlEncode(Path.GetFileName(record.Path)));
+            string dataPath = String.Format("data/{0}-{1}", record.Id, Path.GetFileName(record.Path).Replace(" ", "-")); // todo webify file name
 
             // save a not-yet-successful attempt to begin with
             var attempt = AddNewAttempt(record);

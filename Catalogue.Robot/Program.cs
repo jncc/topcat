@@ -11,6 +11,7 @@ using System.Xml.Linq;
 using Catalogue.Data;
 using Catalogue.Data.Model;
 using Catalogue.Data.Query;
+using Catalogue.Robot.Importing;
 using Catalogue.Robot.Publishing.DataGovUk;
 using Newtonsoft.Json;
 using Raven.Client;
@@ -26,15 +27,21 @@ namespace Catalogue.Robot
         {
             Init();
 
-            if (args.First() == "mark")
+            if (args.First() == "import")
+            {
+                using (var db = DocumentStore.OpenSession())
+                {
+                    new ImportHandler(db).Import(args);
+                }
+            }
+            else if (args.First() == "mark")
             {
                 string keyword = args.Skip(1).First();
                 MarkRecordsAsPublishableToDataGovUk(keyword);
             }
-
-            if (args.First() == "publish")
+            else if (args.First() == "publish")
             {
-                Publish1000RecordsToDataGovUk();
+                Publish1RecordsToDataGovUk();
             }
         }
 
@@ -59,7 +66,7 @@ namespace Catalogue.Robot
             }
         }
 
-        static void Publish1000RecordsToDataGovUk()
+        static void Publish1RecordsToDataGovUk()
         {
             // load the config
             var configPath = Path.Combine(Environment.CurrentDirectory, "data-gov-uk-publisher-config.json");
@@ -73,7 +80,7 @@ namespace Catalogue.Robot
             {
                 ids = db.Query<Record>()
                     .Where(r => r.Publication.DataGovUk != null)
-                    .Take(1000)
+                    .Take(1)
                     .ToList()
                     .Select(r => r.Id) // why can't ravendb manage to project the id?!
                     .ToList();

@@ -11,6 +11,7 @@ namespace Catalogue.Robot.Publishing.DataGovUk
         void UploadFile(string address, string filename);
         void UploadString(string address, string content);
         string DownloadString(string address);
+        void MakeDirectory(string address);
     }
 
     public class FtpClient : IFtpClient
@@ -40,6 +41,14 @@ namespace Catalogue.Robot.Publishing.DataGovUk
         {
             var c = new WebClient { Credentials = new NetworkCredential(username, password) };
             return  c.DownloadString(address);
+        }
+
+        public void MakeDirectory(string address)
+        {
+            var request = WebRequest.Create(address);
+            request.Method = WebRequestMethods.Ftp.MakeDirectory;
+            request.Credentials = new NetworkCredential(username, password);
+            using (request.GetResponse()) { }
         }
     }
 }
