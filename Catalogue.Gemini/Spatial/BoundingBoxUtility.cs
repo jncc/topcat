@@ -64,7 +64,7 @@ namespace Catalogue.Gemini.Spatial
     {
 
         [Test]
-        public void correct_for_single_box()
+        public void should_be_correct_for_single_box()
         {
             var box = new BoundingBox { North = 21.9259m, West = -63.8981m, South = 17.9476m, East = -60.6832m };
 
@@ -75,7 +75,7 @@ namespace Catalogue.Gemini.Spatial
         }
 
         [Test]
-        public void correct_for_one_box_containing_the_other()
+        public void should_be_correct_for_one_box_containing_the_other()
         {
             var outer = new BoundingBox { North = 60.49854m, West = -10.05288m, South = 49.7122m, East = 1.46442m };
             var inner = new BoundingBox { North = 53.57077m, West = 5.295278m, South = 53.35306m, East = 5.17534m };
@@ -83,11 +83,13 @@ namespace Catalogue.Gemini.Spatial
             var min = BoundingBoxUtility.MinimumOf(new[] { inner, outer });
 
             min.North.Should().Be(outer.North);
+            min.South.Should().Be(outer.South);
+            min.East.Should().Be(outer.East);
             min.West.Should().Be(outer.West);
         }
 
         [Test]
-        public void correct_for_one_box_overlapping_the_other()
+        public void should_be_correct_for_one_box_overlapping_the_other()
         {
             var southernIrishSea = new BoundingBox { North = 53.65873m, West = -6.967625m, South = 51.23337m, East = -3.950034m };
             var englishChannel = new BoundingBox { North = 52.065138m, West = -9.793268m, South = 48.264071m, East = 1.939627m };
