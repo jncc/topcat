@@ -135,6 +135,7 @@ namespace Catalogue.Data.Import.Mappings
         }
     }
 
+    [Explicit]
     class when_importing_marine_recorder_dump
     {
         List<Record> imported;
