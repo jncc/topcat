@@ -17,7 +17,7 @@ namespace Catalogue.Gemini.BoundingBoxes
                     new KnownBoundingBox { Name = "Anguilla", Box = new BoundingBox { North = 21.9259m, West = -63.8981m, South = 17.9476m, East = -60.6832m } },
                     new KnownBoundingBox { Name = "Ascension", Box = new BoundingBox { North = -4.5588m, West = -17.7888m, South = -11.3278m, East = -10.9331m } },
                     new KnownBoundingBox { Name = "Bermuda", Box = new BoundingBox { North = -60.7055m, West = -68.8268m, South = 28.9132m, East = 35.7224m } },
-//                  new KnownBoundingBox { Name = "British Antarctic territory", Box = new BoundingBox { North = 0m, West = 0m, South = 0m, East = 0m } },
+//                  new KnownBoundingBox { Name = "British Antarctic Territory", Box = new BoundingBox { North = 0m, West = 0m, South = 0m, East = 0m } },
                     new KnownBoundingBox { Name = "British Indian Ocean Territory", Box = new BoundingBox { North = -2.2838m, West = 67.8877m, South = -10.7916m, East = 75.8501m } },
                     new KnownBoundingBox { Name = "British Virgin Islands", Box = new BoundingBox { North = 22.0819m, West = -65.8426m, South = 17.9642m, East = -63.2995m } },
                     new KnownBoundingBox { Name = "Cayman Islands", Box = new BoundingBox { North = 20.6724m, West = -83.5972m, South = 17.5841m, East = -78.7236m } },

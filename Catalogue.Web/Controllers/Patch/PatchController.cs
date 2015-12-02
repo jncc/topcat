@@ -166,7 +166,11 @@ namespace Catalogue.Web.Controllers.Patch
                 if (ots.Any())
                 {
                     var allBoxes = BoundingBoxes.Groups.Single(g => g.Name == "Overseas Territories").Boxes
-                        .Concat(new[] { new KnownBoundingBox { Name = "Sovereign Base Areas Cyprus", Box = new BoundingBox() } }); // currently don't have this so just use 0,0,0,0
+                        .Concat(new[] // currently don't have these so just use 0,0,0,0
+                        {
+                            new KnownBoundingBox { Name = "Sovereign Base Areas Cyprus", Box = new BoundingBox() },
+                            new KnownBoundingBox { Name = "British Antarctic Territory", Box = new BoundingBox() }, 
+                        });
 
                     var boxes = ots.Select(ot => allBoxes.SingleOrDefault(b => b.Name == ot.Value)).ToList();
 
