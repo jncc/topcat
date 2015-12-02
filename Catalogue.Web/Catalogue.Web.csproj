@@ -201,6 +201,7 @@
     <Content Include="app\css\main.min.css">
       <DependentUpon>main.less</DependentUpon>
     </Content>
+    <Content Include="app\img\favicon.ico" />
     <Content Include="app\img\spinner.gif" />
     <Content Include="app\img\topcat.png" />
     <Content Include="app\index.html" />
