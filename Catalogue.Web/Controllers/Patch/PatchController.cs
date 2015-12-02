@@ -169,7 +169,7 @@ namespace Catalogue.Web.Controllers.Patch
                     var boxes = ots.Select(ot => allBoxes.SingleOrDefault(b => b.Name == ot.Value)).ToList();
 
                     if (boxes.Any(b => b == null))
-                        throw new Exception("Some box couldn't be looked up.");
+                        throw new Exception("Some box couldn't be looked up for record " + record.Id);
 
                     var box = BoundingBoxUtility.MinimumOf(boxes.Select(b => b.Box));
                     record.Gemini.BoundingBox = box;
