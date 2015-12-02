@@ -165,7 +165,9 @@ namespace Catalogue.Web.Controllers.Patch
 
                 if (ots.Any())
                 {
-                    var allBoxes = BoundingBoxes.Groups.Single(g => g.Name == "Overseas Territories").Boxes;
+                    var allBoxes = BoundingBoxes.Groups.Single(g => g.Name == "Overseas Territories").Boxes
+                        .Concat(new[] { new KnownBoundingBox { Name = "Sovereign Base Areas Cyprus", Box = new BoundingBox() } }); // currently don't have this so just use 0,0,0,0
+
                     var boxes = ots.Select(ot => allBoxes.SingleOrDefault(b => b.Name == ot.Value)).ToList();
 
                     if (boxes.Any(b => b == null))
