@@ -58,6 +58,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BoundingBoxes\BoundingBoxes.cs" />
     <Compile Include="DataFormats\DataFormatQueries.cs" />
     <Compile Include="DataFormats\DataFormats.cs" />
     <Compile Include="Encoding\Ns.cs" />
