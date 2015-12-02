@@ -5,7 +5,9 @@ using System.Net;
 using System.Net.Http;
 using System.Web.Http;
 using Catalogue.Data.Query;
+using Catalogue.Gemini.BoundingBoxes;
 using Catalogue.Gemini.Model;
+using Catalogue.Gemini.Spatial;
 using Catalogue.Utilities.Clone;
 using Catalogue.Web.Injection;
 using Raven.Client;
@@ -137,6 +139,41 @@ namespace Catalogue.Web.Controllers.Patch
             foreach (var record in records)
             {
                 record.Gemini.MetadataPointOfContact.Email = record.Gemini.MetadataPointOfContact.Email.Replace("jnccc", "jncc");
+            }
+
+            db.SaveChanges();
+
+            return new HttpResponseMessage();
+        }
+
+        [HttpPost, Route("api/patch/addotboundingboxes")]
+        public HttpResponseMessage AddOTBoundingBoxes()
+        {
+            var query = new RecordQueryInputModel
+            {
+                K = new[] { "vocab.jncc.gov.uk/jncc-category/Overseas Territories" },
+                P = 0,
+                N = 1024,
+            };
+
+            var records = _queryer.Query(query).ToList();
+
+            foreach (var record in records)
+            {
+                // note incorrect 's' in vocabs.jncc!
+                var ots = record.Gemini.Keywords.Where(k => k.Vocab == "http://vocabs.jncc.gov.uk/overseas-territories").ToList();
+
+                if (ots.Any())
+                {
+                    var allBoxes = BoundingBoxes.Groups.Single(g => g.Name == "Overseas Territories").Boxes;
+                    var boxes = ots.Select(ot => allBoxes.SingleOrDefault(b => b.Name == ot.Value)).ToList();
+
+                    if (boxes.Any(b => b == null))
+                        throw new Exception("Some box couldn't be looked up.");
+
+                    var box = BoundingBoxUtility.MinimumOf(boxes.Select(b => b.Box));
+                    record.Gemini.BoundingBox = box;
+                }
             }
 
             db.SaveChanges();
