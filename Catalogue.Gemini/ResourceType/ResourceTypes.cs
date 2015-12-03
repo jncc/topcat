@@ -12,6 +12,7 @@ namespace Catalogue.Gemini.ResourceType
                 "dataset",
                 "series",
                 "service",
+                "nonGeographicDataset",
                 "publication"
             };
     }
