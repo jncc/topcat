@@ -2,8 +2,6 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Catalogue.Data.Model;
 using Catalogue.Data.Seed;
 using Catalogue.Data.Test;
@@ -19,9 +17,9 @@ using NUnit.Framework;
 namespace Catalogue.Data.Import.Mappings
 {
     /// <summary>
-    /// Steps: unknown. Get CSV from someone.
+    /// Steps: Get Excel sheet, delete "empty" rows from bottom, save as MS-DOS CSV.
     /// </summary>
-    public class StandardishMapping : IMapping
+    public class EuropeanReportingMapping : IMapping
     {
         public IEnumerable<Vocabulary> RequiredVocabularies
         {
@@ -50,21 +48,24 @@ namespace Catalogue.Data.Import.Mappings
             {
                 Map(m => m.Title).Field("Gemini.Title");
                 Map(m => m.Abstract).Field("Gemini.Abstract");
-                Map(m => m.TopicCategory).Field("Gemini.TopicCategory", value => value.FirstCharToLower());
+                Map(m => m.TopicCategory).Value("environment"); // .Field("Gemini.TopicCategory"); ### TEMP
                 Map(m => m.Keywords).ConvertUsing(row =>
                 {
-                    string keyword1 = row.GetField("Gemini.Keywords.Keyword1");
-
                     var keywords = new List<MetadataKeyword>
                     {
-                        new MetadataKeyword {Vocab = "http://vocab.jncc.gov.uk/jncc-domain", Value = "Marine"},
-                        new MetadataKeyword {Vocab = "http://vocab.jncc.gov.uk/jncc-category", Value = "The Category"},
+                        new MetadataKeyword {Vocab = "http://vocab.jncc.gov.uk/jncc-category", Value = "European Reporting"},
                     };
 
-                    if (keyword1.IsNotBlank())
-                        keywords.Add(new MetadataKeyword { Vocab = "http://vocab.jncc.gov.uk/BLAH", Value = keyword1 });
+                    var domains = row.GetField("Gemini.Keywords.Domain").Split(',')
+                        .Select(s => s.Trim())
+                        .Select(s => new MetadataKeyword {Vocab = "http://vocab.jncc.gov.uk/jncc-domain", Value = s});
 
-                    return keywords;
+//                    string keyword1 = row.GetField("Gemini.Keywords.Keyword1");
+
+//                    if (keyword1.IsNotBlank())
+//                        keywords.Add(new MetadataKeyword { Vocab = "http://vocab.jncc.gov.uk/BLAH", Value = keyword1 });
+
+                    return domains.Concat(keywords).ToList();
                 });
                 Map(m => m.TemporalExtent).ConvertUsing(row => new TemporalExtent
                 {
@@ -75,7 +76,7 @@ namespace Catalogue.Data.Import.Mappings
                 Map(m => m.Lineage).Field("Gemini.Lineage");
                 Map(m => m.ResourceLocator).Ignore();
                 Map(m => m.AdditionalInformationSource).Field("Gemini.AdditionalInformationSource");
-                Map(m => m.DataFormat).Field("Gemini.DataFormat");
+                Map(m => m.DataFormat).Field("Gemini.DataFormat", val => "Comma Separated Values"); // ###TEMP
                 Map(m => m.ResponsibleOrganisation).ConvertUsing(row =>
                 {
                     string name = row.GetField("ResponsibleOrganisation.Name").Trim();
@@ -91,9 +92,6 @@ namespace Catalogue.Data.Import.Mappings
                 Map(m => m.MetadataDate).Value(DateTime.Now);
                 Map(m => m.MetadataPointOfContact).ConvertUsing(row =>
                 {
-//                    string name = "Joint Nature Conservation Committee (JNCC)";
-//                    string email = "data@jncc.gov.uk";
-//                    string role = "pointOfContact";
                     string name = row.GetField("MetadataPointOfContact.Name").Trim();
                     string email = row.GetField("MetadataPointOfContact.Email").Trim();
                     string role = row.GetField("MetadataPointOfContact.Role").FirstCharToLower().Trim();
@@ -131,9 +129,9 @@ namespace Catalogue.Data.Import.Mappings
                 Map(m => m.Status).Ignore();
                 Map(m => m.Security).Ignore();
                 Map(m => m.Review).Ignore();
-                Map(m => m.Notes);
-                Map(m => m.SourceIdentifier);
-                Map(m => m.ReadOnly);
+                Map(m => m.Notes).Ignore();
+                Map(m => m.SourceIdentifier).Ignore();
+                Map(m => m.ReadOnly).Value(true);
 
                 References<GeminiMap>(m => m.Gemini);
             }
@@ -141,7 +139,7 @@ namespace Catalogue.Data.Import.Mappings
     }
 
     [Explicit]
-    class when_importing_standardish_import
+    class when_importing_european_reporting_import
     {
         List<Record> imported;
 
@@ -152,14 +150,14 @@ namespace Catalogue.Data.Import.Mappings
 
             using (var db = store.OpenSession())
             {
-                var importer = Importer.CreateImporter<StandardishMapping>(db);
+                var importer = Importer.CreateImporter<EuropeanReportingMapping>(db);
                 importer.SkipBadRecords = true;
-                importer.Import(@"C:\Work\standardish-import.csv");
+                importer.Import(@"C:\Work\data\europeanreporting\Article 17 JNCC publishable metadata_riskassessment.csv");
 
                 var errors = importer.Results
                     .Where(r => !r.Success)
                     .Select(r => r.Record.Gemini.Title + Environment.NewLine + JsonConvert.SerializeObject(r.Validation) + Environment.NewLine);
-                File.WriteAllLines(@"C:\work\standardish-import-errors.txt", errors);
+                File.WriteAllLines(@"C:\work\data\europeanreporting\errors.txt", errors);
 
                 db.SaveChanges();
 
@@ -172,7 +170,7 @@ namespace Catalogue.Data.Import.Mappings
         [Test, Explicit] // this isn't seed data, so these tests are (were) only used for the "one-off" import
         public void should_import_expected_number_of_records()
         {
-            imported.Count().Should().Be(146);
+            imported.Count().Should().Be(16);
         }
     }
 }

@@ -55,23 +55,31 @@ namespace Catalogue.Data.Import
             int n = 1;
             var keywords = new List<MetadataKeyword>();
 
-            foreach (var record in records)
+            try
             {
-                var result = recordService.Insert(record);
-
-                if (!result.Success)
+                foreach (var record in records)
                 {
-                    if (!SkipBadRecords)
+                    var result = recordService.Insert(record);
+
+                    if (!result.Success)
                     {
-                        throw new Exception(String.Format("Import failed due to validation errors at record {0}: {1}",
-                            n, result.Validation.Errors.ToConcatenatedString(e => e.Message, "; ")));
+                        if (!SkipBadRecords)
+                        {
+                            throw new Exception(String.Format("Import failed due to validation errors at record {0}: {1}",
+                                n, result.Validation.Errors.ToConcatenatedString(e => e.Message, "; ")));
+                        }
                     }
+
+                    n++;
+                    Results.Add(result);
+
+                    keywords.AddRange(result.Record.Gemini.Keywords);
                 }
-
-                n++;
-                Results.Add(result);
-
-                keywords.AddRange(result.Record.Gemini.Keywords);
+            }
+            catch (CsvHelperException ex)
+            {
+                string info = (string) ex.Data["CsvHelper"];
+                throw new Exception("CsvHelper exception: " + info, ex);
             }
 
             // import new vocabs and keywords
