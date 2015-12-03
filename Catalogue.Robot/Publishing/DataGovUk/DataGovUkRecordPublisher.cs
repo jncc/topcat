@@ -11,13 +11,13 @@ using Raven.Client;
 
 namespace Catalogue.Robot.Publishing.DataGovUk
 {
-    public class RecordPublisher
+    public class DataGovUkRecordPublisher
     {
         readonly IDocumentSession db;
         readonly DataGovUkPublisherConfig config;
         readonly IFtpClient ftpClient;
 
-        public RecordPublisher(IDocumentSession db, DataGovUkPublisherConfig config, IFtpClient ftpClient)
+        public DataGovUkRecordPublisher(IDocumentSession db, DataGovUkPublisherConfig config, IFtpClient ftpClient)
         {
             this.db = db;
             this.config = config;

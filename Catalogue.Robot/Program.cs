@@ -91,7 +91,7 @@ namespace Catalogue.Robot
                     var ftpClient = new FtpClient(config.FtpUsername, config.FtpPassword);
                     using (var db = DocumentStore.OpenSession())
                     {
-                        new RecordPublisher(db, config, ftpClient).PublishRecord(id);
+                        new DataGovUkRecordPublisher(db, config, ftpClient).PublishRecord(id);
                     }
                 }
 
