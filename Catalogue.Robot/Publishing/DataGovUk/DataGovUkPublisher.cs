@@ -10,16 +10,16 @@ using Raven.Client;
 
 namespace Catalogue.Robot.Publishing.DataGovUk
 {
-    public class DataGovUkPublisher : Publisher
+    public class DataGovUkPublisher
     {
-        IDocumentSession db;
+        readonly IDocumentSession db;
 
         public DataGovUkPublisher(IDocumentSession db)
         {
             this.db = db;
         }
 
-        public override void Publish()
+        public void Publish()
         {
             // get the publishable records that have been updated since the last successful publication
             // copy the dataset from the Path to the target folder
@@ -33,10 +33,7 @@ namespace Catalogue.Robot.Publishing.DataGovUk
 //                .As<Record>()
 //                .ToList();
 
-//            Console.WriteLine(q.Count);
 
         }
     }
-
-
 }

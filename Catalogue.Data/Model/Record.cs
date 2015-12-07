@@ -38,6 +38,6 @@ namespace Catalogue.Data.Model
         /// </summary>
         public int Revision { get; internal set; }
 
-        public PublicationInfo Publication { get; internal set;  }
+        public PublicationInfo Publication { get; set;  }
     }
 }

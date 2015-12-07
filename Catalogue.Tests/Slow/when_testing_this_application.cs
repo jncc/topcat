@@ -19,17 +19,5 @@ namespace Catalogue.Tests.Slow
             }
         }
 
-
-        [Explicit, Test]
-        public void make_an_xml()
-        {
-            var record = Db.Load<Record>(new Guid("679434f5-baab-47b9-98e4-81c8e3a1a6f9"));
-            record.Gemini.ResourceLocator = String.Format("http://example.com/{0}", record.Id);
-            var xml = new global::Catalogue.Gemini.Encoding.XmlEncoder().Create(record.Id, record.Gemini);
-            string filename = "topcat-record-" + record.Id.ToString().ToLower() + ".xml";
-            xml.Save(Path.Combine(@"C:\work", filename));
-
-        }
-
     }
 }

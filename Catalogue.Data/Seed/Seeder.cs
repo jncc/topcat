@@ -39,6 +39,7 @@ namespace Catalogue.Data.Seed
                 s.AddHumanActivitiesRecord();
                 s.AddOverseasTerritoriesRecord();
                 s.AddSimpleGeminiExampleRecord();
+                s.AddTestRecordForPublishingRecord();
                 s.AddRecordWithLotsOfVocablessTags();
                 s.AddReadOnlyRecord();
                 s.AddSecureRecords();
@@ -168,6 +169,56 @@ namespace Catalogue.Data.Seed
                             West = -8.14m,
                         };
                     });
+            });
+
+            recordService.Insert(record);
+        }
+
+        void AddTestRecordForPublishingRecord()
+        {
+            var record = MakeExampleSeedRecord().With(r =>
+            {
+                r.Id = new Guid("b2691fed-e421-4e48-9da9-99bd77e0b8ba");
+                r.Path = @"C:\work\test-data.csv";
+                r.TopCopy = true;
+                r.Validation = Validation.Gemini;
+                r.Gemini = r.Gemini.With(m =>
+                {
+                    m.Title = "A Gemini-compliant test record for publishing";
+                    m.Abstract = "This is a Gemini-compliant example record.";
+                    m.Keywords = m.Keywords.With(ks => ks.Add(new MetadataKeyword { Vocab = "http://vocab.jncc.gov.uk/metadata-admin", Value = "Publish"}));
+                    m.TopicCategory = "environment";
+                    m.TemporalExtent = new TemporalExtent { Begin = "1998", End = "2005" };
+                    m.DatasetReferenceDate = "2015-04-14";
+                    m.Lineage = "This dataset was imagined by a developer.";
+                    m.ResourceLocator = "";
+                    m.DataFormat = "Comma Separated Values";
+                    m.ResponsibleOrganisation = new ResponsibleParty
+                    {
+                        Name = "Joint Nature Conservation Committee (JNCC)",
+                        Email = "data@jncc.gov.uk",
+                        Role = "owner",
+                    };
+                    m.LimitationsOnPublicAccess = "no limitations";
+                    m.UseConstraints = "no conditions apply";
+                    m.SpatialReferenceSystem = "http://www.opengis.net/def/crs/EPSG/0/4326";
+                    m.Extent = new StringPairList().ToExtentList();
+                    m.MetadataDate = Convert.ToDateTime("2015-05-07");
+                    m.MetadataPointOfContact = new ResponsibleParty
+                    {
+                        Name = "Joint Nature Conservation Committee (JNCC)",
+                        Email = "some.user@jncc.gov.uk",
+                        Role = "pointOfContact",
+                    };
+                    m.ResourceType = "dataset";
+                    m.BoundingBox = new BoundingBox
+                    {
+                        North = 60.77m,
+                        South = 49.79m,
+                        East = 2.96m,
+                        West = -8.14m,
+                    };
+                });
             });
 
             recordService.Insert(record);

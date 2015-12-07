@@ -200,6 +200,7 @@ namespace Catalogue.Data.Import.Mappings
 
     }
 
+    [Explicit]
     class when_importing_seabed_survey_spreadsheet
     {
         List<Record> imported;
