@@ -127,9 +127,19 @@ namespace Catalogue.Data.Import.Mappings
                 {
                     var sb = new StringBuilder();
 
+
+
                     if (!String.IsNullOrWhiteSpace(row.GetField("ShortSummary")))
                     {              
                         sb.AppendLine(row.GetField("ShortSummary"));
+                        sb.AppendLine();
+                    }
+
+                    var subtitle = row.GetField("Subtitle");
+                    if (!String.IsNullOrWhiteSpace(subtitle))
+                    {
+                        sb.AppendLine("#### Subtitle");
+                        sb.AppendLine(subtitle);
                         sb.AppendLine();
                     }
 
@@ -151,9 +161,17 @@ namespace Catalogue.Data.Import.Mappings
                         sb.AppendLine(row.GetField("Comment"));
                     }
 
+                    var bibliographicInfo = row.GetField("BibliographicInfo");
+                    if (!String.IsNullOrWhiteSpace(bibliographicInfo))
+                    {
+                        sb.AppendLine("#### Bibliographic Info");
+                        sb.AppendLine(bibliographicInfo);
+                        
+                    }
+
                     return sb.ToString();
                 });
-                //Invalid dates handled by exporter - go to comments field with note
+                
                 Map(m => m.DatasetReferenceDate)
                     .ConvertUsing(
                         row =>
