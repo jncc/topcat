@@ -27,7 +27,7 @@ namespace Catalogue.Tests.Web.Search
         public void WhenPagingCheckCountIsAsExpected()
         {
             // do not perform a full text search, so should be fewer results
-            var results = _recordQueryer.SearchQuery(_recordQueryInputModel);
+            var results = _recordQueryer.Search(_recordQueryInputModel);
             Assert.AreEqual(results.Results.Count, 25);
             var totalReturned = results.Results.Count;
             // loop through each page
@@ -35,7 +35,7 @@ namespace Catalogue.Tests.Web.Search
             for (int i = 1; i <= pages; i++)
             {
                 _recordQueryInputModel.P = i;
-                results = _recordQueryer.SearchQuery(_recordQueryInputModel);
+                results = _recordQueryer.Search(_recordQueryInputModel);
                 totalReturned += results.Results.Count;
             }
             Assert.AreEqual(results.Total,totalReturned);

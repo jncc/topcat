@@ -70,10 +70,10 @@ namespace Catalogue.Data.Import.Mappings
                 });
                 Map(m => m.TemporalExtent).ConvertUsing(row => new TemporalExtent
                 {
-                    Begin = row.GetField("TemporalExtent.Begin"),
-                    End = row.GetField("TemporalExtent.End")
+                    Begin = FixUpLynnDateTime(row.GetField("TemporalExtent.Begin")),
+                    End = FixUpLynnDateTime(row.GetField("TemporalExtent.End"))
                 });
-                Map(m => m.DatasetReferenceDate).Field("Gemini.DatasetReferenceDate");
+                Map(m => m.DatasetReferenceDate).Field("Gemini.DatasetReferenceDate", FixUpLynnDateTime);
                 Map(m => m.Lineage).Field("Gemini.Lineage").Value("This survey was extracted from a Marine Recorder snapshot.");
                 Map(m => m.ResourceLocator).Ignore();
                 Map(m => m.AdditionalInformationSource).Field("Gemini.AdditionalInformationSource");
@@ -109,6 +109,11 @@ namespace Catalogue.Data.Import.Mappings
                     return new BoundingBox { North = north, South = south, East = east, West = west };
                 });
             }
+
+            string FixUpLynnDateTime(string s)
+            {
+                return DateTime.Parse(s).ToString("yyyy-MM-dd");
+            }
         }
 
         public sealed class RecordMap : CsvClassMap<Record>
@@ -137,8 +142,7 @@ namespace Catalogue.Data.Import.Mappings
         [TestFixtureSetUp]
         public void SetUp()
         {
-            var paths = new { input = @"C:\work\data\habitatMetadata.csv", errors = @"C:\work\data\habitat-errors.txt" };
-//          var paths = new { input = @"C:\work\data\speciesMetadata.csv", errors = @"C:\work\data\species-errors.txt" };
+            var paths = new { input = @"C:\work\marine-recorder-dump\MR_MNCR_1stTranche_INPUT_Final.csv", errors = @"C:\work\marine-recorder-dump\errors.txt" };
 
             var store = new InMemoryDatabaseHelper().Create();
 

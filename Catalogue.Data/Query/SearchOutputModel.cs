@@ -4,7 +4,7 @@ using Catalogue.Gemini.Model;
 
 namespace Catalogue.Data.Query
 {
-    public class RecordQueryOutputModel
+    public class SearchOutputModel
     {
         public int Total { get; set; }
         public List<ResultOutputModel> Results { get; set; }

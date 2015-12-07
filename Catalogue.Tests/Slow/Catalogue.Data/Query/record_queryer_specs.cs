@@ -40,7 +40,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Data.Query
         public void should_return_correct_result_count_for_keywords(string keyword, int expected)
         {
             var input = EmptyQuery().With(q => q.K = new [] { keyword });
-            var output = new RecordQueryer(Db).SearchQuery(input);
+            var output = new RecordQueryer(Db).Search(input);
             
             output.Total.Should().Be(expected);
         }

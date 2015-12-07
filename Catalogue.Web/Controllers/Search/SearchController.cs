@@ -13,9 +13,9 @@ namespace Catalogue.Web.Controllers.Search
         }
 
         // GET api/search?q=blah
-        public RecordQueryOutputModel Get([FromUri] RecordQueryInputModel model)
+        public SearchOutputModel Get([FromUri] RecordQueryInputModel model)
         {
-            return _queryer.SearchQuery(model);
+            return _queryer.Search(model);
         }
     }
 }

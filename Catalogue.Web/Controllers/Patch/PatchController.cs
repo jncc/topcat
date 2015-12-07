@@ -56,7 +56,7 @@ namespace Catalogue.Web.Controllers.Patch
                 N = 1024,
             };
 
-            var records2 = _queryer.RecordQuery(query2);
+            var records2 = _queryer.Query(query2).ToList();
 
             foreach (var record in records2)
             {
@@ -132,7 +132,7 @@ namespace Catalogue.Web.Controllers.Patch
                 N = 1024,
             };
 
-            var records = _queryer.RecordQuery(query);
+            var records = _queryer.Query(query).ToList();
 
             foreach (var record in records)
             {
