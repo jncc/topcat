@@ -12,7 +12,7 @@ using Catalogue.Data;
 using Catalogue.Data.Model;
 using Catalogue.Data.Query;
 using Catalogue.Robot.Importing;
-using Catalogue.Robot.Publishing.DataGovUk;
+using Catalogue.Robot.Publishing.OpenData;
 using Newtonsoft.Json;
 using Raven.Client;
 using Raven.Client.Document;
@@ -37,15 +37,15 @@ namespace Catalogue.Robot
             else if (args.First() == "mark")
             {
                 string keyword = args.Skip(1).First();
-                MarkRecordsAsPublishableToDataGovUk(keyword);
+                MarkRecordsAsOpenDataPublishable(keyword);
             }
             else if (args.First() == "publish")
             {
-                Publish1RecordsToDataGovUk();
+                PublishRecordsAsOpenData();
             }
         }
 
-        static void MarkRecordsAsPublishableToDataGovUk(string keyword)
+        static void MarkRecordsAsOpenDataPublishable(string keyword)
         {
             using (var db = DocumentStore.OpenSession())
             {
@@ -57,8 +57,8 @@ namespace Catalogue.Robot
                     if (record.Publication == null)
                         record.Publication = new PublicationInfo();
 
-                    if (record.Publication.DataGovUk == null)
-                        record.Publication.DataGovUk = new DataGovUkPublicationInfo();
+                    if (record.Publication.OpenData == null)
+                        record.Publication.OpenData = new OpenDataPublicationInfo() { Attempts = new List<PublicationAttempt>() };
                 }
 
                 db.SaveChanges();
@@ -66,36 +66,46 @@ namespace Catalogue.Robot
             }
         }
 
-        static void Publish1RecordsToDataGovUk()
+        static void PublishRecordsAsOpenData()
         {
             // load the config
             var configPath = Path.Combine(Environment.CurrentDirectory, "data-gov-uk-publisher-config.json");
             if (!File.Exists(configPath))
                 throw new Exception("No data-gov-uk-publisher-config.json file in current directory.");
             string configJson = File.ReadAllText(configPath);
-            var config = JsonConvert.DeserializeObject<DataGovUkPublisherConfig>(configJson);
+            var config = JsonConvert.DeserializeObject<OpenDataPublisherConfig>(configJson);
 
             var ids = new List<Guid>();
             using (var db = DocumentStore.OpenSession())
             {
-                ids = db.Query<Record>()
-                    .Where(r => r.Publication.DataGovUk != null)
-                    .Take(1)
-                    .ToList()
-                    .Select(r => r.Id) // why can't ravendb manage to project the id?!
+                var records = db.Query<Record>()
+                    .Where(r => r.Publication.OpenData != null)
+                    .Take(1000)
                     .ToList();
+
+                // exclude the ones that have already successfully published (and haven't been updated since)
+                // ie those where: never attempted, or the last attempt was unsuccesful, or those that have been updated since the last successful attempt
+                ids = (from r in records
+                       let neverAttempted = !r.Publication.OpenData.Attempts.Any()
+                       let latestAttempt = r.Publication.OpenData.Attempts.LastOrDefault()
+                       let latestSuccessfulAttempt = r.Publication.OpenData.Attempts.LastOrDefault(a => a.Successful)
+                       where neverAttempted || !latestAttempt.Successful  // || (r.Gemini.DatasetReferenceDate > latestAttempt.DateUtc)
+                       select r.Id).ToList();
             }
 
-                foreach (var id in ids)
-                {
-                    var ftpClient = new FtpClient(config.FtpUsername, config.FtpPassword);
-                    using (var db = DocumentStore.OpenSession())
-                    {
-                        new DataGovUkRecordPublisher(db, config, ftpClient).PublishRecord(id);
-                    }
-                }
+            Console.WriteLine("Publishing {0} records...", ids.Count);
 
-                Console.WriteLine("Published {0} records to data.gov.uk.", ids.Count);
+            foreach (var id in ids)
+            {
+                var ftpClient = new FtpClient(config.FtpUsername, config.FtpPassword);
+
+                using (var db = DocumentStore.OpenSession())
+                {
+                    new OpenDataRecordPublisher(db, config, ftpClient).PublishRecord(id);
+                }
+            }
+
+            Console.WriteLine("Published {0} records.", ids.Count);
         }
 
 

@@ -18,7 +18,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Data.Indexes
         {
             var record = Db.Load<Record>(new Guid("679434f5-baab-47b9-98e4-81c8e3a1a6f9"));
             
-            record.Publication = new PublicationInfo { DataGovUk = new DataGovUkPublicationInfo() };
+            record.Publication = new PublicationInfo { OpenData = new OpenDataPublicationInfo() };
             Db.SaveChanges();
             RavenUtility.WaitForIndexing(Db);
 

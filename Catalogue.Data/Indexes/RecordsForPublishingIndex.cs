@@ -22,10 +22,10 @@ namespace Catalogue.Data.Indexes
         {
             Map = records => from r in records
                              where r.Publication != null
-                             where r.Publication.DataGovUk != null
+                             where r.Publication.OpenData != null
                              select new
                              {
-                                 LastSuccess = r.Gemini.MetadataDate, // r.Publication.DataGovUk.Attempts.Last().DateUtc,
+                                 LastSuccess = r.Gemini.MetadataDate, // r.Publication.OpenData.Attempts.Last().DateUtc,
                                  MetadataDate = r.Gemini.MetadataDate
                                  //Staleness = r.Gemini.MetadataDate - r.Publication.LastSuccess
                              };

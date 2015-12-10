@@ -1,20 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Catalogue.Data.Indexes;
-using Catalogue.Data.Model;
-using NUnit.Framework;
-using Raven.Client;
+﻿using Raven.Client;
 
-namespace Catalogue.Robot.Publishing.DataGovUk
+namespace Catalogue.Robot.Publishing.OpenData
 {
-    public class DataGovUkPublisher
+    public class OpenDataPublisher
     {
         readonly IDocumentSession db;
 
-        public DataGovUkPublisher(IDocumentSession db)
+        public OpenDataPublisher(IDocumentSession db)
         {
             this.db = db;
         }

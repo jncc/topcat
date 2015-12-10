@@ -1,7 +1,6 @@
-﻿using System;
-using System.Net;
+﻿using System.Net;
 
-namespace Catalogue.Robot.Publishing.DataGovUk
+namespace Catalogue.Robot.Publishing.OpenData
 {
     /// <summary>
     /// Mockable FTP-focussed WebClient.

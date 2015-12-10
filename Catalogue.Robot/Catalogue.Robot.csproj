@@ -63,10 +63,10 @@
     <Compile Include="Importing\ImportHandler.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Publishing\DataGovUk\DataGovUkPublisher.cs" />
-    <Compile Include="Publishing\DataGovUk\DataGovUkPublisherConfig.cs" />
-    <Compile Include="Publishing\DataGovUk\FtpClient.cs" />
-    <Compile Include="Publishing\DataGovUk\DataGovUkRecordPublisher.cs" />
+    <Compile Include="Publishing\OpenData\OpenDataPublisher.cs" />
+    <Compile Include="Publishing\OpenData\OpenDataPublisherConfig.cs" />
+    <Compile Include="Publishing\OpenData\FtpClient.cs" />
+    <Compile Include="Publishing\OpenData\OpenDataRecordPublisher.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

@@ -8,10 +8,10 @@ namespace Catalogue.Data.Model
 {
     public class PublicationInfo
     {
-        public DataGovUkPublicationInfo DataGovUk { get; set; }
+        public OpenDataPublicationInfo OpenData { get; set; }
     }
 
-    public class DataGovUkPublicationInfo
+    public class OpenDataPublicationInfo
     {
         public List<PublicationAttempt> Attempts { get; set; }         
     }

@@ -2,22 +2,19 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Net;
-using System.Text;
-using System.Threading.Tasks;
 using System.Xml.Linq;
 using Catalogue.Data.Model;
 using Raven.Client;
 
-namespace Catalogue.Robot.Publishing.DataGovUk
+namespace Catalogue.Robot.Publishing.OpenData
 {
-    public class DataGovUkRecordPublisher
+    public class OpenDataRecordPublisher
     {
         readonly IDocumentSession db;
-        readonly DataGovUkPublisherConfig config;
+        readonly OpenDataPublisherConfig config;
         readonly IFtpClient ftpClient;
 
-        public DataGovUkRecordPublisher(IDocumentSession db, DataGovUkPublisherConfig config, IFtpClient ftpClient)
+        public OpenDataRecordPublisher(IDocumentSession db, OpenDataPublisherConfig config, IFtpClient ftpClient)
         {
             this.db = db;
             this.config = config;
@@ -51,7 +48,7 @@ namespace Catalogue.Robot.Publishing.DataGovUk
 
         PublicationAttempt AddNewAttempt(Record record)
         {
-            var publicationInfo = record.Publication.DataGovUk;
+            var publicationInfo = record.Publication.OpenData;
             if (publicationInfo.Attempts == null)
                 publicationInfo.Attempts = new List<PublicationAttempt>();
 
@@ -94,7 +91,18 @@ namespace Catalogue.Robot.Publishing.DataGovUk
 
             var doc = XDocument.Parse(indexDocHtml);
             var body = doc.Root.Element("body");
-            body.Add(new XElement("a", new XAttribute("href", record.Id + ".xml")));
+
+            var newLink = new XElement("a", new XAttribute("href", record.Id + ".xml"), record.Gemini.Title);
+            var existingLinks = body.Elements("a").ToList();
+            
+            existingLinks.Remove();
+
+            var newLinks = existingLinks
+                .Concat(new [] { newLink })
+                .GroupBy(a => a.Attribute("href").Value)
+                .Select(g => g.First()); // poor man's DistinctBy
+
+            body.Add(newLinks);
 
             ftpClient.UploadString(indexDocFtpPath, doc.ToString());
         }
