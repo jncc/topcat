@@ -86,14 +86,15 @@ namespace Catalogue.Data.Import.Mappings
                 });
                 Map(m => m.LimitationsOnPublicAccess).Field("Gemini.LimitationsOnPublicAccess");
                 Map(m => m.UseConstraints).Field("Gemini.UseConstraints");
-                Map(m => m.SpatialReferenceSystem).Field("Gemini.SpatialReferenceSystem", value => value == "N/A" ? null : value);
+                Map(m => m.Copyright).Field("Copyright");
+//              Map(m => m.SpatialReferenceSystem).Field("Gemini.SpatialReferenceSystem", value => value == "N/A" ? null : value);
                 Map(m => m.Extent).Ignore();
                 Map(m => m.MetadataDate).Value(DateTime.Now);
                 Map(m => m.MetadataPointOfContact).ConvertUsing(row =>
                 {
-//                    string name = "Joint Nature Conservation Committee (JNCC)";
-//                    string email = "data@jncc.gov.uk";
-//                    string role = "pointOfContact";
+//                  string name = "Joint Nature Conservation Committee (JNCC)";
+//                  string email = "data@jncc.gov.uk";
+//                  string role = "pointOfContact";
                     string name = row.GetField("MetadataPointOfContact.Name").Trim();
                     string email = row.GetField("MetadataPointOfContact.Email").Trim();
                     string role = row.GetField("MetadataPointOfContact.Role").FirstCharToLower().Trim();

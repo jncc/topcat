@@ -149,6 +149,7 @@ namespace Catalogue.Data.Import.Mappings
                     });
                 Map(m => m.LimitationsOnPublicAccess).Field("Gemini.LimitationsOnPublicAccess");
                 Map(m => m.UseConstraints).Field("Gemini.UseConstraints");
+                Map(m => m.Copyright).Field("Copyright");
                 Map(m => m.SpatialReferenceSystem).Field("Gemini.SpatialReferenceSystem", value => value == "N/A" ? null : value);
                 Map(m => m.Extent).Ignore();
                 Map(m => m.MetadataDate).Value(DateTime.Now);
@@ -216,7 +217,7 @@ namespace Catalogue.Data.Import.Mappings
                 {
                     var importer = Importer.CreateImporter<SeabedSurveyMapping>(db);
                     importer.SkipBadRecords = true; // see log for skipped bad records
-                    importer.Import(@"C:\Work\data\Offshore_survey_TopCat_data_part1.csv");
+                    importer.Import(@"C:\Work\data\Offshore_survey_TopCat_data_part1_20151208.xlsx");
 
                     var errors = importer.Results
                         .Where(r => !r.Success)

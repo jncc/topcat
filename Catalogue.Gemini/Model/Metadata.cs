@@ -22,6 +22,7 @@ namespace Catalogue.Gemini.Model
         public ResponsibleParty ResponsibleOrganisation { get; set; }
         public string LimitationsOnPublicAccess { get; set; }
         public string UseConstraints { get; set; }
+        public string Copyright { get; set; }
         public string SpatialReferenceSystem { get; set; }
         public List<Extent> Extent { get; set; }
         public DateTime MetadataDate { get; set; }
