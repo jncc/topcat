@@ -217,7 +217,7 @@ namespace Catalogue.Data.Import.Mappings
                 {
                     var importer = Importer.CreateImporter<SeabedSurveyMapping>(db);
                     importer.SkipBadRecords = true; // see log for skipped bad records
-                    importer.Import(@"C:\Work\data\Offshore_survey_TopCat_data_part1_20151208.xlsx");
+                    importer.Import(@"C:\Work\data\Offshore_survey_TopCat_data_part1_20151208.csv");
 
                     var errors = importer.Results
                         .Where(r => !r.Success)
@@ -242,9 +242,14 @@ namespace Catalogue.Data.Import.Mappings
         [Test, Explicit] // this isn't seed data, so these tests are (were) only used for the "one-off" import
         public void should_import_expected_number_of_records()
         {
-            imported.Count().Should().Be(276);
+            imported.Count().Should().Be(281);
         }
 
+        [Test, Explicit]
+        public void should_import_copyright()
+        {
+            imported.Should().Contain(r => r.Gemini.Copyright.Contains("© 2014  Joint Nature Conservation Committee"));
+        }
 
         [Test, Explicit]
         public void MakeAnXmlFile()
