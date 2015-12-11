@@ -256,8 +256,11 @@ namespace Catalogue.Data.Write
 
         void ValidateBoundingBox(Record record, ValidationResult<Record> result)
         {
-            if (!BoundingBoxUtility.IsValid(record.Gemini.BoundingBox))
-                result.Errors.Add("Invalid bounding box", r => r.Gemini.BoundingBox);
+            if (!BoundingBoxUtility.IsBlank(record.Gemini.BoundingBox))
+            {
+                if (!BoundingBoxUtility.IsValid(record.Gemini.BoundingBox))
+                    result.Errors.Add("Invalid bounding box", r => r.Gemini.BoundingBox);
+            }
         }
 
         void ValidateJnccSpecificRules(Record record, ValidationResult<Record> result)

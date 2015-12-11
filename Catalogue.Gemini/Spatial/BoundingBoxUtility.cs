@@ -91,7 +91,13 @@ namespace Catalogue.Gemini.Spatial
             BoundingBoxUtility.IsValid(outsideTheWorld).Should().BeFalse();
         }
 
+        [Test]
+        public void can_identify_a_bad_bounding_box_from_real_data()
+        {
+            var box = new BoundingBox { North = 58.5076m, West = -10.6494m, South = 56.7659m, East = -14.1198m };
 
+            BoundingBoxUtility.IsValid(box).Should().BeFalse();
+        }
     }
 
     class bounding_box_utility_minimum_of_tests
