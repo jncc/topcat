@@ -39,6 +39,14 @@ namespace Catalogue.Gemini.Spatial
 
             return new BoundingBox { North = northmost, South = southmost, East = eastmost, West = westmost };
         }
+
+        public static bool IsValid(BoundingBox box)
+        {
+            bool isntImpossible = (box.North > box.South) && (box.East > box.West);
+            bool withinBounds = (box.North <= 90) && (box.South >= -90) && (box.East >= -180) && (box.West <= 180);
+
+            return withinBounds && isntImpossible;
+        }
     }
 
 
@@ -58,6 +66,32 @@ namespace Catalogue.Gemini.Spatial
             var box = new BoundingBox { North = 0, South = 0, East = 0, West = 0 };
             BoundingBoxUtility.IsBlank(box).Should().BeTrue();
         }
+
+        [Test]
+        public void can_identify_a_valid_bounding_box()
+        {
+            var englishChannel = new BoundingBox { North = 52.065138m, West = -9.793268m, South = 48.264071m, East = 1.939627m };
+
+            BoundingBoxUtility.IsValid(englishChannel).Should().BeTrue();
+        }
+
+        [Test]
+        public void can_identify_an_impossibly_inverted_bounding_box()
+        {
+            var englishChannelWithNorthAndSouthInverted = new BoundingBox { North = 48.264071m, West = -9.793268m, South = 52.065138m, East = 1.939627m };
+
+            BoundingBoxUtility.IsValid(englishChannelWithNorthAndSouthInverted).Should().BeFalse();
+        }
+
+        [Test]
+        public void can_identify_an_impossibly_sized_bounding_box()
+        {
+            var outsideTheWorld = new BoundingBox { North = 10000m, West = -9.793268m, South = 48.264071m, East = 1.939627m };
+
+            BoundingBoxUtility.IsValid(outsideTheWorld).Should().BeFalse();
+        }
+
+
     }
 
     class bounding_box_utility_minimum_of_tests
@@ -106,5 +140,4 @@ namespace Catalogue.Gemini.Spatial
             min.West.Should().Be(englishChannel.West);
         }
     }
-
 }

@@ -46,6 +46,7 @@ namespace Catalogue.Data.Write
             ValidateResourceType(record, result);
             ValidateSecurityInvariants(record, result);
             ValidatePublishableInvariants(record, result);
+            ValidateBoundingBox(record, result);
             ValidateJnccSpecificRules(record, result);
 
             if (record.Validation == Validation.Gemini)
@@ -251,6 +252,12 @@ namespace Catalogue.Data.Write
 //                result.Errors.Add("Publishable records must have a resource locator",
 //                    r => r.Status, r => r.Gemini.ResourceLocator);
 //            }
+        }
+
+        void ValidateBoundingBox(Record record, ValidationResult<Record> result)
+        {
+            if (!BoundingBoxUtility.IsValid(record.Gemini.BoundingBox))
+                result.Errors.Add("Invalid bounding box", r => r.Gemini.BoundingBox);
         }
 
         void ValidateJnccSpecificRules(Record record, ValidationResult<Record> result)

@@ -217,7 +217,7 @@ namespace Catalogue.Data.Import.Mappings
                 {
                     var importer = Importer.CreateImporter<SeabedSurveyMapping>(db);
                     importer.SkipBadRecords = true; // see log for skipped bad records
-                    importer.Import(@"C:\Work\data\Offshore_survey_TopCat_data_part1_20151208.csv");
+                    importer.Import(@"C:\work\data\Offshore_survey_TopCat_data_part1_20151208.csv");
 
                     var errors = importer.Results
                         .Where(r => !r.Success)
