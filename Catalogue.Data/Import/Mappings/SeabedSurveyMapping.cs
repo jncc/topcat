@@ -116,13 +116,16 @@ namespace Catalogue.Data.Import.Mappings
                     if (site.IsNotBlank())
                     {
                         var sites = site.Split(';')
-                            .Select(s => s.Trim())
-                            .Select(s => new MetadataKeyword { Vocab = "http://vocab.jncc.gov.uk/location", Value = s });
+                            .Select(s => new MetadataKeyword { Vocab = "http://vocab.jncc.gov.uk/location", Value = s.Trim() });
                         keywords.AddRange(sites);
                     }
 
                     if (technique.IsNotBlank())
-                        keywords.Add(new MetadataKeyword {Vocab = "http://vocab.jncc.gov.uk/seabed-survey-technique", Value = technique });
+                    {
+                        var techniques = site.Split(';')
+                            .Select(s => new MetadataKeyword { Vocab = "http://vocab.jncc.gov.uk/seabed-survey-technique", Value = s.Trim() });
+                        keywords.AddRange(techniques);
+                    }
 
                     if (dataType.IsNotBlank())
                         keywords.Add(new MetadataKeyword { Vocab = "http://vocab.jncc.gov.uk/seabed-survey-data-type", Value = dataType });
@@ -217,7 +220,7 @@ namespace Catalogue.Data.Import.Mappings
                 {
                     var importer = Importer.CreateImporter<SeabedSurveyMapping>(db);
                     importer.SkipBadRecords = true; // see log for skipped bad records
-                    importer.Import(@"C:\work\data\Offshore_survey_TopCat_data_part1_20151208.csv");
+                    importer.Import(@"C:\Work\data\Offshore_survey_TopCat_data_part1_20151208.csv");
 
                     var errors = importer.Results
                         .Where(r => !r.Success)
