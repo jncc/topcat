@@ -13,20 +13,27 @@ baseLayer = L.tileLayer 'https://{s}.tiles.mapbox.com/v4/petmon.lp99j25j/{z}/{x}
 normal = fillOpacity: 0.2, weight: 1, color: '#222'
 select = fillOpacity: 0.5, weight: 1, color: 'rgb(217,38,103)'
 
-getBestPadding = (tuples) ->
-    switch tuples.length
-        when 1 then padding: [50, 50]
-        when 2 then padding: [20, 20]
-        else        padding: [5, 5]
-
 getArea = (bounds) ->
     [[s, w], [n, e]] = bounds
     x = e - w
     y = n - s
     Math.abs (x * y)
 
-# the records to show on the map, paired with additional map-related
-# tuples of { record, coordinate bounds, leaflet rectangle }
+getBestPadding = (tuples) ->
+    onlyOneBoxIsVisible = (allBounds) ->
+        largest = _.max allBounds, (b) -> getArea b
+        isWithin = (bounds, other) ->
+            [[s, w], [n, e]] = bounds
+            [[sx, wx], [nx, ex]] = other
+            s >= sx and n <= nx and w >= wx and e <= ex
+        _.every allBounds, (b) -> isWithin b, largest 
+    if onlyOneBoxIsVisible(_.map tuples, (t) -> t.bounds)
+        padding: [120, 120] # zoom out fairly wide so we can see the surrounding space
+    else
+        padding: [5, 5] # zoom in to fit - there's likely to be space between the various boxes
+
+# the records to show on the map, paired with additional map-related objects
+# triples of { record, coordinate bounds, leaflet rectangle }
 tuples = {}
 
 updateTuples = (results, scope) ->

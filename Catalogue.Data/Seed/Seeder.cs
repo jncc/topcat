@@ -46,6 +46,7 @@ namespace Catalogue.Data.Seed
                 s.AddNonTopCopyRecord();
                 s.AddVariousDataFormatRecords();
                 s.AddRecordWithUnusualCharactersInKeywords();
+                s.AddTwoRecordsWithTheSameBoundingBox();
                 s.AddBboxes();
 
                 db.SaveChanges();
@@ -335,6 +336,38 @@ namespace Catalogue.Data.Seed
             });
 
             recordService.Insert(record);
+        }
+
+        void AddTwoRecordsWithTheSameBoundingBox()
+        {
+            var wales = new BoundingBox { North = 53.98783m, South = 50.92033m, East = -2.919512m, West = -5.682273m };
+
+            var record1 = MakeExampleSeedRecord().With(r =>
+            {
+                r.Id = new Guid("50749e9a-4df5-4641-81a7-1fea04346be5");
+                r.Path = @"X:\path\for\record\with\same\bounding\box\as\another\1";
+                r.Gemini = r.Gemini.With(m =>
+                {
+                    m.Title = "A record with the same bounding box an another (1)";
+                    m.BoundingBox = wales;
+                });
+                r.Gemini.Keywords.Add(new MetadataKeyword { Vocab = "http://vocab.jncc.gov.uk/some-vocab", Value = "Bounding boxes" });
+            });
+
+            var record2 = MakeExampleSeedRecord().With(r =>
+            {
+                r.Id = new Guid("6a969b7f-18e8-4e96-b0ea-371d8e2ba774");
+                r.Path = @"X:\path\for\record\with\same\bounding\box\as\another\2";
+                r.Gemini = r.Gemini.With(m =>
+                {
+                    m.Title = "A record with the same bounding box an another (2)";
+                    m.BoundingBox = wales;
+                });
+                r.Gemini.Keywords.Add(new MetadataKeyword { Vocab = "http://vocab.jncc.gov.uk/some-vocab", Value = "Bounding boxes" });
+            });
+
+            recordService.Insert(record1);
+            recordService.Insert(record2);
         }
 
         void AddBboxes()

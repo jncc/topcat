@@ -122,8 +122,8 @@ label {
   font-size: 123%;
   color: #666666;
 }
-.welcome .headline {
-  padding-right: 5em;
+.welcome h1 {
+  padding-right: 2em;
 }
 .welcome .collection-description {
   position: relative;

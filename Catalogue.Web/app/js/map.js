@@ -28,29 +28,42 @@
     color: 'rgb(217,38,103)'
   };
 
-  getBestPadding = function(tuples) {
-    switch (tuples.length) {
-      case 1:
-        return {
-          padding: [50, 50]
-        };
-      case 2:
-        return {
-          padding: [20, 20]
-        };
-      default:
-        return {
-          padding: [5, 5]
-        };
-    }
-  };
-
   getArea = function(bounds) {
     var e, n, s, w, x, y, _ref, _ref1;
     (_ref = bounds[0], s = _ref[0], w = _ref[1]), (_ref1 = bounds[1], n = _ref1[0], e = _ref1[1]);
     x = e - w;
     y = n - s;
     return Math.abs(x * y);
+  };
+
+  getBestPadding = function(tuples) {
+    var onlyOneBoxIsVisible;
+    onlyOneBoxIsVisible = function(allBounds) {
+      var isWithin, largest;
+      largest = _.max(allBounds, function(b) {
+        return getArea(b);
+      });
+      isWithin = function(bounds, other) {
+        var e, ex, n, nx, s, sx, w, wx, _ref, _ref1, _ref2, _ref3;
+        (_ref = bounds[0], s = _ref[0], w = _ref[1]), (_ref1 = bounds[1], n = _ref1[0], e = _ref1[1]);
+        (_ref2 = other[0], sx = _ref2[0], wx = _ref2[1]), (_ref3 = other[1], nx = _ref3[0], ex = _ref3[1]);
+        return s >= sx && n <= nx && w >= wx && e <= ex;
+      };
+      return _.every(allBounds, function(b) {
+        return isWithin(b, largest);
+      });
+    };
+    if (onlyOneBoxIsVisible(_.map(tuples, function(t) {
+      return t.bounds;
+    }))) {
+      return {
+        padding: [120, 120]
+      };
+    } else {
+      return {
+        padding: [5, 5]
+      };
+    }
   };
 
   tuples = {};
