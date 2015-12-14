@@ -2,5 +2,13 @@
   {
     "outputFile": "app/js/controllers/IngestController.js",
     "inputFile": "app/js/controllers/IngestController.coffee"
+  },
+  {
+    "outputFile": "app/js/app.js",
+    "inputFile": "app/js/app.coffee"
+  },
+  {
+    "outputFile": "app/css/main.css",
+    "inputFile": "app/css/main.less"
   }
 ]
