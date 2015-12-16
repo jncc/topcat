@@ -70,6 +70,9 @@ module.config ($routeProvider) ->
         .when '/content/whytopcat',
             controller:     'ContentController',
             templateUrl:    'views/partials/why-topcat.html'
+        .when '/content/present',
+            controller:     'ContentController',
+            templateUrl:    'views/partials/presentation.html'
         .otherwise
             redirectTo:     '/'
 

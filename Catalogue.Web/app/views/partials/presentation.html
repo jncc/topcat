@@ -1,0 +1,17 @@
+﻿
+
+
+<div ng-if="slide == 0" class="huge">Discover</div>
+<div ng-if="slide == 1" class="huge">Manage</div>
+<div ng-if="slide == 2" class="huge">Publish</div>
+
+<div style="text-align: center;">
+    <br />
+    <br />
+    <br />
+    <button type="button" class="btn btn-default"
+            ng-click="slide = (slide + 1) % 3">
+        <span class="glyphicon glyphicon-repeat"></span>
+        
+    </button>
+</div>
