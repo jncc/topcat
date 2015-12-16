@@ -1,16 +1,18 @@
 ﻿
 
 
-<div ng-if="slide == 0" class="huge">Discover</div>
-<div ng-if="slide == 1" class="huge">Manage</div>
-<div ng-if="slide == 2" class="huge">Publish</div>
+<div ng-if="slide == 0" class="huge">Topcat</div>
+<div ng-if="slide == 1" class="huge">Discover</div>
+<div ng-if="slide == 2" class="huge">Manage</div>
+<div ng-if="slide == 3" class="huge">Publish</div>
+<div ng-if="slide == 4" style="text-align: center;"><img src="img/topcat-original.png" alt="logo" height="600" width="900"></div>
 
 <div style="text-align: center;">
     <br />
     <br />
     <br />
     <button type="button" class="btn btn-default"
-            ng-click="slide = (slide + 1) % 3">
+            ng-click="slide = (slide + 1) % 5">
         <span class="glyphicon glyphicon-repeat"></span>
         
     </button>

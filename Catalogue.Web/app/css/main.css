@@ -44,6 +44,14 @@ hr {
   color: #bbbbbb;
   padding-top: 100px;
 }
+.huge.ng-enter {
+  transition: 0.7s all;
+  opacity: 0;
+}
+.huge.ng-enter.ng-enter-active {
+  left: 0;
+  opacity: 1;
+}
 .placeholder {
   color: #bbbbbb;
 }

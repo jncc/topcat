@@ -67,6 +67,12 @@ hr {
     font-weight: bold; 
     color: @grey;
     padding-top: 100px;
+    &.ng-enter {
+        transition: 0.7s all;
+        opacity:0;
+        &.ng-enter-active { left: 0; opacity: 1; }
+    }
+
 } 
 
 // ie8 placeholder is a bit dark by default (jquery-placeholder plugin)

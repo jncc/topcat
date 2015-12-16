@@ -203,6 +203,7 @@
     </Content>
     <Content Include="app\img\favicon.ico" />
     <Content Include="app\img\spinner.gif" />
+    <Content Include="app\img\topcat-original.png" />
     <Content Include="app\img\topcat.png" />
     <Content Include="app\index.html" />
     <Content Include="app\js\app.js">
