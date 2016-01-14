@@ -186,5 +186,16 @@ namespace Catalogue.Web.Controllers.Patch
 
             return new HttpResponseMessage();
         }
+
+
+//        [HttpPost, Route("api/patch/renamesecuritylevels")]
+//        public HttpResponseMessage RenameSecurityLevels()
+//        {
+////            db.Advanced.DocumentStore.DatabaseCommands.Patch(
+//
+////            db.SaveChanges();
+////
+////            return new HttpResponseMessage();
+//        }
     }
 }

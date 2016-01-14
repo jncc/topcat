@@ -63,3 +63,18 @@ When deploying a new database instance, the **Versioning bundle** needs to be en
 
 **Important** The Catalogue.Data.dll must be deployed into Raven/Analyzers folder because RavenDB needs to be able to load the custom Lucene analyzer we use.  
 
+LinqPad
+-------
+RavenDB doesn't support ad-hoc querying very well. We use LinqPad to do ad-hoc querying and basic data visualisation. 
+
+You need to use the RavenDB LinqPad adaptor. Create a connection like `RavenDB: Topcat LIVE`, and add the references to the assemblies in the output folder of your build.
+
+    Catalogue.Data.dll
+	Catalogue.Gemini.dll
+
+You can then write queries like this:
+
+    from r in Query<Catalogue.Data.Model.Record>()
+    where r.Gemini.Title.StartsWith("Sea")
+    select r
+  

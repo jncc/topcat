@@ -221,14 +221,14 @@ namespace Catalogue.Data.Write
         }
 
         [Test]
-        public void should_set_security_to_open_by_default()
+        public void should_set_security_to_official_by_default()
         {
             var database = Mock.Of<IDocumentSession>();
             var service = new RecordService(database, ValidatorStub());
 
             service.Upsert(BasicRecord());
 
-            Mock.Get(database).Verify(db => db.Store(It.Is((Record r) => r.Security == Security.Open)));
+            Mock.Get(database).Verify(db => db.Store(It.Is((Record r) => r.Security == Security.Official)));
         }
 
         [Test]

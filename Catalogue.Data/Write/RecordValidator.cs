@@ -234,8 +234,8 @@ namespace Catalogue.Data.Write
 
         void ValidateSecurityInvariants(Record record, ValidationResult<Record> result)
         {
-            // non_open_records_must_have_limitations_on_public_access
-            if (record.Security != Security.Open && record.Gemini.LimitationsOnPublicAccess.IsBlank())
+            // sensitive_records_must_have_limitations_on_public_access
+            if (record.Security != Security.Official && record.Gemini.LimitationsOnPublicAccess.IsBlank())
             {
                 result.Errors.Add("Non-open records must describe their limitations on public access",
                     r => r.Security,
@@ -607,8 +607,8 @@ namespace Catalogue.Data.Write
         }
 
         [Test]
-        public void non_open_records_must_have_limitations_on_public_access(
-            [Values(Security.Classified, Security.Restricted)] Security nonOpen, [Values("", " ", null)] string blank)
+        public void sensitive_records_must_have_limitations_on_public_access(
+            [Values(Security.Secret, Security.OfficialSensitive)] Security nonOpen, [Values("", " ", null)] string blank)
         {
             var record = SimpleRecord().With(r =>
             {

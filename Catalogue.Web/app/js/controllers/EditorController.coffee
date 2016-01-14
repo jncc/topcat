@@ -127,9 +127,9 @@
 
 
 getSecurityText = (n) -> switch n
-    when 0 then 'Open'
-    when 1 then 'Restricted'
-    when 2 then 'Classified'
+    when 0 then 'Official'
+    when 1 then 'Official-Sensitive'
+    when 2 then 'Secret'
     
 getDataFormatObj = (name, formats) ->
     if (name != undefined && formats != undefined)

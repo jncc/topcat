@@ -268,7 +268,7 @@ namespace Catalogue.Data.Seed
                 {
                     r.Id = new Guid("89136d54-d383-4d4d-a385-ac9687596b01");
                     r.Path = @"X:\path\to\restricted\record\data";
-                    r.Security = Security.Restricted;
+                    r.Security = Security.OfficialSensitive;
                     r.Gemini = r.Gemini.With(m =>
                         {
                             m.Title = "An example restricted record";

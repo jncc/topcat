@@ -166,11 +166,11 @@
   getSecurityText = function(n) {
     switch (n) {
       case 0:
-        return 'Open';
+        return 'Official';
       case 1:
-        return 'Restricted';
+        return 'Official-Sensitive';
       case 2:
-        return 'Classified';
+        return 'Secret';
     }
   };
 
