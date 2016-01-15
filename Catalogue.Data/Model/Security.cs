@@ -10,8 +10,8 @@ namespace Catalogue.Data.Model
     {
         // new
         Official = 0,
-        OfficialSensitive,
-        Secret,
+        OfficialSensitive = 1,
+        Secret = 2,
 
         // old - remove!
         Open, 
