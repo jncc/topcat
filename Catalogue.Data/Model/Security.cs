@@ -8,15 +8,8 @@ namespace Catalogue.Data.Model
 {
     public enum Security
     {
-        // new
         Official = 0,
         OfficialSensitive = 1,
         Secret = 2,
-
-        // old - remove!
-        Open, 
-        Restricted,
-        Classified,
-
     }
 }
