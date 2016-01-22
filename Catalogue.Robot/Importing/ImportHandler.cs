@@ -17,13 +17,12 @@ namespace Catalogue.Robot.Importing
             this.db = db;
         }
 
-        public void Import(string[] args)
+        public void Import(ImportOptions options)
         {
-            string mapping = args[1]; // -mapping "marinerecorder"
-            string file = args[2];    // -file "C:\work\file.csv"
+
             var importer = global::Catalogue.Data.Import.Importer.CreateImporter<MarineRecorderMapping>(db);
-            importer.SkipBadRecords = false; // --skip-bad
-            importer.Import(file.Trim('"'));
+            importer.SkipBadRecords = options.SkipBad;
+            importer.Import(options.File); //.Trim('"')  needed, or hopefully will the CommandLineParser strip out quotes for me?
             db.SaveChanges();
 
             int successes = importer.Results.Count(r => r.Success);

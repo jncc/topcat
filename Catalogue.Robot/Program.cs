@@ -13,28 +13,75 @@ using Catalogue.Data.Model;
 using Catalogue.Data.Query;
 using Catalogue.Robot.Importing;
 using Catalogue.Robot.Publishing.OpenData;
+using CommandLine;
 using Newtonsoft.Json;
 using Raven.Client;
-using Raven.Client.Document;
 
 namespace Catalogue.Robot
 {
+    [Verb("import", HelpText = "Import records from a CSV file.")]
+    public class ImportOptions
+    {
+        [Option(Required = true, HelpText = "Import mapping, e.g. 'SeabedSurveyMapping'.")]
+        public string Mapping { get; set; }
+
+        [Option(Required = true, HelpText = "Path to CSV file to import.")]
+        public string File { get; set; }
+
+        [Option("skip-bad", Default = false, HelpText = "Skip bad records (default false).")]
+        public bool SkipBad { get; set; }
+    }
+
+    [Verb("publish", HelpText = "Publish records.")]
+    public class PublishOptions
+    {
+    }
+
     class Program
     {
+        static int Main(string[] args)
+        {
+            var parser = CommandLine.Parser.Default;
+
+            return parser.ParseArguments<ImportOptions, PublishOptions>(args).MapResult(
+                (ImportOptions options) => RunImportAndReturnExitCode(options),
+                (PublishOptions options) => RunPublishAndReturnExitCode(options),
+                errs => 1);
+        }
+
+
         public static IDocumentStore DocumentStore { get; private set; }
 
-        static void Main(string[] args)
+        static int RunImportAndReturnExitCode(ImportOptions options)
         {
-            Init();
+            InitDatabase();
 
-            if (args.First() == "import")
+            using (var db = DocumentStore.OpenSession())
             {
-                using (var db = DocumentStore.OpenSession())
-                {
-                    new ImportHandler(db).Import(args);
-                }
+                new ImportHandler(db).Import(options);
             }
-            else if (args.First() == "mark")
+
+            return 0;
+        }
+
+        static int RunPublishAndReturnExitCode(PublishOptions options)
+        {
+            return 1;
+        }
+
+        static void MainOld(string[] args)
+        {
+            InitDatabase();
+
+//            if (args.First() == "import")
+//            {
+//                using (var db = DocumentStore.OpenSession())
+//                {
+//                    new ImportHandler(db).Import(args);
+//                }
+//            }
+//            else 
+            if (args.First() == "mark")
             {
                 string keyword = args.Skip(1).First();
                 MarkRecordsAsOpenDataPublishable(keyword);
@@ -128,7 +175,7 @@ namespace Catalogue.Robot
             return records;
         }
 
-        static void Init()
+        static void InitDatabase()
         {
             try
             {
