@@ -22,14 +22,14 @@ namespace Catalogue.Robot
     [Verb("import", HelpText = "Import records from a CSV file.")]
     public class ImportOptions
     {
-        [Option(Required = true, HelpText = "Import mapping, e.g. 'SeabedSurveyMapping'.")]
+        [Option(Required = true, HelpText = "Import mapping, e.g. 'StandardTopcatMapping'.")]
         public string Mapping { get; set; }
 
-        [Option(Required = true, HelpText = "Path to CSV file to import.")]
+        [Option(Required = true, HelpText = "Path to the CSV file to import.")]
         public string File { get; set; }
 
-        [Option("skip-bad", Default = false, HelpText = "Skip bad records (default false).")]
-        public bool SkipBad { get; set; }
+        [Option("skip-bad-records", Default = false, HelpText = "Skip bad records?")]
+        public bool SkipBadRecords { get; set; }
     }
 
     [Verb("publish", HelpText = "Publish records.")]

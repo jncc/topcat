@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
+using Catalogue.Data.Import;
 using Catalogue.Data.Import.Mappings;
 using Raven.Client;
 
@@ -19,28 +21,18 @@ namespace Catalogue.Robot.Importing
 
         public void Import(ImportOptions options)
         {
+            var mapping = typeof(IMapping).Assembly.GetType("Catalogue.Data.Import.Mappings." + options.Mapping);
+            if (mapping  == null)
+                throw new Exception(String.Format("The import mapping '{0}' couldn't be found or does not exist.", options.Mapping));
 
-            var importer = global::Catalogue.Data.Import.Importer.CreateImporter<MarineRecorderMapping>(db);
-            importer.SkipBadRecords = options.SkipBad;
-            importer.Import(options.File); //.Trim('"')  needed, or hopefully will the CommandLineParser strip out quotes for me?
+            var importer = Importer.CreateImporter(db, (IMapping) Activator.CreateInstance(mapping));
+
+            importer.SkipBadRecords = options.SkipBadRecords;
+            importer.Import(options.File);
             db.SaveChanges();
 
-            int successes = importer.Results.Count(r => r.Success);
-            Console.WriteLine(successes);
+            Console.WriteLine("Imported {0} records.", importer.Results.Count(r => r.Success));
+            Console.WriteLine("Skipped {0} records.", importer.Results.Count(r => !r.Success));
         }
-
-//        IMapping GetMapping(string arg)
-//        {
-////            if (arg == "topcat") return RunImport<TopcatMapping>(model);
-////            if (model.Id == 1) return RunImport<ActivitiesMapping>(model);
-////            if (model.Id == 2) return RunImport<MeshMapping>(model);
-////            if (model.Id == 3) return RunImport<PubCatMapping>(model);
-////            if (model.Id == 4) return RunImport<MeowMapping>(model);
-////            if (model.Id == 5) return RunImport<SeabedSurveyMapping>(model);
-//            if (arg == "marinerecorder") return MarineRecorderMapping);
-//            //throw new ArgumentException("Invalid import id");
-//        }
     }
-
-    
 }

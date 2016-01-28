@@ -189,7 +189,7 @@ namespace Catalogue.Data.Import.Mappings
 
             using (var db = store.OpenSession())
             {
-                var importer = Importer.CreateImporter<SeabirdSurveyMapping>(db);
+                var importer = Importer.CreateImporter(db, new SeabirdSurveyMapping());
                 importer.SkipBadRecords = true;
                 importer.Import(@"C:\Work\data\TopCat_BulkDataImport_MLv2.csv");
 

@@ -151,7 +151,7 @@ namespace Catalogue.Data.Import.Mappings
             {
                 try
                 {
-                    var importer = Importer.CreateImporter<MarineRecorderMapping>(db);
+                    var importer = Importer.CreateImporter(db, new MarineRecorderMapping());
                     importer.SkipBadRecords = true;
                     importer.Import(paths.input);
 
