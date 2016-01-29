@@ -4,6 +4,7 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
+using Catalogue.Data.Indexes;
 using Catalogue.Data.Query;
 using Catalogue.Gemini.BoundingBoxes;
 using Catalogue.Gemini.Model;
@@ -186,6 +187,18 @@ namespace Catalogue.Web.Controllers.Patch
 
             return new HttpResponseMessage();
         }
+
+        [HttpGet, Route("api/patch/createhumanactiityvocabrecord")]
+        public List<string> CreateHumanActiityVocabRecord()
+        {
+            var recordKeywords = db.Query<RecordKeywordIndex.Result, RecordKeywordIndex>()
+                .Where(x => x.Vocab == "http://vocab.jncc.gov.uk/human-activity")
+                .Select(x => x.Value )
+                .ToList();
+
+            return recordKeywords;
+        }
+
 
 
 //        [HttpPost, Route("api/patch/renamesecuritylevels")]

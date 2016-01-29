@@ -41,14 +41,11 @@ namespace Catalogue.Robot
     {
         static int Main(string[] args)
         {
-            var parser = CommandLine.Parser.Default;
-
-            return parser.ParseArguments<ImportOptions, PublishOptions>(args).MapResult(
+            return CommandLine.Parser.Default.ParseArguments<ImportOptions, PublishOptions>(args).MapResult(
                 (ImportOptions options) => RunImportAndReturnExitCode(options),
                 (PublishOptions options) => RunPublishAndReturnExitCode(options),
                 errs => 1);
         }
-
 
         public static IDocumentStore DocumentStore { get; private set; }
 
