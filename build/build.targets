@@ -124,7 +124,7 @@ File.WriteAllText(Path, content);
         <TransformXml
             OriginalDocumentPath="..\Catalogue.Robot\App.config"
             TransformDocumentPath="..\Catalogue.Robot\App.$(Environment).config"
-            OutputDocumentPath="$(MSBuildProjectDirectory)\Output\Catalogue.Robot\Catalogue.Robot.dll.config"
+            OutputDocumentPath="$(MSBuildProjectDirectory)\Output\Catalogue.Robot\Catalogue.Robot.exe.config"
             DeleteTransformDocuments="$(MSBuildProjectDirectory)\Output\Catalogue.Robot\App.*.config"
             />
 
