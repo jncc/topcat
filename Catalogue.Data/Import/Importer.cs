@@ -73,7 +73,7 @@ namespace Catalogue.Data.Import
                     {
                         if (!SkipBadRecords)
                         {
-                            throw new Exception(String.Format("Import failed due to validation errors at record {0}: {1}",
+                            throw new ImportException(String.Format("Import failed due to validation errors at record {0}: {1}",
                                 n, result.Validation.Errors.ToConcatenatedString(e => e.Message, "; ")));
                         }
                     }
@@ -87,7 +87,7 @@ namespace Catalogue.Data.Import
             catch (CsvHelperException ex)
             {
                 string info = (string) ex.Data["CsvHelper"];
-                throw new Exception("CsvHelper exception: " + info, ex);
+                throw new ImportException("CsvHelper exception: " + info, ex);
             }
 
             // import new vocabs and keywords
