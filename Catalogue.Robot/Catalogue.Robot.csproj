@@ -73,9 +73,29 @@
     <Compile Include="Publishing\OpenData\OpenDataRecordPublisher.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="App.config" />
     <None Include="packages.config" />
   </ItemGroup>
+  <ItemGroup>
+    <Content Include="App.config">
+      <SubType>Designer</SubType>
+	</Content>
+    <Content Include="App.Beta.config">
+        <DependentUpon>App.config</DependentUpon>
+	</Content>
+    <Content Include="App.Dev.config">
+        <DependentUpon>App.config</DependentUpon>
+	</Content>
+    <Content Include="App.Live.config">
+        <DependentUpon>App.config</DependentUpon>
+	</Content>
+    <Content Include="App.Test.config">
+        <DependentUpon>App.config</DependentUpon>
+	</Content>
+</ItemGroup>
+  
+
+  
+  
   <ItemGroup>
     <ProjectReference Include="..\Catalogue.Data\Catalogue.Data.csproj">
       <Project>{3ad6b61c-cab1-4cc4-8895-ba2dd3b58c59}</Project>
