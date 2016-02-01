@@ -116,26 +116,18 @@ File.WriteAllText(Path, content);
             DeleteTransformDocuments="$(MSBuildProjectDirectory)\output\Catalogue.Web\Web.*.config"
             />
 							
-		<!-- todo: build any other app projects -->
-		<!-- todo: run the tests -->
-		  
+		<!-- build Catalogue.Robot -->
+        <MSBuild
+            Projects="..\Catalogue.Robot\Catalogue.Robot.csproj"
+            Properties="OutputPath=$(MSBuildProjectDirectory)\Output\Catalogue.Robot;Configuration=$(Configuration);Environment=$(Environment)"
+            />
+        <TransformXml
+            OriginalDocumentPath="..\Catalogue.Robot\App.config"
+            TransformDocumentPath="..\Catalogue.Robot\App.$(Environment).config"
+            OutputDocumentPath="$(MSBuildProjectDirectory)\Output\Catalogue.Robot\Catalogue.Robot.dll.config"
+            DeleteTransformDocuments="$(MSBuildProjectDirectory)\Output\Catalogue.Robot\App.*.config"
+            />
 
-		<!-- hack: delete stuff causing problems in nsb scanning -->
-		<ItemGroup>
-			<UnwantedRavenFiles Include="$(MSBuildProjectDirectory)\output\Catalogue.Web\bin\Raven.Backup*"/>
-			<!--
-			<UnwantedRavenFiles Include="$(MSBuildProjectDirectory)\output\Catalogue.Web\bin\BouncyCastle*"/>
-			<UnwantedRavenFiles Include="$(MSBuildProjectDirectory)\output\Catalogue.Web\bin\Esent*"/>
-			<UnwantedRavenFiles Include="$(MSBuildProjectDirectory)\output\Catalogue.Web\bin\Lucene*"/>
-			<UnwantedRavenFiles Include="$(MSBuildProjectDirectory)\output\Catalogue.Web\bin\Raven.Client.Embedded*"/>
-			<UnwantedRavenFiles Include="$(MSBuildProjectDirectory)\output\Catalogue.Web\bin\Raven.Database*"/>
-			<UnwantedRavenFiles Include="$(MSBuildProjectDirectory)\output\Catalogue.Web\bin\Raven.Munin*"/>
-			<UnwantedRavenFiles Include="$(MSBuildProjectDirectory)\output\Catalogue.Web\bin\Raven.Smuggler*"/>
-			<UnwantedRavenFiles Include="$(MSBuildProjectDirectory)\output\Catalogue.Web\bin\Raven.Storage*"/>
-			<UnwantedRavenFiles Include="$(MSBuildProjectDirectory)\output\Catalogue.Web\bin\Spatial4n*"/>
-			-->
-		</ItemGroup>
-		<Delete Files="@(UnwantedRavenFiles)" />
   </Target>
  
   <Target Name="Test">
@@ -146,11 +138,6 @@ File.WriteAllText(Path, content);
 		  ToolPath="C:\Program Files (x86)\NUnit 2.6.3\bin"
 		  OutputXmlFile="$(BuildOutputPath)\..\TestResults.xml"
 		  />
-		  
-   <!-- <CreateItem Include="$(BuildOutputPath)Catalogue.*.dll">
-      <Output TaskParameter="Include" ItemName="TestAssembly" />
-    </CreateItem>
-    <NUnit Assemblies="@(TestAssembly)" ToolPath="C:\Program Files (x86)\NUnit 2.6.2\bin" OutputXmlFile="$(NUnitResultsFile)" />-->
   </Target>
 
 </Project>
