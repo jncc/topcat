@@ -45,5 +45,16 @@ namespace Catalogue.Web.Controllers.Dumps
 
             return q2.ToList();
         }
+
+        [HttpGet, Route("api/dumps/recordswithpublishinginfo")]
+        public List<Record> RecordsWithPublishingInfo()
+        {
+            var q = db.Query<Record, RecordsForPublishingIndex>();
+
+            var results = q.Take(1024).ToList();
+            if (results.Count == 1024) throw new Exception("Too many results. Needs to page them!");
+
+            return results;
+        }
     }
 }

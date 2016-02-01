@@ -32,10 +32,17 @@ namespace Catalogue.Robot
         public bool SkipBadRecords { get; set; }
     }
 
-    [Verb("publish", HelpText = "Publish records.")]
+    [Verb("publish", HelpText = "Mark records tagged with the specified keyword for publishing.")]
     public class PublishOptions
     {
+        [Option(Required = true, HelpText = "Keyword, e.g. 'vocab.jncc.gov.uk/jncc-category/Some Category'.")]
+        public string Keyword { get; set; }
+
+        [Option("now", Default = false, HelpText = "Publish immediately")]
+        public bool Now { get; set; }
+
     }
+
 
     class Program
     {
@@ -63,37 +70,13 @@ namespace Catalogue.Robot
 
         static int RunPublishAndReturnExitCode(PublishOptions options)
         {
-            return 1;
-        }
-
-        static void MainOld(string[] args)
-        {
             InitDatabase();
 
-//            if (args.First() == "import")
-//            {
-//                using (var db = DocumentStore.OpenSession())
-//                {
-//                    new ImportHandler(db).Import(args);
-//                }
-//            }
-//            else 
-            if (args.First() == "mark")
-            {
-                string keyword = args.Skip(1).First();
-                MarkRecordsAsOpenDataPublishable(keyword);
-            }
-            else if (args.First() == "publish")
-            {
-                PublishRecordsAsOpenData();
-            }
-        }
-
-        static void MarkRecordsAsOpenDataPublishable(string keyword)
-        {
             using (var db = DocumentStore.OpenSession())
             {
-                var records = GetRecords(db, keyword);
+                var records = GetRecords(db, options.Keyword);
+
+                Console.WriteLine("Found {0} records tagged '{1}'.", records.Count, options.Keyword);
 
                 // in reality need to go through RecordService and ensure appropriate validation etc.
                 foreach (var record in records)
@@ -106,11 +89,12 @@ namespace Catalogue.Robot
                 }
 
                 db.SaveChanges();
-                Console.WriteLine("Marked {0} records.", records.Count);                
+                Console.WriteLine("Marked {0} records.", records.Count);
             }
+            return 0;
         }
 
-        static void PublishRecordsAsOpenData()
+        static void PublishRecordsNowAsOpenData()
         {
             // load the config
             var configPath = Path.Combine(Environment.CurrentDirectory, "data-gov-uk-publisher-config.json");
