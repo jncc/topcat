@@ -150,7 +150,7 @@ namespace Catalogue.Data.Import.Mappings
 
             using (var db = store.OpenSession())
             {
-                var importer = Importer.CreateImporter<EuropeanReportingMapping>(db);
+                var importer = Importer.CreateImporter(db, new EuropeanReportingMapping());
                 importer.SkipBadRecords = true;
                 importer.Import(@"C:\Work\data\europeanreporting\Article 17 JNCC publishable metadata_riskassessment.csv");
 

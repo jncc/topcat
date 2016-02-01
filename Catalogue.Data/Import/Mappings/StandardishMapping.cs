@@ -153,7 +153,7 @@ namespace Catalogue.Data.Import.Mappings
 
             using (var db = store.OpenSession())
             {
-                var importer = Importer.CreateImporter<StandardishMapping>(db);
+                var importer = Importer.CreateImporter(db, new StandardishMapping());
                 importer.SkipBadRecords = true;
                 importer.Import(@"C:\Work\standardish-import.csv");
 

@@ -19,14 +19,9 @@ namespace Catalogue.Tests.Explicit.Catalogue.Import
 
             using (IDocumentSession db = store.OpenSession())
             {
-                var importer = Importer.CreateImporter<ActivitiesMapping>(db);
+                var importer = Importer.CreateImporter(db, new ActivitiesMapping());
                 importer.Import(@"C:\Work\pressures-data\Human_Activities_Metadata_Catalogue.csv");
             }
         }
-
-
-        
     }
-
-
 }

@@ -432,7 +432,7 @@ namespace Catalogue.Data.Import.Mappings
 
             using (var db = store.OpenSession())
             {
-                var importer = Importer.CreateImporter<ActivitiesMapping>(db);
+                var importer = Importer.CreateImporter(db, new ActivitiesMapping());
                 importer.SkipBadRecords = true; // see log for skipped bad records
                 importer.Import(@"C:\work\activities\Catalogue2.txt");
 

@@ -137,7 +137,7 @@ namespace Catalogue.Data.Import.Mappings
             {
                 try
                 {
-                    var importer = Importer.CreateImporter<MeowMapping>(db);
+                    var importer = Importer.CreateImporter(db, new MeowMapping());
                     importer.SkipBadRecords = true; // see log for skipped bad records
                     importer.Import(@"C:\Work\meow-export-FINAL v3.csv");
 

@@ -75,7 +75,7 @@ namespace Catalogue.Data.Seed
 
             using (var reader = new StreamReader(s))
             {
-                var importer = Importer.CreateImporter<MeshMapping>(db);
+                var importer = Importer.CreateImporter(db, new MeshMapping());
                 importer.Import(reader);
 
 //                var probs = from r in importer.Results

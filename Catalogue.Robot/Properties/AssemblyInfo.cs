@@ -8,9 +8,9 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyTitle("Catalogue.Robot")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("Centre for Ecology and Hydrology")]
+[assembly: AssemblyCompany("Joint Nature Conservation Committee")]
 [assembly: AssemblyProduct("Catalogue.Robot")]
-[assembly: AssemblyCopyright("Copyright © Centre for Ecology and Hydrology 2015")]
+[assembly: AssemblyCopyright("Copyright © 2015 Joint Nature Conservation Committee")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 

@@ -17,8 +17,17 @@ using Raven.Client;
 
 namespace Catalogue.Data.Import
 {
-    public class Importer<T> where T : IMapping, new()
+    public class Importer
     {
+        /// <summary>
+        /// Helper to conveniently create an importer instance.
+        /// </summary>
+        public static Importer CreateImporter(IDocumentSession db, IMapping mapping)
+        {
+            return new Importer(mapping, new FileSystem(), new RecordService(db, new RecordValidator()), new VocabularyService(db, new VocabularyValidator()));
+        }
+
+        readonly IMapping mapping;
         readonly IFileSystem fileSystem;
         readonly IRecordService recordService;
         readonly IVocabularyService vocabularyService;
@@ -27,8 +36,9 @@ namespace Catalogue.Data.Import
 
         public readonly List<RecordServiceResult> Results = new List<RecordServiceResult>();
 
-        public Importer(IFileSystem fileSystem, IRecordService recordService, IVocabularyService vocabularyService)
+        public Importer(IMapping mapping, IFileSystem fileSystem, IRecordService recordService, IVocabularyService vocabularyService)
         {
+            this.mapping = mapping;
             this.fileSystem = fileSystem;
             this.recordService = recordService;
             this.vocabularyService = vocabularyService;
@@ -45,8 +55,6 @@ namespace Catalogue.Data.Import
         public void Import(TextReader reader)
         {
             var csv = new CsvReader(reader);
-
-            var mapping = Activator.CreateInstance<T>();
 
             mapping.Apply(csv.Configuration);
 
@@ -65,7 +73,7 @@ namespace Catalogue.Data.Import
                     {
                         if (!SkipBadRecords)
                         {
-                            throw new Exception(String.Format("Import failed due to validation errors at record {0}: {1}",
+                            throw new ImportException(String.Format("Import failed due to validation errors at record {0}: {1}",
                                 n, result.Validation.Errors.ToConcatenatedString(e => e.Message, "; ")));
                         }
                     }
@@ -79,7 +87,7 @@ namespace Catalogue.Data.Import
             catch (CsvHelperException ex)
             {
                 string info = (string) ex.Data["CsvHelper"];
-                throw new Exception("CsvHelper exception: " + info, ex);
+                throw new ImportException("CsvHelper exception: " + info, ex);
             }
 
             // import new vocabs and keywords
@@ -91,18 +99,6 @@ namespace Catalogue.Data.Import
             vocabularyService.AddKeywordsToExistingControlledVocabs(keywords);
         }
     }
-
-    /// <summary>
-    /// Helper to conveniently create an importer instance.
-    /// </summary>
-    public static class Importer
-    {
-        public static Importer<T> CreateImporter<T>(IDocumentSession db) where T : IMapping, new()
-        {
-            return new Importer<T>(new FileSystem(), new RecordService(db, new RecordValidator()), new VocabularyService(db, new VocabularyValidator()));
-        }
-    }
-
 
     class when_importing_test_records
     {
@@ -122,7 +118,7 @@ namespace Catalogue.Data.Import
             string path = @"c:\some\path.csv";
             var fileSystem = Mock.Of<IFileSystem>(fs => fs.OpenReader(path) == new StringReader(testData));
 
-            var importer = new Importer<TestDataMapping>(fileSystem, recordService, Mock.Of<IVocabularyService>());
+            var importer = new Importer(new TestDataMapping(), fileSystem, recordService, Mock.Of<IVocabularyService>());
             importer.Import(path);
         }
 

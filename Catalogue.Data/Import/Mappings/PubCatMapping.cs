@@ -344,7 +344,7 @@ namespace Catalogue.Data.Import.Mappings
 
             using (IDocumentSession db = store.OpenSession())
             {
-                var importer = Importer.CreateImporter<PubCatMapping>(db);
+                var importer = Importer.CreateImporter(db, new PubCatMapping());
                 importer.SkipBadRecords = true;
 
                 importer.Import(@"C:\Working\pubcat.csv");
