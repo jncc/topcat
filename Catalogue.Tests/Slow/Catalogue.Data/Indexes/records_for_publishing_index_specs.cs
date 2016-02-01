@@ -16,17 +16,17 @@ namespace Catalogue.Tests.Slow.Catalogue.Data.Indexes
         [Test, Explicit]
         public void should_be_able_to_get_records_for_publishing()
         {
-            var record = Db.Load<Record>(new Guid("679434f5-baab-47b9-98e4-81c8e3a1a6f9"));
-            
-            record.Publication = new PublicationInfo { OpenData = new OpenDataPublicationInfo() };
-            Db.SaveChanges();
-            RavenUtility.WaitForIndexing(Db);
+//            var record = Db.Load<Record>(new Guid("679434f5-baab-47b9-98e4-81c8e3a1a6f9"));
+//            
+//            record.Publication = new PublicationInfo { OpenData = new OpenDataPublicationInfo() };
+//            Db.SaveChanges();
+//            RavenUtility.WaitForIndexing(Db);
 
             var recordsForPublishing = Db.Query<RecordsForPublishingIndex.Result, RecordsForPublishingIndex>()
                 //.Where(x => x.MetadataDate > x.LastSuccess)
                 .ToList();
 
-            recordsForPublishing.Count.Should().Be(1);
+            recordsForPublishing.Count.Should().Be(2);
         }
     }
 }

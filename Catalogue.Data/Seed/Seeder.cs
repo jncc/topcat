@@ -39,7 +39,7 @@ namespace Catalogue.Data.Seed
                 s.AddHumanActivitiesRecord();
                 s.AddOverseasTerritoriesRecord();
                 s.AddSimpleGeminiExampleRecord();
-                s.AddTestRecordForPublishingRecord();
+                s.AddRecordsWithPublishingInfo();
                 s.AddRecordWithLotsOfVocablessTags();
                 s.AddReadOnlyRecord();
                 s.AddSecureRecords();
@@ -175,11 +175,10 @@ namespace Catalogue.Data.Seed
             recordService.Insert(record);
         }
 
-        void AddTestRecordForPublishingRecord()
+        void AddRecordsWithPublishingInfo()
         {
             var record = MakeExampleSeedRecord().With(r =>
             {
-                r.Id = new Guid("b2691fed-e421-4e48-9da9-99bd77e0b8ba");
                 r.Path = @"C:\work\test-data.csv";
                 r.TopCopy = true;
                 r.Validation = Validation.Gemini;
@@ -187,7 +186,7 @@ namespace Catalogue.Data.Seed
                 {
                     m.Title = "A Gemini-compliant test record for publishing";
                     m.Abstract = "This is a Gemini-compliant example record.";
-                    m.Keywords = m.Keywords.With(ks => ks.Add(new MetadataKeyword { Vocab = "http://vocab.jncc.gov.uk/metadata-admin", Value = "Publish"}));
+                    m.Keywords = m.Keywords.With(ks => ks.Add(new MetadataKeyword { Vocab = "http://vocab.jncc.gov.uk/metadata-admin", Value = "Publishable"}));
                     m.TopicCategory = "environment";
                     m.TemporalExtent = new TemporalExtent { Begin = "1998", End = "2005" };
                     m.DatasetReferenceDate = "2015-04-14";
@@ -220,9 +219,35 @@ namespace Catalogue.Data.Seed
                         West = -8.14m,
                     };
                 });
+
             });
 
-            recordService.Insert(record);
+            var earlierUnsuccessfullyPublishedRecord = record.With(r => 
+            {
+                r.Id = new Guid("b2691fed-e421-4e48-9da9-99bd77e0b8ba");
+                r.Publication = new PublicationInfo
+                {
+                    OpenData = new OpenDataPublicationInfo
+                    {
+                        Attempts = new List<PublicationAttempt> { new PublicationAttempt { DateUtc = new DateTime(2016, 1, 1, 12, 0, 0), Successful = false } }
+                    }
+                };
+            });
+
+            var laterSuccessfullyPublishedRecord = record.With(r =>
+            {
+                r.Id = new Guid("d9c14587-90d8-4eba-b670-4cf36e45196d");
+                r.Publication = new PublicationInfo
+                {
+                    OpenData = new OpenDataPublicationInfo
+                    {
+                        Attempts = new List<PublicationAttempt> { new PublicationAttempt { DateUtc = new DateTime(2016, 1, 1, 12, 0, 1), Successful = true } }
+                    }
+                };
+            });
+
+            recordService.Insert(earlierUnsuccessfullyPublishedRecord);
+            recordService.Insert(laterSuccessfullyPublishedRecord);
         }
 
         void AddRecordWithLotsOfVocablessTags()
