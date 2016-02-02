@@ -10,6 +10,7 @@ using Catalogue.Gemini.Templates;
 using Catalogue.Utilities.Clone;
 using Catalogue.Utilities.Collections;
 using Catalogue.Utilities.Text;
+using Catalogue.Utilities.Time;
 using FluentAssertions;
 using Moq;
 using NUnit.Framework;
@@ -96,7 +97,7 @@ namespace Catalogue.Data.Write
 
         void UpdateMetadataDateToNow(Record record)
         {
-            record.Gemini.MetadataDate = DateTime.Now;
+            record.Gemini.MetadataDate = Clock.NowUtc;
         }
     }
 

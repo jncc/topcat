@@ -5,6 +5,7 @@ using Catalogue.Data.Write;
 using Catalogue.Gemini.Model;
 using Catalogue.Gemini.Templates;
 using Catalogue.Utilities.Clone;
+using Catalogue.Utilities.Time;
 using Catalogue.Web.Code.Account;
 using FluentAssertions;
 using Moq;
@@ -89,7 +90,7 @@ namespace Catalogue.Web.Controllers.Records
                                 Email = "data@jncc.gov.uk",
                                 Role = "distributor",
                             };
-                        m.MetadataDate = DateTime.Now.Date;
+                        m.MetadataDate = Clock.NowUtc;
                         m.MetadataPointOfContact = new ResponsibleParty
                             {
                                 Name = user.User.DisplayName,

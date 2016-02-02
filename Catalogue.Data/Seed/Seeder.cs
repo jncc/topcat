@@ -356,6 +356,7 @@ namespace Catalogue.Data.Seed
                 {
                     m.Title = "A record with unusual characters in keywords";
                 });
+                // add a keyword with parentheses and hypen
                 r.Gemini.Keywords.Add(new MetadataKeyword { Vocab = "http://vocab.jncc.gov.uk/human-activity", Value = "Extraction – Water (abstraction)" });
                 r.Gemini.Keywords.Add(new MetadataKeyword { Vocab = "http://vocab.jncc.gov.uk/some-vocab", Value = "Two words" });
             });

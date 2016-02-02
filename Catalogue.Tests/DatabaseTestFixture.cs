@@ -1,6 +1,8 @@
+using System;
 using Catalogue.Data;
 using Catalogue.Data.Seed;
 using Catalogue.Data.Test;
+using Catalogue.Utilities.Time;
 using NUnit.Framework;
 using Raven.Client;
 
@@ -16,6 +18,9 @@ namespace Catalogue.Tests
 
         static DatabaseTestFixture()
         {
+            // ensure deterministic date for metadata date, which is always set to Clock.NowUtc when records are inserted
+            Clock.CurrentUtcDateTimeGetter = () => new DateTime(2015, 1, 1);
+
             // initialise the ResusableDocumentStore once, in this static constructor
             ReusableDocumentStore = DatabaseFactory.InMemory(); 
         }
