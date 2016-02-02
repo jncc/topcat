@@ -9,6 +9,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Linq;
 using Catalogue.Data;
+using Catalogue.Data.Indexes;
 using Catalogue.Data.Model;
 using Catalogue.Data.Query;
 using Catalogue.Robot.Importing;
@@ -78,14 +79,13 @@ namespace Catalogue.Robot
 
                 Console.WriteLine("Found {0} records tagged '{1}'.", records.Count, options.Keyword);
 
-                // in reality need to go through RecordService and ensure appropriate validation etc.
                 foreach (var record in records)
                 {
                     if (record.Publication == null)
                         record.Publication = new PublicationInfo();
 
                     if (record.Publication.OpenData == null)
-                        record.Publication.OpenData = new OpenDataPublicationInfo() { Attempts = new List<PublicationAttempt>() };
+                        record.Publication.OpenData = new OpenDataPublicationInfo();
                 }
 
                 db.SaveChanges();
@@ -106,19 +106,16 @@ namespace Catalogue.Robot
             var ids = new List<Guid>();
             using (var db = DocumentStore.OpenSession())
             {
-                var records = db.Query<Record>()
-                    .Where(r => r.Publication.OpenData != null)
-                    .Take(1000)
-                    .ToList();
 
                 // exclude the ones that have already successfully published (and haven't been updated since)
                 // ie those where: never attempted, or the last attempt was unsuccesful, or those that have been updated since the last successful attempt
-                ids = (from r in records
-                       let neverAttempted = !r.Publication.OpenData.Attempts.Any()
-                       let latestAttempt = r.Publication.OpenData.Attempts.LastOrDefault()
-                       let latestSuccessfulAttempt = r.Publication.OpenData.Attempts.LastOrDefault(a => a.Successful)
-                       where neverAttempted || !latestAttempt.Successful  // || (r.Gemini.DatasetReferenceDate > latestAttempt.DateUtc)
-                       select r.Id).ToList();
+                var records = db.Query<RecordsWithOpenDataPublicationIndex.Result, RecordsWithOpenDataPublicationIndex>()
+                    .Where(x => x.LastPublicationAttemptDate == DateTime.MinValue
+                        || x.LastPublicationAttemptDate > x.LastSuccessfulPublicationAttemptDate
+                        || x.MetadataDate > x.LastSuccessfulPublicationAttemptDate)
+                    .OfType<Record>()
+                    .Take(1000)
+                    .ToList();
             }
 
             Console.WriteLine("Publishing {0} records...", ids.Count);

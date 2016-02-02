@@ -222,6 +222,20 @@ namespace Catalogue.Data.Seed
 
             });
 
+            var neverPublishedRecord = record.With(r =>
+            {
+                r.Id = new Guid("bd4a2f8a-b548-4ce4-a70c-3f2fdb44005c");
+                r.Publication = new PublicationInfo
+                {
+                    OpenData = new OpenDataPublicationInfo
+                    {
+                        LastAttempt = null,
+                        LastSuccessfulAttempt = null,
+                    }
+                };
+            });
+
+
             var earlierUnsuccessfullyPublishedRecord = record.With(r => 
             {
                 r.Id = new Guid("b2691fed-e421-4e48-9da9-99bd77e0b8ba");
@@ -229,7 +243,8 @@ namespace Catalogue.Data.Seed
                 {
                     OpenData = new OpenDataPublicationInfo
                     {
-                        Attempts = new List<PublicationAttempt> { new PublicationAttempt { DateUtc = new DateTime(2016, 1, 1, 12, 0, 0), Successful = false } }
+                        LastAttempt = new PublicationAttempt { DateUtc = new DateTime(2015, 1, 1, 11, 0, 0) },
+                        LastSuccessfulAttempt = null,
                     }
                 };
             });
@@ -241,7 +256,8 @@ namespace Catalogue.Data.Seed
                 {
                     OpenData = new OpenDataPublicationInfo
                     {
-                        Attempts = new List<PublicationAttempt> { new PublicationAttempt { DateUtc = new DateTime(2016, 1, 1, 12, 0, 1), Successful = true } }
+                        LastAttempt = new PublicationAttempt { DateUtc = new DateTime(2016, 1, 1, 13, 0, 0) },
+                        LastSuccessfulAttempt = new PublicationAttempt { DateUtc = new DateTime(2016, 1, 1, 13, 0, 0) },
                     }
                 };
             });

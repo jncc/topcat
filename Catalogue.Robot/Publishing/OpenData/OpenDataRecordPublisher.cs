@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Xml.Linq;
 using Catalogue.Data.Model;
+using Catalogue.Utilities.Time;
 using Raven.Client;
 
 namespace Catalogue.Robot.Publishing.OpenData
@@ -30,7 +31,8 @@ namespace Catalogue.Robot.Publishing.OpenData
             string dataPath = String.Format("data/{0}-{1}", record.Id, Path.GetFileName(record.Path).Replace(" ", "-")); // todo webify file name
 
             // save a not-yet-successful attempt to begin with
-            var attempt = AddNewAttempt(record);
+            var attempt = new PublicationAttempt { DateUtc = Clock.NowUtc };
+            record.Publication.OpenData.LastAttempt = attempt;
             db.SaveChanges();
 
             // do the sequential actions
@@ -40,23 +42,23 @@ namespace Catalogue.Robot.Publishing.OpenData
             UpdateTheWafIndexDocument(record);
 
             // mark the attempt successful
-            attempt.Successful = true;
+            record.Publication.OpenData.LastSuccessfulAttempt = attempt;
 
             // commit the changes (to the resource locator and the attempt object)
             db.SaveChanges();
         }
 
-        PublicationAttempt AddNewAttempt(Record record)
-        {
-            var publicationInfo = record.Publication.OpenData;
-            if (publicationInfo.Attempts == null)
-                publicationInfo.Attempts = new List<PublicationAttempt>();
-
-            var attempt = new PublicationAttempt { DateUtc = DateTime.UtcNow };
-            publicationInfo.Attempts.Add(attempt);
-
-            return attempt;
-        }
+//        PublicationAttempt AddNewAttempt(Record record)
+//        {
+//            var publicationInfo = record.Publication.OpenData;
+//            if (publicationInfo.Attempts == null)
+//                publicationInfo.Attempts = new List<PublicationAttempt>();
+//
+//            var attempt = new PublicationAttempt { DateUtc = DateTime.UtcNow };
+//            publicationInfo.Attempts.Add(attempt);
+//
+//            return attempt;
+//        }
 
         void UploadTheDataFile(Record record, string dataPath)
         {

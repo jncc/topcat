@@ -19,7 +19,7 @@ namespace Catalogue.Tests
         static DatabaseTestFixture()
         {
             // ensure deterministic date for metadata date, which is always set to Clock.NowUtc when records are inserted
-            Clock.CurrentUtcDateTimeGetter = () => new DateTime(2015, 1, 1);
+            Clock.CurrentUtcDateTimeGetter = () => new DateTime(2015, 1, 1, 12, 0, 0);
 
             // initialise the ResusableDocumentStore once, in this static constructor
             ReusableDocumentStore = DatabaseFactory.InMemory(); 

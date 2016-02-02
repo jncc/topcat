@@ -100,7 +100,7 @@
     <Compile Include="Indexes\FieldNames.cs" />
     <Compile Include="Indexes\RecordCountForKeywordIndex.cs" />
     <Compile Include="Indexes\MyIndex.cs" />
-    <Compile Include="Indexes\RecordsForPublishingIndex.cs" />
+    <Compile Include="Indexes\RecordsWithOpenDataPublicationIndex.cs" />
     <Compile Include="Indexes\RecordStreamingIndex.cs" />
     <Compile Include="Indexes\VocabularyIndex.cs" />
     <Compile Include="Indexes\VocabularyKeywordIndex.cs" />

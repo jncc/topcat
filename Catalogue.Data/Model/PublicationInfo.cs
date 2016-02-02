@@ -13,13 +13,13 @@ namespace Catalogue.Data.Model
 
     public class OpenDataPublicationInfo
     {
-        public List<PublicationAttempt> Attempts { get; set; }         
+        public PublicationAttempt LastAttempt { get; set; }
+        public PublicationAttempt LastSuccessfulAttempt { get; set; }
     }
 
     public class PublicationAttempt
     {
         public DateTime DateUtc { get; set; }
-        public bool Successful { get; set; }
         public string Message { get; set; }
     }
 

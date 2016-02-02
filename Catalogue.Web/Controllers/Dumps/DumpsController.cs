@@ -47,14 +47,29 @@ namespace Catalogue.Web.Controllers.Dumps
         }
 
         [HttpGet, Route("api/dumps/recordswithpublishinginfo")]
-        public List<Record> RecordsWithPublishingInfo()
+        public List<RecordWithPublicationInfo> RecordsWithPublishingInfo()
         {
-            var q = db.Query<Record, RecordsForPublishingIndex>();
+            var q = db.Query<Record, RecordsWithOpenDataPublicationIndex>();
 
             var results = q.Take(1024).ToList();
             if (results.Count == 1024) throw new Exception("Too many results. Needs to page them!");
 
-            return results;
+            return results.Select(r => new RecordWithPublicationInfo
+                {
+                    Id = r.Id,
+                    Title = r.Gemini.Title,
+                    MetadataDate = r.Gemini.MetadataDate,
+                    PublicationInfo = r.Publication.OpenData,
+                }).ToList();
+        }
+
+        public class RecordWithPublicationInfo
+        {
+            public Guid Id { get; set; }
+            public string Title { get; set; }
+            public DateTime MetadataDate { get; set; }
+            public OpenDataPublicationInfo PublicationInfo { get; set; }
+
         }
     }
 }
