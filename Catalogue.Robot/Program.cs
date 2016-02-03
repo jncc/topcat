@@ -40,6 +40,8 @@ namespace Catalogue.Robot
     [Verb("publish", HelpText = "Publish now as Open Data.")]
     public class PublishOptions
     {
+        [Option("what-if", Default = false, HelpText = "Don't actually do it.")]
+        public bool WhatIf { get; set; }
     }
 
     class Program
@@ -151,13 +153,16 @@ namespace Catalogue.Robot
 
             Console.WriteLine("Publishing {0} records...", ids.Count);
 
-            foreach (var id in ids)
+            if (!options.WhatIf)
             {
-                var ftpClient = new FtpClient(config.FtpUsername, config.FtpPassword);
-
-                using (var db = DocumentStore.OpenSession())
+                foreach (var id in ids)
                 {
-                    new OpenDataRecordPublisher(db, config, ftpClient).PublishRecord(id);
+                    var ftpClient = new FtpClient(config.FtpUsername, config.FtpPassword);
+
+                    using (var db = DocumentStore.OpenSession())
+                    {
+                        new OpenDataRecordPublisher(db, config, ftpClient).PublishRecord(id);
+                    }
                 }
             }
 
