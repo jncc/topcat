@@ -109,10 +109,10 @@ namespace Catalogue.Robot
 
                 // exclude the ones that have already successfully published (and haven't been updated since)
                 // ie those where: never attempted, or the last attempt was unsuccesful, or those that have been updated since the last successful attempt
-                var records = db.Query<RecordsWithOpenDataPublicationIndex.Result, RecordsWithOpenDataPublicationIndex>()
+                var records = db.Query<RecordsWithOpenDataPublicationInfoIndex.Result, RecordsWithOpenDataPublicationInfoIndex>()
                     .Where(x => x.LastPublicationAttemptDate == DateTime.MinValue
                         || x.LastPublicationAttemptDate > x.LastSuccessfulPublicationAttemptDate
-                        || x.MetadataDate > x.LastSuccessfulPublicationAttemptDate)
+                        || x.RecordLastUpdatedDate > x.LastSuccessfulPublicationAttemptDate)
                     .OfType<Record>()
                     .Take(1000)
                     .ToList();

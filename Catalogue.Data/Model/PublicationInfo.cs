@@ -14,7 +14,7 @@ namespace Catalogue.Data.Model
     public class OpenDataPublicationInfo
     {
         public PublicationAttempt LastAttempt { get; set; }
-        public PublicationAttempt LastSuccessfulAttempt { get; set; }
+        public PublicationAttempt LastSuccess { get; set; }
     }
 
     public class PublicationAttempt

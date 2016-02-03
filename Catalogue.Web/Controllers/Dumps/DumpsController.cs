@@ -49,7 +49,7 @@ namespace Catalogue.Web.Controllers.Dumps
         [HttpGet, Route("api/dumps/recordswithpublishinginfo")]
         public List<RecordWithPublicationInfo> RecordsWithPublishingInfo()
         {
-            var q = db.Query<Record, RecordsWithOpenDataPublicationIndex>();
+            var q = db.Query<Record, RecordsWithOpenDataPublicationInfoIndex>();
 
             var results = q.Take(1024).ToList();
             if (results.Count == 1024) throw new Exception("Too many results. Needs to page them!");

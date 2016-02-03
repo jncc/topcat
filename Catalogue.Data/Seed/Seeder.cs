@@ -230,7 +230,7 @@ namespace Catalogue.Data.Seed
                     OpenData = new OpenDataPublicationInfo
                     {
                         LastAttempt = null,
-                        LastSuccessfulAttempt = null,
+                        LastSuccess = null,
                     }
                 };
             });
@@ -244,7 +244,7 @@ namespace Catalogue.Data.Seed
                     OpenData = new OpenDataPublicationInfo
                     {
                         LastAttempt = new PublicationAttempt { DateUtc = new DateTime(2015, 1, 1, 11, 0, 0) },
-                        LastSuccessfulAttempt = null,
+                        LastSuccess = null,
                     }
                 };
             });
@@ -257,13 +257,30 @@ namespace Catalogue.Data.Seed
                     OpenData = new OpenDataPublicationInfo
                     {
                         LastAttempt = new PublicationAttempt { DateUtc = new DateTime(2016, 1, 1, 13, 0, 0) },
-                        LastSuccessfulAttempt = new PublicationAttempt { DateUtc = new DateTime(2016, 1, 1, 13, 0, 0) },
+                        LastSuccess = new PublicationAttempt { DateUtc = new DateTime(2016, 1, 1, 13, 0, 0) },
                     }
                 };
             });
 
+            // metadata date is set at dev/test-time seed to new DateTime(2015, 1, 1, 12, 0, 0)
+            // so we need to set the publish date to earlier than this
+            var updatedSinceSuccessfullyPublishedRecord = record.With(r =>
+            {
+                r.Id = new Guid("19b8c7ab-5c33-4d55-bc1d-3762b8207a9f");
+                r.Publication = new PublicationInfo
+                {
+                    OpenData = new OpenDataPublicationInfo
+                    {
+                        LastAttempt = new PublicationAttempt { DateUtc = new DateTime(2014, 12, 31) },
+                        LastSuccess = new PublicationAttempt { DateUtc = new DateTime(2014, 12, 31) },
+                    }
+                };
+            });
+
+            recordService.Insert(neverPublishedRecord);
             recordService.Insert(earlierUnsuccessfullyPublishedRecord);
             recordService.Insert(laterSuccessfullyPublishedRecord);
+            recordService.Insert(updatedSinceSuccessfullyPublishedRecord);
         }
 
         void AddRecordWithLotsOfVocablessTags()

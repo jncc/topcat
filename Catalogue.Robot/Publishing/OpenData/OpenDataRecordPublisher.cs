@@ -42,7 +42,7 @@ namespace Catalogue.Robot.Publishing.OpenData
             UpdateTheWafIndexDocument(record);
 
             // mark the attempt successful
-            record.Publication.OpenData.LastSuccessfulAttempt = attempt;
+            record.Publication.OpenData.LastSuccess = attempt;
 
             // commit the changes (to the resource locator and the attempt object)
             db.SaveChanges();
