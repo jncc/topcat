@@ -40,55 +40,18 @@ namespace Catalogue.Robot
     {
     }
 
-    [Verb("remark", HelpText = "Temp.")]
-    public class RemarkOptions
-    {
-        [Option("what-if", Default = false)]
-        public bool WhatIf { get; set; }
-    }
-
     class Program
     {
         static int Main(string[] args)
         {
-            return Parser.Default.ParseArguments<ImportOptions, MarkOptions, PublishOptions, RemarkOptions>(args).MapResult(
+            return Parser.Default.ParseArguments<ImportOptions, MarkOptions, PublishOptions>(args).MapResult(
                 (ImportOptions options) => RunImportAndReturnExitCode(options),
                 (MarkOptions options) => RunMarkAndReturnExitCode(options),
                 (PublishOptions options) => RunPublishAndReturnExitCode(options),
-                (RemarkOptions options) => RunRemarkAndReturnExitCode(options),
                 errs => 1);
         }
 
         public static IDocumentStore DocumentStore { get; private set; }
-
-        static int RunRemarkAndReturnExitCode(RemarkOptions options)
-        {
-            InitDatabase();
-
-            using (var db = DocumentStore.OpenSession())
-            {
-                var alreadyPubbed = db.Query<Record>()
-                    .Where(r => r.Publication != null)
-                    .Where(r => r.Publication.OpenData != null)
-                    .Take(1000)
-                    .ToList();
-
-                foreach (var record in alreadyPubbed)
-                {
-                    record.Publication.OpenData.LastAttempt = new PublicationAttempt { DateUtc = record.Publication.OpenData.Attempts.Last().DateUtc };
-                    record.Publication.OpenData.LastSuccess = new PublicationAttempt { DateUtc = record.Publication.OpenData.Attempts.Where(a => a.Successful).Select(a => a.DateUtc).LastOrDefault()};
-                }
-
-                if (!options.WhatIf)
-                {
-                    db.SaveChanges();
-                    Console.WriteLine("Changes committed");
-                }
-
-                Console.WriteLine("Marked {0} records.", alreadyPubbed.Count);
-            }
-            return 0;
-        }
 
         static int RunImportAndReturnExitCode(ImportOptions options)
         {

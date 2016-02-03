@@ -71,5 +71,26 @@ namespace Catalogue.Web.Controllers.Dumps
             public OpenDataPublicationInfo PublicationInfo { get; set; }
 
         }
+
+        [HttpGet, Route("api/dumps/recordsnotpublishedsincelastupdated")]
+        public List<RecordWithPublicationInfo> RecordsNotPublishedSinceLastUpdated()
+        {
+            var q = db.Query<RecordsWithOpenDataPublicationInfoIndex.Result, RecordsWithOpenDataPublicationInfoIndex>()
+                .Where(r => !r.PublishedSinceLastUpdated)
+                .OfType<Record>()
+                .ToList();
+
+            var results = q.Take(1024).ToList();
+            if (results.Count == 1024) throw new Exception("Too many results. Needs to page them!");
+
+            return results.Select(r => new RecordWithPublicationInfo
+            {
+                Id = r.Id,
+                Title = r.Gemini.Title,
+                MetadataDate = r.Gemini.MetadataDate,
+                PublicationInfo = r.Publication.OpenData,
+            }).ToList();
+        }
+
     }
 }
