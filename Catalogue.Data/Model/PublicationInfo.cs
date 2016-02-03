@@ -15,17 +15,12 @@ namespace Catalogue.Data.Model
     {
         public PublicationAttempt LastAttempt { get; set; }
         public PublicationAttempt LastSuccess { get; set; }
-
-        public List<PublicationAttempt> Attempts { get; set; }
     }
 
     public class PublicationAttempt
     {
         public DateTime DateUtc { get; set; }
         public string Message { get; set; }
-
-        // todo remove
-        public bool Successful { get; set; }
     }
 
 }
