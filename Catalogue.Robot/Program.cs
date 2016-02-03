@@ -74,6 +74,7 @@ namespace Catalogue.Robot
             {
                 var records = GetRecords(db, options.Keyword);
 
+                int count = 0;
                 Console.WriteLine("Found {0} records tagged '{1}'.", records.Count, options.Keyword);
 
                 foreach (var record in records)
@@ -82,11 +83,14 @@ namespace Catalogue.Robot
                         record.Publication = new PublicationInfo();
 
                     if (record.Publication.OpenData == null)
+                    {
                         record.Publication.OpenData = new OpenDataPublicationInfo();
+                        count++;
+                    }
                 }
 
                 db.SaveChanges();
-                Console.WriteLine("Marked {0} records.", records.Count);
+                Console.WriteLine("Marked {0} records.", count);
             }
             return 0;
         }
