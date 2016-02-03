@@ -90,6 +90,7 @@
     <Compile Include="Slow\Catalogue.Data\Import\topcat_mapping_tests.cs" />
     <Compile Include="Slow\Catalogue.Data\Indexes\jncc_categories_index_spec.cs" />
     <Compile Include="Slow\Catalogue.Data\Indexes\keywords_search_index_specs.cs" />
+    <Compile Include="Slow\Catalogue.Data\Indexes\records_with_duplicate_title_checker_index_tests.cs" />
     <Compile Include="Slow\Catalogue.Data\Indexes\records_with_open_data_publication_info_index_specs.cs" />
     <Compile Include="Slow\Catalogue.Data\Indexes\records_search_index_specs.cs" />
     <Compile Include="Slow\Catalogue.Data\Query\record_queryer_specs.cs" />
