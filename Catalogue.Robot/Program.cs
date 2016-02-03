@@ -101,6 +101,8 @@ namespace Catalogue.Robot
             string configJson = File.ReadAllText(configPath);
             var config = JsonConvert.DeserializeObject<OpenDataPublisherConfig>(configJson);
 
+            Console.WriteLine("Publishing to '{0}'", config.FtpRootUrl);
+
             var ids = new List<Guid>();
             using (var db = DocumentStore.OpenSession())
             {
@@ -121,6 +123,7 @@ namespace Catalogue.Robot
 
                 using (var db = DocumentStore.OpenSession())
                 {
+                    Console.WriteLine(db);
                     new OpenDataRecordPublisher(db, config, ftpClient).PublishRecord(id);
                 }
             }
