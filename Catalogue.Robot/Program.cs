@@ -87,6 +87,7 @@ namespace Catalogue.Robot
 
                 Console.WriteLine("Marked {0} records.", alreadyPubbed.Count);
             }
+            return 0;
         }
 
         static int RunImportAndReturnExitCode(ImportOptions options)
