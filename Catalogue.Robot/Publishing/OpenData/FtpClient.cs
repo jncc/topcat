@@ -26,26 +26,26 @@ namespace Catalogue.Robot.Publishing.OpenData
 
         public void UploadFile(string address, string filename)
         {
-            var c = new WebClient { Credentials = new NetworkCredential(username, password), Proxy = WebRequest.DefaultWebProxy };
+            var c = new WebClient { Credentials = new NetworkCredential(username, password), Proxy = null };
             c.UploadFile(address, "STOR", filename);
         }
 
         public void UploadString(string address, string content)
         {
-            var c = new WebClient { Credentials = new NetworkCredential(username, password), Proxy = WebRequest.DefaultWebProxy };
+            var c = new WebClient { Credentials = new NetworkCredential(username, password), Proxy = null };
             c.UploadString(address, "STOR", content);
         }
 
         public string DownloadString(string address)
         {
-            var c = new WebClient { Credentials = new NetworkCredential(username, password), Proxy = WebRequest.DefaultWebProxy };
+            var c = new WebClient { Credentials = new NetworkCredential(username, password), Proxy = null };
             return  c.DownloadString(address);
         }
 
         public void MakeDirectory(string address)
         {
             var request = WebRequest.Create(address);
-            request.Proxy = WebRequest.DefaultWebProxy;
+            request.Proxy = null;
             request.Method = WebRequestMethods.Ftp.MakeDirectory;
             request.Credentials = new NetworkCredential(username, password);
             using (request.GetResponse()) { }
