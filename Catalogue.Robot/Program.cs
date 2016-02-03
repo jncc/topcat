@@ -166,7 +166,7 @@ namespace Catalogue.Robot
                 }
             }
 
-            Console.WriteLine("Published {0} records.", ids.Count);
+            Console.WriteLine("Published (or skipped) {0} records.", ids.Count);
 
             return 1;
         }
