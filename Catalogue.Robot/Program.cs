@@ -134,7 +134,8 @@ namespace Catalogue.Robot
             var ids = new List<Guid>();
             using (var db = DocumentStore.OpenSession())
             {
-                CheckForDuplicateTitles(db);
+                // there are currently duplicates in what looks like the original seabed habitat map collection
+                //CheckForDuplicateTitles(db);
 
                 // get the records for publishing
                 ids = db.Query<RecordsWithOpenDataPublicationInfoIndex.Result, RecordsWithOpenDataPublicationInfoIndex>()
