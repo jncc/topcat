@@ -15,6 +15,7 @@ namespace Catalogue.Data.Indexes
             public bool PublicationNeverAttempted { get; set; }
             public bool LastPublicationAttemptWasUnsuccessful { get; set; }
             public bool PublishedSinceLastUpdated { get; set; }
+            public bool GeminiValidated { get; set; }
         }
 
         public RecordsWithOpenDataPublicationInfoIndex()
@@ -37,6 +38,7 @@ namespace Catalogue.Data.Indexes
                                  PublicationNeverAttempted = neverAttempted,
                                  LastPublicationAttemptWasUnsuccessful = lastAttemptDate > lastSuccessDate,
                                  PublishedSinceLastUpdated = lastSuccessDate > recordLastUpdatedDate,
+                                 GeminiValidated = r.Validation == Validation.Gemini,
                              };
         }
     }
