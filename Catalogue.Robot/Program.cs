@@ -9,6 +9,7 @@ using Catalogue.Data.Model;
 using Catalogue.Data.Query;
 using Catalogue.Robot.Importing;
 using Catalogue.Robot.Publishing.OpenData;
+using Catalogue.Utilities.Text;
 using CommandLine;
 using Newtonsoft.Json;
 using Raven.Client;
@@ -100,6 +101,14 @@ namespace Catalogue.Robot
                 throw new Exception("No data-gov-uk-publisher-config.json file in current directory.");
             string configJson = File.ReadAllText(configPath);
             var config = JsonConvert.DeserializeObject<OpenDataPublisherConfig>(configJson);
+            if (config.FtpRootUrl.IsBlank())
+                throw new Exception("No FtpRootUrl specified in data-gov-uk-publisher-config.json file.");
+            if (config.HttpRootUrl.IsBlank())
+                throw new Exception("No HttpRootUrl specified in data-gov-uk-publisher-config.json file.");
+            if (config.FtpUsername.IsBlank())
+                throw new Exception("No FtpUsername specified in data-gov-uk-publisher-config.json file.");
+            if (config.FtpPassword.IsBlank())
+                throw new Exception("No FtpPassword specified in data-gov-uk-publisher-config.json file.");
 
             Console.WriteLine("Publishing to '{0}'", config.FtpRootUrl);
 
@@ -110,8 +119,10 @@ namespace Catalogue.Robot
                 ids = db.Query<RecordsWithOpenDataPublicationInfoIndex.Result, RecordsWithOpenDataPublicationInfoIndex>()
                     .Where(x => !x.PublishedSinceLastUpdated)
                     .OfType<Record>()
-                    .Select(r => r.Id)
+//                  .Select(r => r.Id) // this doesn't work in RavenDB, and doesn't throw
                     .Take(1000)
+                    .ToList() // so materialize the record first
+                    .Select(r => r.Id)
                     .ToList();
             }
 
