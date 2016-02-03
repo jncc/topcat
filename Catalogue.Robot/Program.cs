@@ -123,7 +123,6 @@ namespace Catalogue.Robot
 
                 using (var db = DocumentStore.OpenSession())
                 {
-                    Console.WriteLine(db);
                     new OpenDataRecordPublisher(db, config, ftpClient).PublishRecord(id);
                 }
             }

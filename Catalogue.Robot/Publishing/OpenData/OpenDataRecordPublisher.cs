@@ -24,7 +24,13 @@ namespace Catalogue.Robot.Publishing.OpenData
 
         public void PublishRecord(Guid id)
         {
+            Console.WriteLine(id);
+            Console.WriteLine(db);
             var record = db.Load<Record>(id);
+            Console.WriteLine(record);
+            Console.WriteLine(record.Gemini);
+            Console.WriteLine(record.Gemini.Title);
+            Console.WriteLine(config.FtpRootUrl);
             Console.WriteLine("Publishing '{0}' to '{1}'.", record.Gemini.Title, config.FtpRootUrl);
 
             string metaPath = String.Format("waf/{0}.xml", record.Id);
