@@ -30,22 +30,30 @@ namespace Catalogue.Robot.Publishing.OpenData
             string metaPath = String.Format("waf/{0}.xml", record.Id);
             string dataPath = String.Format("data/{0}-{1}", record.Id, Path.GetFileName(record.Path).Replace(" ", "-")); // todo webify file name
 
-            // save a not-yet-successful attempt to begin with
-            var attempt = new PublicationAttempt { DateUtc = Clock.NowUtc };
-            record.Publication.OpenData.LastAttempt = attempt;
-            db.SaveChanges();
+            // check that the data exists
+            if (File.Exists(dataPath))
+            {
+                // save a not-yet-successful attempt to begin with
+                var attempt = new PublicationAttempt { DateUtc = Clock.NowUtc };
+                record.Publication.OpenData.LastAttempt = attempt;
+                db.SaveChanges();
 
-            // do the sequential actions
-            UploadTheDataFile(record, dataPath);
-            UpdateResourceLocatorInTheRecord(record, dataPath);
-            UploadTheMetadataDocument(record, metaPath);
-            UpdateTheWafIndexDocument(record);
+                // do the sequential actions
+                UploadTheDataFile(record, dataPath);
+                UpdateResourceLocatorInTheRecord(record, dataPath);
+                UploadTheMetadataDocument(record, metaPath);
+                UpdateTheWafIndexDocument(record);
 
-            // mark the attempt successful
-            record.Publication.OpenData.LastSuccess = attempt;
+                // mark the attempt successful
+                record.Publication.OpenData.LastSuccess = attempt;
 
-            // commit the changes (to the resource locator and the attempt object)
-            db.SaveChanges();
+                // commit the changes (to the resource locator and the attempt object)
+                db.SaveChanges();
+            }
+            else
+            {
+                Console.WriteLine("Data file does not exist for record {0} so skipping it.", id);
+            }
         }
 
 //        PublicationAttempt AddNewAttempt(Record record)
