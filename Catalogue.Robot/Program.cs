@@ -12,6 +12,7 @@ using Catalogue.Robot.Publishing.OpenData;
 using Catalogue.Utilities.Text;
 using CommandLine;
 using Newtonsoft.Json;
+using Raven.Abstractions.Extensions;
 using Raven.Client;
 
 namespace Catalogue.Robot
@@ -95,6 +96,20 @@ namespace Catalogue.Robot
             return 0;
         }
 
+        private static void CheckForDuplicateTitles(IDocumentSession db)
+        {
+            var results = db.Query<RecordsWithDuplicateTitleCheckerIndex.Result, RecordsWithDuplicateTitleCheckerIndex>()
+                .Where(x => x.Count > 1)
+                .Take(100)
+                .ToList();
+
+            if (results.Any())
+            {
+                results.Select(r => new { r.Title, r.Count }).ForEach(Console.WriteLine);
+                throw new Exception("There are records with duplicate titles in Topcat. THey need to be removed before Open Data publishing can resume.");
+            }
+        }
+
         static int RunPublishAndReturnExitCode(PublishOptions options)
         {
             InitDatabase();
@@ -119,6 +134,8 @@ namespace Catalogue.Robot
             var ids = new List<Guid>();
             using (var db = DocumentStore.OpenSession())
             {
+                CheckForDuplicateTitles(db);
+
                 // get the records for publishing
                 ids = db.Query<RecordsWithOpenDataPublicationInfoIndex.Result, RecordsWithOpenDataPublicationInfoIndex>()
                     .Where(x => !x.PublishedSinceLastUpdated)

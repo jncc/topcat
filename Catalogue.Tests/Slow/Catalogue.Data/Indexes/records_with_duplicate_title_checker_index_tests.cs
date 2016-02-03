@@ -57,7 +57,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Data.Indexes
                 .ToList();
 
             // looks like we have some duplicates created by the seeder!
-            results.Count.Should().BeInRange(1, 10);
+            results.Count.Should().BeInRange(1, 10); // perhaps prevent more duplicate titles being seeded in the future!
             results.Should().Contain(r => r.Title == "This is a duplicate record");
         }
     }
