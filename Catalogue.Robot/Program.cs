@@ -1,13 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Configuration;
 using System.IO;
 using System.Linq;
-using System.Net;
 using System.Net.Http;
-using System.Text;
-using System.Threading.Tasks;
-using System.Xml.Linq;
 using Catalogue.Data;
 using Catalogue.Data.Indexes;
 using Catalogue.Data.Model;
@@ -33,24 +28,25 @@ namespace Catalogue.Robot
         public bool SkipBadRecords { get; set; }
     }
 
-    [Verb("publish", HelpText = "Mark records tagged with the specified keyword for publishing.")]
-    public class PublishOptions
+    [Verb("mark", HelpText = "Mark records tagged with the specified keyword for publishing.")]
+    public class MarkOptions
     {
         [Option(Required = true, HelpText = "Keyword, e.g. 'vocab.jncc.gov.uk/jncc-category/Some Category'.")]
         public string Keyword { get; set; }
-
-        [Option("now", Default = false, HelpText = "Publish immediately")]
-        public bool Now { get; set; }
-
     }
 
+    [Verb("publish", HelpText = "Publish now as Open Data.")]
+    public class PublishOptions
+    {
+    }
 
     class Program
     {
         static int Main(string[] args)
         {
-            return CommandLine.Parser.Default.ParseArguments<ImportOptions, PublishOptions>(args).MapResult(
+            return Parser.Default.ParseArguments<ImportOptions, PublishOptions>(args).MapResult(
                 (ImportOptions options) => RunImportAndReturnExitCode(options),
+                (MarkOptions options) => RunMarkAndReturnExitCode(options),
                 (PublishOptions options) => RunPublishAndReturnExitCode(options),
                 errs => 1);
         }
@@ -69,7 +65,7 @@ namespace Catalogue.Robot
             return 0;
         }
 
-        static int RunPublishAndReturnExitCode(PublishOptions options)
+        static int RunMarkAndReturnExitCode(MarkOptions options)
         {
             InitDatabase();
 
@@ -94,8 +90,10 @@ namespace Catalogue.Robot
             return 0;
         }
 
-        static void PublishRecordsNowAsOpenData()
+        static int RunPublishAndReturnExitCode(PublishOptions options)
         {
+            InitDatabase();
+
             // load the config
             var configPath = Path.Combine(Environment.CurrentDirectory, "data-gov-uk-publisher-config.json");
             if (!File.Exists(configPath))
@@ -106,14 +104,11 @@ namespace Catalogue.Robot
             var ids = new List<Guid>();
             using (var db = DocumentStore.OpenSession())
             {
-
-                // exclude the ones that have already successfully published (and haven't been updated since)
-                // ie those where: never attempted, or the last attempt was unsuccesful, or those that have been updated since the last successful attempt
-                var records = db.Query<RecordsWithOpenDataPublicationInfoIndex.Result, RecordsWithOpenDataPublicationInfoIndex>()
-                    .Where(x => x.LastPublicationAttemptDate == DateTime.MinValue
-                        || x.LastPublicationAttemptDate > x.LastSuccessfulPublicationAttemptDate
-                        || x.RecordLastUpdatedDate > x.LastSuccessfulPublicationAttemptDate)
+                // get the records for publishing
+                ids = db.Query<RecordsWithOpenDataPublicationInfoIndex.Result, RecordsWithOpenDataPublicationInfoIndex>()
+                    .Where(x => !x.PublishedSinceLastUpdated)
                     .OfType<Record>()
+                    .Select(r => r.Id)
                     .Take(1000)
                     .ToList();
             }
@@ -131,6 +126,8 @@ namespace Catalogue.Robot
             }
 
             Console.WriteLine("Published {0} records.", ids.Count);
+
+            return 1;
         }
 
 
