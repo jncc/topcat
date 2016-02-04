@@ -9,6 +9,7 @@ namespace Catalogue.Robot.Publishing.OpenData
     {
         void UploadFile(string address, string filename);
         void UploadString(string address, string content);
+        void UploadBytes(string address, byte[] bytes);
         string DownloadString(string address);
         void MakeDirectory(string address);
     }
@@ -34,6 +35,12 @@ namespace Catalogue.Robot.Publishing.OpenData
         {
             var c = new WebClient { Credentials = new NetworkCredential(username, password), Proxy = null };
             c.UploadString(address, "STOR", content);
+        }
+
+        public void UploadBytes(string address, byte[] bytes)
+        {
+            var c = new WebClient { Credentials = new NetworkCredential(username, password), Proxy = null };
+            c.UploadData(address, "STOR", bytes);
         }
 
         public string DownloadString(string address)

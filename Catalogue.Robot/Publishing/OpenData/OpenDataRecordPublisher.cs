@@ -93,14 +93,19 @@ namespace Catalogue.Robot.Publishing.OpenData
         {
             var doc = new global::Catalogue.Gemini.Encoding.XmlEncoder().Create(record.Id, record.Gemini);
 
-            doc.Declaration = new XDeclaration("1.0", "utf-8", null);
-            var writer = new Utf8StringWriter();
-            doc.Save(writer, SaveOptions.None);
-            string metaXmlDoc = writer.ToString();
+//            doc.Declaration = new XDeclaration("1.0", "utf-8", null);
+//            var writer = new Utf8StringWriter();
+//            doc.Save(writer, SaveOptions.None);
+//            string metaXmlDoc = writer.ToString();
+
+            var s = new MemoryStream();
+            doc.Save(s);
+            var metaXmlDoc = s.ToArray();
 
             string metaFtpPath = config.FtpRootUrl + "/" + metaPath;
 
-            ftpClient.UploadString(metaFtpPath, metaXmlDoc);
+            //ftpClient.UploadString(metaFtpPath, metaXmlDoc);
+            ftpClient.UploadBytes(metaFtpPath, metaXmlDoc);
         }
 
         void UpdateTheWafIndexDocument(Record record)
