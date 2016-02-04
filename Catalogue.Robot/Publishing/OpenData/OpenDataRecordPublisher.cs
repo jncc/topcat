@@ -82,6 +82,9 @@ namespace Catalogue.Robot.Publishing.OpenData
             string dataFilePath = record.Path;
             // correct data path for unmapped drive X
             dataFilePath = dataFilePath.Replace(@"X:\OffshoreSurvey\", @"\\JNCC-CORPFILE\Marine Survey\OffshoreSurvey\");
+            dataFilePath = dataFilePath.Replace(@"J:\GISprojects\", @"\\Jncc - corpfile\gis\GISprojects\");
+
+            
 
             ftpClient.UploadFile(dataFtpPath, dataFilePath);
             Console.WriteLine("Uploaded data file successfully.");
