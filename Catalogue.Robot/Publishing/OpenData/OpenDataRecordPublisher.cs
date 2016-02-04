@@ -124,5 +124,5 @@ namespace Catalogue.Robot.Publishing.OpenData
 
             ftpClient.UploadString(indexDocFtpPath, doc.ToString());
         }
-
+    }
 }
