@@ -6,6 +6,7 @@ using System.Net;
 using System.Text;
 using System.Xml.Linq;
 using Catalogue.Data.Model;
+using Catalogue.Utilities.Text;
 using Catalogue.Utilities.Time;
 using Raven.Client;
 
@@ -37,15 +38,20 @@ namespace Catalogue.Robot.Publishing.OpenData
             record.Publication.OpenData.LastAttempt = attempt;
             db.SaveChanges();
 
-//            // check that the data exists
-//            if (File.Exists(dataPath))
-//            {
+
+            bool corpulent = record.Gemini.Keywords.Any(k => k.Vocab == "http://vocab.jncc.gov.uk/metadata-admin" && k.Value == "Corpulent");
+
+                //            // check that the data exists
+                //            if (File.Exists(dataPath))
+                //            {
 
             try
             {
                 // do the sequential actions
-                UploadTheDataFile(record, dataPath);
-                UpdateResourceLocatorInTheRecord(record, dataPath);
+                if (!corpulent)
+                    UploadTheDataFile(record, dataPath);
+
+                UpdateResourceLocatorInTheRecord(record, dataPath, corpulent);
                 UploadTheMetadataDocument(record, metaPath);
                 UpdateTheWafIndexDocument(record);
 
@@ -102,20 +108,29 @@ namespace Catalogue.Robot.Publishing.OpenData
             Console.WriteLine("Uploaded data file successfully.");
         }
 
-        void UpdateResourceLocatorInTheRecord(Record record, string dataPath)
+        void UpdateResourceLocatorInTheRecord(Record record, string dataPath, bool corpulent)
         {
-            if (record.Gemini.Keywords.Any(k => k.Vocab == "http://vocab.jncc.gov.uk/metadata-admin" && k.Value == "Corpulent"))
+            // don't overwrite accidentally
+            if (record.Gemini.ResourceLocator.IsNotBlank())
             {
-                // this is a big dataset so just link to a webpage
-                string jnccWebDownloadPage = "http://jncc.defra.gov.uk/opendata";
-                record.Gemini.ResourceLocator = jnccWebDownloadPage;
+                Console.WriteLine("ResourceLocator already exists; not overwriting.");
             }
             else
             {
-                // normally, update the resource locator to be the data file
-                string dataHttpPath = config.HttpRootUrl + "/" + dataPath;
-                record.Gemini.ResourceLocator = dataHttpPath;
+                if (corpulent)
+                {
+                    // this is a big dataset so just link to a webpage
+                    string jnccWebDownloadPage = "http://jncc.defra.gov.uk/opendata";
+                    record.Gemini.ResourceLocator = jnccWebDownloadPage;
+                }
+                else
+                {
+                    // normally, update the resource locator to be the data file
+                    string dataHttpPath = config.HttpRootUrl + "/" + dataPath;
+                    record.Gemini.ResourceLocator = dataHttpPath;
+                }
             }
+
         }
 
         void UploadTheMetadataDocument(Record record, string metaPath)
