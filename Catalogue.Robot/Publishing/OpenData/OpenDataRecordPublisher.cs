@@ -93,9 +93,10 @@ namespace Catalogue.Robot.Publishing.OpenData
         {
             var doc = new global::Catalogue.Gemini.Encoding.XmlEncoder().Create(record.Id, record.Gemini);
 
-            var b = new StringBuilder();
-            using (var writer = new StringWriter(b)) { doc.Save(writer); }
-            string metaXmlDoc = b.ToString();
+            doc.Declaration = new XDeclaration("1.0", "utf-8", null);
+            var writer = new Utf8StringWriter();
+            doc.Save(writer, SaveOptions.None);
+            string metaXmlDoc = writer.ToString();
 
             string metaFtpPath = config.FtpRootUrl + "/" + metaPath;
 
@@ -123,6 +124,11 @@ namespace Catalogue.Robot.Publishing.OpenData
             body.Add(newLinks);
 
             ftpClient.UploadString(indexDocFtpPath, doc.ToString());
+        }
+
+        private class Utf8StringWriter : StringWriter
+        {
+            public override Encoding Encoding { get { return Encoding.UTF8; } }
         }
     }
 }
