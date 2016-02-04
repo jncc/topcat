@@ -36,9 +36,9 @@ namespace Catalogue.Robot.Publishing.OpenData
             record.Publication.OpenData.LastAttempt = attempt;
             db.SaveChanges();
 
-            // check that the data exists
-            if (File.Exists(dataPath))
-            {
+//            // check that the data exists
+//            if (File.Exists(dataPath))
+//            {
                 // do the sequential actions
                 UploadTheDataFile(record, dataPath);
                 UpdateResourceLocatorInTheRecord(record, dataPath);
@@ -50,13 +50,13 @@ namespace Catalogue.Robot.Publishing.OpenData
 
                 // commit the changes (to the resource locator and the attempt object)
                 db.SaveChanges();
-            }
-            else
-            {
-                Console.WriteLine("Data file does not exist for record {0} so skipping it.", id);
-                attempt.Message = "Data file does not exist.";
-                db.SaveChanges();
-            }
+//            }
+//            else
+//            {
+//                Console.WriteLine("Data file does not exist for record {0} so skipping it.", id);
+//                attempt.Message = "Data file does not exist.";
+//                db.SaveChanges();
+//            }
         }
 
 //        PublicationAttempt AddNewAttempt(Record record)
