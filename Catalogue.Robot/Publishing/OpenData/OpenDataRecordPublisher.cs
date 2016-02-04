@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Net;
 using System.Text;
 using System.Xml.Linq;
 using Catalogue.Data.Model;
@@ -39,6 +40,9 @@ namespace Catalogue.Robot.Publishing.OpenData
 //            // check that the data exists
 //            if (File.Exists(dataPath))
 //            {
+
+            try
+            {
                 // do the sequential actions
                 UploadTheDataFile(record, dataPath);
                 UpdateResourceLocatorInTheRecord(record, dataPath);
@@ -48,8 +52,16 @@ namespace Catalogue.Robot.Publishing.OpenData
                 // mark the attempt successful
                 record.Publication.OpenData.LastSuccess = attempt;
 
-                // commit the changes (to the resource locator and the attempt object)
-                db.SaveChanges();
+            }
+            catch (WebException ex)
+            {
+                Console.WriteLine(ex.Message);
+                attempt.Message = ex.Message;
+            }
+
+            // commit the changes (to the resource locator and the attempt object)
+            db.SaveChanges();
+
 //            }
 //            else
 //            {
