@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Text;
 using System.Xml.Linq;
 using Catalogue.Data.Model;
 using Catalogue.Utilities.Time;
@@ -90,7 +91,12 @@ namespace Catalogue.Robot.Publishing.OpenData
 
         void UploadTheMetadataDocument(Record record, string metaPath)
         {
-            string metaXmlDoc = new global::Catalogue.Gemini.Encoding.XmlEncoder().Create(record.Id, record.Gemini).ToString();
+            var doc = new global::Catalogue.Gemini.Encoding.XmlEncoder().Create(record.Id, record.Gemini);
+
+            var b = new StringBuilder();
+            using (var writer = new StringWriter(b)) { doc.Save(writer); }
+            string metaXmlDoc = b.ToString();
+
             string metaFtpPath = config.FtpRootUrl + "/" + metaPath;
 
             ftpClient.UploadString(metaFtpPath, metaXmlDoc);

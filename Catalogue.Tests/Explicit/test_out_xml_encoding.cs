@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -12,11 +13,26 @@ namespace Catalogue.Tests.Explicit
     class test_out_xml_encoding
     {
         [Explicit, Test]
-        public void reproduce_xml_enocding_issue()
+        public void reproduce_xml_enocoding_issue()
         {
             string xml = @"<some-element>© JNCC</some-element>";
+            var doc = XDocument.Parse(xml);
+            doc.ToString().Should().Contain("©");
+            doc.ToString().Should().NotContain("&copy;");
+        }
 
-            new XDocument(xml).ToString().Should().Contain("&copy;");
+        [Explicit, Test]
+        public void should_correctly_encode_copyright()
+        {
+            string xml = @"<some-element>© JNCC</some-element>";
+            var doc = XDocument.Parse(xml);
+
+            var b = new StringBuilder();
+            using (TextWriter writer = new StringWriter(b))
+            {
+                doc.Save(writer);
+            }
+            b.ToString().Should().Contain("&copy;");
         }
     }
 }
