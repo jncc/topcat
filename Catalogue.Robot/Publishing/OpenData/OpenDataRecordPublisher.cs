@@ -73,11 +73,14 @@ namespace Catalogue.Robot.Publishing.OpenData
 
         void UploadTheDataFile(Record record, string dataPath)
         {
+            // correct data path for unmapped drive X
+            dataPath = dataPath.Replace(@"X:\OffshoreSurvey\", @"\\JNCC-CORPFILE\Marine Survey\OffshoreSurvey\");
+
             string dataFtpPath = config.FtpRootUrl + "/" + dataPath;
             Console.WriteLine("Uploading data file to {0}", dataFtpPath);
 
-            if (!File.Exists(record.Path))
-                throw new Exception(String.Format("Data file for record {0} doesn't exist.", record.Id));
+//            if (!File.Exists(record.Path))
+//                throw new Exception(String.Format("Data file for record {0} doesn't exist.", record.Id));
 
             ftpClient.UploadFile(dataFtpPath, record.Path);
             Console.WriteLine("Uploaded data file successfully.");
