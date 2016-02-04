@@ -10,6 +10,7 @@ using Catalogue.Gemini.BoundingBoxes;
 using Catalogue.Gemini.Model;
 using Catalogue.Gemini.Spatial;
 using Catalogue.Utilities.Clone;
+using Catalogue.Utilities.Time;
 using Catalogue.Web.Injection;
 using Raven.Client;
 
@@ -199,6 +200,27 @@ namespace Catalogue.Web.Controllers.Patch
             return recordKeywords;
         }
 
+        [HttpPost, Route("api/patch/pokeseabirdrecords")]
+        public HttpResponseMessage PokeSeabirdRecords()
+        {
+            var query = new RecordQueryInputModel
+            {
+                K = new[] { "vocab.jncc.gov.uk/jncc-category/Seabird Surveys" },
+                P = 0,
+                N = 1024,
+            };
+
+            var records = _queryer.Query(query).ToList();
+
+            foreach (var record in records)
+            {
+                record.Gemini.MetadataDate = Clock.NowUtc;
+            }
+
+            db.SaveChanges();
+
+            return new HttpResponseMessage();
+        }
 
 
 //        [HttpPost, Route("api/patch/renamesecuritylevels")]
