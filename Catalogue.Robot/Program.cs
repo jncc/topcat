@@ -12,6 +12,7 @@ using Catalogue.Robot.Publishing.OpenData;
 using Catalogue.Utilities.Text;
 using CommandLine;
 using Newtonsoft.Json;
+using NUnit.Framework.Constraints;
 using Raven.Abstractions.Extensions;
 using Raven.Client;
 
@@ -33,8 +34,11 @@ namespace Catalogue.Robot
     [Verb("mark", HelpText = "Mark records tagged with the specified keyword for publishing.")]
     public class MarkOptions
     {
-        [Option(Required = true, HelpText = "Keyword, e.g. 'vocab.jncc.gov.uk/jncc-category/Some Category'.")]
+        [Option(HelpText = "Keyword, e.g. 'vocab.jncc.gov.uk/jncc-category/Some Category'.")]
         public string Keyword { get; set; }
+
+        [Option("id-list-path", HelpText = "A path to the list of Topcat IDs to mark.")]
+        public string IdListPath { get; set; }
     }
 
     [Verb("publish", HelpText = "Publish now as Open Data.")]
@@ -75,7 +79,21 @@ namespace Catalogue.Robot
 
             using (var db = DocumentStore.OpenSession())
             {
-                var records = GetRecords(db, options.Keyword);
+                List<Record> records;
+                if (options.Keyword.IsNotBlank())
+                {
+                    Console.WriteLine("Marking records tagged '{0}'", options.Keyword);
+                    records = GetRecords(db, options.Keyword);
+                }
+                else if (options.IdListPath.IsNotBlank())
+                {
+                    var ids = File.ReadAllLines(options.IdListPath).Select(line => "records/" + line.Trim());
+                    records = db.Load<Record>(ids).ToList();
+                }
+                else
+                {
+                    throw new Exception("Must specify either --keyword or --id-list-path.");
+                }
 
                 int count = 0;
                 Console.WriteLine("Found {0} records tagged '{1}'.", records.Count, options.Keyword);
