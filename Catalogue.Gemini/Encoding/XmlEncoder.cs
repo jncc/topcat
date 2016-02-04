@@ -228,6 +228,7 @@ namespace Catalogue.Gemini.Encoding
             // not supporting versions for data format
         }
 
+        // haven't checked this against gemini spec - just doing quickly
         XElement MakeResourceLocator(Metadata metadata)
         {
             return new XElement(gmd + "transferOptions",
@@ -235,7 +236,9 @@ namespace Catalogue.Gemini.Encoding
                     new XElement(gmd + "onLine",
                         new XElement(gmd + "CI_OnlineResource",
                             new XElement(gmd + "linkage",
-                                new XElement(gmd + "URL", metadata.ResourceLocator))))));
+                                new XElement(gmd + "URL", metadata.ResourceLocator)),
+                            new XElement(gmd + "name", 
+                                new XElement(gco + "CharacterString", "Download"))))));
         }
 
         XElement MakeLineage(Metadata metadata)

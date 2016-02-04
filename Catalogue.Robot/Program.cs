@@ -7,6 +7,7 @@ using Catalogue.Data;
 using Catalogue.Data.Indexes;
 using Catalogue.Data.Model;
 using Catalogue.Data.Query;
+using Catalogue.Gemini.Model;
 using Catalogue.Robot.Importing;
 using Catalogue.Robot.Publishing.OpenData;
 using Catalogue.Utilities.Text;
@@ -39,6 +40,9 @@ namespace Catalogue.Robot
 
         [Option("id-list-path", HelpText = "A path to the list of Topcat IDs to mark.")]
         public string IdListPath { get; set; }
+
+        [Option("mark-as-corpulent", HelpText = "Mark these records as corpulent - too large to have a data resource.")]
+        public bool MarkAsCorpulent { get; set; }
     }
 
     [Verb("publish", HelpText = "Publish now as Open Data.")]
@@ -107,6 +111,11 @@ namespace Catalogue.Robot
                     {
                         record.Publication.OpenData = new OpenDataPublicationInfo();
                         count++;
+                    }
+
+                    if (options.MarkAsCorpulent)
+                    {
+                        record.Gemini.Keywords.Add(new MetadataKeyword { Vocab = "http://vocab.jncc.gov.uk/metadata-admin", Value = "Corpulent" });
                     }
                 }
 

@@ -104,8 +104,18 @@ namespace Catalogue.Robot.Publishing.OpenData
 
         void UpdateResourceLocatorInTheRecord(Record record, string dataPath)
         {
-            string dataHttpPath = config.HttpRootUrl + "/" + dataPath;
-            record.Gemini.ResourceLocator = dataHttpPath;
+            if (record.Gemini.Keywords.Any(k => k.Vocab == "http://vocab.jncc.gov.uk/metadata-admin" && k.Value == "Corpulent"))
+            {
+                // this is a big dataset so just link to a webpage
+                string jnccWebDownloadPage = "http://jncc.defra.gov.uk/opendata";
+                record.Gemini.ResourceLocator = jnccWebDownloadPage;
+            }
+            else
+            {
+                // normally, update the resource locator to be the data file
+                string dataHttpPath = config.HttpRootUrl + "/" + dataPath;
+                record.Gemini.ResourceLocator = dataHttpPath;
+            }
         }
 
         void UploadTheMetadataDocument(Record record, string metaPath)
