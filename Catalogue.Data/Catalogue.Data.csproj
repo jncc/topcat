@@ -85,6 +85,7 @@
     <Compile Include="Import\FileSystem.cs" />
     <Compile Include="Import\ImportException.cs" />
     <Compile Include="Import\Mappings\ActivitiesMapping.cs" />
+    <Compile Include="Import\Mappings\DaveChambersMapping.cs" />
     <Compile Include="Import\Mappings\EuropeanReportingMapping.cs" />
     <Compile Include="Import\Mappings\MarineRecorderMapping.cs" />
     <Compile Include="Import\Mappings\MeowMapping.cs" />
