@@ -19,7 +19,7 @@ using NUnit.Framework.Constraints;
 namespace Catalogue.Data.Import.Mappings
 {
     /// <summary>
-    /// Steps: unknown. Get CSV from someone.
+    /// Steps: Get Excel sheet from Dave. Open in Open Office, save as Unicode CSV.
     /// </summary>
     public class DaveChambersMapping : IMapping
     {
@@ -161,8 +161,6 @@ namespace Catalogue.Data.Import.Mappings
             }
         }
     }
-
-    // readonly some records say YES - why? 
 
     [Explicit]
     class when_importing_dave_chambers_import
