@@ -116,12 +116,15 @@ namespace Catalogue.Data.Write
 
         void ValidateKeywords(Record record, ValidationResult<Record> ValidationResult)
         {
-            if (!record.Gemini.Keywords.Any(k => k.Vocab == "http://vocab.jncc.gov.uk/jncc-domain"))
+            var jnccDomainKeywords = record.Gemini.Keywords.Where(k => k.Vocab == "http://vocab.jncc.gov.uk/jncc-domain");
+            var jnccCategoryKeywords = record.Gemini.Keywords.Where(k => k.Vocab == "http://vocab.jncc.gov.uk/jncc-category");
+
+            if (!jnccDomainKeywords.Any())
             {
                 ValidationResult.Errors.Add(String.Format("Must specify a JNCC Domain keyword"),
                     r => r.Gemini.Keywords);
             }
-            if (!record.Gemini.Keywords.Any(k => k.Vocab == "http://vocab.jncc.gov.uk/jncc-category"))
+            if (!jnccCategoryKeywords.Any())
             {
                 ValidationResult.Errors.Add(String.Format("Must specify a JNCC Category keyword"),
                     r => r.Gemini.Keywords);

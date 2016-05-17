@@ -54,14 +54,20 @@ namespace Catalogue.Data.Import.Mappings
                 Map(m => m.Keywords).ConvertUsing(row =>
                 {
                     string domain = row.GetField("Gemini.Keywords.Domain");
+                    // split and correct comma-separated domains
+                    var domains = domain.Split(',').Select(s => s.Trim().Replace("Terrrestrial", "Terrestrial"));
+
                     string category = row.GetField("Gemini.Keywords.JNCCCategory");
                     string others = row.GetField("Gemini.Keywords.Category");
 
-                    var keywords = new List<MetadataKeyword>
+                    var keywords = new List<MetadataKeyword>();
+
+                    foreach (var d in domains)
                     {
-                        new MetadataKeyword {Vocab = "http://vocab.jncc.gov.uk/jncc-domain", Value = domain},
-                        new MetadataKeyword {Vocab = "http://vocab.jncc.gov.uk/jncc-category", Value = category},
-                    };
+                        keywords.Add(new MetadataKeyword { Vocab = "http://vocab.jncc.gov.uk/jncc-domain", Value = d });
+                    }
+
+                    keywords.Add(new MetadataKeyword { Vocab = "http://vocab.jncc.gov.uk/jncc-category", Value = category });
 
                     if (others.IsNotBlank())
                     {
@@ -99,9 +105,9 @@ namespace Catalogue.Data.Import.Mappings
                 Map(m => m.MetadataDate).Value(DateTime.Now);
                 Map(m => m.MetadataPointOfContact).ConvertUsing(row =>
                 {
-                    //                  string name = "Joint Nature Conservation Committee (JNCC)";
-                    //                  string email = "data@jncc.gov.uk";
-                    //                  string role = "pointOfContact";
+//                  string name = "Joint Nature Conservation Committee (JNCC)";
+//                  string email = "data@jncc.gov.uk";
+//                  string role = "pointOfContact";
                     string name = row.GetField("MetadataPointOfContact.Name").Trim();
                     string email = row.GetField("MetadataPointOfContact.Email").Trim();
                     string role = row.GetField("MetadataPointOfContact.Role").FirstCharToLower().Trim();
