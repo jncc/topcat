@@ -87,11 +87,15 @@ namespace Catalogue.Robot
                 if (options.Keyword.IsNotBlank())
                 {
                     Console.WriteLine("Marking records tagged '{0}'", options.Keyword);
+
                     records = GetRecords(db, options.Keyword);
                 }
                 else if (options.IdListPath.IsNotBlank())
                 {
-                    var ids = File.ReadAllLines(options.IdListPath).Select(line => "records/" + line.Trim());
+                    var ids = File.ReadAllLines(options.IdListPath)
+                        .Where(line => line.IsNotBlank())
+                        .Select(line => "records/" + line.Trim());
+
                     records = db.Load<Record>(ids).ToList();
                 }
                 else

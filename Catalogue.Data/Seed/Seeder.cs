@@ -225,6 +225,7 @@ namespace Catalogue.Data.Seed
             var neverPublishedRecord = record.With(r =>
             {
                 r.Id = new Guid("bd4a2f8a-b548-4ce4-a70c-3f2fdb44005c");
+                r.Gemini.Title = "A never-published record";
                 r.Publication = new PublicationInfo
                 {
                     OpenData = new OpenDataPublicationInfo
@@ -239,6 +240,7 @@ namespace Catalogue.Data.Seed
             var earlierUnsuccessfullyPublishedRecord = record.With(r => 
             {
                 r.Id = new Guid("b2691fed-e421-4e48-9da9-99bd77e0b8ba");
+                r.Gemini.Title = "An earlier unsuccessfully published record";
                 r.Publication = new PublicationInfo
                 {
                     OpenData = new OpenDataPublicationInfo
@@ -252,6 +254,7 @@ namespace Catalogue.Data.Seed
             var laterSuccessfullyPublishedRecord = record.With(r =>
             {
                 r.Id = new Guid("d9c14587-90d8-4eba-b670-4cf36e45196d");
+                r.Gemini.Title = "A later successfully published record";
                 r.Publication = new PublicationInfo
                 {
                     OpenData = new OpenDataPublicationInfo
@@ -267,6 +270,7 @@ namespace Catalogue.Data.Seed
             var updatedSinceSuccessfullyPublishedRecord = record.With(r =>
             {
                 r.Id = new Guid("19b8c7ab-5c33-4d55-bc1d-3762b8207a9f");
+                r.Gemini.Title = "An updated since successfully published record";
                 r.Publication = new PublicationInfo
                 {
                     OpenData = new OpenDataPublicationInfo
