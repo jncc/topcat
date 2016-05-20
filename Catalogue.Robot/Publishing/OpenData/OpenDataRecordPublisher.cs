@@ -62,7 +62,7 @@ namespace Catalogue.Robot.Publishing.OpenData
             catch (WebException ex)
             {
                 Console.WriteLine(ex.Message);
-                attempt.Message = ex.Message + (ex.InnerException?.Message ?? "") ;
+                attempt.Message = ex.Message + (ex.InnerException != null ? ex.InnerException.Message : "") ;
             }
 
             // commit the changes (to the resource locator and the attempt object)
