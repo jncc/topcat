@@ -52,6 +52,7 @@ namespace Catalogue.Web.Controllers.Publishing
                     Id = r.Id,
                     Title = r.Gemini.Title,
                     MetadataDate = r.Gemini.MetadataDate,
+                    IsGeminiValid = r.Validation == Validation.Gemini,
                     OpenData = r.Publication.OpenData,
                 })
                 .ToList();
@@ -67,6 +68,7 @@ namespace Catalogue.Web.Controllers.Publishing
         public Guid Id { get; set; }
         public string Title { get; set; }
         public DateTime MetadataDate { get; set; }
+        public bool IsGeminiValid { get; set; }
         public OpenDataPublicationInfo OpenData { get; set; }
     }
 

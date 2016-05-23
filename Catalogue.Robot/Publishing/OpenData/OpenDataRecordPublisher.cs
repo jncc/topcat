@@ -28,7 +28,7 @@ namespace Catalogue.Robot.Publishing.OpenData
         public void PublishRecord(Guid id)
         {
             var record = db.Load<Record>(id);
-            Console.WriteLine("Publishing '{0}' to '{1}'.", record.Gemini.Title, config.FtpRootUrl);
+            Console.WriteLine(Environment.NewLine + "Publishing '{0}' to '{1}'.", record.Gemini.Title, config.FtpRootUrl);
 
             string metaPath = String.Format("waf/{0}.xml", record.Id);
             string dataPath = String.Format("data/{0}-{1}", record.Id, Path.GetFileName(record.Path).Replace(" ", "-")); // todo webify file name
@@ -61,8 +61,9 @@ namespace Catalogue.Robot.Publishing.OpenData
             }
             catch (WebException ex)
             {
-                Console.WriteLine(ex.Message);
-                attempt.Message = ex.Message + (ex.InnerException != null ? ex.InnerException.Message : "") ;
+                string message = ex.Message + (ex.InnerException != null ? ex.InnerException.Message : "");
+                Console.WriteLine(message);
+                attempt.Message = message;
             }
 
             // commit the changes (to the resource locator and the attempt object)
