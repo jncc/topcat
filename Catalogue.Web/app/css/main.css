@@ -23,10 +23,10 @@
   cursor: pointer;
 }
 .hoverable-glyphicon {
-  color: #666666;
+  color: #666;
 }
 .hoverable-glyphicon:hover {
-  color: #444444;
+  color: #444;
 }
 h1,
 h2,
@@ -41,7 +41,7 @@ hr {
   font-size: 230px;
   text-align: center;
   font-weight: bold;
-  color: #bbbbbb;
+  color: #bbb;
   padding-top: 100px;
 }
 .huge.ng-enter {
@@ -53,10 +53,10 @@ hr {
   opacity: 1;
 }
 .placeholder {
-  color: #bbbbbb;
+  color: #bbb;
 }
 .dark {
-  color: #666666;
+  color: #666;
 }
 .label-success {
   background-color: #35d926;
@@ -65,22 +65,22 @@ hr {
   background-color: #d92687;
 }
 .btn-default {
-  background-color: #eeeeee;
-  border-color: #eeeeee;
+  background-color: #eee;
+  border-color: #eee;
 }
 .btn-default:hover {
-  background-color: #dddddd;
-  border-color: #dddddd;
+  background-color: #ddd;
+  border-color: #ddd;
 }
 .btn-dialogue {
-  background-color: #666666;
-  border-color: #666666;
+  background-color: #666;
+  border-color: #666;
   color: white;
   padding: 0 0.7em;
 }
 .btn-dialogue:hover {
-  background-color: #444444;
-  border-color: #444444;
+  background-color: #444;
+  border-color: #444;
   color: white;
 }
 .btn-dialogue:focus {
@@ -131,11 +131,11 @@ label {
   display: table-cell;
   vertical-align: middle;
   text-align: right;
-  color: #bbbbbb;
+  color: #bbb;
 }
 .header .user-info div:first-child {
   font-size: 123%;
-  color: #666666;
+  color: #666;
 }
 .welcome h1 {
   padding-right: 2em;
@@ -150,7 +150,7 @@ label {
   font-size: 6.5em;
   font-weight: bold;
   line-height: 0.8em;
-  color: #eeeeee;
+  color: #eee;
   float: right;
   z-index: -10000;
 }
@@ -161,7 +161,7 @@ label {
   margin-top: 0.5em;
 }
 .roadmap {
-  border-left: 1px solid #eeeeee;
+  border-left: 1px solid #eee;
   padding-top: 0.5em;
   padding-left: 3em;
 }
@@ -217,45 +217,45 @@ label {
   font-size: x-large;
 }
 .search-result .search-format .glyphicon {
-  color: #666666;
+  color: #666;
 }
 .search-result .search-format .glyphicon:hover {
-  color: #444444;
+  color: #444;
 }
 .search-result .search-title a {
   font-size: larger;
 }
 .search-result .search-title .search-result-top-copy {
   margin-left: 0.3em;
-  color: #666666;
+  color: #666;
 }
 .search-result .search-title .search-result-top-copy:hover {
-  color: #444444;
+  color: #444;
 }
 .search-result .search-title .search-result-map-buttons {
   margin-left: 0.5em;
 }
 .search-result .search-title .search-result-map-buttons .search-result-map-button {
-  color: #bbbbbb;
+  color: #bbb;
   cursor: pointer;
 }
 .search-result .search-title .search-result-map-buttons .search-result-map-button:hover {
-  color: #444444;
+  color: #444;
 }
 .search-result .search-title .search-result-map-control {
-  color: #bbbbbb;
+  color: #bbb;
   cursor: pointer;
 }
 .search-result .search-title .search-result-map-control:hover {
-  color: #444444;
+  color: #444;
 }
 .search-result .search-title .search-date {
   font-size: larger;
-  color: #666666;
+  color: #666;
 }
 .search-result .search-divider-bullet {
   font-weight: bold;
-  color: #dddddd;
+  color: #ddd;
   margin: 0 0.15em 0 0.25em;
 }
 .search-result .search-resource-type {
@@ -284,19 +284,19 @@ label {
 }
 .glyphicon-remove {
   font-size: 75%;
-  color: #666666;
+  color: #666;
   cursor: pointer;
 }
 .tag {
   white-space: nowrap;
   display: inline-block;
-  background-color: #eeeeee;
+  background-color: #eee;
   padding-right: 0.5em;
   margin: 0 0.8em 0.45em 0;
   position: relative;
 }
 .tag:hover {
-  background-color: #dddddd;
+  background-color: #ddd;
 }
 .tag > .vocabful-colour-edge {
   display: inline-block;
@@ -321,7 +321,7 @@ label {
   right: 0;
   width: 1.5em;
   height: 100%;
-  background: linear-gradient(to right, rgba(238, 238, 238, 0), #ffffff 70%);
+  background: linear-gradient(to right, rgba(238, 238, 238, 0), #fff 70%);
 }
 .tip {
   max-width: 100%;
@@ -368,7 +368,7 @@ label {
   z-index: 100;
 }
 .vocabulator .vocabulator-vocab-list .vocab-item:hover {
-  background-color: #eeeeee;
+  background-color: #eee;
 }
 .vocabulator .vocabulator-vocab-list .vocab-item {
   position: relative;
@@ -384,13 +384,13 @@ label {
   font-size: 16.7999992370605px;
 }
 .vocabulator .vocabulator-vocab-list .vocab-item.active {
-  background-color: #eeeeee;
+  background-color: #eee;
 }
 .vocabulator .vocabulator-vocab-list .vocab-item .vocab-item-id {
   font-size: 11px;
   font-family: 'Lucida Grande', sans-serif;
   font-weight: 700;
-  color: #bbbbbb;
+  color: #bbb;
 }
 .vocabulator .vocabulator-vocab-list .vocab-item-arrow {
   opacity: 0.2;
@@ -478,10 +478,10 @@ label {
 }
 .editor-readonly .glyphicon {
   margin: 0 2px 0 2px;
-  color: #666666;
+  color: #666;
 }
 .editor-readonly .glyphicon:hover {
-  color: #444444;
+  color: #444;
 }
 .editor-title {
   font-size: larger;
@@ -495,14 +495,14 @@ label {
 }
 .editor-format div span {
   padding-top: 11px;
-  color: #666666;
+  color: #666;
   cursor: pointer;
 }
 .editor-format div span:hover {
-  color: #444444;
+  color: #444;
 }
 .editor-path .zeroclipboard-is-hover {
-  background-color: #dddddd;
+  background-color: #ddd;
 }
 .editor-keywords {
   margin-top: 0.5em;
@@ -546,7 +546,7 @@ label {
   margin-right: 0.6em;
 }
 .editor-internal .btn-default .glyphicon {
-  color: #666666;
+  color: #666;
 }
 .editor-internal hr {
   margin-top: 10px;
@@ -569,7 +569,7 @@ label {
   margin-right: 4px;
 }
 form .ng-invalid {
-  border: 1px solid #ff1493;
+  border: 1px solid #FF1493;
   background-color: #f9f2f4;
 }
 .notification-summary {
@@ -588,6 +588,15 @@ form .ng-invalid {
   color: white;
   padding: 5px;
   border-radius: 4px;
+}
+.publishing .publishing-summary .publishing-summary-item {
+  white-space: nowrap;
+  padding-right: 2em;
+}
+.publishing .publishing-summary .publishing-summary-item span {
+  font-weight: bold;
+  font-size: 4em;
+  color: #bbb;
 }
 .fade-in-with-delay.ng-hide-remove {
   transition: all cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.5s;
@@ -634,4 +643,3 @@ form .ng-invalid {
 .nav > li > a {
   color: #666666;
 }
-/*# sourceMappingURL=main.css.map */

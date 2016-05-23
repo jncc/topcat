@@ -20,19 +20,15 @@ namespace Catalogue.Web.Controllers.Publishing
         [HttpGet, Route("api/publishing/opendata/summary")]
         public SummaryRepresentation Summary()
         {
-            var recordsSuccessfullyPublishedCount = db.Query<RecordsWithOpenDataPublicationInfoIndex.Result, RecordsWithOpenDataPublicationInfoIndex>()
-                .Where(x => x.PublishedSinceLastUpdated)
-                .Count();
-
-            var recordsPendingPublicationCount = db.Query<RecordsWithOpenDataPublicationInfoIndex.Result, RecordsWithOpenDataPublicationInfoIndex>()
-                .Where(x => !x.PublishedSinceLastUpdated)
-                .Count();
+            var query = db.Query<RecordsWithOpenDataPublicationInfoIndex.Result, RecordsWithOpenDataPublicationInfoIndex>();
 
             return new SummaryRepresentation
                 {
-                    RecordsSuccessfullyPublishedCount = recordsSuccessfullyPublishedCount,
-                    RecordsPendingPublicationCount = recordsPendingPublicationCount,
-                };
+                    CountOfPublishedSinceLastUpdated = query.Count(x => x.PublishedSinceLastUpdated),
+                    CountOfNotYetPublishedSinceLastUpdated = query.Count(x => !x.PublishedSinceLastUpdated),
+                    CountOfPublicationNeverAttempted = query.Count(x => x.PublicationNeverAttempted),
+                    CountOfLastPublicationAttemptWasUnsuccessful = query.Count(x => x.LastPublicationAttemptWasUnsuccessful),
+            };
         }
 
         [HttpGet, Route("api/publishing/opendata/pending")]
@@ -74,8 +70,10 @@ namespace Catalogue.Web.Controllers.Publishing
 
     public class SummaryRepresentation
     {
-        public int RecordsSuccessfullyPublishedCount { get; set; }
-        public int RecordsPendingPublicationCount { get; set; }
+        public int CountOfPublishedSinceLastUpdated { get; set; }
+        public int CountOfNotYetPublishedSinceLastUpdated { get; set; }
+        public int CountOfPublicationNeverAttempted { get; set; }
+        public int CountOfLastPublicationAttemptWasUnsuccessful { get; set; }
     }
 }
 

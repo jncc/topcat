@@ -41,9 +41,9 @@ module.config ($routeProvider) ->
         .when '/vocabularies',
             controller:     'VocabularyListController',
             templateUrl:    'views/vocabularies/vocabularies.html'
-        .when '/ingest',
-            controller:     'IngestController',
-            templateUrl:    'views/ingest/ingest.html'
+        .when '/publishing',
+            controller:     'PublishingController',
+            templateUrl:    'views/publishing/publishing.html'
         .when '/vocabularies/editor/:vocabId*',
             controller:     'VocabularyEditorController',
             templateUrl:    'views/vocabularies/editor.html',

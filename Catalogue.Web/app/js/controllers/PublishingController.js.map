@@ -1,0 +1,10 @@
+﻿{
+  "version": 3,
+  "file": "PublishingController.js",
+  "sourceRoot": "..\\..\\..\\..\\..\\..\\Work\\topcat\\Catalogue.Web\\app\\js\\controllers",
+  "sources": [
+    "PublishingController.coffee"
+  ],
+  "names": [],
+  "mappings": ";AAAA;AAAA,EAAA,OAAO,CAAC,MAAR,CAAe,iBAAf,CAAiC,CAAC,UAAlC,CAA6C,sBAA7C,EAEI,SAAC,MAAD,EAAS,KAAT,GAAA;AAEI,IAAA,MAAM,CAAC,QAAP,GAAkB,EAAlB,CAAA;AAAA,IACA,KAAK,CAAC,GAAN,CAAU,oCAAV,CAA+C,CAAC,OAAhD,CAAwD,SAAC,MAAD,GAAA;aAAY,MAAM,CAAC,QAAQ,CAAC,OAAhB,GAA0B,OAAtC;IAAA,CAAxD,CADA,CAAA;WAEA,KAAK,CAAC,GAAN,CAAU,oCAAV,CAA+C,CAAC,OAAhD,CAAwD,SAAC,MAAD,GAAA;aAAY,MAAM,CAAC,QAAQ,CAAC,OAAhB,GAA0B,OAAtC;IAAA,CAAxD,EAJJ;EAAA,CAFJ,CAAA,CAAA;AAAA"
+}
