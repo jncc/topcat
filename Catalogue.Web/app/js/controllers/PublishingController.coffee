@@ -2,8 +2,14 @@
 
     ($scope, $http) ->
         
-        $scope.opendata = {}
-        $http.get('../api/publishing/opendata/summary').success (result) -> $scope.opendata.summary = result
-        $http.get('../api/publishing/opendata/pending').success (result) -> $scope.opendata.pending = result
+        
+        m =
+            openData: {},
+            tab: 2
+        
+        $scope.m = m
+
+        $http.get('../api/publishing/opendata/summary').success (result) -> m.openData.summary = result
+        $http.get('../api/publishing/opendata/pending').success (result) -> m.openData.pending = result
 
         

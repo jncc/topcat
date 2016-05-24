@@ -589,14 +589,23 @@ form .ng-invalid {
   padding: 5px;
   border-radius: 4px;
 }
-.publishing .publishing-summary .publishing-summary-item {
-  white-space: nowrap;
-  padding-right: 2em;
+.publishing .publishing-summary :hover {
+  background-color: #eee;
 }
-.publishing .publishing-summary .publishing-summary-item span {
+.publishing .publishing-summary .hi {
+  background-color: #eee;
+}
+.publishing .publishing-summary .publishing-summary-item {
+  display: inline-block;
+  padding: 0 1em;
+  cursor: pointer;
+  border-radius: 6px;
+}
+.publishing .publishing-summary .publishing-summary-item > span {
   font-weight: bold;
   font-size: 4em;
-  color: #bbb;
+  color: #666;
+  margin-right: 2px;
 }
 .fade-in-with-delay.ng-hide-remove {
   transition: all cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.5s;

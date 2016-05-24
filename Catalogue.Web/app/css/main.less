@@ -660,12 +660,19 @@ form .ng-invalid {
 // ----------
 
 .publishing {
+
     .publishing-summary {
+        :hover { background-color: @pale; }
+        .hi { background-color: @pale; }
         .publishing-summary-item {
-            white-space: nowrap;
-            padding-right:2em;
-            span { font-weight: bold; font-size: 4em; color: @grey; }
+            display: inline-block;
+            padding:0 1em;
+            cursor: pointer;
+            border-radius: 6px;
+            >span { font-weight: bold; font-size: 4em; color: @dark; margin-right: 2px; }
         }
+
+        
     }
 }
 

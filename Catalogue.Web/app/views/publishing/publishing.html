@@ -1,17 +1,28 @@
 ﻿
 
 <h1>Open data publishing</h1>
-
-<hr />
+<br/>
 
 <div class="publishing">
     <div class="publishing-summary">
-        <span class="publishing-summary-item"><span>{{opendata.summary.countOfPublishedSinceLastUpdated}}</span> records published and up-to-date</span>
-        <span class="publishing-summary-item"><span>{{opendata.summary.countOfNotYetPublishedSinceLastUpdated}}</span> records pending publication</span>
-        <span class="publishing-summary-item"><span>{{opendata.summary.countOfPublicationNeverAttempted}}</span> records not attempted yet</span>
-        <span class="publishing-summary-item"><span>{{opendata.summary.countOfLastPublicationAttemptWasUnsuccessful}}</span> records failed last publication</span>
+        <div class="publishing-summary-item" ng-class="{'hi': m.tab == 1}" ng-click="m.tab = 1">
+            <span>{{m.openData.summary.countOfPublishedSinceLastUpdated}}</span> records published and up-to-date
+        </div>
+        <div class="publishing-summary-item" ng-class="{'hi': m.tab == 2}" ng-click="m.tab = 2">
+            <span>{{m.openData.summary.countOfNotYetPublishedSinceLastUpdated}}</span> records pending publication
+        </div>
+        <div class="publishing-summary-item" ng-class="{'hi': m.tab == 3}" ng-click="m.tab = 3">
+            <span>{{m.openData.summary.countOfPublicationNeverAttempted}}</span> records not attempted yet
+        </div>
+        <div class="publishing-summary-item" ng-class="{'hi': m.tab == 4}" ng-click="m.tab = 4">
+            <span>{{m.openData.summary.countOfLastPublicationAttemptWasUnsuccessful}}</span> records failed last publication
+        </div>
     </div>
+
+
 </div>
 
-<hr />
-{{opendata.pending}}
+<hr/>
+{{m}}
+<hr/>
+
