@@ -592,9 +592,6 @@ form .ng-invalid {
 .publishing .publishing-summary {
   margin-bottom: 2em;
 }
-.publishing .publishing-summary :hover {
-  background-color: #eee;
-}
 .publishing .publishing-summary .hi {
   background-color: #eee;
 }
@@ -609,6 +606,21 @@ form .ng-invalid {
   font-size: 4em;
   color: #666;
   margin-right: 2px;
+}
+.publishing .publishing-summary .publishing-summary-item-hoverable {
+  display: inline-block;
+  padding: 0 1em;
+  cursor: pointer;
+  border-radius: 6px;
+}
+.publishing .publishing-summary .publishing-summary-item-hoverable > span {
+  font-weight: bold;
+  font-size: 4em;
+  color: #666;
+  margin-right: 2px;
+}
+.publishing .publishing-summary .publishing-summary-item-hoverable:hover {
+  background-color: #eee;
 }
 .publishing .publishing-list .first {
   width: 50%;
