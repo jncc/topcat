@@ -31,14 +31,53 @@ namespace Catalogue.Web.Controllers.Publishing
             };
         }
 
-        [HttpGet, Route("api/publishing/opendata/pending")]
+
+        [HttpGet, Route("api/publishing/opendata/publishedsincelastupdated")]
+        public List<RecordRepresentation> PublishedSinceLastUpdated(int p = 1)
+        {
+            var query = db
+                .Query<RecordsWithOpenDataPublicationInfoIndex.Result, RecordsWithOpenDataPublicationInfoIndex>()
+                .Where(x => x.PublishedSinceLastUpdated);
+
+            return GetRecords(query, p);
+        }
+
+        [HttpGet, Route("api/publishing/opendata/notpublishedsincelastupdated")]
         public List<RecordRepresentation> Pending(int p = 1)
         {
-            int take = 10;
+            var query = db
+                .Query<RecordsWithOpenDataPublicationInfoIndex.Result, RecordsWithOpenDataPublicationInfoIndex>()
+                .Where(x => !x.PublishedSinceLastUpdated);
+
+            return GetRecords(query, p);
+        }
+
+        [HttpGet, Route("api/publishing/opendata/publicationneverattempted")]
+        public List<RecordRepresentation> PublicationNeverAttempted(int p = 1)
+        {
+            var query = db
+                .Query<RecordsWithOpenDataPublicationInfoIndex.Result, RecordsWithOpenDataPublicationInfoIndex>()
+                .Where(x => x.PublicationNeverAttempted);
+
+            return GetRecords(query, p);
+        }
+
+        [HttpGet, Route("api/publishing/opendata/lastpublicationattemptwasunsuccessful")]
+        public List<RecordRepresentation> LastPublicationAttemptWasUnsuccessful(int p = 1)
+        {
+            var query = db
+                .Query<RecordsWithOpenDataPublicationInfoIndex.Result, RecordsWithOpenDataPublicationInfoIndex>()
+                .Where(x => x.LastPublicationAttemptWasUnsuccessful);
+
+            return GetRecords(query, p);
+        }
+
+        List<RecordRepresentation> GetRecords(IQueryable<RecordsWithOpenDataPublicationInfoIndex.Result> query, int p)
+        {
+            int take = 1000;
             int skip = (p - 1) * take;
 
-            var records = db.Query<RecordsWithOpenDataPublicationInfoIndex.Result, RecordsWithOpenDataPublicationInfoIndex>()
-                .Where(x => !x.PublishedSinceLastUpdated)
+            var records = query
                 .Skip(skip)
                 .Take(take)
                 .As<Record>()
@@ -55,8 +94,6 @@ namespace Catalogue.Web.Controllers.Publishing
 
             return records;
         }
-
-
     }
 
     public class RecordRepresentation

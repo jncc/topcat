@@ -19,10 +19,29 @@
         </div>
     </div>
 
+    <table class="table publishing-list">
+        <thead>
+        <tr>
+            <th class="first"></th>
+            <th>Metadata date</th>
+            <th>Gemini</th>
+            <th>Last attempt</th>
+            <th>Last success</th>
+            <th></th>
+        </tr>
+        </thead>
+        <tbody>
+            <tr ng-repeat="r in m.openData.list">
+                <td><a ng-href="#/editor/{{r.id}}" target="_blank" ng-bind-html="r.title"></a></td>
+                <td><span tc-tip title="{{r.metadataDate | date:'yyyy-MM-dd HH:mm:ss'}}">{{r.metadataDate | date}}</span></td>
+                <td>{{r.isGeminiValid}}</td>
+                <td><span ng-if="r.openData.lastAttempt.dateUtc" tc-tip title="{{r.openData.lastAttempt.dateUtc | date:'yyyy-MM-dd HH:mm:ss'}}">{{r.openData.lastAttempt.dateUtc | date}}</span></td>
+                <td><span ng-if="r.openData.lastSuccess.dateUtc" tc-tip title="{{r.openData.lastSuccess.dateUtc | date:'yyyy-MM-dd HH:mm:ss'}}">{{r.openData.lastSuccess.dateUtc | date}}</span></td>
+                <td><span ng-show="r.openData.lastAttempt.message" class="glyphicon glyphicon-warning-sign" tc-tip title="{{r.openData.lastAttempt.message}}"></span></td>
+            </tr>
+        </tbody>
+    </table>
 
 </div>
 
-<hr/>
-{{m}}
-<hr/>
 

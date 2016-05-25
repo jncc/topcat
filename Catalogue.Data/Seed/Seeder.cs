@@ -245,7 +245,7 @@ namespace Catalogue.Data.Seed
                 {
                     OpenData = new OpenDataPublicationInfo
                     {
-                        LastAttempt = new PublicationAttempt { DateUtc = new DateTime(2015, 1, 1, 11, 0, 0) },
+                        LastAttempt = new PublicationAttempt { DateUtc = new DateTime(2015, 1, 1, 11, 0, 0), Message = "Failed with a terrible error in Sector 7G"},
                         LastSuccess = null,
                     }
                 };

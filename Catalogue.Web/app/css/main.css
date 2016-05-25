@@ -589,6 +589,9 @@ form .ng-invalid {
   padding: 5px;
   border-radius: 4px;
 }
+.publishing .publishing-summary {
+  margin-bottom: 2em;
+}
 .publishing .publishing-summary :hover {
   background-color: #eee;
 }
@@ -606,6 +609,9 @@ form .ng-invalid {
   font-size: 4em;
   color: #666;
   margin-right: 2px;
+}
+.publishing .publishing-list .first {
+  width: 50%;
 }
 .fade-in-with-delay.ng-hide-remove {
   transition: all cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.5s;
