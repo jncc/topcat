@@ -74,7 +74,7 @@ namespace Catalogue.Web.Controllers.Publishing
 
         List<RecordRepresentation> GetRecords(IQueryable<RecordsWithOpenDataPublicationInfoIndex.Result> query, int p)
         {
-            int take = 1000;
+            int take = 1000; // can change this when paging is implemented in the UI
             int skip = (p - 1) * take;
 
             var records = query

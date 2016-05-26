@@ -42,6 +42,7 @@ namespace Catalogue.Data.Seed
                 s.AddRecordsWithPublishingInfo();
                 s.AddRecordWithLotsOfVocablessTags();
                 s.AddReadOnlyRecord();
+                s.AddNonGeographicDataset();
                 s.AddSecureRecords();
                 s.AddNonTopCopyRecord();
                 s.AddVariousDataFormatRecords();
@@ -324,6 +325,22 @@ namespace Catalogue.Data.Seed
             recordService.Insert(record);
         }
 
+        void AddNonGeographicDataset()
+        {
+            var record = MakeExampleSeedRecord().With(r =>
+            {
+                r.Id = new Guid("397a03d6-2770-445f-9900-fdb18850b5f8");
+                r.Path = @"X:\path\to\nongeographic\data";
+                r.Gemini = r.Gemini.With(m =>
+                {
+                    m.Title = "An example non-geographic record";
+                    m.Abstract = "This is an example non-geographic record.";
+                    m.ResourceType = "nonGeographicDataset";
+                });
+            });
+
+            recordService.Insert(record);
+        }
         void AddSecureRecords()
         {
             var record = this.MakeExampleSeedRecord().With(r =>

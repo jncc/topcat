@@ -93,7 +93,7 @@ namespace Catalogue.Robot
                 else if (options.IdListPath.IsNotBlank())
                 {
                     var ids = File.ReadAllLines(options.IdListPath)
-                        .Where(line => line.IsNotBlank())
+                        .Where(line => line.IsNotBlank() && !line.StartsWith("#"))
                         .Select(line => "records/" + line.Trim());
 
                     records = db.Load<Record>(ids).ToList();
