@@ -65,7 +65,7 @@ namespace Catalogue.Robot
     {
         static int Main(string[] args)
         {
-            return Parser.Default.ParseArguments<ImportOptions, MarkOptions, PublishOptions>(args).MapResult(
+            return Parser.Default.ParseArguments<ImportOptions, MarkOptions, PublishOptions, DeleteOptions>(args).MapResult(
                 (ImportOptions options) => RunImportAndReturnExitCode(options),
                 (MarkOptions options) => RunMarkAndReturnExitCode(options),
                 (PublishOptions options) => RunPublishAndReturnExitCode(options),
