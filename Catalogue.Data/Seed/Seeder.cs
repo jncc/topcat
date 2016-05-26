@@ -341,6 +341,7 @@ namespace Catalogue.Data.Seed
 
             recordService.Insert(record);
         }
+
         void AddSecureRecords()
         {
             var record = this.MakeExampleSeedRecord().With(r =>

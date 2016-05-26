@@ -209,6 +209,11 @@ namespace Catalogue.Robot
 
             Console.WriteLine("Published (or skipped) {0} records.", ids.Count);
 
+            if (options.WhatIf)
+            {
+                Console.WriteLine("Ran in 'what-if' mode. Nothing was really done.");
+            }
+
             return 1;
         }
 
@@ -224,6 +229,7 @@ namespace Catalogue.Robot
                 // https://groups.google.com/forum/#!topic/ravendb/ELqhzCs2amY
                 int count = db.Advanced.DocumentQuery<Record>("RecordIndex").Where(luceneQuery).ToList().Count;
                 Console.WriteLine("Deleting {0} records...", count);
+                Console.WriteLine("If this said 128 then it could be more!");
             }
 
             if (!options.WhatIf)
@@ -232,6 +238,11 @@ namespace Catalogue.Robot
             }
 
             Console.WriteLine("Delete request sent to database.");
+
+            if (options.WhatIf)
+            {
+               Console.WriteLine("Ran in 'what-if' mode. Nothing was really done.");
+            }
 
             return 1;
         }

@@ -540,25 +540,25 @@
 
             <hr/>
 
-            <div class="editor-status layout-row">
+            <div class="editor-publishing layout-row">
                 <div class="layout-col">
-                    <span>Status</span>
+                    <span>Publishing</span>
                 </div>
-                <div class="layout-col pull-right">
-
-                    <button type="button" class="btn"
-                            ng-click="form.status = (form.status + 1) % 2"
-                            ng-class="{ 'btn-default': form.status != 1, 'btn-danger': form.status == 1 }"
-                            title="Is the resource for internal use only, or is it for publishing externally?"
+                <div class="layout-col pull-right"
+                            title="The publication status of the record. Can't be changed here just yet."
                             tc-tip>
-                        <span class="glyphicon glyphicon-repeat"></span>
-                        {{ form.status == 0 ? 'Internal' : 'Publishable' }}
+                     
+                    <button ng-if="form.publication.openData" type="button" class="btn btn-danger">
+                        Open Data
+                    </button>
+                    <button ng-if="!form.publication.openData" type="button" class="btn btn-default">
+                        None
                     </button>
 
                 </div>
             </div>
 
-            <hr/>
+            <hr />
 
             <div class="editor-validation layout-row">
                 <div class="layout-col">
@@ -631,6 +631,25 @@
                           title="Notes to keep separate from the Gemini record"
                           tc-focus-tip></textarea>
             </div>
+
+            <hr />
+
+            <div class="editor-status layout-row">
+                <div class="layout-col">
+                    <span>Status</span>
+                </div>
+                <div class="layout-col pull-right">
+
+                    <button type="button" class="btn btn-default"
+                            title="This button is deprectated and will soon be removed. Please speak to Lynn about publishing."
+                            tc-tip>
+                        <span class="glyphicon glyphicon-repeat"></span>
+                        {{ form.status == 0 ? 'Internal' : 'Publishable' }}
+                    </button>
+
+                </div>
+            </div>
+
 
         </div>
 
