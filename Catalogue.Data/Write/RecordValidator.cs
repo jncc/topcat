@@ -423,6 +423,11 @@ namespace Catalogue.Data.Write
                 result.Errors.Add("A metadata point of contact organisation name must be provided" + GeminiSuffix,
                     r => r.Gemini.MetadataPointOfContact.Name);
             }
+            if (record.Gemini.MetadataPointOfContact.Role != "pointOfContact")
+            {
+                result.Errors.Add("The metadata point of contact role must be 'pointOfContact'" + GeminiSuffix,
+                    r => r.Gemini.MetadataPointOfContact.Name);
+            }
 
             // 36 Unique resource identifier
 

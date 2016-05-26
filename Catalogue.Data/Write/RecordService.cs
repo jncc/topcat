@@ -53,6 +53,7 @@ namespace Catalogue.Data.Write
             CorrectlyOrderKeywords(record);
             StandardiseUnconditionalUseConstraints(record);
             UpdateMetadataDateToNow(record);
+            SetMetadataPointOfContactRoleToOnlyAllowedValue(record);
 
             var validation = validator.Validate(record);
 
@@ -67,6 +68,12 @@ namespace Catalogue.Data.Write
                     Record = record,
                     Validation = validation,
                 };
+        }
+
+        void SetMetadataPointOfContactRoleToOnlyAllowedValue(Record record)
+        {
+            // the point of contact must be the point of contact (gemini validation)
+            record.Gemini.MetadataPointOfContact.Role = "pointOfContact";
         }
 
         void PerformDenormalizations(Record record)

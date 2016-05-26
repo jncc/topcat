@@ -353,15 +353,6 @@
             <div>
                 <input class="form-control" type="text" ng-model="form.gemini.metadataPointOfContact.email" placeholder="Email" title="An email for the contact for this record" tc-focus-tip/>
             </div>
-            <div>
-                <select data-ng-model="form.gemini.metadataPointOfContact.role"
-                        data-ng-options="role as role|camelCaseFilter for role in lookups.roles"
-                        class="form-control"
-                        title="The role of the point of contact for this metadata"
-                        tc-focus-tip>
-                    <option value="" disabled selected style="display: none">Metadata Point of Contact Role</option>
-                </select>
-            </div>
         </div>
 
         <br/>

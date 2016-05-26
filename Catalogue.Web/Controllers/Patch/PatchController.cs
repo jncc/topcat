@@ -223,14 +223,38 @@ namespace Catalogue.Web.Controllers.Patch
         }
 
 
-//        [HttpPost, Route("api/patch/renamesecuritylevels")]
-//        public HttpResponseMessage RenameSecurityLevels()
-//        {
-////            db.Advanced.DocumentStore.DatabaseCommands.Patch(
-//
-////            db.SaveChanges();
-////
-////            return new HttpResponseMessage();
-//        }
+        [HttpPost, Route("api/patch/fixpointofcontact")]
+        public HttpResponseMessage FixPointOfContact()
+        {
+            var query = new RecordQueryInputModel
+            {
+                K = new[] { "vocab.jncc.gov.uk/jncc-category/Protected Areas" },
+                P = 0,
+                N = 1024,
+            };
+
+            var records = _queryer.Query(query).ToList();
+
+            foreach (var record in records)
+            {
+                record.Gemini.MetadataPointOfContact.Role = "pointOfContact";
+            }
+
+
+            db.SaveChanges();
+
+            return new HttpResponseMessage();
+        }
+
+
+        //        [HttpPost, Route("api/patch/renamesecuritylevels")]
+        //        public HttpResponseMessage RenameSecurityLevels()
+        //        {
+        ////            db.Advanced.DocumentStore.DatabaseCommands.Patch(
+        //
+        ////            db.SaveChanges();
+        ////
+        ////            return new HttpResponseMessage();
+        //        }
     }
 }
