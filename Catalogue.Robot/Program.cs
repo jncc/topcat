@@ -12,8 +12,10 @@ using Catalogue.Robot.Importing;
 using Catalogue.Robot.Publishing.OpenData;
 using Catalogue.Utilities.Text;
 using CommandLine;
+using CommandLine.Text;
 using Newtonsoft.Json;
 using NUnit.Framework.Constraints;
+using Raven.Abstractions.Data;
 using Raven.Abstractions.Extensions;
 using Raven.Client;
 
@@ -52,6 +54,13 @@ namespace Catalogue.Robot
         public bool WhatIf { get; set; }
     }
 
+    [Verb("delete", HelpText = "Delete all records marked with the metadata-admin Delete tag")]
+    public class DeleteOptions
+    {
+        [Option("what-if", Default = false, HelpText = "Don't actually do it.")]
+        public bool WhatIf { get; set; }
+    }
+
     class Program
     {
         static int Main(string[] args)
@@ -60,6 +69,7 @@ namespace Catalogue.Robot
                 (ImportOptions options) => RunImportAndReturnExitCode(options),
                 (MarkOptions options) => RunMarkAndReturnExitCode(options),
                 (PublishOptions options) => RunPublishAndReturnExitCode(options),
+                (DeleteOptions options) => RunDeleteAndReturnExitCode(options),
                 errs => 1);
         }
 
@@ -202,6 +212,29 @@ namespace Catalogue.Robot
             return 1;
         }
 
+        static int RunDeleteAndReturnExitCode(DeleteOptions options)
+        {
+            InitDatabase();
+
+            string luceneQuery = "Keywords:\"http://vocab.jncc.gov.uk/metadata-admin/Delete\"";
+
+            using (var db = DocumentStore.OpenSession())
+            {
+                // this loads all the records into memory because i can't figure out how to do it better
+                // https://groups.google.com/forum/#!topic/ravendb/ELqhzCs2amY
+                int count = db.Advanced.DocumentQuery<Record>("RecordIndex").Where(luceneQuery).ToList().Count;
+                Console.WriteLine("Deleting {0} records...", count);
+            }
+
+            if (!options.WhatIf)
+            {
+                DocumentStore.DatabaseCommands.DeleteByIndex("RecordIndex", new IndexQuery { Query = luceneQuery });
+            }
+
+            Console.WriteLine("Delete request sent to database.");
+
+            return 1;
+        }
 
         static List<Record> GetRecords(IDocumentSession db, string keyword)
         {

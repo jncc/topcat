@@ -5,6 +5,8 @@ using System.Linq;
 using System.Net.Http;
 using System.Web;
 using System.Web.Http;
+using Catalogue.Data.Indexes;
+using Catalogue.Data.Model;
 using Catalogue.Data.Query;
 using Catalogue.Data.Seed;
 using Catalogue.Robot.DeadLinks;
@@ -63,18 +65,22 @@ namespace Catalogue.Web.Controllers.Admin
         }
 
         /// <summary>
-        /// Deletes all the records tagged with the special 'Delete' tag.
+        /// Deletes all the records tagged with the special 'Delete' tag. This has been added to the Robot so could be deleted.
         /// </summary>
         [HttpPost, Route("api/admin/delete")]
         public HttpResponseMessage Delete()
         {
+
+            string luceneQuery = "Keywords:\"http://vocab.jncc.gov.uk/metadata-admin/Delete\"";
+            int recordsToDelete = db.Advanced.DocumentQuery<Record>("RecordIndex").Where(luceneQuery).ToList().Count;
+
             WebApiApplication.DocumentStore.DatabaseCommands.DeleteByIndex("RecordIndex",
                 new IndexQuery
                 {
                     Query = "Keywords:\"http://vocab.jncc.gov.uk/metadata-admin/Delete\""
                 });
 
-            return new HttpResponseMessage { Content = new StringContent("Done") };
+            return new HttpResponseMessage { Content = new StringContent("Asked to delete "  + recordsToDelete + " records") };
         }
 
         /// <summary>
