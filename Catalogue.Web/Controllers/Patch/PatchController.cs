@@ -237,7 +237,7 @@ namespace Catalogue.Web.Controllers.Patch
 
             foreach (var record in records)
             {
-                record.Gemini.MetadataPointOfContact.Role = "pointOfContact";
+                record.Gemini.MetadataDate = Clock.NowUtc;
             }
 
 
