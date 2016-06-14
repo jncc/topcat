@@ -164,10 +164,24 @@ namespace Catalogue.Data.Import.Mappings
                         return new ResponsibleParty { Name = name, Email = email, Role = role };
                     });
                 Map(m => m.ResourceType).Field("Gemini.ResourceType", value => value.FirstCharToLower());
+                Map(m => m.ResourceType).ConvertUsing(row =>
+                    {
+                        // resource type isn't provided in this sheet, so work it out - it'll be dataset if there's a bbox
+                        string bbn = row.GetField("BoundingBox.North");
+
+                        if (IsBlankBoundingBoxValue(bbn))
+                            return "nonGeographicDataset";
+                        else
+                            return "dataset";
+                    });
                 Map(m => m.BoundingBox).ConvertUsing(row =>
                     {
                         string n = row.GetField("BoundingBox.North");
-                        if (n.IsNotBlank() && n != "NA")
+                        if (IsBlankBoundingBoxValue(n))
+                        {
+                            return null;
+                        }
+                        else
                         {
                             decimal north = Convert.ToDecimal(row.GetField("BoundingBox.North"));
                             decimal south = Convert.ToDecimal(row.GetField("BoundingBox.South"));
@@ -176,12 +190,13 @@ namespace Catalogue.Data.Import.Mappings
 
                             return new BoundingBox { North = north, South = south, East = east, West = west };
                         }
-                        else
-                        {
-                            return null;
-                        }
                     });
             }
+        }
+
+        static bool IsBlankBoundingBoxValue(string b)
+        {
+            return b.IsBlank() || b.ToLower().Trim() == "n/a";
         }
 
         public sealed class RecordMap : CsvClassMap<Record>
@@ -189,14 +204,14 @@ namespace Catalogue.Data.Import.Mappings
             public RecordMap()
             {
                 Map(m => m.Path);
-                Map(m => m.TopCopy);
+                Map(m => m.TopCopy).Value(true);
                 Map(m => m.Validation).Value(Validation.Gemini);
-                Map(m => m.Status);
-                Map(m => m.Security);
+                Map(m => m.Status).Ignore();
+                Map(m => m.Security).Value(Security.Official);
                 Map(m => m.Review);
                 Map(m => m.Notes);
                 Map(m => m.SourceIdentifier);
-                Map(m => m.ReadOnly);
+                Map(m => m.ReadOnly).Value(false);
 
                 References<GeminiMap>(m => m.Gemini);
             }
@@ -220,12 +235,12 @@ namespace Catalogue.Data.Import.Mappings
                 {
                     var importer = Importer.CreateImporter(db, new SeabedSurveyMapping());
                     importer.SkipBadRecords = true; // see log for skipped bad records
-                    importer.Import(@"C:\Work\data\Offshore_survey_TopCat_data_part1_20151208.csv");
+                    importer.Import(@"C:\Work\data\Offshore_survey_TopCat_data_part2_20160506.csv");
 
                     var errors = importer.Results
                         .Where(r => !r.Success)
                         .Select(r => r.Record.Gemini.Title + Environment.NewLine + JsonConvert.SerializeObject(r.Validation) + Environment.NewLine);
-                    File.WriteAllLines(@"C:\work\data\offshore-seabed-survey-errors.txt", errors);
+                    File.WriteAllLines(@"C:\work\data\Offshore_survey_TopCat_data_part2_20160506.csv.errors.txt", errors);
 
                     db.SaveChanges();
 
@@ -245,7 +260,7 @@ namespace Catalogue.Data.Import.Mappings
         [Test, Explicit] // this isn't seed data, so these tests are (were) only used for the "one-off" import
         public void should_import_expected_number_of_records()
         {
-            imported.Count().Should().Be(281);
+            imported.Count().Should().Be(156);
         }
 
         [Test, Explicit]
