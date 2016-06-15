@@ -13,6 +13,7 @@ using Catalogue.Robot.Publishing.OpenData;
 using Catalogue.Utilities.Text;
 using CommandLine;
 using CommandLine.Text;
+using CsvHelper;
 using Newtonsoft.Json;
 using NUnit.Framework.Constraints;
 using Raven.Abstractions.Data;
@@ -54,22 +55,30 @@ namespace Catalogue.Robot
         public bool WhatIf { get; set; }
     }
 
-    [Verb("delete", HelpText = "Delete all records marked with the metadata-admin Delete tag")]
+    [Verb("delete", HelpText = "Delete all records marked with the metadata-admin Delete tag.")]
     public class DeleteOptions
     {
         [Option("what-if", Default = false, HelpText = "Don't actually do it.")]
         public bool WhatIf { get; set; }
     }
 
+    [Verb("resources", HelpText = "Add resources to records via a CSV file.")]
+    public class ResourcesOptions
+    {
+        [Option(HelpText = "The path to the CSV file.")]
+        public string File { get; set; }
+    }
+
     class Program
     {
         static int Main(string[] args)
         {
-            return Parser.Default.ParseArguments<ImportOptions, MarkOptions, PublishOptions, DeleteOptions>(args).MapResult(
+            return Parser.Default.ParseArguments<ImportOptions, MarkOptions, PublishOptions, DeleteOptions, ResourcesOptions>(args).MapResult(
                 (ImportOptions options) => RunImportAndReturnExitCode(options),
                 (MarkOptions options) => RunMarkAndReturnExitCode(options),
                 (PublishOptions options) => RunPublishAndReturnExitCode(options),
                 (DeleteOptions options) => RunDeleteAndReturnExitCode(options),
+                (ResourcesOptions options) => RunResourcesAndReturnExitCode(options),
                 errs => 1);
         }
 
@@ -139,7 +148,7 @@ namespace Catalogue.Robot
             return 0;
         }
 
-        private static void CheckForDuplicateTitles(IDocumentSession db)
+        static void CheckForDuplicateTitles(IDocumentSession db)
         {
             var results = db.Query<RecordsWithDuplicateTitleCheckerIndex.Result, RecordsWithDuplicateTitleCheckerIndex>()
                 .Where(x => x.Count > 1)
@@ -242,6 +251,45 @@ namespace Catalogue.Robot
             if (options.WhatIf)
             {
                Console.WriteLine("Ran in 'what-if' mode. Nothing was really done.");
+            }
+
+            return 1;
+        }
+
+        // temporary ad-hoc job for running one-off code, adding resources etc.
+        static int RunResourcesAndReturnExitCode(ResourcesOptions options)
+        {
+            InitDatabase();
+
+            var list = new List<Tuple<string, List<string>>>();
+
+            using (var reader = new StreamReader(options.File))
+            {
+                var csv = new CsvReader(reader);
+                csv.Configuration.HasHeaderRecord = false;
+
+                while (csv.Read())
+                {
+                    var id = csv.GetField<string>(0);
+                    var resourcePaths = csv.CurrentRecord.Skip(1)
+                        .Where(value => value.IsNotBlank())
+                        .ToList();
+
+                    list.Add(new Tuple<string, List<string>>(id, resourcePaths));
+                }
+            }
+
+            using (var db = DocumentStore.OpenSession())
+            {
+                foreach (var tuple in list)
+                {
+                    var record = db.Load<Record>(tuple.Item1);
+
+                    var resources = tuple.Item2.Select(r => new Resource { Path = r });
+                    record.Publication.OpenData.Resources.AddRange(resources);
+                }
+
+                db.SaveChanges();
             }
 
             return 1;

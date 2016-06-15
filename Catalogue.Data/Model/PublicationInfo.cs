@@ -15,6 +15,13 @@ namespace Catalogue.Data.Model
     {
         public PublicationAttempt LastAttempt { get; set; }
         public PublicationAttempt LastSuccess { get; set; }
+
+        public List<Resource> Resources { get; set; }
+    }
+
+    public class Resource
+    {
+        public string Path { get; set; }
     }
 
     public class PublicationAttempt

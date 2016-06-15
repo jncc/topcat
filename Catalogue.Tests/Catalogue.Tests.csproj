@@ -83,6 +83,7 @@
     <Compile Include="Explicit\feasibility_tests.cs" />
     <Compile Include="Explicit\Catalogue.Gemini\Vocabs\topic_category_codes.cs" />
     <Compile Include="Explicit\highlighting_wildcard_queries.cs" />
+    <Compile Include="Explicit\multi_resource_spike.cs" />
     <Compile Include="Explicit\reproduce_unexpected_query_result.cs" />
     <Compile Include="Explicit\test_out_xml_encoding.cs" />
     <Compile Include="Explicit\versioning_proof_of_concept.cs" />
