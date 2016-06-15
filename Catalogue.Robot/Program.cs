@@ -283,7 +283,8 @@ namespace Catalogue.Robot
             {
                 foreach (var tuple in list)
                 {
-                    var record = db.Load<Record>(tuple.Item1);
+                    var id = Guid.Parse(tuple.Item1);
+                    var record = db.Load<Record>(id);
 
                     var resources = tuple.Item2.Select(r => new Resource { Path = r });
                     record.Publication.OpenData.Resources.AddRange(resources);
