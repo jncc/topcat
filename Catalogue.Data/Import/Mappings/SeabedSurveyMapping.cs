@@ -235,12 +235,12 @@ namespace Catalogue.Data.Import.Mappings
                 {
                     var importer = Importer.CreateImporter(db, new SeabedSurveyMapping());
                     importer.SkipBadRecords = true; // see log for skipped bad records
-                    importer.Import(@"C:\Work\data\Offshore_survey_TopCat_data_part2_20160506.csv");
+                    importer.Import(@"C:\Work\data\Offshore_survey_TopCat_data_part2_20160506_EL.csv");
 
                     var errors = importer.Results
                         .Where(r => !r.Success)
                         .Select(r => r.Record.Gemini.Title + Environment.NewLine + JsonConvert.SerializeObject(r.Validation) + Environment.NewLine);
-                    File.WriteAllLines(@"C:\work\data\Offshore_survey_TopCat_data_part2_20160506.csv.errors.txt", errors);
+                    File.WriteAllLines(@"C:\work\data\Offshore_survey_TopCat_data_part2_20160506_EL.csv.errors.txt", errors);
 
                     db.SaveChanges();
 
@@ -260,7 +260,7 @@ namespace Catalogue.Data.Import.Mappings
         [Test, Explicit] // this isn't seed data, so these tests are (were) only used for the "one-off" import
         public void should_import_expected_number_of_records()
         {
-            imported.Count().Should().Be(156);
+            imported.Count().Should().Be(193);
         }
 
         [Test, Explicit]

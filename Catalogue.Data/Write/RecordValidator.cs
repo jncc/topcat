@@ -101,7 +101,7 @@ namespace Catalogue.Data.Write
             }
 
             // title must be reasonable length
-            if (record.Gemini.Title != null && (record.Gemini.Title.Length > 150))
+            if (record.Gemini.Title != null && (record.Gemini.Title.Length > 200))
             {
                 if (record.Gemini.ResourceType == "publication" && record.Gemini.Title.Length > 250)
                 {
@@ -109,7 +109,7 @@ namespace Catalogue.Data.Write
                 }
                 else if (record.Gemini.ResourceType != "publication")
                 {
-                    result.Errors.Add("Title is too long. 150 characters or less, please", r => r.Gemini.Title);
+                    result.Errors.Add("Title is too long. 200 characters or less, please", r => r.Gemini.Title);
                 }
             }
         }
