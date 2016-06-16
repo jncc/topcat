@@ -65,7 +65,7 @@ namespace Catalogue.Robot
     [Verb("resources", HelpText = "Add resources to records via a CSV file.")]
     public class ResourcesOptions
     {
-        [Option(HelpText = "The path to the CSV file.")]
+        [Option(Required = true, HelpText = "The path to the CSV file.")]
         public string File { get; set; }
     }
 
@@ -287,11 +287,23 @@ namespace Catalogue.Robot
                     var record = db.Load<Record>(id);
 
                     var resources = tuple.Item2.Select(r => new Resource { Path = r });
+
+                    if (record.Publication == null)
+                        record.Publication = new PublicationInfo();
+
+                    if (record.Publication.OpenData == null)
+                        record.Publication.OpenData = new OpenDataPublicationInfo();
+
+                    if (record.Publication.OpenData.Resources == null)
+                        record.Publication.OpenData.Resources = new List<Resource>();
+
                     record.Publication.OpenData.Resources.AddRange(resources);
                 }
 
                 db.SaveChanges();
             }
+
+            Console.WriteLine("Added {0} resources to {1} records.", list.Sum(tuple => tuple.Item2.Count), list.Count);
 
             return 1;
         }
