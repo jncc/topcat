@@ -6,6 +6,7 @@ using System.Net;
 using System.Text;
 using System.Xml.Linq;
 using Catalogue.Data.Model;
+using Catalogue.Gemini.Model;
 using Catalogue.Utilities.Text;
 using Catalogue.Utilities.Time;
 using Raven.Client;
@@ -31,31 +32,43 @@ namespace Catalogue.Robot.Publishing.OpenData
             Console.WriteLine(Environment.NewLine + "Publishing '{0}' to '{1}'.", record.Gemini.Title, config.FtpRootUrl);
 
             string metaPath = String.Format("waf/{0}.xml", record.Id);
-            string dataPath = String.Format("data/{0}-{1}", record.Id, Path.GetFileName(record.Path).Replace(" ", "-")); // todo webify file name
 
             // save a not-yet-successful attempt to begin with
             var attempt = new PublicationAttempt { DateUtc = Clock.NowUtc };
             record.Publication.OpenData.LastAttempt = attempt;
             db.SaveChanges();
 
+            bool datasetIsCorpulent = record.Gemini.Keywords.Any(k => k.Vocab == "http://vocab.jncc.gov.uk/metadata-admin" && k.Value == "Corpulent");
+            bool publishAlternativeResources = record.Publication != null && record.Publication.OpenData != null && record.Publication.OpenData.Resources != null && record.Publication.OpenData.Resources.Any();
 
-            bool corpulent = record.Gemini.Keywords.Any(k => k.Vocab == "http://vocab.jncc.gov.uk/metadata-admin" && k.Value == "Corpulent");
-
-                //            // check that the data exists
-                //            if (File.Exists(dataPath))
-                //            {
+            var doc = new global::Catalogue.Gemini.Encoding.XmlEncoder().Create(record.Id, record.Gemini);
 
             try
             {
-                // do the sequential actions
-                if (!corpulent)
-                    UploadTheDataFile(record, dataPath);
+                if (publishAlternativeResources)
+                {
+                    // upload the alternative resources and correct (mutate) the doc; don't touch the resource locator
+                    UploadAlternativeResourcesAndMungThemIntoMetadataDoc(record, doc);
+                }
+                else
+                {
+                    if (datasetIsCorpulent)
+                    {
+                        // set the resource locator if blank; don't upload any resources
+                        if (record.Gemini.ResourceLocator.IsBlank()) // arguably should always do it actually
+                            UpdateTheResourceLocatorToBeTheOpenDataDownloadPage(record);
+                    }
+                    else
+                    {
+                        // "normal" case - set the resource locator; upload the resource pointed at by record.Path
+                        UploadNormalDataFileAndUpdateResourceLocatorToMatch(record);
+                    }
+                }
 
-                UpdateResourceLocatorInTheRecord(record, dataPath, corpulent);
-                UploadTheMetadataDocument(record, metaPath);
+                UploadTheMetadataDocument(doc, metaPath);
                 UpdateTheWafIndexDocument(record);
 
-                // mark the attempt successful
+                // record success
                 record.Publication.OpenData.LastSuccess = attempt;
 
             }
@@ -66,78 +79,77 @@ namespace Catalogue.Robot.Publishing.OpenData
                 attempt.Message = message;
             }
 
-            // commit the changes (to the resource locator and the attempt object)
+            // commit the changes - to both the record (resource locator may have changed) and the attempt object
             db.SaveChanges();
-
-//            }
-//            else
-//            {
-//                Console.WriteLine("Data file does not exist for record {0} so skipping it.", id);
-//                attempt.Message = "Data file does not exist.";
-//                db.SaveChanges();
-//            }
         }
 
-//        PublicationAttempt AddNewAttempt(Record record)
-//        {
-//            var publicationInfo = record.Publication.OpenData;
-//            if (publicationInfo.Attempts == null)
-//                publicationInfo.Attempts = new List<PublicationAttempt>();
-//
-//            var attempt = new PublicationAttempt { DateUtc = DateTime.UtcNow };
-//            publicationInfo.Attempts.Add(attempt);
-//
-//            return attempt;
-//        }
-
-        void UploadTheDataFile(Record record, string dataPath)
+        void UpdateTheResourceLocatorToBeTheOpenDataDownloadPage(Record record)
         {
-            string dataFtpPath = config.FtpRootUrl + "/" + dataPath;
+            // this is a big dataset so just link to a webpage
+            string jnccWebDownloadPage = "http://jncc.defra.gov.uk/opendata";
+            record.Gemini.ResourceLocator = jnccWebDownloadPage;
+            Console.WriteLine("ResourceLocator updated to point to open data request webpage.");
+
+        }
+
+        void UploadNormalDataFileAndUpdateResourceLocatorToMatch(Record record)
+        {
+            UploadFile(record.Id, record.Path);
+
+            // update the resource locator to be the data file
+            string dataHttpPath = config.HttpRootUrl + "/" + GetUnrootedDataPath(record.Id, record.Path);
+            record.Gemini.ResourceLocator = dataHttpPath;
+            Console.WriteLine("ResourceLocator updated to point to the data file.");
+        }
+
+        void UploadAlternativeResourcesAndMungThemIntoMetadataDoc(Record record, XDocument doc)
+        {
+            var resources = (from r in record.Publication.OpenData.Resources
+                             let unrootedDataPath = GetUnrootedDataPath(record.Id, r.Path)
+                             select new
+                             {
+                                 r.Path,
+                                 Name = Path.GetFileName(r.Path),
+                                 UnrootedDataPath = unrootedDataPath,
+                                 Url =  config.HttpRootUrl + "/" + unrootedDataPath
+                             })
+                             .ToList();
+
+            // check that there are no duplicate filenames after webifying for the data path
+            if (resources.Count != (from r in resources group r by r.Name).Count())
+                throw new Exception("There are duplicate resource file names (after webifying) for this record.");
+
+            // upload the resources
+            foreach (var r in resources)
+            {
+                string dataFtpPath = config.FtpRootUrl + "/" + r.UnrootedDataPath;
+                Console.WriteLine("Uploading data resource file to {0}", dataFtpPath);
+
+                UploadFile(record.Id, r.Path);
+            }
+
+            // mung (mutate) the metadata doc so data.gov.uk knows about the resources
+            var onlineResources = resources.Select(r => new OnlineResource { Name = r.Name, Url = r.Url }).ToList();
+            global::Catalogue.Gemini.Encoding.XmlEncoder.ReplaceDigitalTransferOptions(doc, onlineResources);
+        }
+
+        void UploadFile(Guid recordId, string filePath)
+        {
+            // correct path for unmapped drive X
+            filePath = filePath.Replace(@"X:\OffshoreSurvey\", @"\\JNCC-CORPFILE\Marine Survey\OffshoreSurvey\");
+            filePath = filePath.Replace(@"J:\GISprojects\", @"\\Jncc - corpfile\gis\GISprojects\");
+
+            string unrootedDataPath = GetUnrootedDataPath(recordId, filePath);
+
+            string dataFtpPath = config.FtpRootUrl + "/" + unrootedDataPath;
             Console.WriteLine("Uploading data file to {0}", dataFtpPath);
 
-//            if (!File.Exists(record.Path))
-//                throw new Exception(String.Format("Data file for record {0} doesn't exist.", record.Id));
-
-            string dataFilePath = record.Path;
-            // correct data path for unmapped drive X
-            dataFilePath = dataFilePath.Replace(@"X:\OffshoreSurvey\", @"\\JNCC-CORPFILE\Marine Survey\OffshoreSurvey\");
-            dataFilePath = dataFilePath.Replace(@"J:\GISprojects\", @"\\Jncc - corpfile\gis\GISprojects\");
-
-            
-
-            ftpClient.UploadFile(dataFtpPath, dataFilePath);
+            ftpClient.UploadFile(dataFtpPath, filePath);
             Console.WriteLine("Uploaded data file successfully.");
         }
 
-        void UpdateResourceLocatorInTheRecord(Record record, string dataPath, bool corpulent)
+        void UploadTheMetadataDocument(XDocument doc, string metaPath)
         {
-            // don't overwrite accidentally
-            if (record.Gemini.ResourceLocator.IsNotBlank())
-            {
-                Console.WriteLine("ResourceLocator already exists; not overwriting.");
-            }
-            else
-            {
-                if (corpulent)
-                {
-                    // this is a big dataset so just link to a webpage
-                    string jnccWebDownloadPage = "http://jncc.defra.gov.uk/opendata";
-                    record.Gemini.ResourceLocator = jnccWebDownloadPage;
-                }
-                else
-                {
-                    // normally, update the resource locator to be the data file
-                    string dataHttpPath = config.HttpRootUrl + "/" + dataPath;
-                    record.Gemini.ResourceLocator = dataHttpPath;
-                }
-            }
-
-        }
-
-        void UploadTheMetadataDocument(Record record, string metaPath)
-        {
-            var doc = new global::Catalogue.Gemini.Encoding.XmlEncoder().Create(record.Id, record.Gemini);
-
             var s = new MemoryStream();
             doc.Save(s);
             var metaXmlDoc = s.ToArray();
@@ -168,6 +180,20 @@ namespace Catalogue.Robot.Publishing.OpenData
             body.Add(newLinks);
 
             ftpClient.UploadString(indexDocFtpPath, doc.ToString());
+        }
+
+        /// <summary>
+        /// Gets a path like "data/3148e1e2-bd6b-4623-b72a-5408263b9056-Some-Data-File.csv"
+        /// </summary>
+        string GetUnrootedDataPath(Guid recordId, string filePath)
+        {
+            string fileName = Path.GetFileName(filePath);
+
+            // make a file name suitable for a file on the web
+            // todo: make this much more robust and web-friendly
+            string name = fileName.Replace(" ", "-");
+
+            return String.Format("data/{0}-{1}", recordId, fileName);
         }
     }
 }

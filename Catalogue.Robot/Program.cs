@@ -35,8 +35,8 @@ namespace Catalogue.Robot
         public bool SkipBadRecords { get; set; }
     }
 
-    [Verb("mark", HelpText = "Mark records tagged with the specified keyword for publishing.")]
-    public class MarkOptions
+    [Verb("mark-as-open-data", HelpText = "Mark records tagged with the specified keyword for publishing as Open Data.")]
+    public class MarkAsOpenDataOptions
     {
         [Option(HelpText = "Keyword, e.g. 'vocab.jncc.gov.uk/jncc-category/Some Category'.")]
         public string Keyword { get; set; }
@@ -48,11 +48,14 @@ namespace Catalogue.Robot
         public bool MarkAsCorpulent { get; set; }
     }
 
-    [Verb("publish", HelpText = "Publish now as Open Data.")]
-    public class PublishOptions
+    [Verb("publish-open-data", HelpText = "Publish Open Data records now.")]
+    public class PublishOpenDataOptions
     {
         [Option("what-if", Default = false, HelpText = "Don't actually do it.")]
         public bool WhatIf { get; set; }
+
+        [Option("record-id", HelpText = "Just publish one specified record.")]
+        public string RecordId { get; set; }
     }
 
     [Verb("delete", HelpText = "Delete all records marked with the metadata-admin Delete tag.")]
@@ -62,8 +65,8 @@ namespace Catalogue.Robot
         public bool WhatIf { get; set; }
     }
 
-    [Verb("resources", HelpText = "Add resources to records via a CSV file.")]
-    public class ResourcesOptions
+    [Verb("add-open-data-resources", HelpText = "Add Open Data alternative resources to records via a CSV file.")]
+    public class AddOpenDataResourcesOptions
     {
         [Option(Required = true, HelpText = "The path to the CSV file.")]
         public string File { get; set; }
@@ -73,12 +76,12 @@ namespace Catalogue.Robot
     {
         static int Main(string[] args)
         {
-            return Parser.Default.ParseArguments<ImportOptions, MarkOptions, PublishOptions, DeleteOptions, ResourcesOptions>(args).MapResult(
+            return Parser.Default.ParseArguments<ImportOptions, MarkAsOpenDataOptions, PublishOpenDataOptions, DeleteOptions, AddOpenDataResourcesOptions>(args).MapResult(
                 (ImportOptions options) => RunImportAndReturnExitCode(options),
-                (MarkOptions options) => RunMarkAndReturnExitCode(options),
-                (PublishOptions options) => RunPublishAndReturnExitCode(options),
+                (MarkAsOpenDataOptions options) => RunMarkAndReturnExitCode(options),
+                (PublishOpenDataOptions options) => RunPublishAndReturnExitCode(options),
                 (DeleteOptions options) => RunDeleteAndReturnExitCode(options),
-                (ResourcesOptions options) => RunResourcesAndReturnExitCode(options),
+                (AddOpenDataResourcesOptions options) => RunResourcesAndReturnExitCode(options),
                 errs => 1);
         }
 
@@ -96,7 +99,7 @@ namespace Catalogue.Robot
             return 0;
         }
 
-        static int RunMarkAndReturnExitCode(MarkOptions options)
+        static int RunMarkAndReturnExitCode(MarkAsOpenDataOptions options)
         {
             InitDatabase();
 
@@ -162,7 +165,7 @@ namespace Catalogue.Robot
             }
         }
 
-        static int RunPublishAndReturnExitCode(PublishOptions options)
+        static int RunPublishAndReturnExitCode(PublishOpenDataOptions options)
         {
             InitDatabase();
 
@@ -184,21 +187,27 @@ namespace Catalogue.Robot
             Console.WriteLine("Publishing to '{0}'", config.FtpRootUrl);
 
             var ids = new List<Guid>();
+
             using (var db = DocumentStore.OpenSession())
             {
-                // there are currently duplicates in what looks like the original seabed habitat map collection
-                //CheckForDuplicateTitles(db);
+                if (options.RecordId.IsNotBlank())
+                {
+                    // publish the specified record
+                    ids = new List<Guid> { Guid.Parse(options.RecordId) };
+                }
+                else
+                {
+                    // get the records that are pending publication
+                    ids = db.Query<RecordsWithOpenDataPublicationInfoIndex.Result, RecordsWithOpenDataPublicationInfoIndex>()
+                        .Where(x => !x.PublishedSinceLastUpdated)
+                        .Where(x => x.GeminiValidated) // all open data should be gemini-valid - this is a safety don't try to publish 
+                        .OfType<Record>() //.Select(r => r.Id) // this doesn't work in RavenDB, and doesn't throw! so take 1000 which is enough for one run
+                        .Take(1000)
+                        .ToList() // so materialize the record first
+                        .Select(r => r.Id)
+                        .ToList();
+                }
 
-                // get the records for publishing
-                ids = db.Query<RecordsWithOpenDataPublicationInfoIndex.Result, RecordsWithOpenDataPublicationInfoIndex>()
-                    .Where(x => !x.PublishedSinceLastUpdated)
-                    .Where(x => x.GeminiValidated) // all open data should be gemini-valid - this is a safety don't try to publish 
-                    .OfType<Record>()
-//                  .Select(r => r.Id) // this doesn't work in RavenDB, and doesn't throw
-                    .Take(1000)
-                    .ToList() // so materialize the record first
-                    .Select(r => r.Id)
-                    .ToList();
             }
 
             Console.WriteLine("Publishing {0} records...", ids.Count);
@@ -257,7 +266,7 @@ namespace Catalogue.Robot
         }
 
         // temporary ad-hoc job for running one-off code, adding resources etc.
-        static int RunResourcesAndReturnExitCode(ResourcesOptions options)
+        static int RunResourcesAndReturnExitCode(AddOpenDataResourcesOptions options)
         {
             InitDatabase();
 

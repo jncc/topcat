@@ -92,4 +92,10 @@ namespace Catalogue.Gemini.Model
         public string IdentifierUrl { get; set; }
         public string Name { get; set; }
     }
+
+    public class OnlineResource
+    {
+        public string Url { get; set; }
+        public string Name { get; set; }
+    }
 }

@@ -220,7 +220,6 @@ namespace Catalogue.Data.Seed
                         West = -8.14m,
                     };
                 });
-
             });
 
             var neverPublishedRecord = record.With(r =>
@@ -282,10 +281,31 @@ namespace Catalogue.Data.Seed
                 };
             });
 
+            var recordWithAlternativeResources = record.With(r =>
+            {
+                r.Id = new Guid("90fe83ac-d3e4-4342-8eeb-5919b38bc670");
+                r.Gemini.Title = "A record with alternative resources";
+                r.Gemini.ResourceLocator = "http://example.com/this/will/get/ignored/when/published";
+                r.Publication = new PublicationInfo
+                {
+                    OpenData = new OpenDataPublicationInfo
+                    {
+                        LastAttempt = null,
+                        LastSuccess = null,
+                        Resources = new List<Resource>
+                        {
+                            new Resource { Path = @"Z:\some\alternative\resource\1" },
+                            new Resource { Path = @"Z:\some\alternative\resource\2" },
+                        }
+                    }
+                };
+            });
+
             recordService.Insert(neverPublishedRecord);
             recordService.Insert(earlierUnsuccessfullyPublishedRecord);
             recordService.Insert(laterSuccessfullyPublishedRecord);
             recordService.Insert(updatedSinceSuccessfullyPublishedRecord);
+            recordService.Insert(recordWithAlternativeResources);
         }
 
         void AddRecordWithLotsOfVocablessTags()
