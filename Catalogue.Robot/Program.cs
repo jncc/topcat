@@ -307,6 +307,7 @@ namespace Catalogue.Robot
 
                     record.Publication.OpenData.Resources.AddRange(resources);
 
+                    record.Gemini.MetadataDate = DateTime.Now; // poke the record to ensure it is publishable
                     db.SaveChanges();
                 }
             }
