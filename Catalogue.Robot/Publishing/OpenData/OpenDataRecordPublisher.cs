@@ -134,7 +134,7 @@ namespace Catalogue.Robot.Publishing.OpenData
         {
             // correct path for unmapped drive X
             filePath = filePath.Replace(@"X:\OffshoreSurvey\", @"\\JNCC-CORPFILE\Marine Survey\OffshoreSurvey\");
-            filePath = filePath.Replace(@"J:\GISprojects\", @"\\Jncc - corpfile\gis\GISprojects\");
+            //filePath = filePath.Replace(@"J:\GISprojects\", @"\\Jncc - corpfile\gis\GISprojects\");
 
             string unrootedDataPath = GetUnrootedDataPath(recordId, filePath);
 
