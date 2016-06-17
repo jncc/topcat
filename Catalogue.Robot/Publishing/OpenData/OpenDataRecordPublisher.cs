@@ -122,9 +122,6 @@ namespace Catalogue.Robot.Publishing.OpenData
             // upload the resources
             foreach (var r in resources)
             {
-                string dataFtpPath = config.FtpRootUrl + "/" + r.UnrootedDataPath;
-                Console.WriteLine("Uploading data resource file to {0}", dataFtpPath);
-
                 UploadFile(record.Id, r.Path);
             }
 
@@ -142,7 +139,8 @@ namespace Catalogue.Robot.Publishing.OpenData
             string unrootedDataPath = GetUnrootedDataPath(recordId, filePath);
 
             string dataFtpPath = config.FtpRootUrl + "/" + unrootedDataPath;
-            Console.WriteLine("Uploading data file to {0}", dataFtpPath);
+            Console.WriteLine("Uploading file at {0}", filePath);
+            Console.WriteLine("Uploading data to {0}", dataFtpPath);
 
             ftpClient.UploadFile(dataFtpPath, filePath);
             Console.WriteLine("Uploaded data file successfully.");
