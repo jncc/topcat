@@ -17,6 +17,11 @@ namespace Catalogue.Data.Model
         public PublicationAttempt LastSuccess { get; set; }
 
         public List<Resource> Resources { get; set; }
+
+        /// <summary>
+        /// Don't publish this record, for the time being.
+        /// </summary>
+        public bool Paused { get; set; }
     }
 
     public class Resource

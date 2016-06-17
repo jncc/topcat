@@ -65,6 +65,11 @@ namespace Catalogue.Robot
         public bool WhatIf { get; set; }
     }
 
+    [Verb("check-resources-exist", HelpText = "Check that referenced data files actually exist.")]
+    public class CheckResourcesExistOptions
+    {
+    }
+
     [Verb("add-open-data-resources", HelpText = "Add Open Data alternative resources to records via a CSV file.")]
     public class AddOpenDataResourcesOptions
     {
@@ -82,6 +87,7 @@ namespace Catalogue.Robot
                 (PublishOpenDataOptions options) => RunPublishOpenData(options),
                 (DeleteOptions options) => RunDelete(options),
                 (AddOpenDataResourcesOptions options) => RunAddOpenDataResources(options),
+                (CheckResourcesExistOptions options) => RunCheckResourcesExist(options),
                 errs => 1);
         }
 
@@ -200,7 +206,8 @@ namespace Catalogue.Robot
                     // get the records that are pending publication
                     ids = db.Query<RecordsWithOpenDataPublicationInfoIndex.Result, RecordsWithOpenDataPublicationInfoIndex>()
                         .Where(x => !x.PublishedSinceLastUpdated)
-                        .Where(x => x.GeminiValidated) // all open data should be gemini-valid - this is a safety don't try to publish 
+                        .Where(x => !x.PublishingIsPaused)
+                        .Where(x => x.GeminiValidated) // all open data should be gemini-valid - this is a safety
                         .OfType<Record>() //.Select(r => r.Id) // this doesn't work in RavenDB, and doesn't throw! so take 1000 which is enough for one run
                         .Take(1000)
                         .ToList() // so materialize the record first
@@ -313,6 +320,13 @@ namespace Catalogue.Robot
             }
 
             Console.WriteLine("Added {0} resources to {1} records.", list.Sum(tuple => tuple.Item2.Count), list.Count);
+
+            return 1;
+        }
+
+        static int RunCheckResourcesExist(CheckResourcesExistOptions options)
+        {
+
 
             return 1;
         }

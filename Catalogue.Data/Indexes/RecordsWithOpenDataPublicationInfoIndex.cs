@@ -15,13 +15,14 @@ namespace Catalogue.Data.Indexes
             public bool PublicationNeverAttempted { get; set; }
             public bool LastPublicationAttemptWasUnsuccessful { get; set; }
             public bool PublishedSinceLastUpdated { get; set; }
+            public bool PublishingIsPaused { get; set; }
             public bool GeminiValidated { get; set; }
         }
 
         public RecordsWithOpenDataPublicationInfoIndex()
         {
             // note that these calculations rely on the trick of using
-            // DateTime.MinValue to avoid nulls and enable simple value comparisions
+            // DateTime.MinValue to avoid nulls and enable simple value comparisions which can be done on the RavenDB server
 
             Map = records => from r in records
                              where r.Publication != null
@@ -38,6 +39,7 @@ namespace Catalogue.Data.Indexes
                                  PublicationNeverAttempted = neverAttempted,
                                  LastPublicationAttemptWasUnsuccessful = lastAttemptDate > lastSuccessDate,
                                  PublishedSinceLastUpdated = lastSuccessDate > recordLastUpdatedDate,
+                                 PublishingIsPaused = r.Publication.OpenData.Paused,
                                  GeminiValidated = r.Validation == Validation.Gemini,
                              };
         }
