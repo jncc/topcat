@@ -267,16 +267,17 @@ namespace Catalogue.Data.Seed
 
             // metadata date is set at dev/test-time seed to new DateTime(2015, 1, 1, 12, 0, 0)
             // so we need to set the publish date to earlier than this
-            var updatedSinceSuccessfullyPublishedRecord = record.With(r =>
+            var updatedSinceSuccessfullyPublishedRecordAndNowPaused = record.With(r =>
             {
                 r.Id = new Guid("19b8c7ab-5c33-4d55-bc1d-3762b8207a9f");
-                r.Gemini.Title = "An updated since successfully published record";
+                r.Gemini.Title = "An updated since successfully published record, now paused";
                 r.Publication = new PublicationInfo
                 {
                     OpenData = new OpenDataPublicationInfo
                     {
                         LastAttempt = new PublicationAttempt { DateUtc = new DateTime(2014, 12, 31) },
                         LastSuccess = new PublicationAttempt { DateUtc = new DateTime(2014, 12, 31) },
+                        Paused = true,
                     }
                 };
             });
@@ -304,7 +305,7 @@ namespace Catalogue.Data.Seed
             recordService.Insert(neverPublishedRecord);
             recordService.Insert(earlierUnsuccessfullyPublishedRecord);
             recordService.Insert(laterSuccessfullyPublishedRecord);
-            recordService.Insert(updatedSinceSuccessfullyPublishedRecord);
+            recordService.Insert(updatedSinceSuccessfullyPublishedRecordAndNowPaused);
             recordService.Insert(recordWithAlternativeResources);
         }
 
