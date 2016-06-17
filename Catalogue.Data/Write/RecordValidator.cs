@@ -502,12 +502,12 @@ namespace Catalogue.Data.Write
         }
 
         [Test]
-        public void title_must_not_be_londer_then_150([Values("", " ", null)] string blank)
+        public void title_must_not_be_londer_then_200([Values("", " ", null)] string blank)
         {
             var result =
-                new RecordValidator().Validate(SimpleRecord().With(r => r.Gemini.Title = new String('x', 151)));
+                new RecordValidator().Validate(SimpleRecord().With(r => r.Gemini.Title = new String('x', 201)));
 
-            result.Errors.Single().Message.Should().StartWith("Title is too long. 150 characters or less, please");
+            result.Errors.Single().Message.Should().StartWith("Title is too long. 200 characters or less, please");
             result.Errors.Single().Fields.Single().Should().Be("gemini.title");
         }
 
