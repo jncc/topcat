@@ -20,15 +20,15 @@ namespace Catalogue.Tests.Slow.Catalogue.Data.Indexes
         [Test]
         public void should_be_able_to_get_all_records_with_publishing_info()
         {
-            Db.Query<Record, RecordsWithOpenDataPublicationInfoIndex>().Count().Should().Be(4);
+            Db.Query<Record, RecordsWithOpenDataPublicationInfoIndex>().Count().Should().Be(5);
         }
         
         [Test]
-        public void should_be_able_to_get_never_attempted_record()
+        public void should_be_able_to_get_never_attempted_records()
         {
             Db.Query<RecordsWithOpenDataPublicationInfoIndex.Result, RecordsWithOpenDataPublicationInfoIndex>()
                 .Where(x => x.PublicationNeverAttempted)
-                .Count().Should().Be(1);
+                .Count().Should().Be(2);
         }
 
         [Test]
@@ -66,7 +66,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Data.Indexes
                 .OfType<Record>()
                 .ToList();
 
-            results.Count().Should().Be(3);
+            results.Count().Should().Be(4);
             results.Should().Contain( r => r.Id.ToString() == "19b8c7ab-5c33-4d55-bc1d-3762b8207a9f");
         }
     }
