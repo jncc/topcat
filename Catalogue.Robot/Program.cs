@@ -77,17 +77,17 @@ namespace Catalogue.Robot
         static int Main(string[] args)
         {
             return Parser.Default.ParseArguments<ImportOptions, MarkAsOpenDataOptions, PublishOpenDataOptions, DeleteOptions, AddOpenDataResourcesOptions>(args).MapResult(
-                (ImportOptions options) => RunImportAndReturnExitCode(options),
-                (MarkAsOpenDataOptions options) => RunMarkAndReturnExitCode(options),
-                (PublishOpenDataOptions options) => RunPublishAndReturnExitCode(options),
-                (DeleteOptions options) => RunDeleteAndReturnExitCode(options),
-                (AddOpenDataResourcesOptions options) => RunResourcesAndReturnExitCode(options),
+                (ImportOptions options) => RunImport(options),
+                (MarkAsOpenDataOptions options) => RunMarkAsOpenData(options),
+                (PublishOpenDataOptions options) => RunPublishOpenData(options),
+                (DeleteOptions options) => RunDelete(options),
+                (AddOpenDataResourcesOptions options) => RunAddOpenDataResources(options),
                 errs => 1);
         }
 
         public static IDocumentStore DocumentStore { get; private set; }
 
-        static int RunImportAndReturnExitCode(ImportOptions options)
+        static int RunImport(ImportOptions options)
         {
             InitDatabase();
 
@@ -99,7 +99,7 @@ namespace Catalogue.Robot
             return 0;
         }
 
-        static int RunMarkAndReturnExitCode(MarkAsOpenDataOptions options)
+        static int RunMarkAsOpenData(MarkAsOpenDataOptions options)
         {
             InitDatabase();
 
@@ -165,7 +165,7 @@ namespace Catalogue.Robot
             }
         }
 
-        static int RunPublishAndReturnExitCode(PublishOpenDataOptions options)
+        static int RunPublishOpenData(PublishOpenDataOptions options)
         {
             InitDatabase();
 
@@ -235,7 +235,7 @@ namespace Catalogue.Robot
             return 1;
         }
 
-        static int RunDeleteAndReturnExitCode(DeleteOptions options)
+        static int RunDelete(DeleteOptions options)
         {
             InitDatabase();
 
@@ -265,8 +265,7 @@ namespace Catalogue.Robot
             return 1;
         }
 
-        // temporary ad-hoc job for running one-off code, adding resources etc.
-        static int RunResourcesAndReturnExitCode(AddOpenDataResourcesOptions options)
+        static int RunAddOpenDataResources(AddOpenDataResourcesOptions options)
         {
             InitDatabase();
 
@@ -288,9 +287,9 @@ namespace Catalogue.Robot
                 }
             }
 
-            using (var db = DocumentStore.OpenSession())
+            foreach (var tuple in list)
             {
-                foreach (var tuple in list)
+                using (var db = DocumentStore.OpenSession())
                 {
                     var id = Guid.Parse(tuple.Item1);
                     var record = db.Load<Record>(id);
@@ -307,9 +306,9 @@ namespace Catalogue.Robot
                         record.Publication.OpenData.Resources = new List<Resource>();
 
                     record.Publication.OpenData.Resources.AddRange(resources);
-                }
 
-                db.SaveChanges();
+                    db.SaveChanges();
+                }
             }
 
             Console.WriteLine("Added {0} resources to {1} records.", list.Sum(tuple => tuple.Item2.Count), list.Count);

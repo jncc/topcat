@@ -139,8 +139,9 @@ namespace Catalogue.Robot.Publishing.OpenData
             string unrootedDataPath = GetUnrootedDataPath(recordId, filePath);
 
             string dataFtpPath = config.FtpRootUrl + "/" + unrootedDataPath;
-            Console.WriteLine("Uploading file at {0}", filePath);
-            Console.WriteLine("Uploading data to {0}", dataFtpPath);
+            Console.WriteLine("Uploading file...");
+            Console.WriteLine(filePath);
+            Console.WriteLine(dataFtpPath);
 
             ftpClient.UploadFile(dataFtpPath, filePath);
             Console.WriteLine("Uploaded data file successfully.");
