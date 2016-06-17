@@ -78,7 +78,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Data.Indexes
                 .OfType<Record>()
                 .ToList();
 
-            results.Count().Should().Be(3);
+            results.Count().Should().Be(4);
             results.Should().Contain(r => r.Id.ToString() == "19b8c7ab-5c33-4d55-bc1d-3762b8207a9f");
         }
     }
