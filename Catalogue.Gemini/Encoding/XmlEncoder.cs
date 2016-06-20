@@ -59,7 +59,7 @@ namespace Catalogue.Gemini.Encoding
                     new XElement(gmd + "distributionInfo",
                         new XElement(gmd + "MD_Distribution",
                             MakeDataFormat(m),
-                            MakeResourceLocator(m))),
+                            MakeResourceLocator(m, id))),
                     MakeLineage(m)));
         }
 
@@ -229,11 +229,13 @@ namespace Catalogue.Gemini.Encoding
             // not supporting versions for data format
         }
 
-        XElement MakeResourceLocator(Metadata metadata)
+        XElement MakeResourceLocator(Metadata metadata, Guid id)
         {
+            string fileName = WebificationUtility.ToUrlFriendlyString(Path.GetFileName(metadata.ResourceLocator));
             // this doesn't work so well when the resource locator contains the guid like this
             // http://data.jncc.gov.uk/data/d4ddd363-97eb-4ef6-9b8b-6f019f434103-ProcessedImages.zip
-            // string fileName = WebificationUtility.ToUrlFriendlyString(Path.GetFileName(metadata.ResourceLocator));
+            if (fileName.StartsWith(id + "-"))
+                fileName = fileName.Replace(id + "-", String.Empty);
 
             return new XElement(gmd + "transferOptions",
                 new XElement(gmd + "MD_DigitalTransferOptions",
@@ -242,7 +244,7 @@ namespace Catalogue.Gemini.Encoding
                             new XElement(gmd + "linkage",
                                 new XElement(gmd + "URL", metadata.ResourceLocator)),
                             new XElement(gmd + "name", 
-                                new XElement(gco + "CharacterString", "Download"))))));
+                                new XElement(gco + "CharacterString", fileName))))));
         }
 
         XElement MakeLineage(Metadata metadata)
