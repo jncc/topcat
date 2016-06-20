@@ -57,6 +57,9 @@ namespace Catalogue.Robot
 
         [Option("record-id", HelpText = "Just publish one specified record.")]
         public string RecordId { get; set; }
+
+        [Option("all", HelpText = "Force re-publication of all publishable records.")]
+        public bool All { get; set; }
     }
 
     [Verb("delete", HelpText = "Delete all records marked with the metadata-admin Delete tag.")]
@@ -207,8 +210,13 @@ namespace Catalogue.Robot
                 }
                 else
                 {
-                    // get the records that are pending publication
-                    ids = db.Query<RecordsWithOpenDataPublicationInfoIndex.Result, RecordsWithOpenDataPublicationInfoIndex>()
+                    var query = db.Query<RecordsWithOpenDataPublicationInfoIndex.Result, RecordsWithOpenDataPublicationInfoIndex>().AsQueryable();
+
+                    // in normal usage (not --all), we get the records that are pending publication
+                    if (!options.All)
+                        query = query.Where(x => !x.PublishedSinceLastUpdated);
+
+                    ids = query
                         .Where(x => !x.PublishedSinceLastUpdated)
                         .Where(x => x.GeminiValidated) // all open data should be gemini-valid - this is a safety
                         .OfType<Record>() //.Select(r => r.Id) // this doesn't work in RavenDB, and doesn't throw! so take 1000 which is enough for one run
