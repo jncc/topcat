@@ -39,7 +39,7 @@ namespace Catalogue.Robot.Publishing.OpenData
             db.SaveChanges();
 
             bool datasetIsCorpulent = record.Gemini.Keywords.Any(k => k.Vocab == "http://vocab.jncc.gov.uk/metadata-admin" && k.Value == "Corpulent");
-            bool datasetIsOnAmazonCloud = record.Gemini.ResourceLocator.ToLower().Contains("amazonaws.com");
+            bool datasetIsOnAmazonCloud = record.Gemini.ResourceLocator.IsNotBlank() && record.Gemini.ResourceLocator.ToLower().Contains("amazonaws.com");
             bool publishAlternativeResources = record.Publication != null && record.Publication.OpenData != null && record.Publication.OpenData.Resources != null && record.Publication.OpenData.Resources.Any();
 
             var doc = new global::Catalogue.Gemini.Encoding.XmlEncoder().Create(record.Id, record.Gemini);
