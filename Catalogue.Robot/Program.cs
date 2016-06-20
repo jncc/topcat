@@ -217,7 +217,6 @@ namespace Catalogue.Robot
                         query = query.Where(x => !x.PublishedSinceLastUpdated);
 
                     ids = query
-                        .Where(x => !x.PublishedSinceLastUpdated)
                         .Where(x => x.GeminiValidated) // all open data should be gemini-valid - this is a safety
                         .OfType<Record>() //.Select(r => r.Id) // this doesn't work in RavenDB, and doesn't throw! so take 1000 which is enough for one run
                         .Take(1000)
