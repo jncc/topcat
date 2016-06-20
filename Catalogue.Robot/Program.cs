@@ -75,6 +75,9 @@ namespace Catalogue.Robot
     {
         [Option(Required = true, HelpText = "The path to the CSV file.")]
         public string File { get; set; }
+
+        [Option("remove-existing", Default = false, HelpText = "Remove any existing resources.")]
+        public bool RemoveExisting { get; set; }
     }
 
     class Program
@@ -305,15 +308,16 @@ namespace Catalogue.Robot
 
                     if (record.Publication == null)
                         record.Publication = new PublicationInfo();
-
                     if (record.Publication.OpenData == null)
                         record.Publication.OpenData = new OpenDataPublicationInfo();
-
                     if (record.Publication.OpenData.Resources == null)
                         record.Publication.OpenData.Resources = new List<Resource>();
 
-                    //temp! - remove this!
-                    record.Publication.OpenData.Resources.Clear();
+                    if (options.RemoveExisting)
+                    {
+                        record.Publication.OpenData.Resources.Clear();
+                    }
+
                     record.Publication.OpenData.Resources.AddRange(resources);
 
                     record.Gemini.MetadataDate = DateTime.Now; // poke the record to ensure it is publishable
