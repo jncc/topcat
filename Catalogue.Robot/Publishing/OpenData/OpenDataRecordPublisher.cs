@@ -31,39 +31,35 @@ namespace Catalogue.Robot.Publishing.OpenData
             var record = db.Load<Record>(id);
             Console.WriteLine(Environment.NewLine + "Publishing '{0}' to '{1}'.", record.Gemini.Title, config.FtpRootUrl);
 
-            string metaPath = String.Format("waf/{0}.xml", record.Id);
-
             // save a not-yet-successful attempt to begin with
             var attempt = new PublicationAttempt { DateUtc = Clock.NowUtc };
             record.Publication.OpenData.LastAttempt = attempt;
             db.SaveChanges();
 
-            var doc = new global::Catalogue.Gemini.Encoding.XmlEncoder().Create(record.Id, record.Gemini);
-
-            bool publishAlternativeResources = record.Publication != null && record.Publication.OpenData != null && record.Publication.OpenData.Resources != null && record.Publication.OpenData.Resources.Any();
-            bool datasetIsCorpulent = record.Gemini.Keywords.Any(k => k.Vocab == "http://vocab.jncc.gov.uk/metadata-admin" && k.Value == "Corpulent");
+            bool alternativeResources = record.Publication != null && record.Publication.OpenData != null && record.Publication.OpenData.Resources != null && record.Publication.OpenData.Resources.Any();
+            bool corpulent = record.Gemini.Keywords.Any(k => k.Vocab == "http://vocab.jncc.gov.uk/metadata-admin" && k.Value == "Corpulent");
 
             try
             {
-                if (publishAlternativeResources)
+                if (alternativeResources)
                 {
-                    // upload the alternative resources and correct (mutate) the doc; don't touch the resource locator
-                    UploadAlternativeResourcesAndMungThemIntoTheMetadataDoc(record, doc);
+                    // upload the alternative resources; don't touch the resource locator
+                    UploadAlternativeResources(record);
                 }
                 else
                 {
-                    if (datasetIsCorpulent)
+                    if (corpulent)
                     {
-                        // set the resource locator to the download page; don't upload any resources
+                        // set the resource locator to the download request page; don't upload any resources
                         if (record.Gemini.ResourceLocator.IsBlank()) // arguably should always do it actually
                             UpdateTheResourceLocatorToBeTheOpenDataDownloadPage(record);
                     }
                     else if (record.Gemini.ResourceLocator.IsBlank() || record.Gemini.ResourceLocator.Contains(config.HttpRootUrl))
                     {
-                        // "normal" case - upload the resource pointed at by record.Path
-                        // if the resource locator is blank or already data.jncc.gov.uk
-                        UpdateResourceLocatorToMatchMainDataFile(record);
+                        // "normal" case - if the resource locator is blank or already data.jncc.gov.uk
+                        // upload the resource pointed at by record.Path, and update the resource locator to match
                         UploadFile(record.Id, record.Path);
+                        UpdateResourceLocatorToMatchMainDataFile(record);
                     }
                     else
                     {
@@ -72,7 +68,7 @@ namespace Catalogue.Robot.Publishing.OpenData
                     }
                 }
 
-                UploadTheMetadataDocument(doc, metaPath);
+                UploadTheMetadataDocument(record, alternativeResources);
                 UpdateTheWafIndexDocument(record);
 
                 // record success
@@ -107,33 +103,20 @@ namespace Catalogue.Robot.Publishing.OpenData
             Console.WriteLine("ResourceLocator updated to point to the data file.");
         }
 
-        void UploadAlternativeResourcesAndMungThemIntoTheMetadataDoc(Record record, XDocument doc)
+        void UploadAlternativeResources(Record record)
         {
-            var resources = (from r in record.Publication.OpenData.Resources
-                             let fileName = Path.GetFileName(r.Path)
-                             let unrootedDataPath = GetUnrootedDataPath(record.Id, r.Path)
-                             select new
-                             {
-                                 r.Path,
-                                 Name = WebificationUtility.ToUrlFriendlyString(fileName),
-                                 UnrootedDataPath = unrootedDataPath,
-                                 Url =  config.HttpRootUrl + "/" + unrootedDataPath
-                             })
-                             .ToList();
-
-            // check that there are no duplicate filenames after webifying
-            if (resources.Count != (from r in resources group r by r.Name).Count())
+            // check no duplicate filenames after webifying
+            var fileNames = from r in record.Publication.OpenData.Resources
+                            let fileName = WebificationUtility.ToUrlFriendlyString(Path.GetFileName(r.Path))
+                            group r by fileName;
+            if (fileNames.Count() != record.Publication.OpenData.Resources.Count)
                 throw new Exception("There are duplicate resource file names (after webifying) for this record.");
 
             // upload the resources
-            foreach (var r in resources)
+            foreach (var r in record.Publication.OpenData.Resources)
             {
                 UploadFile(record.Id, r.Path);
             }
-
-            // mung (mutate) the metadata doc so data.gov.uk knows about the resources
-            var onlineResources = resources.Select(r => new OnlineResource { Name = r.Name, Url = r.Url }).ToList();
-            global::Catalogue.Gemini.Encoding.XmlEncoder.ReplaceDigitalTransferOptions(doc, onlineResources);
         }
 
         void UploadFile(Guid recordId, string filePath)
@@ -153,12 +136,28 @@ namespace Catalogue.Robot.Publishing.OpenData
             Console.WriteLine("Uploaded data file successfully.");
         }
 
-        void UploadTheMetadataDocument(XDocument doc, string metaPath)
+        void UploadTheMetadataDocument(Record record,  bool alternativeResources)
         {
+            var doc = new global::Catalogue.Gemini.Encoding.XmlEncoder().Create(record.Id, record.Gemini);
+
+            if (alternativeResources)
+            {
+                // mung (mutate) the metadata doc so data.gov.uk knows about the resources
+                var onlineResources = record.Publication.OpenData.Resources
+                    .Select(r => new OnlineResource
+                    {
+                        Name = WebificationUtility.ToUrlFriendlyString(Path.GetFileName(r.Path)),
+                        Url = config.HttpRootUrl + "/" + GetUnrootedDataPath(record.Id, r.Path)
+                    }).ToList();
+
+                global::Catalogue.Gemini.Encoding.XmlEncoder.ReplaceDigitalTransferOptions(doc, onlineResources);
+            }
+
             var s = new MemoryStream();
             doc.Save(s);
             var metaXmlDoc = s.ToArray();
 
+            string metaPath = String.Format("waf/{0}.xml", record.Id);
             string metaFtpPath = config.FtpRootUrl + "/" + metaPath;
 
             ftpClient.UploadBytes(metaFtpPath, metaXmlDoc);
