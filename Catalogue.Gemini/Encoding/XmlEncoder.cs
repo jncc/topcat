@@ -229,10 +229,11 @@ namespace Catalogue.Gemini.Encoding
             // not supporting versions for data format
         }
 
-        // haven't checked this against gemini spec - just doing quickly
         XElement MakeResourceLocator(Metadata metadata)
         {
-            string fileName = WebificationUtility.ToUrlFriendlyString(Path.GetFileName(metadata.ResourceLocator));
+            // this doesn't work so well when the resource locator contains the guid like this
+            // http://data.jncc.gov.uk/data/d4ddd363-97eb-4ef6-9b8b-6f019f434103-ProcessedImages.zip
+            // string fileName = WebificationUtility.ToUrlFriendlyString(Path.GetFileName(metadata.ResourceLocator));
 
             return new XElement(gmd + "transferOptions",
                 new XElement(gmd + "MD_DigitalTransferOptions",
@@ -241,7 +242,7 @@ namespace Catalogue.Gemini.Encoding
                             new XElement(gmd + "linkage",
                                 new XElement(gmd + "URL", metadata.ResourceLocator)),
                             new XElement(gmd + "name", 
-                                new XElement(gco + "CharacterString", fileName))))));
+                                new XElement(gco + "CharacterString", "Download"))))));
         }
 
         XElement MakeLineage(Metadata metadata)
