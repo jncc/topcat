@@ -58,12 +58,12 @@ namespace Catalogue.Robot.Publishing.OpenData
                         if (record.Gemini.ResourceLocator.IsBlank()) // arguably should always do it actually
                             UpdateTheResourceLocatorToBeTheOpenDataDownloadPage(record);
                     }
-                    else if (record.Gemini.ResourceLocator.IsBlank() || record.Gemini.ResourceLocator.Contains("data.jncc.gov.uk"))
+                    else if (record.Gemini.ResourceLocator.IsBlank() || record.Gemini.ResourceLocator.Contains(config.HttpRootUrl))
                     {
                         // "normal" case - upload the resource pointed at by record.Path
                         // if the resource locator is blank or already data.jncc.gov.uk
-                        UploadFile(record.Id, record.Path);
                         UpdateResourceLocatorToMatchMainDataFile(record);
+                        UploadFile(record.Id, record.Path);
                     }
                     else
                     {
