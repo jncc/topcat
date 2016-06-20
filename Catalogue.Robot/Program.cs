@@ -312,6 +312,8 @@ namespace Catalogue.Robot
                     if (record.Publication.OpenData.Resources == null)
                         record.Publication.OpenData.Resources = new List<Resource>();
 
+                    //temp! - remove this!
+                    record.Publication.OpenData.Resources.Clear();
                     record.Publication.OpenData.Resources.AddRange(resources);
 
                     record.Gemini.MetadataDate = DateTime.Now; // poke the record to ensure it is publishable
@@ -326,9 +328,9 @@ namespace Catalogue.Robot
 
         static int RunCheckResourcesExist(CheckResourcesExistOptions options)
         {
+            throw new Exception("TODO");
 
-
-            return 1;
+            //return 1;
         }
 
         static List<Record> GetRecords(IDocumentSession db, string keyword)
