@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Xml.Linq;
 using Catalogue.Gemini.Model;
@@ -231,6 +232,8 @@ namespace Catalogue.Gemini.Encoding
         // haven't checked this against gemini spec - just doing quickly
         XElement MakeResourceLocator(Metadata metadata)
         {
+            string fileName = WebificationUtility.ToUrlFriendlyString(Path.GetFileName(metadata.ResourceLocator));
+
             return new XElement(gmd + "transferOptions",
                 new XElement(gmd + "MD_DigitalTransferOptions",
                     new XElement(gmd + "onLine",
@@ -238,7 +241,7 @@ namespace Catalogue.Gemini.Encoding
                             new XElement(gmd + "linkage",
                                 new XElement(gmd + "URL", metadata.ResourceLocator)),
                             new XElement(gmd + "name", 
-                                new XElement(gco + "CharacterString", "Download"))))));
+                                new XElement(gco + "CharacterString", fileName))))));
         }
 
         XElement MakeLineage(Metadata metadata)
