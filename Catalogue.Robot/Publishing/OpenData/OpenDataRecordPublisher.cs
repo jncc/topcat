@@ -61,7 +61,8 @@ namespace Catalogue.Robot.Publishing.OpenData
                     }
                     else if (datasetIsOnAmazonCloud)
                     {
-                        // do nothing - don't change the resource locator, don't uplad anything
+                        // do nothing - don't change the resource locator, don't upload anything
+                        Console.WriteLine("Resource already on Amazon Cloud so not uploading.");
                     }
                     else
                     {
@@ -110,17 +111,18 @@ namespace Catalogue.Robot.Publishing.OpenData
         void UploadAlternativeResourcesAndMungThemIntoMetadataDoc(Record record, XDocument doc)
         {
             var resources = (from r in record.Publication.OpenData.Resources
+                             let fileName = Path.GetFileName(r.Path)
                              let unrootedDataPath = GetUnrootedDataPath(record.Id, r.Path)
                              select new
                              {
                                  r.Path,
-                                 Name = Path.GetFileName(r.Path),
+                                 Name = WebificationUtility.ToUrlFriendlyString(fileName),
                                  UnrootedDataPath = unrootedDataPath,
                                  Url =  config.HttpRootUrl + "/" + unrootedDataPath
                              })
                              .ToList();
 
-            // check that there are no duplicate filenames after webifying for the data path
+            // check that there are no duplicate filenames after webifying
             if (resources.Count != (from r in resources group r by r.Name).Count())
                 throw new Exception("There are duplicate resource file names (after webifying) for this record.");
 
