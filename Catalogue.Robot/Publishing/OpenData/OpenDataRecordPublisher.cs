@@ -188,11 +188,10 @@ namespace Catalogue.Robot.Publishing.OpenData
         {
             string fileName = Path.GetFileName(filePath);
 
-            // make a file name suitable for a file on the web
-            // todo: make this much more robust and web-friendly
-            string name = fileName.Replace(" ", "-");
+            // make a file name suitable for the web
+            string name = WebificationUtility.ToUrlFriendlyString(fileName);
 
-            return String.Format("data/{0}-{1}", recordId, fileName);
+            return String.Format("data/{0}-{1}", recordId, name);
         }
     }
 }
