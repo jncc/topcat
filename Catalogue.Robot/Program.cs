@@ -11,6 +11,7 @@ using Catalogue.Gemini.Model;
 using Catalogue.Robot.Importing;
 using Catalogue.Robot.Publishing.OpenData;
 using Catalogue.Utilities.Text;
+using Catalogue.Utilities.Time;
 using CommandLine;
 using CommandLine.Text;
 using CsvHelper;
@@ -319,8 +320,8 @@ namespace Catalogue.Robot
                     }
 
                     record.Publication.OpenData.Resources.AddRange(resources);
+                    record.Gemini.MetadataDate = Clock.NowUtc; // poke the record to ensure it is publishable
 
-                    record.Gemini.MetadataDate = DateTime.Now; // poke the record to ensure it is publishable
                     db.SaveChanges();
                 }
             }
