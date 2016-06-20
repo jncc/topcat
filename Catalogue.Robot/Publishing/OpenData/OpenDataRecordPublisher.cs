@@ -38,40 +38,37 @@ namespace Catalogue.Robot.Publishing.OpenData
             record.Publication.OpenData.LastAttempt = attempt;
             db.SaveChanges();
 
-            bool datasetIsCorpulent = record.Gemini.Keywords.Any(k => k.Vocab == "http://vocab.jncc.gov.uk/metadata-admin" && k.Value == "Corpulent");
-            bool datasetIsOnAmazonCloud = record.Gemini.ResourceLocator.IsNotBlank() && record.Gemini.ResourceLocator.ToLower().Contains("amazonaws.com");
-            bool publishAlternativeResources = record.Publication != null && record.Publication.OpenData != null && record.Publication.OpenData.Resources != null && record.Publication.OpenData.Resources.Any();
-
             var doc = new global::Catalogue.Gemini.Encoding.XmlEncoder().Create(record.Id, record.Gemini);
+
+            bool publishAlternativeResources = record.Publication != null && record.Publication.OpenData != null && record.Publication.OpenData.Resources != null && record.Publication.OpenData.Resources.Any();
+            bool datasetIsCorpulent = record.Gemini.Keywords.Any(k => k.Vocab == "http://vocab.jncc.gov.uk/metadata-admin" && k.Value == "Corpulent");
 
             try
             {
                 if (publishAlternativeResources)
                 {
                     // upload the alternative resources and correct (mutate) the doc; don't touch the resource locator
-                    UploadAlternativeResourcesAndMungThemIntoMetadataDoc(record, doc);
+                    UploadAlternativeResourcesAndMungThemIntoTheMetadataDoc(record, doc);
                 }
                 else
                 {
                     if (datasetIsCorpulent)
                     {
-                        // set the resource locator if blank; don't upload any resources
+                        // set the resource locator to the download page; don't upload any resources
                         if (record.Gemini.ResourceLocator.IsBlank()) // arguably should always do it actually
                             UpdateTheResourceLocatorToBeTheOpenDataDownloadPage(record);
                     }
-                    else if (datasetIsOnAmazonCloud)
+                    else if (record.Gemini.ResourceLocator.IsBlank() || record.Gemini.ResourceLocator.Contains("data.jncc.gov.uk"))
                     {
-                        // do nothing - don't change the resource locator, don't upload anything
-                        Console.WriteLine("Resource already on Amazon Cloud so not uploading.");
+                        // "normal" case - upload the resource pointed at by record.Path
+                        // if the resource locator is blank or already data.jncc.gov.uk
+                        UploadFile(record.Id, record.Path);
+                        UpdateResourceLocatorToMatchMainDataFile(record);
                     }
                     else
                     {
-                        // "normal" case - upload the resource pointed at by record.Path
-                        UploadFile(record.Id, record.Path);
-
-                        // set the resource locator to match 
-                        if (record.Gemini.ResourceLocator.IsBlank() || record.Gemini.ResourceLocator.Contains("data.jncc.gov.uk"))
-                            UpdateResourceLocatorToMatchMainDataFile(record);
+                        // do nothing - don't change the resource locator, don't upload anything
+                        Console.WriteLine("Deferring to existing resource locator - not uploading.");
                     }
                 }
 
@@ -110,7 +107,7 @@ namespace Catalogue.Robot.Publishing.OpenData
             Console.WriteLine("ResourceLocator updated to point to the data file.");
         }
 
-        void UploadAlternativeResourcesAndMungThemIntoMetadataDoc(Record record, XDocument doc)
+        void UploadAlternativeResourcesAndMungThemIntoTheMetadataDoc(Record record, XDocument doc)
         {
             var resources = (from r in record.Publication.OpenData.Resources
                              let fileName = Path.GetFileName(r.Path)

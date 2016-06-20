@@ -1,4 +1,7 @@
-﻿namespace Catalogue.Robot.Publishing.OpenData
+﻿using System.Collections.Generic;
+using NUnit.Framework;
+
+namespace Catalogue.Robot.Publishing.OpenData
 {
     public class OpenDataPublisherConfig
     {
@@ -6,5 +9,7 @@
         public string FtpRootUrl { get; set; }
         public string FtpUsername { get; set; }
         public string FtpPassword { get; set; }
+
+        //public List<string> DataHostDomains { get; set; }
     }
 }
