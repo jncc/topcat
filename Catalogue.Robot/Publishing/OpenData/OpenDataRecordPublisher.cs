@@ -39,6 +39,7 @@ namespace Catalogue.Robot.Publishing.OpenData
             db.SaveChanges();
 
             bool datasetIsCorpulent = record.Gemini.Keywords.Any(k => k.Vocab == "http://vocab.jncc.gov.uk/metadata-admin" && k.Value == "Corpulent");
+            bool datasetIsOnAmazonCloud = record.Gemini.ResourceLocator.ToLower().Contains("amazonaws.com");
             bool publishAlternativeResources = record.Publication != null && record.Publication.OpenData != null && record.Publication.OpenData.Resources != null && record.Publication.OpenData.Resources.Any();
 
             var doc = new global::Catalogue.Gemini.Encoding.XmlEncoder().Create(record.Id, record.Gemini);
@@ -57,6 +58,10 @@ namespace Catalogue.Robot.Publishing.OpenData
                         // set the resource locator if blank; don't upload any resources
                         if (record.Gemini.ResourceLocator.IsBlank()) // arguably should always do it actually
                             UpdateTheResourceLocatorToBeTheOpenDataDownloadPage(record);
+                    }
+                    else if (datasetIsOnAmazonCloud)
+                    {
+                        // do nothing - don't change the resource locator, don't uplad anything
                     }
                     else
                     {
