@@ -66,8 +66,12 @@ namespace Catalogue.Robot.Publishing.OpenData
                     }
                     else
                     {
-                        // "normal" case - set the resource locator; upload the resource pointed at by record.Path
-                        UploadNormalDataFileAndUpdateResourceLocatorToMatch(record);
+                        // "normal" case - upload the resource pointed at by record.Path
+                        UploadFile(record.Id, record.Path);
+
+                        // set the resource locator to match 
+                        if (record.Gemini.ResourceLocator.IsBlank() || record.Gemini.ResourceLocator.Contains("data.jncc.gov.uk"))
+                            UpdateResourceLocatorToMatchMainDataFile(record);
                     }
                 }
 
@@ -98,10 +102,8 @@ namespace Catalogue.Robot.Publishing.OpenData
 
         }
 
-        void UploadNormalDataFileAndUpdateResourceLocatorToMatch(Record record)
+        void UpdateResourceLocatorToMatchMainDataFile(Record record)
         {
-            UploadFile(record.Id, record.Path);
-
             // update the resource locator to be the data file
             string dataHttpPath = config.HttpRootUrl + "/" + GetUnrootedDataPath(record.Id, record.Path);
             record.Gemini.ResourceLocator = dataHttpPath;
