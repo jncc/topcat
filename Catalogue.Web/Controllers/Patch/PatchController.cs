@@ -246,6 +246,29 @@ namespace Catalogue.Web.Controllers.Patch
             return new HttpResponseMessage();
         }
 
+        [HttpPost, Route("api/patch/fixmarinerecorderpath")]
+        public HttpResponseMessage FixMarineRecorderPath()
+        {
+            var query = new RecordQueryInputModel
+            {
+                K = new[] { "vocab.jncc.gov.uk/jncc-category/Marine Recorder" },
+                P = 0,
+                N = 1024,
+            };
+
+            var records = _queryer.Query(query).ToList();
+
+            foreach (var record in records)
+            {
+                record.Path = record.Path.Replace("Programme 110 Access to information", "Prog110-FutureData");
+                record.Gemini.MetadataDate = Clock.NowUtc;
+            }
+
+
+            db.SaveChanges();
+
+            return new HttpResponseMessage();
+        }
 
         //        [HttpPost, Route("api/patch/renamesecuritylevels")]
         //        public HttpResponseMessage RenameSecurityLevels()
