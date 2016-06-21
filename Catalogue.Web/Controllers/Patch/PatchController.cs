@@ -258,16 +258,18 @@ namespace Catalogue.Web.Controllers.Patch
 
             var records = _queryer.Query(query).ToList();
 
+            string old = @"\\jncc-corpfile\JNCC Corporate Data\Programme 110 Access to information\Marine Data\Marine Recorder\Data\JNCC\MNCR\Surveys";
+            string now = @"\\jncc - corpfile\JNCC Corporate Data\Prog110 - FutureData\Marine Data\Marine Recorder\Data\Data Suppliers\JNCC\MNCR(MRMIT000)\TopCat survey files\surveys";
+
             foreach (var record in records)
             {
-                record.Path = record.Path.Replace("Programme 110 Access to information", "Prog110-FutureData");
+                record.Path = record.Path.Replace(old, now);
                 record.Gemini.MetadataDate = Clock.NowUtc;
             }
 
-
             db.SaveChanges();
 
-            return new HttpResponseMessage();
+            return new HttpResponseMessage { Content = new StringContent("Updated " + records.Count + " records.") };
         }
 
         //        [HttpPost, Route("api/patch/renamesecuritylevels")]
