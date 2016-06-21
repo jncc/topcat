@@ -258,8 +258,8 @@ namespace Catalogue.Web.Controllers.Patch
 
             var records = _queryer.Query(query).ToList();
 
-            string old = @"Prog110 - FutureData";
-            string now = @"Prog110-FutureData";
+            string old = @"MNCR (MRMIT000)";
+            string now = @"MNCR(MRMIT000)a";
 
             foreach (var record in records)
             {
