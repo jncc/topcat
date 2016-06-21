@@ -259,7 +259,7 @@ namespace Catalogue.Web.Controllers.Patch
             var records = _queryer.Query(query).ToList();
 
             string old = @"\\jncc-corpfile\JNCC Corporate Data\Programme 110 Access to information\Marine Data\Marine Recorder\Data\JNCC\MNCR\Surveys";
-            string now = @"\\jncc - corpfile\JNCC Corporate Data\Prog110 - FutureData\Marine Data\Marine Recorder\Data\Data Suppliers\JNCC\MNCR(MRMIT000)\TopCat survey files\surveys";
+            string now = @"\\jncc-corpfile\JNCC Corporate Data\Prog110-FutureData\Marine Data\Marine Recorder\Data\Data Suppliers\JNCC\MNCR (MRMIT000)\TopCat survey files\surveys";
 
             foreach (var record in records)
             {
