@@ -36,6 +36,10 @@ namespace Catalogue.Robot.Publishing.OpenData
             // save a not-yet-successful attempt to begin with
             var attempt = new PublicationAttempt { DateUtc = Clock.NowUtc };
             record.Publication.OpenData.LastAttempt = attempt;
+
+            // temp
+            record.Gemini.MetadataDate = Clock.NowUtc;
+
             db.SaveChanges();
 
             bool alternativeResources = record.Publication != null && record.Publication.OpenData != null && record.Publication.OpenData.Resources != null && record.Publication.OpenData.Resources.Any();
