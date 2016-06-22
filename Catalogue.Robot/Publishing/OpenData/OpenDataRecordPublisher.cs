@@ -33,6 +33,9 @@ namespace Catalogue.Robot.Publishing.OpenData
             var record = db.Load<Record>(id);
             Console.WriteLine(Environment.NewLine + "Publishing '{0}' to '{1}'.", record.Gemini.Title, config.FtpRootUrl);
 
+            // temp
+            record.Gemini.MetadataDate = Clock.NowUtc.AddSeconds(-1);
+
             // save a not-yet-successful attempt to begin with
             var attempt = new PublicationAttempt { DateUtc = Clock.NowUtc };
             record.Publication.OpenData.LastAttempt = attempt;
