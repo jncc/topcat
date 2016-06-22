@@ -87,6 +87,7 @@
     <Compile Include="Import\Mappings\ActivitiesMapping.cs" />
     <Compile Include="Import\Mappings\DaveChambersMapping.cs" />
     <Compile Include="Import\Mappings\EuropeanReportingMapping.cs" />
+    <Compile Include="Import\Mappings\LightWaveMapping.cs" />
     <Compile Include="Import\Mappings\MarineRecorderMapping.cs" />
     <Compile Include="Import\Mappings\MeowMapping.cs" />
     <Compile Include="Import\Mappings\MeshMapping.cs" />
