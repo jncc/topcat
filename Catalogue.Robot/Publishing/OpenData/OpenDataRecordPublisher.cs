@@ -18,12 +18,14 @@ namespace Catalogue.Robot.Publishing.OpenData
         readonly IDocumentSession db;
         readonly OpenDataPublisherConfig config;
         readonly IFtpClient ftpClient;
+        readonly bool metadataOnly;
 
-        public OpenDataRecordPublisher(IDocumentSession db, OpenDataPublisherConfig config, IFtpClient ftpClient)
+        public OpenDataRecordPublisher(IDocumentSession db, OpenDataPublisherConfig config, bool metadataOnly, IFtpClient ftpClient)
         {
             this.db = db;
             this.config = config;
             this.ftpClient = ftpClient;
+            this.metadataOnly = metadataOnly;
         }
 
         public void PublishRecord(Guid id)
@@ -58,7 +60,7 @@ namespace Catalogue.Robot.Publishing.OpenData
                     {
                         // "normal" case - if the resource locator is blank or already data.jncc.gov.uk
                         // upload the resource pointed at by record.Path, and update the resource locator to match
-                        UploadFile(record.Id, record.Path);
+                        UploadDataFile(record.Id, record.Path);
                         UpdateResourceLocatorToMatchMainDataFile(record);
                     }
                     else
@@ -115,25 +117,28 @@ namespace Catalogue.Robot.Publishing.OpenData
             // upload the resources
             foreach (var r in record.Publication.OpenData.Resources)
             {
-                UploadFile(record.Id, r.Path);
+                UploadDataFile(record.Id, r.Path);
             }
         }
 
-        void UploadFile(Guid recordId, string filePath)
+        void UploadDataFile(Guid recordId, string filePath)
         {
-            // correct path for unmapped drive X
-            filePath = filePath.Replace(@"X:\OffshoreSurvey\", @"\\JNCC-CORPFILE\Marine Survey\OffshoreSurvey\");
-            //filePath = filePath.Replace(@"J:\GISprojects\", @"\\Jncc - corpfile\gis\GISprojects\");
+            if (!metadataOnly) // if metadataOnly, we don't really upload the data file
+            {
+                // correct path for unmapped drive X
+                filePath = filePath.Replace(@"X:\OffshoreSurvey\", @"\\JNCC-CORPFILE\Marine Survey\OffshoreSurvey\");
+                //filePath = filePath.Replace(@"J:\GISprojects\", @"\\Jncc - corpfile\gis\GISprojects\");
 
-            string unrootedDataPath = GetUnrootedDataPath(recordId, filePath);
+                string unrootedDataPath = GetUnrootedDataPath(recordId, filePath);
 
-            string dataFtpPath = config.FtpRootUrl + "/" + unrootedDataPath;
-            Console.WriteLine("Uploading file...");
-            Console.WriteLine(filePath);
-            Console.WriteLine(dataFtpPath);
+                string dataFtpPath = config.FtpRootUrl + "/" + unrootedDataPath;
+                Console.WriteLine("Uploading file...");
+                Console.WriteLine(filePath);
+                Console.WriteLine(dataFtpPath);
 
-            ftpClient.UploadFile(dataFtpPath, filePath);
-            Console.WriteLine("Uploaded data file successfully.");
+                ftpClient.UploadFile(dataFtpPath, filePath);
+                Console.WriteLine("Uploaded data file successfully.");
+            }
         }
 
         void UploadTheMetadataDocument(Record record,  bool alternativeResources)

@@ -58,8 +58,8 @@ namespace Catalogue.Robot
         [Option("record-id", HelpText = "Just publish one specified record.")]
         public string RecordId { get; set; }
 
-        [Option("all", HelpText = "Force re-publication of all publishable records.")]
-        public bool All { get; set; }
+        [Option("metadata-only", Default = false, HelpText = "Don't upload data files; metadata only.")]
+        public bool MetadataOnly { get; set; }
     }
 
     [Verb("delete", HelpText = "Delete all records marked with the metadata-admin Delete tag.")]
@@ -215,7 +215,7 @@ namespace Catalogue.Robot
                         .Where(x => !x.PublishedSinceLastUpdated)
                         .Where(x => x.GeminiValidated) // all open data should be gemini-valid - this is a safety
                         .OfType<Record>() //.Select(r => r.Id) // this doesn't work in RavenDB, and doesn't throw!
-                        .Take(1000) // so take 1000 which is enough for one run
+                        .Take(1500) // so take 1500 which is enough for one run
                         .ToList() // so materialize the record first
                         .Where(r => !r.Publication.OpenData.Paused) //  .Where(x => !x.PublishingIsPaused) on the server doesn't work on live - thanks, ravenDB
                         .Select(r => r.Id)
@@ -234,7 +234,7 @@ namespace Catalogue.Robot
 
                     using (var db = DocumentStore.OpenSession())
                     {
-                        new OpenDataRecordPublisher(db, config, ftpClient).PublishRecord(id);
+                        new OpenDataRecordPublisher(db, config, options.MetadataOnly, ftpClient).PublishRecord(id);
                     }
                 }
             }
