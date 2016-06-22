@@ -87,7 +87,7 @@ namespace Catalogue.Data.Import.Mappings
                 {
                     string name = row.GetField("ResponsibleOrganisation.Name").Trim();
                     string email = row.GetField("ResponsibleOrganisation.Email").Trim();
-                    string role = row.GetField("ResponsibleOrganisation.Role").FirstCharToLower().Trim();
+                    string role = row.GetField("ResponsibleOrganisation.Role").Replace("point of Contact", "pointOfContact").FirstCharToLower().Trim();
 
                     return new ResponsibleParty { Name = name == "JNCC" ? "Joint Nature Conservation Committee (JNCC)" : name, Email = email, Role = role };
                 });
@@ -149,6 +149,27 @@ namespace Catalogue.Data.Import.Mappings
                 Map(m => m.ReadOnly);
 
                 References<GeminiMap>(m => m.Gemini);
+                //References<PublicationInfoMap>(m => m.Gemini);
+            }
+        }
+
+        public sealed class PublicationInfoMap : CsvClassMap<PublicationInfo>
+        {
+            public PublicationInfoMap()
+            {
+                References<OpenDataPublicationInfoMap>(m => m.OpenData);
+            }
+        }
+
+        public sealed class OpenDataPublicationInfoMap : CsvClassMap<OpenDataPublicationInfo>
+        {
+            public OpenDataPublicationInfoMap()
+            {
+                var cols = Enumerable.Range(1, 13).Select(n => "Path" + n).ToList();
+                Map(m => m.Resources).ConvertUsing(row =>
+                {
+                    return cols.Select(col => row.GetField<string>(col)).Where(StringUtility.IsNotBlank).ToList();
+                });
             }
         }
     }
@@ -167,12 +188,12 @@ namespace Catalogue.Data.Import.Mappings
             {
                 var importer = Importer.CreateImporter(db, new LightWaveMapping());
                 importer.SkipBadRecords = true;
-                importer.Import(@"C:\Work\lightwave-import.csv");
+                importer.Import(@"C:\Work\data\LightWave_RiskAssessv2.csv");
 
                 var errors = importer.Results
                     .Where(r => !r.Success)
                     .Select(r => r.Record.Gemini.Title + Environment.NewLine + JsonConvert.SerializeObject(r.Validation) + Environment.NewLine);
-                File.WriteAllLines(@"C:\work\lightwave-import-errors.txt", errors);
+                File.WriteAllLines(@"C:\work\data\LightWave_RiskAssessv2.csv-errors.txt", errors);
 
                 db.SaveChanges();
 

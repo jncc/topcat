@@ -17,6 +17,9 @@ namespace Catalogue.Utilities.Text
         /// </summary>
         public static string ToUrlFriendlyString(string s)
         {
+            if (s.IsBlank())
+                return s;
+
             // match "words" of lower and uppercase letters, numbers and dots
             var words = Regex.Matches(s, @"[A-Za-z0-9\.]+")
                 .OfType<Match>()
@@ -35,6 +38,9 @@ namespace Catalogue.Utilities.Text
         [TestCase("New-York NEW-YORK!.txt", Result = "New-York-NEW-YORK.txt")]
         [TestCase("my.file.txt", Result = "my.file.txt")]
         [TestCase("myfile.txt", Result = "myfile.txt")]
+        [TestCase("Sound_Strait_WGS84.zip", Result = "Sound-Strait-WGS84.zip")]
+        [TestCase("", Result = "")]
+        [TestCase(null, Result = null)]
         public string test_to_url_friendly_string(string s)
         {
             return WebificationUtility.ToUrlFriendlyString(s);
