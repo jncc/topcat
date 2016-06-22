@@ -212,7 +212,7 @@ namespace Catalogue.Robot
                 {
                     // get the records that are pending publication (ie not PublishedSinceLastUpdated)
                     ids = db.Query<RecordsWithOpenDataPublicationInfoIndex.Result, RecordsWithOpenDataPublicationInfoIndex>()
-                        .Where(x => !x.PublishedSinceLastUpdated)
+                        //.Where(x => !x.PublishedSinceLastUpdated)
                         .Where(x => x.GeminiValidated) // all open data should be gemini-valid - this is a safety
                         .OfType<Record>() //.Select(r => r.Id) // this doesn't work in RavenDB, and doesn't throw!
                         .Take(1500) // so take 1500 which is enough for one run
