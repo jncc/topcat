@@ -6,6 +6,7 @@ using System.Net.Http;
 using System.Web.Http;
 using Catalogue.Data.Indexes;
 using Catalogue.Data.Query;
+using Catalogue.Data.Write;
 using Catalogue.Gemini.BoundingBoxes;
 using Catalogue.Gemini.Model;
 using Catalogue.Gemini.Spatial;
@@ -200,21 +201,23 @@ namespace Catalogue.Web.Controllers.Patch
             return recordKeywords;
         }
 
-        [HttpPost, Route("api/patch/pokeseabirdrecords")]
-        public HttpResponseMessage PokeSeabirdRecords()
+        [HttpPost, Route("api/patch/resave")]
+        public HttpResponseMessage Resave(string category)
         {
             var query = new RecordQueryInputModel
             {
-                K = new[] { "vocab.jncc.gov.uk/jncc-category/Seabird Surveys" },
+                K = new[] { "vocab.jncc.gov.uk/jncc-category/" + category },
                 P = 0,
                 N = 1024,
             };
 
             var records = _queryer.Query(query).ToList();
 
+            var service = new RecordService(db, new RecordValidator());
+
             foreach (var record in records)
             {
-                record.Gemini.MetadataDate = Clock.NowUtc;
+                service.Update(record);
             }
 
             db.SaveChanges();
