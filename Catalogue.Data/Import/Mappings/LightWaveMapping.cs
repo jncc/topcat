@@ -87,7 +87,7 @@ namespace Catalogue.Data.Import.Mappings
                 {
                     string name = row.GetField("ResponsibleOrganisation.Name").Trim();
                     string email = row.GetField("ResponsibleOrganisation.Email").Trim();
-                    string role = row.GetField("ResponsibleOrganisation.Role").Replace("point of Contact", "pointOfContact").FirstCharToLower().Trim();
+                    string role = row.GetField("ResponsibleOrganisation.Role").Replace("Point of Contact", "pointOfContact").Trim();
 
                     return new ResponsibleParty { Name = name == "JNCC" ? "Joint Nature Conservation Committee (JNCC)" : name, Email = email, Role = role };
                 });
@@ -149,7 +149,7 @@ namespace Catalogue.Data.Import.Mappings
                 Map(m => m.ReadOnly);
 
                 References<GeminiMap>(m => m.Gemini);
-                //References<PublicationInfoMap>(m => m.Gemini);
+                References<PublicationInfoMap>(m => m.Publication);
             }
         }
 
@@ -168,7 +168,9 @@ namespace Catalogue.Data.Import.Mappings
                 var cols = Enumerable.Range(1, 13).Select(n => "Path" + n).ToList();
                 Map(m => m.Resources).ConvertUsing(row =>
                 {
-                    return cols.Select(col => row.GetField<string>(col)).Where(StringUtility.IsNotBlank).ToList();
+                    return cols.Select(col => row.GetField<string>(col))
+                        .Where(StringUtility.IsNotBlank)
+                        .Select(v => new Resource { Path = v}).ToList();
                 });
             }
         }
@@ -206,7 +208,15 @@ namespace Catalogue.Data.Import.Mappings
         [Test, Explicit] // this isn't seed data, so these tests are (were) only used for the "one-off" import
         public void should_import_expected_number_of_records()
         {
-            imported.Count().Should().Be(10);
+            imported.Count().Should().Be(5);
+        }
+
+        [Test, Explicit] 
+        public void should_import_alternative_resources()
+        {
+            var record = imported.Single(r=>r.Gemini.Title == "Peak wave period in the Greater North Sea and Celtic Seas (2000-2005) for the EMODnet Seabed Habitats project");
+
+            record.Publication.OpenData.Resources.Count.Should().Be(6);
         }
     }
 }
