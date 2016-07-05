@@ -232,9 +232,10 @@ namespace Catalogue.Gemini.Encoding
         XElement MakeResourceLocator(Metadata metadata, Guid id)
         {
             string fileName = WebificationUtility.ToUrlFriendlyString(Path.GetFileName(metadata.ResourceLocator));
-            // this doesn't work so well when the resource locator contains the guid like this
+            // but this doesn't work so well when the resource locator contains the guid like this
             // http://data.jncc.gov.uk/data/d4ddd363-97eb-4ef6-9b8b-6f019f434103-ProcessedImages.zip
-            if (fileName.StartsWith(id + "-"))
+            // so remove the proceeding guid
+            if (fileName.IsNotBlank() && fileName.StartsWith(id + "-"))
                 fileName = fileName.Replace(id + "-", String.Empty);
 
             return new XElement(gmd + "transferOptions",
