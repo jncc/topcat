@@ -226,8 +226,8 @@ namespace Catalogue.Web.Controllers.Patch
         }
 
 
-        [HttpPost, Route("api/patch/fixpointofcontact")]
-        public HttpResponseMessage FixPointOfContact()
+        [HttpPost, Route("api/patch/fixseabedsurvey")]
+        public HttpResponseMessage FixSeabedSurvey()
         {
             var query = new RecordQueryInputModel
             {
@@ -238,15 +238,18 @@ namespace Catalogue.Web.Controllers.Patch
 
             var records = _queryer.Query(query).ToList();
 
+            var service = new RecordService(db, new RecordValidator());
+
             foreach (var record in records)
             {
-                record.Gemini.MetadataDate = Clock.NowUtc;
+                record.Gemini.ResponsibleOrganisation.Role = "custodian";
+                service.Update(record);
             }
 
 
             db.SaveChanges();
 
-            return new HttpResponseMessage();
+            return new HttpResponseMessage { Content = new StringContent("Updated " + records.Count + " records.") };
         }
 
         //        [HttpPost, Route("api/patch/renamesecuritylevels")]

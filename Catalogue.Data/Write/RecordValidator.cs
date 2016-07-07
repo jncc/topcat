@@ -383,6 +383,11 @@ namespace Catalogue.Data.Write
                 result.Errors.Add("Name of responsible organisation must be provided" + GeminiSuffix,
                         r => r.Gemini.ResponsibleOrganisation.Name);
             }
+            if (record.Gemini.ResponsibleOrganisation.Role.IsBlank())
+            {
+                result.Errors.Add("Role of responsible organisation must be provided" + GeminiSuffix,
+                        r => r.Gemini.ResponsibleOrganisation.Role);
+            }
 
             // 24 frequency of update is optional
 
@@ -746,6 +751,19 @@ namespace Catalogue.Data.Write
             var result = new RecordValidator().Validate(record);
 
             result.Errors.Count.Should().Be(0);
+        }
+
+        [Test]
+        public void responsible_organisation_role_must_not_be_blank()
+        {
+            var record = GeminiRecord().With(r => r.Gemini.ResponsibleOrganisation = new ResponsibleParty
+            {
+                Email = "a.mann@example.com",
+                Name = "A. Mann",
+                Role = "",
+            });
+            var result = new RecordValidator().Validate(record);
+            result.Errors.Single().Fields.Should().Contain("gemini.responsibleOrganisation.role");
         }
 
         [Test]
