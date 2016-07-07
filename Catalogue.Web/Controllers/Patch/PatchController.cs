@@ -231,7 +231,7 @@ namespace Catalogue.Web.Controllers.Patch
         {
             var query = new RecordQueryInputModel
             {
-                K = new[] { "vocab.jncc.gov.uk/jncc-category/Protected Areas" },
+                K = new[] { "vocab.jncc.gov.uk/jncc-category/Offshore Seabed Survey" },
                 P = 0,
                 N = 1024,
             };
