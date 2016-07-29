@@ -77,4 +77,11 @@ You can then write queries like this:
     from r in Query<Catalogue.Data.Model.Record>()
     where r.Gemini.Title.StartsWith("Sea")
     select r
+
+or
+
   
+    from r in Query<Catalogue.Data.Model.Record>()
+    where r.Gemini.Keywords.Any(k => k.Vocab == "http://vocab.jncc.gov.uk/jncc-category" && k.Value == "Human Activities")
+    select r
+    
