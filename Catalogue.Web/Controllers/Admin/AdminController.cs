@@ -129,6 +129,12 @@ namespace Catalogue.Web.Controllers.Admin
             return String.Format("{0} records updated.", count);
         }
 
+        [HttpGet, Route("api/admin/temptest")]
+        public bool TempTest()
+        {
+            return true;
+        }
+		
         [HttpGet, Route("api/admin/linkchecker")]
         public List<LinkCheckResult> LinkChecker()
         {
