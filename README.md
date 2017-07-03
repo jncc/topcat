@@ -9,21 +9,21 @@ Licensed under [Open Government Licence v2](http://www.nationalarchives.gov.uk/d
 Development
 -----------
 
-###Web Essentials
+### Web Essentials
 Install the Visual Studio Web Essentials extensions pack (and now the "Web Compiler" extension) for design-time support for CoffeeScript (.coffee) and LESS (.less). These are essential if you want to edit the application's Javascript or CSS.
 
 There are no build-time or run-time steps used to compile Coffeescript and LESS - the Visual Studio extensions are simpler.
 The application will expect the correct .js and .css files to have been design-time generated.
 
-###AngularJS
+### AngularJS
 There is (allegedly) [Resharper support](http://blogs.jetbrains.com/dotnet/2013/02/angularjs-support-for-resharper/).
 
-###Resharper
+### Resharper
 Currently best to disable Resharper > Options > Tools > Unit Testing > Javascript Tests > 
 * Enable QUnit support
 * Enable Jasmine support
 
-###RavenDB
+### RavenDB
 RavenDB studio can be accessed in development at http://localhost:8888
 
 To upgrade RavenDB, after updating the NuGet packages you currently need to update the Raven.Studio.Html5.zip file which can be got from the downloadable distribution.
@@ -36,19 +36,19 @@ Topcat runs with no special setup in Visual Studio for local development.
 
 Here's what you need to do to create a production instance:
 
-###Build
+### Build
 Run the `build/built.targets` MSBuild file (or use `build.bat`).
 * Use the the Developer Command Prompt for Visual Studio, else you may need to fix up (copy) the `Microsoft.WebApplication.targets` into the necessary place in the MSBuild installation.
 * You may need to install / correct the path for Git.
 * You may need to install / correct the path for NUnit-console.
 
-###Windows Authentication
+### Windows Authentication
 This is an corporate / intranet application and user account details and authentication rely on
 Active Directory and Windows authentication which gives us a great user experience in Chrome and IE.
 
 You need to disable Anonymous Authentication and enable Windows Authentication in the IIS website hosting Topcat.
 
-###RavenDB
+### RavenDB
 You can deploy Raven in various ways; the recommended is using the Windows installer:
 
 * Download the correct version from https://ravendb.net/download (see packages folder for the version number currently in use) 
