@@ -38,9 +38,11 @@ Here's what you need to do to create a production instance:
 
 ### Build
 Run the `build/built.targets` MSBuild file (or use `build.bat`).
-* Use the the Developer Command Prompt for Visual Studio, else you may need to fix up (copy) the `Microsoft.WebApplication.targets` into the necessary place in the MSBuild installation.
-* You may need to install / correct the path for Git.
-* You may need to install / correct the path for NUnit-console.
+* Use the the Developer Command Prompt for Visual Studio
+** You may need to fix up (copy) the `Microsoft.WebApplication.targets` into the necessary place in the MSBuild installation.
+E.g. I copied the WebApplications folder from `C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\MSBuild\Microsoft\VisualStudio\v15.0\WebApplications` to `C:\Program Files (x86)\MSBuild\Microsoft\VisualStudio\v15.0`
+* Make sure Git is available globally (e.g. install GitBash).
+* Install NUnit-console 2.6.3 from https://launchpad.net/nunitv2/trunk/2.6.3
 
 ### Windows Authentication
 This is an corporate / intranet application and user account details and authentication rely on
