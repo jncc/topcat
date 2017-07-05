@@ -17,7 +17,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Gemini.Validation
     /// </summary>
     internal class when_validating_the_example_document
     {
-        [Test]
+        [Test, Explicit]
         public void should_be_valid_gemini()
         {
             // without this we get an error message 417
