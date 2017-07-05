@@ -34,8 +34,8 @@ File.WriteAllText(Path, content);
         <MSBuildCommunityTasksLib>MSBuild.Community.Tasks.dll</MSBuildCommunityTasksLib>
     </PropertyGroup>
   <Target Name="DefaultRun">
-	<CallTarget Targets="Build" />
-     <CallTarget Targets="Test" />
+	  <CallTarget Targets="Build" />
+    <CallTarget Targets="Test" />
   </Target>
   
 	<Target Name="Build">
@@ -49,7 +49,7 @@ File.WriteAllText(Path, content);
         <!-- get the Git revision of the working copy that is being built -->
        <Message Text="=== Getting the Git revision being built." Importance="high" />
 		
-		<GitVersion LocalPath="$(MSBuildProjectDirectory)" ToolPath="C:\Program Files (x86)\Git\bin" >
+		<GitVersion LocalPath="$(MSBuildProjectDirectory)" ToolPath="C:\Program Files\Git\bin" >
 			<Output TaskParameter="CommitHash" PropertyName="CommitHash" />
     	</GitVersion>
 		<Message Text="GitVersion: '$(CommitHash)' " />

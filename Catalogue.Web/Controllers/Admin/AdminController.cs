@@ -13,6 +13,7 @@ using Catalogue.Robot.DeadLinks;
 using Catalogue.Web.Code;
 using Raven.Abstractions.Data;
 using Raven.Client;
+using Raven.Client.Bundles.Versioning;
 
 namespace Catalogue.Web.Controllers.Admin
 {
@@ -149,5 +150,16 @@ namespace Catalogue.Web.Controllers.Admin
         {
             return Directory.Exists(@"C:\topcat");
         }
+
+        [HttpPost, Route("api/devtest")]
+        public Object DevTest()
+        {
+            var pastRevisions = db
+                .Advanced
+                .GetRevisionsFor<Record>("records/fc566ae8-e4d9-4b5f-a565-28a5cd84f2e3", 0, 25);
+
+            return pastRevisions;
+        }
+
     }
 }
