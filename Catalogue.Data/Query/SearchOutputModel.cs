@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Catalogue.Data.Model;
 using Catalogue.Gemini.Model;
 
 namespace Catalogue.Data.Query
@@ -42,5 +43,10 @@ namespace Catalogue.Data.Query
         public string Value { get; set; }
         public string Vocab { get; set; }
         public bool Squash { get; set; }
+    }
+
+    public class UsageOutputModel
+    {
+        public List<Record> RecentlyModifiedRecords { get; set; }
     }
 }
