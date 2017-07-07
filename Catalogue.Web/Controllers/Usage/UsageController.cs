@@ -17,11 +17,21 @@ namespace Catalogue.Web.Controllers.Usage
             this.db = db;
         }
 
-        [HttpGet, Route("api/usage/recentlymodified")]
-        public UsageOutputModel GetRecentlyModifiedRecords(DateTime dateTime)
+        [HttpGet, Route("api/usage")]
+        public UsageOutputModel GetRecentlyModifiedRecords()
         {
             var output = new UsageOutputModel();
-            var recentlyModifiedRecords = db.Query<Record>().OrderByDescending(r => r.Gemini.MetadataDate).Take(5).ToList();
+            var recentlyModifiedRecords = db.Query<Record>()
+                .OrderByDescending(r => r.Gemini.MetadataDate)
+                .Take(5)
+                .Select(r => new ModifiedRecord
+                {
+                    Id = r.Id,
+                    Title = r.Gemini.Title,
+                    Date = r.Gemini.MetadataDate, // ("yyyy-MM-ddTHH\\:mm\\:ss.fffffffzzz"),
+                    User = r.Gemini.MetadataPointOfContact.Name
+                })
+                .ToList();
 
             output.RecentlyModifiedRecords = recentlyModifiedRecords;
             return output;
