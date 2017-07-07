@@ -632,7 +632,7 @@ namespace Catalogue.Data.Seed
                     new DateTime(2017, 07, 12, 15, 00, 00), "Cathy"),
             };
 
-            foreach (Tuple<String, String, DateTime, String> tuple in tuples)
+            foreach (Tuple<string, string, DateTime, string> tuple in tuples)
             {
                 Clock.CurrentUtcDateTimeGetter = () => tuple.Item3;
 
