@@ -50,7 +50,6 @@ namespace Catalogue.Data.Seed
                 s.AddRecordWithUnusualCharactersInKeywords();
                 s.AddTwoRecordsWithTheSameBoundingBox();
                 s.AddBboxes();
-                s.AddLastModifiedDateRecords();
 
                 db.SaveChanges();
             }
@@ -608,51 +607,6 @@ namespace Catalogue.Data.Seed
             db.Store(meshSeabedSurveyTechnique);
 
 
-        }
-
-        void AddLastModifiedDateRecords()
-        {
-            var timeGetter = Clock.CurrentUtcDateTimeGetter;
-
-            var tuples = new[]
-            {
-                Tuple.Create("8f4562ea-9d8a-45a0-afd3-bc5072d342a0", "DateTest_1",
-                    new DateTime(2016, 01, 03, 09, 00, 00), "Cathy"),
-                Tuple.Create("3ad98517-110b-40d7-aa0d-f0e3b1273007", "DateTest_2",
-                    new DateTime(2017, 06, 05, 09, 00, 00), "Pete"),
-                Tuple.Create("8c88dd97-3317-43e4-b59e-239e0604a094", "DateTest_3",
-                    new DateTime(2017, 07, 01, 15, 00, 00), "Cathy"),
-                Tuple.Create("f5a48ac7-13f6-40ba-85a2-f4534d9806a5", "DateTest_4",
-                    new DateTime(2017, 07, 01, 14, 00, 0), "Pete"),
-                Tuple.Create("80de0c30-325a-4392-ab4e-64b0654ca6ec", "DateTest_5",
-                    new DateTime(2017, 07, 11, 10, 00, 00), "Pete"),
-                Tuple.Create("afb567fe-8ca4-4274-9c4f-d1125983226c", "DateTest_6",
-                    new DateTime(2018, 07, 12, 14, 00, 00), "Pete"),
-                Tuple.Create("1458dfd1-e356-4287-9190-65e5f9ffd1df", "DateTest_7",
-                    new DateTime(2017, 07, 12, 15, 00, 00), "Cathy"),
-            };
-
-            foreach (Tuple<string, string, DateTime, string> tuple in tuples)
-            {
-                Clock.CurrentUtcDateTimeGetter = () => tuple.Item3;
-
-                var record = MakeExampleSeedRecord().With(r =>
-                {
-                    r.Id = new Guid(tuple.Item1);
-                    r.Path = @"X:\path\to\last\modified\date\data\"+ tuple.Item2;
-                    r.Gemini = r.Gemini.With(m =>
-                    {
-                        m.Title = tuple.Item2;
-                        m.Abstract = "Record with different last modified date";
-                        m.MetadataPointOfContact.Name = tuple.Item4;
-                    });
-                });
-
-                recordService.Insert(record);
-            }
-
-            // clean up!
-            Clock.CurrentUtcDateTimeGetter = timeGetter;
         }
 
         // BigBoundingBoxWithNothingInside and SmallBox do not intersect
