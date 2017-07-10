@@ -173,6 +173,8 @@
     <Compile Include="Controllers\Download\DownloadController.cs" />
     <Compile Include="Controllers\Export\ExportController.cs" />
     <Compile Include="Controllers\Topics\TopicsController.cs" />
+	<Compile Include="Controllers\Usage\UsageController.cs" />
+	<Compile Include="Controllers\Usage\UsageOutputModel.cs" />
     <Compile Include="Controllers\Search\VocabularyTypeaheadController.cs" />
     <Compile Include="Customization\CustomWebApiAssembliesResolver.cs" />
     <Compile Include="Logging\ElmahHandledErrorLoggerFilter.cs" />
