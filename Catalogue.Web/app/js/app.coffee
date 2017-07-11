@@ -11,7 +11,8 @@
     'app.filters',
     'app.controllers',
     'ui.grid',
-    'ui.grid.resizeColumns'
+    'ui.grid.resizeColumns',
+    'angularMoment'
     ]
         
 angular.module 'app.map', []
@@ -79,6 +80,27 @@ module.config ($routeProvider) ->
         .otherwise
             redirectTo:     '/'
 
+moment.updateLocale('en', {
+    relativeTime : {
+        past:   "%s",
+        s  : 'A few seconds ago',
+        ss : '%d seconds ago',
+        m:  "A minute ago",
+        mm: "%d minutes ago",
+        h:  "An hour ago",
+        hh: "Today",
+        d:  "Yesterday",
+        dd: (number) ->
+            if number < 7
+                "This past week"
+            else
+                "This month"
+        M:  "Last month",
+        MM: "This year",
+        y:  "Last year",
+        yy: "%d years ago"
+    }
+});
 
 # just playing....
 module.animation '.my-special-animation', ->

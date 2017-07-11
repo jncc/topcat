@@ -213,6 +213,17 @@
                     for <b>guidance and videos</b> created by <a href="mailto:Mary.Campling@jncc.gov.uk">Mary Campling</a> to introduce you to Topcat.
                 </div>
             </div>
+            
+            <div class="well well-sm">
+                <h2>What's happening</h2>
+                <div class="collection-description">
+                    <div ng-repeat="r in recentModifications">
+                        <time tc-tip title="{{ r.date | amDateFormat: 'dddd, MMMM Do YYYY, h:mm:ss a' }}" am-time-ago="r.date"></time>
+                        {{ r.user }} edited 
+                        <a ng-href="#/editor/{{ r.id}}">{{ r.title }}</a>
+                    </div>
+                </div>
+            </div>
 
             <div class="well well-sm">
                 <h2>Open Data Accelerator</h2>
