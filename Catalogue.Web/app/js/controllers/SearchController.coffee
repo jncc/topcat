@@ -105,7 +105,7 @@
             s = $scope.keywordToString keyword
             $scope.query.k.splice ($.inArray s, $scope.query.k), 1
        
-        # keyword helper functions            
+        # keyword helper functions
         $scope.keywordToString = (k) ->
             s = if k.vocab then k.vocab + '/' + k.value else k.value
             s.replace 'http://', ''
@@ -151,3 +151,5 @@
             # chunk the collections into two columns [ [a, b], [c, d] ... ]
             $scope.collections = _.chunk result, 2
 
+        $http.get('../api/usage').success (result) ->
+            $scope.recentModifications = result.recentlyModifiedRecords

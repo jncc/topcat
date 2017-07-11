@@ -172,8 +172,8 @@
     <Compile Include="Controllers\Download\DownloadController.cs" />
     <Compile Include="Controllers\Export\ExportController.cs" />
     <Compile Include="Controllers\Topics\TopicsController.cs" />
-	<Compile Include="Controllers\Usage\UsageController.cs" />
-	<Compile Include="Controllers\Usage\UsageOutputModel.cs" />
+    <Compile Include="Controllers\Usage\UsageController.cs" />
+    <Compile Include="Controllers\Usage\UsageOutputModel.cs" />
     <Compile Include="Controllers\Search\VocabularyTypeaheadController.cs" />
     <Compile Include="Customization\CustomWebApiAssembliesResolver.cs" />
     <Compile Include="Logging\ElmahHandledErrorLoggerFilter.cs" />
@@ -317,6 +317,7 @@
     <Content Include="app\lib\angular-1.2.28\angular-sanitize.min.js" />
     <Content Include="app\lib\angular-1.2.28\angular.min.js" />
     <Content Include="app\lib\angular-1.2.28\ui-bootstrap-tpls-0.12.0.min.js" />
+    <Content Include="app\lib\angular-moment-1.0.1\angular-moment.min.js" />
     <Content Include="app\lib\angular-strap-0.7.5\angular-strap-min.js" />
     <Content Include="app\lib\autosize-1.8.1\jquery.autosize.min.js" />
     <Content Include="app\lib\bootstrap-3.3.0-dist\dist\css\bootstrap-theme.css" />
@@ -343,6 +344,7 @@
     <Content Include="app\lib\leaflet-0.7.3\leaflet.css" />
     <Content Include="app\lib\leaflet-0.7.3\leaflet.js" />
     <Content Include="app\lib\lodash-3.7.0\lodash.min.js" />
+    <Content Include="app\lib\moment-2.18.1\moment.min.js" />
     <Content Include="app\lib\qtip2-2.1.1\jquery.qtip.min.css" />
     <Content Include="app\lib\qtip2-2.1.1\jquery.qtip.min.js" />
     <Content Include="app\lib\qtip2-2.2.0\jquery.qtip.min.css" />

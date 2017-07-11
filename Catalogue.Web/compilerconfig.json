@@ -1,15 +1,74 @@
 ﻿[
-
-  {
-    "outputFile": "app/js/app.js",
-    "inputFile": "app/js/app.coffee"
-  },
   {
     "outputFile": "app/css/main.css",
     "inputFile": "app/css/main.less"
   },
   {
+    "outputFile": "app/js/controllers/ContentController.js",
+    "inputFile": "app/js/controllers/ContentController.coffee"
+  },
+  {
+    "outputFile": "app/js/controllers/EditorController.js",
+    "inputFile": "app/js/controllers/EditorController.coffee"
+  },
+  {
+    "outputFile": "app/js/controllers/MainController.js",
+    "inputFile": "app/js/controllers/MainController.coffee"
+  },
+  {
+    "outputFile": "app/js/controllers/MarkdownController.js",
+    "inputFile": "app/js/controllers/MarkdownController.coffee"
+  },
+  {
     "outputFile": "app/js/controllers/PublishingController.js",
     "inputFile": "app/js/controllers/PublishingController.coffee"
+  },
+  {
+    "outputFile": "app/js/controllers/SandboxController.js",
+    "inputFile": "app/js/controllers/SandboxController.coffee"
+  },
+  {
+    "outputFile": "app/js/controllers/SearchController.js",
+    "inputFile": "app/js/controllers/SearchController.coffee"
+  },
+  {
+    "outputFile": "app/js/controllers/SearchGridController.js",
+    "inputFile": "app/js/controllers/SearchGridController.coffee"
+  },
+  {
+    "outputFile": "app/js/controllers/VocabularyEditorController.js",
+    "inputFile": "app/js/controllers/VocabularyEditorController.coffee"
+  },
+  {
+    "outputFile": "app/js/controllers/VocabularyListController.js",
+    "inputFile": "app/js/controllers/VocabularyListController.coffee"
+  },
+  {
+    "outputFile": "app/js/controllers/VocabularyController.js",
+    "inputFile": "app/js/controllers/VocabularyController.coffee"
+  },
+  {
+    "outputFile": "app/js/app.js",
+    "inputFile": "app/js/app.coffee"
+  },
+  {
+    "outputFile": "app/js/directives.js",
+    "inputFile": "app/js/directives.coffee"
+  },
+  {
+    "outputFile": "app/js/filters.js",
+    "inputFile": "app/js/filters.coffee"
+  },
+  {
+    "outputFile": "app/js/map.js",
+    "inputFile": "app/js/map.coffee"
+  },
+  {
+    "outputFile": "app/js/services.js",
+    "inputFile": "app/js/services.coffee"
+  },
+  {
+    "outputFile": "app/js/utilities.js",
+    "inputFile": "app/js/utilities.coffee"
   }
 ]
