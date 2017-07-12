@@ -7,15 +7,17 @@ namespace Catalogue.Web.Code.Account
 {
     public class User
     {
-        public string DisplayName { get; private set; }
-        public string FirstName { get; private set; }
-        public string Email { get; private set; }
+        public string DisplayName { get; }
+        public string FirstName { get; }
+        public string Email { get; }
+        public string Groups { get; }
 
-        public User(string displayName, string firstName, string email)
+        public User(string displayName, string firstName, string email, string groups)
         {
             FirstName = firstName;
             DisplayName = displayName;
             Email = email;
+            Groups = groups;
         }
     }
 }
