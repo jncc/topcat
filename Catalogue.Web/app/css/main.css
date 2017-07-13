@@ -670,3 +670,7 @@ form .ng-invalid {
 .nav > li > a {
   color: #666666;
 }
+time {
+  color: #666;
+  font-style: italic;
+}

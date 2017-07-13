@@ -2,7 +2,7 @@
 (function() {
   var module;
 
-  module = angular.module('app', ['ngAnimate', 'ngRoute', 'ngSanitize', 'ngCookies', 'ui.bootstrap', 'app.map', 'app.utilities', 'app.directives', 'app.services', 'app.filters', 'app.controllers', 'ui.grid', 'ui.grid.resizeColumns']);
+  module = angular.module('app', ['ngAnimate', 'ngRoute', 'ngSanitize', 'ngCookies', 'ui.bootstrap', 'app.map', 'app.utilities', 'app.directives', 'app.services', 'app.filters', 'app.controllers', 'ui.grid', 'ui.grid.resizeColumns', 'angularMoment']);
 
   angular.module('app.map', []);
 
@@ -89,6 +89,30 @@
     }).otherwise({
       redirectTo: '/'
     });
+  });
+
+  moment.updateLocale('en', {
+    relativeTime: {
+      past: "%s",
+      s: 'A few seconds ago',
+      ss: '%d seconds ago',
+      m: "A minute ago",
+      mm: "%d minutes ago",
+      h: "An hour ago",
+      hh: "Today",
+      d: "Yesterday",
+      dd: function(number) {
+        if (number < 7) {
+          return "This past week";
+        } else {
+          return "This month";
+        }
+      },
+      M: "Last month",
+      MM: "This year",
+      y: "Last year",
+      yy: "%d years ago"
+    }
   });
 
   module.animation('.my-special-animation', function() {
