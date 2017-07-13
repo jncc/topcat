@@ -1,8 +1,6 @@
 ﻿using Catalogue.Data.Model;
 using Catalogue.Data.Test;
 using Catalogue.Data.Write;
-using Catalogue.Gemini.Model;
-using Catalogue.Gemini.Templates;
 using Catalogue.Utilities.Clone;
 using Catalogue.Utilities.Time;
 using Catalogue.Web.Controllers.Usage;
@@ -10,6 +8,8 @@ using FluentAssertions;
 using NUnit.Framework;
 using System;
 using System.Collections.Generic;
+using Catalogue.Gemini.Model;
+using Catalogue.Gemini.Templates;
 
 namespace Catalogue.Tests.Slow.Catalogue.Web.Controllers.Usage
 {
@@ -68,7 +68,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Web.Controllers.Usage
             };
 
             var testRecords = new List<ModifiedRecord> { dateTest7, dateTest5, dateTest4, dateTest3, dateTest2, dateTest1 };
-            var expectedList = new List<ModifiedRecord> { dateTest7, dateTest5, dateTest4, dateTest3, dateTest2 };
+            var expectedRecords = new List<ModifiedRecord> { dateTest7, dateTest5, dateTest4, dateTest3, dateTest2 };
 
             var store = new InMemoryDatabaseHelper().Create();
             using (var db = store.OpenSession())
@@ -83,7 +83,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Web.Controllers.Usage
                 var recentlyModifiedRecords = usageResult.RecentlyModifiedRecords;
 
 
-                recentlyModifiedRecords.Should().ContainInOrder(expectedList);
+                recentlyModifiedRecords.Should().ContainInOrder(expectedRecords);
             }
         }
 
@@ -93,34 +93,23 @@ namespace Catalogue.Tests.Slow.Catalogue.Web.Controllers.Usage
             {
                 Clock.CurrentUtcDateTimeGetter = () => testRecord.Date;
 
-                var record = MakeExampleSeedRecord().With(r =>
+                var record = new Record().With(r =>
                 {
                     r.Id = testRecord.Id;
                     r.Path = @"X:\path\to\last\modified\date\data\" + testRecord.Title;
-                    r.Gemini = r.Gemini.With(m =>
+                    r.Gemini = Library.Blank().With(m =>
                     {
                         m.Title = testRecord.Title;
                         m.Abstract = "Record with different last modified date";
                         m.MetadataPointOfContact.Name = testRecord.User;
+                        m.Keywords.Add(new MetadataKeyword { Vocab = "http://vocab.jncc.gov.uk/jncc-domain", Value = "Marine" });
+                        m.Keywords.Add(new MetadataKeyword { Vocab = "http://vocab.jncc.gov.uk/jncc-category", Value = "Overseas Territories" });
+                        m.ResourceType = "dataset";
                     });
                 });
 
                 recordService.Insert(record);
             }
-        }
-
-        private static Record MakeExampleSeedRecord()
-        {
-            return new Record
-            {
-                Gemini = Library.Blank().With(m =>
-                {
-                    m.ResourceType = "dataset";
-                    m.Keywords.Add(new MetadataKeyword { Vocab = "http://vocab.jncc.gov.uk/jncc-domain", Value = "Terrestrial" });
-                    m.Keywords.Add(new MetadataKeyword { Vocab = "http://vocab.jncc.gov.uk/jncc-category", Value = "Example Collection" });
-                    m.Keywords.Add(new MetadataKeyword { Vocab = "", Value = "example" });
-                }),
-            };
         }
     }
 }
