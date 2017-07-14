@@ -160,10 +160,33 @@ label {
 .why-topcat > ul > li > ul > li:first-child {
   margin-top: 0.5em;
 }
-.roadmap {
+.righthand-info {
   border-left: 1px solid #eee;
   padding-top: 0.5em;
   padding-left: 3em;
+}
+.righthand-info .whats-happening {
+  padding-left: 1.5em;
+}
+.righthand-info .whats-happening .whats-happening-item {
+  margin-bottom: 0.5em;
+}
+.righthand-info .whats-happening li {
+  display: block;
+}
+.righthand-info .whats-happening li:before {
+  /*Using a Bootstrap glyphicon as the bullet point*/
+  content: "\e080";
+  font-family: 'Glyphicons Halflings';
+  font-size: 9px;
+  float: left;
+  margin-top: 4px;
+  margin-left: -17px;
+  color: #bbb;
+}
+.righthand-info .whats-happening time {
+  font-weight: bold;
+  color: #666;
 }
 .search-box {
   margin-bottom: 2em;
@@ -669,8 +692,4 @@ form .ng-invalid {
 }
 .nav > li > a {
   color: #666666;
-}
-time {
-  color: #666;
-  font-style: italic;
 }
