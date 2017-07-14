@@ -94,23 +94,23 @@
   moment.updateLocale('en', {
     relativeTime: {
       past: "%s",
-      s: 'A few seconds ago',
+      s: 'a few seconds ago',
       ss: '%d seconds ago',
-      m: "A minute ago",
+      m: "a minute ago",
       mm: "%d minutes ago",
-      h: "An hour ago",
-      hh: "Today",
-      d: "Yesterday",
+      h: "an hour ago",
+      hh: "today",
+      d: "yesterday",
       dd: function(number) {
         if (number < 7) {
-          return "This past week";
+          return "this past week";
         } else {
-          return "This month";
+          return "this month";
         }
       },
-      M: "Last month",
-      MM: "This year",
-      y: "Last year",
+      M: "last month",
+      MM: "this year",
+      y: "last year",
       yy: "%d years ago"
     }
   });
