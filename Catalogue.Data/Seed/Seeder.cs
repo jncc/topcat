@@ -13,6 +13,7 @@ using Catalogue.Gemini.Model;
 using Catalogue.Gemini.Templates;
 using Catalogue.Utilities.Clone;
 using Catalogue.Utilities.Collections;
+using Catalogue.Utilities.Time;
 using Raven.Client;
 
 namespace Catalogue.Data.Seed
@@ -33,7 +34,8 @@ namespace Catalogue.Data.Seed
             using (var db = store.OpenSession())
             {
                 var s = new Seeder(db, new RecordService(db, new RecordValidator()));
-                
+                Clock.CurrentUtcDateTimeGetter = () => new DateTime(2015, 1, 1, 12, 0, 0);
+
                 s.AddVocabularies();
                 s.AddMeshRecords();
                 s.AddHumanActivitiesRecord();
@@ -49,6 +51,7 @@ namespace Catalogue.Data.Seed
                 s.AddRecordWithUnusualCharactersInKeywords();
                 s.AddTwoRecordsWithTheSameBoundingBox();
                 s.AddBboxes();
+                s.AddDatesForTimeline();
 
                 db.SaveChanges();
             }
@@ -604,8 +607,68 @@ namespace Catalogue.Data.Seed
                 Keywords = new List<VocabularyKeyword>()
             };
             db.Store(meshSeabedSurveyTechnique);
+        }
 
+        void AddDatesForTimeline()
+        {
+            var timeGetter = Clock.CurrentUtcDateTimeGetter;
+            var timelineTest1 = MakeExampleSeedRecord().With(r =>
+            {
+                r.Id = new Guid("3671d004-a476-42e6-be1f-ef270784382e");
+                r.Path = @"Z:\path\to\timeline\test1";
+                r.Gemini = r.Gemini.With(m =>
+                {
+                    m.Title = "Timeline Test 1";
+                    m.MetadataPointOfContact.Name = "Cathy";
+                });
+            });
 
+            var timelineTest2 = MakeExampleSeedRecord().With(r =>
+            {
+                r.Id = new Guid("e26e1c00-7e2b-47c6-9ca7-bf0fedcfc72c");
+                r.Path = @"Z:\path\to\timeline\test2";
+                r.Gemini = r.Gemini.With(m =>
+                {
+                    m.Title = "Timeline Test 2";
+                    m.MetadataPointOfContact.Name = "Pete";
+                });
+            });
+
+            var timelineTest3 = MakeExampleSeedRecord().With(r =>
+            {
+                r.Id = new Guid("71c4e034-0c6b-4fa7-9b4d-ac328d34dabf");
+                r.Path = @"Z:\path\to\timeline\test3";
+                r.Gemini = r.Gemini.With(m =>
+                {
+                    m.Title = "Timeline Test 3";
+                    m.MetadataPointOfContact.Name = "Felix";
+                });
+            });
+
+            var timelineTest4 = MakeExampleSeedRecord().With(r =>
+            {
+                r.Id = new Guid("7c0055d1-8076-42f3-a004-ceaf2ad8ae9e");
+                r.Path = @"Z:\path\to\timeline\test4";
+                r.Gemini = r.Gemini.With(m =>
+                {
+                    m.Title = "Timeline Test 4";
+                    m.MetadataPointOfContact.Name = "Matt";
+                });
+            });
+
+            Clock.CurrentUtcDateTimeGetter = () => DateTime.Now;
+            recordService.Insert(timelineTest1);
+
+            Clock.CurrentUtcDateTimeGetter = () => DateTime.Now.AddHours(-5);
+            recordService.Insert(timelineTest2);
+
+            Clock.CurrentUtcDateTimeGetter = () => DateTime.Now.AddDays(-2);
+            recordService.Insert(timelineTest3);
+
+            Clock.CurrentUtcDateTimeGetter = () => DateTime.Now.AddMonths(-4);
+            recordService.Insert(timelineTest4);
+
+            Clock.CurrentUtcDateTimeGetter = timeGetter;
         }
 
         // BigBoundingBoxWithNothingInside and SmallBox do not intersect

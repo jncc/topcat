@@ -1,19 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Net.Http;
-using System.Web;
-using System.Web.Http;
-using Catalogue.Data.Indexes;
-using Catalogue.Data.Model;
+﻿using Catalogue.Data.Model;
 using Catalogue.Data.Query;
 using Catalogue.Data.Seed;
 using Catalogue.Robot.DeadLinks;
 using Catalogue.Web.Code;
 using Raven.Abstractions.Data;
 using Raven.Client;
-using Raven.Client.Bundles.Versioning;
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Net.Http;
+using System.Web.Http;
 
 namespace Catalogue.Web.Controllers.Admin
 {
@@ -149,16 +146,6 @@ namespace Catalogue.Web.Controllers.Admin
         public bool SeePath()
         {
             return Directory.Exists(@"C:\topcat");
-        }
-
-        [HttpGet, Route("api/devtest")]
-        public Object DevTest()
-        {
-            var pastRevisions = db
-                .Advanced
-                .GetRevisionsFor<Record>("records/fc566ae8-e4d9-4b5f-a565-28a5cd84f2e3", 0, 25);
-            var currentRecord = db.Load<Record>("records/fc566ae8-e4d9-4b5f-a565-28a5cd84f2e3");
-            return pastRevisions.Concat(new[] { currentRecord });
         }
 
     }

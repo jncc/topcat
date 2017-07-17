@@ -1,6 +1,6 @@
-﻿using System;
+﻿using Catalogue.Gemini.Model;
+using System;
 using System.Collections.Generic;
-using Catalogue.Gemini.Model;
 
 namespace Catalogue.Data.Query
 {

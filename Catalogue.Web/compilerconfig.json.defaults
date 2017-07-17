@@ -30,7 +30,7 @@
     },
     "coffeescript": {
       "bare": false,
-      "runtimeMode": "node",
+      "runtimeMode": "none",
       "sourceMap": true
     }
   },

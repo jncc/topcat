@@ -103,6 +103,7 @@
     <Compile Include="Slow\Catalogue.Web\Controllers\Export\export_controller_tests.cs" />
     <Compile Include="Slow\Catalogue.Web\Controllers\Marking\marking_specs.cs" />
     <Compile Include="Slow\Catalogue.Web\Controllers\Search\search_helper_specs.cs" />
+	<Compile Include="Slow\Catalogue.Web\Controllers\Usage\usage_controller_specs.cs" />
     <Compile Include="Slow\Spatial\when_querying_spatial_test_data.cs" />
     <Compile Include="Slow\when_testing_this_application.cs" />
     <Compile Include="DatabaseTestFixture.cs" />

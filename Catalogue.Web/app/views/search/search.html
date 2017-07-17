@@ -201,33 +201,33 @@
                 with <a href="mailto:Pete.Montgomery@jncc.gov.uk">Pete Montgomery</a> in Data Services if you want to help influence the project.
             </p>
         </div>
-        <div class="col-md-4 roadmap">
+        <div class="col-md-4 righthand-info">
 
             <br />
 
             <div class="well well-sm">
-                <h2>Help and guidance</h2>
-                <div class="collection-description">
+                <h2>What's happening</h2>
+                <ul class="whats-happening">
+                    <li ng-repeat="r in recentModifications" class="whats-happening-item">
+                        <time tc-tip title="{{ r.date | amDateFormat: 'dddd, MMMM Do YYYY, h:mm:ss a' }}" am-time-ago="r.date"></time>
+                        {{ r.user }} edited
+                        <a ng-href="#/editor/{{ r.id}}">{{ r.title }}</a>
+                    </li>
+                </ul>
+            </div>
 
+            <div class="well well-sm">
+                <h2>Help and guidance</h2>
+                <div>
                     Open <a href="\\jncc-corpfile\JNCC Corporate Data\Prog110-FutureData\0264 Information Management\Information Management\Tools\Topcat\Guidance">this folder</a> in Windows Explorer (copy and paste the link)
                     for <b>guidance and videos</b> created by <a href="mailto:Mary.Campling@jncc.gov.uk">Mary Campling</a> to introduce you to Topcat.
                 </div>
             </div>
-
+            
             <div class="well well-sm">
-                <h2>Open Data Accelerator</h2>
-                <p>
-                    The Secretary of State <a href="https://defradigital.blog.gov.uk/2015/06/25/opendefra/">recently promised</a>
-                    to release vast amounts of data across the Defra group as <b>open data</b> by June 2016.
-                </p>
-                <p>We now have an extremely ambitious and binding timescale to catalogue and release JNCC-owned data to the public.</p>
-                <p>Please contact <a href="mailto:Lynn.Heeley@jncc.gov.uk">Lynn Heeley</a> in Data Services for more information. <b>We need your data!</b> </p>
-            </div>
-
-            <div class="well well-sm">
-                <h2>Topcat Roadmap</h2>
+                <h2>Roadmap</h2>
                 <ul>
-                    <li>Full data.gov.uk targeting <span class="label label-info">In progress</span></li>
+                    <li>Better publishing to data.gov.uk<span class="label label-info">In progress</span></li>
                     <li>Keyword browser <span class="label label-success">Done</span></li>
                     <li>Spatial visualisation <span class="label label-success">Done</span></li>
                     <li>Export & download <span class="label label-success">Done</span></li>
