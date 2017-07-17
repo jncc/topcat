@@ -11,6 +11,7 @@ namespace Catalogue.Web.Security
 {
     public class OpenDataPublishersAttribute : AuthorizeAttribute
     {
+
         protected override bool AuthorizeCore(HttpContextBase httpContext)
         {
             if (httpContext.Request.IsLocal)
