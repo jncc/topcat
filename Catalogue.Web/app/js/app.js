@@ -99,7 +99,7 @@
       m: "a minute ago",
       mm: "%d minutes ago",
       h: "an hour ago",
-      hh: "today",
+      hh: "%d hours ago",
       d: "yesterday",
       dd: function(number) {
         if (number < 7) {
