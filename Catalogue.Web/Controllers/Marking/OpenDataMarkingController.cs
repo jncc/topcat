@@ -14,7 +14,7 @@ namespace Catalogue.Web.Controllers.Marking
             this.markingService = markingService;
         }
 
-        [HttpPut, Route("api/marking/opendata"), Authorize(Roles = "Publishers")]
+        [HttpPut, Route("api/marking/opendata"), OpenDataPublishers]
         public IHttpActionResult MarkAsOpenData(Guid id)
         {
             markingService.MarkAsOpenData(id);
