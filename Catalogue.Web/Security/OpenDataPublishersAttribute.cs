@@ -11,12 +11,6 @@ namespace Catalogue.Web.Security
 {
     public class OpenDataPublishersAttribute : AuthorizeAttribute
     {
-        public OpenDataPublishersAttribute()
-        {
-            var allRoles = (NameValueCollection)ConfigurationManager.GetSection("roles");
-            Roles = "Publishers";
-        }
-
         protected override bool AuthorizeCore(HttpContextBase httpContext)
         {
             if (httpContext.Request.IsLocal)
