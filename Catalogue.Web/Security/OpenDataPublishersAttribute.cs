@@ -14,7 +14,7 @@ namespace Catalogue.Web.Security
     {
         public OpenDataPublishersAttribute()
         {
-            Roles = "Publisher";
+            Roles = @"GREEN\OpenDataPublishers";
         }
 
 //        protected override bool AuthorizeCore(HttpContextBase httpContext)
