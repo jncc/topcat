@@ -621,7 +621,7 @@ namespace Catalogue.Data.Write
 
         [Test]
         public void sensitive_records_must_have_limitations_on_public_access(
-            [Values(Security.Secret, Security.OfficialSensitive)] Security nonOpen, [Values("", " ", null)] string blank)
+            [Values(Security.Secret, Security.OfficialSensitive)] Model.Security nonOpen, [Values("", " ", null)] string blank)
         {
             var record = SimpleRecord().With(r =>
             {

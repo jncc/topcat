@@ -1,40 +1,24 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Runtime.InteropServices.ComTypes;
+﻿using Catalogue.Data.Write;
+using Catalogue.Web.Security;
+using System;
 using System.Web.Http;
-using Catalogue.Data.Write;
-using Raven.Client;
-using Catalogue.Data.Model;
-using Catalogue.Gemini.Model;
 
 namespace Catalogue.Web.Controllers.Marking
 {
     public class OpenDataMarkingController : ApiController
     {
-        readonly IDocumentSession db;
+        readonly IMarkingService markingService;
 
-        public OpenDataMarkingController(IDocumentSession db)
+        public OpenDataMarkingController(IMarkingService markingService)
         {
-            this.db = db;
+            this.markingService = markingService;
         }
 
-        [HttpGet, Route("api/marking/opendata")]
-        public RecordServiceResult MarkAsOpenData(Guid id)
+        [HttpPut, Route("api/marking/opendata"), OpenDataPublishers]
+        public IHttpActionResult MarkAsOpenData(Guid id)
         {
-            var recordServiceResult = new RecordServiceResult();
-            var record = db.Load<Record>(id);
-
-            if (record.Publication == null)
-                record.Publication = new PublicationInfo();
-
-            if (record.Publication.OpenData == null)
-            {
-                record.Publication.OpenData = new OpenDataPublicationInfo();
-            }
-                
-            db.SaveChanges();
-
-            return recordServiceResult;
+            markingService.MarkAsOpenData(id);
+            return Ok();
         }
     }
 }
