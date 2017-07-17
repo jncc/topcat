@@ -14,7 +14,7 @@ namespace Catalogue.Web.Security
         public OpenDataPublishersAttribute()
         {
             var allRoles = (NameValueCollection)ConfigurationManager.GetSection("roles");
-            Roles = allRoles["OpenDataPublishers"];
+            Roles = "Publishers";
         }
 
         protected override bool AuthorizeCore(HttpContextBase httpContext)
@@ -25,7 +25,7 @@ namespace Catalogue.Web.Security
                 return true;
             }
 
-            return httpContext.Request.IsLocal || base.AuthorizeCore(httpContext);
+            return base.AuthorizeCore(httpContext);
         }
     }
 }
