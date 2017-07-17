@@ -91,30 +91,6 @@
     });
   });
 
-  moment.updateLocale('en', {
-    relativeTime: {
-      past: "%s",
-      s: 'a few seconds ago',
-      ss: '%d seconds ago',
-      m: "a minute ago",
-      mm: "%d minutes ago",
-      h: "an hour ago",
-      hh: "%d hours ago",
-      d: "yesterday",
-      dd: function(number) {
-        if (number < 7) {
-          return "this past week";
-        } else {
-          return "this month";
-        }
-      },
-      M: "last month",
-      MM: "this year",
-      y: "last year",
-      yy: "%d years ago"
-    }
-  });
-
   module.animation('.my-special-animation', function() {
     return {
       enter: function(element, done) {
