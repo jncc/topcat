@@ -80,24 +80,25 @@ module.config ($routeProvider) ->
         .otherwise
             redirectTo:     '/'
 
+# todo: move and commment
 moment.updateLocale('en', {
     relativeTime : {
         past:   "%s",
-        s  : 'A few seconds ago',
+        s  : 'a few seconds ago',
         ss : '%d seconds ago',
-        m:  "A minute ago",
+        m:  "a minute ago",
         mm: "%d minutes ago",
-        h:  "An hour ago",
-        hh: "Today",
-        d:  "Yesterday",
+        h:  "an hour ago",
+        hh: "today",
+        d:  "yesterday",
         dd: (number) ->
             if number < 7
-                "This past week"
+                "this past week"
             else
-                "This month"
-        M:  "Last month",
-        MM: "This year",
-        y:  "Last year",
+                "this month"
+        M:  "last month",
+        MM: "this year",
+        y:  "last year",
         yy: "%d years ago"
     }
 });
