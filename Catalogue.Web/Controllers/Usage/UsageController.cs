@@ -24,7 +24,7 @@ namespace Catalogue.Web.Controllers.Usage
             var recentlyModifiedRecords = db.Query<Record>()
                 .OrderByDescending(r => r.Gemini.MetadataDate)
                 .Take(5)
-                .Select(r => new ModifiedRecord
+                .Select(r => new RecentlyModifiedRecord
                 {
                     Id = r.Id,
                     Title = r.Gemini.Title,
