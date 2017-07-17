@@ -9,12 +9,13 @@ using System.Web.Http;
 
 namespace Catalogue.Web.Security
 {
-    [AttributeUsage(AttributeTargets.Class | AttributeTargets.Method )]
+    [AttributeUsage(AttributeTargets.Class | AttributeTargets.Method)]
     public class OpenDataPublishersAttribute : AuthorizeAttribute
     {
         public OpenDataPublishersAttribute()
         {
-            Roles = @"GREEN\OpenDataPublishers";
+            var allRoles = (NameValueCollection)ConfigurationManager.GetSection("roles");
+            Roles = allRoles["OpenDataPublishers"];
         }
 
 //        protected override bool AuthorizeCore(HttpContextBase httpContext)
@@ -25,7 +26,7 @@ namespace Catalogue.Web.Security
 //                return true;
 //            }
 //
-//            return base.AuthorizeCore(httpContext);
+//            return httpContext.Request.IsLocal || base.AuthorizeCore(httpContext);
 //        }
     }
 }
