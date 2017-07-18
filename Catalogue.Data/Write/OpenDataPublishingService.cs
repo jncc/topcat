@@ -4,12 +4,12 @@ using Raven.Client;
 
 namespace Catalogue.Data.Write
 {
-    public class PublishingService : IPublishingService
+    public class OpenDataPublishingService : IPublishingService
     {
         private readonly IDocumentSession db;
         private readonly IRecordService recordService;
 
-        public PublishingService(IDocumentSession db, IRecordService recordService)
+        public OpenDataPublishingService(IDocumentSession db, IRecordService recordService)
         {
             this.db = db;
             this.recordService = recordService;

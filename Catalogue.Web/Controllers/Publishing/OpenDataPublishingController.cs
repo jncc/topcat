@@ -13,12 +13,12 @@ namespace Catalogue.Web.Controllers.Publishing
     public class OpenDataPublishingController : ApiController
     {
         readonly IDocumentSession db;
-        readonly IPublishingService publishingService;
+        readonly IPublishingService openDataPublishingService;
 
-        public OpenDataPublishingController(IDocumentSession db, IPublishingService publishingService)
+        public OpenDataPublishingController(IDocumentSession db, IPublishingService openDataPublishingService)
         {
             this.db = db;
-            this.publishingService = publishingService;
+            this.openDataPublishingService = openDataPublishingService;
         }
 
         [HttpGet, Route("api/publishing/opendata/summary")]
@@ -38,7 +38,7 @@ namespace Catalogue.Web.Controllers.Publishing
         [HttpPut, Route("api/publishing/opendata/mark"), AuthorizeOpenDataPublishers]
         public IHttpActionResult MarkAsOpenData(Guid id)
         {
-            if (publishingService.MarkForPublishing(id))
+            if (openDataPublishingService.MarkForPublishing(id))
             {
                 return Ok();
             }

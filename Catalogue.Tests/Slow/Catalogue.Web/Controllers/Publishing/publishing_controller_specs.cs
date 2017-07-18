@@ -34,7 +34,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Web.Controllers.Publishing
                 db.SaveChanges();
 
                 var recordService = new RecordService(db, new RecordValidator());
-                var publishingService = new PublishingService(db, recordService);
+                var publishingService = new OpenDataPublishingService(db, recordService);
                 var publishingController = new OpenDataPublishingController(db, publishingService);
                 publishingController.MarkAsOpenData(record.Id);
 
