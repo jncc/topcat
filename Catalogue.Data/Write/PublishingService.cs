@@ -4,16 +4,18 @@ using Raven.Client;
 
 namespace Catalogue.Data.Write
 {
-    public class MarkingService : IMarkingService
+    public class PublishingService : IPublishingService
     {
         private readonly IDocumentSession db;
+        private readonly IRecordService recordService;
 
-        public MarkingService(IDocumentSession db)
+        public PublishingService(IDocumentSession db, IRecordService recordService)
         {
             this.db = db;
+            this.recordService = recordService;
         }
 
-        public void MarkAsOpenData(Guid id)
+        public bool MarkForPublishing(Guid id)
         {
             var record = db.Load<Record>(id);
 
@@ -21,11 +23,14 @@ namespace Catalogue.Data.Write
                 record.Publication = new PublicationInfo();
 
             if (record.Publication.OpenData == null)
-            {
                 record.Publication.OpenData = new OpenDataPublicationInfo();
-            }
 
-            db.SaveChanges();
+            var recordServiceResult = recordService.Update(record);
+            if (recordServiceResult.Success)
+                db.SaveChanges();
+
+            return recordServiceResult.Success;
         }
+
     }
 }

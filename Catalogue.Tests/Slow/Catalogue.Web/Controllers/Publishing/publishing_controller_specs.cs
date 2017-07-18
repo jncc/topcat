@@ -1,19 +1,19 @@
 ﻿using Catalogue.Data.Model;
 using Catalogue.Data.Test;
+using Catalogue.Data.Write;
 using Catalogue.Gemini.Templates;
 using Catalogue.Utilities.Clone;
-using Catalogue.Web.Controllers.Marking;
+using Catalogue.Web.Controllers.Publishing;
 using FluentAssertions;
 using NUnit.Framework;
 using System;
-using Catalogue.Data.Write;
 
-namespace Catalogue.Tests.Slow.Catalogue.Web.Controllers.Marking
+namespace Catalogue.Tests.Slow.Catalogue.Web.Controllers.Publishing
 {
-    class marking_specs
+    class publishing_controller_specs
     {
         [Test]
-        public void marking_changes_publication_test()
+        public void mark_as_open_data_test()
         {
             var record = new Record().With(r =>
             {
@@ -33,9 +33,10 @@ namespace Catalogue.Tests.Slow.Catalogue.Web.Controllers.Marking
                 db.Store(record);
                 db.SaveChanges();
 
-                var markingService = new MarkingService(db);
-                var markingController = new OpenDataMarkingController(markingService);
-                markingController.MarkAsOpenData(record.Id);
+                var recordService = new RecordService(db, new RecordValidator());
+                var publishingService = new PublishingService(db, recordService);
+                var publishingController = new OpenDataPublishingController(db, publishingService);
+                publishingController.MarkAsOpenData(record.Id);
 
                 var markedRecord = db.Load<Record>(record.Id);
                 markedRecord.Publication.Should().NotBeNull();

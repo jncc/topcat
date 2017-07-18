@@ -161,7 +161,6 @@
     <Compile Include="Controllers\Collections\CollectionOutputModel.cs" />
     <Compile Include="Controllers\Keywords\KeywordModel.cs" />
     <Compile Include="Controllers\Keywords\KeywordsController.cs" />
-    <Compile Include="Controllers\Marking\OpenDataMarkingController.cs" />
     <Compile Include="Controllers\Publishing\OpenDataPublishingController.cs" />
     <Compile Include="Controllers\Patch\PatchController.cs" />
     <Compile Include="Controllers\Queries\QueriesController.cs" />
@@ -179,7 +178,7 @@
     <Compile Include="Customization\CustomWebApiAssembliesResolver.cs" />
     <Compile Include="Logging\ElmahHandledErrorLoggerFilter.cs" />
     <Compile Include="Logging\UnhandledExceptionFilter.cs" />
-    <Compile Include="Security\OpenDataPublishersAttribute.cs" />
+    <Compile Include="Security\AuthorizeOpenDataPublishersAttribute.cs" />
     <Compile Include="Settings.cs" />
     <Compile Include="Account\AccountController.cs" />
     <Compile Include="Controllers\Search\SearchController.cs" />

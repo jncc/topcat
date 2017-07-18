@@ -1,5 +1,4 @@
-﻿
-using System;
+﻿using System;
 using System.Collections.Specialized;
 using System.Configuration;
 using System.Net.Http;
@@ -9,11 +8,11 @@ using System.Web.Http.Controllers;
 namespace Catalogue.Web.Security
 {
     [AttributeUsage(AttributeTargets.Class | AttributeTargets.Method)]
-    public class OpenDataPublishersAttribute : AuthorizeAttribute
+    public class AuthorizeOpenDataPublishersAttribute : AuthorizeAttribute
     {
-        public OpenDataPublishersAttribute()
+        public AuthorizeOpenDataPublishersAttribute()
         {
-            var allRoles = (NameValueCollection)ConfigurationManager.GetSection("roles");
+            var allRoles = (NameValueCollection) ConfigurationManager.GetSection("roles");
             Roles = allRoles["OpenDataPublishers"];
         }
 

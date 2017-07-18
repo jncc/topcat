@@ -4,6 +4,8 @@ using System.Linq;
 using System.Web.Http;
 using Catalogue.Data.Indexes;
 using Catalogue.Data.Model;
+using Catalogue.Data.Write;
+using Catalogue.Web.Security;
 using Raven.Client;
 
 namespace Catalogue.Web.Controllers.Publishing
@@ -11,10 +13,12 @@ namespace Catalogue.Web.Controllers.Publishing
     public class OpenDataPublishingController : ApiController
     {
         readonly IDocumentSession db;
+        readonly IPublishingService publishingService;
 
-        public OpenDataPublishingController(IDocumentSession db)
+        public OpenDataPublishingController(IDocumentSession db, IPublishingService publishingService)
         {
             this.db = db;
+            this.publishingService = publishingService;
         }
 
         [HttpGet, Route("api/publishing/opendata/summary")]
@@ -31,6 +35,15 @@ namespace Catalogue.Web.Controllers.Publishing
             };
         }
 
+        [HttpPut, Route("api/publishing/opendata/mark"), AuthorizeOpenDataPublishers]
+        public IHttpActionResult MarkAsOpenData(Guid id)
+        {
+            if (publishingService.MarkForPublishing(id))
+            {
+                return Ok();
+            }
+            return InternalServerError();
+        }
 
         [HttpGet, Route("api/publishing/opendata/publishedsincelastupdated")]
         public List<RecordRepresentation> PublishedSinceLastUpdated(int p = 1)

@@ -56,6 +56,7 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.Composition" />
+    <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.Data.Services.Client" />
     <Reference Include="System.Net.Http" />
@@ -101,9 +102,9 @@
     <Compile Include="Slow\Catalogue.Gemini\Validation\when_validating_the_example_document.cs" />
     <Compile Include="Slow\Catalogue.Import\when_importing_mesh_data.cs" />
     <Compile Include="Slow\Catalogue.Web\Controllers\Export\export_controller_tests.cs" />
-    <Compile Include="Slow\Catalogue.Web\Controllers\Marking\marking_specs.cs" />
+    <Compile Include="Slow\Catalogue.Web\Controllers\Publishing\publishing_controller_specs.cs" />
     <Compile Include="Slow\Catalogue.Web\Controllers\Search\search_helper_specs.cs" />
-	<Compile Include="Slow\Catalogue.Web\Controllers\Usage\usage_controller_specs.cs" />
+    <Compile Include="Slow\Catalogue.Web\Controllers\Usage\usage_controller_specs.cs" />
     <Compile Include="Slow\Spatial\when_querying_spatial_test_data.cs" />
     <Compile Include="Slow\when_testing_this_application.cs" />
     <Compile Include="DatabaseTestFixture.cs" />
