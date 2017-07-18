@@ -124,7 +124,7 @@
     <Compile Include="Seed\Vocabularies.cs" />
     <Compile Include="Test\InMemoryDatabaseHelper.cs" />
     <Compile Include="Test\RavenUtility.cs" />
-    <Compile Include="Write\IPublishingService.cs" />
+    <Compile Include="Write\IOpenDataPublishingService.cs" />
     <Compile Include="Write\OpenDataPublishingService.cs" />
     <Compile Include="Write\RecordService.cs" />
     <Compile Include="Write\RecordValidator.cs" />

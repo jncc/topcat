@@ -13,9 +13,9 @@ namespace Catalogue.Web.Controllers.Publishing
     public class OpenDataPublishingController : ApiController
     {
         readonly IDocumentSession db;
-        readonly IPublishingService openDataPublishingService;
+        readonly IOpenDataPublishingService openDataPublishingService;
 
-        public OpenDataPublishingController(IDocumentSession db, IPublishingService openDataPublishingService)
+        public OpenDataPublishingController(IDocumentSession db, IOpenDataPublishingService openDataPublishingService)
         {
             this.db = db;
             this.openDataPublishingService = openDataPublishingService;

@@ -2,7 +2,7 @@
 
 namespace Catalogue.Data.Write
 {
-    public interface IPublishingService
+    public interface IOpenDataPublishingService
     {
         bool MarkForPublishing(Guid id);
         // TODO
