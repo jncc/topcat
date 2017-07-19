@@ -11,7 +11,8 @@
     'app.filters',
     'app.controllers',
     'ui.grid',
-    'ui.grid.resizeColumns'
+    'ui.grid.resizeColumns',
+    'angularMoment'
     ]
         
 angular.module 'app.map', []
@@ -78,7 +79,6 @@ module.config ($routeProvider) ->
             templateUrl:    'views/partials/presentation.html'
         .otherwise
             redirectTo:     '/'
-
 
 # just playing....
 module.animation '.my-special-animation', ->

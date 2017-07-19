@@ -2,6 +2,7 @@
 using System.DirectoryServices.AccountManagement;
 using System.Security.Principal;
 using System.Web;
+using Catalogue.Utilities.Text;
 
 namespace Catalogue.Web.Code.Account
 {
@@ -42,10 +43,13 @@ namespace Catalogue.Web.Code.Account
                     var domainContext = new PrincipalContext(ContextType.Domain, settings.Domain);
                     var u = UserPrincipal.FindByIdentity(domainContext, principal.Identity.Name);
 
-                    user = new User(u.DisplayName, u.GivenName, u.EmailAddress);
+                    // get security groups (todo: relevant ones)
+                    string groups = u.GetAuthorizationGroups().ToConcatenatedString(g => g.Name, ";");
+
+                    user = new User(u.DisplayName, u.GivenName, u.EmailAddress, groups);
                 }
 
-                return user ?? new User("Guest User", "Guest", "guest@example.com");
+                return user ?? new User("Guest User", "Guest", "guest@example.com", "none!");
             }
         }
 
@@ -53,11 +57,12 @@ namespace Catalogue.Web.Code.Account
         {
             get { return principal.Identity.IsAuthenticated; }
         }
+
     }
 
     public class TestUserContext : IUserContext
     {
-        public User User { get { return new User("Test User", "Tester", "tester@example.com");  } }
+        public User User { get { return new User("Test User", "Tester", "tester@example.com", "test user group");  } }
         public bool Authenticated { get { return true; } }
     }
 }

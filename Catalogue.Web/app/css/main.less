@@ -6,7 +6,7 @@
 // always have a scroll bar to avoid layout jumps
 html { overflow-y: scroll; }
 
-// extra spacing when abtn has a gylphicon and text
+// extra spacing when a btn has a gylphicon and text
 .icon-and-text-btn > span { margin-right: 0.5em; }
 
 // make these look better when in a bootstrap well
@@ -203,10 +203,38 @@ label {
     > ul > li > ul > li:first-child { margin-top: 0.5em; }
 }
 
-.roadmap {
+.righthand-info {
     border-left: 1px solid @pale;
-    padding-top: 0.5em; // keep it definitely below the main welcome heading 
+    padding-top: 0.5em; // keep it definitely below the main welcome heading
     padding-left: 3em;
+
+    .whats-happening {
+        padding-left: 1.5em;
+
+        .whats-happening-item {
+            margin-bottom: 0.5em;
+        }
+
+        li {
+            display: block;
+        }
+
+        li:before {
+            /*Using a Bootstrap glyphicon as the bullet point*/
+            content: "\e080";
+            font-family: 'Glyphicons Halflings';
+            font-size: 9px;
+            float: left;
+            margin-top: 4px;
+            margin-left: -17px;
+            color: @grey;
+        }
+
+        time {
+            font-weight: bold;
+            color: @dark;
+        }
+    }
 }
 
 // ------
@@ -759,4 +787,3 @@ form .ng-invalid {
 .nav>li>a {
     color: #666666;
 }
-
