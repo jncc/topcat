@@ -5,6 +5,7 @@ using System.Net;
 using System.Net.Http;
 using System.Web.Http;
 using Catalogue.Data.Indexes;
+using Catalogue.Data.Model;
 using Catalogue.Data.Query;
 using Catalogue.Data.Write;
 using Catalogue.Gemini.BoundingBoxes;
@@ -225,7 +226,6 @@ namespace Catalogue.Web.Controllers.Patch
             return new HttpResponseMessage();
         }
 
-
         [HttpPost, Route("api/patch/fixseabedsurvey")]
         public HttpResponseMessage FixSeabedSurvey()
         {
@@ -250,6 +250,35 @@ namespace Catalogue.Web.Controllers.Patch
             db.SaveChanges();
 
             return new HttpResponseMessage { Content = new StringContent("Updated " + records.Count + " records.") };
+        }
+
+        [HttpPost, Route("api/patch/migrateopendatapublicationinfo")]
+        public HttpResponseMessage MigrateOpenDataPublicationInfo()
+        {
+            var records = db
+                .Query<RecordsWithOpenDataPublicationInfoIndex.Result, RecordsWithOpenDataPublicationInfoIndex>()
+                .As<Record>()
+                .Take(5000)
+                .ToList();
+
+            foreach (var record in records)
+            {
+                var old = record.Publication.OpenData;
+                record.Publication.OpenData = new OpenDataPublicationInfo
+                {
+                    Assessment = new OpenDataAssessmentInfo { Completed = true, InitialAssessmentWasDoneOnSpreadsheet = true },
+                    SignOff = new OpenDataSignOffInfo(),
+                    LastAttempt = old.LastAttempt,
+                    LastSuccess = old.LastSuccess,
+                    Paused = old.Paused,
+                    Resources = old.Resources,
+                };
+            }
+
+            db.SaveChanges();
+
+            return new HttpResponseMessage { Content = new StringContent("Updated " + records.Count + " records.") };
+
         }
 
         //        [HttpPost, Route("api/patch/renamesecuritylevels")]
