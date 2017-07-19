@@ -10,33 +10,51 @@ namespace Catalogue.Data.Model
 
     public class OpenDataPublicationInfo
     {
-        public Assessment Assessment { get; set; }
-        public SignOff SignOff { get; set; }
+        /// <summary>
+        /// Captures the record's "risk assessment" information. 
+        /// </summary>
+        public OpenDataAssessmentInfo Assessment { get; set; }
 
-        public PublicationAttempt LastAttempt { get; set; }
-        public PublicationAttempt LastSuccess { get; set; }
+        /// <summary>
+        /// Is the record signed-off by the SIRO? (Null means no.)
+        /// </summary>
+        public OpenDataSignOffInfo SignOff { get; set; }
 
+        /// <summary>
+        /// The files to actually publish, if different to the record's path.
+        /// </summary>
         public List<Resource> Resources { get; set; }
 
         /// <summary>
         /// Don't publish this record, for the time being.
         /// </summary>
         public bool Paused { get; set; }
+
+        /// <summary>
+        /// Details of the last attempt to publish this record.
+        /// </summary>
+        public PublicationAttempt LastAttempt { get; set; }
+
+        /// <summary>
+        /// Details about the last successful attempt to publish this record.
+        /// </summary>
+        public PublicationAttempt LastSuccess { get; set; }
     }
 
-    public class SignOff
+    public class OpenDataSignOffInfo
     {
         public DateTime DateUtc { get; set; }
         public string User { get; set; }
         public string Comment { get; set; }
     }
 
-    public class Assessment
+    public class OpenDataAssessmentInfo
     {
-        public bool InitialAssessmentWasDoneOnSpreadsheet { get; set; }
         public bool Completed { get; set; }
         public string CompletedBy { get; set; }
-        public DateTime CompletionDateUtc { get; set; }
+        public DateTime CompletedOnUtc { get; set; }
+
+        public bool InitialAssessmentWasDoneOnSpreadsheet { get; set; }
     }
 
     public class Resource
