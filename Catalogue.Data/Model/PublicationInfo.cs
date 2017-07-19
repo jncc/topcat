@@ -1,8 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Catalogue.Data.Model
 {
@@ -13,6 +10,9 @@ namespace Catalogue.Data.Model
 
     public class OpenDataPublicationInfo
     {
+        public Assessment Assessment { get; set; }
+        public SignOff SignOff { get; set; }
+
         public PublicationAttempt LastAttempt { get; set; }
         public PublicationAttempt LastSuccess { get; set; }
 
@@ -22,6 +22,21 @@ namespace Catalogue.Data.Model
         /// Don't publish this record, for the time being.
         /// </summary>
         public bool Paused { get; set; }
+    }
+
+    public class SignOff
+    {
+        public DateTime DateUtc { get; set; }
+        public string User { get; set; }
+        public string Comment { get; set; }
+    }
+
+    public class Assessment
+    {
+        public bool InitialAssessmentWasDoneOnSpreadsheet { get; set; }
+        public bool Completed { get; set; }
+        public string CompletedBy { get; set; }
+        public DateTime CompletionDateUtc { get; set; }
     }
 
     public class Resource
