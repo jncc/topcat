@@ -255,24 +255,38 @@ namespace Catalogue.Web.Controllers.Patch
         [HttpPost, Route("api/patch/migrateopendatapublicationinfo")]
         public HttpResponseMessage MigrateOpenDataPublicationInfo()
         {
-            var records = db
+            var records1 = db
                 .Query<RecordsWithOpenDataPublicationInfoIndex.Result, RecordsWithOpenDataPublicationInfoIndex>()
                 .As<Record>()
-                .Take(5000)
+                .Skip(0)
+                .Take(1024)
                 .ToList();
+
+            var records2 = db
+                .Query<RecordsWithOpenDataPublicationInfoIndex.Result, RecordsWithOpenDataPublicationInfoIndex>()
+                .As<Record>()
+                .Skip(1024)
+                .Take(1024)
+                .ToList();
+
+            var records = records1.Concat(records2).ToList();
 
             foreach (var record in records)
             {
                 var old = record.Publication.OpenData;
-                record.Publication.OpenData = new OpenDataPublicationInfo
+
+                if (old.SignOff == null)
                 {
-                    Assessment = new OpenDataAssessmentInfo { Completed = true, InitialAssessmentWasDoneOnSpreadsheet = true },
-                    SignOff = new OpenDataSignOffInfo(),
-                    LastAttempt = old.LastAttempt,
-                    LastSuccess = old.LastSuccess,
-                    Paused = old.Paused,
-                    Resources = old.Resources,
-                };
+                    record.Publication.OpenData = new OpenDataPublicationInfo
+                    {
+                        Assessment = new OpenDataAssessmentInfo { Completed = true, InitialAssessmentWasDoneOnSpreadsheet = true },
+                        SignOff = new OpenDataSignOffInfo(),
+                        LastAttempt = old.LastAttempt,
+                        LastSuccess = old.LastSuccess,
+                        Paused = old.Paused,
+                        Resources = old.Resources,
+                    };
+                }
             }
 
             db.SaveChanges();
