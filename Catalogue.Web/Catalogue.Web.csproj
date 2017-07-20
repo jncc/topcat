@@ -227,6 +227,7 @@
     <Content Include="app\js\controllers\EditorController.min.js">
       <DependentUpon>EditorController.coffee</DependentUpon>
     </Content>
+    <None Include="app\js\controllers\OpenDataPublishingController.coffee" />
     <Content Include="app\js\controllers\MainController.js">
       <DependentUpon>MainController.coffee</DependentUpon>
     </Content>
@@ -238,6 +239,12 @@
     </Content>
     <Content Include="app\js\controllers\MarkdownController.min.js">
       <DependentUpon>MarkdownController.coffee</DependentUpon>
+    </Content>
+    <Content Include="app\js\controllers\OpenDataPublishingController.js">
+      <DependentUpon>OpenDataPublishingController.coffee</DependentUpon>
+    </Content>
+    <Content Include="app\js\controllers\OpenDataPublishingController.min.js">
+      <DependentUpon>OpenDataPublishingController.js</DependentUpon>
     </Content>
     <Content Include="app\js\controllers\PublishingController.js">
       <DependentUpon>PublishingController.coffee</DependentUpon>
@@ -392,6 +399,7 @@
     <Content Include="app\views\partials\vocabulator.html" />
     <Content Include="app\views\partials\what-is-data.html" />
     <Content Include="app\views\partials\why-topcat.html" />
+    <Content Include="app\views\opendatapublishing\siro.html" />
     <Content Include="app\views\publishing\publishing.html" />
     <Content Include="app\views\sandbox\colours.html" />
     <Content Include="app\views\sandbox\dropdown.html" />
@@ -635,6 +643,9 @@
     <Content Include="app\js\controllers\PublishingController.js.map">
       <DependentUpon>PublishingController.js</DependentUpon>
     </Content>
+    <Content Include="app\js\controllers\OpenDataPublishingController.js.map">
+      <DependentUpon>OpenDataPublishingController.js</DependentUpon>
+    </Content>
     <None Include="app\js\controllers\VocabulatorController.coffee" />
     <Content Include="app\js\controllers\VocabulatorController.js.map">
       <DependentUpon>VocabulatorController.js</DependentUpon>
@@ -684,7 +695,9 @@
   <ItemGroup>
     <Service Include="{82A7F48D-3B50-4B1E-B82E-3ADA8210C358}" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="app\views\opendata\" />
+  </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
