@@ -41,7 +41,7 @@ namespace Catalogue.Data.Seed
                 s.AddHumanActivitiesRecord();
                 s.AddOverseasTerritoriesRecord();
                 s.AddSimpleGeminiExampleRecord();
-                s.AddRecordsWithPublishingInfo();
+                s.AddRecordsWithOpenDataPublishingInfo();
                 s.AddRecordWithLotsOfVocablessTags();
                 s.AddReadOnlyRecord();
                 s.AddNonGeographicDataset();
@@ -179,7 +179,7 @@ namespace Catalogue.Data.Seed
             recordService.Insert(record);
         }
 
-        void AddRecordsWithPublishingInfo()
+        void AddRecordsWithOpenDataPublishingInfo()
         {
             var record = MakeExampleSeedRecord().With(r =>
             {
@@ -224,6 +224,66 @@ namespace Catalogue.Data.Seed
                     };
                 });
             });
+
+            var assessedButNotCompletelyRecord = record.With(r =>
+            {
+                r.Id = new Guid("39f9442a-45e5-464f-8b20-876051560964");
+                r.Gemini.Title = "A record with an incomplete risk-assessment";
+                r.Publication = new PublicationInfo
+                {
+                    OpenData = new OpenDataPublicationInfo
+                    {
+                        Assessment = new OpenDataAssessmentInfo
+                        {
+                            // todo add more assessment fields
+                            Completed = false,
+
+                        }
+                    },
+                };
+            });
+
+            var assessedButNotSignedOffRecord= record.With(r =>
+            {
+                r.Id = new Guid("46003050-66f3-4fb2-b2b0-f66b382c8d37");
+                r.Gemini.Title = "An assessed but not signed-off record";
+                r.Publication = new PublicationInfo
+                {
+                    OpenData = new OpenDataPublicationInfo
+                    {
+                        Assessment = new OpenDataAssessmentInfo
+                        {
+                            // todo add more assessment fields
+                            Completed = true,
+                        },
+                        SignOff = null,
+                    },
+                };
+            });
+
+            var signedOffRecord = record.With(r =>
+            {
+                r.Id = new Guid("82ee6baf-26dc-438d-a579-dc7bcbdd1688");
+                r.Gemini.Title = "A signed-off record for publication";
+                r.Publication = new PublicationInfo
+                {
+                    OpenData = new OpenDataPublicationInfo
+                    {
+                        Assessment = new OpenDataAssessmentInfo
+                        {
+                            // todo add more assessment fields
+                            Completed = true,
+                        },
+                        SignOff = new OpenDataSignOffInfo
+                        {
+                            User = "Pete Montgomery",
+                            DateUtc = new DateTime(2017, 4, 14, 10, 0, 0),
+                            Comment = "All OK now.",
+                        }
+                    },
+                };
+            });
+
 
             var neverPublishedRecord = record.With(r =>
             {
@@ -306,6 +366,9 @@ namespace Catalogue.Data.Seed
             });
 
             recordService.Insert(neverPublishedRecord);
+            recordService.Insert(assessedButNotCompletelyRecord);
+            recordService.Insert(assessedButNotSignedOffRecord);
+            recordService.Insert(signedOffRecord);
             recordService.Insert(earlierUnsuccessfullyPublishedRecord);
             recordService.Insert(laterSuccessfullyPublishedRecord);
             recordService.Insert(updatedSinceSuccessfullyPublishedRecordAndNowPaused);

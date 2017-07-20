@@ -1,7 +1,7 @@
 ﻿{
   "version": 3,
   "file": "MarkdownController.js",
-  "sourceRoot": "D:\\workspace\\topcat\\Catalogue.Web\\app\\js\\controllers",
+  "sourceRoot": "..\\..\\..\\..\\..\\..\\Work\\topcat\\Catalogue.Web\\app\\js\\controllers",
   "sources": [
     "MarkdownController.coffee"
   ],
