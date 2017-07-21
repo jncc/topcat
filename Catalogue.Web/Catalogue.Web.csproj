@@ -151,7 +151,6 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Account\SecurityGroupsController.cs" />
     <Compile Include="Account\User.cs" />
     <Compile Include="Account\UserContext.cs" />
     <Compile Include="Controllers\Admin\AdminController.cs" />
@@ -179,6 +178,7 @@
     <Compile Include="Customization\CustomWebApiAssembliesResolver.cs" />
     <Compile Include="Logging\ElmahHandledErrorLoggerFilter.cs" />
     <Compile Include="Logging\UnhandledExceptionFilter.cs" />
+    <Compile Include="Security\AuthorizeOpenDataPublishersAttribute.cs" />
     <Compile Include="Settings.cs" />
     <Compile Include="Account\AccountController.cs" />
     <Compile Include="Controllers\Search\SearchController.cs" />
@@ -684,7 +684,9 @@
   <ItemGroup>
     <Service Include="{82A7F48D-3B50-4B1E-B82E-3ADA8210C358}" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="app\views\OpenDataMarking\" />
+  </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>

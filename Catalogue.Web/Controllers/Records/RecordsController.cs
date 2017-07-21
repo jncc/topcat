@@ -33,10 +33,7 @@ namespace Catalogue.Web.Controllers.Records
         {
             if (id == Guid.Empty) // a nice empty record for making a new one
                 return MakeNewRecord();
-            else if (clone)
-                return Clone(db.Load<Record>(id));
-            else
-                return db.Load<Record>(id);
+            return clone ? Clone(db.Load<Record>(id)) : db.Load<Record>(id);
         }
 
         private Record Clone(Record record)
