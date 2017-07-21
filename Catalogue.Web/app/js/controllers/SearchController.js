@@ -2,8 +2,6 @@
 (function() {
   var __indexOf = [].indexOf || function(item) { for (var i = 0, l = this.length; i < l; i++) { if (i in this && this[i] === item) return i; } return -1; };
 
-
-
   angular.module('app.controllers').controller('SearchController', function($scope, $rootScope, $location, $http, $timeout, $q, $modal) {
     var blankQuery, parseQuerystring, queryKeywords, queryRecords, updateUrl;
     $scope.app = {
@@ -44,10 +42,7 @@
           return $scope.notifications.add('Oops! ' + e.message);
         });
       } else {
-        return $q.defer({
-          lineno: 38,
-          context: __iced_deferrals
-        });
+        return $q["defer"]();
       }
     };
     $scope.doSearch = function(query) {
