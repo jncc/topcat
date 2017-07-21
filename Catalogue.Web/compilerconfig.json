@@ -20,6 +20,10 @@
     "inputFile": "app/js/controllers/MarkdownController.coffee"
   },
   {
+    "outputFile": "app/js/controllers/OpenDataPublishingController.js",
+    "inputFile": "app/js/controllers/OpenDataPublishingController.coffee"
+  },
+  {
     "outputFile": "app/js/controllers/PublishingController.js",
     "inputFile": "app/js/controllers/PublishingController.coffee"
   },

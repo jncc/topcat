@@ -69,10 +69,12 @@ LinqPad
 -------
 RavenDB doesn't support ad-hoc querying very well. We use LinqPad to do ad-hoc querying and basic data visualisation. 
 
-You need to use the RavenDB LinqPad adaptor. Create a connection like `RavenDB: Topcat LIVE`, and add the references to the assemblies in the output folder of your build.
+http://www.linqpad.net/download.aspx
+
+You need to use the RavenDB LinqPad adaptor. Our RavenDB is not up-to-date, so we need to use an older version of the driver. Browse to it in the `/linqpad` directory. Create a connection like `RavenDB: Topcat LIVE`, and add the references to the assemblies in the output folder (such as `Catalogue.Web/bin`) of your build.
 
     Catalogue.Data.dll
-	Catalogue.Gemini.dll
+    Catalogue.Gemini.dll
 
 You can then write queries like this:
 
@@ -81,7 +83,6 @@ You can then write queries like this:
     select r
 
 or
-
   
     from r in Query<Catalogue.Data.Model.Record>()
     where r.Gemini.Keywords.Any(k => k.Vocab == "http://vocab.jncc.gov.uk/jncc-category" && k.Value == "Human Activities")

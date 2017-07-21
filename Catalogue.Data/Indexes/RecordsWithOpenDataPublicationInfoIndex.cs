@@ -12,11 +12,13 @@ namespace Catalogue.Data.Indexes
             public DateTime RecordLastUpdatedDate { get; set; }
             public DateTime LastPublicationAttemptDate { get; set; }
             public DateTime LastSuccessfulPublicationAttemptDate { get; set; }
+            public bool GeminiValidated { get; set; }
+            public bool AssessmentCompleted { get; set; }
+            public bool SignedOff { get; set; }
             public bool PublicationNeverAttempted { get; set; }
             public bool LastPublicationAttemptWasUnsuccessful { get; set; }
             public bool PublishedSinceLastUpdated { get; set; }
             public bool PublishingIsPaused { get; set; }
-            public bool GeminiValidated { get; set; }
         }
 
         public RecordsWithOpenDataPublicationInfoIndex()
@@ -36,11 +38,13 @@ namespace Catalogue.Data.Indexes
                                  RecordLastUpdatedDate = recordLastUpdatedDate,
                                  LastPublicationAttemptDate = lastAttemptDate,
                                  LastSuccessfulPublicationAttemptDate = lastSuccessDate,
+                                 GeminiValidated = r.Validation == Validation.Gemini,
+                                 AssessmentCompleted = r.Publication.OpenData.Assessment.Completed,
+                                 SignedOff = r.Publication.OpenData.SignOff != null,
                                  PublicationNeverAttempted = neverAttempted,
                                  LastPublicationAttemptWasUnsuccessful = lastAttemptDate > lastSuccessDate,
                                  PublishedSinceLastUpdated = lastSuccessDate > recordLastUpdatedDate,
                                  PublishingIsPaused = r.Publication.OpenData.Paused,
-                                 GeminiValidated = r.Validation == Validation.Gemini,
                              };
         }
     }

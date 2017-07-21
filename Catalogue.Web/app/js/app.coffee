@@ -42,9 +42,12 @@ module.config ($routeProvider) ->
         .when '/vocabularies',
             controller:     'VocabularyListController',
             templateUrl:    'views/vocabularies/vocabularies.html'
-        .when '/publishing',
+        .when '/publishing/old',
             controller:     'PublishingController',
             templateUrl:    'views/publishing/publishing.html'
+        .when '/opendatapublishing/siro',
+            controller:     'OpenDataPublishingController',
+            templateUrl:    'views/opendatapublishing/siro.html'
         .when '/vocabularies/editor/:vocabId*',
             controller:     'VocabularyEditorController',
             templateUrl:    'views/vocabularies/editor.html',

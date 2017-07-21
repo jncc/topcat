@@ -5,6 +5,7 @@ using System.Net;
 using System.Net.Http;
 using System.Web.Http;
 using Catalogue.Data.Indexes;
+using Catalogue.Data.Model;
 using Catalogue.Data.Query;
 using Catalogue.Data.Write;
 using Catalogue.Gemini.BoundingBoxes;
@@ -225,7 +226,6 @@ namespace Catalogue.Web.Controllers.Patch
             return new HttpResponseMessage();
         }
 
-
         [HttpPost, Route("api/patch/fixseabedsurvey")]
         public HttpResponseMessage FixSeabedSurvey()
         {
@@ -250,6 +250,49 @@ namespace Catalogue.Web.Controllers.Patch
             db.SaveChanges();
 
             return new HttpResponseMessage { Content = new StringContent("Updated " + records.Count + " records.") };
+        }
+
+        [HttpPost, Route("api/patch/migrateopendatapublicationinfo")]
+        public HttpResponseMessage MigrateOpenDataPublicationInfo()
+        {
+            var records1 = db
+                .Query<RecordsWithOpenDataPublicationInfoIndex.Result, RecordsWithOpenDataPublicationInfoIndex>()
+                .As<Record>()
+                .Skip(0)
+                .Take(1024)
+                .ToList();
+
+            var records2 = db
+                .Query<RecordsWithOpenDataPublicationInfoIndex.Result, RecordsWithOpenDataPublicationInfoIndex>()
+                .As<Record>()
+                .Skip(1024)
+                .Take(1024)
+                .ToList();
+
+            var records = records1.Concat(records2).ToList();
+
+            foreach (var record in records)
+            {
+                var old = record.Publication.OpenData;
+
+                if (old.SignOff == null)
+                {
+                    record.Publication.OpenData = new OpenDataPublicationInfo
+                    {
+                        Assessment = new OpenDataAssessmentInfo { Completed = true, InitialAssessmentWasDoneOnSpreadsheet = true },
+                        SignOff = new OpenDataSignOffInfo(),
+                        LastAttempt = old.LastAttempt,
+                        LastSuccess = old.LastSuccess,
+                        Paused = old.Paused,
+                        Resources = old.Resources,
+                    };
+                }
+            }
+
+            db.SaveChanges();
+
+            return new HttpResponseMessage { Content = new StringContent("Updated " + records.Count + " records.") };
+
         }
 
         //        [HttpPost, Route("api/patch/renamesecuritylevels")]
