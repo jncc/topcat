@@ -110,6 +110,7 @@
     <Compile Include="Indexes\RecordKeywordIndex.cs" />
     <Compile Include="Indexes\RecordSpatialIndex.cs" />
     <Compile Include="Indexes\RecordIndex.cs" />
+    <Compile Include="Model\SignOffRequest.cs" />
     <Compile Include="Model\PublicationInfo.cs" />
     <Compile Include="Model\Record.cs" />
     <Compile Include="Model\Security.cs" />

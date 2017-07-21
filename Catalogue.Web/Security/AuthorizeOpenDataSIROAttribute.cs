@@ -8,12 +8,12 @@ using System.Web.Http.Controllers;
 namespace Catalogue.Web.Security
 {
     [AttributeUsage(AttributeTargets.Class | AttributeTargets.Method)]
-    public class AuthorizeOpenDataPublishersAttribute : AuthorizeAttribute
+    public class AuthorizeOpenDataSIROAttribute : AuthorizeAttribute
     {
-        public AuthorizeOpenDataPublishersAttribute()
+        public AuthorizeOpenDataSIROAttribute()
         {
             var allRoles = (NameValueCollection) ConfigurationManager.GetSection("roles");
-            Roles = allRoles["OpenDataPublishers"];
+            Roles = allRoles["OpenDataSignOffRole"];
         }
 
         protected override bool IsAuthorized(HttpActionContext actionContext)

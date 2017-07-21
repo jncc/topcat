@@ -15,21 +15,20 @@ namespace Catalogue.Data.Write
             this.recordService = recordService;
         }
 
-        public bool MarkForPublishing(Guid id)
+        public void SignOff(Record record, OpenDataSignOffInfo signOffInfo)
         {
-            var record = db.Load<Record>(id);
+            var publicationInfo = record.Publication;
 
-            if (record.Publication == null)
+            if (publicationInfo == null)
                 record.Publication = new PublicationInfo();
 
-            if (record.Publication.OpenData == null)
-                record.Publication.OpenData = new OpenDataPublicationInfo();
+            var openDataInfo = record.Publication.OpenData ?? new OpenDataPublicationInfo();
+            openDataInfo.SignOff = signOffInfo;
+            record.Publication.OpenData = openDataInfo;
 
             var recordServiceResult = recordService.Update(record);
             if (recordServiceResult.Success)
                 db.SaveChanges();
-
-            return recordServiceResult.Success;
         }
 
     }

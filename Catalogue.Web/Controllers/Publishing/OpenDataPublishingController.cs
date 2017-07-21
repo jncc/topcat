@@ -5,6 +5,7 @@ using System.Web.Http;
 using Catalogue.Data.Indexes;
 using Catalogue.Data.Model;
 using Catalogue.Data.Write;
+using Catalogue.Web.Account;
 using Catalogue.Web.Security;
 using Raven.Client;
 
@@ -14,11 +15,13 @@ namespace Catalogue.Web.Controllers.Publishing
     {
         readonly IDocumentSession db;
         readonly IOpenDataPublishingService openDataPublishingService;
+        readonly IUserContext user;
 
-        public OpenDataPublishingController(IDocumentSession db, IOpenDataPublishingService openDataPublishingService)
+        public OpenDataPublishingController(IDocumentSession db, IOpenDataPublishingService openDataPublishingService, IUserContext user)
         {
             this.db = db;
             this.openDataPublishingService = openDataPublishingService;
+            this.user = user;
         }
 
         [HttpGet, Route("api/publishing/opendata/summary")]
@@ -35,14 +38,19 @@ namespace Catalogue.Web.Controllers.Publishing
             };
         }
 
-        [HttpPut, Route("api/publishing/opendata/mark"), AuthorizeOpenDataPublishers]
-        public IHttpActionResult MarkAsOpenData(Guid id)
+        [HttpPut, Route("api/publishing/opendata/signoff"), AuthorizeOpenDataSIRO]
+        public IHttpActionResult SignOff(SignOffRequest signOffRequest)
         {
-            if (openDataPublishingService.MarkForPublishing(id))
+            var record = db.Load<Record>(signOffRequest.Id);
+            var signOffInfo = new OpenDataSignOffInfo
             {
-                return Ok();
-            }
-            return InternalServerError();
+                User = user.User.DisplayName,
+                DateUtc = DateTime.Now,
+                Comment = signOffRequest.Comment
+            };
+
+            openDataPublishingService.SignOff(record, signOffInfo);
+            return Ok();
         }
 
         [HttpGet, Route("api/publishing/opendata/publishedsincelastupdated")]

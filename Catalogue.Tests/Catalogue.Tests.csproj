@@ -133,7 +133,7 @@
       <Name>Catalogue.Utilities</Name>
     </ProjectReference>
     <ProjectReference Include="..\Catalogue.Web\Catalogue.Web.csproj">
-      <Project>{27b06ce1-415f-41aa-a822-e13aa61ea0d2}</Project>
+      <Project>{27B06CE1-415F-41AA-A822-E13AA61EA0D2}</Project>
       <Name>Catalogue.Web</Name>
     </ProjectReference>
   </ItemGroup>

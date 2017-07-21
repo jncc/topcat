@@ -1,12 +1,12 @@
-﻿using System;
+﻿using Catalogue.Data.Model;
 
 namespace Catalogue.Data.Write
 {
     public interface IOpenDataPublishingService
     {
-        bool MarkForPublishing(Guid id);
+        void SignOff(Record record, OpenDataSignOffInfo signOffInfo);
         // TODO
-        // SignOff
+        // Assess
         // Publish
     }
 }
