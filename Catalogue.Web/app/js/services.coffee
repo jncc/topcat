@@ -1,7 +1,7 @@
 ﻿module = angular.module 'app.services'
 
 module.factory 'Account', ($http, $q) ->
-    d = $q.defer()
+    d = $q["defer"]()
     $http.get('../api/account').success (data) ->
         d.resolve data
     d.promise
@@ -13,7 +13,7 @@ module.factory 'Vocabulary', ($resource) ->
     
 module.factory 'VocabLoader', (Vocabulary, $route, $q) ->
     () ->
-        d = $q.defer()
+        d = $q["defer"]()
         Vocabulary.get
             id: $route.current.params.vocabId,
             (vocabulary) -> d.resolve vocabulary,
@@ -28,7 +28,7 @@ module.factory 'Record', ($resource) ->
     
 module.factory 'RecordLoader', (Record, $route, $q) ->
     () ->
-        d = $q.defer()
+        d = $q["defer"]()
         Record.get
             id: $route.current.params.recordId,
             (record) -> d.resolve record,
@@ -37,7 +37,7 @@ module.factory 'RecordLoader', (Record, $route, $q) ->
 
 module.factory 'RecordCloner', (Record, $route, $q) ->
     () ->
-        d = $q.defer()
+        d = $q["defer"]()
         Record.clone
             id: $route.current.params.recordId,
             (record) -> d.resolve record,
@@ -46,7 +46,7 @@ module.factory 'RecordCloner', (Record, $route, $q) ->
 
 # just currently using this for a spike in SandboxController
 module.factory 'Formats', ($http, $q) ->
-    d = $q.defer()
+    d = $q["defer"]()
     $http.get('../api/formats').success (data) ->
         d.resolve data
     d.promise

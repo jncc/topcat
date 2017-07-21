@@ -36,8 +36,8 @@
                     .success (result) -> $scope.keywordSuggestions = result
                     .error (e) -> $scope.notifications.add 'Oops! ' + e.message
             else
-                $q.defer() # return an empty promise
-        
+                $q["defer"]() # return an empty promise https://github.com/madskristensen/WebCompiler/issues/202
+
         # called whenever the $scope.query object changes
         # (also called explicitly from search button)
         $scope.doSearch = (query) ->
