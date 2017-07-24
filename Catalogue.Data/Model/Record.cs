@@ -6,6 +6,9 @@ namespace Catalogue.Data.Model
     public class Record
     {
         public Guid Id { get; set; }
+        public DateTime CreationDateUtc { get; set; }
+        public string CreatedBy { get; set; }
+        public string LastModifiedBy { get; set; }
 
         /// <summary>
         /// The UK Gemini metadata record. 
