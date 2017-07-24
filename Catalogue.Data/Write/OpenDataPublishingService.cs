@@ -29,7 +29,6 @@ namespace Catalogue.Data.Write
                 throw new Exception("OpenDataAssessmentInfo not completed");
 
             openDataInfo.SignOff = signOffInfo;
-            record.Publication.OpenData = openDataInfo;
 
             var recordServiceResult = recordService.Update(record);
             if (recordServiceResult.Success)
