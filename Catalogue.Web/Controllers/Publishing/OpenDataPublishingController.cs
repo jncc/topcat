@@ -38,7 +38,7 @@ namespace Catalogue.Web.Controllers.Publishing
             };
         }
 
-        [HttpPut, Route("api/publishing/opendata/signoff"), AuthorizeOpenDataSIRO]
+        [HttpPut, Route("api/publishing/opendata/signoff"), AuthorizeOpenDataSiro]
         public IHttpActionResult SignOff(SignOffRequest signOffRequest)
         {
             var record = db.Load<Record>(signOffRequest.Id);

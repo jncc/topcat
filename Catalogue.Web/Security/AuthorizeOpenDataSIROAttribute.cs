@@ -8,9 +8,9 @@ using System.Web.Http.Controllers;
 namespace Catalogue.Web.Security
 {
     [AttributeUsage(AttributeTargets.Class | AttributeTargets.Method)]
-    public class AuthorizeOpenDataSIROAttribute : AuthorizeAttribute
+    public class AuthorizeOpenDataSiroAttribute : AuthorizeAttribute
     {
-        public AuthorizeOpenDataSIROAttribute()
+        public AuthorizeOpenDataSiroAttribute()
         {
             var allRoles = (NameValueCollection) ConfigurationManager.GetSection("roles");
             Roles = allRoles["OpenDataSignOffRole"];
