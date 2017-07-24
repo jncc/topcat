@@ -64,7 +64,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Web.Controllers.Publishing
         }
 
         [Test]
-        [ExpectedException(typeof(Exception), ExpectedMessage = "OpenDataAssessmentInfo not completed")]
+        [ExpectedException(typeof(Exception), ExpectedMessage = "Couldn't sign-off record for publication. Assessment not completed.")]
         public void sign_off_without_risk_assessment_test()
         {
             var recordId = new Guid("9f9d7a83-8fcb-4afc-956b-3d874d5632b1");
@@ -92,7 +92,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Web.Controllers.Publishing
         }
 
         [Test]
-        [ExpectedException(typeof(Exception), ExpectedMessage = "OpenDataAssessmentInfo not completed")]
+        [ExpectedException(typeof(Exception), ExpectedMessage = "Couldn't sign-off record for publication. Assessment not completed.")]
         public void sign_off_with_incomplete_risk_assessment_test()
         {
             var recordId = new Guid("9f9d7a83-8fcb-4afc-956b-3d874d5632b1");
@@ -130,7 +130,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Web.Controllers.Publishing
         }
 
         [Test]
-        [ExpectedException(typeof(Exception), ExpectedMessage = "Record already signed off")]
+        [ExpectedException(typeof(Exception), ExpectedMessage = "The record has already been signed off and cannot be signed off again.")]
         public void repeat_sign_off_should_fail_test()
         {
             var recordId = new Guid("eb6fc4d3-1d75-446d-adc8-296881110079");
@@ -164,6 +164,34 @@ namespace Catalogue.Tests.Slow.Catalogue.Web.Controllers.Publishing
                         {
                             DateUtc = new DateTime(2017, 07, 20),
                             User = "Ulric"
+                        }
+                    }
+                };
+            });
+
+            testSignOff(record, recordId);
+        }
+
+        [Test]
+        [ExpectedException(typeof(Exception), ExpectedMessage = "Error while saving sign off changes.")]
+        public void failure_when_saving_sign_off_changes_test()
+        {
+            var recordId = new Guid("30f9aed6-62f2-478d-8851-c322ddb7beb8");
+            var record = new Record().With(r =>
+            {
+                r.Id = recordId;
+                r.Path = @"X:\path\to\signoff\test";
+                r.Gemini = Library.Blank().With(m =>
+                {
+                    m.Title = "Open data sign off test";
+                });
+                r.Publication = new PublicationInfo
+                {
+                    OpenData = new OpenDataPublicationInfo
+                    {
+                        Assessment = new OpenDataAssessmentInfo
+                        {
+                            Completed = true,
                         }
                     }
                 };

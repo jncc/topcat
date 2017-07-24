@@ -13,7 +13,7 @@ namespace Catalogue.Web.Security
         public AuthorizeOpenDataSiroAttribute()
         {
             var allRoles = (NameValueCollection) ConfigurationManager.GetSection("roles");
-            Roles = allRoles["OpenDataSignOffRole"];
+            Roles = allRoles["OpenDataSiroRole"];
         }
 
         protected override bool IsAuthorized(HttpActionContext actionContext)
