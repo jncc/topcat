@@ -17,12 +17,17 @@ namespace Catalogue.Data.Write
 
         public void SignOff(Record record, OpenDataSignOffInfo signOffInfo)
         {
-            var publicationInfo = record.Publication;
+            if (record.Publication?.OpenData == null)
+                throw new Exception("OpenDataAssessmentInfo not completed");
 
-            if (publicationInfo == null)
-                record.Publication = new PublicationInfo();
+            var openDataInfo = record.Publication.OpenData;
 
-            var openDataInfo = record.Publication.OpenData ?? new OpenDataPublicationInfo();
+            if (openDataInfo?.SignOff != null && openDataInfo.SignOff.DateUtc != DateTime.MinValue)
+                throw new Exception("Record already signed off");
+
+            if (openDataInfo?.Assessment != null && !openDataInfo.Assessment.Completed)
+                throw new Exception("OpenDataAssessmentInfo not completed");
+
             openDataInfo.SignOff = signOffInfo;
             record.Publication.OpenData = openDataInfo;
 
@@ -30,6 +35,5 @@ namespace Catalogue.Data.Write
             if (recordServiceResult.Success)
                 db.SaveChanges();
         }
-
     }
 }
