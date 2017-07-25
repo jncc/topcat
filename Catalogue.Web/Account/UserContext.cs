@@ -2,6 +2,7 @@
 using Catalogue.Web.Code;
 using System.DirectoryServices.AccountManagement;
 using System.Security.Principal;
+using Catalogue.Data.Model;
 
 namespace Catalogue.Web.Account
 {

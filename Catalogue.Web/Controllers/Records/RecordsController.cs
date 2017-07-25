@@ -1,16 +1,13 @@
-﻿using System;
-using System.Web.Http;
-using Catalogue.Data.Model;
+﻿using Catalogue.Data.Model;
 using Catalogue.Data.Write;
 using Catalogue.Gemini.Model;
 using Catalogue.Gemini.Templates;
 using Catalogue.Utilities.Clone;
 using Catalogue.Utilities.Time;
 using Catalogue.Web.Account;
-using FluentAssertions;
-using Moq;
-using NUnit.Framework;
 using Raven.Client;
+using System;
+using System.Web.Http;
 
 namespace Catalogue.Web.Controllers.Records
 {
@@ -54,6 +51,7 @@ namespace Catalogue.Web.Controllers.Records
 
         public RecordServiceResult Put(Guid id, [FromBody]Record record)
         {
+            AddModifiedInfo(record);
             var result = service.Update(record);
 
             if (result.Record.Id != id) throw new Exception("The ID of the record does not match that supplied to the put method");
@@ -68,6 +66,8 @@ namespace Catalogue.Web.Controllers.Records
         {
             record.Id = Guid.NewGuid();
 
+            AddCreatedInfo(record);
+            AddModifiedInfo(record);
             var result = service.Insert(record);
 
             if (result.Success)
@@ -98,38 +98,23 @@ namespace Catalogue.Web.Controllers.Records
                                 Role = "author", // it's a new record, so let's suppose the user must be the metadata author
                             };
                     }),
-                    Review = DateTime.Now.AddYears(3) // arbitrarily decided to default to 3 years from now
-                };
-        }
-    }
-
-    public class records_controllers_tests
-    {
-        [Test]
-        public void should_return_blank_record_for_empty_guid()
-        {
-            var controller = new RecordsController(Mock.Of<IRecordService>(), Mock.Of<IDocumentSession>(), new TestUserContext());
-            var record = controller.Get(Guid.Empty);
-
-            record.Gemini.Title.Should().BeBlank();
-            record.Path.Should().BeBlank();
+                Review = DateTime.Now.AddYears(3) // arbitrarily decided to default to 3 years from now
+            };
         }
 
-        [Test]
-        public void should_give_new_record_a_new_guid()
+        private void AddCreatedInfo(Record record)
         {
-            var record = new Record
-                {
-                    Path = @"X:\some\path",
-                    Gemini = Library.Blank().With(m => m.Title = "Some new record!")
-                };
-            var rsr = RecordServiceResult.SuccessfulResult.With(r => r.Record = record);
-            var service = Mock.Of<IRecordService>(s => s.Insert(It.IsAny<Record>()) == rsr);
-            var controller = new RecordsController(service, Mock.Of<IDocumentSession>(), new TestUserContext());
-            
-            var result = controller.Post(record);
+            record.Footer = new Footer
+            {
+                CreatedOnUtc = Clock.NowUtc,
+                CreatedBy = user.User.DisplayName
+            };
+        }
 
-            result.Record.Id.Should().NotBeEmpty();
+        private void AddModifiedInfo(Record record)
+        {
+            record.Footer.ModifiedOnUtc = Clock.NowUtc;
+            record.Footer.ModifiedBy = user.User.DisplayName;
         }
     }
 }
