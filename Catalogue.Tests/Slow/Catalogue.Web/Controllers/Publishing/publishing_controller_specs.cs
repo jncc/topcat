@@ -208,9 +208,9 @@ namespace Catalogue.Tests.Slow.Catalogue.Web.Controllers.Publishing
                 db.Store(record);
                 db.SaveChanges();
 
-                var user = new User("Guest User", "Guest", "guest@example.com", "none!");
+                var testUserContext = new TestUserContext();
                 var userContextMock = new Mock<IUserContext>();
-                userContextMock.Setup(u => u.User).Returns(user);
+                userContextMock.Setup(u => u.User).Returns(testUserContext.User);
 
                 var recordService = new RecordService(db, new RecordValidator());
                 var publishingService = new OpenDataPublishingService(db, recordService);
