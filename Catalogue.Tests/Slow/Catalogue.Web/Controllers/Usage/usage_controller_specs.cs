@@ -11,6 +11,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Catalogue.Gemini.Model;
 using Catalogue.Gemini.Templates;
+using static Catalogue.Data.Model.RecordEvent;
 
 namespace Catalogue.Tests.Slow.Catalogue.Web.Controllers.Usage
 {
@@ -25,7 +26,8 @@ namespace Catalogue.Tests.Slow.Catalogue.Web.Controllers.Usage
                 Id = new Guid("1458dfd1-e356-4287-9190-65e5f9ffd1df"),
                 Title = "DateTest_7",
                 Date = new DateTime(2017, 07, 12, 15, 00, 00),
-                User = "Cathy"
+                User = "Cathy",
+                Event = Create
             };
 
             var dateTest5 = new RecentlyModifiedRecord
@@ -33,7 +35,8 @@ namespace Catalogue.Tests.Slow.Catalogue.Web.Controllers.Usage
                 Id = new Guid("80de0c30-325a-4392-ab4e-64b0654ca6ec"),
                 Title = "DateTest_5",
                 Date = new DateTime(2017, 07, 11, 10, 00, 00),
-                User = "Pete"
+                User = "Pete",
+                Event = Create
             };
 
             var dateTest4 = new RecentlyModifiedRecord
@@ -41,7 +44,8 @@ namespace Catalogue.Tests.Slow.Catalogue.Web.Controllers.Usage
                 Id = new Guid("f5a48ac7-13f6-40ba-85a2-f4534d9806a5"),
                 Title = "DateTest_4",
                 Date = new DateTime(2017, 07, 01, 15, 05, 0),
-                User = "Pete"
+                User = "Pete",
+                Event = Edit
             };
 
             var dateTest3 = new RecentlyModifiedRecord
@@ -49,7 +53,8 @@ namespace Catalogue.Tests.Slow.Catalogue.Web.Controllers.Usage
                 Id = new Guid("8c88dd97-3317-43e4-b59e-239e0604a094"),
                 Title = "DateTest_3",
                 Date = new DateTime(2017, 07, 01, 15, 00, 00),
-                User = "Cathy"
+                User = "Cathy",
+                Event = Edit
             };
 
             var dateTest2 = new RecentlyModifiedRecord
@@ -57,7 +62,8 @@ namespace Catalogue.Tests.Slow.Catalogue.Web.Controllers.Usage
                 Id = new Guid("3ad98517-110b-40d7-aa0d-f0e3b1273007"),
                 Title = "DateTest_2",
                 Date = new DateTime(2017, 06, 05, 09, 00, 00),
-                User = "Pete"
+                User = "Pete",
+                Event = Edit
             };
 
             var dateTest1 = new RecentlyModifiedRecord
@@ -65,13 +71,15 @@ namespace Catalogue.Tests.Slow.Catalogue.Web.Controllers.Usage
                 Id = new Guid("8f4562ea-9d8a-45a0-afd3-bc5072d342a0"),
                 Title = "DateTest_1",
                 Date = new DateTime(2016, 01, 03, 09, 00, 00),
-                User = "Cathy"
+                User = "Cathy",
+                Event = Edit
             };
 
             var testRecords = new List<RecentlyModifiedRecord> { dateTest7, dateTest5, dateTest4, dateTest3, dateTest2, dateTest1 };
             var expectedRecords = new List<string> { "1458dfd1-e356-4287-9190-65e5f9ffd1df",
                 "80de0c30-325a-4392-ab4e-64b0654ca6ec", "f5a48ac7-13f6-40ba-85a2-f4534d9806a5",
                 "8c88dd97-3317-43e4-b59e-239e0604a094", "3ad98517-110b-40d7-aa0d-f0e3b1273007" };
+            var expectedEvents = new List<string> {"Created", "Created", "Edited", "Created", "Edited"};
 
             var store = new InMemoryDatabaseHelper().Create();
             using (var db = store.OpenSession())
@@ -86,6 +94,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Web.Controllers.Usage
                 var recentlyModifiedRecords = usageResult.RecentlyModifiedRecords;
 
                 recentlyModifiedRecords.Select(r => r.Id.ToString()).Should().ContainInOrder(expectedRecords);
+                recentlyModifiedRecords.Select(r => r.Event.ToString()).Should().ContainInOrder(expectedEvents);
             }
         }
 
@@ -108,6 +117,11 @@ namespace Catalogue.Tests.Slow.Catalogue.Web.Controllers.Usage
                         m.Keywords.Add(new MetadataKeyword { Vocab = "http://vocab.jncc.gov.uk/jncc-category", Value = "Overseas Territories" });
                         m.ResourceType = "dataset";
                     });
+                    r.Footer = new Footer
+                    {
+                        CreatedOnUtc = testRecord.Event == Create ? testRecord.Date : testRecord.Date.AddDays(-1),
+                        ModifiedOnUtc = testRecord.Date
+                    };
                 });
 
                 recordService.Insert(record);

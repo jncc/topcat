@@ -672,6 +672,8 @@ namespace Catalogue.Data.Seed
         void AddDatesForTimeline()
         {
             var timeGetter = Clock.CurrentUtcDateTimeGetter;
+            
+            Clock.CurrentUtcDateTimeGetter = () => DateTime.Now;
             var timelineTest1 = MakeExampleSeedRecord().With(r =>
             {
                 r.Id = new Guid("3671d004-a476-42e6-be1f-ef270784382e");
@@ -681,9 +683,12 @@ namespace Catalogue.Data.Seed
                     m.Title = "Timeline Test 1";
                     m.MetadataPointOfContact.Name = "Cathy";
                 });
-                r.Footer.ModifiedOnUtc = DateTime.Now;
+                r.Footer.ModifiedOnUtc = Clock.NowUtc;
+                r.Footer.ModifiedBy = "Cathy";
             });
+            recordService.Insert(timelineTest1);
 
+            Clock.CurrentUtcDateTimeGetter = () => DateTime.Now.AddHours(-5);
             var timelineTest2 = MakeExampleSeedRecord().With(r =>
             {
                 r.Id = new Guid("e26e1c00-7e2b-47c6-9ca7-bf0fedcfc72c");
@@ -693,9 +698,12 @@ namespace Catalogue.Data.Seed
                     m.Title = "Timeline Test 2";
                     m.MetadataPointOfContact.Name = "Pete";
                 });
-                r.Footer.ModifiedOnUtc = DateTime.Now.AddHours(-5);
+                r.Footer.ModifiedOnUtc = Clock.NowUtc;
+                r.Footer.ModifiedBy = "Pete";
             });
+            recordService.Insert(timelineTest2);
 
+            Clock.CurrentUtcDateTimeGetter = () => DateTime.Now.AddDays(-2);
             var timelineTest3 = MakeExampleSeedRecord().With(r =>
             {
                 r.Id = new Guid("71c4e034-0c6b-4fa7-9b4d-ac328d34dabf");
@@ -705,8 +713,12 @@ namespace Catalogue.Data.Seed
                     m.Title = "Timeline Test 3";
                     m.MetadataPointOfContact.Name = "Felix";
                 });
+                r.Footer.ModifiedOnUtc = Clock.NowUtc;
+                r.Footer.ModifiedBy = "Felix";
             });
+            recordService.Insert(timelineTest3);
 
+            Clock.CurrentUtcDateTimeGetter = () => DateTime.Now.AddMonths(-4);
             var timelineTest4 = MakeExampleSeedRecord().With(r =>
             {
                 r.Id = new Guid("7c0055d1-8076-42f3-a004-ceaf2ad8ae9e");
@@ -716,18 +728,9 @@ namespace Catalogue.Data.Seed
                     m.Title = "Timeline Test 4";
                     m.MetadataPointOfContact.Name = "Matt";
                 });
+                r.Footer.ModifiedOnUtc = Clock.NowUtc;
+                r.Footer.ModifiedBy = "Matt";
             });
-
-            Clock.CurrentUtcDateTimeGetter = () => DateTime.Now;
-            recordService.Insert(timelineTest1);
-
-            Clock.CurrentUtcDateTimeGetter = () => DateTime.Now.AddHours(-5);
-            recordService.Insert(timelineTest2);
-
-            Clock.CurrentUtcDateTimeGetter = () => DateTime.Now.AddDays(-2);
-            recordService.Insert(timelineTest3);
-
-            Clock.CurrentUtcDateTimeGetter = () => DateTime.Now.AddMonths(-4);
             recordService.Insert(timelineTest4);
 
             Clock.CurrentUtcDateTimeGetter = timeGetter;
