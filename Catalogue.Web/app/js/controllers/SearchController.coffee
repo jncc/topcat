@@ -153,3 +153,9 @@
 
         $http.get('../api/usage').success (result) ->
             $scope.recentModifications = result.recentlyModifiedRecords
+            for r in $scope.recentModifications
+                if r.event == 0
+                    r.event = "created"
+                else
+                    r.event = "edited"
+            

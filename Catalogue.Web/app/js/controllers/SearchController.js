@@ -166,7 +166,19 @@
       return $scope.collections = _.chunk(result, 2);
     });
     return $http.get('../api/usage').success(function(result) {
-      return $scope.recentModifications = result.recentlyModifiedRecords;
+      var r, _i, _len, _ref, _results;
+      $scope.recentModifications = result.recentlyModifiedRecords;
+      _ref = $scope.recentModifications;
+      _results = [];
+      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+        r = _ref[_i];
+        if (r.event === 0) {
+          _results.push(r.event = "created");
+        } else {
+          _results.push(r.event = "edited");
+        }
+      }
+      return _results;
     });
   });
 

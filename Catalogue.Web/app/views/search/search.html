@@ -210,8 +210,8 @@
                 <ul class="whats-happening">
                     <li ng-repeat="r in recentModifications" class="whats-happening-item">
                         <time tc-tip title="{{ r.date | amDateFormat: 'dddd, MMMM Do YYYY, h:mm:ss a' }}" am-time-ago="r.date"></time>
-                        {{ r.user }} edited
-                        <a ng-href="#/editor/{{ r.id}}">{{ r.title }}</a>
+                        {{ r.user }} {{ r.event }}
+                        <a ng-href="#/editor/{{ r.id }}">{{ r.title }}</a>
                     </li>
                 </ul>
             </div>

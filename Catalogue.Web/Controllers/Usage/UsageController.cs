@@ -1,11 +1,10 @@
-﻿using Catalogue.Data.Model;
-using Catalogue.Data.Query;
+﻿using System.Collections.Generic;
+using Catalogue.Data.Indexes;
 using Raven.Client;
 using Raven.Client.Linq;
-using System;
 using System.Linq;
 using System.Web.Http;
-using Catalogue.Data.Indexes;
+using Catalogue.Data.Model;
 using static Catalogue.Data.Model.RecordEvent;
 
 namespace Catalogue.Web.Controllers.Usage
@@ -23,17 +22,20 @@ namespace Catalogue.Web.Controllers.Usage
         public UsageOutputModel GetRecentlyModifiedRecords()
         {
             var output = new UsageOutputModel();
-            var recentlyModifiedRecords = db.Query<RecordEventIndex>()
-                .As<RecentlyModifiedRecord>()
+
+            var records = db.Query<Record>()
+                .OrderByDescending(r => r.Gemini.MetadataDate)
                 .Take(5)
-//                .Select(r => new RecentlyModifiedRecord
-//                {
-//                    Id = r.Id,
-//                    Title = r.Gemini.Title,
-//                    Date = r.Footer.ModifiedOnUtc, // ("yyyy-MM-ddTHH\\:mm\\:ss.fffffffzzz"),
-//                    User = r.Footer.ModifiedBy,
-//                    Event = r.Footer.CreatedOnUtc == r.Footer.ModifiedOnUtc ? Create : Edit
-//                })
+                .ToList();
+
+            var recentlyModifiedRecords = records.Select(record => new RecentlyModifiedRecord
+                {
+                    Id = record.Id,
+                    Title = record.Gemini.Title,
+                    Date = record.Footer.ModifiedOnUtc,
+                    User = record.Footer.ModifiedBy,
+                    Event = record.Footer.CreatedOnUtc.Equals(record.Footer.ModifiedOnUtc) ? Create : Edit
+                })
                 .ToList();
 
             output.RecentlyModifiedRecords = recentlyModifiedRecords;

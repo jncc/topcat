@@ -683,8 +683,13 @@ namespace Catalogue.Data.Seed
                     m.Title = "Timeline Test 1";
                     m.MetadataPointOfContact.Name = "Cathy";
                 });
-                r.Footer.ModifiedOnUtc = Clock.NowUtc;
-                r.Footer.ModifiedBy = "Cathy";
+                r.Footer = new Footer
+                {
+                    CreatedOnUtc = Clock.NowUtc.AddDays(-1),
+                    CreatedBy = "Pete",
+                    ModifiedOnUtc = Clock.NowUtc,
+                    ModifiedBy = "Cathy"
+                };
             });
             recordService.Insert(timelineTest1);
 
@@ -698,8 +703,13 @@ namespace Catalogue.Data.Seed
                     m.Title = "Timeline Test 2";
                     m.MetadataPointOfContact.Name = "Pete";
                 });
-                r.Footer.ModifiedOnUtc = Clock.NowUtc;
-                r.Footer.ModifiedBy = "Pete";
+                r.Footer = new Footer
+                {
+                    CreatedOnUtc = Clock.NowUtc,
+                    CreatedBy = "Pete",
+                    ModifiedOnUtc = Clock.NowUtc,
+                    ModifiedBy = "Pete"
+                };
             });
             recordService.Insert(timelineTest2);
 
@@ -713,8 +723,13 @@ namespace Catalogue.Data.Seed
                     m.Title = "Timeline Test 3";
                     m.MetadataPointOfContact.Name = "Felix";
                 });
-                r.Footer.ModifiedOnUtc = Clock.NowUtc;
-                r.Footer.ModifiedBy = "Felix";
+                r.Footer = new Footer
+                {
+                    CreatedOnUtc = Clock.NowUtc.AddDays(-2),
+                    CreatedBy = "Felix",
+                    ModifiedOnUtc = Clock.NowUtc,
+                    ModifiedBy = "Felix"
+                };
             });
             recordService.Insert(timelineTest3);
 
@@ -728,8 +743,13 @@ namespace Catalogue.Data.Seed
                     m.Title = "Timeline Test 4";
                     m.MetadataPointOfContact.Name = "Matt";
                 });
-                r.Footer.ModifiedOnUtc = Clock.NowUtc;
-                r.Footer.ModifiedBy = "Matt";
+                r.Footer = new Footer
+                {
+                    CreatedOnUtc = Clock.NowUtc.AddDays(-5),
+                    CreatedBy = "Cathy",
+                    ModifiedOnUtc = Clock.NowUtc,
+                    ModifiedBy = "Pete"
+                };
             });
             recordService.Insert(timelineTest4);
 

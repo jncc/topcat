@@ -99,7 +99,6 @@
     <Compile Include="Import\Mappings\SeabirdSurveyMapping.cs" />
     <Compile Include="Import\Mappings\StandardishMapping.cs" />
     <Compile Include="Import\Mappings\TopcatMapping.cs" />
-    <Compile Include="Indexes\RecordEventIndex.cs" />
     <Compile Include="Indexes\RecordsWithNoFooterIndex.cs" />
     <Compile Include="Indexes\FieldNames.cs" />
     <Compile Include="Indexes\RecordCountForKeywordIndex.cs" />
