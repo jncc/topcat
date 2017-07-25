@@ -76,10 +76,9 @@ namespace Catalogue.Tests.Slow.Catalogue.Web.Controllers.Usage
             };
 
             var testRecords = new List<RecentlyModifiedRecord> { dateTest7, dateTest5, dateTest4, dateTest3, dateTest2, dateTest1 };
-            var expectedRecords = new List<string> { "1458dfd1-e356-4287-9190-65e5f9ffd1df",
-                "80de0c30-325a-4392-ab4e-64b0654ca6ec", "f5a48ac7-13f6-40ba-85a2-f4534d9806a5",
-                "8c88dd97-3317-43e4-b59e-239e0604a094", "3ad98517-110b-40d7-aa0d-f0e3b1273007" };
-            var expectedEvents = new List<string> {"Created", "Created", "Edited", "Created", "Edited"};
+            var expectedRecords = new List<string> { "DateTest_7", "DateTest_5", "DateTest_4", "DateTest_3", "DateTest_2" };
+            var expectedEvents = new List<string> {"Create", "Create", "Edit", "Edit", "Edit"};
+            var expectedUsers = new List<string> { "Cathy", "Pete", "Pete", "Cathy", "Pete" };
 
             var store = new InMemoryDatabaseHelper().Create();
             using (var db = store.OpenSession())
@@ -89,12 +88,12 @@ namespace Catalogue.Tests.Slow.Catalogue.Web.Controllers.Usage
                 db.SaveChanges();
 
                 var usageController = new UsageController(db);
-
                 var usageResult = usageController.GetRecentlyModifiedRecords();
                 var recentlyModifiedRecords = usageResult.RecentlyModifiedRecords;
 
-                recentlyModifiedRecords.Select(r => r.Id.ToString()).Should().ContainInOrder(expectedRecords);
+                recentlyModifiedRecords.Select(r => r.Title).Should().ContainInOrder(expectedRecords);
                 recentlyModifiedRecords.Select(r => r.Event.ToString()).Should().ContainInOrder(expectedEvents);
+                recentlyModifiedRecords.Select(r => r.User).Should().ContainInOrder(expectedUsers);
             }
         }
 
@@ -119,8 +118,10 @@ namespace Catalogue.Tests.Slow.Catalogue.Web.Controllers.Usage
                     });
                     r.Footer = new Footer
                     {
-                        CreatedOnUtc = testRecord.Event == Create ? testRecord.Date : testRecord.Date.AddDays(-1),
-                        ModifiedOnUtc = testRecord.Date
+                        CreatedOnUtc = testRecord.Event == Create ? testRecord.Date : testRecord.Date.AddYears(-1),
+                        CreatedBy = "Cathy",
+                        ModifiedOnUtc = testRecord.Date,
+                        ModifiedBy = testRecord.User
                     };
                 });
 
