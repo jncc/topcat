@@ -68,6 +68,13 @@ namespace Catalogue.Data.Seed
                         m.Keywords.Add(new MetadataKeyword { Vocab = "http://vocab.jncc.gov.uk/jncc-category", Value = "Example Collection" });
                         m.Keywords.Add(new MetadataKeyword { Vocab = "", Value = "example" });
                     }),
+                Footer = new Footer
+                {
+                    CreatedOnUtc = Clock.NowUtc,
+                    CreatedBy = "Guest User",
+                    ModifiedOnUtc = Clock.NowUtc,
+                    ModifiedBy = "Guest User"
+                }
             };
         }
 
@@ -81,16 +88,6 @@ namespace Catalogue.Data.Seed
             {
                 var importer = Importer.CreateImporter(db, new MeshMapping());
                 importer.Import(reader);
-
-//                var probs = from r in importer.Results
-//                    where !r.Success
-//                    select new
-//                    {
-//                        r.Record.SourceIdentifier,
-//                        errors = r.Validation.Errors.ToConcatenatedString(e => e.Message, ",")
-//                    };
-//
-//                string log = ObjectDumper.String(probs);
             }
         }
 
@@ -684,6 +681,7 @@ namespace Catalogue.Data.Seed
                     m.Title = "Timeline Test 1";
                     m.MetadataPointOfContact.Name = "Cathy";
                 });
+                r.Footer.ModifiedOnUtc = DateTime.Now;
             });
 
             var timelineTest2 = MakeExampleSeedRecord().With(r =>
@@ -695,6 +693,7 @@ namespace Catalogue.Data.Seed
                     m.Title = "Timeline Test 2";
                     m.MetadataPointOfContact.Name = "Pete";
                 });
+                r.Footer.ModifiedOnUtc = DateTime.Now.AddHours(-5);
             });
 
             var timelineTest3 = MakeExampleSeedRecord().With(r =>

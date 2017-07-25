@@ -97,7 +97,6 @@ namespace Catalogue.Web.Controllers.Patch
             };
             db.Store(category);
 
-
             db.SaveChanges();
             return new HttpResponseMessage();
         }
@@ -267,6 +266,45 @@ namespace Catalogue.Web.Controllers.Patch
 
             return new HttpResponseMessage { Content = new StringContent("Updated " + records.Count + " records.") };
 
+        }
+
+        [HttpPost, Route("api/patch/migratefooterinfo")]
+        public HttpResponseMessage MigrateFooterInfo()
+        {
+            var records1 = db
+                .Query<RecordsWithNoFooterIndex.Result, RecordsWithNoFooterIndex>()
+                .As<Record>()
+                .Skip(0)
+                .Take(1024)
+                .ToList();
+            var records2 = db
+                .Query<RecordsWithNoFooterIndex.Result, RecordsWithNoFooterIndex>()
+                .As<Record>()
+                .Skip(1024)
+                .Take(1024)
+                .ToList();
+            var records = records1.Concat(records2).ToList();
+
+            foreach (var record in records)
+            {
+                var oldFooter = record.Footer;
+
+                if (oldFooter == null)
+                {
+                    record.Footer = new Footer
+                    {
+                        CreatedOnUtc = DateTime.MinValue,
+                        CreatedBy = "Joint Nature Conservation Committee (JNCC)",
+                        ModifiedOnUtc = record.Gemini.MetadataDate,
+                        ModifiedBy = String.IsNullOrWhiteSpace(record.Gemini.MetadataPointOfContact.Name) ?
+                            "Joint Nature Conservation Committee (JNCC)" : record.Gemini.MetadataPointOfContact.Name
+                    };
+                }
+            }
+
+            db.SaveChanges();
+
+            return new HttpResponseMessage { Content = new StringContent("Updated " + records.Count + " records.") };
         }
     }
 }
