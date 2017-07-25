@@ -4,6 +4,9 @@ using System.Linq;
 using System.Web.Http;
 using Catalogue.Data.Indexes;
 using Catalogue.Data.Model;
+using Catalogue.Data.Write;
+using Catalogue.Web.Account;
+using Catalogue.Web.Security;
 using Raven.Client;
 
 namespace Catalogue.Web.Controllers.Publishing
@@ -11,10 +14,14 @@ namespace Catalogue.Web.Controllers.Publishing
     public class OpenDataPublishingController : ApiController
     {
         readonly IDocumentSession db;
+        readonly IOpenDataPublishingService openDataPublishingService;
+        readonly IUserContext user;
 
-        public OpenDataPublishingController(IDocumentSession db)
+        public OpenDataPublishingController(IDocumentSession db, IOpenDataPublishingService openDataPublishingService, IUserContext user)
         {
             this.db = db;
+            this.openDataPublishingService = openDataPublishingService;
+            this.user = user;
         }
 
         [HttpGet, Route("api/publishing/opendata/summary")]
@@ -31,6 +38,20 @@ namespace Catalogue.Web.Controllers.Publishing
             };
         }
 
+        [HttpPut, Route("api/publishing/opendata/signoff"), AuthorizeOpenDataSiro]
+        public IHttpActionResult SignOff(SignOffRequest signOffRequest)
+        {
+            var record = db.Load<Record>(signOffRequest.Id);
+            var signOffInfo = new OpenDataSignOffInfo
+            {
+                User = user.User.DisplayName,
+                DateUtc = DateTime.Now,
+                Comment = signOffRequest.Comment
+            };
+
+            openDataPublishingService.SignOff(record, signOffInfo);
+            return Ok();
+        }
 
         [HttpGet, Route("api/publishing/opendata/publishedsincelastupdated")]
         public List<RecordRepresentation> PublishedSinceLastUpdated(int p = 1)

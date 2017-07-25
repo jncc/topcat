@@ -1,10 +1,9 @@
-﻿using System;
+﻿using Catalogue.Utilities.Text;
+using Catalogue.Web.Code;
 using System.DirectoryServices.AccountManagement;
 using System.Security.Principal;
-using System.Web;
-using Catalogue.Utilities.Text;
 
-namespace Catalogue.Web.Code.Account
+namespace Catalogue.Web.Account
 {
     public interface IUserContext
     {

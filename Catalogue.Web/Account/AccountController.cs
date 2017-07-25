@@ -1,11 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using System.Web.Http;
-using Catalogue.Web.Code.Account;
+﻿using System.Web.Http;
 
-namespace Catalogue.Web.Controllers.Account
+namespace Catalogue.Web.Account
 {
     public class AccountController : ApiController
     {

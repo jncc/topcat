@@ -6,7 +6,7 @@ using Catalogue.Gemini.Model;
 using Catalogue.Gemini.Templates;
 using Catalogue.Utilities.Clone;
 using Catalogue.Utilities.Time;
-using Catalogue.Web.Code.Account;
+using Catalogue.Web.Account;
 using FluentAssertions;
 using Moq;
 using NUnit.Framework;

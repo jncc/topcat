@@ -151,7 +151,6 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Account\SecurityGroupsController.cs" />
     <Compile Include="Account\User.cs" />
     <Compile Include="Account\UserContext.cs" />
     <Compile Include="Controllers\Admin\AdminController.cs" />
@@ -164,6 +163,7 @@
     <Compile Include="Controllers\Keywords\KeywordsController.cs" />
     <Compile Include="Controllers\Publishing\OpenDataPublishingController.cs" />
     <Compile Include="Controllers\Patch\PatchController.cs" />
+    <Compile Include="Controllers\Publishing\SignOffRequest.cs" />
     <Compile Include="Controllers\Queries\QueriesController.cs" />
     <Compile Include="Controllers\Records\RecordsController.cs" />
     <Compile Include="Controllers\Roles\RolesController.cs" />
@@ -179,6 +179,7 @@
     <Compile Include="Customization\CustomWebApiAssembliesResolver.cs" />
     <Compile Include="Logging\ElmahHandledErrorLoggerFilter.cs" />
     <Compile Include="Logging\UnhandledExceptionFilter.cs" />
+    <Compile Include="Security\AuthorizeOpenDataSiroAttribute.cs" />
     <Compile Include="Settings.cs" />
     <Compile Include="Account\AccountController.cs" />
     <Compile Include="Controllers\Search\SearchController.cs" />

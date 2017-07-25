@@ -1,10 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Linq.Expressions;
-using Catalogue.Data.Model;
+﻿using Catalogue.Data.Model;
 using Catalogue.Gemini.Helpers;
-using Catalogue.Gemini.Model;
 using Catalogue.Gemini.Spatial;
 using Catalogue.Gemini.Templates;
 using Catalogue.Utilities.Clone;
@@ -15,6 +10,8 @@ using FluentAssertions;
 using Moq;
 using NUnit.Framework;
 using Raven.Client;
+using System;
+using System.Linq;
 
 namespace Catalogue.Data.Write
 {
