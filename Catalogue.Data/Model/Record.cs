@@ -26,6 +26,8 @@ namespace Catalogue.Data.Model
         public string SourceIdentifier { get; set; }
         public bool   ReadOnly         { get; set; } // for imported records
 
+        public PublicationInfo Publication { get; set; }
+
         /// <summary>
         /// A 'well known text' representation of the bounding box in the Gemini record
         /// used for spatial indexing.
@@ -37,6 +39,7 @@ namespace Catalogue.Data.Model
         /// </summary>
         public int Revision { get; internal set; }
 
-        public PublicationInfo Publication { get; set;  }
+        // record footer
+        public Footer Footer { get; set; }
     }
 }

@@ -1,20 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net;
-using System.Net.Http;
-using System.Web.Http;
-using Catalogue.Data.Indexes;
+﻿using Catalogue.Data.Indexes;
 using Catalogue.Data.Model;
 using Catalogue.Data.Query;
 using Catalogue.Data.Write;
 using Catalogue.Gemini.BoundingBoxes;
 using Catalogue.Gemini.Model;
 using Catalogue.Gemini.Spatial;
-using Catalogue.Utilities.Clone;
-using Catalogue.Utilities.Time;
-using Catalogue.Web.Injection;
 using Raven.Client;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Net.Http;
+using System.Web.Http;
 
 namespace Catalogue.Web.Controllers.Patch
 {
@@ -32,28 +28,6 @@ namespace Catalogue.Web.Controllers.Patch
         [HttpPost, Route("api/patch/fixupkeywords")]
         public HttpResponseMessage FixUpKeywords()
         {
-//            // mesh 
-//            var query1 = new RecordQueryInputModel
-//                {
-//                    K = new [] { "vocab.jncc.gov.uk/jncc-broad-category/Seabed Habitat Maps" },
-//                    P = 0,
-//                    N = 1024,
-//                };
-//
-//            var records1 = _queryer.RecordQuery(query1);
-//
-//            foreach (var record in records1)
-//            {
-//                var existing = record.Gemini.Keywords.Single(k => k.Vocab == "http://vocab.jncc.gov.uk/jncc-broad-category" && k.Value == "Seabed Habitat Maps");
-//                record.Gemini.Keywords.Remove(existing);
-//
-//                var domain = new MetadataKeyword { Vocab = "http://vocab.jncc.gov.uk/jncc-domain", Value = "Marine" };
-//                var category = new MetadataKeyword { Vocab = "http://vocab.jncc.gov.uk/jncc-category", Value = "Seabed Habitat Maps" };
-//
-//                record.Gemini.Keywords.Insert(0, domain);
-//                record.Gemini.Keywords.Insert(1, category);
-//            }
-
             // protected sites
             var query2 = new RecordQueryInputModel
             {
@@ -294,15 +268,5 @@ namespace Catalogue.Web.Controllers.Patch
             return new HttpResponseMessage { Content = new StringContent("Updated " + records.Count + " records.") };
 
         }
-
-        //        [HttpPost, Route("api/patch/renamesecuritylevels")]
-        //        public HttpResponseMessage RenameSecurityLevels()
-        //        {
-        ////            db.Advanced.DocumentStore.DatabaseCommands.Patch(
-        //
-        ////            db.SaveChanges();
-        ////
-        ////            return new HttpResponseMessage();
-        //        }
     }
 }
