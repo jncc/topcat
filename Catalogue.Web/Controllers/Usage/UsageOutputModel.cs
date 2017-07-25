@@ -15,5 +15,6 @@ namespace Catalogue.Web.Controllers.Usage
         public string Title { get; set; }
         public DateTime Date { get; set; }
         public string User { get; set; }
+        public RecordEvent Event { get; set; }
     }
 }

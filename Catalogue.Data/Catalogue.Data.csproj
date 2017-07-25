@@ -99,6 +99,7 @@
     <Compile Include="Import\Mappings\SeabirdSurveyMapping.cs" />
     <Compile Include="Import\Mappings\StandardishMapping.cs" />
     <Compile Include="Import\Mappings\TopcatMapping.cs" />
+    <Compile Include="Indexes\RecordEventIndex.cs" />
     <Compile Include="Indexes\RecordsWithNoFooterIndex.cs" />
     <Compile Include="Indexes\FieldNames.cs" />
     <Compile Include="Indexes\RecordCountForKeywordIndex.cs" />
@@ -111,6 +112,7 @@
     <Compile Include="Indexes\RecordKeywordIndex.cs" />
     <Compile Include="Indexes\RecordSpatialIndex.cs" />
     <Compile Include="Indexes\RecordIndex.cs" />
+    <Compile Include="Model\RecordEvent.cs" />
     <Compile Include="Model\Footer.cs" />
     <Compile Include="Model\PublicationInfo.cs" />
     <Compile Include="Model\Record.cs" />

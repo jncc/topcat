@@ -58,7 +58,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Web.Controllers.Publishing
             openDataInfo.LastSuccess.Should().BeNull();
             openDataInfo.Resources.Should().BeNull();
             openDataInfo.Paused.Should().BeFalse();
-            openDataInfo.SignOff.User.Should().Be("Guest User");
+            openDataInfo.SignOff.User.Should().Be("Test User");
             openDataInfo.SignOff.DateUtc.Should().NotBe(DateTime.MinValue);
             openDataInfo.SignOff.Comment.Should().Be("Sign off test");
         }
