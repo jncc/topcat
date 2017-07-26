@@ -16,12 +16,6 @@ namespace Catalogue.Tests.Slow.Catalogue.Data.Write
     public class record_service_specs
     {
         [Test]
-        public void should_create_a_new_guid_on_insert()
-        {
-            // todo
-        }
-
-        [Test]
         public void should_fail_when_record_is_readonly_on_update()
         {
             var service = new RecordService(Mock.Of<IDocumentSession>(), Mock.Of<IRecordValidator>());

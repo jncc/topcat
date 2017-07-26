@@ -76,9 +76,14 @@ namespace Catalogue.Tests.Slow.Catalogue.Web.Controllers.Usage
             };
 
             var testRecords = new List<RecentlyModifiedRecord> { dateTest7, dateTest5, dateTest4, dateTest3, dateTest2, dateTest1 };
-            var expectedRecords = new List<string> { "DateTest_7", "DateTest_5", "DateTest_4", "DateTest_3", "DateTest_2" };
-            var expectedEvents = new List<string> {"Create", "Create", "Edit", "Edit", "Edit"};
-            var expectedUsers = new List<string> { "Cathy", "Pete", "Pete", "Cathy", "Pete" };
+            var expectedValues = new List<Tuple<string, string, string>>
+            {
+                new Tuple<string, string, string>("DateTest_7", "Cathy", "Create"),
+                new Tuple<string, string, string>("DateTest_5", "Pete", "Create"),
+                new Tuple<string, string, string>("DateTest_4", "Pete", "Edit"),
+                new Tuple<string, string, string>("DateTest_3", "Cathy", "Edit"),
+                new Tuple<string, string, string>("DateTest_2", "Pete", "Edit")
+            };
 
             var store = new InMemoryDatabaseHelper().Create();
             using (var db = store.OpenSession())
@@ -91,9 +96,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Web.Controllers.Usage
                 var usageResult = usageController.GetRecentlyModifiedRecords();
                 var recentlyModifiedRecords = usageResult.RecentlyModifiedRecords;
 
-                recentlyModifiedRecords.Select(r => r.Title).Should().ContainInOrder(expectedRecords);
-                recentlyModifiedRecords.Select(r => r.Event.ToString()).Should().ContainInOrder(expectedEvents);
-                recentlyModifiedRecords.Select(r => r.User).Should().ContainInOrder(expectedUsers);
+                recentlyModifiedRecords.Select(r => new Tuple<string, string, string>(r.Title, r.User, r.Event.ToString())).Should().ContainInOrder(expectedValues);
             }
         }
 
