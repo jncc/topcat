@@ -39,7 +39,6 @@ namespace Catalogue.Data.Model
         /// </summary>
         public int Revision { get; internal set; }
 
-        // record footer
         public Footer Footer { get; set; }
     }
 }
