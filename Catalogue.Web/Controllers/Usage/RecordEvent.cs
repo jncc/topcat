@@ -1,4 +1,4 @@
-﻿namespace Catalogue.Data.Model
+﻿namespace Catalogue.Web.Controllers.Usage
 {
     public enum RecordEvent
     {

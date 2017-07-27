@@ -5,7 +5,7 @@ using Raven.Client.Linq;
 using System.Linq;
 using System.Web.Http;
 using Catalogue.Data.Model;
-using static Catalogue.Data.Model.RecordEvent;
+using static Catalogue.Web.Controllers.Usage.RecordEvent;
 
 namespace Catalogue.Web.Controllers.Usage
 {
