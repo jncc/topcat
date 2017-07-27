@@ -11,7 +11,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Catalogue.Gemini.Model;
 using Catalogue.Gemini.Templates;
-using static Catalogue.Data.Model.RecordEvent;
+using static Catalogue.Web.Controllers.Usage.RecordEvent;
 
 namespace Catalogue.Tests.Slow.Catalogue.Web.Controllers.Usage
 {

@@ -51,7 +51,8 @@ namespace Catalogue.Web.Controllers.Records
 
         public RecordServiceResult Put(Guid id, [FromBody]Record record)
         {
-            AddModifiedInfo(record);
+            SetFooterForUpdatedRecord(record);
+
             var result = service.Update(record);
 
             if (result.Record.Id != id) throw new Exception("The ID of the record does not match that supplied to the put method");
@@ -66,8 +67,8 @@ namespace Catalogue.Web.Controllers.Records
         {
             record.Id = Guid.NewGuid();
 
-            AddCreatedInfo(record);
-            AddModifiedInfo(record);
+            SetFooterForNewlyCreatedRecord(record);
+
             var result = service.Insert(record);
 
             if (result.Success)
@@ -102,16 +103,18 @@ namespace Catalogue.Web.Controllers.Records
             };
         }
 
-        private void AddCreatedInfo(Record record)
+        private void SetFooterForNewlyCreatedRecord(Record record)
         {
             record.Footer = new Footer
             {
                 CreatedOnUtc = Clock.NowUtc,
                 CreatedBy = user.User.DisplayName
             };
+
+            SetFooterForUpdatedRecord(record);
         }
 
-        private void AddModifiedInfo(Record record)
+        private void SetFooterForUpdatedRecord(Record record)
         {
             record.Footer.ModifiedOnUtc = Clock.NowUtc;
             record.Footer.ModifiedBy = user.User.DisplayName;

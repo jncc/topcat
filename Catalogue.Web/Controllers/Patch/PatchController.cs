@@ -11,6 +11,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
 using System.Web.Http;
+using Catalogue.Utilities.Text;
 
 namespace Catalogue.Web.Controllers.Patch
 {
@@ -296,7 +297,7 @@ namespace Catalogue.Web.Controllers.Patch
                         CreatedOnUtc = DateTime.MinValue,
                         CreatedBy = "Joint Nature Conservation Committee (JNCC)",
                         ModifiedOnUtc = record.Gemini.MetadataDate,
-                        ModifiedBy = String.IsNullOrWhiteSpace(record.Gemini.MetadataPointOfContact.Name) ?
+                        ModifiedBy = record.Gemini.MetadataPointOfContact.Name.IsBlank() ?
                             "Joint Nature Conservation Committee (JNCC)" : record.Gemini.MetadataPointOfContact.Name
                     };
                 }

@@ -111,7 +111,6 @@
     <Compile Include="Indexes\RecordKeywordIndex.cs" />
     <Compile Include="Indexes\RecordSpatialIndex.cs" />
     <Compile Include="Indexes\RecordIndex.cs" />
-    <Compile Include="Model\RecordEvent.cs" />
     <Compile Include="Model\Footer.cs" />
     <Compile Include="Model\PublicationInfo.cs" />
     <Compile Include="Model\Record.cs" />
