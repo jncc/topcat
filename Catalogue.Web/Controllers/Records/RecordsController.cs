@@ -105,13 +105,14 @@ namespace Catalogue.Web.Controllers.Records
 
         private void SetFooterForNewlyCreatedRecord(Record record)
         {
+            var currentTime = Clock.NowUtc;
             record.Footer = new Footer
             {
-                CreatedOnUtc = Clock.NowUtc,
-                CreatedBy = user.User.DisplayName
+                CreatedOnUtc = currentTime,
+                CreatedBy = user.User.DisplayName,
+                ModifiedOnUtc = currentTime,
+                ModifiedBy = user.User.DisplayName
             };
-
-            SetFooterForUpdatedRecord(record);
         }
 
         private void SetFooterForUpdatedRecord(Record record)
