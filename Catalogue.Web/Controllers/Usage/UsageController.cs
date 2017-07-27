@@ -1,11 +1,8 @@
-﻿using System.Collections.Generic;
-using Catalogue.Data.Indexes;
+﻿using Catalogue.Data.Model;
 using Raven.Client;
 using Raven.Client.Linq;
 using System.Linq;
 using System.Web.Http;
-using Catalogue.Data.Model;
-using static Catalogue.Web.Controllers.Usage.RecordEvent;
 
 namespace Catalogue.Web.Controllers.Usage
 {
@@ -34,7 +31,7 @@ namespace Catalogue.Web.Controllers.Usage
                     Title = record.Gemini.Title,
                     Date = record.Footer.ModifiedOnUtc,
                     User = record.Footer.ModifiedBy,
-                    Event = record.Footer.CreatedOnUtc.Equals(record.Footer.ModifiedOnUtc) ? Create : Edit
+                    Event = record.Footer.CreatedOnUtc.Equals(record.Footer.ModifiedOnUtc) ? "created" : "edited"
                 })
                 .ToList();
 

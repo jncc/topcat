@@ -1,6 +1,8 @@
 ﻿using Catalogue.Data.Model;
 using Catalogue.Data.Test;
 using Catalogue.Data.Write;
+using Catalogue.Gemini.Model;
+using Catalogue.Gemini.Templates;
 using Catalogue.Utilities.Clone;
 using Catalogue.Utilities.Time;
 using Catalogue.Web.Controllers.Usage;
@@ -9,9 +11,6 @@ using NUnit.Framework;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Catalogue.Gemini.Model;
-using Catalogue.Gemini.Templates;
-using static Catalogue.Web.Controllers.Usage.RecordEvent;
 
 namespace Catalogue.Tests.Slow.Catalogue.Web.Controllers.Usage
 {
@@ -27,7 +26,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Web.Controllers.Usage
                 Title = "DateTest_7",
                 Date = new DateTime(2017, 07, 12, 15, 00, 00),
                 User = "Cathy",
-                Event = Create
+                Event = "created"
             };
 
             var dateTest5 = new RecentlyModifiedRecord
@@ -36,7 +35,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Web.Controllers.Usage
                 Title = "DateTest_5",
                 Date = new DateTime(2017, 07, 11, 10, 00, 00),
                 User = "Pete",
-                Event = Create
+                Event = "created"
             };
 
             var dateTest4 = new RecentlyModifiedRecord
@@ -45,7 +44,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Web.Controllers.Usage
                 Title = "DateTest_4",
                 Date = new DateTime(2017, 07, 01, 15, 05, 0),
                 User = "Pete",
-                Event = Edit
+                Event = "edited"
             };
 
             var dateTest3 = new RecentlyModifiedRecord
@@ -54,7 +53,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Web.Controllers.Usage
                 Title = "DateTest_3",
                 Date = new DateTime(2017, 07, 01, 15, 00, 00),
                 User = "Cathy",
-                Event = Edit
+                Event = "edited"
             };
 
             var dateTest2 = new RecentlyModifiedRecord
@@ -63,7 +62,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Web.Controllers.Usage
                 Title = "DateTest_2",
                 Date = new DateTime(2017, 06, 05, 09, 00, 00),
                 User = "Pete",
-                Event = Edit
+                Event = "edited"
             };
 
             var dateTest1 = new RecentlyModifiedRecord
@@ -72,17 +71,17 @@ namespace Catalogue.Tests.Slow.Catalogue.Web.Controllers.Usage
                 Title = "DateTest_1",
                 Date = new DateTime(2016, 01, 03, 09, 00, 00),
                 User = "Cathy",
-                Event = Edit
+                Event = "edited"
             };
 
             var testRecords = new List<RecentlyModifiedRecord> { dateTest7, dateTest5, dateTest4, dateTest3, dateTest2, dateTest1 };
             var expectedValues = new List<Tuple<string, string, string>>
             {
-                new Tuple<string, string, string>("DateTest_7", "Cathy", "Create"),
-                new Tuple<string, string, string>("DateTest_5", "Pete", "Create"),
-                new Tuple<string, string, string>("DateTest_4", "Pete", "Edit"),
-                new Tuple<string, string, string>("DateTest_3", "Cathy", "Edit"),
-                new Tuple<string, string, string>("DateTest_2", "Pete", "Edit")
+                new Tuple<string, string, string>("DateTest_7", "Cathy", "created"),
+                new Tuple<string, string, string>("DateTest_5", "Pete", "created"),
+                new Tuple<string, string, string>("DateTest_4", "Pete", "edited"),
+                new Tuple<string, string, string>("DateTest_3", "Cathy", "edited"),
+                new Tuple<string, string, string>("DateTest_2", "Pete", "edited")
             };
 
             var store = new InMemoryDatabaseHelper().Create();
@@ -121,7 +120,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Web.Controllers.Usage
                     });
                     r.Footer = new Footer
                     {
-                        CreatedOnUtc = testRecord.Event == Create ? testRecord.Date : testRecord.Date.AddYears(-1),
+                        CreatedOnUtc = testRecord.Event.Equals("created") ? testRecord.Date : testRecord.Date.AddYears(-1),
                         CreatedBy = "Cathy",
                         ModifiedOnUtc = testRecord.Date,
                         ModifiedBy = testRecord.User

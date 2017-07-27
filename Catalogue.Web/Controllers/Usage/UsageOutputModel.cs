@@ -1,5 +1,4 @@
 ﻿using System;
-using Catalogue.Data.Model;
 using System.Collections.Generic;
 
 namespace Catalogue.Web.Controllers.Usage
@@ -15,6 +14,6 @@ namespace Catalogue.Web.Controllers.Usage
         public string Title { get; set; }
         public DateTime Date { get; set; }
         public string User { get; set; }
-        public RecordEvent Event { get; set; }
+        public string Event { get; set; }
     }
 }

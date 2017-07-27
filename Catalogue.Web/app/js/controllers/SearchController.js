@@ -166,20 +166,7 @@
       return $scope.collections = _.chunk(result, 2);
     });
     return $http.get('../api/usage').success(function(result) {
-      var create, edit, r, _i, _len, _ref, _ref1, _results;
-      $scope.recentModifications = result.recentlyModifiedRecords;
-      _ref = [0, 1], create = _ref[0], edit = _ref[1];
-      _ref1 = $scope.recentModifications;
-      _results = [];
-      for (_i = 0, _len = _ref1.length; _i < _len; _i++) {
-        r = _ref1[_i];
-        if (r.event === create) {
-          _results.push(r.event = "created");
-        } else {
-          _results.push(r.event = "edited");
-        }
-      }
-      return _results;
+      return $scope.recentModifications = result.recentlyModifiedRecords;
     });
   });
 
