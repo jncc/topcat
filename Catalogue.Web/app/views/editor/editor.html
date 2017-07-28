@@ -536,16 +536,15 @@
                     <span>Publishing</span>
                 </div>
                 <div class="layout-col pull-right"
-                            title="The publication status of the record. Can't be changed here just yet."
+                            title="The publication status of the record."
                             tc-tip>
                      
-                    <button ng-if="form.publication.openData" type="button" class="btn btn-danger">
-                        Open Data
+                    <button type="button" class="btn"
+                            ng-click="openAssessment()"
+                            ng-class="{ 'btn-default': !form.publication.openData.signOff,
+                                'btn-danger': form.publication.openData.signOff}">
+                        {{form.publication.openData.signOff ? 'Open Data':'None';}}
                     </button>
-                    <button ng-if="!form.publication.openData" type="button" class="btn btn-default">
-                        None
-                    </button>
-
                 </div>
             </div>
 

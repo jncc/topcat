@@ -141,6 +141,15 @@
         return $scope.form.gemini.abstract = s;
       });
     };
+    $scope.openAssessment = function() {
+      var modal;
+      return modal = $modal.open({
+        controller: 'AssessmentController',
+        templateUrl: 'views/partials/assessment.html?' + new Date().getTime(),
+        size: 'lg',
+        scope: $scope
+      });
+    };
     $scope.removeExtent = function(extent) {
       return $scope.form.gemini.extent.splice($.inArray(extent, $scope.form.gemini.extent), 1);
     };

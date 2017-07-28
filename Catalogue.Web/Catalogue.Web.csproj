@@ -216,6 +216,12 @@
     <Content Include="app\js\app.min.js">
       <DependentUpon>app.coffee</DependentUpon>
     </Content>
+    <Content Include="app\js\controllers\AssessmentController.js">
+      <DependentUpon>AssessmentController.coffee</DependentUpon>
+    </Content>
+    <Content Include="app\js\controllers\AssessmentController.min.js">
+      <DependentUpon>AssessmentController.js</DependentUpon>
+    </Content>
     <Content Include="app\js\controllers\ContentController.js">
       <DependentUpon>ContentController.coffee</DependentUpon>
     </Content>
@@ -227,6 +233,9 @@
     </Content>
     <Content Include="app\js\controllers\EditorController.min.js">
       <DependentUpon>EditorController.coffee</DependentUpon>
+    </Content>
+    <Content Include="app\js\controllers\AssessmentController.js.map">
+      <DependentUpon>AssessmentController.js</DependentUpon>
     </Content>
     <None Include="app\js\controllers\OpenDataPublishingController.coffee" />
     <Content Include="app\js\controllers\MainController.js">
@@ -397,6 +406,7 @@
     <Content Include="app\views\partials\jncc-categories.html" />
     <Content Include="app\views\partials\markdown.html" />
     <Content Include="app\views\partials\presentation.html" />
+    <Content Include="app\views\partials\assessment.html" />
     <Content Include="app\views\partials\vocabulator.html" />
     <Content Include="app\views\partials\what-is-data.html" />
     <Content Include="app\views\partials\why-topcat.html" />
@@ -647,6 +657,7 @@
     <Content Include="app\js\controllers\OpenDataPublishingController.js.map">
       <DependentUpon>OpenDataPublishingController.js</DependentUpon>
     </Content>
+    <Content Include="app\js\controllers\AssessmentController.coffee" />
     <None Include="app\js\controllers\VocabulatorController.coffee" />
     <Content Include="app\js\controllers\VocabulatorController.js.map">
       <DependentUpon>VocabulatorController.js</DependentUpon>

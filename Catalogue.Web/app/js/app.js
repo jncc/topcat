@@ -80,6 +80,9 @@
           return '#test text';
         }
       }
+    }).when('/sandbox/assessment', {
+      controller: 'AssessmentController',
+      templateUrl: 'views/partials/assessment.html'
     }).when('/content/whytopcat', {
       controller: 'ContentController',
       templateUrl: 'views/partials/why-topcat.html'

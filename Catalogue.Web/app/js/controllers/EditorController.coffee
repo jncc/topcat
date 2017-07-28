@@ -108,7 +108,14 @@
                 resolve:     'markdown': -> $scope.form.gemini.abstract
             modal.result
                 .then (s) -> $scope.form.gemini.abstract = s
-            
+
+        $scope.openAssessment = ->
+            modal = $modal.open
+                controller:  'AssessmentController'
+                templateUrl: 'views/partials/assessment.html?' + new Date().getTime() # stop iis express caching the html
+                size:        'lg'
+                scope:       $scope
+
         $scope.removeExtent = (extent) ->
             $scope.form.gemini.extent.splice ($.inArray extent, $scope.form.gemini.extent), 1
         $scope.addExtent = ->
