@@ -104,6 +104,13 @@ namespace Catalogue.Data.Seed
                     m.Keywords.Add(new MetadataKeyword { Vocab = "http://vocab.jncc.gov.uk/jncc-category", Value = "Human Activities" });
                     m.ResourceType = "dataset";
                 });
+                r.Footer = new Footer
+                {
+                    CreatedOnUtc = Clock.NowUtc,
+                    CreatedBy = "Guest User",
+                    ModifiedOnUtc = Clock.NowUtc,
+                    ModifiedBy = "Guest User"
+                };
             });
 
             recordService.Insert(record);
@@ -122,6 +129,13 @@ namespace Catalogue.Data.Seed
                     m.Keywords.Add(new MetadataKeyword { Vocab = "http://vocab.jncc.gov.uk/jncc-category", Value = "Overseas Territories" });
                     m.ResourceType = "dataset";
                 });
+                r.Footer = new Footer
+                {
+                    CreatedOnUtc = Clock.NowUtc,
+                    CreatedBy = "Guest User",
+                    ModifiedOnUtc = Clock.NowUtc,
+                    ModifiedBy = "Guest User"
+                };
             });
 
             recordService.Insert(record);
