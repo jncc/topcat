@@ -9,6 +9,7 @@ using Catalogue.Data.Model;
 using Catalogue.Data.Query;
 using Catalogue.Gemini.Model;
 using Catalogue.Robot.Importing;
+using Catalogue.Robot.Injection;
 using Catalogue.Robot.Publishing.OpenData;
 using Catalogue.Utilities.Text;
 using Catalogue.Utilities.Time;
@@ -16,10 +17,13 @@ using CommandLine;
 using CommandLine.Text;
 using CsvHelper;
 using Newtonsoft.Json;
+using Ninject;
 using NUnit.Framework.Constraints;
 using Raven.Abstractions.Data;
 using Raven.Abstractions.Extensions;
 using Raven.Client;
+using Raven.Client.Document;
+using Topshelf;
 
 namespace Catalogue.Robot
 {
@@ -86,23 +90,88 @@ namespace Catalogue.Robot
 
     class Program
     {
-        static int Main(string[] args)
+        public static IDocumentStore DocumentStore
         {
-            return Parser.Default.ParseArguments<ImportOptions, MarkAsOpenDataOptions, PublishOpenDataOptions, DeleteOptions, AddOpenDataResourcesOptions>(args).MapResult(
-                (ImportOptions options) => RunImport(options),
-                (MarkAsOpenDataOptions options) => RunMarkAsOpenData(options),
-                (PublishOpenDataOptions options) => RunPublishOpenData(options),
-                (DeleteOptions options) => RunDelete(options),
-                (AddOpenDataResourcesOptions options) => RunAddOpenDataResources(options),
-                (CheckResourcesExistOptions options) => RunCheckResourcesExist(options),
-                errs => 1);
+            get
+            {
+                try
+                {
+                    // DatabaseFactory.Production() returns the RavenDB DocumentStore using the connection
+                    // string name specfied in the local web.config or app.config, so this is just what we need
+                    // for both production and local dev (where we use the db running in the local dev web app)
+                    return DatabaseFactory.Production();
+                }
+                catch (HttpRequestException ex)
+                {
+                    throw new Exception("Unable to connect to the Topcat database.", ex);
+                }
+            }
         }
 
-        public static IDocumentStore DocumentStore { get; private set; }
+        static void Main(string[] args)
+        {
+            //            return Parser.Default.ParseArguments<ImportOptions, MarkAsOpenDataOptions, PublishOpenDataOptions, DeleteOptions, AddOpenDataResourcesOptions>(args).MapResult(
+            //                (ImportOptions options) => RunImport(options),
+            //                (MarkAsOpenDataOptions options) => RunMarkAsOpenData(options),
+            //                (PublishOpenDataOptions options) => RunPublishOpenData(options),
+            //                (DeleteOptions options) => RunDelete(options),
+            //                (AddOpenDataResourcesOptions options) => RunAddOpenDataResources(options),
+            //                (CheckResourcesExistOptions options) => RunCheckResourcesExist(options),
+            //                errs => 1);
+
+            HostFactory.Run(x =>
+            {
+                x.Service<Program>(s =>
+                {
+                    s.ConstructUsing(name => Create());
+                    s.WhenStarted(p => p.Start());
+                    s.WhenStopped(p => p.Stop());
+                });
+
+                x.RunAsLocalSystem();
+
+                string nombre = "Bars.Jobber." + "TODO"; // settings.Environment;
+                x.SetDisplayName(nombre);
+                x.SetServiceName(nombre);
+                x.SetDescription("Description of Robot");
+            });
+        }
+
+        /// <summary>
+        /// Creates an instance with dependecies injected.
+        /// </summary>
+        public static Program Create()
+        {
+            var kernel = new StandardKernel();
+
+            // register the type bindings we want for injection 
+            kernel.Load<MainNinjectModule>();
+
+            return kernel.Get<Program>();
+        }
+
+        // todo: split "instance" stuff out into a separate class
+
+        readonly IDocumentStore store;
+
+        public Program(IDocumentStore store)
+        {
+            this.store = store;
+        }
+
+        public void Start()
+        {
+            Console.WriteLine("I'm a robot");
+        }
+
+        public void Stop()
+        {
+            Console.WriteLine("I'm stopping");
+        }
 
         static int RunImport(ImportOptions options)
         {
-            InitDatabase();
+            //InitDatabase();
 
             using (var db = DocumentStore.OpenSession())
             {
@@ -114,7 +183,7 @@ namespace Catalogue.Robot
 
         static int RunMarkAsOpenData(MarkAsOpenDataOptions options)
         {
-            InitDatabase();
+            //InitDatabase();
 
             using (var db = DocumentStore.OpenSession())
             {
@@ -180,7 +249,7 @@ namespace Catalogue.Robot
 
         static int RunPublishOpenData(PublishOpenDataOptions options)
         {
-            InitDatabase();
+            //InitDatabase();
 
             // load the config
             var configPath = Path.Combine(Environment.CurrentDirectory, "data-gov-uk-publisher-config.json");
@@ -251,7 +320,7 @@ namespace Catalogue.Robot
 
         static int RunDelete(DeleteOptions options)
         {
-            InitDatabase();
+            //InitDatabase();
 
             string luceneQuery = "Keywords:\"http://vocab.jncc.gov.uk/metadata-admin/Delete\"";
 
@@ -281,7 +350,7 @@ namespace Catalogue.Robot
 
         static int RunAddOpenDataResources(AddOpenDataResourcesOptions options)
         {
-            InitDatabase();
+            //InitDatabase();
 
             var list = new List<Tuple<string, List<string>>>();
 
@@ -360,18 +429,5 @@ namespace Catalogue.Robot
             return records;
         }
 
-        static void InitDatabase()
-        {
-            try
-            {
-                // for local dev, we expect to use the db running in the local dev web app,
-                // so the DatabaseFactory just uses the dev connection string in the dev app.config file
-                DocumentStore = DatabaseFactory.Production();
-            }
-            catch (HttpRequestException ex)
-            {                
-                throw new Exception("Unable to connect to the Topcat database.", ex);
-            }
-        }
     }
 }
