@@ -173,7 +173,8 @@ namespace Catalogue.Tests.Slow.Catalogue.Web.Controllers.Publishing
                     {
                         Assessment = new OpenDataAssessmentInfo
                         {
-                            InitialAssessmentWasDoneOnSpreadsheet = true,
+                            Completed = true,
+                            InitialAssessmentWasDoneOnSpreadsheet = true
                         }
                     }
                 };
