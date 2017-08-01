@@ -541,7 +541,7 @@
                      
                     <button type="button" class="btn"
                             ng-click="openAssessment()"
-                            ng-disabled="form.publication.openData.assessment.completed"
+                            ng-disabled="!isSaveHidden()"
                             ng-class="{ 'btn-default': !form.publication.openData.assessment.completed,
                                 'btn-danger': form.publication.openData.assessment.completed}">
                         {{form.publication.openData.assessment.completed? "Open Data" : "None";}}

@@ -12,7 +12,7 @@
             <ol>
                 <li>This dataset does not contain personal data.</li>
                 <li>There are no third party licencing or IP restrictions or permissions to be resolved.
-                    <ol>
+                    <ol type="a">
                         <li>No Ordnance Survey data was used in the production of this output.</li>
                         <li>No UK Hydrographic Office data was used in the production of this output.</li>
                     </ol>
@@ -29,6 +29,10 @@
         <span class="pull-left">
             <button type="button" class="btn btn-default" data-dismiss="modal" ng-click="$dismiss()">CANCEL</button>
         </span>
-        <button type="button" class="btn btn-primary" ng-click="close()">I AGREE</button>
+        <button type="button" class="btn btn-primary"
+                ng-click="close()"
+                ng-disabled="form.publication.openData.assessment.completed">
+            {{publishingButtonText}}
+        </button>
     </div>
 </div>
