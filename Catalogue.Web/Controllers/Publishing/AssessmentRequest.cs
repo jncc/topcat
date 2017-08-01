@@ -2,9 +2,9 @@
 
 namespace Catalogue.Web.Controllers.Publishing
 {
-    public class SignOffRequest
+    public class AssessmentRequest
     {
         public Guid Id { get; set; }
-        public string Comment { get; set; }
+        //TODO add each assessment criteria here to be saved
     }
 }

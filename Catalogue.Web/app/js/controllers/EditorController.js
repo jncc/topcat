@@ -33,16 +33,19 @@
       $event.stopPropagation();
       $scope[elem] = true;
     };
+    $scope.successResponse = function(response) {
+      record = response;
+      $scope.validation = {};
+      $scope.reset();
+      $scope.notifications.add('Edits saved');
+      return $location.path('/editor/' + record.id);
+    };
     $scope.save = function() {
       var processResult;
       processResult = function(response) {
         var e, errors, field, _i, _j, _len, _len1, _ref;
         if (response.data.success) {
-          record = response.data.record;
-          $scope.validation = {};
-          $scope.reset();
-          $scope.notifications.add('Edits saved');
-          $location.path('/editor/' + record.id);
+          $scope.successResponse(response.data.record);
         } else {
           $scope.validation = response.data.validation;
           errors = response.data.validation.errors;
@@ -143,11 +146,14 @@
     };
     $scope.openAssessment = function() {
       var modal;
-      return modal = $modal.open({
+      modal = $modal.open({
         controller: 'AssessmentController',
         templateUrl: 'views/partials/assessment.html?' + new Date().getTime(),
         size: 'lg',
         scope: $scope
+      });
+      return modal.result.then(function(result) {
+        return $scope.successResponse(result);
       });
     };
     $scope.removeExtent = function(extent) {

@@ -40,5 +40,44 @@ namespace Catalogue.Data.Write
                 throw new Exception("Error while saving sign off changes.");
             }
         }
+
+        public Record Assess(Record record, OpenDataAssessmentInfo assessmentInfo)
+        {
+            if (record.Publication == null)
+            {
+                record.Publication = new PublicationInfo();
+            }
+
+            if (record.Publication.OpenData == null)
+            {
+                record.Publication.OpenData = new OpenDataPublicationInfo
+                {
+                    Assessment = new OpenDataAssessmentInfo()
+                };
+            }
+            
+            if (AssessmentAlreadyCompleted(record))
+            {
+                throw new Exception("Assessment has already been completed.");
+            }
+
+            record.Publication.OpenData.Assessment = assessmentInfo;
+
+            var recordServiceResult = recordService.Update(record);
+            if (!recordServiceResult.Success)
+            {
+                throw new Exception("Error while saving assessment changes.");
+            }
+
+            db.SaveChanges();
+
+            return recordServiceResult.Record;
+        }
+
+        private bool AssessmentAlreadyCompleted(Record record)
+        {
+            var assessment = record.Publication.OpenData.Assessment;
+            return assessment != null && (assessment.Completed || assessment.InitialAssessmentWasDoneOnSpreadsheet);
+        }
     }
 }

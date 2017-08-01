@@ -2,11 +2,12 @@
 angular.module('app.controllers').controller 'AssessmentController',
 
     ($scope, $http) ->
-        $scope.signOffRequest = '{"id": "' + $scope.form.id + '","comment": "Test sign off"}'
+        $scope.assessmentRequest = '{"id": "' + $scope.form.id + '"}'
+        $scope.assessmentResult = {}
         $scope.close = ->
-            # Need risk assessment call here instead
-            $http.put('../api/publishing/opendata/signoff', $scope.signOffRequest)
+            $http.put('../api/publishing/opendata/assess', $scope.assessmentRequest)
+            .success (result) ->
+                $scope.$close result.record
             .catch (error) ->
-                $scope.notifications.add 'Error updating risk assessment'
-                
-            $scope.$close($scope.assessment)
+                $scope.notifications.add error.data.exceptionMessage
+                $scope.$dismiss()

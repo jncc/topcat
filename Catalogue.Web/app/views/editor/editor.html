@@ -541,9 +541,9 @@
                      
                     <button type="button" class="btn"
                             ng-click="openAssessment()"
-                            ng-class="{ 'btn-default': !form.publication.openData.signOff,
-                                'btn-danger': form.publication.openData.signOff}">
-                        {{form.publication.openData.signOff ? 'Open Data':'None';}}
+                            ng-class="{ 'btn-default': !form.publication.openData.assessment.completed,
+                                'btn-danger': form.publication.openData.assessment.completed}">
+                        {{form.publication.openData.assessment.completed? "Open Data" : "None";}}
                     </button>
                 </div>
             </div>

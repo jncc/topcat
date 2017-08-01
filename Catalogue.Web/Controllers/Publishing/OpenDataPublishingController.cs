@@ -38,6 +38,25 @@ namespace Catalogue.Web.Controllers.Publishing
             };
         }
 
+        [HttpPut, Route("api/publishing/opendata/assess")]
+        public AssessmentResponse Assess(AssessmentRequest assessmentRequest)
+        {
+            var record = db.Load<Record>(assessmentRequest.Id);
+            var assessmentInfo = new OpenDataAssessmentInfo
+            {
+                Completed = true,
+                CompletedBy = user.User.DisplayName,
+                CompletedOnUtc = DateTime.Now,
+                InitialAssessmentWasDoneOnSpreadsheet = false
+            };
+
+            var updatedRecord = openDataPublishingService.Assess(record, assessmentInfo);
+            return new AssessmentResponse
+            {
+                Record = updatedRecord
+            };
+        }
+
         [HttpPut, Route("api/publishing/opendata/signoff"), AuthorizeOpenDataSiro]
         public IHttpActionResult SignOff(SignOffRequest signOffRequest)
         {

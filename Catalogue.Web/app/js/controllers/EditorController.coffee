@@ -40,14 +40,17 @@
             $scope[elem] = true;
             return
     
+        $scope.successResponse = (response) ->
+            record = response # oo-er, is updating a param a good idea?
+            $scope.validation = {}
+            $scope.reset()
+            $scope.notifications.add 'Edits saved'
+            $location.path('/editor/' + record.id)
+
         $scope.save = ->
             processResult = (response) ->
                 if response.data.success
-                    record = response.data.record # oo-er, is updating a param a good idea?
-                    $scope.validation = {}
-                    $scope.reset()
-                    $scope.notifications.add 'Edits saved'
-                    $location.path('/editor/' + record.id)
+                    $scope.successResponse response.data.record
                 else
                     $scope.validation = response.data.validation
                     # tell the form that fields are invalid
@@ -115,6 +118,8 @@
                 templateUrl: 'views/partials/assessment.html?' + new Date().getTime() # stop iis express caching the html
                 size:        'lg'
                 scope:       $scope
+            modal.result
+                .then (result) -> $scope.successResponse result
 
         $scope.removeExtent = (extent) ->
             $scope.form.gemini.extent.splice ($.inArray extent, $scope.form.gemini.extent), 1

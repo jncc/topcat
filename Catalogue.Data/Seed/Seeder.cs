@@ -236,6 +236,23 @@ namespace Catalogue.Data.Seed
                 });
             });
 
+            var assessmentDoneOnSpreadsheet = record.With(r =>
+            {
+                r.Id = new Guid("92e2135a-3e04-4c33-8caa-0bc0494214aa");
+                r.Gemini.Title = "A record with assessment done on spreadsheet";
+                r.Publication = new PublicationInfo
+                {
+                    OpenData = new OpenDataPublicationInfo
+                    {
+                        Assessment = new OpenDataAssessmentInfo
+                        {
+                            InitialAssessmentWasDoneOnSpreadsheet = true,
+
+                        }
+                    },
+                };
+            });
+
             var assessedButNotCompletelyRecord = record.With(r =>
             {
                 r.Id = new Guid("39f9442a-45e5-464f-8b20-876051560964");
@@ -376,6 +393,7 @@ namespace Catalogue.Data.Seed
                 };
             });
 
+            recordService.Insert(assessmentDoneOnSpreadsheet);
             recordService.Insert(neverPublishedRecord);
             recordService.Insert(assessedButNotCompletelyRecord);
             recordService.Insert(assessedButNotSignedOffRecord);

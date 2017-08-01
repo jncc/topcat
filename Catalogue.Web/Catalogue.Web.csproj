@@ -161,8 +161,10 @@
     <Compile Include="Controllers\Collections\CollectionOutputModel.cs" />
     <Compile Include="Controllers\Keywords\KeywordModel.cs" />
     <Compile Include="Controllers\Keywords\KeywordsController.cs" />
+    <Compile Include="Controllers\Publishing\AssessmentResponse.cs" />
     <Compile Include="Controllers\Publishing\OpenDataPublishingController.cs" />
     <Compile Include="Controllers\Patch\PatchController.cs" />
+    <Compile Include="Controllers\Publishing\AssessmentRequest.cs" />
     <Compile Include="Controllers\Publishing\SignOffRequest.cs" />
     <Compile Include="Controllers\Queries\QueriesController.cs" />
     <Compile Include="Controllers\Records\RecordsController.cs" />
