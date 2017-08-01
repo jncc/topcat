@@ -338,6 +338,10 @@ namespace Catalogue.Data.Seed
                     {
                         LastAttempt = new PublicationAttempt { DateUtc = new DateTime(2015, 1, 1, 11, 0, 0), Message = "Failed with a terrible error in Sector 7G"},
                         LastSuccess = null,
+                        Assessment = new OpenDataAssessmentInfo
+                        {
+                            Completed = true
+                        }
                     }
                 };
             });
@@ -352,6 +356,10 @@ namespace Catalogue.Data.Seed
                     {
                         LastAttempt = new PublicationAttempt { DateUtc = new DateTime(2016, 1, 1, 13, 0, 0) },
                         LastSuccess = new PublicationAttempt { DateUtc = new DateTime(2016, 1, 1, 13, 0, 0) },
+                        Assessment = new OpenDataAssessmentInfo
+                        {
+                            Completed = true
+                        }
                     }
                 };
             });
@@ -369,6 +377,10 @@ namespace Catalogue.Data.Seed
                         LastAttempt = new PublicationAttempt { DateUtc = new DateTime(2014, 12, 31) },
                         LastSuccess = new PublicationAttempt { DateUtc = new DateTime(2014, 12, 31) },
                         Paused = true,
+                        Assessment = new OpenDataAssessmentInfo
+                        {
+                            Completed = true
+                        }
                     }
                 };
             });

@@ -116,7 +116,7 @@
             modal = $modal.open
                 controller:  'AssessmentController'
                 templateUrl: 'views/partials/assessment.html?' + new Date().getTime() # stop iis express caching the html
-                size:        'lg'
+                size:        'md'
                 scope:       $scope
             modal.result
                 .then (result) -> $scope.successResponse result

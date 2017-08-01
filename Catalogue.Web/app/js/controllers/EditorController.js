@@ -149,7 +149,7 @@
       modal = $modal.open({
         controller: 'AssessmentController',
         templateUrl: 'views/partials/assessment.html?' + new Date().getTime(),
-        size: 'lg',
+        size: 'md',
         scope: $scope
       });
       return modal.result.then(function(result) {

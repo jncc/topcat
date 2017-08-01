@@ -55,8 +55,9 @@ namespace Catalogue.Data.Write
                     Assessment = new OpenDataAssessmentInfo()
                 };
             }
-            
-            if (AssessmentAlreadyCompleted(record))
+
+            var assessment = record.Publication.OpenData.Assessment;
+            if (assessment != null && assessment.Completed)
             {
                 throw new Exception("Assessment has already been completed.");
             }
@@ -72,12 +73,6 @@ namespace Catalogue.Data.Write
             db.SaveChanges();
 
             return recordServiceResult.Record;
-        }
-
-        private bool AssessmentAlreadyCompleted(Record record)
-        {
-            var assessment = record.Publication.OpenData.Assessment;
-            return assessment != null && (assessment.Completed || assessment.InitialAssessmentWasDoneOnSpreadsheet);
         }
     }
 }
