@@ -488,6 +488,16 @@ label {
   overflow: scroll;
   overflow-x: hidden;
 }
+@media (min-width: 792px) {
+  .modal-md {
+    width: 700px;
+  }
+}
+@media (min-width: 1000px) {
+  .modal-md {
+    width: 900px;
+  }
+}
 .date-container {
   width: 11em;
 }

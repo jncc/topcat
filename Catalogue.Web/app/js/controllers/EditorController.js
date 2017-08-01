@@ -6,6 +6,7 @@
     $scope.editing = {};
     $scope.lookups = {};
     $scope.lookups.currentDataFormat = {};
+    $scope.record = record;
     $scope.vocabulator = {};
     $scope.$ = $;
     $http.get('../api/topics').success(function(result) {
@@ -33,16 +34,19 @@
       $event.stopPropagation();
       $scope[elem] = true;
     };
+    $scope.successResponse = function(response) {
+      $scope.record = response;
+      $scope.validation = {};
+      $scope.reset();
+      $scope.notifications.add('Edits saved');
+      return $location.path('/editor/' + $scope.record.id);
+    };
     $scope.save = function() {
       var processResult;
       processResult = function(response) {
         var e, errors, field, _i, _j, _len, _len1, _ref;
         if (response.data.success) {
-          record = response.data.record;
-          $scope.validation = {};
-          $scope.reset();
-          $scope.notifications.add('Edits saved');
-          $location.path('/editor/' + record.id);
+          $scope.successResponse(response.data.record);
         } else {
           $scope.validation = response.data.validation;
           errors = response.data.validation.errors;
@@ -66,23 +70,23 @@
       if ($scope.isNew()) {
         return $http.post('../api/records', $scope.form).then(processResult);
       } else {
-        return $http.put('../api/records/' + record.id, $scope.form).then(processResult);
+        return $http.put('../api/records/' + $scope.record.id, $scope.form).then(processResult);
       }
     };
     $scope.clone = function() {
       return $location.path('/clone/' + $scope.form.id);
     };
     $scope.reset = function() {
-      return $scope.form = angular.copy(record);
+      return $scope.form = angular.copy($scope.record);
     };
     $scope.isNew = function() {
       return $scope.form.id === '00000000-0000-0000-0000-000000000000';
     };
     $scope.isClean = function() {
-      return angular.equals($scope.form, record);
+      return angular.equals($scope.form, $scope.record);
     };
     $scope.isSaveHidden = function() {
-      return $scope.isClean() || record.readOnly;
+      return $scope.isClean() || $scope.record.readOnly;
     };
     $scope.isCancelHidden = function() {
       return $scope.isClean();
@@ -95,6 +99,9 @@
     };
     $scope.isCloneDisabled = function() {
       return !$scope.isClean();
+    };
+    $scope.isAssessmentButtonDisabled = function() {
+      return !$scope.isSaveHidden();
     };
     $scope.hasUsageConstraints = function() {
       return (!!$scope.form.gemini.limitationsOnPublicAccess && $scope.form.gemini.limitationsOnPublicAccess !== 'no limitations') || (!!$scope.form.gemini.useConstraints && $scope.form.gemini.useConstraints !== 'no conditions apply');
@@ -139,6 +146,18 @@
       });
       return modal.result.then(function(s) {
         return $scope.form.gemini.abstract = s;
+      });
+    };
+    $scope.openAssessment = function() {
+      var modal;
+      modal = $modal.open({
+        controller: 'AssessmentController',
+        templateUrl: 'views/partials/assessment.html?' + new Date().getTime(),
+        size: 'md',
+        scope: $scope
+      });
+      return modal.result.then(function(result) {
+        return $scope.successResponse(result);
       });
     };
     $scope.removeExtent = function(extent) {

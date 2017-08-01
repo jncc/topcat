@@ -1,7 +1,7 @@
 ﻿{
   "version": 3,
   "file": "VocabularyListController.js",
-  "sourceRoot": "..\\..\\..\\..\\..\\..\\Work\\topcat\\Catalogue.Web\\app\\js\\controllers",
+  "sourceRoot": "D:\\workspace\\topcat\\Catalogue.Web\\app\\js\\controllers",
   "sources": [
     "VocabularyListController.coffee"
   ],

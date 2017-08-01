@@ -16,6 +16,180 @@ namespace Catalogue.Tests.Slow.Catalogue.Web.Controllers.Publishing
     class publishing_controller_specs
     {
         [Test]
+        public void assessment_completed_test()
+        {
+            var recordId = new Guid("1a86bbbe-7f19-4fe2-82ff-7847e68266da");
+            var record = new Record().With(r =>
+            {
+                r.Id = recordId;
+                r.Path = @"X:\path\to\assessment\test";
+                r.Gemini = Library.Blank().With(m =>
+                {
+                    m.Title = "Open data assessment test";
+                    m.Keywords.Add(new MetadataKeyword
+                    {
+                        Vocab = "http://vocab.jncc.gov.uk/jncc-domain",
+                        Value = "Terrestrial"
+                    });
+                    m.Keywords.Add(new MetadataKeyword
+                    {
+                        Vocab = "http://vocab.jncc.gov.uk/jncc-category",
+                        Value = "Example Collection"
+                    });
+                });
+                r.Footer = new Footer();
+            });
+
+            var resultRecord = TestPublishingStage(record, recordId, "Assessment");
+
+            resultRecord.Publication.Should().NotBeNull();
+            resultRecord.Footer.ModifiedBy.Should().Be("Test User");
+            resultRecord.Footer.ModifiedOnUtc.Should().NotBe(DateTime.MinValue);
+
+            var openDataInfo = resultRecord.Publication.OpenData;
+            openDataInfo.Should().NotBeNull();
+            openDataInfo.LastAttempt.Should().BeNull();
+            openDataInfo.LastSuccess.Should().BeNull();
+            openDataInfo.Resources.Should().BeNull();
+            openDataInfo.Paused.Should().BeFalse();
+            openDataInfo.Assessment.Completed.Should().BeTrue();
+            openDataInfo.Assessment.CompletedBy.Should().Be("Test User");
+            openDataInfo.Assessment.CompletedOnUtc.Should().NotBe(DateTime.MinValue);
+        }
+
+        [Test]
+        public void assessment_started_then_completed_test()
+        {
+            var recordId = new Guid("ec0db5b3-8b9d-42c3-ac70-2fd50ff3bbca");
+            var record = new Record().With(r =>
+            {
+                r.Id = recordId;
+                r.Path = @"X:\path\to\assessment\test";
+                r.Gemini = Library.Blank().With(m =>
+                {
+                    m.Title = "Open data assessment test";
+                    m.Keywords.Add(new MetadataKeyword
+                    {
+                        Vocab = "http://vocab.jncc.gov.uk/jncc-domain",
+                        Value = "Terrestrial"
+                    });
+                    m.Keywords.Add(new MetadataKeyword
+                    {
+                        Vocab = "http://vocab.jncc.gov.uk/jncc-category",
+                        Value = "Example Collection"
+                    });
+                });
+                r.Publication = new PublicationInfo
+                {
+                    OpenData = new OpenDataPublicationInfo
+                    {
+                        Assessment = new OpenDataAssessmentInfo
+                        {
+                            Completed = false,
+                            CompletedBy = null,
+                            CompletedOnUtc = DateTime.MinValue,
+                            InitialAssessmentWasDoneOnSpreadsheet = false
+                        }
+                    }
+                };
+                r.Footer = new Footer();
+            });
+
+            var resultRecord = TestPublishingStage(record, recordId, "Assessment");
+
+            resultRecord.Publication.Should().NotBeNull();
+
+            var openDataInfo = resultRecord.Publication.OpenData;
+            openDataInfo.Should().NotBeNull();
+            openDataInfo.LastAttempt.Should().BeNull();
+            openDataInfo.LastSuccess.Should().BeNull();
+            openDataInfo.Resources.Should().BeNull();
+            openDataInfo.Paused.Should().BeFalse();
+            openDataInfo.Assessment.Completed.Should().BeTrue();
+            openDataInfo.Assessment.CompletedBy.Should().Be("Test User");
+            openDataInfo.Assessment.CompletedOnUtc.Should().NotBe(DateTime.MinValue);
+        }
+
+        [Test]
+        [ExpectedException(typeof(Exception), ExpectedMessage = "Assessment has already been completed.")]
+        public void assessment_already_completed_test()
+        {
+            var recordId = new Guid("1a86bbbe-7f19-4fe2-82ff-7847e68266da");
+            var record = new Record().With(r =>
+            {
+                r.Id = recordId;
+                r.Path = @"X:\path\to\assessment\test";
+                r.Gemini = Library.Blank().With(m =>
+                {
+                    m.Title = "Open data assessment test";
+                    m.Keywords.Add(new MetadataKeyword
+                    {
+                        Vocab = "http://vocab.jncc.gov.uk/jncc-domain",
+                        Value = "Terrestrial"
+                    });
+                    m.Keywords.Add(new MetadataKeyword
+                    {
+                        Vocab = "http://vocab.jncc.gov.uk/jncc-category",
+                        Value = "Example Collection"
+                    });
+                });
+                r.Publication = new PublicationInfo
+                {
+                    OpenData = new OpenDataPublicationInfo
+                    {
+                        Assessment = new OpenDataAssessmentInfo
+                        {
+                            Completed = true,
+                        }
+                    }
+                };
+                r.Footer = new Footer();
+            });
+
+            TestPublishingStage(record, recordId, "Assessment");
+        }
+
+        [Test]
+        [ExpectedException(typeof(Exception), ExpectedMessage = "Assessment has already been completed.")]
+        public void assessment_already_completed_on_spreadsheet_test()
+        {
+            var recordId = new Guid("170001cf-1117-459d-a554-b1fc031d439c");
+            var record = new Record().With(r =>
+            {
+                r.Id = recordId;
+                r.Path = @"X:\path\to\assessment\test";
+                r.Gemini = Library.Blank().With(m =>
+                {
+                    m.Title = "Open data assessment test";
+                    m.Keywords.Add(new MetadataKeyword
+                    {
+                        Vocab = "http://vocab.jncc.gov.uk/jncc-domain",
+                        Value = "Terrestrial"
+                    });
+                    m.Keywords.Add(new MetadataKeyword
+                    {
+                        Vocab = "http://vocab.jncc.gov.uk/jncc-category",
+                        Value = "Example Collection"
+                    });
+                });
+                r.Publication = new PublicationInfo
+                {
+                    OpenData = new OpenDataPublicationInfo
+                    {
+                        Assessment = new OpenDataAssessmentInfo
+                        {
+                            Completed = true,
+                            InitialAssessmentWasDoneOnSpreadsheet = true
+                        }
+                    }
+                };
+                r.Footer = new Footer();
+            });
+
+            TestPublishingStage(record, recordId, "Assessment");
+        }
+
+        [Test]
         public void successful_open_data_sign_off_test()
         {
             var recordId = new Guid("f34de2d3-17af-47e2-8deb-a16b67c76b06");
@@ -47,9 +221,10 @@ namespace Catalogue.Tests.Slow.Catalogue.Web.Controllers.Publishing
                         }
                     }
                 };
+                r.Footer = new Footer();
             });
 
-            var resultRecord = testSignOff(record, recordId);
+            var resultRecord = TestPublishingStage(record, recordId, "Sign off");
             resultRecord.Publication.Should().NotBeNull();
 
             var openDataInfo = resultRecord.Publication.OpenData;
@@ -86,9 +261,10 @@ namespace Catalogue.Tests.Slow.Catalogue.Web.Controllers.Publishing
                         Value = "Example Collection"
                     });
                 });
+                r.Footer = new Footer();
             });
 
-            testSignOff(record, recordId);
+            TestPublishingStage(record, recordId, "Sign off");
         }
 
         [Test]
@@ -124,9 +300,10 @@ namespace Catalogue.Tests.Slow.Catalogue.Web.Controllers.Publishing
                         }
                     }
                 };
+                r.Footer = new Footer();
             });
 
-            testSignOff(record, recordId);
+            TestPublishingStage(record, recordId, "Sign off");
         }
 
         [Test]
@@ -167,9 +344,10 @@ namespace Catalogue.Tests.Slow.Catalogue.Web.Controllers.Publishing
                         }
                     }
                 };
+                r.Footer = new Footer();
             });
 
-            testSignOff(record, recordId);
+            TestPublishingStage(record, recordId, "Sign off");
         }
 
         [Test]
@@ -195,12 +373,13 @@ namespace Catalogue.Tests.Slow.Catalogue.Web.Controllers.Publishing
                         }
                     }
                 };
+                r.Footer = new Footer();
             });
 
-            testSignOff(record, recordId);
+            TestPublishingStage(record, recordId, "Sign off");
         }
 
-        private Record testSignOff(Record record, Guid recordId)
+        private static Record TestPublishingStage(Record record, Guid recordId, string publishingStage)
         {
             var store = new InMemoryDatabaseHelper().Create();
             using (var db = store.OpenSession())
@@ -216,15 +395,38 @@ namespace Catalogue.Tests.Slow.Catalogue.Web.Controllers.Publishing
                 var publishingService = new OpenDataPublishingService(db, recordService);
                 var publishingController =
                     new OpenDataPublishingController(db, publishingService, userContextMock.Object);
-                var request = new SignOffRequest
+
+                switch (publishingStage)
                 {
-                    Id = recordId,
-                    Comment = "Sign off test"
-                };
-                publishingController.SignOff(request);
+                    case "Assessment":
+                        return TestAssessment(publishingController, recordId);
+                    case "Sign off":
+                        TestSignOff(publishingController, recordId);
+                        break;
+                }
 
                 return db.Load<Record>(recordId);
             }
+        }
+
+        private static Record TestAssessment(OpenDataPublishingController publishingController, Guid recordId)
+        {
+            var request = new AssessmentRequest()
+            {
+                Id = recordId
+            };
+            var result = publishingController.Assess(request);
+            return result.Record;
+        }
+
+        private static void TestSignOff(OpenDataPublishingController publishingController, Guid recordId)
+        {
+            var request = new SignOffRequest
+            {
+                Id = recordId,
+                Comment = "Sign off test"
+            };
+            publishingController.SignOff(request);
         }
     }
 }

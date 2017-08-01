@@ -5,6 +5,7 @@
         $scope.editing = {}
         $scope.lookups = {}
         $scope.lookups.currentDataFormat = {}
+        $scope.record = record
 
         # store a vocabulator scope here to save state between modal instances
         $scope.vocabulator = {}
@@ -40,14 +41,17 @@
             $scope[elem] = true;
             return
     
+        $scope.successResponse = (response) ->
+            $scope.record = response
+            $scope.validation = {}
+            $scope.reset()
+            $scope.notifications.add 'Edits saved'
+            $location.path('/editor/' + $scope.record.id)
+
         $scope.save = ->
             processResult = (response) ->
                 if response.data.success
-                    record = response.data.record # oo-er, is updating a param a good idea?
-                    $scope.validation = {}
-                    $scope.reset()
-                    $scope.notifications.add 'Edits saved'
-                    $location.path('/editor/' + record.id)
+                    $scope.successResponse response.data.record
                 else
                     $scope.validation = response.data.validation
                     # tell the form that fields are invalid
@@ -65,21 +69,22 @@
             if $scope.isNew()
                 $http.post('../api/records', $scope.form).then processResult
             else
-                $http.put('../api/records/' + record.id, $scope.form).then processResult
+                $http.put('../api/records/' + $scope.record.id, $scope.form).then processResult
 
         $scope.clone = ->
             $location.path( '/clone/' + $scope.form.id )
             
         $scope.reset = -> 
-            $scope.form = angular.copy(record)
+            $scope.form = angular.copy($scope.record)
             
         $scope.isNew = -> $scope.form.id is '00000000-0000-0000-0000-000000000000'
-        $scope.isClean = -> angular.equals($scope.form, record)
-        $scope.isSaveHidden = -> $scope.isClean() or record.readOnly
+        $scope.isClean = -> angular.equals($scope.form, $scope.record)
+        $scope.isSaveHidden = -> $scope.isClean() or $scope.record.readOnly
         $scope.isCancelHidden = -> $scope.isClean()
         $scope.isSaveDisabled = -> $scope.isClean() # || $scope.theForm.$invalid 
         $scope.isCloneHidden = -> $scope.isNew()
         $scope.isCloneDisabled = -> !$scope.isClean()
+        $scope.isAssessmentButtonDisabled = -> !$scope.isSaveHidden()
 
         $scope.hasUsageConstraints = () -> (!!$scope.form.gemini.limitationsOnPublicAccess and $scope.form.gemini.limitationsOnPublicAccess isnt 'no limitations') or (!!$scope.form.gemini.useConstraints and $scope.form.gemini.useConstraints isnt 'no conditions apply')
 
@@ -108,7 +113,16 @@
                 resolve:     'markdown': -> $scope.form.gemini.abstract
             modal.result
                 .then (s) -> $scope.form.gemini.abstract = s
-            
+
+        $scope.openAssessment = ->
+            modal = $modal.open
+                controller:  'AssessmentController'
+                templateUrl: 'views/partials/assessment.html?' + new Date().getTime() # stop iis express caching the html
+                size:        'md'
+                scope:       $scope
+            modal.result
+                .then (result) -> $scope.successResponse result
+
         $scope.removeExtent = (extent) ->
             $scope.form.gemini.extent.splice ($.inArray extent, $scope.form.gemini.extent), 1
         $scope.addExtent = ->

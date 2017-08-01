@@ -5,6 +5,7 @@ using System.Web.Http;
 using Catalogue.Data.Indexes;
 using Catalogue.Data.Model;
 using Catalogue.Data.Write;
+using Catalogue.Utilities.Time;
 using Catalogue.Web.Account;
 using Catalogue.Web.Security;
 using Raven.Client;
@@ -38,6 +39,26 @@ namespace Catalogue.Web.Controllers.Publishing
             };
         }
 
+        [HttpPut, Route("api/publishing/opendata/assess")]
+        public AssessmentResponse Assess(AssessmentRequest assessmentRequest)
+        {
+            var record = db.Load<Record>(assessmentRequest.Id);
+            var assessmentInfo = new OpenDataAssessmentInfo
+            {
+                Completed = true,
+                CompletedBy = user.User.DisplayName,
+                CompletedOnUtc = DateTime.Now,
+                InitialAssessmentWasDoneOnSpreadsheet = false
+            };
+
+            SetFooterForUpdatedRecord(record);
+            var updatedRecord = openDataPublishingService.Assess(record, assessmentInfo);
+            return new AssessmentResponse
+            {
+                Record = updatedRecord
+            };
+        }
+
         [HttpPut, Route("api/publishing/opendata/signoff"), AuthorizeOpenDataSiro]
         public IHttpActionResult SignOff(SignOffRequest signOffRequest)
         {
@@ -49,6 +70,7 @@ namespace Catalogue.Web.Controllers.Publishing
                 Comment = signOffRequest.Comment
             };
 
+            SetFooterForUpdatedRecord(record);
             openDataPublishingService.SignOff(record, signOffInfo);
             return Ok();
         }
@@ -114,6 +136,12 @@ namespace Catalogue.Web.Controllers.Publishing
                 .ToList();
 
             return records;
+        }
+
+        private void SetFooterForUpdatedRecord(Record record)
+        {
+            record.Footer.ModifiedOnUtc = Clock.NowUtc;
+            record.Footer.ModifiedBy = user.User.DisplayName;
         }
     }
 

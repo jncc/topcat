@@ -236,6 +236,23 @@ namespace Catalogue.Data.Seed
                 });
             });
 
+            var assessmentCompletedOnSpreadsheetRecord = record.With(r =>
+            {
+                r.Id = new Guid("471da4f2-d9e2-4a5a-b72b-3ae8cc40ae57");
+                r.Gemini.Title = "A record with assessment completed on spreadsheet";
+                r.Publication = new PublicationInfo
+                {
+                    OpenData = new OpenDataPublicationInfo
+                    {
+                        Assessment = new OpenDataAssessmentInfo
+                        {
+                            Completed = true,
+                            InitialAssessmentWasDoneOnSpreadsheet = true
+                        }
+                    },
+                };
+            });
+
             var assessedButNotCompletelyRecord = record.With(r =>
             {
                 r.Id = new Guid("39f9442a-45e5-464f-8b20-876051560964");
@@ -321,6 +338,10 @@ namespace Catalogue.Data.Seed
                     {
                         LastAttempt = new PublicationAttempt { DateUtc = new DateTime(2015, 1, 1, 11, 0, 0), Message = "Failed with a terrible error in Sector 7G"},
                         LastSuccess = null,
+                        Assessment = new OpenDataAssessmentInfo
+                        {
+                            Completed = true
+                        }
                     }
                 };
             });
@@ -335,6 +356,10 @@ namespace Catalogue.Data.Seed
                     {
                         LastAttempt = new PublicationAttempt { DateUtc = new DateTime(2016, 1, 1, 13, 0, 0) },
                         LastSuccess = new PublicationAttempt { DateUtc = new DateTime(2016, 1, 1, 13, 0, 0) },
+                        Assessment = new OpenDataAssessmentInfo
+                        {
+                            Completed = true
+                        }
                     }
                 };
             });
@@ -352,6 +377,10 @@ namespace Catalogue.Data.Seed
                         LastAttempt = new PublicationAttempt { DateUtc = new DateTime(2014, 12, 31) },
                         LastSuccess = new PublicationAttempt { DateUtc = new DateTime(2014, 12, 31) },
                         Paused = true,
+                        Assessment = new OpenDataAssessmentInfo
+                        {
+                            Completed = true
+                        }
                     }
                 };
             });
@@ -376,6 +405,7 @@ namespace Catalogue.Data.Seed
                 };
             });
 
+            recordService.Insert(assessmentCompletedOnSpreadsheetRecord);
             recordService.Insert(neverPublishedRecord);
             recordService.Insert(assessedButNotCompletelyRecord);
             recordService.Insert(assessedButNotSignedOffRecord);

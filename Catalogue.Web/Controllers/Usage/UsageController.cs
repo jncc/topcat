@@ -21,7 +21,7 @@ namespace Catalogue.Web.Controllers.Usage
             var output = new UsageOutputModel();
 
             var records = db.Query<Record>()
-                .OrderByDescending(r => r.Gemini.MetadataDate)
+                .OrderByDescending(r => r.Footer.ModifiedOnUtc)
                 .Take(5)
                 .ToList();
 

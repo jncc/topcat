@@ -4,8 +4,7 @@ namespace Catalogue.Data.Write
 {
     public interface IOpenDataPublishingService
     {
-        // TODO
-        // Assess
+        Record Assess(Record record, OpenDataAssessmentInfo assessmentInfo);
         void SignOff(Record record, OpenDataSignOffInfo signOffInfo);
     }
 }
