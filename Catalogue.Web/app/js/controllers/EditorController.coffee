@@ -5,6 +5,7 @@
         $scope.editing = {}
         $scope.lookups = {}
         $scope.lookups.currentDataFormat = {}
+        $scope.record = record
 
         # store a vocabulator scope here to save state between modal instances
         $scope.vocabulator = {}
@@ -41,11 +42,11 @@
             return
     
         $scope.successResponse = (response) ->
-            record = response # oo-er, is updating a param a good idea?
+            $scope.record = response
             $scope.validation = {}
             $scope.reset()
             $scope.notifications.add 'Edits saved'
-            $location.path('/editor/' + record.id)
+            $location.path('/editor/' + $scope.record.id)
 
         $scope.save = ->
             processResult = (response) ->
@@ -68,17 +69,17 @@
             if $scope.isNew()
                 $http.post('../api/records', $scope.form).then processResult
             else
-                $http.put('../api/records/' + record.id, $scope.form).then processResult
+                $http.put('../api/records/' + $scope.record.id, $scope.form).then processResult
 
         $scope.clone = ->
             $location.path( '/clone/' + $scope.form.id )
             
         $scope.reset = -> 
-            $scope.form = angular.copy(record)
+            $scope.form = angular.copy($scope.record)
             
         $scope.isNew = -> $scope.form.id is '00000000-0000-0000-0000-000000000000'
-        $scope.isClean = -> angular.equals($scope.form, record)
-        $scope.isSaveHidden = -> $scope.isClean() or record.readOnly
+        $scope.isClean = -> angular.equals($scope.form, $scope.record)
+        $scope.isSaveHidden = -> $scope.isClean() or $scope.record.readOnly
         $scope.isCancelHidden = -> $scope.isClean()
         $scope.isSaveDisabled = -> $scope.isClean() # || $scope.theForm.$invalid 
         $scope.isCloneHidden = -> $scope.isNew()

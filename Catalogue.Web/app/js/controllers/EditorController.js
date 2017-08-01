@@ -6,6 +6,7 @@
     $scope.editing = {};
     $scope.lookups = {};
     $scope.lookups.currentDataFormat = {};
+    $scope.record = record;
     $scope.vocabulator = {};
     $scope.$ = $;
     $http.get('../api/topics').success(function(result) {
@@ -34,11 +35,11 @@
       $scope[elem] = true;
     };
     $scope.successResponse = function(response) {
-      record = response;
+      $scope.record = response;
       $scope.validation = {};
       $scope.reset();
       $scope.notifications.add('Edits saved');
-      return $location.path('/editor/' + record.id);
+      return $location.path('/editor/' + $scope.record.id);
     };
     $scope.save = function() {
       var processResult;
@@ -69,23 +70,23 @@
       if ($scope.isNew()) {
         return $http.post('../api/records', $scope.form).then(processResult);
       } else {
-        return $http.put('../api/records/' + record.id, $scope.form).then(processResult);
+        return $http.put('../api/records/' + $scope.record.id, $scope.form).then(processResult);
       }
     };
     $scope.clone = function() {
       return $location.path('/clone/' + $scope.form.id);
     };
     $scope.reset = function() {
-      return $scope.form = angular.copy(record);
+      return $scope.form = angular.copy($scope.record);
     };
     $scope.isNew = function() {
       return $scope.form.id === '00000000-0000-0000-0000-000000000000';
     };
     $scope.isClean = function() {
-      return angular.equals($scope.form, record);
+      return angular.equals($scope.form, $scope.record);
     };
     $scope.isSaveHidden = function() {
-      return $scope.isClean() || record.readOnly;
+      return $scope.isClean() || $scope.record.readOnly;
     };
     $scope.isCancelHidden = function() {
       return $scope.isClean();
