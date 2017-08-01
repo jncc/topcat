@@ -18,7 +18,11 @@
     $scope.assessmentRequest = {};
     $scope.assessmentRequest.id = $scope.form.id;
     if ($scope.form.publication !== null && $scope.form.publication.openData.assessment.completed) {
-      $scope.publishingButtonText = "Completed by " + $scope.form.publication.openData.assessment.completedBy + " on " + formatDate(new Date($scope.form.publication.openData.assessment.completedOnUtc));
+      if ($scope.form.publication.openData.assessment.initialAssessmentWasDoneOnSpreadsheet) {
+        $scope.publishingButtonText = "Initial assessment completed on spreadsheet";
+      } else {
+        $scope.publishingButtonText = "Completed by " + $scope.form.publication.openData.assessment.completedBy + " on " + formatDate(new Date($scope.form.publication.openData.assessment.completedOnUtc));
+      }
     } else {
       $scope.publishingButtonText = "I AGREE";
     }
