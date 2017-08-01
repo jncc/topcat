@@ -100,6 +100,9 @@
     $scope.isCloneDisabled = function() {
       return !$scope.isClean();
     };
+    $scope.isAssessmentButtonDisabled = function() {
+      return !$scope.isSaveDisabled();
+    };
     $scope.hasUsageConstraints = function() {
       return (!!$scope.form.gemini.limitationsOnPublicAccess && $scope.form.gemini.limitationsOnPublicAccess !== 'no limitations') || (!!$scope.form.gemini.useConstraints && $scope.form.gemini.useConstraints !== 'no conditions apply');
     };

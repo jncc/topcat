@@ -37,11 +37,14 @@ namespace Catalogue.Tests.Slow.Catalogue.Web.Controllers.Publishing
                         Value = "Example Collection"
                     });
                 });
+                r.Footer = new Footer();
             });
 
             var resultRecord = TestPublishingStage(record, recordId, "Assessment");
 
             resultRecord.Publication.Should().NotBeNull();
+            resultRecord.Footer.ModifiedBy.Should().Be("Test User");
+            resultRecord.Footer.ModifiedOnUtc.Should().NotBe(DateTime.MinValue);
 
             var openDataInfo = resultRecord.Publication.OpenData;
             openDataInfo.Should().NotBeNull();
@@ -89,6 +92,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Web.Controllers.Publishing
                         }
                     }
                 };
+                r.Footer = new Footer();
             });
 
             var resultRecord = TestPublishingStage(record, recordId, "Assessment");
@@ -139,6 +143,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Web.Controllers.Publishing
                         }
                     }
                 };
+                r.Footer = new Footer();
             });
 
             TestPublishingStage(record, recordId, "Assessment");
@@ -178,6 +183,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Web.Controllers.Publishing
                         }
                     }
                 };
+                r.Footer = new Footer();
             });
 
             TestPublishingStage(record, recordId, "Assessment");
@@ -215,6 +221,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Web.Controllers.Publishing
                         }
                     }
                 };
+                r.Footer = new Footer();
             });
 
             var resultRecord = TestPublishingStage(record, recordId, "Sign off");
@@ -254,6 +261,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Web.Controllers.Publishing
                         Value = "Example Collection"
                     });
                 });
+                r.Footer = new Footer();
             });
 
             TestPublishingStage(record, recordId, "Sign off");
@@ -292,6 +300,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Web.Controllers.Publishing
                         }
                     }
                 };
+                r.Footer = new Footer();
             });
 
             TestPublishingStage(record, recordId, "Sign off");
@@ -335,6 +344,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Web.Controllers.Publishing
                         }
                     }
                 };
+                r.Footer = new Footer();
             });
 
             TestPublishingStage(record, recordId, "Sign off");
@@ -363,6 +373,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Web.Controllers.Publishing
                         }
                     }
                 };
+                r.Footer = new Footer();
             });
 
             TestPublishingStage(record, recordId, "Sign off");
