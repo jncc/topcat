@@ -6,6 +6,7 @@ using System.Text.RegularExpressions;
 using Catalogue.Data.Model;
 using Catalogue.Gemini.Model;
 using Catalogue.Utilities.Text;
+using Catalogue.Utilities.Time;
 using CsvHelper.Configuration;
 using FluentAssertions;
 using NUnit.Framework;
@@ -186,6 +187,13 @@ namespace Catalogue.Data.Import.Mappings
                 Map(m => m.Status).ConvertUsing(row => Status.Publishable); // all mesh data is publishable
                 Map(m => m.SourceIdentifier).Name("AlternateTitle"); // the mesh "GUI"
                 Map(m => m.Notes);
+                Map(m => m.Footer).ConvertUsing(row => new Footer
+                {
+                    CreatedOnUtc = DateTime.MinValue,
+                    CreatedBy = "Joint Nature Conservation Committee (JNCC)",
+                    ModifiedOnUtc = Clock.NowUtc,
+                    ModifiedBy = "Joint Nature Conservation Committee (JNCC)"
+                });
 
                 References<GeminiMap>(m => m.Gemini);
             }
