@@ -1,15 +1,15 @@
 ﻿using Catalogue.Data.Model;
 using Catalogue.Data.Test;
 using Catalogue.Data.Write;
+using Catalogue.Gemini.Model;
 using Catalogue.Gemini.Templates;
 using Catalogue.Utilities.Clone;
-using FluentAssertions;
-using NUnit.Framework;
-using System;
-using Catalogue.Gemini.Model;
 using Catalogue.Web.Account;
 using Catalogue.Web.Controllers.Publishing;
+using FluentAssertions;
 using Moq;
+using NUnit.Framework;
+using System;
 
 namespace Catalogue.Tests.Slow.Catalogue.Web.Controllers.Publishing
 {
@@ -23,9 +23,10 @@ namespace Catalogue.Tests.Slow.Catalogue.Web.Controllers.Publishing
             {
                 r.Id = recordId;
                 r.Path = @"X:\path\to\assessment\test";
-                r.Gemini = Library.Blank().With(m =>
+                r.Validation = Validation.Gemini;
+                r.Gemini = Library.Example().With(m =>
                 {
-                    m.Title = "Open data assessment test";
+                    m.Title = "Open data assessment test - normal scenario";
                     m.Keywords.Add(new MetadataKeyword
                     {
                         Vocab = "http://vocab.jncc.gov.uk/jncc-domain",
@@ -65,9 +66,10 @@ namespace Catalogue.Tests.Slow.Catalogue.Web.Controllers.Publishing
             {
                 r.Id = recordId;
                 r.Path = @"X:\path\to\assessment\test";
-                r.Gemini = Library.Blank().With(m =>
+                r.Validation = Validation.Gemini;
+                r.Gemini = Library.Example().With(m =>
                 {
-                    m.Title = "Open data assessment test";
+                    m.Title = "Open data assessment test - assessment completed after being started";
                     m.Keywords.Add(new MetadataKeyword
                     {
                         Vocab = "http://vocab.jncc.gov.uk/jncc-domain",
@@ -119,9 +121,10 @@ namespace Catalogue.Tests.Slow.Catalogue.Web.Controllers.Publishing
             {
                 r.Id = recordId;
                 r.Path = @"X:\path\to\assessment\test";
-                r.Gemini = Library.Blank().With(m =>
+                r.Validation = Validation.Gemini;
+                r.Gemini = Library.Example().With(m =>
                 {
-                    m.Title = "Open data assessment test";
+                    m.Title = "Open data assessment test - record with assessment already completed";
                     m.Keywords.Add(new MetadataKeyword
                     {
                         Vocab = "http://vocab.jncc.gov.uk/jncc-domain",
@@ -158,9 +161,10 @@ namespace Catalogue.Tests.Slow.Catalogue.Web.Controllers.Publishing
             {
                 r.Id = recordId;
                 r.Path = @"X:\path\to\assessment\test";
-                r.Gemini = Library.Blank().With(m =>
+                r.Validation = Validation.Gemini;
+                r.Gemini = Library.Example().With(m =>
                 {
-                    m.Title = "Open data assessment test";
+                    m.Title = "Open data assessment test - record with initial assessment completed on spreadsheet";
                     m.Keywords.Add(new MetadataKeyword
                     {
                         Vocab = "http://vocab.jncc.gov.uk/jncc-domain",
@@ -190,6 +194,36 @@ namespace Catalogue.Tests.Slow.Catalogue.Web.Controllers.Publishing
         }
 
         [Test]
+        [ExpectedException(typeof(Exception), ExpectedMessage = "Validation level must be Gemini.")]
+        public void assessment_for_non_Gemini_record_should_fail_test()
+        {
+            var recordId = new Guid("aeda73dc-4723-427d-8555-19558087370a");
+            var record = new Record().With(r =>
+            {
+                r.Id = recordId;
+                r.Path = @"X:\path\to\assessment\test";
+                r.Validation = Validation.Basic;
+                r.Gemini = Library.Blank().With(m =>
+                {
+                    m.Title = "Open data assessment test - record with basic validation";
+                    m.Keywords.Add(new MetadataKeyword
+                    {
+                        Vocab = "http://vocab.jncc.gov.uk/jncc-domain",
+                        Value = "Terrestrial"
+                    });
+                    m.Keywords.Add(new MetadataKeyword
+                    {
+                        Vocab = "http://vocab.jncc.gov.uk/jncc-category",
+                        Value = "Example Collection"
+                    });
+                });
+                r.Footer = new Footer();
+            });
+
+            TestPublishingStage(record, recordId, "Assessment");
+        }
+
+        [Test]
         public void successful_open_data_sign_off_test()
         {
             var recordId = new Guid("f34de2d3-17af-47e2-8deb-a16b67c76b06");
@@ -197,9 +231,10 @@ namespace Catalogue.Tests.Slow.Catalogue.Web.Controllers.Publishing
             {
                 r.Id = recordId;
                 r.Path = @"X:\path\to\signoff\test";
-                r.Gemini = Library.Blank().With(m =>
+                r.Validation = Validation.Gemini;
+                r.Gemini = Library.Example().With(m =>
                 {
-                    m.Title = "Open data sign off test";
+                    m.Title = "Open data sign off test - normal scenario";
                     m.Keywords.Add(new MetadataKeyword
                     {
                         Vocab = "http://vocab.jncc.gov.uk/jncc-domain",
@@ -240,35 +275,6 @@ namespace Catalogue.Tests.Slow.Catalogue.Web.Controllers.Publishing
 
         [Test]
         [ExpectedException(typeof(Exception), ExpectedMessage = "Couldn't sign-off record for publication. Assessment not completed.")]
-        public void sign_off_without_risk_assessment_test()
-        {
-            var recordId = new Guid("9f9d7a83-8fcb-4afc-956b-3d874d5632b1");
-            var record = new Record().With(r =>
-            {
-                r.Id = recordId;
-                r.Path = @"X:\path\to\signoff\test";
-                r.Gemini = Library.Blank().With(m =>
-                {
-                    m.Title = "Open data sign off test";
-                    m.Keywords.Add(new MetadataKeyword
-                    {
-                        Vocab = "http://vocab.jncc.gov.uk/jncc-domain",
-                        Value = "Terrestrial"
-                    });
-                    m.Keywords.Add(new MetadataKeyword
-                    {
-                        Vocab = "http://vocab.jncc.gov.uk/jncc-category",
-                        Value = "Example Collection"
-                    });
-                });
-                r.Footer = new Footer();
-            });
-
-            TestPublishingStage(record, recordId, "Sign off");
-        }
-
-        [Test]
-        [ExpectedException(typeof(Exception), ExpectedMessage = "Couldn't sign-off record for publication. Assessment not completed.")]
         public void sign_off_with_incomplete_risk_assessment_test()
         {
             var recordId = new Guid("9f9d7a83-8fcb-4afc-956b-3d874d5632b1");
@@ -276,9 +282,10 @@ namespace Catalogue.Tests.Slow.Catalogue.Web.Controllers.Publishing
             {
                 r.Id = recordId;
                 r.Path = @"X:\path\to\signoff\test";
-                r.Gemini = Library.Blank().With(m =>
+                r.Validation = Validation.Gemini;
+                r.Gemini = Library.Example().With(m =>
                 {
-                    m.Title = "Open data sign off test";
+                    m.Title = "Open data sign off test - record with incomplete risk assessment";
                     m.Keywords.Add(new MetadataKeyword
                     {
                         Vocab = "http://vocab.jncc.gov.uk/jncc-domain",
@@ -315,9 +322,10 @@ namespace Catalogue.Tests.Slow.Catalogue.Web.Controllers.Publishing
             {
                 r.Id = recordId;
                 r.Path = @"X:\path\to\signoff\test";
-                r.Gemini = Library.Blank().With(m =>
+                r.Validation = Validation.Gemini;
+                r.Gemini = Library.Example().With(m =>
                 {
-                    m.Title = "Open data sign off test";
+                    m.Title = "Open data sign off test - record already signed off";
                     m.Keywords.Add(new MetadataKeyword
                     {
                         Vocab = "http://vocab.jncc.gov.uk/jncc-domain",
@@ -359,9 +367,10 @@ namespace Catalogue.Tests.Slow.Catalogue.Web.Controllers.Publishing
             {
                 r.Id = recordId;
                 r.Path = @"X:\path\to\signoff\test";
-                r.Gemini = Library.Blank().With(m =>
+                r.Validation = Validation.Gemini;
+                r.Gemini = Library.Example().With(m =>
                 {
-                    m.Title = "Open data sign off test";
+                    m.Title = "Open data sign off test - record fails validation";
                 });
                 r.Publication = new PublicationInfo
                 {
@@ -373,6 +382,26 @@ namespace Catalogue.Tests.Slow.Catalogue.Web.Controllers.Publishing
                         }
                     }
                 };
+                r.Footer = new Footer();
+            });
+
+            TestPublishingStage(record, recordId, "Sign off");
+        }
+
+        [Test]
+        [ExpectedException(typeof(Exception), ExpectedMessage = "Couldn't sign-off record for publication. Assessment not completed.")]
+        public void sign_off_without_risk_assessment_test()
+        {
+            var recordId = new Guid("9f9d7a83-8fcb-4afc-956b-3d874d5632b1");
+            var record = new Record().With(r =>
+            {
+                r.Id = recordId;
+                r.Path = @"X:\path\to\signoff\test";
+                r.Validation = Validation.Gemini;
+                r.Gemini = Library.Example().With(m =>
+                {
+                    m.Title = "Open data sign off test - record without risk assessment";
+                });
                 r.Footer = new Footer();
             });
 
