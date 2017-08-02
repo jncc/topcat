@@ -75,6 +75,16 @@ namespace Catalogue.Web.Controllers.Publishing
             return Ok();
         }
 
+        [HttpGet, Route("api/publishing/opendata/pendingsignoff")]
+        public List<RecordRepresentation> PendingSignOff(int p = 1)
+        {
+            var query = db
+                .Query<RecordsWithOpenDataPublicationInfoIndex.Result, RecordsWithOpenDataPublicationInfoIndex>()
+                .Where(x => x.AssessmentCompleted && !x.SignedOff);
+
+            return GetRecords(query, p);
+        }
+
         [HttpGet, Route("api/publishing/opendata/publishedsincelastupdated")]
         public List<RecordRepresentation> PublishedSinceLastUpdated(int p = 1)
         {

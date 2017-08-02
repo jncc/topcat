@@ -10,6 +10,8 @@ using FluentAssertions;
 using Moq;
 using NUnit.Framework;
 using System;
+using System.Collections.Generic;
+using Raven.Client;
 
 namespace Catalogue.Tests.Slow.Catalogue.Web.Controllers.Publishing
 {
@@ -41,7 +43,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Web.Controllers.Publishing
                 r.Footer = new Footer();
             });
 
-            var resultRecord = TestPublishingStage(record, recordId, "Assessment");
+            var resultRecord = TestAssessment(record);
 
             resultRecord.Publication.Should().NotBeNull();
             resultRecord.Footer.ModifiedBy.Should().Be("Test User");
@@ -97,7 +99,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Web.Controllers.Publishing
                 r.Footer = new Footer();
             });
 
-            var resultRecord = TestPublishingStage(record, recordId, "Assessment");
+            var resultRecord = TestAssessment(record);
 
             resultRecord.Publication.Should().NotBeNull();
 
@@ -149,7 +151,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Web.Controllers.Publishing
                 r.Footer = new Footer();
             });
 
-            TestPublishingStage(record, recordId, "Assessment");
+            TestAssessment(record);
         }
 
         [Test]
@@ -190,7 +192,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Web.Controllers.Publishing
                 r.Footer = new Footer();
             });
 
-            TestPublishingStage(record, recordId, "Assessment");
+            TestAssessment(record);
         }
 
         [Test]
@@ -220,7 +222,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Web.Controllers.Publishing
                 r.Footer = new Footer();
             });
 
-            TestPublishingStage(record, recordId, "Assessment");
+            TestAssessment(record);
         }
 
         [Test]
@@ -259,7 +261,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Web.Controllers.Publishing
                 r.Footer = new Footer();
             });
 
-            var resultRecord = TestPublishingStage(record, recordId, "Sign off");
+            var resultRecord = TestSignOff(record);
             resultRecord.Publication.Should().NotBeNull();
 
             var openDataInfo = resultRecord.Publication.OpenData;
@@ -310,7 +312,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Web.Controllers.Publishing
                 r.Footer = new Footer();
             });
 
-            TestPublishingStage(record, recordId, "Sign off");
+            TestSignOff(record);
         }
 
         [Test]
@@ -355,7 +357,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Web.Controllers.Publishing
                 r.Footer = new Footer();
             });
 
-            TestPublishingStage(record, recordId, "Sign off");
+            TestSignOff(record);
         }
 
         [Test]
@@ -385,7 +387,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Web.Controllers.Publishing
                 r.Footer = new Footer();
             });
 
-            TestPublishingStage(record, recordId, "Sign off");
+            TestSignOff(record);
         }
 
         [Test]
@@ -405,10 +407,161 @@ namespace Catalogue.Tests.Slow.Catalogue.Web.Controllers.Publishing
                 r.Footer = new Footer();
             });
 
-            TestPublishingStage(record, recordId, "Sign off");
+            TestSignOff(record);
         }
 
-        private static Record TestPublishingStage(Record record, Guid recordId, string publishingStage)
+        [Test]
+        public void awaiting_sign_off_test()
+        {
+            var retrieveSignOffTest1Record = new Record().With(r =>
+            {
+                r.Id = new Guid("af8e531f-2bed-412e-9b03-2b339c672bff");
+                r.Path = @"X:\path\to\assessment\test";
+                r.Validation = Validation.Gemini;
+                r.Gemini = Library.Example().With(m =>
+                {
+                    m.Title = "Retrieve Sign Off Test 1";
+                    m.Keywords.Add(new MetadataKeyword
+                    {
+                        Vocab = "http://vocab.jncc.gov.uk/jncc-domain",
+                        Value = "Terrestrial"
+                    });
+                    m.Keywords.Add(new MetadataKeyword
+                    {
+                        Vocab = "http://vocab.jncc.gov.uk/jncc-category",
+                        Value = "Example Collection"
+                    });
+                });
+                r.Publication = new PublicationInfo
+                {
+                    OpenData = new OpenDataPublicationInfo
+                    {
+                        Assessment = new OpenDataAssessmentInfo
+                        {
+                            Completed = true
+                        },
+                        SignOff = null
+                    }
+                };
+                r.Footer = new Footer();
+            });
+
+            var retrieveSignOffTest2Record = new Record().With(r =>
+            {
+                r.Id = new Guid("f4b6dd32-93ad-41cd-a7a0-2df0f5c7410b");
+                r.Path = @"X:\path\to\assessment\test";
+                r.Validation = Validation.Gemini;
+                r.Gemini = Library.Example().With(m =>
+                {
+                    m.Title = "Retrieve Sign Off Test 2";
+                    m.Keywords.Add(new MetadataKeyword
+                    {
+                        Vocab = "http://vocab.jncc.gov.uk/jncc-domain",
+                        Value = "Terrestrial"
+                    });
+                    m.Keywords.Add(new MetadataKeyword
+                    {
+                        Vocab = "http://vocab.jncc.gov.uk/jncc-category",
+                        Value = "Example Collection"
+                    });
+                });
+                r.Publication = null;
+                r.Footer = new Footer();
+            });
+
+            var retrieveSignOffTest3Record = new Record().With(r =>
+            {
+                r.Id = new Guid("dbb9bf6e-c128-4611-bd3f-73bd7a9ae4e9");
+                r.Path = @"X:\path\to\assessment\test";
+                r.Validation = Validation.Gemini;
+                r.Gemini = Library.Example().With(m =>
+                {
+                    m.Title = "Retrieve Sign Off Test 3";
+                    m.Keywords.Add(new MetadataKeyword
+                    {
+                        Vocab = "http://vocab.jncc.gov.uk/jncc-domain",
+                        Value = "Terrestrial"
+                    });
+                    m.Keywords.Add(new MetadataKeyword
+                    {
+                        Vocab = "http://vocab.jncc.gov.uk/jncc-category",
+                        Value = "Example Collection"
+                    });
+                });
+                r.Publication = new PublicationInfo
+                {
+                    OpenData = new OpenDataPublicationInfo
+                    {
+                        Assessment = new OpenDataAssessmentInfo
+                        {
+                            Completed = true
+                        },
+                        SignOff = new OpenDataSignOffInfo
+                        {
+                            DateUtc = new DateTime(2017, 08, 02),
+                            User = "Ulric"
+                        }
+                    }
+                };
+                r.Footer = new Footer();
+            });
+
+            var retrieveSignOffTest4Record = new Record().With(r =>
+            {
+                r.Id = new Guid("e1255428-90ec-4d8e-a9d9-0cf210c64dbd");
+                r.Path = @"X:\path\to\assessment\test";
+                r.Validation = Validation.Gemini;
+                r.Gemini = Library.Example().With(m =>
+                {
+                    m.Title = "Retrieve Sign Off Test 4";
+                    m.Keywords.Add(new MetadataKeyword
+                    {
+                        Vocab = "http://vocab.jncc.gov.uk/jncc-domain",
+                        Value = "Terrestrial"
+                    });
+                    m.Keywords.Add(new MetadataKeyword
+                    {
+                        Vocab = "http://vocab.jncc.gov.uk/jncc-category",
+                        Value = "Example Collection"
+                    });
+                });
+                r.Publication = new PublicationInfo
+                {
+                    OpenData = new OpenDataPublicationInfo
+                    {
+                        Assessment = new OpenDataAssessmentInfo
+                        {
+                            Completed = false
+                        },
+                        SignOff = new OpenDataSignOffInfo
+                        {
+                            DateUtc = new DateTime(2017, 08, 02),
+                            User = "Ulric"
+                        }
+                    }
+                };
+                r.Footer = new Footer();
+            });
+
+            var testRecords = new List<Record>(new [] {retrieveSignOffTest1Record, retrieveSignOffTest2Record, retrieveSignOffTest3Record, retrieveSignOffTest4Record});
+
+            var store = new InMemoryDatabaseHelper().Create();
+            using (var db = store.OpenSession())
+            {
+                foreach (var record in testRecords)
+                {
+                    db.Store(record);
+                    db.SaveChanges();
+                }
+
+                var publishingController = GetTestOpenDataPublishingController(db);
+                var result = publishingController.AwaitingSignOff();
+                result.Count.Should().Be(1);
+                result[0].Title.Should().Be("Retrieve Sign Off Test 1");
+            }
+        }
+
+        private static Record TestAssessment(Record record)
         {
             var store = new InMemoryDatabaseHelper().Create();
             using (var db = store.OpenSession())
@@ -416,46 +569,49 @@ namespace Catalogue.Tests.Slow.Catalogue.Web.Controllers.Publishing
                 db.Store(record);
                 db.SaveChanges();
 
-                var testUserContext = new TestUserContext();
-                var userContextMock = new Mock<IUserContext>();
-                userContextMock.Setup(u => u.User).Returns(testUserContext.User);
+                var publishingController = GetTestOpenDataPublishingController(db);
 
-                var recordService = new RecordService(db, new RecordValidator());
-                var publishingService = new OpenDataPublishingService(db, recordService);
-                var publishingController =
-                    new OpenDataPublishingController(db, publishingService, userContextMock.Object);
-
-                switch (publishingStage)
+                var request = new AssessmentRequest
                 {
-                    case "Assessment":
-                        return TestAssessment(publishingController, recordId);
-                    case "Sign off":
-                        TestSignOff(publishingController, recordId);
-                        break;
-                }
+                    Id = record.Id
+                };
 
-                return db.Load<Record>(recordId);
+                return publishingController.Assess(request).Record;
             }
         }
 
-        private static Record TestAssessment(OpenDataPublishingController publishingController, Guid recordId)
+        private static Record TestSignOff(Record record)
         {
-            var request = new AssessmentRequest()
+            var store = new InMemoryDatabaseHelper().Create();
+            using (var db = store.OpenSession())
             {
-                Id = recordId
-            };
-            var result = publishingController.Assess(request);
-            return result.Record;
+                db.Store(record);
+                db.SaveChanges();
+
+                var publishingController = GetTestOpenDataPublishingController(db);
+
+                var request = new SignOffRequest
+                {
+                    Id = record.Id,
+                    Comment = "Sign off test"
+                };
+
+                publishingController.SignOff(request);
+
+                return db.Load<Record>(record.Id);
+            }
         }
 
-        private static void TestSignOff(OpenDataPublishingController publishingController, Guid recordId)
+        private static OpenDataPublishingController GetTestOpenDataPublishingController(IDocumentSession db)
         {
-            var request = new SignOffRequest
-            {
-                Id = recordId,
-                Comment = "Sign off test"
-            };
-            publishingController.SignOff(request);
+            var testUserContext = new TestUserContext();
+            var userContextMock = new Mock<IUserContext>();
+            userContextMock.Setup(u => u.User).Returns(testUserContext.User);
+
+            var recordService = new RecordService(db, new RecordValidator());
+            var publishingService = new OpenDataPublishingService(db, recordService);
+
+            return new OpenDataPublishingController(db, publishingService, userContextMock.Object);
         }
     }
 }
