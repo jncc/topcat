@@ -43,6 +43,11 @@ namespace Catalogue.Data.Write
 
         public Record Assess(Record record, OpenDataAssessmentInfo assessmentInfo)
         {
+            if (!record.Validation.Equals(Validation.Gemini))
+            {
+                throw new Exception("Validation level must be Gemini.");
+            }
+
             if (record.Publication == null)
             {
                 record.Publication = new PublicationInfo();
