@@ -555,7 +555,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Web.Controllers.Publishing
                 }
 
                 var publishingController = GetTestOpenDataPublishingController(db);
-                var result = publishingController.AwaitingSignOff();
+                var result = publishingController.PendingSignOff();
                 result.Count.Should().Be(1);
                 result[0].Title.Should().Be("Retrieve Sign Off Test 1");
             }

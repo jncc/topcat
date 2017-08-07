@@ -181,7 +181,7 @@
     <Compile Include="Customization\CustomWebApiAssembliesResolver.cs" />
     <Compile Include="Logging\ElmahHandledErrorLoggerFilter.cs" />
     <Compile Include="Logging\UnhandledExceptionFilter.cs" />
-    <Compile Include="Security\AuthorizeOpenDataSiroAttribute.cs" />
+    <Compile Include="Security\AuthorizeOpenDataIaoAttribute.cs" />
     <Compile Include="Settings.cs" />
     <Compile Include="Account\AccountController.cs" />
     <Compile Include="Controllers\Search\SearchController.cs" />
@@ -412,7 +412,7 @@
     <Content Include="app\views\partials\vocabulator.html" />
     <Content Include="app\views\partials\what-is-data.html" />
     <Content Include="app\views\partials\why-topcat.html" />
-    <Content Include="app\views\opendatapublishing\siro.html" />
+    <Content Include="app\views\opendatapublishing\signoff.html" />
     <Content Include="app\views\publishing\publishing.html" />
     <Content Include="app\views\sandbox\colours.html" />
     <Content Include="app\views\sandbox\dropdown.html" />

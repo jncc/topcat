@@ -33,9 +33,10 @@ namespace Catalogue.Web.Controllers.Publishing
             return new SummaryRepresentation
                 {
                     CountOfPublishedSinceLastUpdated = query.Count(x => x.PublishedSinceLastUpdated),
-                    CountOfNotYetPublishedSinceLastUpdated = query.Count(x => !x.PublishedSinceLastUpdated),
-                    CountOfPublicationNeverAttempted = query.Count(x => x.PublicationNeverAttempted),
-                    CountOfLastPublicationAttemptWasUnsuccessful = query.Count(x => x.LastPublicationAttemptWasUnsuccessful),
+                    CountOfNotYetPublishedSinceLastUpdated = query.Count(x => !x.PublishedSinceLastUpdated && x.SignedOff),
+                    CountOfPublicationNeverAttempted = query.Count(x => x.PublicationNeverAttempted && x.SignedOff),
+                    CountOfLastPublicationAttemptWasUnsuccessful = query.Count(x => x.LastPublicationAttemptWasUnsuccessful && x.SignedOff),
+                    CountOfPendingSignOff = query.Count(x => x.AssessmentCompleted && !x.SignedOff)
             };
         }
 
@@ -59,7 +60,7 @@ namespace Catalogue.Web.Controllers.Publishing
             };
         }
 
-        [HttpPut, Route("api/publishing/opendata/signoff"), AuthorizeOpenDataSiro]
+        [HttpPut, Route("api/publishing/opendata/signoff"), AuthorizeOpenDataIao]
         public IHttpActionResult SignOff(SignOffRequest signOffRequest)
         {
             var record = db.Load<Record>(signOffRequest.Id);
@@ -90,7 +91,7 @@ namespace Catalogue.Web.Controllers.Publishing
         {
             var query = db
                 .Query<RecordsWithOpenDataPublicationInfoIndex.Result, RecordsWithOpenDataPublicationInfoIndex>()
-                .Where(x => x.PublishedSinceLastUpdated);
+                .Where(x => x.PublishedSinceLastUpdated && x.SignedOff);
 
             return GetRecords(query, p);
         }
@@ -100,7 +101,7 @@ namespace Catalogue.Web.Controllers.Publishing
         {
             var query = db
                 .Query<RecordsWithOpenDataPublicationInfoIndex.Result, RecordsWithOpenDataPublicationInfoIndex>()
-                .Where(x => !x.PublishedSinceLastUpdated);
+                .Where(x => !x.PublishedSinceLastUpdated && x.SignedOff);
 
             return GetRecords(query, p);
         }
@@ -110,7 +111,7 @@ namespace Catalogue.Web.Controllers.Publishing
         {
             var query = db
                 .Query<RecordsWithOpenDataPublicationInfoIndex.Result, RecordsWithOpenDataPublicationInfoIndex>()
-                .Where(x => x.PublicationNeverAttempted);
+                .Where(x => x.PublicationNeverAttempted && x.SignedOff);
 
             return GetRecords(query, p);
         }
@@ -120,7 +121,7 @@ namespace Catalogue.Web.Controllers.Publishing
         {
             var query = db
                 .Query<RecordsWithOpenDataPublicationInfoIndex.Result, RecordsWithOpenDataPublicationInfoIndex>()
-                .Where(x => x.LastPublicationAttemptWasUnsuccessful);
+                .Where(x => x.LastPublicationAttemptWasUnsuccessful && x.SignedOff);
 
             return GetRecords(query, p);
         }
@@ -170,6 +171,7 @@ namespace Catalogue.Web.Controllers.Publishing
         public int CountOfNotYetPublishedSinceLastUpdated { get; set; }
         public int CountOfPublicationNeverAttempted { get; set; }
         public int CountOfLastPublicationAttemptWasUnsuccessful { get; set; }
+        public int CountOfPendingSignOff { get; set; }
     }
 }
 

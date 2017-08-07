@@ -46,9 +46,9 @@
     }).when('/publishing/old', {
       controller: 'PublishingController',
       templateUrl: 'views/publishing/publishing.html'
-    }).when('/opendatapublishing/siro', {
+    }).when('/opendatapublishing/signoff', {
       controller: 'OpenDataPublishingController',
-      templateUrl: 'views/opendatapublishing/siro.html'
+      templateUrl: 'views/opendatapublishing/signoff.html'
     }).when('/vocabularies/editor/:vocabId*', {
       controller: 'VocabularyEditorController',
       templateUrl: 'views/vocabularies/editor.html',
