@@ -42,9 +42,6 @@ module.config ($routeProvider) ->
         .when '/vocabularies',
             controller:     'VocabularyListController',
             templateUrl:    'views/vocabularies/vocabularies.html'
-        .when '/publishing/old',
-            controller:     'PublishingController',
-            templateUrl:    'views/publishing/publishing.html'
         .when '/opendatapublishing/signoff',
             controller:     'OpenDataPublishingController',
             templateUrl:    'views/opendatapublishing/signoff.html'

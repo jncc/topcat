@@ -47,7 +47,6 @@
     <script src="js/controllers/MarkdownController.js?#version"></script>
     <script src="js/controllers/VocabularyListController.js?#version"></script>
     <script src="js/controllers/VocabularyEditorController.js?#version"></script>
-    <script src="js/controllers/PublishingController.js?#version"></script>
     <script src="js/controllers/OpenDataPublishingController.js?#version"></script>
     <script src="js/controllers/AssessmentController.js?#version"></script>
     <script src="js/controllers/SearchGridController.js?#version"></script>
@@ -74,6 +73,13 @@
                         <span tc-spinner ng-show="busy.value()"><img src="img/spinner.gif" /></span>
                     </a>
                 </h1>
+            </div>
+            <div class="pending-sign-off"
+                 ng-if="recordsPendingSignOff">
+                <a href="#opendatapublishing/signoff" class="btn btn-danger">
+                    <span class="glyphicon glyphicon-exclamation-sign"></span>
+                    Records pending sign off
+                </a>
             </div>
             <div class="user-info">
                 <div>{{user.displayName}}</div>

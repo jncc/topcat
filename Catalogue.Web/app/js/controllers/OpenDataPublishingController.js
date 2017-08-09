@@ -3,7 +3,7 @@
   angular.module('app.controllers').controller('OpenDataPublishingController', function($scope, $http, $location, $timeout) {
     var load1, load2, load3, load4, load5, loadList, loadSummary, m;
     m = {
-      tab: 2,
+      tab: 5,
       openData: {
         summary: {},
         list: []
@@ -65,17 +65,23 @@
     };
     $scope.$watch('m.tab', loadList);
     loadSummary();
-    load2();
+    load5();
     $scope.submitSignOff = function(recordId) {
       $scope.signOffRequest = {};
       $scope.signOffRequest.id = recordId;
       $scope.signOffRequest.comment = "";
       return $http.put('../api/publishing/opendata/signoff', $scope.signOffRequest).success(function(result) {
         $scope.signOffStatus[recordId] = "Signed Off";
+        loadSummary();
+        $scope.loadRecordsPendingSignOff();
         return $scope.notifications.add("Successfully signed off");
       })["catch"](function(error) {
-        $scope.signOffStatus[recordId] = "Error, retry?";
-        $scope.notifications.add(error.data.exceptionMessage);
+        if (error.status === 401) {
+          $scope.notifications.add("Unauthorised - not in valid sign off group");
+        } else {
+          $scope.notifications.add(error.data.exceptionMessage);
+        }
+        $scope.signOffStatus[recordId] = "Retry?";
         return delete $scope.recordTimeoutMap[recordId];
       });
     };

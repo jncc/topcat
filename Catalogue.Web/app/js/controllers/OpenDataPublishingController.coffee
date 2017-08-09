@@ -3,7 +3,7 @@
     ($scope, $http, $location, $timeout) ->
         
         m =
-            tab: 2 # default to second UI tab
+            tab: 5 # default to fifth UI tab
             openData:
                 summary: {}
                 list: []
@@ -33,7 +33,7 @@
         $scope.$watch 'm.tab', loadList
 
         loadSummary()
-        load2()
+        load5()
 
 
         $scope.submitSignOff = (recordId) ->
@@ -44,16 +44,22 @@
             $http.put('../api/publishing/opendata/signoff', $scope.signOffRequest)
             .success (result) ->
                 $scope.signOffStatus[recordId] = "Signed Off"
+                loadSummary()
+                $scope.loadRecordsPendingSignOff()
                 $scope.notifications.add "Successfully signed off"
             .catch (error) ->
-                $scope.signOffStatus[recordId] = "Error, retry?"
-                $scope.notifications.add error.data.exceptionMessage
+                if (error.status == 401)
+                    $scope.notifications.add "Unauthorised - not in valid sign off group"
+                else
+                    $scope.notifications.add error.data.exceptionMessage
+
+                $scope.signOffStatus[recordId] = "Retry?"
                 delete $scope.recordTimeoutMap[recordId]
 
         $scope.allowGraceTime = (recordId) ->
             if ($scope.recordTimeoutMap[recordId] > 0)
                 $scope.signOffStatus[recordId] = "Cancel " + ("0" + $scope.recordTimeoutMap[recordId]--).slice(-2)
-                $timeout($scope.allowGraceTime.bind(null, recordId), 1000)
+                $timeout $scope.allowGraceTime.bind(null, recordId), 1000
             else if (recordId of $scope.recordTimeoutMap)
                 $scope.submitSignOff(recordId)
 
@@ -66,5 +72,5 @@
                 $scope.recordTimeoutMap[recordId] = 10; # seconds
                 $scope.allowGraceTime(recordId)
             else
-                $scope.cancelSignOff(recordId)
+                $scope.cancelSignOff recordId
                 
