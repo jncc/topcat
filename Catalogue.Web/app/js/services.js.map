@@ -1,7 +1,7 @@
 ﻿{
   "version": 3,
   "file": "services.js",
-  "sourceRoot": "..\\..\\..\\..\\..\\..\\Work\\topcat\\Catalogue.Web\\app\\js",
+  "sourceRoot": "D:\\workspace\\topcat\\Catalogue.Web\\app\\js",
   "sources": [
     "services.coffee"
   ],

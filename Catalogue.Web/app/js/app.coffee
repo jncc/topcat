@@ -5,6 +5,7 @@
     'ngCookies',
     'ui.bootstrap',
     'app.map',
+    'app.config',
     'app.utilities',
     'app.directives',
     'app.services',
@@ -16,6 +17,7 @@
     ]
         
 angular.module 'app.map', []
+angular.module 'app.config', []
 angular.module 'app.utilities', []
 angular.module 'app.directives', []
 angular.module 'app.services', ['ngResource']

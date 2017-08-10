@@ -218,6 +218,12 @@
     <Content Include="app\js\app.min.js">
       <DependentUpon>app.coffee</DependentUpon>
     </Content>
+    <Content Include="app\js\config.js">
+      <DependentUpon>config.coffee</DependentUpon>
+    </Content>
+    <Content Include="app\js\config.min.js">
+      <DependentUpon>config.js</DependentUpon>
+    </Content>
     <Content Include="app\js\controllers\AssessmentController.js">
       <DependentUpon>AssessmentController.coffee</DependentUpon>
     </Content>
@@ -238,6 +244,10 @@
     </Content>
     <Content Include="app\js\controllers\AssessmentController.js.map">
       <DependentUpon>AssessmentController.js</DependentUpon>
+    </Content>
+    <Content Include="app\js\config.coffee" />
+    <Content Include="app\js\config.js.map">
+      <DependentUpon>config.js</DependentUpon>
     </Content>
     <None Include="app\js\controllers\OpenDataPublishingController.coffee" />
     <Content Include="app\js\controllers\MainController.js">

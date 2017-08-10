@@ -49,7 +49,7 @@ namespace Catalogue.Web.Account
                     user = new User(u.DisplayName, u.GivenName, u.EmailAddress, groups);
                 }
 
-                return user ?? new User("Guest User", "Guest", "guest@example.com", "none!");
+                return user ?? new User("Guest User", "Guest", "guest@example.com", "OpenDataIAO");
             }
         }
 

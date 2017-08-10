@@ -1,6 +1,6 @@
 ﻿angular.module('app.controllers').controller 'OpenDataPublishingController',
 
-    ($scope, $http, $location, $timeout) ->
+    ($scope, $http, $location, $timeout, signOffGroup) ->
         
         m =
             tab: 5 # default to fifth UI tab
@@ -35,6 +35,8 @@
         loadSummary()
         load5()
 
+
+        $scope.isIaoUser = signOffGroup in ($scope.user.groups.split ";")
 
         $scope.submitSignOff = (recordId) ->
             $scope.signOffRequest = {}
