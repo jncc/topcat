@@ -662,7 +662,7 @@ form .ng-invalid {
   background-color: #eee;
 }
 .publishing .publishing-list .first {
-  width: 40%;
+  width: 50%;
 }
 .fade-in-with-delay.ng-hide-remove {
   transition: all cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.5s;
