@@ -193,13 +193,13 @@ namespace Catalogue.Data.Import.Mappings
                     CreatedByUser = new UserInfo
                     {
                         DisplayName = "Joint Nature Conservation Committee (JNCC)",
-                        Email = "data@jncc.gov.uk",
+                        Email = "data@jncc.gov.uk"
                     },
                     ModifiedOnUtc = Clock.NowUtc,
                     ModifiedByUser = new UserInfo
                     {
                         DisplayName = "Joint Nature Conservation Committee (JNCC)",
-                        Email = "data@jncc.gov.uk",
+                        Email = "data@jncc.gov.uk"
                     }
                 });
 

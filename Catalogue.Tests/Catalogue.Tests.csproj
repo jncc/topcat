@@ -90,6 +90,7 @@
     <Compile Include="Explicit\versioning_proof_of_concept.cs" />
     <Compile Include="ISOLanguage.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Slow\Catalogue.Data\Import\when_importing_test_records.cs" />
     <Compile Include="Slow\Catalogue.Data\Import\topcat_mapping_tests.cs" />
     <Compile Include="Slow\Catalogue.Data\Indexes\jncc_categories_index_spec.cs" />
     <Compile Include="Slow\Catalogue.Data\Indexes\keywords_search_index_specs.cs" />

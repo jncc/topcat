@@ -763,7 +763,7 @@ namespace Catalogue.Data.Seed
                     ModifiedByUser = cathyUser
                 };
             });
-            recordService.Insert(timelineTest1, userInfo);
+            recordService.Update(timelineTest1, timelineTest1.Footer.ModifiedByUser);
 
             Clock.CurrentUtcDateTimeGetter = () => DateTime.Now.AddHours(-5);
             var timelineTest2 = MakeExampleSeedRecord().With(r =>
@@ -783,7 +783,7 @@ namespace Catalogue.Data.Seed
                     ModifiedByUser = peteUser
                 };
             });
-            recordService.Insert(timelineTest2, userInfo);
+            recordService.Update(timelineTest2, timelineTest2.Footer.ModifiedByUser);
 
             Clock.CurrentUtcDateTimeGetter = () => DateTime.Now.AddDays(-2);
             var timelineTest3 = MakeExampleSeedRecord().With(r =>
@@ -803,7 +803,7 @@ namespace Catalogue.Data.Seed
                     ModifiedByUser = felixUser
                 };
             });
-            recordService.Insert(timelineTest3, userInfo);
+            recordService.Update(timelineTest3, timelineTest3.Footer.ModifiedByUser);
 
             Clock.CurrentUtcDateTimeGetter = () => DateTime.Now.AddMonths(-4);
             var timelineTest4 = MakeExampleSeedRecord().With(r =>
@@ -823,7 +823,7 @@ namespace Catalogue.Data.Seed
                     ModifiedByUser = peteUser
                 };
             });
-            recordService.Insert(timelineTest4, userInfo);
+            recordService.Update(timelineTest4, timelineTest4.Footer.ModifiedByUser);
 
             Clock.CurrentUtcDateTimeGetter = timeGetter;
         }
