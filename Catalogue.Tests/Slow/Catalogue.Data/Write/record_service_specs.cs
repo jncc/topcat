@@ -10,6 +10,7 @@ using Moq;
 using NUnit.Framework;
 using Raven.Client;
 using System;
+using static Catalogue.Tests.TestUserInfo;
 
 namespace Catalogue.Tests.Slow.Catalogue.Data.Write
 {
@@ -21,7 +22,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Data.Write
             var service = new RecordService(Mock.Of<IDocumentSession>(), Mock.Of<IRecordValidator>());
             var record = new Record { ReadOnly = true };
 
-            service.Invoking(s => s.Update(record))
+            service.Invoking(s => s.Update(record, TestUser))
                 .ShouldThrow<InvalidOperationException>()
                 .WithMessage("Cannot update a read-only record.");
         }
@@ -33,7 +34,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Data.Write
             var service = new RecordService(database, ValidatorStub());
 
             var record = BasicRecord();
-            service.Update(record);
+            service.Update(record, TestUser);
 
             Mock.Get(database).Verify(db => db.Store(record));
         }
@@ -44,7 +45,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Data.Write
             var database = Mock.Of<IDocumentSession>();
             var service = new RecordService(database, FailingValidatorStub());
 
-            service.Update(BasicRecord());
+            service.Update(BasicRecord(), TestUser);
 
             Mock.Get(database).Verify(db => db.Store(It.IsAny<Record>()), Times.Never);
         }
@@ -59,7 +60,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Data.Write
             var service = new RecordService(database, ValidatorStub());
 
             var record = BasicRecord();
-            var result = service.Update(record);
+            var result = service.Update(record, TestUser);
 
             result.Record.Should().Be(record);
         }
@@ -71,9 +72,13 @@ namespace Catalogue.Tests.Slow.Catalogue.Data.Write
             var service = new RecordService(database, ValidatorStub());
 
             var e = Library.Example();
-            var record = new Record { Gemini = e };
+            var record = new Record
+            {
+                Gemini = e,
+                Footer = new Footer()
+            };
 
-            service.Update(record);
+            service.Update(record, TestUser);
 
             string expectedWkt = BoundingBoxUtility.ToWkt(e.BoundingBox);
             Mock.Get(database).Verify(db => db.Store(It.Is((Record r) => r.Wkt == expectedWkt)));
@@ -87,7 +92,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Data.Write
             var database = Mock.Of<IDocumentSession>();
             var service = new RecordService(database, ValidatorStub());
 
-            service.Update(BasicRecord());
+            service.Update(BasicRecord(), TestUser);
 
             Mock.Get(database).Verify(db => db.Store(It.Is((Record r) => r.Wkt == null)));
         }
@@ -99,7 +104,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Data.Write
             var service = new RecordService(database, ValidatorStub());
 
             var record = BasicRecord().With(r => r.Gemini.UseConstraints = "   No conditions APPLY");
-            service.Update(record);
+            service.Update(record, TestUser);
 
             Mock.Get(database).Verify(db => db.Store(It.Is((Record r) => r.Gemini.UseConstraints == "no conditions apply")));
         }
@@ -110,7 +115,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Data.Write
             var database = Mock.Of<IDocumentSession>();
             var service = new RecordService(database, ValidatorStub());
 
-            service.Update(BasicRecord());
+            service.Update(BasicRecord(), TestUser);
 
             Mock.Get(database).Verify(db => db.Store(It.Is((Record r) => r.Security == Security.Official)));
         }
@@ -138,7 +143,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Data.Write
                 }.ToKeywordList();
             });
 
-            service.Update(record);
+            service.Update(record, TestUser);
 
             var expected = new StringPairList
             {
@@ -154,12 +159,71 @@ namespace Catalogue.Tests.Slow.Catalogue.Data.Write
             Mock.Get(database).Verify(db => db.Store(It.Is((Record r) => r.Gemini.Keywords.IsEqualTo(expected))));
         }
 
+        [Test]
+        public void should_give_new_record_a_footer()
+        {
+            var record = new Record
+            {
+                Path = @"X:\some\path",
+                Gemini = Library.Blank().With(m => m.Title = "Footer creation test")
+            };
+            var database = Mock.Of<IDocumentSession>();
+            var service = new RecordService(database, ValidatorStub());
+
+            var result = service.Insert(record, TestUser);
+            var footer = result.Record.Footer;
+            footer.Should().NotBeNull();
+            footer.CreatedOnUtc.Should().NotBe(DateTime.MinValue);
+            footer.CreatedByUser.DisplayName.Should().Be("Test User");
+            footer.ModifiedOnUtc.Should().NotBe(DateTime.MinValue);
+            footer.ModifiedByUser.DisplayName.Should().Be("Test User");
+        }
+
+        [Test]
+        public void should_update_footer_for_existing_record()
+        {
+            var recordId = new Guid("4d909f48-4547-4129-a663-bfab64ae97e9");
+            var record = new Record
+            {
+                Id = recordId,
+                Path = @"X:\some\path",
+                Gemini = Library.Blank().With(m => m.Title = "Footer update test"),
+                Footer = new Footer
+                {
+                    CreatedOnUtc = new DateTime(2015, 1, 1, 10, 0, 0),
+                    CreatedByUser = new UserInfo
+                    {
+                        DisplayName = "Creator",
+                        Email = "creator@jncc.gov.uk"
+                    },
+                    ModifiedOnUtc = new DateTime(2015, 1, 1, 10, 0, 0),
+                    ModifiedByUser = new UserInfo
+                    {
+                        DisplayName = "Creator",
+                        Email = "creator@jncc.gov.uk"
+                    }
+                }
+            };
+
+            var database = Mock.Of<IDocumentSession>();
+            var service = new RecordService(database, ValidatorStub());
+
+            var result = service.Update(record, TestUser);
+            var footer = result.Record.Footer;
+            footer.Should().NotBeNull();
+            footer.CreatedOnUtc.Should().Be(new DateTime(2015, 1, 1, 10, 0, 0));
+            footer.CreatedByUser.DisplayName.Should().Be("Creator");
+            footer.ModifiedOnUtc.Should().Be(new DateTime(2015, 1, 1, 12, 0, 0));
+            footer.ModifiedByUser.DisplayName.Should().Be("Test User");
+        }
+
         Record BasicRecord()
         {
             return new Record
             {
                 Path = @"X:\some\path",
-                Gemini = Library.Blank().With(m => m.Title = "Some title")
+                Gemini = Library.Blank().With(m => m.Title = "Some title"),
+                Footer = new Footer()
             };
         }
 

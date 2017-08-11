@@ -51,9 +51,13 @@ namespace Catalogue.Web.Controllers.Records
 
         public RecordServiceResult Put(Guid id, [FromBody]Record record)
         {
-            SetFooterForUpdatedRecord(record);
+            var userInfo = new UserInfo
+            {
+                DisplayName = user.User.DisplayName,
+                Email = user.User.Email
+            };
 
-            var result = service.Update(record);
+            var result = service.Update(record, userInfo);
 
             if (result.Record.Id != id) throw new Exception("The ID of the record does not match that supplied to the put method");
 
@@ -67,9 +71,13 @@ namespace Catalogue.Web.Controllers.Records
         {
             record.Id = Guid.NewGuid();
 
-            SetFooterForNewlyCreatedRecord(record);
+            var userInfo = new UserInfo
+            {
+                DisplayName = user.User.DisplayName,
+                Email = user.User.Email
+            };
 
-            var result = service.Insert(record);
+            var result = service.Insert(record, userInfo);
 
             if (result.Success)
                 db.SaveChanges();
@@ -101,24 +109,6 @@ namespace Catalogue.Web.Controllers.Records
                     }),
                 Review = DateTime.Now.AddYears(3) // arbitrarily decided to default to 3 years from now
             };
-        }
-
-        private void SetFooterForNewlyCreatedRecord(Record record)
-        {
-            var currentTime = Clock.NowUtc;
-            record.Footer = new Footer
-            {
-                CreatedOnUtc = currentTime,
-                CreatedBy = user.User.DisplayName,
-                ModifiedOnUtc = currentTime,
-                ModifiedBy = user.User.DisplayName
-            };
-        }
-
-        private void SetFooterForUpdatedRecord(Record record)
-        {
-            record.Footer.ModifiedOnUtc = Clock.NowUtc;
-            record.Footer.ModifiedBy = user.User.DisplayName;
         }
     }
 }

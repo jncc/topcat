@@ -30,7 +30,7 @@ namespace Catalogue.Web.Controllers.Usage
                     Id = record.Id,
                     Title = record.Gemini.Title,
                     Date = record.Footer.ModifiedOnUtc,
-                    User = record.Footer.ModifiedBy,
+                    User = record.Footer.ModifiedByUser.DisplayName,
                     Event = record.Footer.CreatedOnUtc.Equals(record.Footer.ModifiedOnUtc) ? "created" : "edited"
                 })
                 .ToList();

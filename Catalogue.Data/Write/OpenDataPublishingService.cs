@@ -30,7 +30,7 @@ namespace Catalogue.Data.Write
 
             openDataInfo.SignOff = signOffInfo;
 
-            var recordServiceResult = recordService.Update(record);
+            var recordServiceResult = recordService.Update(record, signOffInfo.User);
             if (recordServiceResult.Success)
             {
                 db.SaveChanges();
@@ -69,7 +69,7 @@ namespace Catalogue.Data.Write
 
             record.Publication.OpenData.Assessment = assessmentInfo;
 
-            var recordServiceResult = recordService.Update(record);
+            var recordServiceResult = recordService.Update(record, assessmentInfo.CompletedByUser);
             if (!recordServiceResult.Success)
             {
                 throw new Exception("Error while saving assessment changes.");

@@ -190,9 +190,17 @@ namespace Catalogue.Data.Import.Mappings
                 Map(m => m.Footer).ConvertUsing(row => new Footer
                 {
                     CreatedOnUtc = DateTime.MinValue,
-                    CreatedBy = "Joint Nature Conservation Committee (JNCC)",
+                    CreatedByUser = new UserInfo
+                    {
+                        DisplayName = "Joint Nature Conservation Committee (JNCC)",
+                        Email = "data@jncc.gov.uk",
+                    },
                     ModifiedOnUtc = Clock.NowUtc,
-                    ModifiedBy = "Joint Nature Conservation Committee (JNCC)"
+                    ModifiedByUser = new UserInfo
+                    {
+                        DisplayName = "Joint Nature Conservation Committee (JNCC)",
+                        Email = "data@jncc.gov.uk",
+                    }
                 });
 
                 References<GeminiMap>(m => m.Gemini);

@@ -44,7 +44,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Web.Controllers.Publishing
             var resultRecord = TestPublishingStage(record, recordId, "Assessment");
 
             resultRecord.Publication.Should().NotBeNull();
-            resultRecord.Footer.ModifiedBy.Should().Be("Test User");
+            resultRecord.Footer.ModifiedByUser.DisplayName.Should().Be("Test User");
             resultRecord.Footer.ModifiedOnUtc.Should().NotBe(DateTime.MinValue);
 
             var openDataInfo = resultRecord.Publication.OpenData;
@@ -54,7 +54,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Web.Controllers.Publishing
             openDataInfo.Resources.Should().BeNull();
             openDataInfo.Paused.Should().BeFalse();
             openDataInfo.Assessment.Completed.Should().BeTrue();
-            openDataInfo.Assessment.CompletedBy.Should().Be("Test User");
+            openDataInfo.Assessment.CompletedByUser.DisplayName.Should().Be("Test User");
             openDataInfo.Assessment.CompletedOnUtc.Should().NotBe(DateTime.MinValue);
         }
 
@@ -88,7 +88,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Web.Controllers.Publishing
                         Assessment = new OpenDataAssessmentInfo
                         {
                             Completed = false,
-                            CompletedBy = null,
+                            CompletedByUser = null,
                             CompletedOnUtc = DateTime.MinValue,
                             InitialAssessmentWasDoneOnSpreadsheet = false
                         }
@@ -108,7 +108,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Web.Controllers.Publishing
             openDataInfo.Resources.Should().BeNull();
             openDataInfo.Paused.Should().BeFalse();
             openDataInfo.Assessment.Completed.Should().BeTrue();
-            openDataInfo.Assessment.CompletedBy.Should().Be("Test User");
+            openDataInfo.Assessment.CompletedByUser.DisplayName.Should().Be("Test User");
             openDataInfo.Assessment.CompletedOnUtc.Should().NotBe(DateTime.MinValue);
         }
 
@@ -268,7 +268,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Web.Controllers.Publishing
             openDataInfo.LastSuccess.Should().BeNull();
             openDataInfo.Resources.Should().BeNull();
             openDataInfo.Paused.Should().BeFalse();
-            openDataInfo.SignOff.User.Should().Be("Test User");
+            openDataInfo.SignOff.User.DisplayName.Should().Be("Test User");
             openDataInfo.SignOff.DateUtc.Should().NotBe(DateTime.MinValue);
             openDataInfo.SignOff.Comment.Should().Be("Sign off test");
         }
@@ -348,7 +348,11 @@ namespace Catalogue.Tests.Slow.Catalogue.Web.Controllers.Publishing
                         SignOff = new OpenDataSignOffInfo
                         {
                             DateUtc = new DateTime(2017, 07, 20),
-                            User = "Ulric"
+                            User = new UserInfo
+                            {
+                                DisplayName = "Ulric",
+                                Email = "ulric@jncc.gov.uk"
+                            }
                         }
                     }
                 };
@@ -440,7 +444,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Web.Controllers.Publishing
 
         private static Record TestAssessment(OpenDataPublishingController publishingController, Guid recordId)
         {
-            var request = new AssessmentRequest()
+            var request = new AssessmentRequest
             {
                 Id = recordId
             };

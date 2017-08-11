@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Catalogue.Data.Indexes;
+﻿using Catalogue.Data.Indexes;
 using Catalogue.Data.Model;
 using Catalogue.Data.Test;
 using Catalogue.Data.Write;
@@ -11,6 +6,9 @@ using Catalogue.Gemini.Model;
 using Catalogue.Utilities.Clone;
 using FluentAssertions;
 using NUnit.Framework;
+using System;
+using System.Linq;
+using static Catalogue.Tests.TestUserInfo;
 
 namespace Catalogue.Tests.Slow.Catalogue.Data.Indexes
 {
@@ -45,8 +43,8 @@ namespace Catalogue.Tests.Slow.Catalogue.Data.Indexes
                 });
             });
 
-            service.Insert(record1);
-            service.Insert(record2);
+            service.Insert(record1, TestUser);
+            service.Insert(record2, TestUser);
 
             Db.SaveChanges();
             RavenUtility.WaitForIndexing(Db);

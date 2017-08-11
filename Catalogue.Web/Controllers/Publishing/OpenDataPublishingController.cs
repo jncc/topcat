@@ -46,12 +46,15 @@ namespace Catalogue.Web.Controllers.Publishing
             var assessmentInfo = new OpenDataAssessmentInfo
             {
                 Completed = true,
-                CompletedBy = user.User.DisplayName,
+                CompletedByUser = new UserInfo
+                {
+                    DisplayName = user.User.DisplayName,
+                    Email = user.User.Email
+                },
                 CompletedOnUtc = DateTime.Now,
                 InitialAssessmentWasDoneOnSpreadsheet = false
             };
 
-            SetFooterForUpdatedRecord(record);
             var updatedRecord = openDataPublishingService.Assess(record, assessmentInfo);
             return new AssessmentResponse
             {
@@ -65,12 +68,15 @@ namespace Catalogue.Web.Controllers.Publishing
             var record = db.Load<Record>(signOffRequest.Id);
             var signOffInfo = new OpenDataSignOffInfo
             {
-                User = user.User.DisplayName,
+                User = new UserInfo
+                {
+                    DisplayName = user.User.DisplayName,
+                    Email = user.User.Email
+                },
                 DateUtc = DateTime.Now,
                 Comment = signOffRequest.Comment
             };
 
-            SetFooterForUpdatedRecord(record);
             openDataPublishingService.SignOff(record, signOffInfo);
             return Ok();
         }
@@ -136,12 +142,6 @@ namespace Catalogue.Web.Controllers.Publishing
                 .ToList();
 
             return records;
-        }
-
-        private void SetFooterForUpdatedRecord(Record record)
-        {
-            record.Footer.ModifiedOnUtc = Clock.NowUtc;
-            record.Footer.ModifiedBy = user.User.DisplayName;
         }
     }
 
