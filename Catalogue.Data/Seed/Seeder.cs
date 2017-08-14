@@ -290,7 +290,11 @@ namespace Catalogue.Data.Seed
                         {
                             // todo add more assessment fields
                             Completed = true,
-                            CompletedBy = "Cathy"
+                            CompletedByUser = new UserInfo
+                            {
+                                DisplayName = "Cathy",
+                                Email = "cathy@example.com"
+                            }
                         },
                         SignOff = null,
                     },
@@ -353,7 +357,11 @@ namespace Catalogue.Data.Seed
                         Assessment = new OpenDataAssessmentInfo
                         {
                             Completed = true,
-                            CompletedBy = "Cathy"
+                            CompletedByUser = new UserInfo
+                            {
+                                DisplayName = "Cathy",
+                                Email = "cathy@example.com"
+                            }
                         }
                     }
                 };

@@ -20,7 +20,7 @@ angular.module('app.controllers').controller 'AssessmentController',
             if $scope.form.publication.openData.assessment.initialAssessmentWasDoneOnSpreadsheet
                 $scope.publishingButtonText = "Initial assessment completed on spreadsheet"
             else
-                $scope.publishingButtonText = "Completed by " + $scope.form.publication.openData.assessment.completedBy +
+                $scope.publishingButtonText = "Completed by " + $scope.form.publication.openData.assessment.completedByUser.displayName +
                     " on " + formatDate(new Date($scope.form.publication.openData.assessment.completedOnUtc))
         else
             $scope.publishingButtonText = "I AGREE"

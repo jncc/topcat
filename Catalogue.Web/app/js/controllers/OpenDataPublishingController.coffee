@@ -36,8 +36,6 @@
         load5()
 
 
-        $scope.isIaoUser = signOffGroup in ($scope.user.groups.split ";")
-
         $scope.submitSignOff = (recordId) ->
             $scope.signOffRequest = {}
             $scope.signOffRequest.id = recordId

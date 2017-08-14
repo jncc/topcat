@@ -70,6 +70,7 @@
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Core" />
     <Reference Include="System.Data.Services.Client" />
+    <Reference Include="System.Web" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -127,6 +128,7 @@
     <Compile Include="Seed\Vocabularies.cs" />
     <Compile Include="Test\InMemoryDatabaseHelper.cs" />
     <Compile Include="Test\RavenUtility.cs" />
+    <Compile Include="UserToUserInfoConverter.cs" />
     <Compile Include="Write\IOpenDataPublishingService.cs" />
     <Compile Include="Write\OpenDataPublishingService.cs" />
     <Compile Include="Write\RecordService.cs" />

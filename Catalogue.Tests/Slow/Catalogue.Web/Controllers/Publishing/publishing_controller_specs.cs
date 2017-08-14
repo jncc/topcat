@@ -506,7 +506,11 @@ namespace Catalogue.Tests.Slow.Catalogue.Web.Controllers.Publishing
                         SignOff = new OpenDataSignOffInfo
                         {
                             DateUtc = new DateTime(2017, 08, 02),
-                            User = "Ulric"
+                            User = new UserInfo
+                            {
+                                DisplayName = "IAO User",
+                                Email = "iaouser@example.com"
+                            }
                         }
                     }
                 };
@@ -543,7 +547,11 @@ namespace Catalogue.Tests.Slow.Catalogue.Web.Controllers.Publishing
                         SignOff = new OpenDataSignOffInfo
                         {
                             DateUtc = new DateTime(2017, 08, 02),
-                            User = "Ulric"
+                            User = new UserInfo
+                            {
+                                DisplayName = "IAO User",
+                                Email = "iaouser@example.com"
+                            }
                         }
                     }
                 };
