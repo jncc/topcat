@@ -5,6 +5,7 @@
     'ngCookies',
     'ui.bootstrap',
     'app.map',
+    'app.config',
     'app.utilities',
     'app.directives',
     'app.services',
@@ -16,6 +17,7 @@
     ]
         
 angular.module 'app.map', []
+angular.module 'app.config', []
 angular.module 'app.utilities', []
 angular.module 'app.directives', []
 angular.module 'app.services', ['ngResource']
@@ -42,12 +44,9 @@ module.config ($routeProvider) ->
         .when '/vocabularies',
             controller:     'VocabularyListController',
             templateUrl:    'views/vocabularies/vocabularies.html'
-        .when '/publishing/old',
-            controller:     'PublishingController',
-            templateUrl:    'views/publishing/publishing.html'
-        .when '/opendatapublishing/siro',
+        .when '/opendatapublishing/signoff',
             controller:     'OpenDataPublishingController',
-            templateUrl:    'views/opendatapublishing/siro.html'
+            templateUrl:    'views/opendatapublishing/signoff.html'
         .when '/vocabularies/editor/:vocabId*',
             controller:     'VocabularyEditorController',
             templateUrl:    'views/vocabularies/editor.html',

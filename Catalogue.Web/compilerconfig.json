@@ -60,6 +60,10 @@
     "inputFile": "app/js/app.coffee"
   },
   {
+    "outputFile": "app/js/config.js",
+    "inputFile": "app/js/config.coffee"
+  },
+  {
     "outputFile": "app/js/directives.js",
     "inputFile": "app/js/directives.coffee"
   },

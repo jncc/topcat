@@ -254,7 +254,8 @@ namespace Catalogue.Data.Seed
                         {
                             Completed = true,
                             InitialAssessmentWasDoneOnSpreadsheet = true
-                        }
+                        },
+                        SignOff = new OpenDataSignOffInfo()
                     },
                 };
             });
@@ -289,6 +290,7 @@ namespace Catalogue.Data.Seed
                         {
                             // todo add more assessment fields
                             Completed = true,
+                            CompletedBy = "Cathy"
                         },
                         SignOff = null,
                     },
@@ -350,7 +352,8 @@ namespace Catalogue.Data.Seed
                         LastSuccess = null,
                         Assessment = new OpenDataAssessmentInfo
                         {
-                            Completed = true
+                            Completed = true,
+                            CompletedBy = "Cathy"
                         }
                     }
                 };
@@ -369,7 +372,8 @@ namespace Catalogue.Data.Seed
                         Assessment = new OpenDataAssessmentInfo
                         {
                             Completed = true
-                        }
+                        },
+                        SignOff = new OpenDataSignOffInfo()
                     }
                 };
             });
@@ -390,7 +394,8 @@ namespace Catalogue.Data.Seed
                         Assessment = new OpenDataAssessmentInfo
                         {
                             Completed = true
-                        }
+                        },
+                        SignOff = new OpenDataSignOffInfo()
                     }
                 };
             });

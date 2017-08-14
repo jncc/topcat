@@ -1,0 +1,10 @@
+﻿{
+  "version": 3,
+  "file": "config.js",
+  "sourceRoot": "D:\\workspace\\topcat\\Catalogue.Web\\app\\js",
+  "sources": [
+    "config.coffee"
+  ],
+  "names": [],
+  "mappings": ";AAAA;AAAA,MAAA,MAAA;;AAAA,EAAA,MAAA,GAAS,OAAO,CAAC,MAAR,CAAe,YAAf,CAAT,CAAA;;AAAA,EAEA,MAAM,CAAC,QAAP,CAAgB,cAAhB,EAAgC,aAAhC,CAFA,CAAA;AAAA"
+}

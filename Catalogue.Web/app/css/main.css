@@ -90,8 +90,8 @@ hr {
   background-color: #d92687;
 }
 .btn-danger:hover {
-  background-color: #d92687;
-  border-color: #d92687;
+  background-color: #c9302c;
+  border-color: #c9302c;
 }
 .btn-danger[disabled] {
   background-color: #d92687;
@@ -126,6 +126,12 @@ label {
 }
 .header .logo h1 {
   margin: 0;
+}
+.header .pending-sign-off {
+  display: table-cell;
+  vertical-align: middle;
+  height: 100%;
+  padding-right: 2em;
 }
 .header .user-info {
   display: table-cell;
