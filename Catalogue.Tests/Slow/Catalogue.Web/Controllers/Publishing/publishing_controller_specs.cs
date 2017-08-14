@@ -55,6 +55,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Web.Controllers.Publishing
             openDataInfo.Paused.Should().BeFalse();
             openDataInfo.Assessment.Completed.Should().BeTrue();
             openDataInfo.Assessment.CompletedByUser.DisplayName.Should().Be("Test User");
+            openDataInfo.Assessment.CompletedByUser.Email.Should().Be("tester@example.com");
             openDataInfo.Assessment.CompletedOnUtc.Should().NotBe(DateTime.MinValue);
         }
 
@@ -109,6 +110,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Web.Controllers.Publishing
             openDataInfo.Paused.Should().BeFalse();
             openDataInfo.Assessment.Completed.Should().BeTrue();
             openDataInfo.Assessment.CompletedByUser.DisplayName.Should().Be("Test User");
+            openDataInfo.Assessment.CompletedByUser.Email.Should().Be("tester@example.com");
             openDataInfo.Assessment.CompletedOnUtc.Should().NotBe(DateTime.MinValue);
         }
 
@@ -269,6 +271,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Web.Controllers.Publishing
             openDataInfo.Resources.Should().BeNull();
             openDataInfo.Paused.Should().BeFalse();
             openDataInfo.SignOff.User.DisplayName.Should().Be("Test User");
+            openDataInfo.SignOff.User.Email.Should().Be("tester@example.com");
             openDataInfo.SignOff.DateUtc.Should().NotBe(DateTime.MinValue);
             openDataInfo.SignOff.Comment.Should().Be("Sign off test");
         }

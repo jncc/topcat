@@ -9,7 +9,6 @@ using Moq;
 using NUnit.Framework;
 using Raven.Client;
 using System;
-using static Catalogue.Tests.TestUserInfo;
 
 namespace Catalogue.Tests.Slow.Catalogue.Web.Controllers.Records
 {

@@ -7,7 +7,7 @@ namespace Catalogue.Tests
         public static UserInfo TestUser => new UserInfo
         {
             DisplayName = "Test User",
-            Email = "test.user@jncc.gov.uk"
+            Email = "tester@example.com"
         };
     }
 }

@@ -175,8 +175,10 @@ namespace Catalogue.Tests.Slow.Catalogue.Data.Write
             footer.Should().NotBeNull();
             footer.CreatedOnUtc.Should().NotBe(DateTime.MinValue);
             footer.CreatedByUser.DisplayName.Should().Be("Test User");
+            footer.CreatedByUser.Email.Should().Be("tester@example.com");
             footer.ModifiedOnUtc.Should().NotBe(DateTime.MinValue);
             footer.ModifiedByUser.DisplayName.Should().Be("Test User");
+            footer.ModifiedByUser.Email.Should().Be("tester@example.com");
         }
 
         [Test]
@@ -194,13 +196,13 @@ namespace Catalogue.Tests.Slow.Catalogue.Data.Write
                     CreatedByUser = new UserInfo
                     {
                         DisplayName = "Creator",
-                        Email = "creator@jncc.gov.uk"
+                        Email = "creator@example.com"
                     },
                     ModifiedOnUtc = new DateTime(2015, 1, 1, 10, 0, 0),
                     ModifiedByUser = new UserInfo
                     {
                         DisplayName = "Creator",
-                        Email = "creator@jncc.gov.uk"
+                        Email = "creator@example.com"
                     }
                 }
             };
@@ -213,8 +215,10 @@ namespace Catalogue.Tests.Slow.Catalogue.Data.Write
             footer.Should().NotBeNull();
             footer.CreatedOnUtc.Should().Be(new DateTime(2015, 1, 1, 10, 0, 0));
             footer.CreatedByUser.DisplayName.Should().Be("Creator");
+            footer.CreatedByUser.Email.Should().Be("creator@example.com");
             footer.ModifiedOnUtc.Should().Be(new DateTime(2015, 1, 1, 12, 0, 0));
             footer.ModifiedByUser.DisplayName.Should().Be("Test User");
+            footer.ModifiedByUser.Email.Should().Be("tester@example.com");
         }
 
         Record BasicRecord()

@@ -1,5 +1,4 @@
 ﻿using System.Web.Http;
-using Catalogue.Data.Model;
 
 namespace Catalogue.Web.Account
 {
