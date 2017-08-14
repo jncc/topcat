@@ -16,11 +16,13 @@ namespace Catalogue.Data
                 return;
 
             var r = (Record) entity;
+            var footer = document.Value<RavenJObject>("Footer");
 
-            if (r.Footer.CreatedByUser == null) {
+            if (r.Footer.CreatedByUser == null)
+            {
                 r.Footer.CreatedByUser = new UserInfo
                 {
-                    DisplayName = document.Value<string>("CreatedBy"),
+                    DisplayName = footer.Value<string>("CreatedBy"),
                     Email = "data@jncc.gov.uk"
                 };
             }
@@ -29,7 +31,7 @@ namespace Catalogue.Data
             {
                 r.Footer.ModifiedByUser = new UserInfo
                 {
-                    DisplayName = document.Value<string>("ModifiedBy"),
+                    DisplayName = footer.Value<string>("ModifiedBy"),
                     Email = "data@jncc.gov.uk"
                 };
             }
