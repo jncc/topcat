@@ -21,7 +21,7 @@ namespace Catalogue.Data
                 r.Footer.CreatedByUser = new UserInfo
                 {
                     DisplayName = document.Value<string>("CreatedBy"),
-                    Email = ""
+                    Email = "data@jncc.gov.uk"
                 };
             }
 
@@ -30,7 +30,7 @@ namespace Catalogue.Data
                 r.Footer.ModifiedByUser = new UserInfo
                 {
                     DisplayName = document.Value<string>("ModifiedBy"),
-                    Email = ""
+                    Email = "data@jncc.gov.uk"
                 };
             }
         }

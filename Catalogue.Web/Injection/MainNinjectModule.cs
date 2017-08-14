@@ -27,14 +27,6 @@ namespace Catalogue.Web.Injection
                 .SelectAllClasses()
                 .BindDefaultInterface());
 
-//            var docStore = WebApiApplication.DocumentStore;
-//            var conversionListeners = new List<IDocumentConversionListener>();
-//
-//            conversionListeners.AddRange(docStore.Listeners.ConversionListeners);
-//            conversionListeners.Add(new UserToUserInfoConverter());
-//            docStore.Listeners.ConversionListeners = conversionListeners.ToArray();
-
-
             // inject a once-per-request raven document session
             Bind<IDocumentSession>()
                 .ToMethod(x => WebApiApplication.DocumentStore.OpenSession())
