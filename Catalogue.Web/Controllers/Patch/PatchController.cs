@@ -272,12 +272,35 @@ namespace Catalogue.Web.Controllers.Patch
         [HttpPost, Route("api/patch/migrateuserinfo")]
         public HttpResponseMessage MigrateUserInfo()
         {
-            var records = db
+            var records1 = db
                 .Query<Record>()
                 .As<Record>()
                 .Skip(0)
-                .Take(4000)
+                .Take(1024)
                 .ToList();
+
+            var records2 = db
+                .Query<Record>()
+                .As<Record>()
+                .Skip(1024)
+                .Take(1024)
+                .ToList();
+
+            var records3 = db
+                .Query<Record>()
+                .As<Record>()
+                .Skip(2048)
+                .Take(1024)
+                .ToList();
+
+            var records4 = db
+                .Query<Record>()
+                .As<Record>()
+                .Skip(3072)
+                .Take(1024)
+                .ToList();
+
+            var records = records1.Concat(records2).Concat(records3).Concat(records4).ToList();
 
             db.SaveChanges();
 
