@@ -4,7 +4,9 @@ using System.Configuration;
 using Catalogue.Utilities.Text;
 using Catalogue.Web.Code;
 using System.DirectoryServices.AccountManagement;
+using System.Linq;
 using System.Security.Principal;
+using System.Text;
 using Catalogue.Data.Model;
 
 namespace Catalogue.Web.Account
@@ -58,7 +60,13 @@ namespace Catalogue.Web.Account
                         }
                         else
                         {
-                            throw new Exception(u.DisplayName+" not in "+group.Name+", security group? "+group.IsSecurityGroup);
+                            var members = new StringBuilder();
+                            foreach (Principal p in group.GetMembers())
+                            {
+                                members.Append(p.DisplayName);
+                                members.Append(", ");
+                            }
+                            throw new Exception(u.DisplayName + " not in " + group.Name + ", members are " + members);
                         }
                     }
                     else
