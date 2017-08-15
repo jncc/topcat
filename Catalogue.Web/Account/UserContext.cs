@@ -47,7 +47,7 @@ namespace Catalogue.Web.Account
                     var u = UserPrincipal.FindByIdentity(domainContext, principal.Identity.Name);
 
                     var allRoles = (NameValueCollection)ConfigurationManager.GetSection("roles");
-                    var group = GroupPrincipal.FindByIdentity(domainContext, allRoles["OpenDataIaoRole"]);
+                    var group = GroupPrincipal.FindByIdentity(domainContext, allRoles["OpenDataSiroRole"]);
 
                     if (u != null && group != null)
                     {
