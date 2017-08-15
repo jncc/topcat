@@ -52,7 +52,14 @@ namespace Catalogue.Web.Account
                     if (u != null && group != null)
                     {
                         var inIaoGroup = u.IsMemberOf(group);
-                        user = new User(u.DisplayName, u.GivenName, u.EmailAddress, inIaoGroup);
+                        if (inIaoGroup)
+                        {
+                            user = new User(u.DisplayName, u.GivenName, u.EmailAddress, inIaoGroup);
+                        }
+                        else
+                        {
+                            throw new Exception("User not in "+group.DisplayName);
+                        }
                     }
                     else
                     {
