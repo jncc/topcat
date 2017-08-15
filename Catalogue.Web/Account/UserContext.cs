@@ -58,7 +58,7 @@ namespace Catalogue.Web.Account
                         }
                         else
                         {
-                            throw new Exception("User not in "+group.Name+", security group? "+group.IsSecurityGroup);
+                            throw new Exception(u.DisplayName+" not in "+group.Name+", security group? "+group.IsSecurityGroup);
                         }
                     }
                     else
