@@ -58,7 +58,7 @@ namespace Catalogue.Web.Account
                         }
                         else
                         {
-                            throw new Exception("User not in "+group.DisplayName);
+                            throw new Exception("User not in "+group.Name);
                         }
                     }
                     else
