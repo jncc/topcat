@@ -45,13 +45,11 @@ namespace Catalogue.Web.Account
 
                     var domainContext = new PrincipalContext(ContextType.Domain, settings.Domain);
                     var u = UserPrincipal.FindByIdentity(domainContext, principal.Identity.Name);
-
-                    var allRoles = (NameValueCollection)ConfigurationManager.GetSection("roles");
-                    var group = GroupPrincipal.FindByIdentity(domainContext, allRoles["OpenDataIaoRole"]);
+                    var group = GroupPrincipal.FindByIdentity(domainContext, settings.OpenDataIaoRole);
 
                     if (u != null && group != null)
                     {
-                        var inIaoGroup = u.IsMemberOf(group);
+                        bool inIaoGroup = u.IsMemberOf(group);
                         user = new User(u.DisplayName, u.GivenName, u.EmailAddress, inIaoGroup);
                     }
                     else

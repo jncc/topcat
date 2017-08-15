@@ -53,13 +53,13 @@
                         <button class="btn btn-danger"
                                 tc-tip title="Publishing sign off for Information Asset Owners"
                                 ng-click="signOffButtonClick(r.id)"
-                                ng-disabled="signOffStatus[r.id] == 'Signed Off'"
+                                ng-disabled="m.signOffStatus[r.id] == 'Signed Off'"
                                 ng-if="user.isIaoUser && r.openData.assessment.completed && !r.openData.signOff">
-                            <span ng-if="signOffStatus[r.id] == 'Sign Off'" class="glyphicon glyphicon-check"></span>
-                            <span ng-if="signOffStatus[r.id] == 'Signed Off'" class="glyphicon glyphicon-ok"></span>
-                            <span ng-if="signOffStatus[r.id].indexOf('Cancel') == 0" class="glyphicon glyphicon-remove-circle"></span>
-                            <span ng-if="signOffStatus[r.id] == 'Retry?'" class="glyphicon glyphicon-warning-sign"></span>
-                            {{ signOffStatus[r.id] }}
+                            <span ng-if="m.signOffStatus[r.id] == 'Sign Off'" class="glyphicon glyphicon-check"></span>
+                            <span ng-if="m.signOffStatus[r.id] == 'Signed Off'" class="glyphicon glyphicon-ok"></span>
+                            <span ng-if="m.signOffStatus[r.id].indexOf('Cancel') == 0" class="glyphicon glyphicon-remove-circle"></span>
+                            <span ng-if="m.signOffStatus[r.id] == 'Retry?'" class="glyphicon glyphicon-warning-sign"></span>
+                            {{ m.signOffStatus[r.id] }}
                         </button>
 <!--                        <button class="btn btn-danger dropdown-toggle"-->
 <!--                                data-toggle="dropdown"-->

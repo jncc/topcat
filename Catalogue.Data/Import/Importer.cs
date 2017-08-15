@@ -2,13 +2,8 @@
 using Catalogue.Data.Model;
 using Catalogue.Data.Write;
 using Catalogue.Gemini.Model;
-using Catalogue.Gemini.Templates;
-using Catalogue.Utilities.Clone;
 using Catalogue.Utilities.Text;
 using CsvHelper;
-using CsvHelper.Configuration;
-using Moq;
-using NUnit.Framework;
 using Raven.Client;
 using System;
 using System.Collections.Generic;
@@ -30,8 +25,8 @@ namespace Catalogue.Data.Import
                 new VocabularyService(db, new VocabularyValidator()),
                 new UserInfo
                 {
-                    DisplayName = "Guest User",
-                    Email = "guest@example.com"
+                    DisplayName = "Topcat Importer",
+                    Email = "data@jncc.gov.uk"
                 });
         }
 

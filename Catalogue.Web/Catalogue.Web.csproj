@@ -416,7 +416,7 @@
     <Content Include="app\views\partials\vocabulator.html" />
     <Content Include="app\views\partials\what-is-data.html" />
     <Content Include="app\views\partials\why-topcat.html" />
-    <Content Include="app\views\opendatapublishing\signoff.html" />
+    <Content Include="app\views\opendatapublishing\opendatapublishing.html" />
     <Content Include="app\views\publishing\publishing.html" />
     <Content Include="app\views\sandbox\colours.html" />
     <Content Include="app\views\sandbox\dropdown.html" />
