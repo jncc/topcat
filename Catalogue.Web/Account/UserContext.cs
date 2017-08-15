@@ -66,7 +66,7 @@ namespace Catalogue.Web.Account
                                 members.Append(p.DisplayName);
                                 members.Append(", ");
                             }
-                            throw new Exception(u.DisplayName + " not in " + group.Name + ", members are " + members);
+                            throw new Exception(u.DisplayName + " not in " + group.Name + ", security group? "+group.IsSecurityGroup+" Members are " + members);
                         }
                     }
                     else
