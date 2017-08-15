@@ -268,5 +268,21 @@ namespace Catalogue.Web.Controllers.Patch
             return new HttpResponseMessage { Content = new StringContent("Updated " + records.Count + " records.") };
 
         }
+
+        [HttpPost, Route("api/patch/migrateuserinfo")]
+        public HttpResponseMessage MigrateUserInfo()
+        {
+            var records = db
+                .Query<Record>()
+                .As<Record>()
+                .Skip(0)
+                .Take(4000)
+                .ToList();
+
+            db.SaveChanges();
+
+            return new HttpResponseMessage { Content = new StringContent("Updated " + records.Count + " records.") };
+
+        }
     }
 }

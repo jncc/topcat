@@ -7,7 +7,17 @@ namespace Catalogue.Data
     public class UserToUserInfoConverter : IDocumentConversionListener
     {
         public void BeforeConversionToDocument(string key, object entity, RavenJObject metadata){}
-        public void AfterConversionToDocument(string key, object entity, RavenJObject document, RavenJObject metadata) {}
+
+        public void AfterConversionToDocument(string key, object entity, RavenJObject document, RavenJObject metadata)
+        {
+            if (entity is Record == false)
+                return;
+
+            var footer = document.Value<RavenJObject>("Footer");
+            footer.Remove("CreatedBy");
+            footer.Remove("ModifiedBy");
+        }
+
         public void BeforeConversionToEntity(string key, RavenJObject document, RavenJObject metadata) {}
 
         public void AfterConversionToEntity(string key, RavenJObject document, RavenJObject metadata, object entity)
