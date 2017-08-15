@@ -69,7 +69,8 @@ namespace Catalogue.Tests.Explicit
                     {
 	                    new MetadataKeyword { Vocab = "http://vocab", Value = keyword }
 	                }
-                }
+                },
+                Footer = new Footer()
             };
         }
 

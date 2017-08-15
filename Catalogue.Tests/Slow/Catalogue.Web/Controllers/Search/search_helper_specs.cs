@@ -65,6 +65,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Web.Controllers.Search
                         m.Title = "Some title";
                         m.MetadataDate = DateTime.Parse("2020-01-01");
                     }),
+                    Footer = new Footer()
                 };
 
                 Db.Store(record);
