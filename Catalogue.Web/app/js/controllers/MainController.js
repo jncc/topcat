@@ -38,10 +38,10 @@
     $rootScope.$on('$locationChangeStart', function() {
       return $('.qtip').qtip('hide');
     });
-    $scope.recordsPendingSignOff = false;
+    $scope.showPendingSignOffButton = false;
     $scope.loadRecordsPendingSignOff = function() {
       return $http.get('../api/publishing/opendata/pendingsignoff').success(function(result) {
-        return $scope.recordsPendingSignOff = result.length > 0;
+        return $scope.showPendingSignOffButton = (result.length > 0) & $scope.user.isIaoUser;
       });
     };
     return $scope.loadRecordsPendingSignOff();

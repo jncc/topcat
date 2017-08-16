@@ -30,8 +30,8 @@
         $rootScope.$on '$locationChangeStart', -> $('.qtip').qtip 'hide'
 
         # global notification for records pending sign off
-        $scope.recordsPendingSignOff = false
-        $scope.loadRecordsPendingSignOff = -> $http.get('../api/publishing/opendata/pendingsignoff').success (result) -> $scope.recordsPendingSignOff = result.length > 0
+        $scope.showPendingSignOffButton = false
+        $scope.loadRecordsPendingSignOff = -> $http.get('../api/publishing/opendata/pendingsignoff').success (result) -> $scope.showPendingSignOffButton = (result.length > 0) & $scope.user.isIaoUser
 
         $scope.loadRecordsPendingSignOff()
         
