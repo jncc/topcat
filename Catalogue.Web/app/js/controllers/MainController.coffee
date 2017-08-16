@@ -22,16 +22,17 @@
                 remove = -> notifications.pop()
                 $timeout remove, 4000
 
+        # IAO notification for records pending sign off
+        $scope.showPendingSignOffButton = false
+        $scope.loadRecordsPendingSignOff = -> $http.get('../api/publishing/opendata/pendingsignoff').success (result) -> $scope.showPendingSignOffButton = (result.length > 0) && $scope.user.isIaoUser
+
         # every page needs a user
-        Account.then (user) -> $scope.user = user
+        Account.then (user) ->
+            $scope.user = user
+            $scope.loadRecordsPendingSignOff()
         
         # horrid hack to ensure qtips hide when url (location) changes
         # (tooltips left hanging visible when the element has gone)
         $rootScope.$on '$locationChangeStart', -> $('.qtip').qtip 'hide'
 
-        # IAO notification for records pending sign off
-        $scope.showPendingSignOffButton = false
-        $scope.loadRecordsPendingSignOff = -> $http.get('../api/publishing/opendata/pendingsignoff').success (result) -> $scope.showPendingSignOffButton = (result.length > 0) & $scope.user.isIaoUser
-
-        $scope.loadRecordsPendingSignOff()
         

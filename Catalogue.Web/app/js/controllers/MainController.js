@@ -32,19 +32,19 @@
         return $timeout(remove, 4000);
       }
     };
-    Account.then(function(user) {
-      return $scope.user = user;
-    });
-    $rootScope.$on('$locationChangeStart', function() {
-      return $('.qtip').qtip('hide');
-    });
     $scope.showPendingSignOffButton = false;
     $scope.loadRecordsPendingSignOff = function() {
       return $http.get('../api/publishing/opendata/pendingsignoff').success(function(result) {
-        return $scope.showPendingSignOffButton = (result.length > 0) & $scope.user.isIaoUser;
+        return $scope.showPendingSignOffButton = (result.length > 0) && $scope.user.isIaoUser;
       });
     };
-    return $scope.loadRecordsPendingSignOff();
+    Account.then(function(user) {
+      $scope.user = user;
+      return $scope.loadRecordsPendingSignOff();
+    });
+    return $rootScope.$on('$locationChangeStart', function() {
+      return $('.qtip').qtip('hide');
+    });
   });
 
 }).call(this);
