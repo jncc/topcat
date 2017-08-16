@@ -121,16 +121,16 @@ namespace Catalogue.Robot
 
             HostFactory.Run(x =>
             {
-                x.Service<Program>(s =>
+                x.Service<Robot>(s =>
                 {
-                    s.ConstructUsing(name => Create());
+                    s.ConstructUsing(name => CreateRobot());
                     s.WhenStarted(p => p.Start());
                     s.WhenStopped(p => p.Stop());
                 });
 
                 x.RunAsLocalSystem();
 
-                string nombre = "Bars.Jobber." + "TODO"; // settings.Environment;
+                string nombre = "Topcat.Robot." + "TODO"; // settings.Environment;
                 x.SetDisplayName(nombre);
                 x.SetServiceName(nombre);
                 x.SetDescription("Description of Robot");
@@ -140,33 +140,14 @@ namespace Catalogue.Robot
         /// <summary>
         /// Creates an instance with dependecies injected.
         /// </summary>
-        public static Program Create()
+        public static Robot CreateRobot()
         {
             var kernel = new StandardKernel();
 
             // register the type bindings we want for injection 
             kernel.Load<MainNinjectModule>();
 
-            return kernel.Get<Program>();
-        }
-
-        // todo: split "instance" stuff out into a separate class
-
-        readonly IDocumentStore store;
-
-        public Program(IDocumentStore store)
-        {
-            this.store = store;
-        }
-
-        public void Start()
-        {
-            Console.WriteLine("I'm a robot");
-        }
-
-        public void Stop()
-        {
-            Console.WriteLine("I'm stopping");
+            return kernel.Get<Robot>();
         }
 
         static int RunImport(ImportOptions options)
