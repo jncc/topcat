@@ -29,7 +29,7 @@
         # (tooltips left hanging visible when the element has gone)
         $rootScope.$on '$locationChangeStart', -> $('.qtip').qtip 'hide'
 
-        # global notification for records pending sign off
+        # IAO notification for records pending sign off
         $scope.showPendingSignOffButton = false
         $scope.loadRecordsPendingSignOff = -> $http.get('../api/publishing/opendata/pendingsignoff').success (result) -> $scope.showPendingSignOffButton = (result.length > 0) & $scope.user.isIaoUser
 
