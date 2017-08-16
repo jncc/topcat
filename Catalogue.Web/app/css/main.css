@@ -319,6 +319,9 @@ label {
   color: #666;
   cursor: pointer;
 }
+.glyphicon-remove.sign-off {
+  color: #eee;
+}
 .tag {
   white-space: nowrap;
   display: inline-block;

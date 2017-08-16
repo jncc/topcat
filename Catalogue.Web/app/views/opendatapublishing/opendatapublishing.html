@@ -57,7 +57,7 @@
                                 ng-if="user.isIaoUser && r.openData.assessment.completed && !r.openData.signOff">
                             <span ng-if="m.signOffStatus[r.id] == 'Sign Off'" class="glyphicon glyphicon-check"></span>
                             <span ng-if="m.signOffStatus[r.id] == 'Signed Off'" class="glyphicon glyphicon-ok"></span>
-                            <span ng-if="m.signOffStatus[r.id].indexOf('Cancel') == 0" class="glyphicon glyphicon-remove-circle"></span>
+                            <span ng-if="m.signOffStatus[r.id].indexOf('Cancel') == 0" class="glyphicon glyphicon-remove sign-off"></span>
                             <span ng-if="m.signOffStatus[r.id] == 'Retry?'" class="glyphicon glyphicon-warning-sign"></span>
                             &nbsp;{{ m.signOffStatus[r.id] }}
                         </button>
