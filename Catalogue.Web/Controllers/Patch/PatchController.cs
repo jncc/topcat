@@ -192,7 +192,7 @@ namespace Catalogue.Web.Controllers.Patch
 
             foreach (var record in records)
             {
-                service.Update(record);
+                service.Update(record, record.Footer.ModifiedByUser);
             }
 
             db.SaveChanges();
@@ -217,7 +217,7 @@ namespace Catalogue.Web.Controllers.Patch
             foreach (var record in records)
             {
                 record.Gemini.ResponsibleOrganisation.Role = "custodian";
-                service.Update(record);
+                service.Update(record, record.Footer.ModifiedByUser);
             }
 
 
@@ -269,43 +269,43 @@ namespace Catalogue.Web.Controllers.Patch
 
         }
 
-        [HttpPost, Route("api/patch/migratefooterinfo")]
-        public HttpResponseMessage MigrateFooterInfo()
+        [HttpPost, Route("api/patch/migrateuserinfo")]
+        public HttpResponseMessage MigrateUserInfo()
         {
             var records1 = db
-                .Query<RecordsWithNoFooterIndex.Result, RecordsWithNoFooterIndex>()
+                .Query<Record>()
                 .As<Record>()
                 .Skip(0)
                 .Take(1024)
                 .ToList();
+
             var records2 = db
-                .Query<RecordsWithNoFooterIndex.Result, RecordsWithNoFooterIndex>()
+                .Query<Record>()
                 .As<Record>()
                 .Skip(1024)
                 .Take(1024)
                 .ToList();
-            var records = records1.Concat(records2).ToList();
 
-            foreach (var record in records)
-            {
-                var oldFooter = record.Footer;
+            var records3 = db
+                .Query<Record>()
+                .As<Record>()
+                .Skip(2048)
+                .Take(1024)
+                .ToList();
 
-                if (oldFooter == null)
-                {
-                    record.Footer = new Footer
-                    {
-                        CreatedOnUtc = DateTime.MinValue,
-                        CreatedBy = "Joint Nature Conservation Committee (JNCC)",
-                        ModifiedOnUtc = record.Gemini.MetadataDate,
-                        ModifiedBy = record.Gemini.MetadataPointOfContact.Name.IsBlank() ?
-                            "Joint Nature Conservation Committee (JNCC)" : record.Gemini.MetadataPointOfContact.Name
-                    };
-                }
-            }
+            var records4 = db
+                .Query<Record>()
+                .As<Record>()
+                .Skip(3072)
+                .Take(1024)
+                .ToList();
+
+            var records = records1.Concat(records2).Concat(records3).Concat(records4).ToList();
 
             db.SaveChanges();
 
             return new HttpResponseMessage { Content = new StringContent("Updated " + records.Count + " records.") };
+
         }
     }
 }

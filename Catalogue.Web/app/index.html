@@ -33,6 +33,7 @@
     <script src="lib/showdown-0.3.4/compressed/Showdown.min.js"></script>
     <script src="lib/leaflet-0.7.3/leaflet.js"></script>
     <script src="js/app.js?#version"></script>
+    <script src="js/config.js?#version"></script>
     <script src="js/utilities.js?#version"></script>
     <script src="js/directives.js?#version"></script>
     <script src="js/services.js?#version"></script>
@@ -47,7 +48,6 @@
     <script src="js/controllers/MarkdownController.js?#version"></script>
     <script src="js/controllers/VocabularyListController.js?#version"></script>
     <script src="js/controllers/VocabularyEditorController.js?#version"></script>
-    <script src="js/controllers/PublishingController.js?#version"></script>
     <script src="js/controllers/OpenDataPublishingController.js?#version"></script>
     <script src="js/controllers/AssessmentController.js?#version"></script>
     <script src="js/controllers/SearchGridController.js?#version"></script>
@@ -74,6 +74,13 @@
                         <span tc-spinner ng-show="busy.value()"><img src="img/spinner.gif" /></span>
                     </a>
                 </h1>
+            </div>
+            <div class="pending-sign-off"
+                 ng-if="showPendingSignOffButton">
+                <a href="#opendatapublishing" class="btn btn-danger">
+                    <span class="glyphicon glyphicon-exclamation-sign"></span>
+                    Records pending sign off
+                </a>
             </div>
             <div class="user-info">
                 <div>{{user.displayName}}</div>

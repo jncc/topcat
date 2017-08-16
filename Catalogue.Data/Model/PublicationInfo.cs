@@ -44,14 +44,14 @@ namespace Catalogue.Data.Model
     public class OpenDataSignOffInfo
     {
         public DateTime DateUtc { get; set; }
-        public string User { get; set; }
+        public UserInfo User { get; set; }
         public string Comment { get; set; }
     }
 
     public class OpenDataAssessmentInfo
     {
         public bool Completed { get; set; }
-        public string CompletedBy { get; set; }
+        public UserInfo CompletedByUser { get; set; }
         public DateTime CompletedOnUtc { get; set; }
 
         public bool InitialAssessmentWasDoneOnSpreadsheet { get; set; }

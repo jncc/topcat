@@ -121,13 +121,21 @@ namespace Catalogue.Tests.Slow.Catalogue.Web.Controllers.Usage
                     r.Footer = new Footer
                     {
                         CreatedOnUtc = testRecord.Event.Equals("created") ? testRecord.Date : testRecord.Date.AddYears(-1),
-                        CreatedBy = "Cathy",
+                        CreatedByUser = new UserInfo
+                        {
+                            DisplayName = "Cathy",
+                            Email = "test@jncc.gov.uk"
+                        },
                         ModifiedOnUtc = testRecord.Date,
-                        ModifiedBy = testRecord.User
+                        ModifiedByUser = new UserInfo
+                        {
+                            DisplayName = testRecord.User,
+                            Email = "test@jncc.gov.uk"
+                        }
                     };
                 });
 
-                recordService.Insert(record);
+                recordService.Update(record, record.Footer.ModifiedByUser);
             }
         }
     }

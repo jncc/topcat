@@ -1,0 +1,82 @@
+﻿
+
+<h1>Open data publishing</h1>
+<br/>
+
+<div class="publishing">
+    <div class="publishing-summary">
+        <div class="publishing-summary-item">
+            <span>{{m.openData.summary.countOfPublishedSinceLastUpdated}}</span> published and up-to-date
+        </div>
+        <div class="publishing-summary-item-hoverable" ng-class="{'hi': m.tab == 2}" ng-click="m.tab = 2">
+            <span>{{m.openData.summary.countOfNotYetPublishedSinceLastUpdated}}</span> pending publication
+        </div>
+        <div class="publishing-summary-item-hoverable " ng-class="{'hi': m.tab == 3}" ng-click="m.tab = 3">
+            <span>{{m.openData.summary.countOfPublicationNeverAttempted}}</span> not attempted yet
+        </div>
+        <div class="publishing-summary-item-hoverable" ng-class="{'hi': m.tab == 4}" ng-click="m.tab = 4">
+            <span>{{m.openData.summary.countOfLastPublicationAttemptWasUnsuccessful}}</span> failed last publication
+        </div>
+        <div class="publishing-summary-item-hoverable" ng-class="{'hi': m.tab == 5}" ng-click="m.tab = 5">
+            <span>{{m.openData.summary.countOfPendingSignOff}}</span> pending sign off
+        </div>
+    </div>
+
+    <table class="table publishing-list">
+        <thead>
+        <tr>
+            <th class="first"></th>
+            <th>Metadata date</th>
+            <th>Gemini</th>
+            <th ng-if="m.tab != 5">Signed Off</th>
+            <th ng-if="m.tab == 5">Assessed by</th>
+            <th ng-if="m.tab != 5">Last attempt</th>
+            <th ng-if="m.tab != 5">Last success</th>
+            <th ng-if="m.tab != 5"></th>
+            <th></th>
+        </tr>
+        </thead>
+        <tbody>
+            <tr ng-repeat="r in m.openData.list">
+                <td><a ng-href="#/editor/{{r.id}}" target="_blank" ng-bind-html="r.title"></a></td>
+                <td><span tc-tip title="{{r.metadataDate | date:'yyyy-MM-dd HH:mm:ss'}}">{{r.metadataDate | date}}</span></td>
+                <td>{{r.isGeminiValid}}</td>
+                <td ng-if="m.tab == 5">{{r.openData.assessment.completedByUser.displayName}}</td>
+                <td ng-if="m.tab != 5">{{r.openData.signOff != null}}</td>
+                <td ng-if="m.tab != 5"><span ng-if="r.openData.lastAttempt.dateUtc" tc-tip title="{{r.openData.lastAttempt.dateUtc | date:'yyyy-MM-dd HH:mm:ss'}}">{{r.openData.lastAttempt.dateUtc | date}}</span></td>
+                <td ng-if="m.tab != 5"><span ng-if="r.openData.lastSuccess.dateUtc" tc-tip title="{{r.openData.lastSuccess.dateUtc | date:'yyyy-MM-dd HH:mm:ss'}}">{{r.openData.lastSuccess.dateUtc | date}}</span></td>
+                <td ng-if="m.tab != 5"><span ng-show="r.openData.paused" class="glyphicon glyphicon-pause" tc-tip title="Publishing of this record is currently paused"></span></td>
+                <td ng-if="m.tab != 5"><span ng-show="r.openData.lastAttempt.message" class="glyphicon glyphicon-warning-sign" tc-tip title="{{r.openData.lastAttempt.message}}"></span></td>
+                <td>
+<!--                    <div class="btn-group" ng-class="{open: open}"-->
+<!--                         ng-if="isIaoUser && r.openData.assessment.completed && !r.openData.signOff">-->
+                        <button class="btn btn-danger sign-off"
+                                tc-tip title="Publishing sign off for Information Asset Owners"
+                                ng-click="signOffButtonClick(r.id)"
+                                ng-disabled="m.signOffStatus[r.id] == 'Signed Off'"
+                                ng-if="user.isIaoUser && r.openData.assessment.completed && !r.openData.signOff">
+                            <span ng-if="m.signOffStatus[r.id] == 'Sign Off'" class="glyphicon glyphicon-check"></span>
+                            <span ng-if="m.signOffStatus[r.id] == 'Signed Off'" class="glyphicon glyphicon-ok"></span>
+                            <span ng-if="m.signOffStatus[r.id].indexOf('Cancel') == 0" class="glyphicon glyphicon-remove sign-off"></span>
+                            <span ng-if="m.signOffStatus[r.id] == 'Retry?'" class="glyphicon glyphicon-warning-sign"></span>
+                            &nbsp;{{ m.signOffStatus[r.id] }}
+                        </button>
+<!--                        <button class="btn btn-danger dropdown-toggle"-->
+<!--                                data-toggle="dropdown"-->
+<!--                                ng-click="open=!open"-->
+<!--                                ng-disabled="signOffStatus[r.id] == 'Signed Off'">-->
+<!--                            <span class="caret"></span>-->
+<!--                        </button>-->
+<!--                        <ul class="dropdown-menu">-->
+<!--                            <li><a tc-tip title="Review and add comments to the risk assessment" ng-href="#">Review</a></li>-->
+<!--                            <li><a tc-tip title="Reject publishing for this dataset" ng-href="#">Reject</a></li>-->
+<!--                        </ul>-->
+<!--                    </div>-->
+                </td>
+            </tr>
+        </tbody>
+    </table>
+
+</div>
+
+

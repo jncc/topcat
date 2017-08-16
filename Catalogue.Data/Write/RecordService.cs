@@ -10,8 +10,8 @@ namespace Catalogue.Data.Write
 {
     public interface IRecordService
     {
-        RecordServiceResult Insert(Record record);
-        RecordServiceResult Update(Record record);
+        RecordServiceResult Insert(Record record, UserInfo user);
+        RecordServiceResult Update(Record record, UserInfo user);
     }
 
     public class RecordService : IRecordService
@@ -25,15 +25,19 @@ namespace Catalogue.Data.Write
             this.validator = validator;
         }
 
-        public RecordServiceResult Insert(Record record)
+        public RecordServiceResult Insert(Record record, UserInfo user)
         {
+            SetFooterForNewlyCreatedRecord(record, user);
+
             return Upsert(record);
         }
 
-        public RecordServiceResult Update(Record record)
+        public RecordServiceResult Update(Record record, UserInfo user)
         {
             if (record.ReadOnly)
                 throw new InvalidOperationException("Cannot update a read-only record.");
+
+            SetFooterForUpdatedRecord(record, user);
 
             return Upsert(record);
         }
@@ -95,6 +99,24 @@ namespace Catalogue.Data.Write
         void UpdateMetadataDateToNow(Record record)
         {
             record.Gemini.MetadataDate = Clock.NowUtc;
+        }
+
+        private void SetFooterForNewlyCreatedRecord(Record record, UserInfo userInfo)
+        {
+            var currentTime = Clock.NowUtc;
+            record.Footer = new Footer
+            {
+                CreatedOnUtc = currentTime,
+                CreatedByUser = userInfo,
+                ModifiedOnUtc = currentTime,
+                ModifiedByUser = userInfo
+            };
+        }
+
+        private void SetFooterForUpdatedRecord(Record record, UserInfo userInfo)
+        {
+            record.Footer.ModifiedOnUtc = Clock.NowUtc;
+            record.Footer.ModifiedByUser = userInfo;
         }
     }
 

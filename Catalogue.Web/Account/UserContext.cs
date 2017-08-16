@@ -1,4 +1,7 @@
-﻿using Catalogue.Utilities.Text;
+﻿using System;
+using System.Collections.Specialized;
+using System.Configuration;
+using Catalogue.Utilities.Text;
 using Catalogue.Web.Code;
 using System.DirectoryServices.AccountManagement;
 using System.Security.Principal;
@@ -42,14 +45,13 @@ namespace Catalogue.Web.Account
 
                     var domainContext = new PrincipalContext(ContextType.Domain, settings.Domain);
                     var u = UserPrincipal.FindByIdentity(domainContext, principal.Identity.Name);
+                    var group = GroupPrincipal.FindByIdentity(domainContext, settings.OpenDataIaoRole);
 
-                    // get security groups (todo: relevant ones)
-                    string groups = u.GetAuthorizationGroups().ToConcatenatedString(g => g.Name, ";");
-
-                    user = new User(u.DisplayName, u.GivenName, u.EmailAddress, groups);
+                    bool inIaoGroup = group != null && u.IsMemberOf(group);
+                    user = new User(u.DisplayName, u.GivenName, u.EmailAddress, inIaoGroup);
                 }
 
-                return user ?? new User("Guest User", "Guest", "guest@example.com", "none!");
+                return user ?? new User("Guest User", "Guest", "guest@example.com", true);
             }
         }
 
@@ -62,7 +64,17 @@ namespace Catalogue.Web.Account
 
     public class TestUserContext : IUserContext
     {
-        public User User { get { return new User("Test User", "Tester", "tester@example.com", "test user group");  } }
+        public User User { get; private set; }
         public bool Authenticated { get { return true; } }
+
+        public TestUserContext(string displayName, string firstName, string email, bool inIaoGroup)
+        {
+            User = new User(displayName, firstName, email, inIaoGroup);
+        }
+
+        public TestUserContext()
+        {
+            User = new User("Test User", "Tester", "tester@example.com", true);
+        }
     }
 }

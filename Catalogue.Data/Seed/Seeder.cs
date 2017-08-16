@@ -22,11 +22,17 @@ namespace Catalogue.Data.Seed
     {
         readonly IDocumentSession db;
         readonly IRecordService recordService;
+        readonly UserInfo userInfo;
 
         public Seeder(IDocumentSession db, IRecordService recordService)
         {
             this.db = db;
             this.recordService = recordService;
+            userInfo = new UserInfo
+            {
+                DisplayName = "Guest",
+                Email = "jncc@jncc.gov.uk"
+            };
         }
 
         public static void Seed(IDocumentStore store)
@@ -71,9 +77,9 @@ namespace Catalogue.Data.Seed
                 Footer = new Footer
                 {
                     CreatedOnUtc = Clock.NowUtc,
-                    CreatedBy = "Guest User",
+                    CreatedByUser = userInfo,
                     ModifiedOnUtc = Clock.NowUtc,
-                    ModifiedBy = "Guest User"
+                    ModifiedByUser = userInfo
                 }
             };
         }
@@ -107,13 +113,13 @@ namespace Catalogue.Data.Seed
                 r.Footer = new Footer
                 {
                     CreatedOnUtc = Clock.NowUtc,
-                    CreatedBy = "Guest User",
+                    CreatedByUser = userInfo,
                     ModifiedOnUtc = Clock.NowUtc,
-                    ModifiedBy = "Guest User"
+                    ModifiedByUser = userInfo
                 };
             });
 
-            recordService.Insert(record);
+            recordService.Insert(record, userInfo);
         }
 
         void AddOverseasTerritoriesRecord()
@@ -132,13 +138,13 @@ namespace Catalogue.Data.Seed
                 r.Footer = new Footer
                 {
                     CreatedOnUtc = Clock.NowUtc,
-                    CreatedBy = "Guest User",
+                    CreatedByUser = userInfo,
                     ModifiedOnUtc = Clock.NowUtc,
-                    ModifiedBy = "Guest User"
+                    ModifiedByUser = userInfo
                 };
             });
 
-            recordService.Insert(record);
+            recordService.Insert(record, userInfo);
         }
 
         void AddSimpleGeminiExampleRecord()
@@ -187,7 +193,7 @@ namespace Catalogue.Data.Seed
                     });
             });
 
-            recordService.Insert(record);
+            recordService.Insert(record, userInfo);
         }
 
         void AddRecordsWithOpenDataPublishingInfo()
@@ -248,7 +254,8 @@ namespace Catalogue.Data.Seed
                         {
                             Completed = true,
                             InitialAssessmentWasDoneOnSpreadsheet = true
-                        }
+                        },
+                        SignOff = new OpenDataSignOffInfo()
                     },
                 };
             });
@@ -283,6 +290,11 @@ namespace Catalogue.Data.Seed
                         {
                             // todo add more assessment fields
                             Completed = true,
+                            CompletedByUser = new UserInfo
+                            {
+                                DisplayName = "Cathy",
+                                Email = "cathy@example.com"
+                            }
                         },
                         SignOff = null,
                     },
@@ -304,9 +316,13 @@ namespace Catalogue.Data.Seed
                         },
                         SignOff = new OpenDataSignOffInfo
                         {
-                            User = "Pete Montgomery",
+                            User = new UserInfo
+                            {
+                                DisplayName = "Pete Montgomery",
+                                Email = "pete.montgomery@jncc.gov.uk"
+                            },
                             DateUtc = new DateTime(2017, 4, 14, 10, 0, 0),
-                            Comment = "All OK now.",
+                            Comment = "All OK now."
                         }
                     },
                 };
@@ -340,7 +356,12 @@ namespace Catalogue.Data.Seed
                         LastSuccess = null,
                         Assessment = new OpenDataAssessmentInfo
                         {
-                            Completed = true
+                            Completed = true,
+                            CompletedByUser = new UserInfo
+                            {
+                                DisplayName = "Cathy",
+                                Email = "cathy@example.com"
+                            }
                         }
                     }
                 };
@@ -359,7 +380,8 @@ namespace Catalogue.Data.Seed
                         Assessment = new OpenDataAssessmentInfo
                         {
                             Completed = true
-                        }
+                        },
+                        SignOff = new OpenDataSignOffInfo()
                     }
                 };
             });
@@ -380,7 +402,8 @@ namespace Catalogue.Data.Seed
                         Assessment = new OpenDataAssessmentInfo
                         {
                             Completed = true
-                        }
+                        },
+                        SignOff = new OpenDataSignOffInfo()
                     }
                 };
             });
@@ -405,15 +428,15 @@ namespace Catalogue.Data.Seed
                 };
             });
 
-            recordService.Insert(assessmentCompletedOnSpreadsheetRecord);
-            recordService.Insert(neverPublishedRecord);
-            recordService.Insert(assessedButNotCompletelyRecord);
-            recordService.Insert(assessedButNotSignedOffRecord);
-            recordService.Insert(signedOffRecord);
-            recordService.Insert(earlierUnsuccessfullyPublishedRecord);
-            recordService.Insert(laterSuccessfullyPublishedRecord);
-            recordService.Insert(updatedSinceSuccessfullyPublishedRecordAndNowPaused);
-            recordService.Insert(recordWithAlternativeResources);
+            recordService.Insert(assessmentCompletedOnSpreadsheetRecord, userInfo);
+            recordService.Insert(neverPublishedRecord, userInfo);
+            recordService.Insert(assessedButNotCompletelyRecord, userInfo);
+            recordService.Insert(assessedButNotSignedOffRecord, userInfo);
+            recordService.Insert(signedOffRecord, userInfo);
+            recordService.Insert(earlierUnsuccessfullyPublishedRecord, userInfo);
+            recordService.Insert(laterSuccessfullyPublishedRecord, userInfo);
+            recordService.Insert(updatedSinceSuccessfullyPublishedRecordAndNowPaused, userInfo);
+            recordService.Insert(recordWithAlternativeResources, userInfo);
         }
 
         void AddRecordWithLotsOfVocablessTags()
@@ -433,7 +456,7 @@ namespace Catalogue.Data.Seed
                 });
             });
 
-            recordService.Insert(record);
+            recordService.Insert(record, userInfo);
         }
 
         void AddReadOnlyRecord()
@@ -450,7 +473,7 @@ namespace Catalogue.Data.Seed
                         });
                 });
 
-            recordService.Insert(record);
+            recordService.Insert(record, userInfo);
         }
 
         void AddNonGeographicDataset()
@@ -467,7 +490,7 @@ namespace Catalogue.Data.Seed
                 });
             });
 
-            recordService.Insert(record);
+            recordService.Insert(record, userInfo);
         }
 
         void AddSecureRecords()
@@ -484,7 +507,7 @@ namespace Catalogue.Data.Seed
                         });
                 });
 
-            recordService.Insert(record);
+            recordService.Insert(record, userInfo);
         }
 
         void AddNonTopCopyRecord()
@@ -501,7 +524,7 @@ namespace Catalogue.Data.Seed
                         });
                 });
 
-            recordService.Insert(record);
+            recordService.Insert(record, userInfo);
         }
 
         void AddVariousDataFormatRecords()
@@ -525,7 +548,7 @@ namespace Catalogue.Data.Seed
                             });
                     });
 
-                recordService.Insert(record);
+                recordService.Insert(record, userInfo);
             }
         }
 
@@ -544,7 +567,7 @@ namespace Catalogue.Data.Seed
                 r.Gemini.Keywords.Add(new MetadataKeyword { Vocab = "http://vocab.jncc.gov.uk/some-vocab", Value = "Two words" });
             });
 
-            recordService.Insert(record);
+            recordService.Insert(record, userInfo);
         }
 
         void AddTwoRecordsWithTheSameBoundingBox()
@@ -575,8 +598,8 @@ namespace Catalogue.Data.Seed
                 r.Gemini.Keywords.Add(new MetadataKeyword { Vocab = "http://vocab.jncc.gov.uk/some-vocab", Value = "Bounding boxes" });
             });
 
-            recordService.Insert(record1);
-            recordService.Insert(record2);
+            recordService.Insert(record1, userInfo);
+            recordService.Insert(record2, userInfo);
         }
 
         void AddBboxes()
@@ -593,7 +616,7 @@ namespace Catalogue.Data.Seed
                         });
                 });
 
-           recordService.Insert(smallBox);
+           recordService.Insert(smallBox, userInfo);
         }
 
         void AddVocabularies()
@@ -716,7 +739,25 @@ namespace Catalogue.Data.Seed
         void AddDatesForTimeline()
         {
             var timeGetter = Clock.CurrentUtcDateTimeGetter;
-            
+
+            var peteUser = new UserInfo
+            {
+                DisplayName = "Pete",
+                Email = "pete@jncc.gov.uk"
+            };
+
+            var cathyUser = new UserInfo
+            {
+                DisplayName = "Cathy",
+                Email = "cathy@jncc.gov.uk"
+            };
+
+            var felixUser = new UserInfo
+            {
+                DisplayName = "Felix",
+                Email = "felix@jncc.gov.uk"
+            };
+
             Clock.CurrentUtcDateTimeGetter = () => DateTime.Now;
             var timelineTest1 = MakeExampleSeedRecord().With(r =>
             {
@@ -730,12 +771,12 @@ namespace Catalogue.Data.Seed
                 r.Footer = new Footer
                 {
                     CreatedOnUtc = Clock.NowUtc.AddDays(-1),
-                    CreatedBy = "Pete",
+                    CreatedByUser = peteUser,
                     ModifiedOnUtc = Clock.NowUtc,
-                    ModifiedBy = "Cathy"
+                    ModifiedByUser = cathyUser
                 };
             });
-            recordService.Insert(timelineTest1);
+            recordService.Update(timelineTest1, timelineTest1.Footer.ModifiedByUser);
 
             Clock.CurrentUtcDateTimeGetter = () => DateTime.Now.AddHours(-5);
             var timelineTest2 = MakeExampleSeedRecord().With(r =>
@@ -750,12 +791,12 @@ namespace Catalogue.Data.Seed
                 r.Footer = new Footer
                 {
                     CreatedOnUtc = Clock.NowUtc,
-                    CreatedBy = "Pete",
+                    CreatedByUser = peteUser,
                     ModifiedOnUtc = Clock.NowUtc,
-                    ModifiedBy = "Pete"
+                    ModifiedByUser = peteUser
                 };
             });
-            recordService.Insert(timelineTest2);
+            recordService.Update(timelineTest2, timelineTest2.Footer.ModifiedByUser);
 
             Clock.CurrentUtcDateTimeGetter = () => DateTime.Now.AddDays(-2);
             var timelineTest3 = MakeExampleSeedRecord().With(r =>
@@ -770,12 +811,12 @@ namespace Catalogue.Data.Seed
                 r.Footer = new Footer
                 {
                     CreatedOnUtc = Clock.NowUtc.AddDays(-2),
-                    CreatedBy = "Felix",
+                    CreatedByUser = felixUser,
                     ModifiedOnUtc = Clock.NowUtc,
-                    ModifiedBy = "Felix"
+                    ModifiedByUser = felixUser
                 };
             });
-            recordService.Insert(timelineTest3);
+            recordService.Update(timelineTest3, timelineTest3.Footer.ModifiedByUser);
 
             Clock.CurrentUtcDateTimeGetter = () => DateTime.Now.AddMonths(-4);
             var timelineTest4 = MakeExampleSeedRecord().With(r =>
@@ -790,12 +831,12 @@ namespace Catalogue.Data.Seed
                 r.Footer = new Footer
                 {
                     CreatedOnUtc = Clock.NowUtc.AddDays(-5),
-                    CreatedBy = "Cathy",
+                    CreatedByUser = cathyUser,
                     ModifiedOnUtc = Clock.NowUtc,
-                    ModifiedBy = "Pete"
+                    ModifiedByUser = peteUser
                 };
             });
-            recordService.Insert(timelineTest4);
+            recordService.Update(timelineTest4, timelineTest4.Footer.ModifiedByUser);
 
             Clock.CurrentUtcDateTimeGetter = timeGetter;
         }

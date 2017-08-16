@@ -1,10 +1,16 @@
-﻿using Ninject.Extensions.Conventions;
+﻿using System.Collections.Generic;
+using System.Linq;
+using Ninject.Extensions.Conventions;
 using Ninject.Modules;
 using Ninject.Web.Common;
 using Raven.Client;
 using System.Security.Principal;
 using System.Web;
 using Catalogue.Web.Account;
+using Catalogue.Web.Controllers.Patch;
+using Raven.Abstractions.Extensions;
+using Raven.Client.Document;
+using Raven.Client.Listeners;
 
 namespace Catalogue.Web.Injection
 {

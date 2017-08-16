@@ -2,9 +2,11 @@
 (function() {
   var module;
 
-  module = angular.module('app', ['ngAnimate', 'ngRoute', 'ngSanitize', 'ngCookies', 'ui.bootstrap', 'app.map', 'app.utilities', 'app.directives', 'app.services', 'app.filters', 'app.controllers', 'ui.grid', 'ui.grid.resizeColumns', 'angularMoment']);
+  module = angular.module('app', ['ngAnimate', 'ngRoute', 'ngSanitize', 'ngCookies', 'ui.bootstrap', 'app.map', 'app.config', 'app.utilities', 'app.directives', 'app.services', 'app.filters', 'app.controllers', 'ui.grid', 'ui.grid.resizeColumns', 'angularMoment']);
 
   angular.module('app.map', []);
+
+  angular.module('app.config', []);
 
   angular.module('app.utilities', []);
 
@@ -43,12 +45,9 @@
     }).when('/vocabularies', {
       controller: 'VocabularyListController',
       templateUrl: 'views/vocabularies/vocabularies.html'
-    }).when('/publishing/old', {
-      controller: 'PublishingController',
-      templateUrl: 'views/publishing/publishing.html'
-    }).when('/opendatapublishing/siro', {
+    }).when('/opendatapublishing', {
       controller: 'OpenDataPublishingController',
-      templateUrl: 'views/opendatapublishing/siro.html'
+      templateUrl: 'views/opendatapublishing/opendatapublishing.html'
     }).when('/vocabularies/editor/:vocabId*', {
       controller: 'VocabularyEditorController',
       templateUrl: 'views/vocabularies/editor.html',
