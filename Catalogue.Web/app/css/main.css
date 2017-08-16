@@ -89,6 +89,9 @@ hr {
 .btn-danger {
   background-color: #d92687;
 }
+.btn-danger.sign-off {
+  width: 8.5em;
+}
 .btn-danger:hover {
   background-color: #c9302c;
   border-color: #c9302c;

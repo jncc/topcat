@@ -17,7 +17,7 @@
         <div class="publishing-summary-item-hoverable" ng-class="{'hi': m.tab == 4}" ng-click="m.tab = 4">
             <span>{{m.openData.summary.countOfLastPublicationAttemptWasUnsuccessful}}</span> failed last publication
         </div>
-        <div class="publishing-summary-item-hoverable " ng-class="{'hi': m.tab == 5}" ng-click="m.tab = 5">
+        <div class="publishing-summary-item-hoverable" ng-class="{'hi': m.tab == 5}" ng-click="m.tab = 5">
             <span>{{m.openData.summary.countOfPendingSignOff}}</span> pending sign off
         </div>
     </div>
@@ -50,7 +50,7 @@
                 <td>
 <!--                    <div class="btn-group" ng-class="{open: open}"-->
 <!--                         ng-if="isIaoUser && r.openData.assessment.completed && !r.openData.signOff">-->
-                        <button class="btn btn-danger"
+                        <button class="btn btn-danger sign-off"
                                 tc-tip title="Publishing sign off for Information Asset Owners"
                                 ng-click="signOffButtonClick(r.id)"
                                 ng-disabled="m.signOffStatus[r.id] == 'Signed Off'"
@@ -59,7 +59,7 @@
                             <span ng-if="m.signOffStatus[r.id] == 'Signed Off'" class="glyphicon glyphicon-ok"></span>
                             <span ng-if="m.signOffStatus[r.id].indexOf('Cancel') == 0" class="glyphicon glyphicon-remove-circle"></span>
                             <span ng-if="m.signOffStatus[r.id] == 'Retry?'" class="glyphicon glyphicon-warning-sign"></span>
-                            {{ m.signOffStatus[r.id] }}
+                            &nbsp;{{ m.signOffStatus[r.id] }}
                         </button>
 <!--                        <button class="btn btn-danger dropdown-toggle"-->
 <!--                                data-toggle="dropdown"-->

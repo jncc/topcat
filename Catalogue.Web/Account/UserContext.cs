@@ -47,15 +47,8 @@ namespace Catalogue.Web.Account
                     var u = UserPrincipal.FindByIdentity(domainContext, principal.Identity.Name);
                     var group = GroupPrincipal.FindByIdentity(domainContext, settings.OpenDataIaoRole);
 
-                    if (u != null && group != null)
-                    {
-                        bool inIaoGroup = u.IsMemberOf(group);
-                        user = new User(u.DisplayName, u.GivenName, u.EmailAddress, inIaoGroup);
-                    }
-                    else
-                    {
-                        throw new Exception("Error cannot check IAO group");
-                    }
+                    bool inIaoGroup = group != null && u.IsMemberOf(group);
+                    user = new User(u.DisplayName, u.GivenName, u.EmailAddress, inIaoGroup);
                 }
 
                 return user ?? new User("Guest User", "Guest", "guest@example.com", true);
