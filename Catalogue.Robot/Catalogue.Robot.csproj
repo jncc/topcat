@@ -86,6 +86,7 @@
     <Compile Include="Publishing\OpenData\OpenDataPublisherConfig.cs" />
     <Compile Include="Publishing\OpenData\FtpClient.cs" />
     <Compile Include="Publishing\OpenData\OpenDataRecordPublisher.cs" />
+    <Compile Include="Robot.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
