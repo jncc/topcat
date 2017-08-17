@@ -12,7 +12,7 @@
             stop : -> busyCount = busyCount - 1
             value: -> busyCount > 0
 
-        # implement notifications feature
+        # notifications (success, info and error messages)
         notifications = []
         $scope.notifications =
             current: notifications
@@ -22,17 +22,17 @@
                 remove = -> notifications.pop()
                 $timeout remove, 4000
 
-        # IAO notification for records pending sign off
-        $scope.showPendingSignOffButton = false
-        $scope.loadRecordsPendingSignOff = -> $http.get('../api/publishing/opendata/pendingsignoff').success (result) -> $scope.showPendingSignOffButton = (result.length > 0) && $scope.user.isIaoUser
-
         # every page needs a user
-        Account.then (user) ->
-            $scope.user = user
-            $scope.loadRecordsPendingSignOff()
-        
+        Account.then (user) -> $scope.user = user
+
+        # application-wide "status" info for current user
+        $scope.status = 
+            pendingSignOffCount: 0
+            refresh: ->
+                $http.get('../api/publishing/opendata/pendingsignoffcountforcurrentuser').success (result) ->
+                    $scope.status.pendingSignOffCount = result
+        $scope.status.refresh()
+
         # horrid hack to ensure qtips hide when url (location) changes
         # (tooltips left hanging visible when the element has gone)
-        $rootScope.$on '$locationChangeStart', -> $('.qtip').qtip 'hide'
-
-        
+        $rootScope.$on '$locationChangeStart', -> $('.qtip').qtip 'hide'       

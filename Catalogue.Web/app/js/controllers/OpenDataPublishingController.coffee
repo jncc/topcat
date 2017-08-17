@@ -43,8 +43,8 @@
             .success (result) ->
                 m.signOffStatus[recordId] = "Signed Off"
                 loadSummary()
-                $scope.loadRecordsPendingSignOff()
                 $scope.notifications.add "Successfully signed off"
+                $scope.status.refresh()
             .catch (error) ->
                 if (error.status == 401)
                     $scope.notifications.add "Unauthorised - not in valid sign off group"

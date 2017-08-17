@@ -32,16 +32,18 @@
         return $timeout(remove, 4000);
       }
     };
-    $scope.showPendingSignOffButton = false;
-    $scope.loadRecordsPendingSignOff = function() {
-      return $http.get('../api/publishing/opendata/pendingsignoff').success(function(result) {
-        return $scope.showPendingSignOffButton = (result.length > 0) && $scope.user.isIaoUser;
-      });
-    };
     Account.then(function(user) {
-      $scope.user = user;
-      return $scope.loadRecordsPendingSignOff();
+      return $scope.user = user;
     });
+    $scope.status = {
+      pendingSignOffCount: 0,
+      refresh: function() {
+        return $http.get('../api/publishing/opendata/pendingsignoffcountforcurrentuser').success(function(result) {
+          return $scope.status.pendingSignOffCount = result;
+        });
+      }
+    };
+    $scope.status.refresh();
     return $rootScope.$on('$locationChangeStart', function() {
       return $('.qtip').qtip('hide');
     });

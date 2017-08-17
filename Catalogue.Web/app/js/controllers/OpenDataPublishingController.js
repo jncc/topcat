@@ -74,8 +74,8 @@
       return $http.put('../api/publishing/opendata/signoff', $scope.signOffRequest).success(function(result) {
         m.signOffStatus[recordId] = "Signed Off";
         loadSummary();
-        $scope.loadRecordsPendingSignOff();
-        return $scope.notifications.add("Successfully signed off");
+        $scope.notifications.add("Successfully signed off");
+        return $scope.status.refresh();
       })["catch"](function(error) {
         if (error.status === 401) {
           $scope.notifications.add("Unauthorised - not in valid sign off group");

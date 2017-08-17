@@ -64,6 +64,11 @@ hr {
 .label-danger {
   background-color: #d92687;
 }
+.label-badge {
+  border-radius: 1em;
+  padding-left: 0.8em;
+  padding-right: 0.8em;
+}
 .btn-default {
   background-color: #eee;
   border-color: #eee;
@@ -130,15 +135,16 @@ label {
 .header .logo h1 {
   margin: 0;
 }
-.header .pending-sign-off {
+.header .user-status {
   display: table-cell;
   vertical-align: middle;
-  height: 100%;
-  padding-right: 2em;
+  padding-right: 1em;
+  white-space: nowrap;
 }
 .header .user-info {
   display: table-cell;
   vertical-align: middle;
+  padding: 0.8em 2em;
   text-align: right;
   color: #bbb;
 }

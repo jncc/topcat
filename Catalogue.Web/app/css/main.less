@@ -89,6 +89,13 @@ hr {
 .label-success { background-color: @green; }
 .label-danger { background-color: @pink; }
 
+// custom badges so we can use labels instead, for their colours
+.label-badge {
+    border-radius: 1em;
+    padding-left: 0.8em;
+    padding-right: 0.8em;
+}
+
 // cheesily override bootstrap btn properties
 .btn-default {
     background-color: @pale;
@@ -165,19 +172,27 @@ label {
     .logo {
         .cell-mixin;
         width: 100%;
-        h1 { margin: 0 }
+
+        h1 {
+            margin: 0
+        }
     }
 
-    .pending-sign-off {
+    .user-status {
         .cell-mixin;
-        height: 100%;
-        padding-right: 2em;
+        padding-right: 1em;
+        white-space: nowrap;
     }
 
     .user-info {
         .cell-mixin;
+//        border: solid 1px @pale;
+//        border-radius: 0.5em;
+//        background-color: @pale;
+        padding: 0.8em 2em;
         text-align: right;
         color: @grey;
+
         div:first-child {
             font-size: 123%;
             color: @dark;

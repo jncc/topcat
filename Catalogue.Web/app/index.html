@@ -75,12 +75,21 @@
                     </a>
                 </h1>
             </div>
-            <div class="pending-sign-off"
-                 ng-if="showPendingSignOffButton">
-                <a href="#opendatapublishing" class="btn btn-danger">
-                    <span class="glyphicon glyphicon-exclamation-sign"></span>
-                    Records pending sign off
-                </a>
+            <div class="user-status" ng-show="user"> <!-- wait for the user to load to avoid jump -->
+                <ul class="nav nav-pills" role="tablist">
+<!--                comments left in to show how to expand this bootstrap menu in future -->
+<!--                <li role="presentation" class="active"><a href="#">Home <span class="badge">42</span></a></li>-->
+<!--                <li role="presentation"><a href="#">Profile</a></li>-->
+                    <li role="presentation">
+                        <a ng-if="status.pendingSignOffCount > 0" href="#opendatapublishing" tc-tip="bottom" title="There are records waiting to be signed-off">
+                            Open Data
+                            <span class="label label-danger label-badge">{{status.pendingSignOffCount}}</span>
+                        </a>
+                        <a ng-if="status.pendingSignOffCount == 0" href="#opendatapublishing">
+                            Open Data
+                        </a>
+                    </li>
+                </ul>
             </div>
             <div class="user-info">
                 <div>{{user.displayName}}</div>

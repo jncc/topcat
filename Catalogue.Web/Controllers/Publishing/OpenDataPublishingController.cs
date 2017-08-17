@@ -92,6 +92,18 @@ namespace Catalogue.Web.Controllers.Publishing
             return GetRecords(query, p);
         }
 
+        [HttpGet, Route("api/publishing/opendata/pendingsignoffcountforcurrentuser")]
+        public int PendingSignOffCountForCurrentUser()
+        {
+            int count = db
+                .Query<RecordsWithOpenDataPublicationInfoIndex.Result, RecordsWithOpenDataPublicationInfoIndex>()
+                .Count(x => x.AssessmentCompleted && !x.SignedOff);
+
+            // if user is an IAO, then (for now) they can see all records for sign off
+            // if they're not an IAO, it's nothing to do with them, so they have none
+            return user.User.IsIaoUser ? count : 0;
+        }
+
         [HttpGet, Route("api/publishing/opendata/publishedsincelastupdated")]
         public List<RecordRepresentation> PublishedSinceLastUpdated(int p = 1)
         {
