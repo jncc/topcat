@@ -13,7 +13,7 @@ using Raven.Client;
 
 namespace Catalogue.Robot.Publishing.OpenData
 {
-    public class OpenDataRecordPublisher
+    public class OpenDataRecordPublisher : IRecordPublisher
     {
         readonly IDocumentSession db;
         readonly OpenDataPublisherConfig config;

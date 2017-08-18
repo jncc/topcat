@@ -1,4 +1,5 @@
-﻿using Catalogue.Data.Model;
+﻿using System.Collections.Generic;
+using Catalogue.Data.Model;
 
 namespace Catalogue.Data.Write
 {
@@ -6,5 +7,7 @@ namespace Catalogue.Data.Write
     {
         Record Assess(Record record, OpenDataAssessmentInfo assessmentInfo);
         void SignOff(Record record, OpenDataSignOffInfo signOffInfo);
+        void Upload(Record record, UserInfo userInfo, bool metadataOnly);
+        List<Record> GetRecordsPendingUpload();
     }
 }

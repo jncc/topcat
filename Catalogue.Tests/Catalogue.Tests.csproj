@@ -101,6 +101,7 @@
     <Compile Include="Slow\Catalogue.Data\Query\record_queryer_specs.cs" />
     <Compile Include="Slow\Catalogue.Data\Seed\when_seeding.cs" />
     <Compile Include="Slow\Catalogue.Data\Versioning\versioning_specs.cs" />
+    <Compile Include="Slow\Catalogue.Data\Write\open_data_publishing_service_specs.cs" />
     <Compile Include="Slow\Catalogue.Data\Write\record_service_specs.cs" />
     <Compile Include="Slow\Catalogue.Gemini\Validation\when_validating_the_example_document.cs" />
     <Compile Include="Slow\Catalogue.Import\when_importing_mesh_data.cs" />
