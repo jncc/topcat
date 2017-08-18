@@ -4,7 +4,7 @@
 
   module = angular.module('app.config');
 
-  module.constant('signOffGroup', 'OpenDataIAO');
+  module.constant('signOffGroup', 'InformationAssetOwners');
 
 }).call(this);
 
