@@ -506,16 +506,6 @@ label {
   overflow: scroll;
   overflow-x: hidden;
 }
-@media (min-width: 792px) {
-  .modal-md {
-    width: 700px;
-  }
-}
-@media (min-width: 1000px) {
-  .modal-md {
-    width: 900px;
-  }
-}
 .date-container {
   width: 11em;
 }
@@ -675,6 +665,22 @@ form .ng-invalid {
 }
 .publishing .publishing-list .first {
   width: 50%;
+}
+.editor-sign-off {
+  float: right;
+  width: 15%;
+  -webkit-transition: all 0.3s linear !important;
+  -moz-transition: all 0.3s linear !important;
+  -o-transition: all 0.3s linear !important;
+  transition: all 0.3s linear !important;
+}
+.editor-assessment {
+  float: left;
+  width: 85%;
+  -webkit-transition: all 0.3s linear !important;
+  -moz-transition: all 0.3s linear !important;
+  -o-transition: all 0.3s linear !important;
+  transition: all 0.3s linear !important;
 }
 .fade-in-with-delay.ng-hide-remove {
   transition: all cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.5s;

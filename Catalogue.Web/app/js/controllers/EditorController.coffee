@@ -28,6 +28,7 @@
         $scope.getSecurityText = getSecurityText
         $scope.getDataFormatObj = getDataFormatObj
         $scope.updateDataFormatObj = updateDataFormatObj
+        $scope.getPendingSignOff = getPendingSignOff
         
         $scope.cancel = ->
             $scope.reset()
@@ -118,7 +119,7 @@
             modal = $modal.open
                 controller:  'AssessmentController'
                 templateUrl: 'views/partials/assessment.html?' + new Date().getTime() # stop iis express caching the html
-                size:        'md'
+                size:        'lg'
                 scope:       $scope
             modal.result
                 .then (result) -> $scope.successResponse result
@@ -139,6 +140,12 @@
         $scope.setKeyword = ($item, keyword) ->
             keyword.vocab = $item.vocab
 
+
+getPendingSignOff = (publication) ->
+    if (publication != null && publication.openData.assessment.completed && publication.openData.signOff == null)
+        return true
+    else
+        return false
 
 getSecurityText = (n) -> switch n
     when 0 then 'Official'

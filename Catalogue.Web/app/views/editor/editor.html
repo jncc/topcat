@@ -538,13 +538,15 @@
                 <div class="layout-col pull-right"
                             title="The open data publication status of the record."
                             tc-tip>
-                     
+                    
                     <button type="button" class="btn"
                             ng-click="openAssessment()"
                             ng-disabled="isAssessmentButtonDisabled()"
                             ng-class="{ 'btn-default': !form.publication.openData.assessment.completed,
                                 'btn-danger': form.publication.openData.assessment.completed}">
-                        {{form.publication.openData.assessment.completed? "Open Data" : "None";}}
+                        <span ng-if="getPendingSignOff(form.publication)"
+                              class="glyphicon glyphicon-exclamation-sign"></span>
+                        {{ form.publication.openData.assessment.completed? "Open Data" : "None"; }}
                     </button>
                 </div>
             </div>

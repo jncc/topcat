@@ -249,6 +249,7 @@
     <Content Include="app\js\config.js.map">
       <DependentUpon>config.js</DependentUpon>
     </Content>
+    <Content Include="app\js\controllers\SignOffController.coffee" />
     <None Include="app\js\controllers\OpenDataPublishingController.coffee" />
     <Content Include="app\js\controllers\MainController.js">
       <DependentUpon>MainController.coffee</DependentUpon>
@@ -285,6 +286,12 @@
     </Content>
     <Content Include="app\js\controllers\SearchGridController.min.js">
       <DependentUpon>SearchGridController.js</DependentUpon>
+    </Content>
+    <Content Include="app\js\controllers\SignOffController.js">
+      <DependentUpon>SignOffController.coffee</DependentUpon>
+    </Content>
+    <Content Include="app\js\controllers\SignOffController.min.js">
+      <DependentUpon>SignOffController.js</DependentUpon>
     </Content>
     <Content Include="app\js\controllers\VocabularyEditorController.js">
       <DependentUpon>VocabularyEditorController.coffee</DependentUpon>
@@ -424,6 +431,7 @@
     <Content Include="app\views\sandbox\lookups.html" />
     <Content Include="app\views\sandbox\tooltip.html" />
     <Content Include="app\views\search\search.html" />
+    <Content Include="app\views\signoff\signoff.html" />
     <Content Include="app\views\Vocabularies\editor.html" />
     <Content Include="app\views\Vocabularies\vocabularies.html" />
     <Content Include="favicon.ico" />
@@ -660,6 +668,9 @@
       <DependentUpon>OpenDataPublishingController.js</DependentUpon>
     </Content>
     <Content Include="app\js\controllers\AssessmentController.coffee" />
+    <Content Include="app\js\controllers\SignOffController.js.map">
+      <DependentUpon>SignOffController.js</DependentUpon>
+    </Content>
     <None Include="app\js\controllers\VocabulatorController.coffee" />
     <Content Include="app\js\controllers\VocabulatorController.js.map">
       <DependentUpon>VocabulatorController.js</DependentUpon>

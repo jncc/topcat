@@ -44,6 +44,10 @@
     "inputFile": "app/js/controllers/SearchGridController.coffee"
   },
   {
+    "outputFile": "app/js/controllers/SignOffController.js",
+    "inputFile": "app/js/controllers/SignOffController.coffee"
+  },
+  {
     "outputFile": "app/js/controllers/VocabularyEditorController.js",
     "inputFile": "app/js/controllers/VocabularyEditorController.coffee"
   },

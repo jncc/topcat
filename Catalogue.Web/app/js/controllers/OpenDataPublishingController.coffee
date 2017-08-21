@@ -1,14 +1,12 @@
 ﻿angular.module('app.controllers').controller 'OpenDataPublishingController',
 
-    ($scope, $http, $location, $timeout, signOffGroup) ->
+    ($scope, $http, $location, signOffGroup) ->
         
         m =
-            tab: 5 # default to fifth UI tab
+            tab: 5 # default to second UI tab
             openData:
                 summary: {}
                 list: []
-            signOffStatus: {}
-            signOffTimeoutMap: {}
         
         $scope.m = m
 
@@ -20,7 +18,6 @@
         loadTab4Data = -> $http.get('../api/publishing/opendata/lastpublicationattemptwasunsuccessful').success (result) -> m.openData.list = result
         loadTab5Data = -> $http.get('../api/publishing/opendata/pendingsignoff').success (result) ->
             m.openData.list = result
-            m.signOffStatus[r.id] = "Sign Off" for r in result
         
         loadList = ->
             switch m.tab
@@ -33,42 +30,4 @@
         $scope.$watch 'm.tab', loadList
 
         loadSummary()
-        loadTab5Data()
-
-
-        $scope.submitSignOff = (recordId) ->
-            $scope.signOffRequest = { id: recordId, comment: "" }
-
-            $http.put('../api/publishing/opendata/signoff', $scope.signOffRequest)
-            .success (result) ->
-                m.signOffStatus[recordId] = "Signed Off"
-                loadSummary()
-                $scope.notifications.add "Successfully signed off"
-                $scope.status.refresh()
-            .catch (error) ->
-                if (error.status == 401)
-                    $scope.notifications.add "Unauthorised - not in valid sign off group"
-                else
-                    $scope.notifications.add error.data.exceptionMessage
-
-                m.signOffStatus[recordId] = "Retry?"
-                delete m.signOffTimeoutMap[recordId]
-
-        $scope.allowGraceTime = (recordId) ->
-            if (m.signOffTimeoutMap[recordId] > 0)
-                m.signOffStatus[recordId] = "Cancel " + ("0" + m.signOffTimeoutMap[recordId]--).slice(-2)
-                $timeout $scope.allowGraceTime.bind(null, recordId), 1000
-            else if (recordId of m.signOffTimeoutMap)
-                $scope.submitSignOff(recordId)
-
-        $scope.cancelSignOff = (recordId) ->
-            delete m.signOffTimeoutMap[recordId]
-            m.signOffStatus[recordId] = "Sign Off"
-
-        $scope.signOffButtonClick = (recordId) ->
-            if (recordId not of m.signOffTimeoutMap)
-                m.signOffTimeoutMap[recordId] = 10; # seconds
-                $scope.allowGraceTime(recordId)
-            else
-                $scope.cancelSignOff recordId
-                
+        loadTab2Data()
