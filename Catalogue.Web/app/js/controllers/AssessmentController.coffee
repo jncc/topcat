@@ -16,11 +16,42 @@ angular.module('app.controllers').controller 'AssessmentController',
         $scope.assessmentRequest = {}
         $scope.assessmentRequest.id = $scope.form.id
 
-        $scope.assessmentWidth = "85%"
-        $scope.signOffWidth = "15%"
+        publishingStatus =
+            riskAssessment:
+                currentClass: {}
+                completed: {}
+            signOff:
+                currentClass: {}
+                completed: {}
+            upload:
+                currentClass: {}
+                completed: {}
+            currentActiveView: {}
+            signOffButtonDisabled: !$scope.user.isIaoUser || ($scope.form.publication != null && $scope.form.publication.openData.signOff != null)
 
-        $scope.showSignOffInfo = $scope.form.publication != null && $scope.form.publication.openData.completed
-        $scope.signOffButtonDisabled = !$scope.user.isIaoUser || ($scope.form.publication != null && $scope.form.publication.openData.signOff != null)
+        $scope.publishingStatus = publishingStatus
+
+        $scope.refreshPublishingStatus = (activeView) ->
+            publishingStatus.currentActiveView = activeView
+            publishingStatus.riskAssessment.completed = $scope.form.publication != null && $scope.form.publication.openData.assessment.completed
+            publishingStatus.signOff.completed = $scope.form.publication.openData.signOff != null
+            publishingStatus.upload.completed = $scope.form.publication.openData.lastSuccess != null
+            if activeView == "risk assessment"
+                publishingStatus.riskAssessment.currentClass = if publishingStatus.signOff.completed then "visited" else "current"
+                publishingStatus.signOff.currentClass = if publishingStatus.signOff.completed then "current" else ""
+                publishingStatus.upload.currentClass = ""
+                console.log "refreshing publishing status "+activeView+" current class "+publishingStatus.riskAssessment.currentClass
+            else if activeView == "sign off"
+                console.log "refreshing publishing status "+activeView
+                publishingStatus.riskAssessment.currentClass = "visited"
+                publishingStatus.signOff.currentClass = "current"
+                publishingStatus.upload.currentClass = ""
+            else
+                publishingStatus.riskAssessment.currentClass = "visited"
+                publishingStatus.signOff.currentClass = "visited"
+                publishingStatus.upload.currentClass = "current"
+
+        $scope.refreshPublishingStatus("risk assessment")
 
         refreshAssessmentButton = () ->
             if ($scope.form.publication != null && $scope.form.publication.openData.assessment.completed)
@@ -53,9 +84,11 @@ angular.module('app.controllers').controller 'AssessmentController',
                 $scope.notifications.add error.data.exceptionMessage
                 $scope.$dismiss()
 
-        $scope.expandSignOff = ->
-            $scope.assessmentWidth = "50%"
-            $scope.signOffWidth = "50%"
+        $scope.nextStep = () ->
+            if publishingStatus.riskAssessment.currentClass == "current"
+                $scope.refreshPublishingStatus("sign off")
+            else if publishingStatus.signOff.currentClass == "current"
+                scope.refreshPublishingStatus("upload")
+            console.log "Show assessment: "+$scope.showAssessmentView+", show sign off: "+$scope.showSignOffView
 
         $scope.close = () -> $scope.$close $scope.form
-            

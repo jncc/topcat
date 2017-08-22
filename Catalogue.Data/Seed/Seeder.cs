@@ -379,9 +379,14 @@ namespace Catalogue.Data.Seed
                         LastSuccess = new PublicationAttempt { DateUtc = new DateTime(2016, 1, 1, 13, 0, 0) },
                         Assessment = new OpenDataAssessmentInfo
                         {
-                            Completed = true
+                            Completed = true,
+                            CompletedByUser = userInfo
                         },
-                        SignOff = new OpenDataSignOffInfo()
+                        SignOff = new OpenDataSignOffInfo
+                        {
+                            DateUtc = Clock.NowUtc,
+                            User = userInfo
+                        }
                     }
                 };
             });

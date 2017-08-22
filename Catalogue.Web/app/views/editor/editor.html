@@ -533,7 +533,7 @@
 
             <div class="editor-publishing layout-row">
                 <div class="layout-col">
-                    <span>Publishing</span>
+                    <span>Publishing status</span>
                 </div>
                 <div class="layout-col pull-right"
                             title="The open data publication status of the record."
@@ -546,7 +546,7 @@
                                 'btn-danger': form.publication.openData.assessment.completed}">
                         <span ng-if="getPendingSignOff(form.publication)"
                               class="glyphicon glyphicon-exclamation-sign"></span>
-                        {{ form.publication.openData.assessment.completed? "Open Data" : "None"; }}
+                        {{ form.publication.openData.signOff != null? "Published" : form.publication.openData.assessment.completed? "Pending" : "None"; }}
                     </button>
                 </div>
             </div>
