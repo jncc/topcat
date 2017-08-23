@@ -24,8 +24,8 @@
     "inputFile": "app/js/controllers/OpenDataPublishingController.coffee"
   },
   {
-    "outputFile": "app/js/controllers/AssessmentController.js",
-    "inputFile": "app/js/controllers/AssessmentController.coffee"
+    "outputFile": "app/js/controllers/PublishingStatusController.js",
+    "inputFile": "app/js/controllers/PublishingStatusController.coffee"
   },
   {
     "outputFile": "app/js/controllers/PublishingController.js",

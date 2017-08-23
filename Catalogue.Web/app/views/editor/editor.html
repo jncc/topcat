@@ -540,8 +540,8 @@
                             tc-tip>
                     
                     <button type="button" class="btn"
-                            ng-click="openAssessment()"
-                            ng-disabled="isAssessmentButtonDisabled()"
+                            ng-click="openPublishingStatus()"
+                            ng-disabled="isPublishingStatusButtonDisabled()"
                             ng-class="{ 'btn-default': !form.publication.openData.assessment.completed,
                                 'btn-danger': form.publication.openData.assessment.completed}">
                         <span ng-if="getPendingSignOff(form.publication)"

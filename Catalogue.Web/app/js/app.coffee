@@ -73,7 +73,10 @@ module.config ($routeProvider) ->
             controller:     'MarkdownController',
             templateUrl:    'views/partials/markdown.html'
             resolve:        'markdown' : () -> '#test text'
-        .when '/sandbox/assessment', # for developing the assessment modal more easily
+        .when '/sandbox/publishingstatus', # for developing the assessment modal more easily
+            controller:     'PublishingStatusController',
+            templateUrl:    'views/partials/publishingstatus.html'
+        .when '/sandbox/assessment',
             controller:     'AssessmentController',
             templateUrl:    'views/partials/assessment.html'
         .when '/content/whytopcat',

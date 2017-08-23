@@ -1,0 +1,85 @@
+﻿
+
+
+<div class="assessment modal-content">
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close" ng-click="$dismiss()"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title"></h4>
+    </div>
+    <div class="modal-body">
+        <div class="row">
+            <nav>
+                <ol class="cd-multi-steps text-center">
+                    <li ng-class="publishingStatus.riskAssessment.currentClass">
+                        <a ng-click="publishingStatus.currentActiveView = 'risk assessment'">1. Risk assessment <span ng-if="publishingStatus.riskAssessment.completed" class="glyphicon glyphicon-ok"></span></a>
+                    </li>
+                    <li ng-class="publishingStatus.signOff.currentClass">
+                        <a ng-click="publishingStatus.currentActiveView = 'sign off'">
+                            2. Final approval <span ng-if="publishingStatus.signOff.completed" class="glyphicon glyphicon-ok"></span>
+                        </a>
+                    </li>
+                    <li ng-class="publishingStatus.upload.currentClass">
+                        <a ng-click="publishingStatus.currentActiveView = 'upload'">
+                            3. Data upload <span ng-if="publishingStatus.upload.completed" class="glyphicon glyphicon-ok"></span>
+                        </a>
+                    </li>
+                </ol>
+            </nav>
+        </div>
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="publishing-status">
+                    <div ng-show="publishingStatus.currentActiveView == 'risk assessment'">
+                        <h3>Risk assessment</h3>
+                        <p>To proceed you must agree to the below assessment criteria for publishing:</p>
+                        <ol>
+                            <li>This dataset does not contain personal data.</li>
+                            <li>
+                                There are no third party licencing or IP restrictions or permissions to be resolved.
+                                <ol type="a">
+                                    <li>No Ordnance Survey data was used in the production of this output.</li>
+                                    <li>No UK Hydrographic Office data was used in the production of this output.</li>
+                                </ol>
+                            </li>
+                            <li>This dataset does not contain confidential information.</li>
+                            <li>This dataset does not contain information where there are national security concerns.</li>
+                            <li>This dataset does not contain sensitive or environmental policy information.</li>
+                            <li>This dataset does not contain free text fields or comments fields.</li>
+                        </ol>
+                        <p>
+                            For more information and guidance about the publishing process, please open <a href="file:///Z:\Prog110-FutureData\0264%20Information%20Management\Open%20Data\DEFRA%20Data%20Accelerator\Guidance\Risk%20assessment%20for%20publishing%20open%20data_process_draftv2.docx">this file</a> by copying and pasting the link into Windows Explorer.
+                        </p>
+                        <br/>
+                        <span class="pull-right">
+                            <button type="button" class="btn btn-primary"
+                                    ng-click="assessClick()"
+                                    ng-disabled="form.publication.openData.assessment.completed">
+                                {{assessmentButtonText}}
+                            </button>
+                        </span>
+                    </div>
+                    <div ng-show="publishingStatus.currentActiveView == 'sign off'">
+                        <h3>Final approval</h3>
+                        <p>To proceed, this record must be signed off by an Information Asset Owner. Please review the record with your Information Asset Owner and then ask them to sign off by clicking the button below.</p>
+                        <p>Alternatively, sign off can be provided on the <a ng-click="$dismiss()" href="#opendatapublishing/signoff">Final Approval</a> page.</p>
+                        <br />
+                        <span class="pull-right">
+                            <button ng-class="publishingStatus.signOff.signOffButtonClass"
+                                    tc-tip title="Publishing sign off for Information Asset Owners"
+                                    ng-click="signOffButtonClick(r.id)"
+                                    ng-disabled="publishingStatus.signOff.signOffButtonDisabled">
+                                <span ng-if="publishingStatus.signOff.signOffButtonText.indexOf('Cancel') == 0" class="glyphicon glyphicon-remove sign-off"></span>
+                                &nbsp;{{ publishingStatus.signOff.signOffButtonText }}
+                            </button>
+                        </span>
+                    </div>
+                    <div ng-show="publishingStatus.currentActiveView == 'upload'">
+                        <h3>Data upload</h3>
+                        <p>The record will now be automatically uploaded to data.gov.uk. This page will be updated once the upload is completed.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer"></div>
+</div>

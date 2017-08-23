@@ -161,7 +161,7 @@
     <Compile Include="Controllers\Collections\CollectionOutputModel.cs" />
     <Compile Include="Controllers\Keywords\KeywordModel.cs" />
     <Compile Include="Controllers\Keywords\KeywordsController.cs" />
-    <Compile Include="Controllers\Publishing\AssessmentResponse.cs" />
+    <Compile Include="Controllers\Publishing\PublishingResponse.cs" />
     <Compile Include="Controllers\Publishing\OpenDataPublishingController.cs" />
     <Compile Include="Controllers\Patch\PatchController.cs" />
     <Compile Include="Controllers\Publishing\AssessmentRequest.cs" />
@@ -224,12 +224,6 @@
     <Content Include="app\js\config.min.js">
       <DependentUpon>config.js</DependentUpon>
     </Content>
-    <Content Include="app\js\controllers\AssessmentController.js">
-      <DependentUpon>AssessmentController.coffee</DependentUpon>
-    </Content>
-    <Content Include="app\js\controllers\AssessmentController.min.js">
-      <DependentUpon>AssessmentController.js</DependentUpon>
-    </Content>
     <Content Include="app\js\controllers\ContentController.js">
       <DependentUpon>ContentController.coffee</DependentUpon>
     </Content>
@@ -242,12 +236,15 @@
     <Content Include="app\js\controllers\EditorController.min.js">
       <DependentUpon>EditorController.coffee</DependentUpon>
     </Content>
-    <Content Include="app\js\controllers\AssessmentController.js.map">
-      <DependentUpon>AssessmentController.js</DependentUpon>
-    </Content>
     <Content Include="app\js\config.coffee" />
     <Content Include="app\js\config.js.map">
       <DependentUpon>config.js</DependentUpon>
+    </Content>
+    <Content Include="app\js\controllers\PublishingStatusController.js">
+      <DependentUpon>PublishingStatusController.coffee</DependentUpon>
+    </Content>
+    <Content Include="app\js\controllers\PublishingStatusController.min.js">
+      <DependentUpon>PublishingStatusController.js</DependentUpon>
     </Content>
     <Content Include="app\js\controllers\SignOffController.coffee" />
     <None Include="app\js\controllers\OpenDataPublishingController.coffee" />
@@ -419,7 +416,7 @@
     <Content Include="app\views\partials\jncc-categories.html" />
     <Content Include="app\views\partials\markdown.html" />
     <Content Include="app\views\partials\presentation.html" />
-    <Content Include="app\views\partials\assessment.html" />
+    <Content Include="app\views\partials\publishingstatus.html" />
     <Content Include="app\views\partials\vocabulator.html" />
     <Content Include="app\views\partials\what-is-data.html" />
     <Content Include="app\views\partials\why-topcat.html" />
@@ -667,9 +664,12 @@
     <Content Include="app\js\controllers\OpenDataPublishingController.js.map">
       <DependentUpon>OpenDataPublishingController.js</DependentUpon>
     </Content>
-    <Content Include="app\js\controllers\AssessmentController.coffee" />
+    <Content Include="app\js\controllers\PublishingStatusController.coffee" />
     <Content Include="app\js\controllers\SignOffController.js.map">
       <DependentUpon>SignOffController.js</DependentUpon>
+    </Content>
+    <Content Include="app\js\controllers\PublishingStatusController.js.map">
+      <DependentUpon>PublishingStatusController.js</DependentUpon>
     </Content>
     <None Include="app\js\controllers\VocabulatorController.coffee" />
     <Content Include="app\js\controllers\VocabulatorController.js.map">

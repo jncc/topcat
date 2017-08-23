@@ -15,7 +15,7 @@ namespace Catalogue.Data.Write
             this.recordService = recordService;
         }
 
-        public void SignOff(Record record, OpenDataSignOffInfo signOffInfo)
+        public Record SignOff(Record record, OpenDataSignOffInfo signOffInfo)
         {
             if (record.Publication?.OpenData == null)
                 throw new Exception("Couldn't sign-off record for publication. Assessment not completed.");
@@ -31,14 +31,14 @@ namespace Catalogue.Data.Write
             openDataInfo.SignOff = signOffInfo;
 
             var recordServiceResult = recordService.Update(record, signOffInfo.User);
-            if (recordServiceResult.Success)
-            {
-                db.SaveChanges();
-            }
-            else
+            if (!recordServiceResult.Success)
             {
                 throw new Exception("Error while saving sign off changes.");
             }
+
+            db.SaveChanges();
+
+            return recordServiceResult.Record;
         }
 
         public Record Assess(Record record, OpenDataAssessmentInfo assessmentInfo)

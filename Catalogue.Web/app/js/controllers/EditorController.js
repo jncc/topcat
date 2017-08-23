@@ -101,7 +101,7 @@
     $scope.isCloneDisabled = function() {
       return !$scope.isClean();
     };
-    $scope.isAssessmentButtonDisabled = function() {
+    $scope.isPublishingStatusButtonDisabled = function() {
       return !$scope.isSaveHidden();
     };
     $scope.hasUsageConstraints = function() {
@@ -149,11 +149,11 @@
         return $scope.form.gemini.abstract = s;
       });
     };
-    $scope.openAssessment = function() {
+    $scope.openPublishingStatus = function() {
       var modal;
       modal = $modal.open({
-        controller: 'AssessmentController',
-        templateUrl: 'views/partials/assessment.html?' + new Date().getTime(),
+        controller: 'PublishingStatusController',
+        templateUrl: 'views/partials/publishingstatus.html?' + new Date().getTime(),
         size: 'lg',
         scope: $scope
       });

@@ -82,6 +82,9 @@
           return '#test text';
         }
       }
+    }).when('/sandbox/publishingstatus', {
+      controller: 'PublishingStatusController',
+      templateUrl: 'views/partials/publishingstatus.html'
     }).when('/sandbox/assessment', {
       controller: 'AssessmentController',
       templateUrl: 'views/partials/assessment.html'

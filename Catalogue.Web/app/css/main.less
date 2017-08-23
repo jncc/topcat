@@ -29,10 +29,14 @@ html { overflow-y: scroll; }
 @errorForeground: #FF1493;
 @errorBackground: #f9f2f4;
 
+@goodgreen: #96c03d;
+@darkgreen: #8cb538;
+@bootstrapblue: #357ebd;
+@bootstrapdarkblue: #3071a9;
+
 // ---------
 // utilities
 // ---------
-
 .cell-mixin {
     display: table-cell;
     vertical-align: middle;
@@ -739,17 +743,13 @@ form .ng-invalid {
     }
 }
 
-.editor-sign-off {
+.publishing-status {
+    transition: all linear 0.5s;
     display: block;
-    width: 60%;
+    width: 55%;
     margin: 0 auto;
 }
 
-.editor-assessment {
-    display: block;
-    width: 60%;
-    margin: 0 auto;
-}
 
 // ---------
 // animation
@@ -830,12 +830,7 @@ form .ng-invalid {
 }
 
 
-// https://codyhouse.co/gem/css-breadcrumbs-and-multi-step-indicator/
-/* -------------------------------- 
-
-Basic Style
-
--------------------------------- */
+// Publishing status multistep style modified from https://codyhouse.co/gem/css-breadcrumbs-and-multi-step-indicator/
 .cd-multi-steps {
     width: 90%;
     max-width: 768px;
@@ -879,63 +874,27 @@ Basic Style
 
 .cd-multi-steps li.current > * {
     /* selected step */
-    color: #96c03d;
+    color: @bootstrapblue;
 }
 
-.no-touch .cd-multi-steps a:hover {
-    /* steps already visited */
-    color: #96c03d;
+.cd-multi-steps li.disabled > * {
+    text-decoration: none;
+    font-style: italic;
+    pointer-events: none;
+    cursor: text;
 }
 
-.cd-multi-steps.custom-separator li::after {
-    /* replace the default arrow separator with a custom icon */
-    content: '';
-    height: 16px;
-    width: 16px;
-    background: url(../img/cd-custom-separator.svg) no-repeat center center;
-    vertical-align: middle;
+.no-touch .cd-multi-steps a:hover, .cd-multi-steps a:hover {
+    cursor: pointer;
+    text-decoration: none;
 }
 
-.cd-multi-steps.custom-icons li > *::before {
-    /* add a custom icon before each item */
-    content: '';
-    display: inline-block;
-    height: 20px;
-    width: 20px;
-    margin-right: .4em;
-    margin-top: -2px;
-    background: url(../img/cd-custom-icons-01.svg) no-repeat 0 0;
-    vertical-align: middle;
+.no-touch .cd-multi-steps li.visited a:hover, .cd-multi-steps li.visited a:hover {
+    background-color: @darkgreen;
 }
 
-.cd-multi-steps.custom-icons li:not(.current):nth-of-type(2) > *::before {
-    /* change custom icon using image sprites */
-    background-position: -20px 0;
-}
-
-.cd-multi-steps.custom-icons li:not(.current):nth-of-type(3) > *::before {
-    background-position: -40px 0;
-}
-
-.cd-multi-steps.custom-icons li:not(.current):nth-of-type(4) > *::before {
-    background-position: -60px 0;
-}
-
-.cd-multi-steps.custom-icons li.current:first-of-type > *::before {
-    /* change custom icon for the current item */
-    background-position: 0 -20px;
-}
-
-.cd-multi-steps.custom-icons li.current:nth-of-type(2) > *::before {
-    background-position: -20px -20px;
-}
-
-.cd-multi-steps.custom-icons li.current:nth-of-type(3) > *::before {
-    background-position: -40px -20px;
-}
-
-.cd-multi-steps.custom-icons li.current:nth-of-type(4) > *::before {
-    background-position: -60px -20px;
+.no-touch .cd-multi-steps li.current a:hover, .cd-multi-steps li.current a:hover {
+    background-color: @bootstrapdarkblue;
 }
 
 @media only screen and (min-width: 768px) {
@@ -956,35 +915,6 @@ Basic Style
     }
 }
 
-
-/* -------------------------------- 
-
-Custom icons hover effects - breadcrumb and multi-steps
-
--------------------------------- */
-@media only screen and (min-width: 768px) {
-    .no-touch .cd-multi-steps.text-center.custom-icons li:first-of-type a:hover::before, .cd-multi-steps.text-center.custom-icons li.current:first-of-type em::before {
-        /* change custom icon using image sprites - hover effect or current item */
-        background-position: 0 -40px;
-    }
-
-    .no-touch .cd-multi-steps.text-center.custom-icons li:nth-of-type(2) a:hover::before, .cd-multi-steps.text-center.custom-icons li.current:nth-of-type(2) em::before {
-        background-position: -20px -40px;
-    }
-
-    .no-touch .cd-multi-steps.text-center.custom-icons li:nth-of-type(3) a:hover::before, .cd-multi-steps.text-center.custom-icons li.current:nth-of-type(3) em::before {
-        background-position: -40px -40px;
-    }
-
-    .no-touch .cd-multi-steps.text-center.custom-icons li:nth-of-type(4) a:hover::before, .cd-multi-steps.text-center.custom-icons li.current:nth-of-type(4) em::before {
-        background-position: -60px -40px;
-    }
-}
-/* -------------------------------- 
-
-Multi steps indicator 
-
--------------------------------- */
 @media only screen and (min-width: 768px) {
     .cd-multi-steps {
         /* reset style */
@@ -1014,7 +944,7 @@ Multi steps indicator
     }
 
     .cd-multi-steps li.visited::after {
-        background-color: #96c03d;
+        background-color: @goodgreen;
     }
 
     .cd-multi-steps li > *, .cd-multi-steps li.current > * {
@@ -1022,10 +952,12 @@ Multi steps indicator
         color: #2c3f4c;
     }
 
-    .cd-multi-steps.custom-separator li::after {
-        /* reset style */
-        height: 4px;
-        background: #edeff0;
+    .cd-multi-steps li.disabled > * {
+        position: relative;
+        text-decoration: none;
+        font-style: italic;
+        pointer-events: none;
+        cursor: text;
     }
 
     .cd-multi-steps.text-center li::after {
@@ -1048,135 +980,31 @@ Multi steps indicator
 
     .no-touch .cd-multi-steps.text-center a:hover {
         background-color: #2c3f4c;
+        cursor: pointer;
     }
 
-    .cd-multi-steps.text-center li.current > *, .cd-multi-steps.text-center li.visited > * {
+    .no-touch .cd-multi-steps.text-center li.visited a:hover, .cd-multi-steps.text-center li.visited a:hover {
+        background-color: @darkgreen;
+    }
+
+    .no-touch .cd-multi-steps.text-center li.current a:hover, .cd-multi-steps.text-center li.current a:hover {
+        background-color: @bootstrapdarkblue;
+    }
+
+    .cd-multi-steps.text-center li.current > * {
         color: #ffffff;
-        background-color: #96c03d;
+        background-color: @bootstrapblue;
     }
 
-    .cd-multi-steps.text-center.custom-icons li.visited a::before {
-        /* change the custom icon for the visited item - check icon */
-        background-position: 0 -60px;
-    }
-
-    .cd-multi-steps.text-top li, .cd-multi-steps.text-bottom li {
-        width: 80px;
-        text-align: center;
-    }
-
-    .cd-multi-steps.text-top li::after, .cd-multi-steps.text-bottom li::after {
-        /* this is the line connecting 2 adjacent items */
-        position: absolute;
-        left: 50%;
-        /* 40px is the <li> right margin value */
-        width: calc(100% + 40px);
-    }
-
-    .cd-multi-steps.text-top li > *::before, .cd-multi-steps.text-bottom li > *::before {
-        /* this is the spot indicator */
-        content: '';
-        position: absolute;
-        z-index: 1;
-        left: 50%;
-        right: auto;
-        -webkit-transform: translateX(-50%);
-        -moz-transform: translateX(-50%);
-        -ms-transform: translateX(-50%);
-        -o-transform: translateX(-50%);
-        transform: translateX(-50%);
-        height: 12px;
-        width: 12px;
-        border-radius: 50%;
-        background-color: #edeff0;
-    }
-
-    .cd-multi-steps.text-top li.visited > *::before,
-    .cd-multi-steps.text-top li.current > *::before, .cd-multi-steps.text-bottom li.visited > *::before,
-    .cd-multi-steps.text-bottom li.current > *::before {
-        background-color: #96c03d;
-    }
-
-    .no-touch .cd-multi-steps.text-top a:hover, .no-touch .cd-multi-steps.text-bottom a:hover {
-        color: #96c03d;
-    }
-
-    .no-touch .cd-multi-steps.text-top a:hover::before, .no-touch .cd-multi-steps.text-bottom a:hover::before {
-        box-shadow: 0 0 0 3px rgba(150, 192, 61, 0.3);
-    }
-
-    .cd-multi-steps.text-top li::after {
-        /* this is the line connecting 2 adjacent items */
-        bottom: 4px;
-    }
-
-    .cd-multi-steps.text-top li > * {
-        padding-bottom: 20px;
-    }
-
-    .cd-multi-steps.text-top li > *::before {
-        /* this is the spot indicator */
-        bottom: 0;
-    }
-
-    .cd-multi-steps.text-bottom li::after {
-        /* this is the line connecting 2 adjacent items */
-        top: 3px;
-    }
-
-    .cd-multi-steps.text-bottom li > * {
-        padding-top: 20px;
-    }
-
-    .cd-multi-steps.text-bottom li > *::before {
-        /* this is the spot indicator */
-        top: 0;
-    }
-}
-/* -------------------------------- 
-
-Add a counter to the multi-steps indicator 
-
--------------------------------- */
-.cd-multi-steps.count li {
-    counter-increment: steps;
-}
-
-.cd-multi-steps.count li > *::before {
-    content: counter(steps) " - ";
-}
-
-@media only screen and (min-width: 768px) {
-    .cd-multi-steps.text-top.count li > *::before,
-    .cd-multi-steps.text-bottom.count li > *::before {
-        /* this is the spot indicator */
-        content: counter(steps);
-        height: 26px;
-        width: 26px;
-        line-height: 26px;
-        font-size: 1.4rem;
+    .cd-multi-steps.text-center li.visited > * {
         color: #ffffff;
+        background-color: @goodgreen;
     }
 
-    .cd-multi-steps.text-top.count li:not(.current) em::before,
-    .cd-multi-steps.text-bottom.count li:not(.current) em::before {
-        /* steps not visited yet - counter color */
-        color: #2c3f4c;
-    }
-
-    .cd-multi-steps.text-top.count li::after {
-        bottom: 11px;
-    }
-
-    .cd-multi-steps.text-top.count li > * {
-        padding-bottom: 34px;
-    }
-
-    .cd-multi-steps.text-bottom.count li::after {
-        top: 11px;
-    }
-
-    .cd-multi-steps.text-bottom.count li > * {
-        padding-top: 34px;
+    .cd-multi-steps.text-center li.disabled > * {
+        text-decoration: none;
+        font-style: italic;
+        pointer-events: none;
+        cursor: text;
     }
 }
