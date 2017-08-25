@@ -24,10 +24,10 @@ namespace Catalogue.Robot
         {
             Console.WriteLine("I'm a robot");
 
-            using (var db = store.OpenSession())
-            {
-                var record = db.Query<Record>().First(r => r.Gemini.Title.StartsWith("sea"));
-                Console.WriteLine(record.Gemini.Title);
+//            using (var db = store.OpenSession())
+//            {
+//                var record = db.Query<Record>().First(r => r.Gemini.Title.StartsWith("sea"));
+//                Console.WriteLine(record.Gemini.Title);
 
                 var configPath = Path.Combine(Environment.CurrentDirectory, "data-gov-uk-publisher-config.json");
                 if (!File.Exists(configPath))
@@ -44,9 +44,10 @@ namespace Catalogue.Robot
                     throw new Exception("No FtpPassword specified in data-gov-uk-publisher-config.json file.");
 
                 var ftpClient = new FtpClient(config.FtpUsername, config.FtpPassword);
-                new OpenDataRecordPublisher(db, config, true, ftpClient).PublishRecord(record.Id);
-                Console.WriteLine("Finished");
-            }
+                string indexDocFtpPath = String.Format("{0}/waf/index.html", config.FtpRootUrl);
+                string indexDocHtml = ftpClient.DownloadString(indexDocFtpPath);
+                Console.WriteLine("Index doc: " + indexDocHtml);
+//            }
         }
 
         public void Stop()
