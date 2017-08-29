@@ -85,7 +85,7 @@
         $scope.isSaveDisabled = -> $scope.isClean() # || $scope.theForm.$invalid 
         $scope.isCloneHidden = -> $scope.isNew()
         $scope.isCloneDisabled = -> !$scope.isClean()
-        $scope.isPublishingStatusButtonDisabled = -> !$scope.isSaveHidden()
+        $scope.isPublishingModalButtonDisabled = -> !$scope.isSaveHidden()
 
         $scope.hasUsageConstraints = () -> (!!$scope.form.gemini.limitationsOnPublicAccess and $scope.form.gemini.limitationsOnPublicAccess isnt 'no limitations') or (!!$scope.form.gemini.useConstraints and $scope.form.gemini.useConstraints isnt 'no conditions apply')
 
@@ -115,10 +115,10 @@
             modal.result
                 .then (s) -> $scope.form.gemini.abstract = s
 
-        $scope.openPublishingStatus = ->
+        $scope.openPublishingModal = ->
             modal = $modal.open
-                controller:  'PublishingStatusController'
-                templateUrl: 'views/partials/publishingstatus.html?' + new Date().getTime() # stop iis express caching the html
+                controller:  'OpenDataModalController'
+                templateUrl: 'views/partials/opendatamodal.html?' + new Date().getTime() # stop iis express caching the html
                 size:        'lg'
                 scope:       $scope
             modal.result

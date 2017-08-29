@@ -20,12 +20,12 @@
     "inputFile": "app/js/controllers/MarkdownController.coffee"
   },
   {
-    "outputFile": "app/js/controllers/OpenDataPublishingController.js",
-    "inputFile": "app/js/controllers/OpenDataPublishingController.coffee"
+    "outputFile": "app/js/controllers/OpenDataManagementController.js",
+    "inputFile": "app/js/controllers/OpenDataManagementController.coffee"
   },
   {
-    "outputFile": "app/js/controllers/PublishingStatusController.js",
-    "inputFile": "app/js/controllers/PublishingStatusController.coffee"
+    "outputFile": "app/js/controllers/OpenDataModalController.js",
+    "inputFile": "app/js/controllers/OpenDataModalController.coffee"
   },
   {
     "outputFile": "app/js/controllers/PublishingController.js",

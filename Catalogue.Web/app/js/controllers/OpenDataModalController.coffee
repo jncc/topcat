@@ -1,5 +1,5 @@
 ﻿
-angular.module('app.controllers').controller 'PublishingStatusController',
+angular.module('app.controllers').controller 'OpenDataModalController',
 
     ($scope, $http, $timeout) ->
 

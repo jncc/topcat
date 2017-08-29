@@ -46,8 +46,8 @@
       controller: 'VocabularyListController',
       templateUrl: 'views/vocabularies/vocabularies.html'
     }).when('/opendatapublishing', {
-      controller: 'OpenDataPublishingController',
-      templateUrl: 'views/opendatapublishing/opendatapublishing.html'
+      controller: 'OpenDataManagementController',
+      templateUrl: 'views/opendatapublishing/opendatamanagement.html'
     }).when('/opendatapublishing/signoff', {
       controller: 'SignOffController',
       templateUrl: 'views/signoff/signoff.html'
@@ -82,9 +82,9 @@
           return '#test text';
         }
       }
-    }).when('/sandbox/publishingstatus', {
-      controller: 'PublishingStatusController',
-      templateUrl: 'views/partials/publishingstatus.html'
+    }).when('/sandbox/opendatamodal', {
+      controller: 'OpenDataModalController',
+      templateUrl: 'views/partials/opendatamodal.html'
     }).when('/sandbox/assessment', {
       controller: 'AssessmentController',
       templateUrl: 'views/partials/assessment.html'

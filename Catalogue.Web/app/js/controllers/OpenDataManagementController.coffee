@@ -1,4 +1,4 @@
-﻿angular.module('app.controllers').controller 'OpenDataPublishingController',
+﻿angular.module('app.controllers').controller 'OpenDataManagementController',
 
     ($scope, $http, $location, signOffGroup) ->
         
