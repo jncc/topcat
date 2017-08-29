@@ -3,7 +3,7 @@ using Raven.Client;
 using System;
 using System.IO;
 using System.Linq;
-using Catalogue.Robot.Publishing.OpenData;
+using Catalogue.Data.Write;
 using Catalogue.Utilities.Text;
 using Newtonsoft.Json;
 
@@ -24,10 +24,10 @@ namespace Catalogue.Robot
         {
             Console.WriteLine("I'm a robot");
 
-//            using (var db = store.OpenSession())
-//            {
-//                var record = db.Query<Record>().First(r => r.Gemini.Title.StartsWith("sea"));
-//                Console.WriteLine(record.Gemini.Title);
+            using (var db = store.OpenSession())
+            {
+                var record = db.Load<Record>(new Guid("b2691fed-e421-4e48-9da9-99bd77e0b8ba"));
+                Console.WriteLine(record.Gemini.Title);
 
                 var configPath = Path.Combine(Environment.CurrentDirectory, "data-gov-uk-publisher-config.json");
                 if (!File.Exists(configPath))
@@ -43,11 +43,17 @@ namespace Catalogue.Robot
                 if (config.FtpPassword.IsBlank())
                     throw new Exception("No FtpPassword specified in data-gov-uk-publisher-config.json file.");
 
-                var ftpClient = new FtpClient(config.FtpUsername, config.FtpPassword);
-                string indexDocFtpPath = String.Format("{0}/waf/index.html", config.FtpRootUrl);
-                string indexDocHtml = ftpClient.DownloadString(indexDocFtpPath);
-                Console.WriteLine("Index doc: " + indexDocHtml);
-//            }
+                var recordService = new RecordService(db, new RecordValidator());
+                var uploadService = new OpenDataUploadService(config);
+                var publishingService = new OpenDataPublishingService(db, recordService, uploadService);
+                var userInfo = new UserInfo
+                {
+                    DisplayName = "Robot Test Uploader",
+                    Email = "testemail@company.com"
+                };
+                
+                publishingService.Upload(record, userInfo, false);
+            }
         }
 
         public void Stop()

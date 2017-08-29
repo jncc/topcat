@@ -6,6 +6,7 @@ using System.Net;
 using System.Text;
 using System.Xml.Linq;
 using Catalogue.Data.Model;
+using Catalogue.Data.Write;
 using Catalogue.Gemini.Model;
 using Catalogue.Utilities.Text;
 using Catalogue.Utilities.Time;

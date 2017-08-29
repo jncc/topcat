@@ -7,6 +7,7 @@ using Catalogue.Data;
 using Catalogue.Data.Indexes;
 using Catalogue.Data.Model;
 using Catalogue.Data.Query;
+using Catalogue.Data.Write;
 using Catalogue.Gemini.Model;
 using Catalogue.Robot.Importing;
 using Catalogue.Robot.Injection;
