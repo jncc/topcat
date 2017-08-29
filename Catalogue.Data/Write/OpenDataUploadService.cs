@@ -9,14 +9,15 @@ using static Catalogue.Utilities.Text.WebificationUtility;
 
 namespace Catalogue.Data.Write
 {
-    class OpenDataUploadService : IOpenDataUploadService
+    public class OpenDataUploadService : IOpenDataUploadService
     {
         private readonly OpenDataPublisherConfig config;
         private readonly IFtpClient ftpClient;
 
         public OpenDataUploadService(OpenDataPublisherConfig config)
         {
-            this.ftpClient = new FtpClient(config.FtpUsername, config.FtpPassword);
+            this.config = config;
+            ftpClient = new FtpClient(config.FtpUsername, config.FtpPassword);
         }
 
         public void UploadDataFile(Guid recordId, string filePath, bool metadataOnly)
