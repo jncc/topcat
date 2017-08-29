@@ -34,6 +34,7 @@ angular.module('app.controllers').controller 'OpenDataModalController',
         $scope.publishingStatus = publishingStatus
         publishingStatus.signOff.timeout = 0
 
+        # change multistep status
         $scope.refreshPublishingStatus = () ->            
             publishingStatus.riskAssessment.completed = $scope.form.publication != null && $scope.form.publication.openData.assessment.completed
             publishingStatus.signOff.completed = $scope.form.publication != null && $scope.form.publication.openData.signOff != null
@@ -66,6 +67,7 @@ angular.module('app.controllers').controller 'OpenDataModalController',
         else
             publishingStatus.currentActiveView = "risk assessment"
 
+        # Refresh text on assess and sign off buttons
         refreshAssessmentButton = () ->
             if ($scope.form.publication != null && $scope.form.publication.openData.assessment.completed)
                 if $scope.form.publication.openData.assessment.initialAssessmentWasDoneOnSpreadsheet
@@ -93,7 +95,8 @@ angular.module('app.controllers').controller 'OpenDataModalController',
         refreshAssessmentButton()
         refreshSignOffButton()
 
-        $scope.assessClick = ->
+        # Assess and sign off button clicks with timeout for sign off
+        $scope.assessButtonClick = ->
             $http.put('../api/publishing/opendata/assess', $scope.assessmentRequest)
             .success (result) ->
                 $scope.status.refresh()
@@ -105,7 +108,13 @@ angular.module('app.controllers').controller 'OpenDataModalController',
                 $scope.notifications.add error.data.exceptionMessage
                 $scope.$dismiss()
 
-        # duplicated from SignOffController, need to refactor this
+        $scope.signOffButtonClick = () ->
+            if publishingStatus.signOff.timeout == 0
+                publishingStatus.signOff.timeout = 10 # seconds
+                $scope.allowGraceTime()
+            else
+                $scope.cancelSignOff()
+
         $scope.submitSignOff = () ->
             $scope.signOffRequest = { id: $scope.form.id, comment: "" }
 
@@ -135,13 +144,6 @@ angular.module('app.controllers').controller 'OpenDataModalController',
         $scope.cancelSignOff = () ->
             publishingStatus.signOff.timeout = 0
             refreshSignOffButton()
-
-        $scope.signOffButtonClick = () ->
-            if  publishingStatus.signOff.timeout == 0
-                publishingStatus.signOff.timeout = 10 # seconds
-                $scope.allowGraceTime()
-            else
-                $scope.cancelSignOff()
 
 
         $scope.close = () -> $scope.$close $scope.form

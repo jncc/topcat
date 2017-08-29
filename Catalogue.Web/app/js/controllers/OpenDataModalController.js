@@ -93,7 +93,7 @@
     };
     refreshAssessmentButton();
     refreshSignOffButton();
-    $scope.assessClick = function() {
+    $scope.assessButtonClick = function() {
       return $http.put('../api/publishing/opendata/assess', $scope.assessmentRequest).success(function(result) {
         $scope.status.refresh();
         $scope.form = result.record;
@@ -104,6 +104,14 @@
         $scope.notifications.add(error.data.exceptionMessage);
         return $scope.$dismiss();
       });
+    };
+    $scope.signOffButtonClick = function() {
+      if (publishingStatus.signOff.timeout === 0) {
+        publishingStatus.signOff.timeout = 10;
+        return $scope.allowGraceTime();
+      } else {
+        return $scope.cancelSignOff();
+      }
     };
     $scope.submitSignOff = function() {
       $scope.signOffRequest = {
@@ -137,14 +145,6 @@
     $scope.cancelSignOff = function() {
       publishingStatus.signOff.timeout = 0;
       return refreshSignOffButton();
-    };
-    $scope.signOffButtonClick = function() {
-      if (publishingStatus.signOff.timeout === 0) {
-        publishingStatus.signOff.timeout = 10;
-        return $scope.allowGraceTime();
-      } else {
-        return $scope.cancelSignOff();
-      }
     };
     return $scope.close = function() {
       return $scope.$close($scope.form);

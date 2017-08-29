@@ -36,8 +36,6 @@ namespace Catalogue.Data.Write
                 throw new Exception("Error while saving sign off changes.");
             }
 
-            db.SaveChanges();
-
             return recordServiceResult.Record;
         }
 
