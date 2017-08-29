@@ -109,7 +109,7 @@ namespace Catalogue.Web.Controllers.Publishing
         {
             var query = db
                 .Query<RecordsWithOpenDataPublicationInfoIndex.Result, RecordsWithOpenDataPublicationInfoIndex>()
-                .Where(x => x.PublishedSinceLastUpdated && x.SignedOff);
+                .Where(x => x.PublishedSinceLastUpdated);
 
             return GetRecords(query, p);
         }
@@ -119,7 +119,7 @@ namespace Catalogue.Web.Controllers.Publishing
         {
             var query = db
                 .Query<RecordsWithOpenDataPublicationInfoIndex.Result, RecordsWithOpenDataPublicationInfoIndex>()
-                .Where(x => !x.PublishedSinceLastUpdated && x.SignedOff);
+                .Where(x => !x.PublishedSinceLastUpdated);
 
             return GetRecords(query, p);
         }
@@ -129,7 +129,7 @@ namespace Catalogue.Web.Controllers.Publishing
         {
             var query = db
                 .Query<RecordsWithOpenDataPublicationInfoIndex.Result, RecordsWithOpenDataPublicationInfoIndex>()
-                .Where(x => x.PublicationNeverAttempted && x.SignedOff);
+                .Where(x => x.PublicationNeverAttempted);
 
             return GetRecords(query, p);
         }
@@ -139,7 +139,7 @@ namespace Catalogue.Web.Controllers.Publishing
         {
             var query = db
                 .Query<RecordsWithOpenDataPublicationInfoIndex.Result, RecordsWithOpenDataPublicationInfoIndex>()
-                .Where(x => x.LastPublicationAttemptWasUnsuccessful && x.SignedOff);
+                .Where(x => x.LastPublicationAttemptWasUnsuccessful);
 
             return GetRecords(query, p);
         }
