@@ -362,6 +362,11 @@ namespace Catalogue.Data.Seed
                                 DisplayName = "Cathy",
                                 Email = "cathy@example.com"
                             }
+                        },
+                        SignOff = new OpenDataSignOffInfo
+                        {
+                            DateUtc = Clock.NowUtc,
+                            User = userInfo
                         }
                     }
                 };
@@ -408,7 +413,11 @@ namespace Catalogue.Data.Seed
                         {
                             Completed = true
                         },
-                        SignOff = new OpenDataSignOffInfo()
+                        SignOff = new OpenDataSignOffInfo
+                        {
+                            DateUtc = Clock.NowUtc,
+                            User = userInfo
+                        }
                     }
                 };
             });
@@ -428,6 +437,11 @@ namespace Catalogue.Data.Seed
                         {
                             new Resource { Path = @"Z:\some\alternative\resource\1" },
                             new Resource { Path = @"Z:\some\alternative\resource\2" },
+                        },
+                        Assessment = new OpenDataAssessmentInfo
+                        {
+                            Completed = true,
+                            CompletedByUser = userInfo
                         }
                     }
                 };

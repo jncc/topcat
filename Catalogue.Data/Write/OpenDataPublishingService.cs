@@ -75,8 +75,6 @@ namespace Catalogue.Data.Write
                 throw new Exception("Error while saving assessment changes.");
             }
 
-            db.SaveChanges();
-
             return recordServiceResult.Record;
         }
     }

@@ -29,6 +29,7 @@ namespace Catalogue.Data.Indexes
             Map = records => from r in records
                              where r.Publication != null
                              where r.Publication.OpenData != null
+                             let signedOff = r.Publication.OpenData.SignOff != null
                              let recordLastUpdatedDate = r.Gemini.MetadataDate
                              let lastAttemptDate = r.Publication.OpenData.LastAttempt == null ? DateTime.MinValue : r.Publication.OpenData.LastAttempt.DateUtc
                              let lastSuccessDate = r.Publication.OpenData.LastSuccess == null ? DateTime.MinValue : r.Publication.OpenData.LastSuccess.DateUtc
@@ -40,8 +41,8 @@ namespace Catalogue.Data.Indexes
                                  LastSuccessfulPublicationAttemptDate = lastSuccessDate,
                                  GeminiValidated = r.Validation == Validation.Gemini,
                                  AssessmentCompleted = r.Publication.OpenData.Assessment.Completed,
-                                 SignedOff = r.Publication.OpenData.SignOff != null,
-                                 PublicationNeverAttempted = neverAttempted,
+                                 SignedOff = signedOff,
+                                 PublicationNeverAttempted = neverAttempted && signedOff,
                                  LastPublicationAttemptWasUnsuccessful = lastAttemptDate > lastSuccessDate,
                                  PublishedSinceLastUpdated = lastSuccessDate > recordLastUpdatedDate,
                                  PublishingIsPaused = r.Publication.OpenData.Paused,
