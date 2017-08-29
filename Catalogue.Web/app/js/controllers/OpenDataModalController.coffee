@@ -83,9 +83,12 @@ angular.module('app.controllers').controller 'OpenDataModalController',
 
             if $scope.form.publication != null && $scope.form.publication.openData.signOff != null
                 publishingStatus.signOff.signOffButtonClass = "btn btn-primary"
-                publishingStatus.signOff.signOffButtonText = "Signed off by " + $scope.form.publication.openData.signOff.user.displayName +
-                    " on " + formatDate(new Date($scope.form.publication.openData.signOff.dateUtc))
-            else if ($scope.user.isIaoUser)
+                if $scope.form.publication.openData.signOff.user == null
+                    publishingStatus.signOff.signOffButtonText = "Initial sign off completed on spreadsheet"
+                else
+                    publishingStatus.signOff.signOffButtonText = "Signed off by " + $scope.form.publication.openData.signOff.user.displayName +
+                        " on " + formatDate(new Date($scope.form.publication.openData.signOff.dateUtc))
+            else if $scope.user.isIaoUser
                 publishingStatus.signOff.signOffButtonClass = "btn btn-danger sign-off"
                 publishingStatus.signOff.signOffButtonText = "SIGN OFF"
             else
