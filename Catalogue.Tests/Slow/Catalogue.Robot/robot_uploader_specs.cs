@@ -9,7 +9,7 @@ namespace Catalogue.Tests.Explicit.Catalogue.Robot
 {
     public class robot_uploader_specs
     {
-        [Test]
+        [Test][Ignore]
         public void metadata_document_generated_correctly()
         {
             string path = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location),

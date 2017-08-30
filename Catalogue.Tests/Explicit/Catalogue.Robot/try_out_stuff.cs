@@ -6,6 +6,7 @@ using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Linq;
+using Catalogue.Data.Write;
 using Catalogue.Robot.Publishing.OpenData;
 using FluentAssertions;
 using NUnit.Framework;

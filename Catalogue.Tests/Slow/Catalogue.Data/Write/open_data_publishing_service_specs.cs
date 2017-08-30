@@ -10,6 +10,7 @@ using NUnit.Framework;
 using System;
 using System.Collections.Generic;
 using System.Net;
+using Catalogue.Robot.Publishing.OpenData;
 using Moq;
 
 namespace Catalogue.Tests.Slow.Catalogue.Data.Write
@@ -72,12 +73,13 @@ namespace Catalogue.Tests.Slow.Catalogue.Data.Write
                 var testTime = new DateTime(2017, 08, 18, 12, 0, 0);
                 Clock.CurrentUtcDateTimeGetter = () => testTime;
 
-                var uploaderService = new Mock<IOpenDataUploadService>();
-                var publishingService = new OpenDataPublishingService(db, new RecordService(db, new RecordValidator()), uploaderService.Object);
+                var uploadService = new OpenDataPublishingUploadService(db, new RecordService(db, new RecordValidator()));
+                var uploadHelperMock = new Mock<IOpenDataUploadHelper>();
+                var uploader = new RobotUploader(db, uploadService, uploadHelperMock.Object);
 
-                uploaderService.Setup(x => x.GetHttpRootUrl())
-                    .Returns("http://data.jncc.gov.uk");
-                publishingService.Upload(record, TestUserInfo.TestUser, false);
+                uploadHelperMock.Setup(x => x.GetHttpRootUrl()).Returns("http://data.jncc.gov.uk");
+
+                uploader.Upload(new List<Record>{record});
 
                 var updatedRecord = db.Load<Record>(record.Id);
                 updatedRecord.Publication.OpenData.LastAttempt.DateUtc.Should().Be(testTime);
@@ -85,9 +87,9 @@ namespace Catalogue.Tests.Slow.Catalogue.Data.Write
                 updatedRecord.Publication.OpenData.LastSuccess.DateUtc.Should().Be(testTime);
                 updatedRecord.Publication.OpenData.LastSuccess.Message.Should().BeNull();
                 updatedRecord.Gemini.ResourceLocator.Should().Be("http://data.jncc.gov.uk/data/eb189a2f-ebce-4232-8dc6-1ad486cacf21-test");
-                uploaderService.Verify(x => x.UploadDataFile(record.Id, record.Path, false), Times.Once);
-                uploaderService.Verify(x => x.UploadMetadataDocument(record), Times.Once);
-                uploaderService.Verify(x => x.UploadWafIndexDocument(record), Times.Once);
+                uploadHelperMock.Verify(x => x.UploadDataFile(record.Id, record.Path, false), Times.Once);
+                uploadHelperMock.Verify(x => x.UploadMetadataDocument(record), Times.Once);
+                uploadHelperMock.Verify(x => x.UploadWafIndexDocument(record), Times.Once);
 
                 Clock.CurrentUtcDateTimeGetter = currentTime;
             }
@@ -133,7 +135,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Data.Write
                                 Email = "iaouser@example.com"
                             }
                         },
-                        Resources = new List<Resource> { new Resource() }
+                        Resources = new List<Resource> { new Resource{ Path = "x:\\test\\path" } }
                     }
                 };
                 r.Footer = new Footer();
@@ -149,12 +151,14 @@ namespace Catalogue.Tests.Slow.Catalogue.Data.Write
                 var testTime = new DateTime(2017, 08, 18, 12, 0, 0);
                 Clock.CurrentUtcDateTimeGetter = () => testTime;
 
-                var uploaderService = new Mock<IOpenDataUploadService>();
-                var publishingService = new OpenDataPublishingService(db, new RecordService(db, new RecordValidator()), uploaderService.Object);
+                var uploadService = new OpenDataPublishingUploadService(db, new RecordService(db, new RecordValidator()));
+                var uploadHelperMock = new Mock<IOpenDataUploadHelper>();
+                var uploader = new RobotUploader(db, uploadService, uploadHelperMock.Object);
 
-                uploaderService.Setup(x => x.UploadAlternativeResources(record, false))
+                uploadHelperMock.Setup(x => x.UploadAlternativeResources(record, false))
                     .Throws(new WebException("test message"));
-                publishingService.Upload(record, TestUserInfo.TestUser, false);
+
+                uploader.Upload(new List<Record> { record });
 
                 var updatedRecord = db.Load<Record>(record.Id);
                 updatedRecord.Publication.OpenData.LastAttempt.DateUtc.Should().Be(testTime);
@@ -225,10 +229,10 @@ namespace Catalogue.Tests.Slow.Catalogue.Data.Write
                 var testTime = new DateTime(2017, 08, 18, 12, 0, 0);
                 Clock.CurrentUtcDateTimeGetter = () => testTime;
 
-                var uploaderService = new Mock<IOpenDataUploadService>();
-                var publishingService = new OpenDataPublishingService(db, new RecordService(db, new RecordValidator()), uploaderService.Object);
-
-                publishingService.Upload(record, TestUserInfo.TestUser, false);
+                var uploadService = new OpenDataPublishingUploadService(db, new RecordService(db, new RecordValidator()));
+                var uploadHelperMock = new Mock<IOpenDataUploadHelper>();
+                var uploader = new RobotUploader(db, uploadService, uploadHelperMock.Object);
+                uploader.Upload(new List<Record> { record });
 
                 var updatedRecord = db.Load<Record>(record.Id);
                 updatedRecord.Publication.OpenData.LastAttempt.DateUtc.Should().Be(testTime);
@@ -236,8 +240,8 @@ namespace Catalogue.Tests.Slow.Catalogue.Data.Write
                 updatedRecord.Publication.OpenData.LastSuccess.DateUtc.Should().Be(testTime);
                 updatedRecord.Publication.OpenData.LastSuccess.Message.Should().BeNull();
                 updatedRecord.Gemini.ResourceLocator.Should().Be("http://jncc.defra.gov.uk/opendata");
-                uploaderService.Verify(x => x.UploadMetadataDocument(record), Times.Once);
-                uploaderService.Verify(x => x.UploadWafIndexDocument(record), Times.Once);
+                uploadHelperMock.Verify(x => x.UploadMetadataDocument(record), Times.Once);
+                uploadHelperMock.Verify(x => x.UploadWafIndexDocument(record), Times.Once);
 
                 Clock.CurrentUtcDateTimeGetter = currentTime;
             }

@@ -132,10 +132,10 @@
     <Compile Include="UserToUserInfoConverter.cs" />
     <Compile Include="Write\FtpClient.cs" />
     <Compile Include="Write\IOpenDataPublishingService.cs" />
-    <Compile Include="Write\IOpenDataUploadService.cs" />
+    <Compile Include="Write\IOpenDataPublishingUploadService.cs" />
     <Compile Include="Write\OpenDataPublisherConfig.cs" />
     <Compile Include="Write\OpenDataPublishingService.cs" />
-    <Compile Include="Write\OpenDataUploadService.cs" />
+    <Compile Include="Write\OpenDataPublishingUploadService.cs" />
     <Compile Include="Write\RecordService.cs" />
     <Compile Include="Write\RecordValidator.cs" />
     <Compile Include="Write\ValidationResult.cs" />

@@ -1,11 +1,12 @@
 ﻿using Catalogue.Data.Model;
-using Raven.Client;
-using System;
-using System.IO;
-using System.Linq;
 using Catalogue.Data.Write;
+using Catalogue.Robot.Publishing.OpenData;
 using Catalogue.Utilities.Text;
 using Newtonsoft.Json;
+using Raven.Client;
+using System;
+using System.Collections.Generic;
+using System.IO;
 
 namespace Catalogue.Robot
 {
@@ -22,38 +23,20 @@ namespace Catalogue.Robot
 
         public void Start()
         {
-            Console.WriteLine("I'm a robot");
-
+            Console.WriteLine("Running Open Data Uploader");
             using (var db = store.OpenSession())
             {
-                var record = db.Load<Record>(new Guid("b2691fed-e421-4e48-9da9-99bd77e0b8ba"));
-                Console.WriteLine(record.Gemini.Title);
+                var records = GetRecordsPendingUpload(db);
+                var config = GetConfigFile();
+                var uploadService = new OpenDataPublishingUploadService(db, new RecordService(db, new RecordValidator()));
+                var uploadHelper = new OpenDataUploadHelper(config);
 
-                var configPath = Path.Combine(Environment.CurrentDirectory, "data-gov-uk-publisher-config.json");
-                if (!File.Exists(configPath))
-                    throw new Exception("No data-gov-uk-publisher-config.json file in current directory.");
-                string configJson = File.ReadAllText(configPath);
-                var config = JsonConvert.DeserializeObject<OpenDataPublisherConfig>(configJson);
-                if (config.FtpRootUrl.IsBlank())
-                    throw new Exception("No FtpRootUrl specified in data-gov-uk-publisher-config.json file.");
-                if (config.HttpRootUrl.IsBlank())
-                    throw new Exception("No HttpRootUrl specified in data-gov-uk-publisher-config.json file.");
-                if (config.FtpUsername.IsBlank())
-                    throw new Exception("No FtpUsername specified in data-gov-uk-publisher-config.json file.");
-                if (config.FtpPassword.IsBlank())
-                    throw new Exception("No FtpPassword specified in data-gov-uk-publisher-config.json file.");
+                var uploader = new RobotUploader(db, uploadService, uploadHelper);
 
-                var recordService = new RecordService(db, new RecordValidator());
-                var uploadService = new OpenDataUploadService(config);
-                var publishingService = new OpenDataPublishingService(db, recordService, uploadService);
-                var userInfo = new UserInfo
-                {
-                    DisplayName = "Robot Test Uploader",
-                    Email = "testemail@company.com"
-                };
-                
-                publishingService.Upload(record, userInfo, false);
+                uploader.Upload(records);
             }
+
+            Console.WriteLine("Finished all jobs");
         }
 
         public void Stop()
@@ -61,6 +44,30 @@ namespace Catalogue.Robot
             Console.WriteLine("I'm stopping");
         }
 
+        private OpenDataPublisherConfig GetConfigFile()
+        {
+            var configPath = Path.Combine(Environment.CurrentDirectory, "data-gov-uk-publisher-config.json");
+            if (!File.Exists(configPath))
+                throw new Exception("No data-gov-uk-publisher-config.json file in current directory.");
+            string configJson = File.ReadAllText(configPath);
+            var config = JsonConvert.DeserializeObject<OpenDataPublisherConfig>(configJson);
+            if (config.FtpRootUrl.IsBlank())
+                throw new Exception("No FtpRootUrl specified in data-gov-uk-publisher-config.json file.");
+            if (config.HttpRootUrl.IsBlank())
+                throw new Exception("No HttpRootUrl specified in data-gov-uk-publisher-config.json file.");
+            if (config.FtpUsername.IsBlank())
+                throw new Exception("No FtpUsername specified in data-gov-uk-publisher-config.json file.");
+            if (config.FtpPassword.IsBlank())
+                throw new Exception("No FtpPassword specified in data-gov-uk-publisher-config.json file.");
 
+            return config;
+        }
+
+        private List<Record> GetRecordsPendingUpload(IDocumentSession db)
+        {
+            var records = new List<Record>(new [] {db.Load<Record>(new Guid("b2691fed-e421-4e48-9da9-99bd77e0b8ba")) });
+
+            return records;
+        }
     }
 }
