@@ -87,7 +87,7 @@ namespace Catalogue.Data.Write
 
         public IOpenDataPublishingUploadService Upload(Record record, UserInfo userInfo, bool metadataOnly)
         {
-            return new OpenDataPublishingUploadService(db, recordService);
+            return new OpenDataPublishingUploadService(recordService);
         }
     }
 }

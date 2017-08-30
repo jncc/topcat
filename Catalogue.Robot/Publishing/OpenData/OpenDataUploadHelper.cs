@@ -58,7 +58,7 @@ namespace Catalogue.Data.Write
 
         public void UploadMetadataDocument(Record record)
         {
-            string resourceUrl = config.HttpRootUrl + "/" + WebificationUtility.GetUnrootedDataPath(record.Id, record.Path);
+            string resourceUrl = config.HttpRootUrl + "/" + GetUnrootedDataPath(record.Id, record.Path);
             var metaXmlDoc = xmlHelper.GetMetadataDocument(record, resourceUrl);
             string metaPath = String.Format("waf/{0}.xml", record.Id);
             string metaFtpPath = config.FtpRootUrl + "/" + metaPath;

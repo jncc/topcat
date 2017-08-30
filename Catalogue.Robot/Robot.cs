@@ -28,7 +28,7 @@ namespace Catalogue.Robot
             {
                 var records = GetRecordsPendingUpload(db);
                 var config = GetConfigFile();
-                var uploadService = new OpenDataPublishingUploadService(db, new RecordService(db, new RecordValidator()));
+                var uploadService = new OpenDataPublishingUploadService(new RecordService(db, new RecordValidator()));
                 var uploadHelper = new OpenDataUploadHelper(config);
 
                 var uploader = new RobotUploader(db, uploadService, uploadHelper);

@@ -10,12 +10,10 @@ namespace Catalogue.Data.Write
 {
     public class OpenDataPublishingUploadService : IOpenDataPublishingUploadService
     {
-        private readonly IDocumentSession db;
         private readonly IRecordService recordService;
 
-        public OpenDataPublishingUploadService(IDocumentSession db, IRecordService recordService)
+        public OpenDataPublishingUploadService(IRecordService recordService)
         {
-            this.db = db;
             this.recordService = recordService;
         }
 
