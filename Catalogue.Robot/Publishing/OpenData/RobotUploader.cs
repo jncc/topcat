@@ -28,8 +28,8 @@ namespace Catalogue.Robot.Publishing.OpenData
         {
             var userInfo = new UserInfo
             {
-                DisplayName = "Robot Test Uploader",
-                Email = "testemail@company.com"
+                DisplayName = "Robot Uploader",
+                Email = "data@jncc.gov.uk"
             };
 
             foreach (Record record in records)
