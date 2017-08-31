@@ -17,6 +17,7 @@ namespace Catalogue.Data.Indexes
             public bool SignedOff { get; set; }
             public bool PublicationNeverAttempted { get; set; }
             public bool LastPublicationAttemptWasUnsuccessful { get; set; }
+            public bool LastPublicationAttemptWasSuccessful { get; set; }
             public bool PublishedSinceLastUpdated { get; set; }
             public bool PublishingIsPaused { get; set; }
         }
@@ -34,6 +35,7 @@ namespace Catalogue.Data.Indexes
                              let lastAttemptDate = r.Publication.OpenData.LastAttempt == null ? DateTime.MinValue : r.Publication.OpenData.LastAttempt.DateUtc
                              let lastSuccessDate = r.Publication.OpenData.LastSuccess == null ? DateTime.MinValue : r.Publication.OpenData.LastSuccess.DateUtc
                              let neverAttempted = lastAttemptDate == DateTime.MinValue && signedOff
+                             let lastAttemptWasSuccessful = r.Publication.OpenData.LastSuccess != null
                              select new Result
                              {
                                  RecordLastUpdatedDate = recordLastUpdatedDate,
@@ -44,8 +46,9 @@ namespace Catalogue.Data.Indexes
                                  SignedOff = signedOff,
                                  PublicationNeverAttempted = neverAttempted,
                                  LastPublicationAttemptWasUnsuccessful = lastAttemptDate > lastSuccessDate,
-                                 PublishedSinceLastUpdated = lastSuccessDate > recordLastUpdatedDate,
-                                 PublishingIsPaused = r.Publication.OpenData.Paused,
+                                 LastPublicationAttemptWasSuccessful = lastAttemptWasSuccessful,
+                                 PublishedSinceLastUpdated = lastSuccessDate >= recordLastUpdatedDate,
+                                 PublishingIsPaused = r.Publication.OpenData.Paused
                              };
         }
     }

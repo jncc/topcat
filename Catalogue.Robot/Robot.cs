@@ -7,6 +7,8 @@ using Raven.Client;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
+using Catalogue.Data.Indexes;
 
 namespace Catalogue.Robot
 {
@@ -26,14 +28,16 @@ namespace Catalogue.Robot
             Console.WriteLine("Running Open Data Uploader");
             using (var db = store.OpenSession())
             {
-                var records = GetRecordsPendingUpload(db);
                 var config = GetConfigFile();
                 var uploadService = new OpenDataPublishingUploadService(new RecordService(db, new RecordValidator()));
                 var uploadHelper = new OpenDataUploadHelper(config);
 
-                var uploader = new RobotUploader(db, uploadService, uploadHelper);
+                var robotUploader = new RobotUploader(db, uploadService, uploadHelper);
 
-                uploader.Upload(records);
+                var records = robotUploader.GetRecordsPendingUpload();
+                Console.WriteLine("Number of records to upload: " + records.Count);
+
+                robotUploader.Upload(records);
             }
 
             Console.WriteLine("Finished all jobs");
@@ -61,13 +65,6 @@ namespace Catalogue.Robot
                 throw new Exception("No FtpPassword specified in data-gov-uk-publisher-config.json file.");
 
             return config;
-        }
-
-        private List<Record> GetRecordsPendingUpload(IDocumentSession db)
-        {
-            var records = new List<Record>(new [] {db.Load<Record>(new Guid("b2691fed-e421-4e48-9da9-99bd77e0b8ba")) });
-
-            return records;
         }
     }
 }

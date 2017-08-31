@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
+using Catalogue.Data.Indexes;
 using Catalogue.Data.Model;
 using Catalogue.Data.Write;
 using Catalogue.Utilities.Text;
@@ -22,6 +23,22 @@ namespace Catalogue.Robot.Publishing.OpenData
             this.db = db;
             this.uploadService = uploadService;
             this.uploadHelper = uploadHelper;
+        }
+
+        public List<Record> GetRecordsPendingUpload()
+        {
+            var records = db.Query<RecordsWithOpenDataPublicationInfoIndex.Result, RecordsWithOpenDataPublicationInfoIndex>()
+                .Where(x => x.AssessmentCompleted)
+                .Where(x => x.SignedOff)
+                .Where(x => x.GeminiValidated) // all open data should be gemini-valid - this is a safety
+                .Where(x => !x.LastPublicationAttemptWasSuccessful)
+                .OfType<Record>() //.Select(r => r.Id) // this doesn't work in RavenDB, and doesn't throw!
+                .Take(1000) // so take 1000 which is enough for one run
+                .ToList() // so materialize the record first
+                .Where(r => !r.Publication.OpenData.Paused) //  .Where(x => !x.PublishingIsPaused) on the server doesn't work on live - thanks, ravenDB
+                .ToList();
+
+            return records;
         }
 
         public void Upload(List<Record> records)
