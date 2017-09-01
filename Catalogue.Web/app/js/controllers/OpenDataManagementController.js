@@ -3,7 +3,7 @@
   angular.module('app.controllers').controller('OpenDataManagementController', function($scope, $http, $location, signOffGroup) {
     var loadList, loadSummary, loadTab1Data, loadTab2Data, loadTab3Data, loadTab4Data, loadTab5Data, m;
     m = {
-      tab: 5,
+      tab: 2,
       openData: {
         summary: {},
         list: []

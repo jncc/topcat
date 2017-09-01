@@ -3,7 +3,7 @@
     ($scope, $http, $location, signOffGroup) ->
         
         m =
-            tab: 5 # default to second UI tab
+            tab: 2 # default to second UI tab
             openData:
                 summary: {}
                 list: []

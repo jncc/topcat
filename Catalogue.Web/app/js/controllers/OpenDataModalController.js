@@ -36,7 +36,7 @@
       currentActiveView: {}
     };
     $scope.publishingStatus = publishingStatus;
-    publishingStatus.signOff.timeout = 0;
+    publishingStatus.signOff.timeout = -1;
     $scope.refreshPublishingStatus = function() {
       publishingStatus.riskAssessment.completed = $scope.form.publication !== null && $scope.form.publication.openData.assessment.completed;
       publishingStatus.signOff.completed = $scope.form.publication !== null && $scope.form.publication.openData.signOff !== null;
@@ -110,7 +110,7 @@
       });
     };
     $scope.signOffButtonClick = function() {
-      if (publishingStatus.signOff.timeout === 0) {
+      if (publishingStatus.signOff.timeout === -1) {
         publishingStatus.signOff.timeout = 10;
         return $scope.allowGraceTime();
       } else {
@@ -134,7 +134,7 @@
         } else {
           $scope.notifications.add(error.data.exceptionMessage);
         }
-        publishingStatus.signOff.timeout = 0;
+        publishingStatus.signOff.timeout = -1;
         return $scope.$dismiss();
       });
     };
@@ -142,12 +142,14 @@
       if (publishingStatus.signOff.timeout > 0) {
         publishingStatus.signOff.signOffButtonText = "Cancel " + ("0" + publishingStatus.signOff.timeout--).slice(-2);
         return $timeout($scope.allowGraceTime, 1000);
-      } else {
+      } else if (publishingStatus.signOff.timeout === 0) {
+        $timeout.cancel;
         return $scope.submitSignOff();
       }
     };
     $scope.cancelSignOff = function() {
-      publishingStatus.signOff.timeout = 0;
+      $timeout.cancel;
+      publishingStatus.signOff.timeout = -1;
       return refreshSignOffButton();
     };
     return $scope.close = function() {

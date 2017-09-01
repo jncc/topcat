@@ -544,9 +544,7 @@
                             ng-disabled="isPublishingModalButtonDisabled()"
                             ng-class="{ 'btn-default': !form.publication.openData.assessment.completed,
                                 'btn-danger': form.publication.openData.assessment.completed}">
-                        <span ng-if="getPendingSignOff(form.publication)"
-                              class="glyphicon glyphicon-exclamation-sign"></span>
-                        {{ form.publication.openData.signOff != null? "Published" : form.publication.openData.assessment.completed? "Pending" : "Unpublished"; }}
+                        {{ getOpenDataButtonText(form.publication) }}
                     </button>
                 </div>
             </div>
