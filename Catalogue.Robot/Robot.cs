@@ -1,31 +1,31 @@
-﻿using Catalogue.Data.Model;
-using Catalogue.Data.Write;
+﻿using Catalogue.Data.Write;
 using Catalogue.Robot.Publishing.OpenData;
 using Catalogue.Utilities.Text;
 using Newtonsoft.Json;
 using Raven.Client;
 using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using Catalogue.Data.Indexes;
+using Catalogue.Utilities.Logging;
+using log4net;
+using log4net.Config;
 
 namespace Catalogue.Robot
 {
     public class Robot
     {
-        // todo: split "instance" stuff out into a separate class
+        private static readonly ILog logger = LogManager.GetLogger(typeof(Robot));
 
         readonly IDocumentStore store;
 
         public Robot(IDocumentStore store)
         {
+            XmlConfigurator.Configure();
             this.store = store;
         }
 
         public void Start()
         {
-            Console.WriteLine("Running Open Data Uploader");
+            logger.Info("Starting Robot");
             using (var db = store.OpenSession())
             {
                 var config = GetConfigFile();
@@ -35,34 +35,49 @@ namespace Catalogue.Robot
                 var robotUploader = new RobotUploader(db, uploadService, uploadHelper);
 
                 var records = robotUploader.GetRecordsPendingUpload();
-                Console.WriteLine("Number of records to upload: " + records.Count);
+                logger.Info("Number of records to upload: " + records.Count);
 
                 robotUploader.Upload(records);
             }
 
-            Console.WriteLine("Finished all jobs");
+            logger.Info("Finished all jobs");
         }
 
         public void Stop()
         {
-            Console.WriteLine("I'm stopping");
+            logger.Info("Stopping Robot");
         }
 
         private OpenDataPublisherConfig GetConfigFile()
         {
             var configPath = Path.Combine(Environment.CurrentDirectory, "data-gov-uk-publisher-config.json");
             if (!File.Exists(configPath))
-                throw new Exception("No data-gov-uk-publisher-config.json file in current directory.");
+            {
+                var e = new Exception("No data-gov-uk-publisher-config.json file in current directory.");
+                e.LogAndThrow(logger);
+            }
             string configJson = File.ReadAllText(configPath);
             var config = JsonConvert.DeserializeObject<OpenDataPublisherConfig>(configJson);
             if (config.FtpRootUrl.IsBlank())
-                throw new Exception("No FtpRootUrl specified in data-gov-uk-publisher-config.json file.");
+            {
+                var e = new Exception("No FtpRootUrl specified in data-gov-uk-publisher-config.json file.");
+                e.LogAndThrow(logger);
+            }
             if (config.HttpRootUrl.IsBlank())
-                throw new Exception("No HttpRootUrl specified in data-gov-uk-publisher-config.json file.");
+            {
+                var e = new Exception("No HttpRootUrl specified in data-gov-uk-publisher-config.json file.");
+                e.LogAndThrow(logger);
+            }
             if (config.FtpUsername.IsBlank())
-                throw new Exception("No FtpUsername specified in data-gov-uk-publisher-config.json file.");
+            {
+                var e = new Exception("No FtpUsername specified in data-gov-uk-publisher-config.json file.");
+                e.LogAndThrow(logger);
+            }
             if (config.FtpPassword.IsBlank())
-                throw new Exception("No FtpPassword specified in data-gov-uk-publisher-config.json file.");
+            {
+                var e = new Exception("No FtpPassword specified in data-gov-uk-publisher-config.json file.");
+                e.LogAndThrow(logger);
+            }
 
             return config;
         }

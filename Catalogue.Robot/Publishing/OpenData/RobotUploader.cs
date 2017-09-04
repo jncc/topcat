@@ -1,19 +1,22 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net;
-using Catalogue.Data.Indexes;
+﻿using Catalogue.Data.Indexes;
 using Catalogue.Data.Model;
 using Catalogue.Data.Write;
 using Catalogue.Utilities.Text;
 using Catalogue.Utilities.Time;
 using Raven.Client;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Net;
+using log4net;
 using static Catalogue.Utilities.Text.WebificationUtility;
 
 namespace Catalogue.Robot.Publishing.OpenData
 {
     public class RobotUploader
     {
+        private static readonly ILog logger = LogManager.GetLogger(typeof(RobotUploader));
+
         private readonly IDocumentSession db;
         private readonly IOpenDataPublishingUploadService uploadService;
         private readonly IOpenDataUploadHelper uploadHelper;
@@ -31,7 +34,7 @@ namespace Catalogue.Robot.Publishing.OpenData
                 .Where(x => x.AssessmentCompleted)
                 .Where(x => x.SignedOff)
                 .Where(x => x.GeminiValidated) // all open data should be gemini-valid - this is a safety
-                .Where(x => !x.LastPublicationAttemptWasSuccessful)
+                .Where(x => !x.PublishedSuccessfully)
                 .OfType<Record>() //.Select(r => r.Id) // this doesn't work in RavenDB, and doesn't throw!
                 .Take(1000) // so take 1000 which is enough for one run
                 .ToList() // so materialize the record first
@@ -51,7 +54,7 @@ namespace Catalogue.Robot.Publishing.OpenData
 
             foreach (Record record in records)
             {
-                Console.WriteLine("Uploading " + record.Gemini.Title);
+                logger.Info("Uploading record with title: " + record.Gemini.Title);
                 UploadRecord(record, userInfo, false);
             }
         }
@@ -91,7 +94,7 @@ namespace Catalogue.Robot.Publishing.OpenData
                     else
                     {
                         // do nothing - don't change the resource locator, don't upload anything
-                        Console.WriteLine("Deferring to existing resource locator - not uploading.");
+                        logger.Info("Deferring to existing resource locator - not uploading.");
                     }
                 }
 

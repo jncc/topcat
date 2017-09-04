@@ -566,8 +566,8 @@ namespace Catalogue.Tests.Slow.Catalogue.Web.Controllers.Publishing
                 foreach (var record in testRecords)
                 {
                     db.Store(record);
-                    db.SaveChanges();
                 }
+                db.SaveChanges();
 
                 var publishingController = GetTestOpenDataPublishingController(db);
                 var result = publishingController.PendingSignOff();
