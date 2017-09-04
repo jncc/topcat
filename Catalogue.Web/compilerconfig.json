@@ -20,12 +20,12 @@
     "inputFile": "app/js/controllers/MarkdownController.coffee"
   },
   {
-    "outputFile": "app/js/controllers/OpenDataPublishingController.js",
-    "inputFile": "app/js/controllers/OpenDataPublishingController.coffee"
+    "outputFile": "app/js/controllers/OpenDataManagementController.js",
+    "inputFile": "app/js/controllers/OpenDataManagementController.coffee"
   },
   {
-    "outputFile": "app/js/controllers/AssessmentController.js",
-    "inputFile": "app/js/controllers/AssessmentController.coffee"
+    "outputFile": "app/js/controllers/OpenDataModalController.js",
+    "inputFile": "app/js/controllers/OpenDataModalController.coffee"
   },
   {
     "outputFile": "app/js/controllers/PublishingController.js",
@@ -42,6 +42,10 @@
   {
     "outputFile": "app/js/controllers/SearchGridController.js",
     "inputFile": "app/js/controllers/SearchGridController.coffee"
+  },
+  {
+    "outputFile": "app/js/controllers/SignOffController.js",
+    "inputFile": "app/js/controllers/SignOffController.coffee"
   },
   {
     "outputFile": "app/js/controllers/VocabularyEditorController.js",

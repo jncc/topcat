@@ -533,18 +533,18 @@
 
             <div class="editor-publishing layout-row">
                 <div class="layout-col">
-                    <span>Publishing</span>
+                    <span>Open Data</span>
                 </div>
                 <div class="layout-col pull-right"
                             title="The open data publication status of the record."
                             tc-tip>
-                     
+                    
                     <button type="button" class="btn"
-                            ng-click="openAssessment()"
-                            ng-disabled="isAssessmentButtonDisabled()"
+                            ng-click="openPublishingModal()"
+                            ng-disabled="isPublishingModalButtonDisabled()"
                             ng-class="{ 'btn-default': !form.publication.openData.assessment.completed,
                                 'btn-danger': form.publication.openData.assessment.completed}">
-                        {{form.publication.openData.assessment.completed? "Open Data" : "None";}}
+                        {{ getOpenDataButtonText(form.publication) }}
                     </button>
                 </div>
             </div>

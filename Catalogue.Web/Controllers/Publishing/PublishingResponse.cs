@@ -2,7 +2,7 @@
 
 namespace Catalogue.Web.Controllers.Publishing
 {
-    public class AssessmentResponse
+    public class PublishingResponse
     {
         public Record Record { get; set; }
     }

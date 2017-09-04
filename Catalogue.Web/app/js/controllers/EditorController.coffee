@@ -28,6 +28,8 @@
         $scope.getSecurityText = getSecurityText
         $scope.getDataFormatObj = getDataFormatObj
         $scope.updateDataFormatObj = updateDataFormatObj
+        $scope.getPendingSignOff = getPendingSignOff
+        $scope.getOpenDataButtonText = getOpenDataButtonText
         
         $scope.cancel = ->
             $scope.reset()
@@ -42,10 +44,13 @@
             return
     
         $scope.successResponse = (response) ->
+            $scope.reloadRecord response
+            $scope.notifications.add 'Edits saved'
+
+        $scope.reloadRecord = (response) ->
             $scope.record = response
             $scope.validation = {}
             $scope.reset()
-            $scope.notifications.add 'Edits saved'
             $location.path('/editor/' + $scope.record.id)
 
         $scope.save = ->
@@ -84,7 +89,7 @@
         $scope.isSaveDisabled = -> $scope.isClean() # || $scope.theForm.$invalid 
         $scope.isCloneHidden = -> $scope.isNew()
         $scope.isCloneDisabled = -> !$scope.isClean()
-        $scope.isAssessmentButtonDisabled = -> !$scope.isSaveHidden()
+        $scope.isPublishingModalButtonDisabled = -> !$scope.isSaveHidden()
 
         $scope.hasUsageConstraints = () -> (!!$scope.form.gemini.limitationsOnPublicAccess and $scope.form.gemini.limitationsOnPublicAccess isnt 'no limitations') or (!!$scope.form.gemini.useConstraints and $scope.form.gemini.useConstraints isnt 'no conditions apply')
 
@@ -114,14 +119,15 @@
             modal.result
                 .then (s) -> $scope.form.gemini.abstract = s
 
-        $scope.openAssessment = ->
+        $scope.openPublishingModal = ->
             modal = $modal.open
-                controller:  'AssessmentController'
-                templateUrl: 'views/partials/assessment.html?' + new Date().getTime() # stop iis express caching the html
-                size:        'md'
+                controller:  'OpenDataModalController'
+                templateUrl: 'views/partials/opendatamodal.html?' + new Date().getTime() # stop iis express caching the html
+                size:        'lg'
                 scope:       $scope
+                backdrop:  'static'
             modal.result
-                .then (result) -> $scope.successResponse result
+                .then (result) -> $scope.reloadRecord result
 
         $scope.removeExtent = (extent) ->
             $scope.form.gemini.extent.splice ($.inArray extent, $scope.form.gemini.extent), 1
@@ -139,6 +145,25 @@
         $scope.setKeyword = ($item, keyword) ->
             keyword.vocab = $item.vocab
 
+
+
+getOpenDataButtonText = (publication) ->
+    if publication == null
+        return "Not Open Data"
+    else if publication.openData.lastAttempt != null
+        return "Published"
+    else if publication.openData.signOff != null
+        return "Signed Off"
+    else if publication.openData.assessment.completed
+        return "Assessed"
+    else
+        return "Not Open Data"
+
+getPendingSignOff = (publication) ->
+    if (publication != null && publication.openData.assessment.completed && publication.openData.signOff == null)
+        return true
+    else
+        return false
 
 getSecurityText = (n) -> switch n
     when 0 then 'Official'

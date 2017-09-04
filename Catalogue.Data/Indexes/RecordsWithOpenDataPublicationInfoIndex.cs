@@ -29,10 +29,13 @@ namespace Catalogue.Data.Indexes
             Map = records => from r in records
                              where r.Publication != null
                              where r.Publication.OpenData != null
+                             let signedOff = r.Publication.OpenData.SignOff != null
                              let recordLastUpdatedDate = r.Gemini.MetadataDate
                              let lastAttemptDate = r.Publication.OpenData.LastAttempt == null ? DateTime.MinValue : r.Publication.OpenData.LastAttempt.DateUtc
                              let lastSuccessDate = r.Publication.OpenData.LastSuccess == null ? DateTime.MinValue : r.Publication.OpenData.LastSuccess.DateUtc
-                             let neverAttempted = lastAttemptDate == DateTime.MinValue
+                             let neverAttempted = lastAttemptDate == DateTime.MinValue && signedOff
+                             let publishedSinceLastUpdated = r.Publication.OpenData.LastSuccess != null && lastSuccessDate >= recordLastUpdatedDate
+                             
                              select new Result
                              {
                                  RecordLastUpdatedDate = recordLastUpdatedDate,
@@ -40,10 +43,10 @@ namespace Catalogue.Data.Indexes
                                  LastSuccessfulPublicationAttemptDate = lastSuccessDate,
                                  GeminiValidated = r.Validation == Validation.Gemini,
                                  AssessmentCompleted = r.Publication.OpenData.Assessment.Completed,
-                                 SignedOff = r.Publication.OpenData.SignOff != null,
+                                 SignedOff = signedOff,
                                  PublicationNeverAttempted = neverAttempted,
                                  LastPublicationAttemptWasUnsuccessful = lastAttemptDate > lastSuccessDate,
-                                 PublishedSinceLastUpdated = lastSuccessDate > recordLastUpdatedDate,
+                                 PublishedSinceLastUpdated = publishedSinceLastUpdated,
                                  PublishingIsPaused = r.Publication.OpenData.Paused,
                              };
         }

@@ -45,8 +45,11 @@ module.config ($routeProvider) ->
             controller:     'VocabularyListController',
             templateUrl:    'views/vocabularies/vocabularies.html'
         .when '/opendatapublishing',
-            controller:     'OpenDataPublishingController',
-            templateUrl:    'views/opendatapublishing/opendatapublishing.html'
+            controller:     'OpenDataManagementController',
+            templateUrl:    'views/opendatapublishing/opendatamanagement.html'
+        .when '/opendatapublishing/signoff',
+            controller:     'SignOffController',
+            templateUrl:    'views/signoff/signoff.html'
         .when '/vocabularies/editor/:vocabId*',
             controller:     'VocabularyEditorController',
             templateUrl:    'views/vocabularies/editor.html',
@@ -70,7 +73,10 @@ module.config ($routeProvider) ->
             controller:     'MarkdownController',
             templateUrl:    'views/partials/markdown.html'
             resolve:        'markdown' : () -> '#test text'
-        .when '/sandbox/assessment', # for developing the assessment modal more easily
+        .when '/sandbox/opendatamodal', # for developing the assessment modal more easily
+            controller:     'OpenDataModalController',
+            templateUrl:    'views/partials/opendatamodal.html'
+        .when '/sandbox/assessment',
             controller:     'AssessmentController',
             templateUrl:    'views/partials/assessment.html'
         .when '/content/whytopcat',

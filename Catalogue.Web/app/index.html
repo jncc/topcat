@@ -48,9 +48,10 @@
     <script src="js/controllers/MarkdownController.js?#version"></script>
     <script src="js/controllers/VocabularyListController.js?#version"></script>
     <script src="js/controllers/VocabularyEditorController.js?#version"></script>
-    <script src="js/controllers/OpenDataPublishingController.js?#version"></script>
-    <script src="js/controllers/AssessmentController.js?#version"></script>
+    <script src="js/controllers/OpenDataManagementController.js?#version"></script>
+    <script src="js/controllers/OpenDataModalController.js?#version"></script>
     <script src="js/controllers/SearchGridController.js?#version"></script>
+    <script src="js/controllers/SignOffController.js?#version"></script>
 
     <script type="text/javascript">
         ZeroClipboard.setDefaults({ moviePath: 'lib/zeroclipboard-1.1.7/ZeroClipboard.swf' });
@@ -81,11 +82,11 @@
 <!--                <li role="presentation" class="active"><a href="#">Home <span class="badge">42</span></a></li>-->
 <!--                <li role="presentation"><a href="#">Profile</a></li>-->
                     <li role="presentation">
-                        <a ng-if="status.pendingSignOffCount > 0" href="#opendatapublishing" tc-tip="bottom" title="There are records waiting to be signed-off">
+                        <a ng-if="status.pendingSignOffCount > 0" href="#opendatapublishing/signoff" tc-tip="bottom" title="There are records waiting to be signed-off">
                             Open Data
                             <span class="label label-danger label-badge">{{status.pendingSignOffCount}}</span>
                         </a>
-                        <a ng-if="status.pendingSignOffCount == 0" href="#opendatapublishing">
+                        <a ng-if="status.pendingSignOffCount == 0" href="#opendatapublishing/signoff">
                             Open Data
                         </a>
                     </li>

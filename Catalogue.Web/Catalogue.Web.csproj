@@ -161,7 +161,7 @@
     <Compile Include="Controllers\Collections\CollectionOutputModel.cs" />
     <Compile Include="Controllers\Keywords\KeywordModel.cs" />
     <Compile Include="Controllers\Keywords\KeywordsController.cs" />
-    <Compile Include="Controllers\Publishing\AssessmentResponse.cs" />
+    <Compile Include="Controllers\Publishing\PublishingResponse.cs" />
     <Compile Include="Controllers\Publishing\OpenDataPublishingController.cs" />
     <Compile Include="Controllers\Patch\PatchController.cs" />
     <Compile Include="Controllers\Publishing\AssessmentRequest.cs" />
@@ -224,12 +224,6 @@
     <Content Include="app\js\config.min.js">
       <DependentUpon>config.js</DependentUpon>
     </Content>
-    <Content Include="app\js\controllers\AssessmentController.js">
-      <DependentUpon>AssessmentController.coffee</DependentUpon>
-    </Content>
-    <Content Include="app\js\controllers\AssessmentController.min.js">
-      <DependentUpon>AssessmentController.js</DependentUpon>
-    </Content>
     <Content Include="app\js\controllers\ContentController.js">
       <DependentUpon>ContentController.coffee</DependentUpon>
     </Content>
@@ -242,14 +236,24 @@
     <Content Include="app\js\controllers\EditorController.min.js">
       <DependentUpon>EditorController.coffee</DependentUpon>
     </Content>
-    <Content Include="app\js\controllers\AssessmentController.js.map">
-      <DependentUpon>AssessmentController.js</DependentUpon>
-    </Content>
     <Content Include="app\js\config.coffee" />
     <Content Include="app\js\config.js.map">
       <DependentUpon>config.js</DependentUpon>
     </Content>
-    <None Include="app\js\controllers\OpenDataPublishingController.coffee" />
+    <Content Include="app\js\controllers\OpenDataManagementController.js">
+      <DependentUpon>OpenDataManagementController.coffee</DependentUpon>
+    </Content>
+    <Content Include="app\js\controllers\OpenDataManagementController.min.js">
+      <DependentUpon>OpenDataManagementController.js</DependentUpon>
+    </Content>
+    <Content Include="app\js\controllers\OpenDataModalController.js">
+      <DependentUpon>OpenDataModalController.coffee</DependentUpon>
+    </Content>
+    <Content Include="app\js\controllers\OpenDataModalController.min.js">
+      <DependentUpon>OpenDataModalController.js</DependentUpon>
+    </Content>
+    <Content Include="app\js\controllers\SignOffController.coffee" />
+    <None Include="app\js\controllers\OpenDataManagementController.coffee" />
     <Content Include="app\js\controllers\MainController.js">
       <DependentUpon>MainController.coffee</DependentUpon>
     </Content>
@@ -261,12 +265,6 @@
     </Content>
     <Content Include="app\js\controllers\MarkdownController.min.js">
       <DependentUpon>MarkdownController.coffee</DependentUpon>
-    </Content>
-    <Content Include="app\js\controllers\OpenDataPublishingController.js">
-      <DependentUpon>OpenDataPublishingController.coffee</DependentUpon>
-    </Content>
-    <Content Include="app\js\controllers\OpenDataPublishingController.min.js">
-      <DependentUpon>OpenDataPublishingController.js</DependentUpon>
     </Content>
     <Content Include="app\js\controllers\SandboxController.js">
       <DependentUpon>SandboxController.coffee</DependentUpon>
@@ -285,6 +283,12 @@
     </Content>
     <Content Include="app\js\controllers\SearchGridController.min.js">
       <DependentUpon>SearchGridController.js</DependentUpon>
+    </Content>
+    <Content Include="app\js\controllers\SignOffController.js">
+      <DependentUpon>SignOffController.coffee</DependentUpon>
+    </Content>
+    <Content Include="app\js\controllers\SignOffController.min.js">
+      <DependentUpon>SignOffController.js</DependentUpon>
     </Content>
     <Content Include="app\js\controllers\VocabularyEditorController.js">
       <DependentUpon>VocabularyEditorController.coffee</DependentUpon>
@@ -412,11 +416,11 @@
     <Content Include="app\views\partials\jncc-categories.html" />
     <Content Include="app\views\partials\markdown.html" />
     <Content Include="app\views\partials\presentation.html" />
-    <Content Include="app\views\partials\assessment.html" />
+    <Content Include="app\views\partials\opendatamodal.html" />
     <Content Include="app\views\partials\vocabulator.html" />
     <Content Include="app\views\partials\what-is-data.html" />
     <Content Include="app\views\partials\why-topcat.html" />
-    <Content Include="app\views\opendatapublishing\opendatapublishing.html" />
+    <Content Include="app\views\opendatapublishing\opendatamanagement.html" />
     <Content Include="app\views\publishing\publishing.html" />
     <Content Include="app\views\sandbox\colours.html" />
     <Content Include="app\views\sandbox\dropdown.html" />
@@ -424,6 +428,7 @@
     <Content Include="app\views\sandbox\lookups.html" />
     <Content Include="app\views\sandbox\tooltip.html" />
     <Content Include="app\views\search\search.html" />
+    <Content Include="app\views\signoff\signoff.html" />
     <Content Include="app\views\Vocabularies\editor.html" />
     <Content Include="app\views\Vocabularies\vocabularies.html" />
     <Content Include="favicon.ico" />
@@ -656,10 +661,16 @@
     <Content Include="app\js\controllers\ContentController.min.js.map">
       <DependentUpon>ContentController.min.js</DependentUpon>
     </Content>
-    <Content Include="app\js\controllers\OpenDataPublishingController.js.map">
-      <DependentUpon>OpenDataPublishingController.js</DependentUpon>
+    <Content Include="app\js\controllers\OpenDataModalController.coffee" />
+    <Content Include="app\js\controllers\SignOffController.js.map">
+      <DependentUpon>SignOffController.js</DependentUpon>
     </Content>
-    <Content Include="app\js\controllers\AssessmentController.coffee" />
+    <Content Include="app\js\controllers\OpenDataManagementController.js.map">
+      <DependentUpon>OpenDataManagementController.js</DependentUpon>
+    </Content>
+    <Content Include="app\js\controllers\OpenDataModalController.js.map">
+      <DependentUpon>OpenDataModalController.js</DependentUpon>
+    </Content>
     <None Include="app\js\controllers\VocabulatorController.coffee" />
     <Content Include="app\js\controllers\VocabulatorController.js.map">
       <DependentUpon>VocabulatorController.js</DependentUpon>

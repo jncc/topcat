@@ -34,14 +34,14 @@ namespace Catalogue.Web.Controllers.Publishing
                 {
                     CountOfPublishedSinceLastUpdated = query.Count(x => x.PublishedSinceLastUpdated),
                     CountOfNotYetPublishedSinceLastUpdated = query.Count(x => !x.PublishedSinceLastUpdated && x.SignedOff),
-                    CountOfPublicationNeverAttempted = query.Count(x => x.PublicationNeverAttempted && x.SignedOff),
-                    CountOfLastPublicationAttemptWasUnsuccessful = query.Count(x => x.LastPublicationAttemptWasUnsuccessful && x.SignedOff),
+                    CountOfPublicationNeverAttempted = query.Count(x => x.PublicationNeverAttempted),
+                    CountOfLastPublicationAttemptWasUnsuccessful = query.Count(x => x.LastPublicationAttemptWasUnsuccessful),
                     CountOfPendingSignOff = query.Count(x => x.AssessmentCompleted && !x.SignedOff)
             };
         }
 
         [HttpPut, Route("api/publishing/opendata/assess")]
-        public AssessmentResponse Assess(AssessmentRequest assessmentRequest)
+        public PublishingResponse Assess(AssessmentRequest assessmentRequest)
         {
             var record = db.Load<Record>(assessmentRequest.Id);
             var assessmentInfo = new OpenDataAssessmentInfo
@@ -57,14 +57,17 @@ namespace Catalogue.Web.Controllers.Publishing
             };
 
             var updatedRecord = openDataPublishingService.Assess(record, assessmentInfo);
-            return new AssessmentResponse
+
+            db.SaveChanges();
+
+            return new PublishingResponse
             {
                 Record = updatedRecord
             };
         }
 
         [HttpPut, Route("api/publishing/opendata/signoff"), AuthorizeOpenDataIao]
-        public IHttpActionResult SignOff(SignOffRequest signOffRequest)
+        public PublishingResponse SignOff(SignOffRequest signOffRequest)
         {
             var record = db.Load<Record>(signOffRequest.Id);
             var signOffInfo = new OpenDataSignOffInfo
@@ -78,8 +81,14 @@ namespace Catalogue.Web.Controllers.Publishing
                 Comment = signOffRequest.Comment
             };
 
-            openDataPublishingService.SignOff(record, signOffInfo);
-            return Ok();
+            var updatedRecord = openDataPublishingService.SignOff(record, signOffInfo);
+
+            db.SaveChanges();
+
+            return new PublishingResponse
+            {
+                Record = updatedRecord
+            };
         }
 
         [HttpGet, Route("api/publishing/opendata/pendingsignoff")]
@@ -109,7 +118,7 @@ namespace Catalogue.Web.Controllers.Publishing
         {
             var query = db
                 .Query<RecordsWithOpenDataPublicationInfoIndex.Result, RecordsWithOpenDataPublicationInfoIndex>()
-                .Where(x => x.PublishedSinceLastUpdated && x.SignedOff);
+                .Where(x => x.PublishedSinceLastUpdated);
 
             return GetRecords(query, p);
         }
@@ -129,7 +138,7 @@ namespace Catalogue.Web.Controllers.Publishing
         {
             var query = db
                 .Query<RecordsWithOpenDataPublicationInfoIndex.Result, RecordsWithOpenDataPublicationInfoIndex>()
-                .Where(x => x.PublicationNeverAttempted && x.SignedOff);
+                .Where(x => x.PublicationNeverAttempted);
 
             return GetRecords(query, p);
         }
@@ -139,7 +148,7 @@ namespace Catalogue.Web.Controllers.Publishing
         {
             var query = db
                 .Query<RecordsWithOpenDataPublicationInfoIndex.Result, RecordsWithOpenDataPublicationInfoIndex>()
-                .Where(x => x.LastPublicationAttemptWasUnsuccessful && x.SignedOff);
+                .Where(x => x.LastPublicationAttemptWasUnsuccessful);
 
             return GetRecords(query, p);
         }
