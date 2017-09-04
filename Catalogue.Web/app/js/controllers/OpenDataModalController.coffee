@@ -32,7 +32,7 @@ angular.module('app.controllers').controller 'OpenDataModalController',
             currentActiveView: {}
 
         $scope.publishingStatus = publishingStatus
-        publishingStatus.signOff.timeout = 0
+        publishingStatus.signOff.timeout = -1
 
         # change multistep status
         $scope.refreshPublishingStatus = () ->            
@@ -112,7 +112,7 @@ angular.module('app.controllers').controller 'OpenDataModalController',
                 $scope.$dismiss()
 
         $scope.signOffButtonClick = () ->
-            if publishingStatus.signOff.timeout == 0
+            if publishingStatus.signOff.timeout == -1
                 publishingStatus.signOff.timeout = 10 # seconds
                 $scope.allowGraceTime()
             else
@@ -134,19 +134,20 @@ angular.module('app.controllers').controller 'OpenDataModalController',
                 else
                     $scope.notifications.add error.data.exceptionMessage
 
-                publishingStatus.signOff.timeout = 0
+                publishingStatus.signOff.timeout = -1
                 $scope.$dismiss()
 
         $scope.allowGraceTime = () ->
             if (publishingStatus.signOff.timeout > 0)
                 publishingStatus.signOff.signOffButtonText = "Cancel " + ("0" + publishingStatus.signOff.timeout--).slice(-2)
                 $timeout $scope.allowGraceTime, 1000
-            else
+            else if publishingStatus.signOff.timeout == 0
+                $timeout.cancel
                 $scope.submitSignOff()
 
         $scope.cancelSignOff = () ->
-            publishingStatus.signOff.timeout = 0
+            $timeout.cancel
+            publishingStatus.signOff.timeout = -1
             refreshSignOffButton()
-
 
         $scope.close = () -> $scope.$close $scope.form

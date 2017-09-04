@@ -29,6 +29,7 @@
         $scope.getDataFormatObj = getDataFormatObj
         $scope.updateDataFormatObj = updateDataFormatObj
         $scope.getPendingSignOff = getPendingSignOff
+        $scope.getOpenDataButtonText = getOpenDataButtonText
         
         $scope.cancel = ->
             $scope.reset()
@@ -43,10 +44,13 @@
             return
     
         $scope.successResponse = (response) ->
+            $scope.reloadRecord response
+            $scope.notifications.add 'Edits saved'
+
+        $scope.reloadRecord = (response) ->
             $scope.record = response
             $scope.validation = {}
             $scope.reset()
-            $scope.notifications.add 'Edits saved'
             $location.path('/editor/' + $scope.record.id)
 
         $scope.save = ->
@@ -121,8 +125,9 @@
                 templateUrl: 'views/partials/opendatamodal.html?' + new Date().getTime() # stop iis express caching the html
                 size:        'lg'
                 scope:       $scope
+                backdrop:  'static'
             modal.result
-                .then (result) -> $scope.successResponse result
+                .then (result) -> $scope.reloadRecord result
 
         $scope.removeExtent = (extent) ->
             $scope.form.gemini.extent.splice ($.inArray extent, $scope.form.gemini.extent), 1
@@ -140,6 +145,19 @@
         $scope.setKeyword = ($item, keyword) ->
             keyword.vocab = $item.vocab
 
+
+
+getOpenDataButtonText = (publication) ->
+    if publication == null
+        return "Not Open Data"
+    else if publication.openData.lastAttempt != null
+        return "Published"
+    else if publication.openData.signOff != null
+        return "Signed Off"
+    else if publication.openData.assessment.completed
+        return "Assessed"
+    else
+        return "Not Open Data"
 
 getPendingSignOff = (publication) ->
     if (publication != null && publication.openData.assessment.completed && publication.openData.signOff == null)

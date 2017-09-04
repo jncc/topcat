@@ -4,6 +4,7 @@ using System.Configuration;
 using Catalogue.Utilities.Text;
 using Catalogue.Web.Code;
 using System.DirectoryServices.AccountManagement;
+using System.Linq;
 using System.Security.Principal;
 using Catalogue.Data.Model;
 
@@ -47,7 +48,7 @@ namespace Catalogue.Web.Account
                     var u = UserPrincipal.FindByIdentity(domainContext, principal.Identity.Name);
                     var group = GroupPrincipal.FindByIdentity(domainContext, settings.OpenDataIaoRole);
 
-                    bool inIaoGroup = group != null && u.IsMemberOf(group);
+                    bool inIaoGroup = group != null && group.GetMembers(true).Contains(u);
                     user = new User(u.DisplayName, u.GivenName, u.EmailAddress, inIaoGroup);
                 }
 
