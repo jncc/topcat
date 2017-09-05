@@ -13,36 +13,33 @@ namespace Catalogue.Robot.Publishing.OpenData
     {
         private static readonly ILog logger = LogManager.GetLogger(typeof(OpenDataUploadHelper));
 
-        private readonly OpenDataPublisherConfig config;
+        private readonly OpenDataUploadConfig config;
         private readonly IFtpClient ftpClient;
         private readonly IOpenDataXmlHelper xmlHelper;
 
-        public OpenDataUploadHelper(OpenDataPublisherConfig config)
+        public OpenDataUploadHelper(OpenDataUploadConfig config)
         {
             this.config = config;
             ftpClient = new FtpClient(config.FtpUsername, config.FtpPassword);
             xmlHelper = new OpenDataXmlHelper();
         }
 
-        public void UploadDataFile(Guid recordId, string filePath, bool metadataOnly)
+        public void UploadDataFile(Guid recordId, string filePath)
         {
-            if (!metadataOnly) // if metadataOnly, we don't really upload the data file
-            {
-                // correct path for unmapped drive X
-                filePath = filePath.Replace(@"X:\OffshoreSurvey\", @"\\JNCC-CORPFILE\Marine Survey\OffshoreSurvey\");
+            // correct path for unmapped drive X
+            filePath = filePath.Replace(@"X:\OffshoreSurvey\", @"\\JNCC-CORPFILE\Marine Survey\OffshoreSurvey\");
         
-                string unrootedDataPath = WebificationUtility.GetUnrootedDataPath(recordId, filePath);
+            string unrootedDataPath = WebificationUtility.GetUnrootedDataPath(recordId, filePath);
         
-                string dataFtpPath = config.FtpRootUrl + "/" + unrootedDataPath;
-                logger.Info("Data file path: "+filePath);
-                logger.Info("Data FTP path: "+dataFtpPath);
+            string dataFtpPath = config.FtpRootUrl + "/" + unrootedDataPath;
+            logger.Info("Data file path: "+filePath);
+            logger.Info("Data FTP path: "+dataFtpPath);
         
-                ftpClient.UploadFile(dataFtpPath, filePath);
-                logger.Info("Uploaded data file successfully");
-            }
+            ftpClient.UploadFile(dataFtpPath, filePath);
+            logger.Info("Uploaded data file successfully");
         }
 
-        public void UploadAlternativeResources(Record record, bool metadataOnly)
+        public void UploadAlternativeResources(Record record)
         {
             // check no duplicate filenames after webifying
             var fileNames = from r in record.Publication.OpenData.Resources
@@ -57,7 +54,7 @@ namespace Catalogue.Robot.Publishing.OpenData
             // upload the resources
             foreach (var r in record.Publication.OpenData.Resources)
             {
-                UploadDataFile(record.Id, r.Path, metadataOnly);
+                UploadDataFile(record.Id, r.Path);
             }
         }
 

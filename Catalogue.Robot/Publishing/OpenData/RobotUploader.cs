@@ -55,11 +55,11 @@ namespace Catalogue.Robot.Publishing.OpenData
             foreach (Record record in records)
             {
                 logger.Info("Uploading record with title: " + record.Gemini.Title);
-                UploadRecord(record, userInfo, false);
+                UploadRecord(record, userInfo);
             }
         }
 
-        private void UploadRecord(Record record, UserInfo userInfo, bool metadataOnly)
+        private void UploadRecord(Record record, UserInfo userInfo)
         {
             var attempt = new PublicationAttempt { DateUtc = Clock.NowUtc };
             uploadService.UpdateLastAttempt(record, attempt, userInfo);
@@ -73,7 +73,7 @@ namespace Catalogue.Robot.Publishing.OpenData
                 if (alternativeResources)
                 {
                     // upload the alternative resources; don't touch the resource locator
-                    uploadHelper.UploadAlternativeResources(record, metadataOnly);
+                    uploadHelper.UploadAlternativeResources(record);
                 }
                 else
                 {
@@ -87,7 +87,7 @@ namespace Catalogue.Robot.Publishing.OpenData
                     {
                         // "normal" case - if the resource locator is blank or already data.jncc.gov.uk
                         // upload the resource pointed at by record.Path, and update the resource locator to match
-                        uploadHelper.UploadDataFile(record.Id, record.Path, metadataOnly);
+                        uploadHelper.UploadDataFile(record.Id, record.Path);
                         string dataHttpPath = uploadHelper.GetHttpRootUrl() + "/" + GetUnrootedDataPath(record.Id, record.Path);
                         uploadService.UpdateResourceLocatorToMatchMainDataFile(record, dataHttpPath);
                     }
@@ -106,8 +106,8 @@ namespace Catalogue.Robot.Publishing.OpenData
             catch (WebException ex)
             {
                 string message = ex.Message + (ex.InnerException != null ? ex.InnerException.Message : "");
-                Console.WriteLine(message);
                 attempt.Message = message;
+                logger.Error("Upload failed for record with GUID="+record.Id, ex);
             }
 
             // commit the changes - to both the record (resource locator may have changed) and the attempt object

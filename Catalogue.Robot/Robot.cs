@@ -1,13 +1,12 @@
 ﻿using Catalogue.Data.Write;
 using Catalogue.Robot.Publishing.OpenData;
+using Catalogue.Utilities.Logging;
 using Catalogue.Utilities.Text;
+using log4net;
 using Newtonsoft.Json;
 using Raven.Client;
 using System;
 using System.IO;
-using Catalogue.Utilities.Logging;
-using log4net;
-using log4net.Config;
 
 namespace Catalogue.Robot
 {
@@ -19,7 +18,6 @@ namespace Catalogue.Robot
 
         public Robot(IDocumentStore store)
         {
-            XmlConfigurator.Configure();
             this.store = store;
         }
 
@@ -48,7 +46,7 @@ namespace Catalogue.Robot
             logger.Info("Stopping Robot");
         }
 
-        private OpenDataPublisherConfig GetConfigFile()
+        private OpenDataUploadConfig GetConfigFile()
         {
             var configPath = Path.Combine(Environment.CurrentDirectory, "data-gov-uk-publisher-config.json");
             if (!File.Exists(configPath))
@@ -57,7 +55,7 @@ namespace Catalogue.Robot
                 e.LogAndThrow(logger);
             }
             string configJson = File.ReadAllText(configPath);
-            var config = JsonConvert.DeserializeObject<OpenDataPublisherConfig>(configJson);
+            var config = JsonConvert.DeserializeObject<OpenDataUploadConfig>(configJson);
             if (config.FtpRootUrl.IsBlank())
             {
                 var e = new Exception("No FtpRootUrl specified in data-gov-uk-publisher-config.json file.");

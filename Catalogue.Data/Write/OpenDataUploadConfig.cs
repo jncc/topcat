@@ -1,6 +1,6 @@
 ﻿namespace Catalogue.Data.Write
 {
-    public class OpenDataPublisherConfig
+    public class OpenDataUploadConfig
     {
         public string HttpRootUrl { get; set; }
         public string FtpRootUrl { get; set; }

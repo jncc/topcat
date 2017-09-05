@@ -5,8 +5,8 @@ namespace Catalogue.Robot.Publishing.OpenData
 {
     public interface IOpenDataUploadHelper
     {
-        void UploadDataFile(Guid recordId, string filePath, bool metadataOnly);
-        void UploadAlternativeResources(Record record, bool metadataOnly);
+        void UploadDataFile(Guid recordId, string filePath);
+        void UploadAlternativeResources(Record record);
         void UploadMetadataDocument(Record record);
         void UploadWafIndexDocument(Record record);
         string GetHttpRootUrl();

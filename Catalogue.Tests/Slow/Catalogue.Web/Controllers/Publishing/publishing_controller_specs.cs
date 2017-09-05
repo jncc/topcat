@@ -11,6 +11,7 @@ using Moq;
 using NUnit.Framework;
 using System;
 using System.Collections.Generic;
+using System.Threading;
 using Raven.Client;
 
 namespace Catalogue.Tests.Slow.Catalogue.Web.Controllers.Publishing
@@ -568,6 +569,8 @@ namespace Catalogue.Tests.Slow.Catalogue.Web.Controllers.Publishing
                     db.Store(record);
                 }
                 db.SaveChanges();
+
+                Thread.Sleep(100); // Allow time for indexing
 
                 var publishingController = GetTestOpenDataPublishingController(db);
                 var result = publishingController.PendingSignOff();

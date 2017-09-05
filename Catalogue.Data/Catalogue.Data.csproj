@@ -136,7 +136,7 @@
     <Compile Include="Write\FtpClient.cs" />
     <Compile Include="Write\IOpenDataPublishingService.cs" />
     <Compile Include="Write\IOpenDataPublishingUploadService.cs" />
-    <Compile Include="Write\OpenDataPublisherConfig.cs" />
+    <Compile Include="Write\OpenDataUploadConfig.cs" />
     <Compile Include="Write\OpenDataPublishingService.cs" />
     <Compile Include="Write\OpenDataPublishingUploadService.cs" />
     <Compile Include="Write\RecordService.cs" />
