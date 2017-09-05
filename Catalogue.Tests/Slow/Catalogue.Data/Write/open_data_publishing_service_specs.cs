@@ -87,7 +87,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Data.Write
                 updatedRecord.Publication.OpenData.LastSuccess.DateUtc.Should().Be(testTime);
                 updatedRecord.Publication.OpenData.LastSuccess.Message.Should().BeNull();
                 updatedRecord.Gemini.ResourceLocator.Should().Be("http://data.jncc.gov.uk/data/eb189a2f-ebce-4232-8dc6-1ad486cacf21-test");
-                uploadHelperMock.Verify(x => x.UploadDataFile(record.Id, record.Path, false), Times.Once);
+                uploadHelperMock.Verify(x => x.UploadDataFile(record.Id, record.Path), Times.Once);
                 uploadHelperMock.Verify(x => x.UploadMetadataDocument(record), Times.Once);
                 uploadHelperMock.Verify(x => x.UploadWafIndexDocument(record), Times.Once);
 
@@ -155,7 +155,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Data.Write
                 var uploadHelperMock = new Mock<IOpenDataUploadHelper>();
                 var uploader = new RobotUploader(db, uploadService, uploadHelperMock.Object);
 
-                uploadHelperMock.Setup(x => x.UploadAlternativeResources(record, false))
+                uploadHelperMock.Setup(x => x.UploadAlternativeResources(record))
                     .Throws(new WebException("test message"));
 
                 uploader.Upload(new List<Record> { record });
