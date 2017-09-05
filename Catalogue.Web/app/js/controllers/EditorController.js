@@ -192,7 +192,7 @@
   getOpenDataButtonText = function(publication) {
     if (publication === null) {
       return "Not Open Data";
-    } else if (publication.openData.lastAttempt !== null) {
+    } else if (publication.openData.lastSuccess !== null) {
       return "Published";
     } else if (publication.openData.signOff !== null) {
       return "Signed Off";
