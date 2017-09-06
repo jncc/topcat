@@ -47,7 +47,7 @@ namespace Catalogue.Robot
                     s.WhenStopped(p => p.Stop());
                 });
 
-                x.RunAsLocalSystem();
+                x.RunAsNetworkService();
 
                 string nombre = "Topcat.Robot." + "TODO"; // settings.Environment;
                 x.SetDisplayName(nombre);
