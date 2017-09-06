@@ -49,8 +49,6 @@ namespace Catalogue.Robot
                     s.WhenStopped(p => p.Stop());
                 });
 
-                x.RunAsNetworkService();
-
                 string serviceName = "Topcat.Robot." + ConfigurationManager.AppSettings["Environment"];
                 x.SetDisplayName(serviceName);
                 x.SetServiceName(serviceName);
