@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Security.Principal;
-using System.Text;
-using System.Threading.Tasks;
-using Ninject.Extensions.Conventions;
+﻿using Ninject.Extensions.Conventions;
 using Ninject.Modules;
 using Raven.Client;
 
@@ -24,9 +18,10 @@ namespace Catalogue.Robot.Injection
                 .BindDefaultInterface());
 
             Bind<IDocumentStore>().ToMethod(x => Program.DocumentStore);
+            
 
-            // may want to use the log4net logger
-            //this.Kernel.Bind<ILog>().ToMethod(x => LogManager.GetLogger(typeof(Blah)));
+//             may want to use the log4net logger
+//            Kernel.Bind<ILog>().ToMethod(x => LogManager.GetLogger(typeof(Program)));
 
             // may want to use quartz for scheduling; something like this
             //            // bind the quartz scheduler factory to ninject managed version

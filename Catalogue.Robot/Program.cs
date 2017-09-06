@@ -5,6 +5,7 @@ using log4net.Config;
 using Ninject;
 using Raven.Client;
 using System;
+using System.Configuration;
 using System.Net.Http;
 using Topshelf;
 
@@ -38,6 +39,7 @@ namespace Catalogue.Robot
         {
             HostFactory.Run(x =>
             {
+                GlobalContext.Properties["LogFileName"] = ConfigurationManager.AppSettings["LogFilePath"];
                 XmlConfigurator.Configure();
 
                 x.Service<Robot>(s =>
@@ -49,7 +51,7 @@ namespace Catalogue.Robot
 
                 x.RunAsNetworkService();
 
-                string serviceName = "Topcat.Robot." + "TODO"; // settings.Environment;
+                string serviceName = "Topcat.Robot." + ConfigurationManager.AppSettings["Environment"];
                 x.SetDisplayName(serviceName);
                 x.SetServiceName(serviceName);
                 x.SetDescription("Uploads metadata and data files from Topcat to data.jncc.gov.uk");
