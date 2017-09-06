@@ -49,10 +49,10 @@ namespace Catalogue.Robot
 
                 x.RunAsNetworkService();
 
-                string nombre = "Topcat.Robot." + "TODO"; // settings.Environment;
-                x.SetDisplayName(nombre);
-                x.SetServiceName(nombre);
-                x.SetDescription("Description of Robot");
+                string serviceName = "Topcat.Robot." + "TODO"; // settings.Environment;
+                x.SetDisplayName(serviceName);
+                x.SetServiceName(serviceName);
+                x.SetDescription("Uploads metadata and data files from Topcat to data.jncc.gov.uk");
             });
         }
 
