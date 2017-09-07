@@ -4,6 +4,7 @@ using System.Linq;
 using Catalogue.Data.Model;
 using Catalogue.Data.Write;
 using Catalogue.Utilities.Logging;
+using Catalogue.Utilities.PathMapping;
 using Catalogue.Utilities.Text;
 using log4net;
 
@@ -26,9 +27,8 @@ namespace Catalogue.Robot.Publishing.OpenData
 
         public void UploadDataFile(Guid recordId, string filePath)
         {
-            // correct path for unmapped drive X
-            filePath = filePath.Replace(@"X:\OffshoreSurvey\", @"\\JNCC-CORPFILE\Marine Survey\OffshoreSurvey\");
-        
+            filePath = JnccDriveMappings.GetUncPath(filePath);
+
             string unrootedDataPath = WebificationUtility.GetUnrootedDataPath(recordId, filePath);
         
             string dataFtpPath = config.FtpRootUrl + "/" + unrootedDataPath;

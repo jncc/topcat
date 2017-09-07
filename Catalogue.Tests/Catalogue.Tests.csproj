@@ -113,6 +113,7 @@
     <Compile Include="Slow\Catalogue.Gemini\Validation\when_validating_the_example_document.cs" />
     <Compile Include="Slow\Catalogue.Import\when_importing_mesh_data.cs" />
     <Compile Include="Slow\Catalogue.Robot\robot_uploader_specs.cs" />
+    <Compile Include="Slow\Catalogue.Utilities\jncc_drive_mappings_tests.cs" />
     <Compile Include="Slow\Catalogue.Web\Controllers\Account\account_controller_specs.cs" />
     <Compile Include="Slow\Catalogue.Web\Controllers\Export\export_controller_tests.cs" />
     <Compile Include="Slow\Catalogue.Web\Controllers\Publishing\publishing_controller_specs.cs" />
