@@ -27,7 +27,8 @@ namespace Catalogue.Robot
             using (var db = store.OpenSession())
             {
                 var config = GetConfigFile();
-                var uploadService = new OpenDataPublishingUploadService(new RecordService(db, new RecordValidator()));
+                var publishingService = new OpenDataPublishingService(new RecordService(db, new RecordValidator()));
+                var uploadService = publishingService.Upload();
                 var uploadHelper = new OpenDataUploadHelper(config);
 
                 var robotUploader = new RobotUploader(db, uploadService, uploadHelper);

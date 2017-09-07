@@ -15,12 +15,10 @@ namespace Catalogue.Data.Write
 {
     public class OpenDataPublishingService : IOpenDataPublishingService
     {
-        private readonly IDocumentSession db;
         private readonly IRecordService recordService;
 
-        public OpenDataPublishingService(IDocumentSession db, IRecordService recordService)
+        public OpenDataPublishingService(IRecordService recordService)
         {
-            this.db = db;
             this.recordService = recordService;
         }
 
@@ -85,7 +83,7 @@ namespace Catalogue.Data.Write
             return recordServiceResult.Record;
         }
 
-        public IOpenDataPublishingUploadService Upload(Record record, UserInfo userInfo, bool metadataOnly)
+        public IOpenDataPublishingUploadService Upload()
         {
             return new OpenDataPublishingUploadService(recordService);
         }
