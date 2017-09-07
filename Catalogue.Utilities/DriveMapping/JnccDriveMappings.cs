@@ -1,13 +1,17 @@
 ﻿using System.Collections.Generic;
 
-namespace Catalogue.Utilities.PathMapping
+namespace Catalogue.Utilities.DriveMapping
 {
     public static class JnccDriveMappings
     {
         private static Dictionary<string, string> DriveMappings = new Dictionary<string, string>
         {
-            { @"X:\OffshoreSurvey\", @"\\JNCC-CORPFILE\Marine Survey\OffshoreSurvey\" },
-            { @"Z:\", @"\\JNCC-CORPFILE\JNCC Corporate Data\" }
+            { @"G:\", @"\\JNCC-CORPFILE\Corporate Apps\" },
+            { @"J:\", @"\\JNCC-CORPFILE\gis\" },
+            { @"P:\", @"\\JNCC-CORPFILE\Purchase-Logs\" },
+            { @"Y:\", @"\\JNCC-CORPFILE\Teams and Staff\" },
+            { @"Z:\", @"\\JNCC-CORPFILE\JNCC Corporate Data\" },
+            { @"X:\", @"\\JNCC-CORPFILE\Marine Survey\" }
         };
 
         public static string GetUncPath(string filePath)
@@ -18,6 +22,7 @@ namespace Catalogue.Utilities.PathMapping
             {
                 mappedPath = mappedPath.Replace(mapping.Key, mapping.Value);
             }
+
             return mappedPath;
         }
     }

@@ -3,8 +3,8 @@ using System.IO;
 using System.Linq;
 using Catalogue.Data.Model;
 using Catalogue.Data.Write;
+using Catalogue.Utilities.DriveMapping;
 using Catalogue.Utilities.Logging;
-using Catalogue.Utilities.PathMapping;
 using Catalogue.Utilities.Text;
 using log4net;
 
