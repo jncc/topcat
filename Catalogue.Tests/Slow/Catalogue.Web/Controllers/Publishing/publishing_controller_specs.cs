@@ -627,7 +627,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Web.Controllers.Publishing
             userContextMock.Setup(u => u.User).Returns(testUserContext.User);
 
             var recordService = new RecordService(db, new RecordValidator());
-            var publishingService = new OpenDataPublishingService(db, recordService);
+            var publishingService = new OpenDataPublishingService(recordService);
 
             return new OpenDataPublishingController(db, publishingService, userContextMock.Object);
         }

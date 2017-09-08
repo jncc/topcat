@@ -1,15 +1,5 @@
 ﻿using Catalogue.Data.Model;
-using Catalogue.Gemini.Model;
-using Catalogue.Utilities.Text;
-using Catalogue.Utilities.Time;
-using Raven.Client;
 using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Net;
-using System.Xml.Linq;
-using static Catalogue.Utilities.Text.WebificationUtility;
 
 namespace Catalogue.Data.Write
 {

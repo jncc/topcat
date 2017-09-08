@@ -3,12 +3,11 @@ using Catalogue.Data.Model;
 using Catalogue.Data.Write;
 using Catalogue.Utilities.Text;
 using Catalogue.Utilities.Time;
+using log4net;
 using Raven.Client;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
-using log4net;
 using static Catalogue.Utilities.Text.WebificationUtility;
 
 namespace Catalogue.Robot.Publishing.OpenData

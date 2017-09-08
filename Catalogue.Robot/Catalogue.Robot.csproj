@@ -84,9 +84,10 @@
     <Compile Include="Injection\MainNinjectModule.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Program.cs" />
-    <Compile Include="Publishing\IRecordPublisher.cs" />
+    <Compile Include="Publishing\OpenData\FtpClient.cs" />
     <Compile Include="Publishing\OpenData\IOpenDataUploadHelper.cs" />
     <Compile Include="Publishing\OpenData\IOpenDataXmlHelper.cs" />
+    <Compile Include="Publishing\OpenData\OpenDataUploadConfig.cs" />
     <Compile Include="Publishing\OpenData\OpenDataXmlHelper.cs" />
     <Compile Include="Publishing\OpenData\RobotUploader.cs" />
     <Compile Include="Publishing\OpenData\OpenDataUploadHelper.cs" />

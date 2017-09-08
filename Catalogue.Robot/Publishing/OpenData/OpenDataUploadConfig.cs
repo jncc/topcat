@@ -1,4 +1,4 @@
-﻿namespace Catalogue.Data.Write
+﻿namespace Catalogue.Robot.Publishing.OpenData
 {
     public class OpenDataUploadConfig
     {
