@@ -7,7 +7,7 @@ namespace Catalogue.Data.Write
 {
     public class OpenDataPublishingUploadService : IOpenDataPublishingUploadService
     {
-        private static readonly ILog logger = LogManager.GetLogger(typeof(OpenDataPublishingUploadService));
+        private static readonly ILog Logger = LogManager.GetLogger(typeof(OpenDataPublishingUploadService));
 
         private readonly IRecordService recordService;
 
@@ -25,7 +25,7 @@ namespace Catalogue.Data.Write
             if (!recordServiceResult.Success)
             {
                 var e = new Exception("Error while saving upload changes.");
-                e.LogAndThrow(logger);
+                e.LogAndThrow(Logger);
             }
         }
 
@@ -34,14 +34,14 @@ namespace Catalogue.Data.Write
             // this is a big dataset so just link to a webpage
             string jnccWebDownloadPage = "http://jncc.defra.gov.uk/opendata";
             record.Gemini.ResourceLocator = jnccWebDownloadPage;
-            logger.Info("ResourceLocator updated to point to open data request webpage.");
+            Logger.Info("ResourceLocator updated to point to open data request webpage.");
         }
 
         public void UpdateResourceLocatorToMatchMainDataFile(Record record, string dataHttpPath)
         {
             // update the resource locator to be the data file
             record.Gemini.ResourceLocator = dataHttpPath;
-            logger.Info("ResourceLocator updated to point to the data file.");
+            Logger.Info("ResourceLocator updated to point to the data file.");
         }
     }
 }

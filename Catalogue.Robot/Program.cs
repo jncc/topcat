@@ -7,13 +7,17 @@ using Raven.Client;
 using System;
 using System.Configuration;
 using System.Net.Http;
+using Catalogue.Robot.Publishing.OpenData;
+using Quartz;
 using Topshelf;
+using Topshelf.Ninject;
+using Topshelf.Quartz;
 
 namespace Catalogue.Robot
 {
     class Program
     {
-        private static readonly ILog logger = LogManager.GetLogger(typeof(Program));
+        private static readonly ILog Logger = LogManager.GetLogger(typeof(Program));
 
         public static IDocumentStore DocumentStore
         {
@@ -29,7 +33,7 @@ namespace Catalogue.Robot
                 catch (HttpRequestException ex)
                 {
                     var e = new Exception("Unable to connect to the Topcat database.", ex);
-                    logger.Error(e);
+                    Logger.Error(e);
                     throw e;
                 }
             }
@@ -37,16 +41,30 @@ namespace Catalogue.Robot
 
         static void Main(string[] args)
         {
+
             HostFactory.Run(x =>
             {
                 GlobalContext.Properties["LogFileName"] = ConfigurationManager.AppSettings["LogFilePath"];
                 XmlConfigurator.Configure();
 
+                x.UseNinject(new MainNinjectModule());
+                x.UsingQuartzJobFactory(() => new NinjectJobFactory(NinjectBuilderConfigurator.Kernel));
+
+
                 x.Service<Robot>(s =>
                 {
-                    s.ConstructUsing(name => CreateRobot());
+                    s.ConstructUsingNinject();
                     s.WhenStarted(p => p.Start());
                     s.WhenStopped(p => p.Stop());
+                    s.ScheduleQuartzJob(q =>
+                        q.WithJob(() => JobBuilder.Create<OpenDataUploadJob>().Build())
+                            .AddTrigger(() => TriggerBuilder.Create()
+                                .WithDailyTimeIntervalSchedule(b => b
+                                    .WithIntervalInHours(24)
+                                    .StartingDailyAt(TimeOfDay.HourAndMinuteOfDay(02, 00)))
+                                .Build()
+                            )
+                    );
                 });
 
                 string serviceName = "Topcat.Robot." + ConfigurationManager.AppSettings["Environment"];

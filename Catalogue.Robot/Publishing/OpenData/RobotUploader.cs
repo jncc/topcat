@@ -14,7 +14,7 @@ namespace Catalogue.Robot.Publishing.OpenData
 {
     public class RobotUploader
     {
-        private static readonly ILog logger = LogManager.GetLogger(typeof(RobotUploader));
+        private static readonly ILog Logger = LogManager.GetLogger(typeof(RobotUploader));
 
         private readonly IDocumentSession db;
         private readonly IOpenDataPublishingUploadService uploadService;
@@ -53,7 +53,7 @@ namespace Catalogue.Robot.Publishing.OpenData
 
             foreach (Record record in records)
             {
-                logger.Info("Uploading record with title: " + record.Gemini.Title);
+                Logger.Info("Uploading record with title: " + record.Gemini.Title);
                 UploadRecord(record, userInfo);
             }
         }
@@ -93,7 +93,7 @@ namespace Catalogue.Robot.Publishing.OpenData
                     else
                     {
                         // do nothing - don't change the resource locator, don't upload anything
-                        logger.Info("Deferring to existing resource locator - not uploading.");
+                        Logger.Info("Deferring to existing resource locator - not uploading.");
                     }
                 }
 
@@ -106,7 +106,7 @@ namespace Catalogue.Robot.Publishing.OpenData
             {
                 string message = ex.Message + (ex.InnerException != null ? ex.InnerException.Message : "");
                 attempt.Message = message;
-                logger.Error("Upload failed for record with GUID="+record.Id, ex);
+                Logger.Error("Upload failed for record with GUID="+record.Id, ex);
             }
 
             // commit the changes - to both the record (resource locator may have changed) and the attempt object
