@@ -42,9 +42,9 @@ namespace Catalogue.Robot
         private static void Main(string[] args)
         {
             GlobalContext.Properties["LogFileName"] = ConfigurationManager.AppSettings["LogFilePath"];
-            log4net.Config.XmlConfigurator.Configure();
+            XmlConfigurator.Configure();
 
-            bool runOnce = "runOnce".Equals(args[0]);
+            bool runOnce = args != null && args.Length > 0 && "runOnce".Equals(args[0]);
 
             if (runOnce)
             {
