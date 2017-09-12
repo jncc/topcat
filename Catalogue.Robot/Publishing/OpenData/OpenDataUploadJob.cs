@@ -12,7 +12,7 @@ namespace Catalogue.Robot.Publishing.OpenData
 {
     public class OpenDataUploadJob : IJob
     {
-        private static readonly ILog Logger = LogManager.GetLogger(typeof(Robot));
+        private static readonly ILog Logger = LogManager.GetLogger(typeof(OpenDataUploadJob));
 
         readonly IDocumentStore store;
 
@@ -24,32 +24,26 @@ namespace Catalogue.Robot.Publishing.OpenData
         public void Execute(IJobExecutionContext context)
         {
             Logger.Info("Executing job");
-            Logger.Info(store == null ? "Doc store is null" : "Store not null");
-            try
-            {
-                store.Initialize();
-                using (var db = store.OpenSession())
-                {
-                    Logger.Info("Using db");
-                    var config = GetConfigFile();
-                    var publishingService = new OpenDataPublishingService(new RecordService(db, new RecordValidator()));
-                    var uploadService = publishingService.Upload();
-                    var uploadHelper = new OpenDataUploadHelper(config);
-
-                    var robotUploader = new RobotUploader(db, uploadService, uploadHelper);
-
-                    var records = robotUploader.GetRecordsPendingUpload();
-                    Logger.Info("Number of records to upload: " + records.Count);
-
-                    robotUploader.Upload(records);
-                }
-            }
-            catch (Exception e)
-            {
-                Logger.Error(e);
-            }
-
+            RunUpload();
             Logger.Info("Finished all jobs");
+        }
+
+        public void RunUpload()
+        {
+            using (var db = store.OpenSession())
+            {
+                var config = GetConfigFile();
+                var publishingService = new OpenDataPublishingService(new RecordService(db, new RecordValidator()));
+                var uploadService = publishingService.Upload();
+                var uploadHelper = new OpenDataUploadHelper(config);
+
+                var robotUploader = new RobotUploader(db, uploadService, uploadHelper);
+
+                var records = robotUploader.GetRecordsPendingUpload();
+                Logger.Info("Number of records to upload: " + records.Count);
+
+                robotUploader.Upload(records);
+            }
         }
 
         private OpenDataUploadConfig GetConfigFile()

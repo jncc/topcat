@@ -9,7 +9,6 @@ namespace Catalogue.Robot
         public void Start()
         {
             Logger.Info("Starting Robot");
-
         }
 
         public void Stop()

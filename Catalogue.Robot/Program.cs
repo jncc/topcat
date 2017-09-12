@@ -1,14 +1,14 @@
 ﻿using Catalogue.Data;
 using Catalogue.Robot.Injection;
+using Catalogue.Robot.Publishing.OpenData;
 using log4net;
 using log4net.Config;
 using Ninject;
+using Quartz;
 using Raven.Client;
 using System;
 using System.Configuration;
 using System.Net.Http;
-using Catalogue.Robot.Publishing.OpenData;
-using Quartz;
 using Topshelf;
 using Topshelf.Ninject;
 using Topshelf.Quartz;
@@ -41,49 +41,60 @@ namespace Catalogue.Robot
 
         static void Main(string[] args)
         {
+            bool runOnce = "runOnce".Equals(args[0]);
 
-            HostFactory.Run(x =>
+            if (runOnce)
             {
-                GlobalContext.Properties["LogFileName"] = ConfigurationManager.AppSettings["LogFilePath"];
-                XmlConfigurator.Configure();
-
-                x.UseNinject(new MainNinjectModule());
-                x.UsingQuartzJobFactory(() => new NinjectJobFactory(NinjectBuilderConfigurator.Kernel));
-
-                x.Service<Robot>(s =>
+                Logger.Info("Running manually triggered upload");
+                var uploadJob = CreateUploadJob();
+                uploadJob.RunUpload();
+                Logger.Info("Finished manual run");
+            }
+            else
+            {
+                HostFactory.Run(x =>
                 {
-                    s.ConstructUsingNinject();
-                    s.WhenStarted(p => p.Start());
-                    s.WhenStopped(p => p.Stop());
-                    s.ScheduleQuartzJob(q =>
-                        q.WithJob(() => JobBuilder.Create<OpenDataUploadJob>().Build())
-                            .AddTrigger(() => TriggerBuilder.Create()
-                                .WithDailyTimeIntervalSchedule(b => b
-                                    .WithIntervalInMinutes(1)
-                                    .StartingDailyAt(TimeOfDay.HourAndMinuteOfDay(10, 00)))
-                                .Build()
-                            )
-                    );
-                });
+                    GlobalContext.Properties["LogFileName"] = ConfigurationManager.AppSettings["LogFilePath"];
+                    XmlConfigurator.Configure();
 
-                string serviceName = "Topcat.Robot." + ConfigurationManager.AppSettings["Environment"];
-                x.SetDisplayName(serviceName);
-                x.SetServiceName(serviceName);
-                x.SetDescription("Uploads metadata and data files from Topcat to data.jncc.gov.uk");
-            });
+                    x.UseNinject(new MainNinjectModule());
+                    x.UsingQuartzJobFactory(() => new NinjectJobFactory(NinjectBuilderConfigurator.Kernel));
+
+                    x.Service<Robot>(s =>
+                    {
+                        s.ConstructUsingNinject();
+                        s.WhenStarted(p => p.Start());
+                        s.WhenStopped(p => p.Stop());
+                        s.ScheduleQuartzJob(q =>
+                            q.WithJob(() => JobBuilder.Create<OpenDataUploadJob>().Build())
+                                .AddTrigger(() => TriggerBuilder.Create()
+                                    .WithDailyTimeIntervalSchedule(b => b
+                                        .WithIntervalInMinutes(1)
+                                        .StartingDailyAt(TimeOfDay.HourAndMinuteOfDay(10, 00)))
+                                    .Build()
+                                )
+                        );
+                    });
+
+                    string serviceName = "Topcat.Robot." + ConfigurationManager.AppSettings["Environment"];
+                    x.SetDisplayName(serviceName);
+                    x.SetServiceName(serviceName);
+                    x.SetDescription("Uploads metadata and data files from Topcat to data.jncc.gov.uk");
+                });
+            }
         }
 
         /// <summary>
         /// Creates an instance with dependecies injected.
         /// </summary>
-        public static Robot CreateRobot()
+        public static OpenDataUploadJob CreateUploadJob()
         {
             var kernel = new StandardKernel();
 
             // register the type bindings we want for injection 
             kernel.Load<MainNinjectModule>();
 
-            return kernel.Get<Robot>();
+            return kernel.Get<OpenDataUploadJob>();
         }
     }
 }
