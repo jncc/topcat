@@ -1,12 +1,4 @@
-﻿using Catalogue.Data.Write;
-using Catalogue.Robot.Publishing.OpenData;
-using Catalogue.Utilities.Logging;
-using Catalogue.Utilities.Text;
-using log4net;
-using Newtonsoft.Json;
-using Raven.Client;
-using System;
-using System.IO;
+﻿using log4net;
 
 namespace Catalogue.Robot
 {
@@ -24,7 +16,5 @@ namespace Catalogue.Robot
         {
             Logger.Info("Stopping Robot");
         }
-
-
     }
 }
