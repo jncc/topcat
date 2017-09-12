@@ -48,10 +48,10 @@ namespace Catalogue.Robot
 
             if (runOnce)
             {
-                Logger.Info("Running manually triggered upload");
+                Logger.Info("Running upload in runOnce mode");
                 var uploadJob = CreateUploadJob();
                 uploadJob.RunUpload();
-                Logger.Info("Finished manual run");
+                Logger.Info("Finished run");
             }
             else
             {
