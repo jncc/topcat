@@ -51,6 +51,7 @@
             $scope.record = response
             $scope.validation = {}
             $scope.reset()
+            $scope.status.refresh()
             $location.path('/editor/' + $scope.record.id)
 
         $scope.save = ->

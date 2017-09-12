@@ -44,6 +44,7 @@
       $scope.record = response;
       $scope.validation = {};
       $scope.reset();
+      $scope.status.refresh();
       return $location.path('/editor/' + $scope.record.id);
     };
     $scope.save = function() {
