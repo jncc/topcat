@@ -58,10 +58,9 @@ namespace Catalogue.Robot
                     s.ScheduleQuartzJob(q =>
                         q.WithJob(() => JobBuilder.Create<OpenDataUploadJob>().Build())
                             .AddTrigger(() => TriggerBuilder.Create()
-                                .StartAt(DateTime.UtcNow.AddSeconds(10))
                                 .WithDailyTimeIntervalSchedule(b => b
                                     .WithIntervalInHours(24)
-                                    .StartingDailyAt(TimeOfDay.HourAndMinuteOfDay(09, 53)))
+                                    .StartingDailyAt(TimeOfDay.HourAndMinuteOfDay(09, 55)))
                                 .Build()
                             )
                     );
