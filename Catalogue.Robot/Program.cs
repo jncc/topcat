@@ -50,7 +50,6 @@ namespace Catalogue.Robot
                 x.UseNinject(new MainNinjectModule());
                 x.UsingQuartzJobFactory(() => new NinjectJobFactory(NinjectBuilderConfigurator.Kernel));
 
-
                 x.Service<Robot>(s =>
                 {
                     s.ConstructUsingNinject();
@@ -59,9 +58,10 @@ namespace Catalogue.Robot
                     s.ScheduleQuartzJob(q =>
                         q.WithJob(() => JobBuilder.Create<OpenDataUploadJob>().Build())
                             .AddTrigger(() => TriggerBuilder.Create()
+                                .StartAt(DateTime.UtcNow.AddSeconds(10))
                                 .WithDailyTimeIntervalSchedule(b => b
                                     .WithIntervalInHours(24)
-                                    .StartingDailyAt(TimeOfDay.HourAndMinuteOfDay(9, 35)))
+                                    .StartingDailyAt(TimeOfDay.HourAndMinuteOfDay(09, 53)))
                                 .Build()
                             )
                     );
