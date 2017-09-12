@@ -39,8 +39,11 @@ namespace Catalogue.Robot
             }
         }
 
-        static void Main(string[] args)
+        private static void Main(string[] args)
         {
+            GlobalContext.Properties["LogFileName"] = ConfigurationManager.AppSettings["LogFilePath"];
+            XmlConfigurator.Configure();
+
             bool runOnce = "runOnce".Equals(args[0]);
 
             if (runOnce)
@@ -54,9 +57,6 @@ namespace Catalogue.Robot
             {
                 HostFactory.Run(x =>
                 {
-                    GlobalContext.Properties["LogFileName"] = ConfigurationManager.AppSettings["LogFilePath"];
-                    XmlConfigurator.Configure();
-
                     x.UseNinject(new MainNinjectModule());
                     x.UsingQuartzJobFactory(() => new NinjectJobFactory(NinjectBuilderConfigurator.Kernel));
 
