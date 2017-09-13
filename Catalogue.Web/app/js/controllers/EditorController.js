@@ -44,6 +44,7 @@
       $scope.record = response;
       $scope.validation = {};
       $scope.reset();
+      $scope.status.refresh();
       return $location.path('/editor/' + $scope.record.id);
     };
     $scope.save = function() {
@@ -192,7 +193,7 @@
   getOpenDataButtonText = function(publication) {
     if (publication === null) {
       return "Not Open Data";
-    } else if (publication.openData.lastAttempt !== null) {
+    } else if (publication.openData.lastSuccess !== null) {
       return "Published";
     } else if (publication.openData.signOff !== null) {
       return "Signed Off";

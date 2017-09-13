@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -27,6 +28,19 @@ namespace Catalogue.Utilities.Text
 
             // combine words with a "-", unless the second starts with a dot (we want "file.txt", not "file-.txt")
             return words.Aggregate((a, b) => a + (b.StartsWith(".") ? b : "-" + b));
+        }
+
+        /// <summary>
+        /// Gets a path like "data/3148e1e2-bd6b-4623-b72a-5408263b9056-Some-Data-File.csv"
+        /// </summary>
+        public static string GetUnrootedDataPath(Guid recordId, string filePath)
+        {
+            string fileName = Path.GetFileName(filePath);
+
+            // make a file name suitable for the web
+            string name = WebificationUtility.ToUrlFriendlyString(fileName);
+
+            return String.Format("data/{0}-{1}", recordId, name);
         }
     }
 

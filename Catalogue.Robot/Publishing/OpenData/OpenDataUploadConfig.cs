@@ -1,9 +1,6 @@
-﻿using System.Collections.Generic;
-using NUnit.Framework;
-
-namespace Catalogue.Robot.Publishing.OpenData
+﻿namespace Catalogue.Robot.Publishing.OpenData
 {
-    public class OpenDataPublisherConfig
+    public class OpenDataUploadConfig
     {
         public string HttpRootUrl { get; set; }
         public string FtpRootUrl { get; set; }

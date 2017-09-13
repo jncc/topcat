@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -9,8 +9,9 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Catalogue.Tests</RootNamespace>
     <AssemblyName>Catalogue.Tests</AssemblyName>
-    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -73,11 +74,18 @@
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
+    <Reference Include="XmlDiffPatch, Version=1.0.8.28, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+      <HintPath>..\packages\XMLDiffPatch.1.0.8.28\lib\net\XmlDiffPatch.dll</HintPath>
+    </Reference>
+    <Reference Include="XmlDiffPatch.View, Version=1.0.1493.40755, Culture=neutral">
+      <HintPath>..\packages\XMLDiffPatch.1.0.8.28\lib\net\XmlDiffPatch.View.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Explicit\Catalogue.Data\Export\octonaughts_lets_do_this.cs" />
     <Compile Include="Explicit\Catalogue.Data\Indexes\my_record_index_tests.cs" />
     <Compile Include="Explicit\Catalogue.Import\import_runner.cs" />
+    <Compile Include="Slow\Catalogue.Robot\opendataxmlhelper_specs.cs" />
     <Compile Include="Explicit\Catalogue.Robot\try_out_link_checker.cs" />
     <Compile Include="Explicit\Catalogue.Robot\try_out_stuff.cs" />
     <Compile Include="Explicit\exploratory_search_tests.cs" />
@@ -100,9 +108,12 @@
     <Compile Include="Slow\Catalogue.Data\Query\record_queryer_specs.cs" />
     <Compile Include="Slow\Catalogue.Data\Seed\when_seeding.cs" />
     <Compile Include="Slow\Catalogue.Data\Versioning\versioning_specs.cs" />
+    <Compile Include="Slow\Catalogue.Data\Write\open_data_publishing_service_specs.cs" />
     <Compile Include="Slow\Catalogue.Data\Write\record_service_specs.cs" />
     <Compile Include="Slow\Catalogue.Gemini\Validation\when_validating_the_example_document.cs" />
     <Compile Include="Slow\Catalogue.Import\when_importing_mesh_data.cs" />
+    <Compile Include="Slow\Catalogue.Robot\robot_uploader_specs.cs" />
+    <Compile Include="Slow\Catalogue.Utilities\jncc_drive_mappings_tests.cs" />
     <Compile Include="Slow\Catalogue.Web\Controllers\Account\account_controller_specs.cs" />
     <Compile Include="Slow\Catalogue.Web\Controllers\Export\export_controller_tests.cs" />
     <Compile Include="Slow\Catalogue.Web\Controllers\Publishing\publishing_controller_specs.cs" />
@@ -118,8 +129,12 @@
   <ItemGroup>
     <None Include="app.config" />
     <None Include="packages.config" />
+    <EmbeddedResource Include="TestResources\records\c6f3632d-8789-460b-a09d-c132841a7190.json" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <EmbeddedResource Include="TestResources\wafs\index_initial.html" />
+    <EmbeddedResource Include="TestResources\wafs\index_expected.html" />
+  </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Catalogue.Data\Catalogue.Data.csproj">
       <Project>{3ad6b61c-cab1-4cc4-8895-ba2dd3b58c59}</Project>
@@ -144,6 +159,13 @@
   </ItemGroup>
   <ItemGroup>
     <Service Include="{82A7F48D-3B50-4B1E-B82E-3ADA8210C358}" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="TestResources\records\721643b8-7e42-40ca-87d9-23f19221238e.json" />
+    <EmbeddedResource Include="TestResources\wafs\721643b8-7e42-40ca-87d9-23f19221238e.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="TestResources\wafs\c6f3632d-8789-460b-a09d-c132841a7190.xml" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

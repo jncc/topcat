@@ -1,6 +1,6 @@
 ﻿using System.Net;
 
-namespace Catalogue.Robot.Publishing.OpenData
+namespace Catalogue.Data.Write
 {
     /// <summary>
     /// Mockable FTP-focussed WebClient.
@@ -11,7 +11,6 @@ namespace Catalogue.Robot.Publishing.OpenData
         void UploadString(string address, string content);
         void UploadBytes(string address, byte[] bytes);
         string DownloadString(string address);
-        void MakeDirectory(string address);
     }
 
     public class FtpClient : IFtpClient
@@ -27,35 +26,34 @@ namespace Catalogue.Robot.Publishing.OpenData
 
         public void UploadFile(string address, string filename)
         {
-            var c = new WebClient { Credentials = new NetworkCredential(username, password), Proxy = null };
-            c.UploadFile(address, "STOR", filename);
+            using (var c = new WebClient {Credentials = new NetworkCredential(username, password), Proxy = null})
+            {
+                c.UploadFile(address, "STOR", filename);
+            }
         }
 
         public void UploadString(string address, string content)
         {
-            var c = new WebClient { Credentials = new NetworkCredential(username, password), Proxy = null };
-            c.UploadString(address, "STOR", content);
+            using (var c = new WebClient {Credentials = new NetworkCredential(username, password), Proxy = null})
+            {
+                c.UploadString(address, "STOR", content);
+            }
         }
 
         public void UploadBytes(string address, byte[] bytes)
         {
-            var c = new WebClient { Credentials = new NetworkCredential(username, password), Proxy = null };
-            c.UploadData(address, "STOR", bytes);
+            using (var c = new WebClient {Credentials = new NetworkCredential(username, password), Proxy = null})
+            {
+                c.UploadData(address, "STOR", bytes);
+            }
         }
 
         public string DownloadString(string address)
         {
-            var c = new WebClient { Credentials = new NetworkCredential(username, password), Proxy = null };
-            return  c.DownloadString(address);
-        }
-
-        public void MakeDirectory(string address)
-        {
-            var request = WebRequest.Create(address);
-            request.Proxy = null;
-            request.Method = WebRequestMethods.Ftp.MakeDirectory;
-            request.Credentials = new NetworkCredential(username, password);
-            using (request.GetResponse()) { }
+            using (var c = new WebClient {Credentials = new NetworkCredential(username, password), Proxy = null})
+            {
+                return c.DownloadString(address);
+            }
         }
     }
 }

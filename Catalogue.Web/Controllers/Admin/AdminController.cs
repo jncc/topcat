@@ -1,7 +1,6 @@
 ﻿using Catalogue.Data.Model;
 using Catalogue.Data.Query;
 using Catalogue.Data.Seed;
-using Catalogue.Robot.DeadLinks;
 using Catalogue.Web.Code;
 using Raven.Abstractions.Data;
 using Raven.Client;
@@ -133,15 +132,6 @@ namespace Catalogue.Web.Controllers.Admin
             return true;
         }
 		
-        [HttpGet, Route("api/admin/linkchecker")]
-        public List<LinkCheckResult> LinkChecker()
-        {
-            var checker = new Checker(db, new FileLinkChecker());
-            var results = checker.CheckAll();
-
-            return results;
-        }
-
         [HttpGet, Route("api/admin/seepath")]
         public bool SeePath()
         {

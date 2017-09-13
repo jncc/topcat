@@ -11,6 +11,7 @@ using Moq;
 using NUnit.Framework;
 using System;
 using System.Collections.Generic;
+using System.Threading;
 using Raven.Client;
 
 namespace Catalogue.Tests.Slow.Catalogue.Web.Controllers.Publishing
@@ -566,8 +567,10 @@ namespace Catalogue.Tests.Slow.Catalogue.Web.Controllers.Publishing
                 foreach (var record in testRecords)
                 {
                     db.Store(record);
-                    db.SaveChanges();
                 }
+                db.SaveChanges();
+
+                Thread.Sleep(100); // Allow time for indexing
 
                 var publishingController = GetTestOpenDataPublishingController(db);
                 var result = publishingController.PendingSignOff();
@@ -624,7 +627,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Web.Controllers.Publishing
             userContextMock.Setup(u => u.User).Returns(testUserContext.User);
 
             var recordService = new RecordService(db, new RecordValidator());
-            var publishingService = new OpenDataPublishingService(db, recordService);
+            var publishingService = new OpenDataPublishingService(recordService);
 
             return new OpenDataPublishingController(db, publishingService, userContextMock.Object);
         }
