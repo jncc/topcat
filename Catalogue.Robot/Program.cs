@@ -41,6 +41,7 @@ namespace Catalogue.Robot
 
         private static void Main(string[] args)
         {
+            XmlConfigurator.Configure();
             GlobalContext.Properties["LogFileName"] = ConfigurationManager.AppSettings["LogFilePath"];
             XmlConfigurator.Configure();
 
