@@ -45,7 +45,7 @@ namespace Catalogue.Robot
             XmlConfigurator.Configure();
 
             ILog logger = LogManager.GetLogger(typeof(Program));
-            logger.Info("Logger working?");
+            logger.Info("Entry point");
 
             bool runOnce = args != null && args.Length > 0 && "runOnce".Equals(args[0]);
 
@@ -58,6 +58,7 @@ namespace Catalogue.Robot
             }
             else
             {
+                logger.Info("Running service");
                 HostFactory.Run(x =>
                 {
                     x.UseNinject(new MainNinjectModule());
@@ -84,6 +85,7 @@ namespace Catalogue.Robot
                     x.SetServiceName(serviceName);
                     x.SetDescription("Uploads metadata and data files from Topcat to data.jncc.gov.uk");
                 });
+                logger.Info("Finished running service");
             }
         }
 
