@@ -44,6 +44,9 @@ namespace Catalogue.Robot
             GlobalContext.Properties["LogFileName"] = ConfigurationManager.AppSettings["LogFilePath"];
             XmlConfigurator.Configure();
 
+            ILog logger = LogManager.GetLogger(typeof(Program));
+            logger.Info("Logger working?");
+
             bool runOnce = args != null && args.Length > 0 && "runOnce".Equals(args[0]);
 
             if (runOnce)
