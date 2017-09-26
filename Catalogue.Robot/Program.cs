@@ -71,8 +71,8 @@ namespace Catalogue.Robot
                             q.WithJob(() => JobBuilder.Create<OpenDataUploadJob>().Build())
                                 .AddTrigger(() => TriggerBuilder.Create()
                                     .WithDailyTimeIntervalSchedule(b => b
-                                        .WithIntervalInMinutes(2)
-                                        .StartingDailyAt(TimeOfDay.HourAndMinuteOfDay(09, 00)))
+                                        .WithIntervalInHours(24)
+                                        .StartingDailyAt(TimeOfDay.HourAndMinuteOfDay(10, 20)))
                                     .Build()
                                 )
                         );
