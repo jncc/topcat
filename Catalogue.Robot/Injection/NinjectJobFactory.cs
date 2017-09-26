@@ -7,21 +7,21 @@ namespace Catalogue.Robot.Injection
 {
     public class NinjectJobFactory : IJobFactory
     {
-        private readonly IResolutionRoot _resolutionRoot;
+        private readonly IResolutionRoot resolutionRoot;
 
         public NinjectJobFactory(IResolutionRoot resolutionRoot)
         {
-            _resolutionRoot = resolutionRoot;
+            this.resolutionRoot = resolutionRoot;
         }
 
         public IJob NewJob(TriggerFiredBundle bundle, IScheduler scheduler)
         {
-            return _resolutionRoot.Get(bundle.JobDetail.JobType) as IJob;
+            return resolutionRoot.Get(bundle.JobDetail.JobType) as IJob;
         }
 
         public void ReturnJob(IJob job)
         {
-            _resolutionRoot.Release(job);
+            resolutionRoot.Release(job);
         }
     }
 }

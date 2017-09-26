@@ -41,7 +41,6 @@ namespace Catalogue.Robot
 
         private static void Main(string[] args)
         {
-            XmlConfigurator.Configure();
             GlobalContext.Properties["LogFileName"] = ConfigurationManager.AppSettings["LogFilePath"];
             XmlConfigurator.Configure();
 
@@ -57,6 +56,10 @@ namespace Catalogue.Robot
             else
             {
                 Logger.Info("Running scheduled service");
+                var startHour = Convert.ToInt32(ConfigurationManager.AppSettings["UploaderStartHour"]);
+                var startMin = Convert.ToInt32(ConfigurationManager.AppSettings["UploaderStartMinute"]);
+                var interval = Convert.ToInt32(ConfigurationManager.AppSettings["UploaderRunIntervalInHours"]);
+
                 HostFactory.Run(x =>
                 {
                     x.UseNinject(new MainNinjectModule());
@@ -71,8 +74,8 @@ namespace Catalogue.Robot
                             q.WithJob(() => JobBuilder.Create<OpenDataUploadJob>().Build())
                                 .AddTrigger(() => TriggerBuilder.Create()
                                     .WithDailyTimeIntervalSchedule(b => b
-                                        .WithIntervalInHours(24)
-                                        .StartingDailyAt(TimeOfDay.HourAndMinuteOfDay(10, 20)))
+                                        .WithIntervalInHours(interval)
+                                        .StartingDailyAt(TimeOfDay.HourAndMinuteOfDay(startHour, startMin)))
                                     .Build()
                                 )
                         );
