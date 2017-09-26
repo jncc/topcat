@@ -72,7 +72,7 @@ namespace Catalogue.Robot
                                 .AddTrigger(() => TriggerBuilder.Create()
                                     .WithDailyTimeIntervalSchedule(b => b
                                         .WithIntervalInMinutes(2)
-                                        .StartingDailyAt(TimeOfDay.HourAndMinuteOfDay(10, 00)))
+                                        .StartingDailyAt(TimeOfDay.HourAndMinuteOfDay(09, 00)))
                                     .Build()
                                 )
                         );
