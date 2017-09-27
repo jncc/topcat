@@ -1,19 +1,23 @@
 ﻿using Catalogue.Data;
 using Catalogue.Robot.Injection;
+using Catalogue.Robot.Publishing.OpenData;
 using log4net;
 using log4net.Config;
 using Ninject;
+using Quartz;
 using Raven.Client;
 using System;
 using System.Configuration;
 using System.Net.Http;
 using Topshelf;
+using Topshelf.Ninject;
+using Topshelf.Quartz;
 
 namespace Catalogue.Robot
 {
     class Program
     {
-        private static readonly ILog logger = LogManager.GetLogger(typeof(Program));
+        private static readonly ILog Logger = LogManager.GetLogger(typeof(Program));
 
         public static IDocumentStore DocumentStore
         {
@@ -29,44 +33,73 @@ namespace Catalogue.Robot
                 catch (HttpRequestException ex)
                 {
                     var e = new Exception("Unable to connect to the Topcat database.", ex);
-                    logger.Error(e);
+                    Logger.Error(e);
                     throw e;
                 }
             }
         }
 
-        static void Main(string[] args)
+        private static void Main(string[] args)
         {
-            HostFactory.Run(x =>
+            GlobalContext.Properties["LogFileName"] = ConfigurationManager.AppSettings["LogFilePath"];
+            XmlConfigurator.Configure();
+
+            bool runOnce = args != null && args.Length > 0 && "runOnce".Equals(args[0]);
+
+            if (runOnce)
             {
-                GlobalContext.Properties["LogFileName"] = ConfigurationManager.AppSettings["LogFilePath"];
-                XmlConfigurator.Configure();
+                Logger.Info("Running upload in runOnce mode");
+                var uploadJob = CreateUploadJob();
+                uploadJob.RunUpload();
+                Logger.Info("Finished run");
+            }
+            else
+            {
+                Logger.Info("Running scheduled service");
+                var startHour = Convert.ToInt32(ConfigurationManager.AppSettings["UploaderStartHour"]);
+                var startMin = Convert.ToInt32(ConfigurationManager.AppSettings["UploaderStartMinute"]);
+                var interval = Convert.ToInt32(ConfigurationManager.AppSettings["UploaderRunIntervalInHours"]);
 
-                x.Service<Robot>(s =>
+                HostFactory.Run(x =>
                 {
-                    s.ConstructUsing(name => CreateRobot());
-                    s.WhenStarted(p => p.Start());
-                    s.WhenStopped(p => p.Stop());
-                });
+                    x.UseNinject(new MainNinjectModule());
+                    x.UsingQuartzJobFactory(() => new NinjectJobFactory(NinjectBuilderConfigurator.Kernel));
 
-                string serviceName = "Topcat.Robot." + ConfigurationManager.AppSettings["Environment"];
-                x.SetDisplayName(serviceName);
-                x.SetServiceName(serviceName);
-                x.SetDescription("Uploads metadata and data files from Topcat to data.jncc.gov.uk");
-            });
+                    x.Service<Robot>(s =>
+                    {
+                        s.ConstructUsingNinject();
+                        s.WhenStarted(p => p.Start());
+                        s.WhenStopped(p => p.Stop());
+                        s.ScheduleQuartzJob(q =>
+                            q.WithJob(() => JobBuilder.Create<OpenDataUploadJob>().Build())
+                                .AddTrigger(() => TriggerBuilder.Create()
+                                    .WithDailyTimeIntervalSchedule(b => b
+                                        .WithIntervalInHours(interval)
+                                        .StartingDailyAt(TimeOfDay.HourAndMinuteOfDay(startHour, startMin)))
+                                    .Build()
+                                )
+                        );
+                    });
+
+                    string serviceName = "Topcat.Robot." + ConfigurationManager.AppSettings["Environment"];
+                    x.SetDisplayName(serviceName);
+                    x.SetServiceName(serviceName);
+                    x.SetDescription("Uploads metadata and data files from Topcat to data.jncc.gov.uk");
+                });
+            }
         }
 
         /// <summary>
         /// Creates an instance with dependecies injected.
         /// </summary>
-        public static Robot CreateRobot()
+        public static OpenDataUploadJob CreateUploadJob()
         {
             var kernel = new StandardKernel();
 
             // register the type bindings we want for injection 
             kernel.Load<MainNinjectModule>();
 
-            return kernel.Get<Robot>();
+            return kernel.Get<OpenDataUploadJob>();
         }
     }
 }

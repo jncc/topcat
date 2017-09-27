@@ -240,6 +240,164 @@ namespace Catalogue.Tests.Slow.Catalogue.Data.Write
                 updatedRecord.Publication.OpenData.LastSuccess.DateUtc.Should().Be(testTime);
                 updatedRecord.Publication.OpenData.LastSuccess.Message.Should().BeNull();
                 updatedRecord.Gemini.ResourceLocator.Should().Be("http://jncc.defra.gov.uk/opendata");
+                uploadHelperMock.Verify(x => x.UploadDataFile(record.Id, record.Path), Times.Never);
+                uploadHelperMock.Verify(x => x.UploadMetadataDocument(record), Times.Once);
+                uploadHelperMock.Verify(x => x.UploadWafIndexDocument(record), Times.Once);
+
+                Clock.CurrentUtcDateTimeGetter = currentTime;
+            }
+        }
+
+        [Test]
+        public void successful_corpulent_upload_with_populated_resource_location()
+        {
+            var recordId = new Guid("bd89e71a-07c4-4ce5-92f6-5121b104b8fe");
+            var record = new Record().With(r =>
+            {
+                r.Id = recordId;
+                r.Path = @"X:\path\to\upload\test";
+                r.Validation = Validation.Gemini;
+                r.Gemini = Library.Example().With(m =>
+                {
+                    m.Keywords.Add(new MetadataKeyword
+                    {
+                        Vocab = "http://vocab.jncc.gov.uk/jncc-domain",
+                        Value = "Terrestrial"
+                    });
+                    m.Keywords.Add(new MetadataKeyword
+                    {
+                        Vocab = "http://vocab.jncc.gov.uk/jncc-category",
+                        Value = "Example Collection"
+                    });
+                    m.Keywords.Add(new MetadataKeyword
+                    {
+                        Vocab = "http://vocab.jncc.gov.uk/metadata-admin",
+                        Value = "Corpulent"
+                    });
+                    m.ResourceLocator = "http://www.someexternallinkhere.com";
+                });
+                r.Publication = new PublicationInfo
+                {
+                    OpenData = new OpenDataPublicationInfo
+                    {
+                        Assessment = new OpenDataAssessmentInfo
+                        {
+                            Completed = true
+                        },
+                        SignOff = new OpenDataSignOffInfo
+                        {
+                            DateUtc = new DateTime(2017, 08, 02),
+                            User = new UserInfo
+                            {
+                                DisplayName = "IAO User",
+                                Email = "iaouser@example.com"
+                            }
+                        }
+                    }
+                };
+                r.Footer = new Footer();
+            });
+
+            var store = new InMemoryDatabaseHelper().Create();
+            using (var db = store.OpenSession())
+            {
+                db.Store(record);
+                db.SaveChanges();
+
+                var currentTime = Clock.CurrentUtcDateTimeGetter;
+                var testTime = new DateTime(2017, 08, 18, 12, 0, 0);
+                Clock.CurrentUtcDateTimeGetter = () => testTime;
+
+                var uploadService = new OpenDataPublishingUploadService(new RecordService(db, new RecordValidator()));
+                var uploadHelperMock = new Mock<IOpenDataUploadHelper>();
+                var uploader = new RobotUploader(db, uploadService, uploadHelperMock.Object);
+                uploader.Upload(new List<Record> { record });
+
+                var updatedRecord = db.Load<Record>(record.Id);
+                updatedRecord.Publication.OpenData.LastAttempt.DateUtc.Should().Be(testTime);
+                updatedRecord.Publication.OpenData.LastAttempt.Message.Should().BeNull();
+                updatedRecord.Publication.OpenData.LastSuccess.DateUtc.Should().Be(testTime);
+                updatedRecord.Publication.OpenData.LastSuccess.Message.Should().BeNull();
+                updatedRecord.Gemini.ResourceLocator.Should().Be("http://www.someexternallinkhere.com");
+                uploadHelperMock.Verify(x => x.UploadDataFile(record.Id, record.Path), Times.Never);
+                uploadHelperMock.Verify(x => x.UploadMetadataDocument(record), Times.Once);
+                uploadHelperMock.Verify(x => x.UploadWafIndexDocument(record), Times.Once);
+
+                Clock.CurrentUtcDateTimeGetter = currentTime;
+            }
+        }
+
+        [Test]
+        public void record_not_corpulent_with_populated_resource_locator()
+        {
+            var recordId = new Guid("88399fba-b6f5-4e0a-b1d1-fc0668ac7515");
+            var record = new Record().With(r =>
+            {
+                r.Id = recordId;
+                r.Path = @"X:\path\to\upload\test";
+                r.Validation = Validation.Gemini;
+                r.Gemini = Library.Example().With(m =>
+                {
+                    m.Title = "Publishing upload test";
+                    m.Keywords.Add(new MetadataKeyword
+                    {
+                        Vocab = "http://vocab.jncc.gov.uk/jncc-domain",
+                        Value = "Terrestrial"
+                    });
+                    m.Keywords.Add(new MetadataKeyword
+                    {
+                        Vocab = "http://vocab.jncc.gov.uk/jncc-category",
+                        Value = "Example Collection"
+                    });
+                    m.ResourceLocator = "http://www.someexternallinkhere.com";
+                });
+                r.Publication = new PublicationInfo
+                {
+                    OpenData = new OpenDataPublicationInfo
+                    {
+                        Assessment = new OpenDataAssessmentInfo
+                        {
+                            Completed = true
+                        },
+                        SignOff = new OpenDataSignOffInfo
+                        {
+                            DateUtc = new DateTime(2017, 08, 02),
+                            User = new UserInfo
+                            {
+                                DisplayName = "IAO User",
+                                Email = "iaouser@example.com"
+                            }
+                        }
+                    }
+                };
+                r.Footer = new Footer();
+            });
+
+            var store = new InMemoryDatabaseHelper().Create();
+            using (var db = store.OpenSession())
+            {
+                db.Store(record);
+                db.SaveChanges();
+
+                var currentTime = Clock.CurrentUtcDateTimeGetter;
+                var testTime = new DateTime(2017, 08, 18, 12, 0, 0);
+                Clock.CurrentUtcDateTimeGetter = () => testTime;
+
+                var uploadService = new OpenDataPublishingUploadService(new RecordService(db, new RecordValidator()));
+                var uploadHelperMock = new Mock<IOpenDataUploadHelper>();
+                var uploader = new RobotUploader(db, uploadService, uploadHelperMock.Object);
+
+                uploadHelperMock.Setup(x => x.GetHttpRootUrl()).Returns("http://data.jncc.gov.uk");
+
+                uploader.Upload(new List<Record> { record });
+
+                var updatedRecord = db.Load<Record>(record.Id);
+                updatedRecord.Publication.OpenData.LastAttempt.DateUtc.Should().Be(testTime);
+                updatedRecord.Publication.OpenData.LastAttempt.Message.Should().BeNull();
+                updatedRecord.Publication.OpenData.LastSuccess.DateUtc.Should().Be(testTime);
+                updatedRecord.Publication.OpenData.LastSuccess.Message.Should().BeNull();
+                updatedRecord.Gemini.ResourceLocator.Should().Be("http://www.someexternallinkhere.com");
+                uploadHelperMock.Verify(x => x.UploadDataFile(record.Id, record.Path), Times.Never);
                 uploadHelperMock.Verify(x => x.UploadMetadataDocument(record), Times.Once);
                 uploadHelperMock.Verify(x => x.UploadWafIndexDocument(record), Times.Once);
 

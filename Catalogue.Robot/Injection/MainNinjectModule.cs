@@ -1,5 +1,6 @@
 ﻿using Ninject.Extensions.Conventions;
 using Ninject.Modules;
+using Quartz.Spi;
 using Raven.Client;
 
 namespace Catalogue.Robot.Injection
@@ -18,15 +19,10 @@ namespace Catalogue.Robot.Injection
                 .BindDefaultInterface());
 
             Bind<IDocumentStore>().ToMethod(x => Program.DocumentStore);
-            
-
 //             may want to use the log4net logger
 //            Kernel.Bind<ILog>().ToMethod(x => LogManager.GetLogger(typeof(Program)));
 
-            // may want to use quartz for scheduling; something like this
-            //            // bind the quartz scheduler factory to ninject managed version
-            //            Bind<ISchedulerFactory>().To<NinjectSchedulerFactory>();
-            //            Bind<IScheduler>().ToMethod(ctx => ctx.Kernel.Get<ISchedulerFactory>().GetScheduler()).InSingletonScope();
+            Bind<IJobFactory>().To<NinjectJobFactory>();
         }
     }
 }
