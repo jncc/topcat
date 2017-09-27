@@ -11,6 +11,7 @@ using Moq;
 using NUnit.Framework;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using Raven.Client;
 
@@ -250,6 +251,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Web.Controllers.Publishing
                         Vocab = "http://vocab.jncc.gov.uk/jncc-category",
                         Value = "Example Collection"
                     });
+                    m.MetadataDate = new DateTime(2017, 09, 27);
                 });
                 r.Publication = new PublicationInfo
                 {
@@ -257,7 +259,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Web.Controllers.Publishing
                     {
                         Assessment = new OpenDataAssessmentInfo
                         {
-                            Completed = true,
+                            Completed = true
                         }
                     }
                 };
@@ -302,6 +304,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Web.Controllers.Publishing
                         Vocab = "http://vocab.jncc.gov.uk/jncc-category",
                         Value = "Example Collection"
                     });
+                    m.MetadataDate = new DateTime(2017, 09, 27);
                 });
                 r.Publication = new PublicationInfo
                 {
@@ -342,6 +345,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Web.Controllers.Publishing
                         Vocab = "http://vocab.jncc.gov.uk/jncc-category",
                         Value = "Example Collection"
                     });
+                    m.MetadataDate = new DateTime(2017, 07, 20);
                 });
                 r.Publication = new PublicationInfo
                 {
@@ -381,6 +385,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Web.Controllers.Publishing
                 r.Gemini = Library.Example().With(m =>
                 {
                     m.Title = "Open data sign off test - record fails validation";
+                    m.MetadataDate = new DateTime(2017, 09, 27);
                 });
                 r.Publication = new PublicationInfo
                 {
@@ -411,6 +416,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Web.Controllers.Publishing
                 r.Gemini = Library.Example().With(m =>
                 {
                     m.Title = "Open data sign off test - record without risk assessment";
+                    m.MetadataDate = new DateTime(2017, 09, 27);
                 });
                 r.Footer = new Footer();
             });
@@ -439,6 +445,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Web.Controllers.Publishing
                         Vocab = "http://vocab.jncc.gov.uk/jncc-category",
                         Value = "Example Collection"
                     });
+                    m.MetadataDate = new DateTime(2017, 09, 25);
                 });
                 r.Publication = new PublicationInfo
                 {
@@ -446,7 +453,8 @@ namespace Catalogue.Tests.Slow.Catalogue.Web.Controllers.Publishing
                     {
                         Assessment = new OpenDataAssessmentInfo
                         {
-                            Completed = true
+                            Completed = true,
+                            CompletedOnUtc = new DateTime(2017, 09, 25)
                         },
                         SignOff = null
                     }
@@ -472,6 +480,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Web.Controllers.Publishing
                         Vocab = "http://vocab.jncc.gov.uk/jncc-category",
                         Value = "Example Collection"
                     });
+                    m.MetadataDate = new DateTime(2017, 09, 25);
                 });
                 r.Publication = null;
                 r.Footer = new Footer();
@@ -495,6 +504,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Web.Controllers.Publishing
                         Vocab = "http://vocab.jncc.gov.uk/jncc-category",
                         Value = "Example Collection"
                     });
+                    m.MetadataDate = new DateTime(2017, 09, 26);
                 });
                 r.Publication = new PublicationInfo
                 {
@@ -502,11 +512,12 @@ namespace Catalogue.Tests.Slow.Catalogue.Web.Controllers.Publishing
                     {
                         Assessment = new OpenDataAssessmentInfo
                         {
-                            Completed = true
+                            Completed = true,
+                            CompletedOnUtc = new DateTime(2017, 09, 25)
                         },
                         SignOff = new OpenDataSignOffInfo
                         {
-                            DateUtc = new DateTime(2017, 08, 02),
+                            DateUtc = new DateTime(2017, 09, 26),
                             User = new UserInfo
                             {
                                 DisplayName = "IAO User",
@@ -536,6 +547,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Web.Controllers.Publishing
                         Vocab = "http://vocab.jncc.gov.uk/jncc-category",
                         Value = "Example Collection"
                     });
+                    m.MetadataDate = new DateTime(2017, 09, 25);
                 });
                 r.Publication = new PublicationInfo
                 {
@@ -547,7 +559,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Web.Controllers.Publishing
                         },
                         SignOff = new OpenDataSignOffInfo
                         {
-                            DateUtc = new DateTime(2017, 08, 02),
+                            DateUtc = new DateTime(2017, 09, 25),
                             User = new UserInfo
                             {
                                 DisplayName = "IAO User",
@@ -559,7 +571,137 @@ namespace Catalogue.Tests.Slow.Catalogue.Web.Controllers.Publishing
                 r.Footer = new Footer();
             });
 
-            var testRecords = new List<Record>(new [] {retrieveSignOffTest1Record, retrieveSignOffTest2Record, retrieveSignOffTest3Record, retrieveSignOffTest4Record});
+            var retrieveSignOffTest5Record = new Record().With(r =>
+            {
+                r.Id = new Guid("f37efe7f-3033-42d4-83a0-f6d7ab59d0c2");
+                r.Path = @"X:\path\to\assessment\test";
+                r.Validation = Validation.Gemini;
+                r.Gemini = Library.Example().With(m =>
+                {
+                    m.Title = "Retrieve Sign Off Test 5";
+                    m.Keywords.Add(new MetadataKeyword
+                    {
+                        Vocab = "http://vocab.jncc.gov.uk/jncc-domain",
+                        Value = "Terrestrial"
+                    });
+                    m.Keywords.Add(new MetadataKeyword
+                    {
+                        Vocab = "http://vocab.jncc.gov.uk/jncc-category",
+                        Value = "Example Collection"
+                    });
+                    m.MetadataDate = new DateTime(2017, 09, 25);
+                });
+                r.Publication = new PublicationInfo
+                {
+                    OpenData = new OpenDataPublicationInfo
+                    {
+                        Assessment = new OpenDataAssessmentInfo
+                        {
+                            Completed = true,
+                            CompletedOnUtc = new DateTime(2017, 09, 25)
+                        },
+                        SignOff = new OpenDataSignOffInfo
+                        {
+                            DateUtc = new DateTime(2017, 09, 20),
+                            User = new UserInfo
+                            {
+                                DisplayName = "IAO User",
+                                Email = "iaouser@example.com"
+                            }
+                        }
+                    }
+                };
+                r.Footer = new Footer();
+            });
+
+            var retrieveSignOffTest6Record = new Record().With(r =>
+            {
+                r.Id = new Guid("d038b054-269e-4d4f-a635-da75929e8fee");
+                r.Path = @"X:\path\to\assessment\test";
+                r.Validation = Validation.Gemini;
+                r.Gemini = Library.Example().With(m =>
+                {
+                    m.Title = "Retrieve Sign Off Test 6";
+                    m.Keywords.Add(new MetadataKeyword
+                    {
+                        Vocab = "http://vocab.jncc.gov.uk/jncc-domain",
+                        Value = "Terrestrial"
+                    });
+                    m.Keywords.Add(new MetadataKeyword
+                    {
+                        Vocab = "http://vocab.jncc.gov.uk/jncc-category",
+                        Value = "Example Collection"
+                    });
+                    m.MetadataDate = new DateTime(2017, 09, 30);
+                });
+                r.Publication = new PublicationInfo
+                {
+                    OpenData = new OpenDataPublicationInfo
+                    {
+                        Assessment = new OpenDataAssessmentInfo
+                        {
+                            Completed = true,
+                            CompletedOnUtc = new DateTime(2017, 09, 25)
+                        },
+                        SignOff = new OpenDataSignOffInfo
+                        {
+                            DateUtc = new DateTime(2017, 09, 26),
+                            User = new UserInfo
+                            {
+                                DisplayName = "IAO User",
+                                Email = "iaouser@example.com"
+                            }
+                        }
+                    }
+                };
+                r.Footer = new Footer();
+            });
+
+            var retrieveSignOffTest7Record = new Record().With(r =>
+            {
+                r.Id = new Guid("7ec978bc-2ecd-4ab4-a233-5aead4947ab2");
+                r.Path = @"X:\path\to\assessment\test";
+                r.Validation = Validation.Gemini;
+                r.Gemini = Library.Example().With(m =>
+                {
+                    m.Title = "Retrieve Sign Off Test 7";
+                    m.Keywords.Add(new MetadataKeyword
+                    {
+                        Vocab = "http://vocab.jncc.gov.uk/jncc-domain",
+                        Value = "Terrestrial"
+                    });
+                    m.Keywords.Add(new MetadataKeyword
+                    {
+                        Vocab = "http://vocab.jncc.gov.uk/jncc-category",
+                        Value = "Example Collection"
+                    });
+                    m.MetadataDate = new DateTime(2017, 09, 25);
+                });
+                r.Publication = new PublicationInfo
+                {
+                    OpenData = new OpenDataPublicationInfo
+                    {
+                        Assessment = new OpenDataAssessmentInfo
+                        {
+                            Completed = false,
+                            CompletedOnUtc = new DateTime(2017, 09, 25)
+                        },
+                        SignOff = new OpenDataSignOffInfo
+                        {
+                            DateUtc = new DateTime(2017, 09, 20),
+                            User = new UserInfo
+                            {
+                                DisplayName = "IAO User",
+                                Email = "iaouser@example.com"
+                            }
+                        }
+                    }
+                };
+                r.Footer = new Footer();
+            });
+
+            var testRecords = new List<Record>(new [] {retrieveSignOffTest1Record, retrieveSignOffTest2Record, retrieveSignOffTest3Record,
+                retrieveSignOffTest4Record, retrieveSignOffTest5Record, retrieveSignOffTest6Record, retrieveSignOffTest7Record});
 
             var store = new InMemoryDatabaseHelper().Create();
             using (var db = store.OpenSession())
@@ -574,9 +716,54 @@ namespace Catalogue.Tests.Slow.Catalogue.Web.Controllers.Publishing
 
                 var publishingController = GetTestOpenDataPublishingController(db);
                 var result = publishingController.PendingSignOff();
-                result.Count.Should().Be(1);
-                result[0].Title.Should().Be("Retrieve Sign Off Test 1");
+                result.Count.Should().Be(2);
+                result.Count(r => string.Equals(r.Title, "Retrieve Sign Off Test 1", StringComparison.CurrentCulture)).Should().Be(1);
+                result.Count(r => string.Equals(r.Title, "Retrieve Sign Off Test 5", StringComparison.CurrentCulture)).Should().Be(1);
             }
+        }
+
+        [Test]
+        public void successful_sign_off_for_republishing()
+        {
+            var recordId = new Guid("b288b636-026b-4187-96d4-a083e9cbe9e4");
+            var record = new Record().With(r =>
+            {
+                r.Id = recordId;
+                r.Path = @"X:\path\to\signoff\test";
+                r.Validation = Validation.Gemini;
+                r.Gemini = Library.Example().With(m =>
+                {
+                    m.Title = "Open data sign off test - republishing";
+                    m.Keywords.Add(new MetadataKeyword
+                    {
+                        Vocab = "http://vocab.jncc.gov.uk/jncc-domain",
+                        Value = "Terrestrial"
+                    });
+                    m.Keywords.Add(new MetadataKeyword
+                    {
+                        Vocab = "http://vocab.jncc.gov.uk/jncc-category",
+                        Value = "Example Collection"
+                    });
+                    m.MetadataDate = new DateTime(2017, 07, 12);
+                });
+                r.Publication = new PublicationInfo
+                {
+                    OpenData = new OpenDataPublicationInfo
+                    {
+                        Assessment = new OpenDataAssessmentInfo
+                        {
+                            Completed = true,
+                            CompletedOnUtc = new DateTime(2017, 07, 12)
+                        },
+                        SignOff = new OpenDataSignOffInfo
+                        {
+                            DateUtc = new DateTime(2017, 07, 10)
+                        },
+                        LastSuccess = new PublicationAttempt()
+                    }
+                };
+                r.Footer = new Footer();
+            });
         }
 
         private static Record TestAssessment(Record record)
