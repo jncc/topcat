@@ -12,30 +12,6 @@ namespace Catalogue.Data.Write
             this.recordService = recordService;
         }
 
-        public Record SignOff(Record record, OpenDataSignOffInfo signOffInfo)
-        {
-            if (record.Publication?.OpenData == null)
-                throw new Exception("Couldn't sign-off record for publication. Assessment not completed.");
-
-            var openDataInfo = record.Publication.OpenData;
-
-            if (openDataInfo?.SignOff != null && openDataInfo.SignOff.DateUtc != DateTime.MinValue)
-                throw new Exception("The record has already been signed off and cannot be signed off again.");
-
-            if (openDataInfo?.Assessment != null && !openDataInfo.Assessment.Completed)
-                throw new Exception("Couldn't sign-off record for publication. Assessment not completed.");
-
-            openDataInfo.SignOff = signOffInfo;
-
-            var recordServiceResult = recordService.Update(record, signOffInfo.User);
-            if (!recordServiceResult.Success)
-            {
-                throw new Exception("Error while saving sign off changes.");
-            }
-
-            return recordServiceResult.Record;
-        }
-
         public Record Assess(Record record, OpenDataAssessmentInfo assessmentInfo)
         {
             if (!record.Validation.Equals(Validation.Gemini))
@@ -69,6 +45,23 @@ namespace Catalogue.Data.Write
             {
                 throw new Exception("Error while saving assessment changes.");
             }
+
+            return recordServiceResult.Record;
+        }
+
+        public Record SignOff(Record record, OpenDataSignOffInfo signOffInfo)
+        {
+            if (!record.IsAssessedAndUpToDate())
+                throw new InvalidOperationException("Couldn't sign-off record for publication - assessment not completed or out of date");
+
+            if (record.IsSignedOffAndUpToDate())
+                throw new InvalidOperationException("The record has already been signed off");
+
+            record.Publication.OpenData.SignOff = signOffInfo;
+
+            var recordServiceResult = recordService.Update(record, signOffInfo.User);
+            if (!recordServiceResult.Success)
+                throw new Exception("Error while saving sign off changes");
 
             return recordServiceResult.Record;
         }

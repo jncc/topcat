@@ -70,6 +70,8 @@ namespace Catalogue.Gemini.Templates
                     {
                        /* { "", "NDGO0001" },*/
                         { "http://jncc.gov.uk", "Bermuda Institute of Ocean Sciences" },
+                        { "http://vocab.jncc.gov.uk/jncc-domain", "Terrestrial"},
+                        { "http://vocab.jncc.gov.uk/jncc-category", "Example Collection"}
                     }
                     .ToKeywordList(),
                 TemporalExtent = new TemporalExtent { Begin = "1998-01", End = "" },

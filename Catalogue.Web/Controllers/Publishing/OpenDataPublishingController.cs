@@ -36,7 +36,7 @@ namespace Catalogue.Web.Controllers.Publishing
                     CountOfNotYetPublishedSinceLastUpdated = query.Count(x => !x.PublishedSinceLastUpdated && x.SignedOff),
                     CountOfPublicationNeverAttempted = query.Count(x => x.PublicationNeverAttempted),
                     CountOfLastPublicationAttemptWasUnsuccessful = query.Count(x => x.LastPublicationAttemptWasUnsuccessful),
-                    CountOfPendingSignOff = query.Count(x => x.AssessmentCompleted && !x.SignedOff)
+                    CountOfPendingSignOff = query.Count(x => x.Assessed && !x.SignedOff)
             };
         }
 
@@ -96,7 +96,7 @@ namespace Catalogue.Web.Controllers.Publishing
         {
             var query = db
                 .Query<RecordsWithOpenDataPublicationInfoIndex.Result, RecordsWithOpenDataPublicationInfoIndex>()
-                .Where(x => x.AssessmentCompleted && !x.SignedOff);
+                .Where(x => x.Assessed && !x.SignedOff);
 
             return GetRecords(query, p);
         }
@@ -106,7 +106,7 @@ namespace Catalogue.Web.Controllers.Publishing
         {
             int count = db
                 .Query<RecordsWithOpenDataPublicationInfoIndex.Result, RecordsWithOpenDataPublicationInfoIndex>()
-                .Count(x => x.AssessmentCompleted && !x.SignedOff);
+                .Count(x => x.Assessed && !x.SignedOff);
 
             // if user is an IAO, then (for now) they can see all records for sign off
             // if they're not an IAO, it's nothing to do with them, so they have none

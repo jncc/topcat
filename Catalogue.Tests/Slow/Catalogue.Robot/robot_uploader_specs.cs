@@ -9,7 +9,6 @@ using FluentAssertions;
 using Moq;
 using NUnit.Framework;
 using System;
-using System.Collections.Generic;
 using System.Threading;
 
 namespace Catalogue.Tests.Slow.Catalogue.Robot
@@ -26,17 +25,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Robot
                 r.Validation = Validation.Gemini;
                 r.Gemini = Library.Example().With(m =>
                 {
-                    m.Title = "Uploader test";
-                    m.Keywords.Add(new MetadataKeyword
-                    {
-                        Vocab = "http://vocab.jncc.gov.uk/jncc-domain",
-                        Value = "Terrestrial"
-                    });
-                    m.Keywords.Add(new MetadataKeyword
-                    {
-                        Vocab = "http://vocab.jncc.gov.uk/jncc-category",
-                        Value = "Example Collection"
-                    });
+                    m.MetadataDate = new DateTime(2017, 09, 25);
                 });
                 r.Publication = new PublicationInfo
                 {
@@ -44,7 +33,8 @@ namespace Catalogue.Tests.Slow.Catalogue.Robot
                     {
                         Assessment = new OpenDataAssessmentInfo
                         {
-                            Completed = true
+                            Completed = true,
+                            CompletedOnUtc = new DateTime(2017, 09, 25)
                         },
                         SignOff = null,
                         Paused = false
@@ -58,20 +48,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Robot
                 r.Id = new Guid("92efc007-e98e-4263-80f3-847c5f9c4e08");
                 r.Path = @"X:\path\to\uploader\test";
                 r.Validation = Validation.Gemini;
-                r.Gemini = Library.Example().With(m =>
-                {
-                    m.Title = "Uploader test";
-                    m.Keywords.Add(new MetadataKeyword
-                    {
-                        Vocab = "http://vocab.jncc.gov.uk/jncc-domain",
-                        Value = "Terrestrial"
-                    });
-                    m.Keywords.Add(new MetadataKeyword
-                    {
-                        Vocab = "http://vocab.jncc.gov.uk/jncc-category",
-                        Value = "Example Collection"
-                    });
-                });
+                r.Gemini = Library.Example();
                 r.Publication = null;
                 r.Footer = new Footer();
             });
@@ -83,17 +60,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Robot
                 r.Validation = Validation.Gemini;
                 r.Gemini = Library.Example().With(m =>
                 {
-                    m.Title = "Uploader test";
-                    m.Keywords.Add(new MetadataKeyword
-                    {
-                        Vocab = "http://vocab.jncc.gov.uk/jncc-domain",
-                        Value = "Terrestrial"
-                    });
-                    m.Keywords.Add(new MetadataKeyword
-                    {
-                        Vocab = "http://vocab.jncc.gov.uk/jncc-category",
-                        Value = "Example Collection"
-                    });
+                    m.MetadataDate = new DateTime(2017, 09, 26);
                 });
                 r.Publication = new PublicationInfo
                 {
@@ -101,16 +68,13 @@ namespace Catalogue.Tests.Slow.Catalogue.Robot
                     {
                         Assessment = new OpenDataAssessmentInfo
                         {
-                            Completed = true
+                            Completed = true,
+                            CompletedOnUtc = new DateTime(2017, 09, 25)
                         },
                         SignOff = new OpenDataSignOffInfo
                         {
-                            DateUtc = new DateTime(2017, 08, 02),
-                            User = new UserInfo
-                            {
-                                DisplayName = "IAO User",
-                                Email = "iaouser@example.com"
-                            }
+                            DateUtc = new DateTime(2017, 09, 26),
+                            User = TestUserInfo.TestUser
                         },
                         Paused = false
                     }
@@ -125,17 +89,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Robot
                 r.Validation = Validation.Gemini;
                 r.Gemini = Library.Example().With(m =>
                 {
-                    m.Title = "Uploader test";
-                    m.Keywords.Add(new MetadataKeyword
-                    {
-                        Vocab = "http://vocab.jncc.gov.uk/jncc-domain",
-                        Value = "Terrestrial"
-                    });
-                    m.Keywords.Add(new MetadataKeyword
-                    {
-                        Vocab = "http://vocab.jncc.gov.uk/jncc-category",
-                        Value = "Example Collection"
-                    });
+                    m.MetadataDate = new DateTime(2017, 09, 25);
                 });
                 r.Publication = new PublicationInfo
                 {
@@ -147,12 +101,8 @@ namespace Catalogue.Tests.Slow.Catalogue.Robot
                         },
                         SignOff = new OpenDataSignOffInfo
                         {
-                            DateUtc = new DateTime(2017, 08, 02),
-                            User = new UserInfo
-                            {
-                                DisplayName = "IAO User",
-                                Email = "iaouser@example.com"
-                            }
+                            DateUtc = new DateTime(2017, 09, 25),
+                            User = TestUserInfo.TestUser
                         },
                         Paused = false
                     }
@@ -167,17 +117,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Robot
                 r.Validation = Validation.Gemini;
                 r.Gemini = Library.Example().With(m =>
                 {
-                    m.Title = "Uploader test";
-                    m.Keywords.Add(new MetadataKeyword
-                    {
-                        Vocab = "http://vocab.jncc.gov.uk/jncc-domain",
-                        Value = "Terrestrial"
-                    });
-                    m.Keywords.Add(new MetadataKeyword
-                    {
-                        Vocab = "http://vocab.jncc.gov.uk/jncc-category",
-                        Value = "Example Collection"
-                    });
+                    m.MetadataDate = new DateTime(2017, 09, 26);
                 });
                 r.Publication = new PublicationInfo
                 {
@@ -185,16 +125,13 @@ namespace Catalogue.Tests.Slow.Catalogue.Robot
                     {
                         Assessment = new OpenDataAssessmentInfo
                         {
-                            Completed = true
+                            Completed = true,
+                            CompletedOnUtc = new DateTime(2017, 09, 25)
                         },
                         SignOff = new OpenDataSignOffInfo
                         {
-                            DateUtc = new DateTime(2017, 08, 02),
-                            User = new UserInfo
-                            {
-                                DisplayName = "IAO User",
-                                Email = "iaouser@example.com"
-                            }
+                            DateUtc = new DateTime(2017, 09, 26),
+                            User = TestUserInfo.TestUser
                         },
                         Paused = true
                     }
@@ -209,17 +146,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Robot
                 r.Validation = Validation.Gemini;
                 r.Gemini = Library.Example().With(m =>
                 {
-                    m.Title = "Uploader test";
-                    m.Keywords.Add(new MetadataKeyword
-                    {
-                        Vocab = "http://vocab.jncc.gov.uk/jncc-domain",
-                        Value = "Terrestrial"
-                    });
-                    m.Keywords.Add(new MetadataKeyword
-                    {
-                        Vocab = "http://vocab.jncc.gov.uk/jncc-category",
-                        Value = "Example Collection"
-                    });
+                    m.MetadataDate = new DateTime(2017, 09, 27);
                 });
                 r.Publication = new PublicationInfo
                 {
@@ -227,21 +154,18 @@ namespace Catalogue.Tests.Slow.Catalogue.Robot
                     {
                         Assessment = new OpenDataAssessmentInfo
                         {
-                            Completed = true
+                            Completed = true,
+                            CompletedOnUtc = new DateTime(2017, 09, 25)
                         },
                         SignOff = new OpenDataSignOffInfo
                         {
-                            DateUtc = new DateTime(2017, 08, 02),
-                            User = new UserInfo
-                            {
-                                DisplayName = "IAO User",
-                                Email = "iaouser@example.com"
-                            }
+                            DateUtc = new DateTime(2017, 09, 26),
+                            User = TestUserInfo.TestUser
                         },
                         Paused = false,
                         LastAttempt = new PublicationAttempt
                         {
-                            DateUtc = new DateTime(2017, 08, 03),
+                            DateUtc = new DateTime(2017, 09, 27),
                             Message = null
                         },
                         LastSuccess = null
@@ -257,17 +181,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Robot
                 r.Validation = Validation.Gemini;
                 r.Gemini = Library.Example().With(m =>
                 {
-                    m.Title = "Uploader test";
-                    m.Keywords.Add(new MetadataKeyword
-                    {
-                        Vocab = "http://vocab.jncc.gov.uk/jncc-domain",
-                        Value = "Terrestrial"
-                    });
-                    m.Keywords.Add(new MetadataKeyword
-                    {
-                        Vocab = "http://vocab.jncc.gov.uk/jncc-category",
-                        Value = "Example Collection"
-                    });
+                    m.MetadataDate = new DateTime(2017, 09, 27);
                 });
                 r.Publication = new PublicationInfo
                 {
@@ -275,26 +189,23 @@ namespace Catalogue.Tests.Slow.Catalogue.Robot
                     {
                         Assessment = new OpenDataAssessmentInfo
                         {
-                            Completed = true
+                            Completed = true,
+                            CompletedOnUtc = new DateTime(2017, 09, 25)
                         },
                         SignOff = new OpenDataSignOffInfo
                         {
-                            DateUtc = new DateTime(2017, 08, 02),
-                            User = new UserInfo
-                            {
-                                DisplayName = "IAO User",
-                                Email = "iaouser@example.com"
-                            }
+                            DateUtc = new DateTime(2017, 09, 26),
+                            User = TestUserInfo.TestUser
                         },
                         Paused = false,
                         LastAttempt = new PublicationAttempt
                         {
-                            DateUtc = new DateTime(2017, 08, 03),
+                            DateUtc = new DateTime(2017, 09, 27),
                             Message = null
                         },
                         LastSuccess = new PublicationAttempt
                         {
-                            DateUtc = new DateTime(2017, 08, 03),
+                            DateUtc = new DateTime(2017, 09, 27),
                             Message = null
                         }
                     }
