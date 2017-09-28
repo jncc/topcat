@@ -28,7 +28,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Data.Indexes
         {
             Db.Query<RecordsWithOpenDataPublicationInfoIndex.Result, RecordsWithOpenDataPublicationInfoIndex>()
                 .Where(x => x.PublicationNeverAttempted)
-                .Count().Should().Be(2);
+                .Count().Should().Be(1);
         }
 
         [Test]

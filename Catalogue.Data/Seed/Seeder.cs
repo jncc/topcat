@@ -245,7 +245,7 @@ namespace Catalogue.Data.Seed
             {
                 r.Id = new Guid("471da4f2-d9e2-4a5a-b72b-3ae8cc40ae57");
                 r.Gemini.Title = "A record with assessment completed on spreadsheet";
-                r.Gemini.MetadataDate = new DateTime(2015, 1, 1, 12, 0, 0);
+                r.Gemini.MetadataDate = new DateTime(2015, 1, 1, 10, 0, 0);
                 r.Publication = new PublicationInfo
                 {
                     OpenData = new OpenDataPublicationInfo
@@ -253,10 +253,21 @@ namespace Catalogue.Data.Seed
                         Assessment = new OpenDataAssessmentInfo
                         {
                             Completed = true,
-                            CompletedOnUtc = new DateTime(2015, 1, 1, 12, 0, 0),
+                            CompletedOnUtc = DateTime.MinValue,
                             InitialAssessmentWasDoneOnSpreadsheet = true
                         },
-                        SignOff = new OpenDataSignOffInfo()
+                        SignOff = new OpenDataSignOffInfo
+                        {
+                            DateUtc = DateTime.MinValue
+                        },
+                        LastAttempt = new PublicationAttempt
+                        {
+                            DateUtc = new DateTime(2015, 1, 1, 10, 0, 0)
+                        },
+                        LastSuccess = new PublicationAttempt
+                        {
+                            DateUtc = new DateTime(2015, 1, 1, 10, 0, 0)
+                        }
                     }
                 };
             });
