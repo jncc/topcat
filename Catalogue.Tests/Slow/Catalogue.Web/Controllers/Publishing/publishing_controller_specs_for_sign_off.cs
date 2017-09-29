@@ -16,163 +16,8 @@ using System.Threading;
 
 namespace Catalogue.Tests.Slow.Catalogue.Web.Controllers.Publishing
 {
-    class publishing_controller_specs
+    class publishing_controller_specs_for_sign_off
     {
-        [Test]
-        public void assessment_completed_test()
-        {
-            var recordId = new Guid("1a86bbbe-7f19-4fe2-82ff-7847e68266da");
-            var record = new Record().With(r =>
-            {
-                r.Id = recordId;
-                r.Path = @"X:\path\to\assessment\test";
-                r.Validation = Validation.Gemini;
-                r.Gemini = Library.Example();
-                r.Footer = new Footer();
-            });
-
-            var resultRecord = TestAssessment(record);
-
-            resultRecord.Publication.Should().NotBeNull();
-            resultRecord.Footer.ModifiedByUser.DisplayName.Should().Be("Test User");
-            resultRecord.Footer.ModifiedOnUtc.Should().NotBe(DateTime.MinValue);
-
-            var openDataInfo = resultRecord.Publication.OpenData;
-            openDataInfo.Should().NotBeNull();
-            openDataInfo.LastAttempt.Should().BeNull();
-            openDataInfo.LastSuccess.Should().BeNull();
-            openDataInfo.Resources.Should().BeNull();
-            openDataInfo.Paused.Should().BeFalse();
-            openDataInfo.Assessment.Completed.Should().BeTrue();
-            openDataInfo.Assessment.CompletedByUser.DisplayName.Should().Be("Test User");
-            openDataInfo.Assessment.CompletedByUser.Email.Should().Be("tester@example.com");
-            openDataInfo.Assessment.CompletedOnUtc.Should().NotBe(DateTime.MinValue);
-        }
-
-        [Test]
-        public void assessment_started_then_completed_test()
-        {
-            var recordId = new Guid("ec0db5b3-8b9d-42c3-ac70-2fd50ff3bbca");
-            var record = new Record().With(r =>
-            {
-                r.Id = recordId;
-                r.Path = @"X:\path\to\assessment\test";
-                r.Validation = Validation.Gemini;
-                r.Gemini = Library.Example().With(m =>
-                {
-                });
-                r.Publication = new PublicationInfo
-                {
-                    OpenData = new OpenDataPublicationInfo
-                    {
-                        Assessment = new OpenDataAssessmentInfo
-                        {
-                            Completed = false,
-                            CompletedByUser = null,
-                            CompletedOnUtc = DateTime.MinValue,
-                            InitialAssessmentWasDoneOnSpreadsheet = false
-                        }
-                    }
-                };
-                r.Footer = new Footer();
-            });
-
-            var resultRecord = TestAssessment(record);
-
-            resultRecord.Publication.Should().NotBeNull();
-
-            var openDataInfo = resultRecord.Publication.OpenData;
-            openDataInfo.Should().NotBeNull();
-            openDataInfo.LastAttempt.Should().BeNull();
-            openDataInfo.LastSuccess.Should().BeNull();
-            openDataInfo.Resources.Should().BeNull();
-            openDataInfo.Paused.Should().BeFalse();
-            openDataInfo.Assessment.Completed.Should().BeTrue();
-            openDataInfo.Assessment.CompletedByUser.DisplayName.Should().Be("Test User");
-            openDataInfo.Assessment.CompletedByUser.Email.Should().Be("tester@example.com");
-            openDataInfo.Assessment.CompletedOnUtc.Should().NotBe(DateTime.MinValue);
-        }
-
-        [Test]
-        [ExpectedException(typeof(Exception), ExpectedMessage = "Assessment has already been completed.")]
-        public void assessment_already_completed_test()
-        {
-            var recordId = new Guid("1a86bbbe-7f19-4fe2-82ff-7847e68266da");
-            var record = new Record().With(r =>
-            {
-                r.Id = recordId;
-                r.Path = @"X:\path\to\assessment\test";
-                r.Validation = Validation.Gemini;
-                r.Gemini = Library.Example().With(m =>
-                {
-                });
-                r.Publication = new PublicationInfo
-                {
-                    OpenData = new OpenDataPublicationInfo
-                    {
-                        Assessment = new OpenDataAssessmentInfo
-                        {
-                            Completed = true,
-                        }
-                    }
-                };
-                r.Footer = new Footer();
-            });
-
-            TestAssessment(record);
-
-
-        }
-
-        [Test]
-        [ExpectedException(typeof(Exception), ExpectedMessage = "Assessment has already been completed.")]
-        public void assessment_already_completed_on_spreadsheet_test()
-        {
-            var recordId = new Guid("170001cf-1117-459d-a554-b1fc031d439c");
-            var record = new Record().With(r =>
-            {
-                r.Id = recordId;
-                r.Path = @"X:\path\to\assessment\test";
-                r.Validation = Validation.Gemini;
-                r.Gemini = Library.Example().With(m =>
-                {
-                });
-                r.Publication = new PublicationInfo
-                {
-                    OpenData = new OpenDataPublicationInfo
-                    {
-                        Assessment = new OpenDataAssessmentInfo
-                        {
-                            Completed = true,
-                            InitialAssessmentWasDoneOnSpreadsheet = true
-                        }
-                    }
-                };
-                r.Footer = new Footer();
-            });
-
-            TestAssessment(record);
-        }
-
-        [Test]
-        [ExpectedException(typeof(Exception), ExpectedMessage = "Validation level must be Gemini.")]
-        public void assessment_for_non_Gemini_record_should_fail_test()
-        {
-            var recordId = new Guid("aeda73dc-4723-427d-8555-19558087370a");
-            var record = new Record().With(r =>
-            {
-                r.Id = recordId;
-                r.Path = @"X:\path\to\assessment\test";
-                r.Validation = Validation.Basic;
-                r.Gemini = Library.Blank().With(m =>
-                {
-                });
-                r.Footer = new Footer();
-            });
-
-            TestAssessment(record);
-        }
-
         [Test]
         public void successful_open_data_sign_off_test()
         {
@@ -242,7 +87,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Web.Controllers.Publishing
             });
 
             Action a = () => TestSignOff(record);
-            a.ShouldThrow<InvalidOperationException>("Couldn't sign-off record for publication - assessment not completed or out of date");
+            a.ShouldThrow<InvalidOperationException>().And.Message.Should().Be("Couldn't sign-off record for publication - assessment not completed or out of date");
         }
 
         [Test]
@@ -281,7 +126,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Web.Controllers.Publishing
             });
 
             Action a = () => TestSignOff(record);
-            a.ShouldThrow<InvalidOperationException>("The record has already been signed off");
+            a.ShouldThrow<InvalidOperationException>().And.Message.Should().Be("The record has already been signed off");
         }
 
         [Test]
@@ -315,7 +160,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Web.Controllers.Publishing
             });
 
             Action a = () => TestSignOff(record);
-            a.ShouldThrow<Exception>("Error while saving sign off changes");
+            a.ShouldThrow<Exception>().And.Message.Should().Be("Error while saving sign off changes");
         }
 
         [Test]
@@ -335,7 +180,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Web.Controllers.Publishing
             });
 
             Action a = () => TestSignOff(record);
-            a.ShouldThrow<InvalidOperationException>("Couldn't sign-off record for publication - assessment not completed or out of date");
+            a.ShouldThrow<InvalidOperationException>().And.Message.Should().Be("Couldn't sign-off record for publication - assessment not completed or out of date");
         }
 
         [Test]
@@ -456,7 +301,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Web.Controllers.Publishing
                 };
                 
                 Action a = () => publishingController.SignOff(request);
-                a.ShouldThrow<InvalidOperationException>("The record has already been signed off");
+                a.ShouldThrow<InvalidOperationException>().And.Message.Should().Be("The record has already been signed off");
 
                 var resultRecord = db.Load<Record>(record.Id);
                 resultRecord.Publication.Should().NotBeNull();
@@ -528,7 +373,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Web.Controllers.Publishing
                 };
 
                 Action a = () => publishingController.SignOff(request);
-                a.ShouldThrow<InvalidOperationException>("The record has already been signed off");
+                a.ShouldThrow<InvalidOperationException>().And.Message.Should().Be("The record has already been signed off");
 
                 var resultRecord = db.Load<Record>(record.Id);
                 resultRecord.Publication.Should().NotBeNull();
@@ -604,7 +449,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Web.Controllers.Publishing
                 };
 
                 Action a = () => publishingController.SignOff(request);
-                a.ShouldThrow<InvalidOperationException>("Couldn't sign-off record for publication - assessment not completed or out of date");
+                a.ShouldThrow<InvalidOperationException>().And.Message.Should().Be("Couldn't sign-off record for publication - assessment not completed or out of date");
 
                 var resultRecord = db.Load<Record>(record.Id);
                 resultRecord.Publication.Should().NotBeNull();
@@ -872,25 +717,6 @@ namespace Catalogue.Tests.Slow.Catalogue.Web.Controllers.Publishing
                 result.Count.Should().Be(2);
                 result.Count(r => string.Equals(r.Title, "Retrieve Sign Off Test 1", StringComparison.CurrentCulture)).Should().Be(1);
                 result.Count(r => string.Equals(r.Title, "Retrieve Sign Off Test 5", StringComparison.CurrentCulture)).Should().Be(1);
-            }
-        }
-
-        private static Record TestAssessment(Record record)
-        {
-            var store = new InMemoryDatabaseHelper().Create();
-            using (var db = store.OpenSession())
-            {
-                db.Store(record);
-                db.SaveChanges();
-
-                var publishingController = GetTestOpenDataPublishingController(db);
-
-                var request = new AssessmentRequest
-                {
-                    Id = record.Id
-                };
-
-                return publishingController.Assess(request).Record;
             }
         }
 

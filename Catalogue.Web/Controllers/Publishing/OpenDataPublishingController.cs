@@ -53,7 +53,7 @@ namespace Catalogue.Web.Controllers.Publishing
                     Email = user.User.Email
                 },
                 CompletedOnUtc = DateTime.Now,
-                InitialAssessmentWasDoneOnSpreadsheet = false
+                InitialAssessmentWasDoneOnSpreadsheet = record.Publication?.OpenData?.Assessment?.InitialAssessmentWasDoneOnSpreadsheet == true
             };
 
             var updatedRecord = openDataPublishingService.Assess(record, assessmentInfo);

@@ -14,10 +14,11 @@ namespace Catalogue.Data.Write
 
         public Record Assess(Record record, OpenDataAssessmentInfo assessmentInfo)
         {
+            if (record.IsAssessedAndUpToDate())
+                throw new InvalidOperationException("Assessment has already been completed and is up to date");
+
             if (!record.Validation.Equals(Validation.Gemini))
-            {
-                throw new Exception("Validation level must be Gemini.");
-            }
+                throw new InvalidOperationException("Validation level must be Gemini");
 
             if (record.Publication == null)
             {
@@ -30,12 +31,6 @@ namespace Catalogue.Data.Write
                 {
                     Assessment = new OpenDataAssessmentInfo()
                 };
-            }
-
-            var assessment = record.Publication.OpenData.Assessment;
-            if (assessment != null && assessment.Completed)
-            {
-                throw new Exception("Assessment has already been completed.");
             }
 
             record.Publication.OpenData.Assessment = assessmentInfo;
