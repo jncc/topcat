@@ -1,7 +1,6 @@
 ﻿using Catalogue.Data.Model;
 using Catalogue.Data.Test;
 using Catalogue.Data.Write;
-using Catalogue.Gemini.Model;
 using Catalogue.Gemini.Templates;
 using Catalogue.Robot.Publishing.OpenData;
 using Catalogue.Utilities.Clone;
@@ -35,9 +34,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Robot
                         {
                             Completed = true,
                             CompletedOnUtc = new DateTime(2017, 09, 25)
-                        },
-                        SignOff = null,
-                        Paused = false
+                        }
                     }
                 };
                 r.Footer = new Footer();
@@ -73,10 +70,8 @@ namespace Catalogue.Tests.Slow.Catalogue.Robot
                         },
                         SignOff = new OpenDataSignOffInfo
                         {
-                            DateUtc = new DateTime(2017, 09, 26),
-                            User = TestUserInfo.TestUser
-                        },
-                        Paused = false
+                            DateUtc = new DateTime(2017, 09, 26)
+                        }
                     }
                 };
                 r.Footer = new Footer();
@@ -101,10 +96,8 @@ namespace Catalogue.Tests.Slow.Catalogue.Robot
                         },
                         SignOff = new OpenDataSignOffInfo
                         {
-                            DateUtc = new DateTime(2017, 09, 25),
-                            User = TestUserInfo.TestUser
-                        },
-                        Paused = false
+                            DateUtc = new DateTime(2017, 09, 25)
+                        }
                     }
                 };
                 r.Footer = new Footer();
@@ -130,8 +123,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Robot
                         },
                         SignOff = new OpenDataSignOffInfo
                         {
-                            DateUtc = new DateTime(2017, 09, 26),
-                            User = TestUserInfo.TestUser
+                            DateUtc = new DateTime(2017, 09, 26)
                         },
                         Paused = true
                     }
@@ -159,16 +151,12 @@ namespace Catalogue.Tests.Slow.Catalogue.Robot
                         },
                         SignOff = new OpenDataSignOffInfo
                         {
-                            DateUtc = new DateTime(2017, 09, 26),
-                            User = TestUserInfo.TestUser
+                            DateUtc = new DateTime(2017, 09, 26)
                         },
-                        Paused = false,
                         LastAttempt = new PublicationAttempt
                         {
-                            DateUtc = new DateTime(2017, 09, 27),
-                            Message = null
-                        },
-                        LastSuccess = null
+                            DateUtc = new DateTime(2017, 09, 27)
+                        }
                     }
                 };
                 r.Footer = new Footer();
@@ -194,19 +182,157 @@ namespace Catalogue.Tests.Slow.Catalogue.Robot
                         },
                         SignOff = new OpenDataSignOffInfo
                         {
-                            DateUtc = new DateTime(2017, 09, 26),
-                            User = TestUserInfo.TestUser
+                            DateUtc = new DateTime(2017, 09, 26)
                         },
                         Paused = false,
                         LastAttempt = new PublicationAttempt
                         {
-                            DateUtc = new DateTime(2017, 09, 27),
-                            Message = null
+                            DateUtc = new DateTime(2017, 09, 27)
                         },
                         LastSuccess = new PublicationAttempt
                         {
-                            DateUtc = new DateTime(2017, 09, 27),
-                            Message = null
+                            DateUtc = new DateTime(2017, 09, 27)
+                        }
+                    }
+                };
+                r.Footer = new Footer();
+            });
+
+            var publishedAndOutOfDateRecord = new Record().With(r =>
+            {
+                r.Id = new Guid("98b55f61-964b-4186-8af8-e3d62a2aace4");
+                r.Path = @"X:\path\to\uploader\test";
+                r.Validation = Validation.Gemini;
+                r.Gemini = Library.Example().With(m =>
+                {
+                    m.MetadataDate = new DateTime(2017, 09, 28);
+                });
+                r.Publication = new PublicationInfo
+                {
+                    OpenData = new OpenDataPublicationInfo
+                    {
+                        Assessment = new OpenDataAssessmentInfo
+                        {
+                            Completed = true,
+                            CompletedOnUtc = new DateTime(2017, 09, 25)
+                        },
+                        SignOff = new OpenDataSignOffInfo
+                        {
+                            DateUtc = new DateTime(2017, 09, 26)
+                        },
+                        Paused = false,
+                        LastAttempt = new PublicationAttempt
+                        {
+                            DateUtc = new DateTime(2017, 09, 27)
+                        },
+                        LastSuccess = new PublicationAttempt
+                        {
+                            DateUtc = new DateTime(2017, 09, 27)
+                        }
+                    }
+                };
+                r.Footer = new Footer();
+            });
+
+            var readyToRepublishRecord = new Record().With(r =>
+            {
+                r.Id = new Guid("d41f3ffc-0b60-49b4-af15-94e0f3180f29");
+                r.Path = @"X:\path\to\uploader\test";
+                r.Validation = Validation.Gemini;
+                r.Gemini = Library.Example().With(m =>
+                {
+                    m.MetadataDate = new DateTime(2017, 09, 29);
+                });
+                r.Publication = new PublicationInfo
+                {
+                    OpenData = new OpenDataPublicationInfo
+                    {
+                        Assessment = new OpenDataAssessmentInfo
+                        {
+                            Completed = true,
+                            CompletedOnUtc = new DateTime(2017, 09, 28)
+                        },
+                        SignOff = new OpenDataSignOffInfo
+                        {
+                            DateUtc = new DateTime(2017, 09, 29)
+                        },
+                        LastAttempt = new PublicationAttempt
+                        {
+                            DateUtc = new DateTime(2017, 09, 27)
+                        },
+                        LastSuccess = new PublicationAttempt
+                        {
+                            DateUtc = new DateTime(2017, 09, 27)
+                        }
+                    }
+                };
+                r.Footer = new Footer();
+            });
+
+            var publishedAndReassessedRecord = new Record().With(r =>
+            {
+                r.Id = new Guid("b41a3f52-05de-4e52-abb6-18a6d835e39f");
+                r.Path = @"X:\path\to\uploader\test";
+                r.Validation = Validation.Gemini;
+                r.Gemini = Library.Example().With(m =>
+                {
+                    m.MetadataDate = new DateTime(2017, 09, 28);
+                });
+                r.Publication = new PublicationInfo
+                {
+                    OpenData = new OpenDataPublicationInfo
+                    {
+                        Assessment = new OpenDataAssessmentInfo
+                        {
+                            Completed = true,
+                            CompletedOnUtc = new DateTime(2017, 09, 28)
+                        },
+                        SignOff = new OpenDataSignOffInfo
+                        {
+                            DateUtc = new DateTime(2017, 09, 26)
+                        },
+                        LastAttempt = new PublicationAttempt
+                        {
+                            DateUtc = new DateTime(2017, 09, 27)
+                        },
+                        LastSuccess = new PublicationAttempt
+                        {
+                            DateUtc = new DateTime(2017, 09, 27)
+                        }
+                    }
+                };
+                r.Footer = new Footer();
+            });
+
+            var publishedAssessedSignedOffThenEditedRecord = new Record().With(r =>
+            {
+                r.Id = new Guid("6e48d4c7-3174-409f-a4d4-00d6909b7c8f");
+                r.Path = @"X:\path\to\uploader\test";
+                r.Validation = Validation.Gemini;
+                r.Gemini = Library.Example().With(m =>
+                {
+                    m.MetadataDate = new DateTime(2017, 09, 30);
+                });
+                r.Publication = new PublicationInfo
+                {
+                    OpenData = new OpenDataPublicationInfo
+                    {
+                        Assessment = new OpenDataAssessmentInfo
+                        {
+                            Completed = true,
+                            CompletedOnUtc = new DateTime(2017, 09, 28)
+                        },
+                        SignOff = new OpenDataSignOffInfo
+                        {
+                            DateUtc = new DateTime(2017, 09, 29)
+                        },
+                        LastAttempt = new PublicationAttempt
+                        {
+                            DateUtc = new DateTime(2017, 09, 27)
+                        },
+                        LastSuccess = new PublicationAttempt
+                        {
+                            DateUtc = new DateTime(2017, 09, 27)
                         }
                     }
                 };
@@ -223,6 +349,10 @@ namespace Catalogue.Tests.Slow.Catalogue.Robot
                 db.Store(pausedRecord);
                 db.Store(attemptedButFailedRecord);
                 db.Store(alreadyUploadedRecord);
+                db.Store(publishedAndOutOfDateRecord);
+                db.Store(readyToRepublishRecord);
+                db.Store(publishedAndReassessedRecord);
+                db.Store(publishedAssessedSignedOffThenEditedRecord);
                 db.SaveChanges();
 
                 Thread.Sleep(100); // Allow time for indexing
@@ -232,9 +362,10 @@ namespace Catalogue.Tests.Slow.Catalogue.Robot
                 var robotUploader = new RobotUploader(db, uploadServiceMock.Object, uploadHelperMock.Object);
 
                 var pendingRecords = robotUploader.GetRecordsPendingUpload();
-                pendingRecords.Count.Should().Be(2);
+                pendingRecords.Count.Should().Be(3);
                 pendingRecords.Contains(assessedAndSignedOffRecord).Should().BeTrue();
                 pendingRecords.Contains(attemptedButFailedRecord).Should().BeTrue();
+                pendingRecords.Contains(readyToRepublishRecord).Should().BeTrue();
             }
         }
     }
