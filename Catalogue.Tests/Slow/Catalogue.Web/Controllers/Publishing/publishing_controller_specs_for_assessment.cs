@@ -10,13 +10,10 @@ using Moq;
 using NUnit.Framework;
 using Raven.Client;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading;
 
 namespace Catalogue.Tests.Slow.Catalogue.Web.Controllers.Publishing
 {
-    class publishing_controller_specs_for_assessment
+    class publishing_controller_specs_for_assessment : PublishingTest
     {
         [Test]
         public void assessment_completed_test()

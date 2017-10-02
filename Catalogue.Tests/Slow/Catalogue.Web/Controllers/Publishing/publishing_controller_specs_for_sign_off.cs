@@ -1,12 +1,9 @@
 ﻿using Catalogue.Data.Model;
 using Catalogue.Data.Test;
-using Catalogue.Data.Write;
 using Catalogue.Gemini.Templates;
 using Catalogue.Utilities.Clone;
-using Catalogue.Web.Account;
 using Catalogue.Web.Controllers.Publishing;
 using FluentAssertions;
-using Moq;
 using NUnit.Framework;
 using Raven.Client;
 using System;
@@ -16,7 +13,7 @@ using System.Threading;
 
 namespace Catalogue.Tests.Slow.Catalogue.Web.Controllers.Publishing
 {
-    class publishing_controller_specs_for_sign_off
+    class publishing_controller_specs_for_sign_off : PublishingTest
     {
         [Test]
         public void successful_open_data_sign_off_test()
@@ -670,7 +667,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Web.Controllers.Publishing
             }
         }
 
-        private static PublishingResponse GetSignOffPublishingResponse(IDocumentSession db, Record record)
+        private PublishingResponse GetSignOffPublishingResponse(IDocumentSession db, Record record)
         {
             var publishingController = GetTestOpenDataPublishingController(db);
 
@@ -681,30 +678,6 @@ namespace Catalogue.Tests.Slow.Catalogue.Web.Controllers.Publishing
             };
 
             return publishingController.SignOff(request);
-        }
-
-        private static IDocumentSession GetNewDbWithRecord(Record record)
-        {
-            var store = new InMemoryDatabaseHelper().Create();
-            using (var db = store.OpenSession())
-            {
-                db.Store(record);
-                db.SaveChanges();
-
-                return db;
-            }
-        }
-
-        private static OpenDataPublishingController GetTestOpenDataPublishingController(IDocumentSession db)
-        {
-            var testUserContext = new TestUserContext();
-            var userContextMock = new Mock<IUserContext>();
-            userContextMock.Setup(u => u.User).Returns(testUserContext.User);
-
-            var recordService = new RecordService(db, new RecordValidator());
-            var publishingService = new OpenDataPublishingService(recordService);
-
-            return new OpenDataPublishingController(db, publishingService, userContextMock.Object);
         }
     }
 }
