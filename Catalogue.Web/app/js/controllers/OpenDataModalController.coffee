@@ -76,7 +76,7 @@ angular.module('app.controllers').controller 'OpenDataModalController',
 
         # Refresh text on assess and sign off buttons
         refreshAssessmentInfo = () ->
-            if $scope.form.publication.openData.assessment.completed
+            if $scope.form.publication != null && $scope.form.publication.openData.assessment.completed
                 if $scope.form.publication.openData.assessment.initialAssessmentWasDoneOnSpreadsheet
                     $scope.assessmentCompletedByUser = "Initial assessment completed on spreadsheet"
                     $scope.assessmentCompletedOnDate = null
@@ -90,7 +90,7 @@ angular.module('app.controllers').controller 'OpenDataModalController',
         refreshSignOffInfo = () -> 
             publishingStatus.signOff.showButton = $scope.user.isIaoUser && !isSignedOffAndUpToDate $scope.form
 
-            if $scope.form.publication.openData.signOff != null
+            if $scope.form.publication != null && $scope.form.publication.openData.signOff != null
                 if $scope.form.publication.openData.signOff.user == null
                     $scope.signOffCompletedByUser = "Initial sign off completed on spreadsheet"
                     $scope.signOffCompletedOnDate = null
@@ -107,7 +107,7 @@ angular.module('app.controllers').controller 'OpenDataModalController',
                 publishingStatus.signOff.signOffButtonText = "Pending sign off"
 
         refreshUploadInfo = () ->
-            if $scope.form.publication.openData.lastAttempt != null
+            if $scope.form.publication != null && $scope.form.publication.openData.lastAttempt != null
                 $scope.uploadLastAttempted = moment(new Date($scope.form.publication.openData.lastAttempt.dateUtc)).format('DD MMM YYYY h:mm a')
                 $scope.uploadLastSucceeded = moment(new Date($scope.form.publication.openData.lastSuccess.dateUtc)).format('DD MMM YYYY h:mm a')
 

@@ -76,7 +76,7 @@
       publishingStatus.currentActiveView = "risk assessment";
     }
     refreshAssessmentInfo = function() {
-      if ($scope.form.publication.openData.assessment.completed) {
+      if ($scope.form.publication !== null && $scope.form.publication.openData.assessment.completed) {
         if ($scope.form.publication.openData.assessment.initialAssessmentWasDoneOnSpreadsheet) {
           $scope.assessmentCompletedByUser = "Initial assessment completed on spreadsheet";
           return $scope.assessmentCompletedOnDate = null;
@@ -91,7 +91,7 @@
     };
     refreshSignOffInfo = function() {
       publishingStatus.signOff.showButton = $scope.user.isIaoUser && !isSignedOffAndUpToDate($scope.form);
-      if ($scope.form.publication.openData.signOff !== null) {
+      if ($scope.form.publication !== null && $scope.form.publication.openData.signOff !== null) {
         if ($scope.form.publication.openData.signOff.user === null) {
           $scope.signOffCompletedByUser = "Initial sign off completed on spreadsheet";
           $scope.signOffCompletedOnDate = null;
@@ -110,7 +110,7 @@
       }
     };
     refreshUploadInfo = function() {
-      if ($scope.form.publication.openData.lastAttempt !== null) {
+      if ($scope.form.publication !== null && $scope.form.publication.openData.lastAttempt !== null) {
         $scope.uploadLastAttempted = moment(new Date($scope.form.publication.openData.lastAttempt.dateUtc)).format('DD MMM YYYY h:mm a');
         return $scope.uploadLastSucceeded = moment(new Date($scope.form.publication.openData.lastSuccess.dateUtc)).format('DD MMM YYYY h:mm a');
       }
