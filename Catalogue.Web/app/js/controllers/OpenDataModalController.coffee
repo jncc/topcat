@@ -16,6 +16,10 @@ angular.module('app.controllers').controller 'OpenDataModalController',
         $scope.assessmentRequest = {}
         $scope.assessmentRequest.id = $scope.form.id
 
+        $scope.isAssessedAndUpToDate = isAssessedAndUpToDate
+        $scope.isSignedOffAndUpToDate = isSignedOffAndUpToDate
+        $scope.isUploadedAndUpToDate = isUploadedAndUpToDate
+
         publishingStatus =
             riskAssessment:
                 currentClass: {}
@@ -24,8 +28,7 @@ angular.module('app.controllers').controller 'OpenDataModalController',
                 currentClass: {}
                 completed: {}
                 timeout: {}
-                signOffButtonDisabled: {}
-                signOffButtonClass: {}
+                showButton: {}
             upload:
                 currentClass: {}
                 completed: {}
@@ -39,64 +42,78 @@ angular.module('app.controllers').controller 'OpenDataModalController',
             publishingStatus.riskAssessment.completed = $scope.form.publication != null && $scope.form.publication.openData.assessment.completed
             publishingStatus.signOff.completed = $scope.form.publication != null && $scope.form.publication.openData.signOff != null
             publishingStatus.upload.completed = $scope.form.publication != null && $scope.form.publication.openData.lastSuccess != null
-            
-            if publishingStatus.upload.completed
+
+            if isAssessedAndUpToDate $scope.form
                 publishingStatus.riskAssessment.currentClass = "visited"
-                publishingStatus.signOff.currentClass = "visited"
-                publishingStatus.upload.currentClass = "visited"
-            else if publishingStatus.signOff.completed
-                publishingStatus.riskAssessment.currentClass = "visited"
-                publishingStatus.signOff.currentClass = "visited"
-                publishingStatus.upload.currentClass = "current"
-            else if publishingStatus.riskAssessment.completed
-                publishingStatus.riskAssessment.currentClass = "visited"
-                publishingStatus.signOff.currentClass = "current"
-                publishingStatus.upload.currentClass = "disabled"
+            else if publishingStatus.riskAssessment.completed 
+                publishingStatus.riskAssessment.currentClass = "current"
             else
                 publishingStatus.riskAssessment.currentClass = "current"
+
+            if isSignedOffAndUpToDate $scope.form
+                publishingStatus.signOff.currentClass = "visited"
+            else if isAssessedAndUpToDate $scope.form
+                publishingStatus.signOff.currentClass = "current"
+            else
                 publishingStatus.signOff.currentClass = "disabled"
+
+            if isUploadedAndUpToDate $scope.form
+                publishingStatus.upload.currentClass = "visited"
+            else if isSignedOffAndUpToDate $scope.form
+                publishingStatus.upload.currentClass = "current"
+            else
                 publishingStatus.upload.currentClass = "disabled"
 
         $scope.refreshPublishingStatus()
 
         # load initial status screen
-        if publishingStatus.upload.completed || publishingStatus.signOff.completed
+        if isSignedOffAndUpToDate $scope.form
             publishingStatus.currentActiveView = "upload"
-        else if publishingStatus.riskAssessment.completed
+        else if isAssessedAndUpToDate $scope.form
             publishingStatus.currentActiveView = "sign off"
         else
             publishingStatus.currentActiveView = "risk assessment"
 
         # Refresh text on assess and sign off buttons
-        refreshAssessmentButton = () ->
-            if ($scope.form.publication != null && $scope.form.publication.openData.assessment.completed)
+        refreshAssessmentInfo = () ->
+            if $scope.form.publication.openData.assessment.completed
                 if $scope.form.publication.openData.assessment.initialAssessmentWasDoneOnSpreadsheet
-                    $scope.assessmentButtonText = "Initial assessment completed on spreadsheet"
+                    $scope.assessmentCompletedByUser = "Initial assessment completed on spreadsheet"
+                    $scope.assessmentCompletedOnDate = null
+                else if isAssessedAndUpToDate $scope.form
+                    $scope.assessmentCompletedByUser = "Completed by: " + $scope.form.publication.openData.assessment.completedByUser.displayName
+                    $scope.assessmentCompletedOnDate = "Completed on: " + moment(new Date($scope.form.publication.openData.assessment.completedOnUtc)).format('DD MMM YYYY h:mm a')
                 else
-                    $scope.assessmentButtonText = "Completed by " + $scope.form.publication.openData.assessment.completedByUser.displayName +
-                        " on " + formatDate(new Date($scope.form.publication.openData.assessment.completedOnUtc))
-            else
-                $scope.assessmentButtonText = "I AGREE"
+                    $scope.assessmentCompletedByUser = "Last completed by: " + $scope.form.publication.openData.assessment.completedByUser.displayName
+                    $scope.assessmentCompletedOnDate = "Last completed on: " + moment(new Date($scope.form.publication.openData.assessment.completedOnUtc)).format('DD MMM YYYY h:mm a')
 
-        refreshSignOffButton = () -> 
-            publishingStatus.signOff.signOffButtonDisabled = !$scope.user.isIaoUser || ($scope.form.publication != null && $scope.form.publication.openData.signOff != null)
+        refreshSignOffInfo = () -> 
+            publishingStatus.signOff.showButton = $scope.user.isIaoUser && !isSignedOffAndUpToDate $scope.form
 
-            if $scope.form.publication != null && $scope.form.publication.openData.signOff != null
-                publishingStatus.signOff.signOffButtonClass = "btn btn-primary"
+            if $scope.form.publication.openData.signOff != null
                 if $scope.form.publication.openData.signOff.user == null
-                    publishingStatus.signOff.signOffButtonText = "Initial sign off completed on spreadsheet"
+                    $scope.signOffCompletedByUser = "Initial sign off completed on spreadsheet"
+                    $scope.signOffCompletedOnDate = null
+                else if isSignedOffAndUpToDate $scope.form
+                    $scope.signOffCompletedByUser = "Signed off by: " + $scope.form.publication.openData.signOff.user.displayName
+                    $scope.signOffCompletedOnDate = "Signed off on: " + moment(new Date($scope.form.publication.openData.signOff.dateUtc)).format('DD MMM YYYY h:mm a')
                 else
-                    publishingStatus.signOff.signOffButtonText = "Signed off by " + $scope.form.publication.openData.signOff.user.displayName +
-                        " on " + formatDate(new Date($scope.form.publication.openData.signOff.dateUtc))
-            else if $scope.user.isIaoUser
-                publishingStatus.signOff.signOffButtonClass = "btn btn-danger sign-off"
+                    $scope.signOffCompletedByUser = "Last signed off by: " + $scope.form.publication.openData.signOff.user.displayName
+                    $scope.signOffCompletedOnDate = "Last signed off on: " + moment(new Date($scope.form.publication.openData.signOff.dateUtc)).format('DD MMM YYYY h:mm a')
+            
+            if $scope.user.isIaoUser
                 publishingStatus.signOff.signOffButtonText = "SIGN OFF"
             else
-                publishingStatus.signOff.signOffButtonClass = "btn btn-primary"
                 publishingStatus.signOff.signOffButtonText = "Pending sign off"
 
-        refreshAssessmentButton()
-        refreshSignOffButton()
+        refreshUploadInfo = () ->
+            if $scope.form.publication.openData.lastAttempt != null
+                $scope.uploadLastAttempted = moment(new Date($scope.form.publication.openData.lastAttempt.dateUtc)).format('DD MMM YYYY h:mm a')
+                $scope.uploadLastSucceeded = moment(new Date($scope.form.publication.openData.lastSuccess.dateUtc)).format('DD MMM YYYY h:mm a')
+
+        refreshAssessmentInfo()
+        refreshSignOffInfo()
+        refreshUploadInfo()
 
         # Assess and sign off button clicks with timeout for sign off
         $scope.assessButtonClick = ->
@@ -104,7 +121,7 @@ angular.module('app.controllers').controller 'OpenDataModalController',
             .success (result) ->
                 $scope.status.refresh()
                 $scope.form = result.record
-                refreshAssessmentButton()
+                refreshAssessmentInfo()
                 $scope.refreshPublishingStatus()
                 publishingStatus.currentActiveView = "sign off"
             .catch (error) ->
@@ -125,7 +142,7 @@ angular.module('app.controllers').controller 'OpenDataModalController',
             .success (result) ->
                 $scope.status.refresh()
                 $scope.form = result.record
-                refreshSignOffButton()
+                refreshSignOffInfo()
                 $scope.refreshPublishingStatus()
                 publishingStatus.currentActiveView = "upload"
             .catch (error) ->
@@ -148,6 +165,33 @@ angular.module('app.controllers').controller 'OpenDataModalController',
         $scope.cancelSignOff = () ->
             $timeout.cancel
             publishingStatus.signOff.timeout = -1
-            refreshSignOffButton()
+            refreshSignOffInfo()
 
         $scope.close = () -> $scope.$close $scope.form
+
+isAssessedAndUpToDate = (record) ->
+    if record.publication == null
+        return false
+    else if !record.publication.openData.assessment.completed
+        return false
+    else if record.publication.openData.assessment.completedOnUtc == record.gemini.metadataDate
+        return true
+    else
+        return isSignedOffAndUpToDate(record)
+
+isSignedOffAndUpToDate = (record) ->
+    if record.publication == null
+        return false
+    else if record.publication.openData.signOff != null && record.publication.openData.signOff.dateUtc == record.gemini.metadataDate
+        return true
+    else
+        return isUploadedAndUpToDate(record)
+
+isUploadedAndUpToDate = (record) ->
+    if record.publication == null
+        return false
+    else if record.publication.openData.lastAttempt != null && record.publication.openData.lastAttempt.dateUtc == record.gemini.metadataDate
+        return true
+    else
+        return false
+    

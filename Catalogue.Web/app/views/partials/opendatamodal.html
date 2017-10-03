@@ -12,16 +12,18 @@
             <nav>
                 <ol class="cd-multi-steps text-center">
                     <li ng-class="publishingStatus.riskAssessment.currentClass">
-                        <a ng-click="publishingStatus.currentActiveView = 'risk assessment'">1. Risk assessment <span ng-if="publishingStatus.riskAssessment.completed" class="glyphicon glyphicon-ok"></span></a>
+                        <a ng-click="publishingStatus.currentActiveView = 'risk assessment'">
+                            1. Risk assessment <span ng-if="isAssessedAndUpToDate(form)" class="glyphicon glyphicon-ok"></span>
+                        </a>
                     </li>
                     <li ng-class="publishingStatus.signOff.currentClass">
                         <a ng-click="publishingStatus.currentActiveView = 'sign off'">
-                            2. Final approval <span ng-if="publishingStatus.signOff.completed" class="glyphicon glyphicon-ok"></span>
+                            2. Final approval <span ng-if="isSignedOffAndUpToDate(form)" class="glyphicon glyphicon-ok"></span>
                         </a>
                     </li>
                     <li ng-class="publishingStatus.upload.currentClass">
                         <a ng-click="publishingStatus.currentActiveView = 'upload'">
-                            3. Data upload <span ng-if="publishingStatus.upload.completed" class="glyphicon glyphicon-ok"></span>
+                            3. Data upload <span ng-if="isUploadedAndUpToDate(form)" class="glyphicon glyphicon-ok"></span>
                         </a>
                     </li>
                 </ol>
@@ -51,11 +53,16 @@
                             For more information and guidance about the publishing process, please open <a href="file:///Z:\Prog110-FutureData\0264 Information Management\Tools\Topcat\Guidance\Risk Assessment for Open Data Publication.pdf">this file</a> by copying and pasting the link into Windows Explorer.
                         </p>
                         <br/>
-                        <span class="pull-right">
+                        <span ng-if="form.publication.openData.assessment.completed">
+                            <p>
+                                {{assessmentCompletedByUser}}<br />
+                                {{assessmentCompletedOnDate}}
+                            </p>
+                        </span>
+                        <span class="pull-right" ng-if="!isAssessedAndUpToDate(form)">
                             <button type="button" class="btn btn-primary"
-                                    ng-click="assessButtonClick()"
-                                    ng-disabled="form.publication.openData.assessment.completed">
-                                {{assessmentButtonText}}
+                                    ng-click="assessButtonClick()">
+                                I AGREE
                             </button>
                         </span>
                     </div>
@@ -64,11 +71,16 @@
                         <p>To proceed, this record must be signed off by an Information Asset Owner. Please review the record with your Information Asset Owner and then ask them to sign off by clicking the button below.</p>
                         <p>Alternatively, sign off can be provided on the <a ng-click="$dismiss()" href="#opendatapublishing/signoff">Final Approval</a> page.</p>
                         <br />
-                        <span class="pull-right">
-                            <button ng-class="publishingStatus.signOff.signOffButtonClass"
+                        <span ng-if="form.publication.openData.signOff != null">
+                            <p>
+                                {{signOffCompletedByUser}}<br />
+                                {{signOffCompletedOnDate}}
+                            </p>
+                        </span>
+                        <span class="pull-right" ng-if="publishingStatus.signOff.showButton">
+                            <button class="btn btn-danger sign-off"
                                     tc-tip title="Publishing sign off for Information Asset Owners"
-                                    ng-click="signOffButtonClick(r.id)"
-                                    ng-disabled="publishingStatus.signOff.signOffButtonDisabled">
+                                    ng-click="signOffButtonClick(r.id)">
                                 <span ng-if="publishingStatus.signOff.signOffButtonText.indexOf('Cancel') == 0" class="glyphicon glyphicon-remove sign-off"></span>
                                 &nbsp;{{ publishingStatus.signOff.signOffButtonText }}
                             </button>
@@ -76,7 +88,14 @@
                     </div>
                     <div ng-show="publishingStatus.currentActiveView == 'upload'">
                         <h3>Data upload</h3>
-                        <p>The record will now be automatically uploaded to data.gov.uk. This page will be updated once the upload is completed.</p>
+                        <p>The record is now waiting to be automatically uploaded to data.gov.uk. The upload process may take a day so please check back later.</p>
+                        <br />
+                        <span>
+                            <p>
+                                Last upload attempt: {{uploadLastAttempted}}<br />
+                                Last upload success: {{uploadLastSucceeded}}
+                            </p>
+                        </span>
                     </div>
                 </div>
             </div>
