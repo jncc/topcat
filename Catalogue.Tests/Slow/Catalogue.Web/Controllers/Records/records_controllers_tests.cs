@@ -33,7 +33,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Web.Controllers.Records
                 Gemini = Library.Blank().With(m => m.Title = "Some new record!")
             };
             var rsr = RecordServiceResult.SuccessfulResult.With(r => r.Record = record);
-            var service = Mock.Of<IRecordService>(s => s.Insert(It.IsAny<Record>(), It.IsAny<UserInfo>()) == rsr);
+            var service = Mock.Of<IRecordService>(s => s.Insert(It.IsAny<Record>(), It.IsAny<UserInfo>(), It.IsAny<DateTime>()) == rsr);
             var controller = new RecordsController(service, Mock.Of<IDocumentSession>(), new TestUserContext());
 
             var result = controller.Post(record);

@@ -20,7 +20,7 @@ namespace Catalogue.Data.Write
         {
             record.Publication.OpenData.LastAttempt = attempt;
 
-            var recordServiceResult = recordService.Update(record, userInfo);
+            var recordServiceResult = recordService.Update(record, userInfo, attempt.DateUtc);
             if (!recordServiceResult.Success)
             {
                 var e = new Exception("Error while saving upload changes.");
@@ -32,7 +32,7 @@ namespace Catalogue.Data.Write
         {
             record.Publication.OpenData.LastSuccess = attempt;
 
-            var recordServiceResult = recordService.Update(record, userInfo);
+            var recordServiceResult = recordService.Update(record, userInfo, attempt.DateUtc);
             if (!recordServiceResult.Success)
             {
                 var e = new Exception("Error while saving upload changes.");

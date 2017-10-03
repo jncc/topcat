@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using Catalogue.Data.Import;
 using Catalogue.Data.Import.Mappings;
@@ -27,7 +28,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Data.Import
                 Footer = new Footer()
             };
             var result = RecordServiceResult.SuccessfulResult.With(r => r.Record = record);
-            recordService = Mock.Of<IRecordService>(rs => rs.Insert(It.IsAny<Record>(), It.IsAny<UserInfo>()) == result);
+            recordService = Mock.Of<IRecordService>(rs => rs.Insert(It.IsAny<Record>(), It.IsAny<UserInfo>(), It.IsAny<DateTime>()) == result);
 
             string path = @"c:\some\path.csv";
             var fileSystem = Mock.Of<IFileSystem>(fs => fs.OpenReader(path) == new StringReader(testData));
@@ -39,14 +40,14 @@ namespace Catalogue.Tests.Slow.Catalogue.Data.Import
         [Test]
         public void should_import_both_records()
         {
-            Mock.Get(recordService).Verify(s => s.Insert(It.IsAny<Record>(), It.IsAny<UserInfo>()), Times.Exactly(2));
+            Mock.Get(recordService).Verify(s => s.Insert(It.IsAny<Record>(), It.IsAny<UserInfo>(), It.IsAny<DateTime>()), Times.Exactly(2));
         }
 
         [Test]
         public void should_import_gemini_object()
         {
             // make sure that the importer is filling in the gemini object as well as the top-level field(s)
-            Mock.Get(recordService).Verify(s => s.Insert(It.Is((Record r) => r.Gemini.Abstract == "This is the abstract"), It.IsAny<UserInfo>()));
+            Mock.Get(recordService).Verify(s => s.Insert(It.Is((Record r) => r.Gemini.Abstract == "This is the abstract"), It.IsAny<UserInfo>(), It.IsAny<DateTime>()));
         }
 
         string testData =

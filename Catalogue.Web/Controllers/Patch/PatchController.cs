@@ -12,6 +12,7 @@ using System.Linq;
 using System.Net.Http;
 using System.Web.Http;
 using Catalogue.Utilities.Text;
+using Catalogue.Utilities.Time;
 
 namespace Catalogue.Web.Controllers.Patch
 {
@@ -192,7 +193,7 @@ namespace Catalogue.Web.Controllers.Patch
 
             foreach (var record in records)
             {
-                service.Update(record, record.Footer.ModifiedByUser);
+                service.Update(record, record.Footer.ModifiedByUser, Clock.NowUtc);
             }
 
             db.SaveChanges();
@@ -217,7 +218,7 @@ namespace Catalogue.Web.Controllers.Patch
             foreach (var record in records)
             {
                 record.Gemini.ResponsibleOrganisation.Role = "custodian";
-                service.Update(record, record.Footer.ModifiedByUser);
+                service.Update(record, record.Footer.ModifiedByUser, Clock.NowUtc);
             }
 
 

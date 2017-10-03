@@ -43,8 +43,8 @@ namespace Catalogue.Tests.Slow.Catalogue.Data.Indexes
                 });
             });
 
-            service.Insert(record1, TestUser);
-            service.Insert(record2, TestUser);
+            service.Insert(record1, TestUser, new DateTime());
+            service.Insert(record2, TestUser, new DateTime());
 
             Db.SaveChanges();
             RavenUtility.WaitForIndexing(Db);

@@ -57,7 +57,7 @@ namespace Catalogue.Web.Controllers.Records
                 Email = user.User.Email
             };
 
-            var result = service.Update(record, userInfo);
+            var result = service.Update(record, userInfo, Clock.NowUtc);
 
             if (result.Record.Id != id) throw new Exception("The ID of the record does not match that supplied to the put method");
 
@@ -77,7 +77,7 @@ namespace Catalogue.Web.Controllers.Records
                 Email = user.User.Email
             };
 
-            var result = service.Insert(record, userInfo);
+            var result = service.Insert(record, userInfo, Clock.NowUtc);
 
             if (result.Success)
                 db.SaveChanges();

@@ -10,8 +10,8 @@ namespace Catalogue.Data.Write
 {
     public interface IRecordService
     {
-        RecordServiceResult Insert(Record record, UserInfo user);
-        RecordServiceResult Update(Record record, UserInfo user);
+        RecordServiceResult Insert(Record record, UserInfo user, DateTime metadataDate);
+        RecordServiceResult Update(Record record, UserInfo user, DateTime metadataDate);
     }
 
     public class RecordService : IRecordService
@@ -25,28 +25,28 @@ namespace Catalogue.Data.Write
             this.validator = validator;
         }
 
-        public RecordServiceResult Insert(Record record, UserInfo user)
+        public RecordServiceResult Insert(Record record, UserInfo user, DateTime metadataDate)
         {
             SetFooterForNewlyCreatedRecord(record, user);
 
-            return Upsert(record);
+            return Upsert(record, metadataDate);
         }
 
-        public RecordServiceResult Update(Record record, UserInfo user)
+        public RecordServiceResult Update(Record record, UserInfo user, DateTime metadataDate)
         {
             if (record.ReadOnly)
                 throw new InvalidOperationException("Cannot update a read-only record.");
 
             SetFooterForUpdatedRecord(record, user);
 
-            return Upsert(record);
+            return Upsert(record, metadataDate);
         }
 
-        internal RecordServiceResult Upsert(Record record)
+        internal RecordServiceResult Upsert(Record record, DateTime metadataDate)
         {
             CorrectlyOrderKeywords(record);
             StandardiseUnconditionalUseConstraints(record);
-            UpdateMetadataDateToNow(record);
+            UpdateMetadataDate(record, metadataDate);
             SetMetadataPointOfContactRoleToOnlyAllowedValue(record);
 
             var validation = validator.Validate(record);
@@ -96,9 +96,9 @@ namespace Catalogue.Data.Write
                 record.Gemini.UseConstraints = unconditional;
         }
 
-        void UpdateMetadataDateToNow(Record record)
+        void UpdateMetadataDate(Record record, DateTime metadataDate)
         {
-            record.Gemini.MetadataDate = Clock.NowUtc;
+            record.Gemini.MetadataDate = metadataDate;
         }
 
         private void SetFooterForNewlyCreatedRecord(Record record, UserInfo userInfo)

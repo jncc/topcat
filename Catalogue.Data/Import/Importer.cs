@@ -8,6 +8,7 @@ using Raven.Client;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using Catalogue.Utilities.Time;
 
 namespace Catalogue.Data.Import
 {
@@ -72,7 +73,7 @@ namespace Catalogue.Data.Import
             {
                 foreach (var record in records)
                 {
-                    var result = recordService.Insert(record, userInfo);
+                    var result = recordService.Insert(record, userInfo, Clock.NowUtc);
 
                     if (!result.Success)
                     {

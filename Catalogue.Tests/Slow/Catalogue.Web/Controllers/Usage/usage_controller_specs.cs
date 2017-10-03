@@ -135,7 +135,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Web.Controllers.Usage
                     };
                 });
 
-                recordService.Update(record, record.Footer.ModifiedByUser);
+                recordService.Update(record, record.Footer.ModifiedByUser, new DateTime());
             }
         }
     }

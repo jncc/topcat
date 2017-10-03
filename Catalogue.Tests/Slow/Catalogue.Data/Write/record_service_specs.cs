@@ -22,7 +22,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Data.Write
             var service = new RecordService(Mock.Of<IDocumentSession>(), Mock.Of<IRecordValidator>());
             var record = new Record { ReadOnly = true };
 
-            service.Invoking(s => s.Update(record, TestUser))
+            service.Invoking(s => s.Update(record, TestUser, new DateTime()))
                 .ShouldThrow<InvalidOperationException>()
                 .WithMessage("Cannot update a read-only record.");
         }
@@ -34,7 +34,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Data.Write
             var service = new RecordService(database, ValidatorStub());
 
             var record = BasicRecord();
-            service.Update(record, TestUser);
+            service.Update(record, TestUser, new DateTime());
 
             Mock.Get(database).Verify(db => db.Store(record));
         }
@@ -45,7 +45,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Data.Write
             var database = Mock.Of<IDocumentSession>();
             var service = new RecordService(database, FailingValidatorStub());
 
-            service.Update(BasicRecord(), TestUser);
+            service.Update(BasicRecord(), TestUser, new DateTime());
 
             Mock.Get(database).Verify(db => db.Store(It.IsAny<Record>()), Times.Never);
         }
@@ -60,7 +60,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Data.Write
             var service = new RecordService(database, ValidatorStub());
 
             var record = BasicRecord();
-            var result = service.Update(record, TestUser);
+            var result = service.Update(record, TestUser, new DateTime());
 
             result.Record.Should().Be(record);
         }
@@ -78,7 +78,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Data.Write
                 Footer = new Footer()
             };
 
-            service.Update(record, TestUser);
+            service.Update(record, TestUser, new DateTime());
 
             string expectedWkt = BoundingBoxUtility.ToWkt(e.BoundingBox);
             Mock.Get(database).Verify(db => db.Store(It.Is((Record r) => r.Wkt == expectedWkt)));
@@ -92,7 +92,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Data.Write
             var database = Mock.Of<IDocumentSession>();
             var service = new RecordService(database, ValidatorStub());
 
-            service.Update(BasicRecord(), TestUser);
+            service.Update(BasicRecord(), TestUser, new DateTime());
 
             Mock.Get(database).Verify(db => db.Store(It.Is((Record r) => r.Wkt == null)));
         }
@@ -104,7 +104,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Data.Write
             var service = new RecordService(database, ValidatorStub());
 
             var record = BasicRecord().With(r => r.Gemini.UseConstraints = "   No conditions APPLY");
-            service.Update(record, TestUser);
+            service.Update(record, TestUser, new DateTime());
 
             Mock.Get(database).Verify(db => db.Store(It.Is((Record r) => r.Gemini.UseConstraints == "no conditions apply")));
         }
@@ -115,7 +115,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Data.Write
             var database = Mock.Of<IDocumentSession>();
             var service = new RecordService(database, ValidatorStub());
 
-            service.Update(BasicRecord(), TestUser);
+            service.Update(BasicRecord(), TestUser, new DateTime());
 
             Mock.Get(database).Verify(db => db.Store(It.Is((Record r) => r.Security == Security.Official)));
         }
@@ -143,7 +143,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Data.Write
                 }.ToKeywordList();
             });
 
-            service.Update(record, TestUser);
+            service.Update(record, TestUser, new DateTime());
 
             var expected = new StringPairList
             {
@@ -170,7 +170,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Data.Write
             var database = Mock.Of<IDocumentSession>();
             var service = new RecordService(database, ValidatorStub());
 
-            var result = service.Insert(record, TestUser);
+            var result = service.Insert(record, TestUser, new DateTime());
             var footer = result.Record.Footer;
             footer.Should().NotBeNull();
             footer.CreatedOnUtc.Should().NotBe(DateTime.MinValue);
@@ -210,7 +210,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Data.Write
             var database = Mock.Of<IDocumentSession>();
             var service = new RecordService(database, ValidatorStub());
 
-            var result = service.Update(record, TestUser);
+            var result = service.Update(record, TestUser, new DateTime());
             var footer = result.Record.Footer;
             footer.Should().NotBeNull();
             footer.CreatedOnUtc.Should().Be(new DateTime(2015, 1, 1, 10, 0, 0));
