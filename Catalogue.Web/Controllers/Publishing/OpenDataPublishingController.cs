@@ -52,7 +52,7 @@ namespace Catalogue.Web.Controllers.Publishing
                     DisplayName = user.User.DisplayName,
                     Email = user.User.Email
                 },
-                CompletedOnUtc = DateTime.Now,
+                CompletedOnUtc = Clock.NowUtc,
                 InitialAssessmentWasDoneOnSpreadsheet = record.Publication?.OpenData?.Assessment?.InitialAssessmentWasDoneOnSpreadsheet == true
             };
 
@@ -77,7 +77,7 @@ namespace Catalogue.Web.Controllers.Publishing
                     DisplayName = user.User.DisplayName,
                     Email = user.User.Email
                 },
-                DateUtc = DateTime.Now,
+                DateUtc = Clock.NowUtc,
                 Comment = signOffRequest.Comment
             };
 

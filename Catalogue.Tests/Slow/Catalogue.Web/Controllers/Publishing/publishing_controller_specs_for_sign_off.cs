@@ -186,7 +186,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Web.Controllers.Publishing
                 r.Validation = Validation.Gemini;
                 r.Gemini = Library.Example().With(m =>
                 {
-                    m.MetadataDate = new DateTime(2017, 07, 12);
+                    m.MetadataDate = DateTime.Parse("2017-07-12T00:00:00.0000000Z");
                 });
                 r.Publication = new PublicationInfo
                 {
@@ -195,7 +195,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Web.Controllers.Publishing
                         Assessment = new OpenDataAssessmentInfo
                         {
                             Completed = true,
-                            CompletedOnUtc = new DateTime(2017, 07, 12)
+                            CompletedOnUtc = DateTime.Parse("2017-07-12T00:00:00.0000000Z")
                         },
                         SignOff = new OpenDataSignOffInfo
                         {
@@ -204,15 +204,15 @@ namespace Catalogue.Tests.Slow.Catalogue.Web.Controllers.Publishing
                                 DisplayName = "Cathy",
                                 Email = "cathy@example.com"
                             },
-                            DateUtc = new DateTime(2017, 07, 10)
+                            DateUtc = DateTime.Parse("2017-07-10T00:00:00.0000000Z")
                         },
                         LastAttempt = new PublicationAttempt
                         {
-                            DateUtc = new DateTime(2017, 07, 11)
+                            DateUtc = DateTime.Parse("2017-07-11T00:00:00.0000000Z")
                         },
                         LastSuccess = new PublicationAttempt
                         {
-                            DateUtc = new DateTime(2017, 07, 11)
+                            DateUtc = DateTime.Parse("2017-07-11T00:00:00.0000000Z")
                         }
                     }
                 };
@@ -224,14 +224,14 @@ namespace Catalogue.Tests.Slow.Catalogue.Web.Controllers.Publishing
 
             var openDataInfo = resultRecord.Publication.OpenData;
             openDataInfo.Should().NotBeNull();
-            openDataInfo.LastAttempt.DateUtc.Should().Be(new DateTime(2017, 07, 11));
-            openDataInfo.LastSuccess.DateUtc.Should().Be(new DateTime(2017, 07, 11));
+            openDataInfo.LastAttempt.DateUtc.Should().Be(DateTime.Parse("2017-07-11T00:00:00.0000000Z"));
+            openDataInfo.LastSuccess.DateUtc.Should().Be(DateTime.Parse("2017-07-11T00:00:00.0000000Z"));
             openDataInfo.Resources.Should().BeNull();
             openDataInfo.Paused.Should().BeFalse();
             openDataInfo.SignOff.User.DisplayName.Should().Be("Test User");
             openDataInfo.SignOff.User.Email.Should().Be("tester@example.com");
             openDataInfo.SignOff.DateUtc.Should().NotBe(DateTime.MinValue);
-            openDataInfo.SignOff.DateUtc.Should().NotBe(new DateTime(2017, 07, 10));
+            openDataInfo.SignOff.DateUtc.Should().NotBe(DateTime.Parse("2017-07-10T00:00:00.0000000Z"));
         }
 
         [Test]
