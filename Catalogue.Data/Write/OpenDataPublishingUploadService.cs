@@ -18,8 +18,19 @@ namespace Catalogue.Data.Write
 
         public void UpdateLastAttempt(Record record, PublicationAttempt attempt, UserInfo userInfo)
         {
-            // save a not-yet-successful attempt to begin with
             record.Publication.OpenData.LastAttempt = attempt;
+
+            var recordServiceResult = recordService.Update(record, userInfo);
+            if (!recordServiceResult.Success)
+            {
+                var e = new Exception("Error while saving upload changes.");
+                e.LogAndThrow(Logger);
+            }
+        }
+
+        public void UpdateLastSuccess(Record record, PublicationAttempt attempt, UserInfo userInfo)
+        {
+            record.Publication.OpenData.LastSuccess = attempt;
 
             var recordServiceResult = recordService.Update(record, userInfo);
             if (!recordServiceResult.Success)
@@ -43,5 +54,6 @@ namespace Catalogue.Data.Write
             record.Gemini.ResourceLocator = dataHttpPath;
             Logger.Info("ResourceLocator updated to point to the data file.");
         }
+
     }
 }

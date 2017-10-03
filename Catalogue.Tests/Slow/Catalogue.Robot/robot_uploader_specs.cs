@@ -1,7 +1,6 @@
 ﻿using Catalogue.Data.Model;
 using Catalogue.Data.Test;
 using Catalogue.Data.Write;
-using Catalogue.Gemini.Model;
 using Catalogue.Gemini.Templates;
 using Catalogue.Robot.Publishing.OpenData;
 using Catalogue.Utilities.Clone;
@@ -17,7 +16,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Robot
     class robot_uploader_specs
     {
         [Test]
-        public void get_records_pending_upload_test_with_assessed_record()
+        public void pending_upload_test_with_assessed_record()
         {
             var assessedRecord = new Record().With(r =>
             {
@@ -26,17 +25,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Robot
                 r.Validation = Validation.Gemini;
                 r.Gemini = Library.Example().With(m =>
                 {
-                    m.Title = "Uploader test";
-                    m.Keywords.Add(new MetadataKeyword
-                    {
-                        Vocab = "http://vocab.jncc.gov.uk/jncc-domain",
-                        Value = "Terrestrial"
-                    });
-                    m.Keywords.Add(new MetadataKeyword
-                    {
-                        Vocab = "http://vocab.jncc.gov.uk/jncc-category",
-                        Value = "Example Collection"
-                    });
+                    m.MetadataDate = new DateTime(2017, 09, 25);
                 });
                 r.Publication = new PublicationInfo
                 {
@@ -44,38 +33,36 @@ namespace Catalogue.Tests.Slow.Catalogue.Robot
                     {
                         Assessment = new OpenDataAssessmentInfo
                         {
-                            Completed = true
-                        },
-                        SignOff = null,
-                        Paused = false
+                            Completed = true,
+                            CompletedOnUtc = new DateTime(2017, 09, 25)
+                        }
                     }
                 };
                 r.Footer = new Footer();
             });
 
+            TestRecordNotReturned(assessedRecord);
+        }
+
+        [Test]
+        public void pending_upload_test_with_null_publication_record()
+        {
             var nullPublicationRecord = new Record().With(r =>
             {
                 r.Id = new Guid("92efc007-e98e-4263-80f3-847c5f9c4e08");
                 r.Path = @"X:\path\to\uploader\test";
                 r.Validation = Validation.Gemini;
-                r.Gemini = Library.Example().With(m =>
-                {
-                    m.Title = "Uploader test";
-                    m.Keywords.Add(new MetadataKeyword
-                    {
-                        Vocab = "http://vocab.jncc.gov.uk/jncc-domain",
-                        Value = "Terrestrial"
-                    });
-                    m.Keywords.Add(new MetadataKeyword
-                    {
-                        Vocab = "http://vocab.jncc.gov.uk/jncc-category",
-                        Value = "Example Collection"
-                    });
-                });
+                r.Gemini = Library.Example();
                 r.Publication = null;
                 r.Footer = new Footer();
             });
 
+            TestRecordNotReturned(nullPublicationRecord);
+        }
+
+        [Test]
+        public void pending_upload_test_with_assessed_and_signed_off_record()
+        {
             var assessedAndSignedOffRecord = new Record().With(r =>
             {
                 r.Id = new Guid("09ed523e-a35f-4654-a337-64ee732e505f");
@@ -83,17 +70,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Robot
                 r.Validation = Validation.Gemini;
                 r.Gemini = Library.Example().With(m =>
                 {
-                    m.Title = "Uploader test";
-                    m.Keywords.Add(new MetadataKeyword
-                    {
-                        Vocab = "http://vocab.jncc.gov.uk/jncc-domain",
-                        Value = "Terrestrial"
-                    });
-                    m.Keywords.Add(new MetadataKeyword
-                    {
-                        Vocab = "http://vocab.jncc.gov.uk/jncc-category",
-                        Value = "Example Collection"
-                    });
+                    m.MetadataDate = new DateTime(2017, 09, 26);
                 });
                 r.Publication = new PublicationInfo
                 {
@@ -101,23 +78,24 @@ namespace Catalogue.Tests.Slow.Catalogue.Robot
                     {
                         Assessment = new OpenDataAssessmentInfo
                         {
-                            Completed = true
+                            Completed = true,
+                            CompletedOnUtc = new DateTime(2017, 09, 25)
                         },
                         SignOff = new OpenDataSignOffInfo
                         {
-                            DateUtc = new DateTime(2017, 08, 02),
-                            User = new UserInfo
-                            {
-                                DisplayName = "IAO User",
-                                Email = "iaouser@example.com"
-                            }
-                        },
-                        Paused = false
+                            DateUtc = new DateTime(2017, 09, 26)
+                        }
                     }
                 };
                 r.Footer = new Footer();
             });
 
+            TestRecordReturned(assessedAndSignedOffRecord);
+        }
+
+        [Test]
+        public void pending_upload_test_with_signed_off_only_record()
+        {
             var signedOffOnlyRecord = new Record().With(r =>
             {
                 r.Id = new Guid("cfefc2b9-bd6c-4005-a7a6-c0d66be4a8e0");
@@ -125,17 +103,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Robot
                 r.Validation = Validation.Gemini;
                 r.Gemini = Library.Example().With(m =>
                 {
-                    m.Title = "Uploader test";
-                    m.Keywords.Add(new MetadataKeyword
-                    {
-                        Vocab = "http://vocab.jncc.gov.uk/jncc-domain",
-                        Value = "Terrestrial"
-                    });
-                    m.Keywords.Add(new MetadataKeyword
-                    {
-                        Vocab = "http://vocab.jncc.gov.uk/jncc-category",
-                        Value = "Example Collection"
-                    });
+                    m.MetadataDate = new DateTime(2017, 09, 25);
                 });
                 r.Publication = new PublicationInfo
                 {
@@ -147,19 +115,19 @@ namespace Catalogue.Tests.Slow.Catalogue.Robot
                         },
                         SignOff = new OpenDataSignOffInfo
                         {
-                            DateUtc = new DateTime(2017, 08, 02),
-                            User = new UserInfo
-                            {
-                                DisplayName = "IAO User",
-                                Email = "iaouser@example.com"
-                            }
-                        },
-                        Paused = false
+                            DateUtc = new DateTime(2017, 09, 25)
+                        }
                     }
                 };
                 r.Footer = new Footer();
             });
 
+            TestRecordNotReturned(signedOffOnlyRecord);
+        }
+
+        [Test]
+        public void pending_upload_test_with_paused_record()
+        {
             var pausedRecord = new Record().With(r =>
             {
                 r.Id = new Guid("5775e234-56fb-4ef4-b932-95325fa88674");
@@ -167,17 +135,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Robot
                 r.Validation = Validation.Gemini;
                 r.Gemini = Library.Example().With(m =>
                 {
-                    m.Title = "Uploader test";
-                    m.Keywords.Add(new MetadataKeyword
-                    {
-                        Vocab = "http://vocab.jncc.gov.uk/jncc-domain",
-                        Value = "Terrestrial"
-                    });
-                    m.Keywords.Add(new MetadataKeyword
-                    {
-                        Vocab = "http://vocab.jncc.gov.uk/jncc-category",
-                        Value = "Example Collection"
-                    });
+                    m.MetadataDate = new DateTime(2017, 09, 26);
                 });
                 r.Publication = new PublicationInfo
                 {
@@ -185,16 +143,12 @@ namespace Catalogue.Tests.Slow.Catalogue.Robot
                     {
                         Assessment = new OpenDataAssessmentInfo
                         {
-                            Completed = true
+                            Completed = true,
+                            CompletedOnUtc = new DateTime(2017, 09, 25)
                         },
                         SignOff = new OpenDataSignOffInfo
                         {
-                            DateUtc = new DateTime(2017, 08, 02),
-                            User = new UserInfo
-                            {
-                                DisplayName = "IAO User",
-                                Email = "iaouser@example.com"
-                            }
+                            DateUtc = new DateTime(2017, 09, 26)
                         },
                         Paused = true
                     }
@@ -202,6 +156,12 @@ namespace Catalogue.Tests.Slow.Catalogue.Robot
                 r.Footer = new Footer();
             });
 
+            TestRecordNotReturned(pausedRecord);
+        }
+
+        [Test]
+        public void pending_upload_test_with_failed_attempt_record()
+        {
             var attemptedButFailedRecord = new Record().With(r =>
             {
                 r.Id = new Guid("1a4fae84-465d-4823-9db5-494e0eee0de7");
@@ -209,17 +169,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Robot
                 r.Validation = Validation.Gemini;
                 r.Gemini = Library.Example().With(m =>
                 {
-                    m.Title = "Uploader test";
-                    m.Keywords.Add(new MetadataKeyword
-                    {
-                        Vocab = "http://vocab.jncc.gov.uk/jncc-domain",
-                        Value = "Terrestrial"
-                    });
-                    m.Keywords.Add(new MetadataKeyword
-                    {
-                        Vocab = "http://vocab.jncc.gov.uk/jncc-category",
-                        Value = "Example Collection"
-                    });
+                    m.MetadataDate = new DateTime(2017, 09, 27);
                 });
                 r.Publication = new PublicationInfo
                 {
@@ -227,29 +177,28 @@ namespace Catalogue.Tests.Slow.Catalogue.Robot
                     {
                         Assessment = new OpenDataAssessmentInfo
                         {
-                            Completed = true
+                            Completed = true,
+                            CompletedOnUtc = new DateTime(2017, 09, 25)
                         },
                         SignOff = new OpenDataSignOffInfo
                         {
-                            DateUtc = new DateTime(2017, 08, 02),
-                            User = new UserInfo
-                            {
-                                DisplayName = "IAO User",
-                                Email = "iaouser@example.com"
-                            }
+                            DateUtc = new DateTime(2017, 09, 26)
                         },
-                        Paused = false,
                         LastAttempt = new PublicationAttempt
                         {
-                            DateUtc = new DateTime(2017, 08, 03),
-                            Message = null
-                        },
-                        LastSuccess = null
+                            DateUtc = new DateTime(2017, 09, 27)
+                        }
                     }
                 };
                 r.Footer = new Footer();
             });
 
+            TestRecordReturned(attemptedButFailedRecord);
+        }
+
+        [Test]
+        public void pending_upload_test_with_already_uploaded_record()
+        {
             var alreadyUploadedRecord = new Record().With(r =>
             {
                 r.Id = new Guid("3df7c4ca-2be5-4455-b2e8-dc984d2c3fbe");
@@ -257,17 +206,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Robot
                 r.Validation = Validation.Gemini;
                 r.Gemini = Library.Example().With(m =>
                 {
-                    m.Title = "Uploader test";
-                    m.Keywords.Add(new MetadataKeyword
-                    {
-                        Vocab = "http://vocab.jncc.gov.uk/jncc-domain",
-                        Value = "Terrestrial"
-                    });
-                    m.Keywords.Add(new MetadataKeyword
-                    {
-                        Vocab = "http://vocab.jncc.gov.uk/jncc-category",
-                        Value = "Example Collection"
-                    });
+                    m.MetadataDate = new DateTime(2017, 09, 27);
                 });
                 r.Publication = new PublicationInfo
                 {
@@ -275,43 +214,214 @@ namespace Catalogue.Tests.Slow.Catalogue.Robot
                     {
                         Assessment = new OpenDataAssessmentInfo
                         {
-                            Completed = true
+                            Completed = true,
+                            CompletedOnUtc = new DateTime(2017, 09, 25)
                         },
                         SignOff = new OpenDataSignOffInfo
                         {
-                            DateUtc = new DateTime(2017, 08, 02),
-                            User = new UserInfo
-                            {
-                                DisplayName = "IAO User",
-                                Email = "iaouser@example.com"
-                            }
+                            DateUtc = new DateTime(2017, 09, 26)
                         },
                         Paused = false,
                         LastAttempt = new PublicationAttempt
                         {
-                            DateUtc = new DateTime(2017, 08, 03),
-                            Message = null
+                            DateUtc = new DateTime(2017, 09, 27)
                         },
                         LastSuccess = new PublicationAttempt
                         {
-                            DateUtc = new DateTime(2017, 08, 03),
-                            Message = null
+                            DateUtc = new DateTime(2017, 09, 27)
                         }
                     }
                 };
                 r.Footer = new Footer();
             });
 
+            TestRecordNotReturned(alreadyUploadedRecord);
+        }
+
+        [Test]
+        public void pending_upload_test_with_published_and_out_of_date_record()
+        {
+            var publishedAndOutOfDateRecord = new Record().With(r =>
+            {
+                r.Id = new Guid("98b55f61-964b-4186-8af8-e3d62a2aace4");
+                r.Path = @"X:\path\to\uploader\test";
+                r.Validation = Validation.Gemini;
+                r.Gemini = Library.Example().With(m =>
+                {
+                    m.MetadataDate = new DateTime(2017, 09, 28);
+                });
+                r.Publication = new PublicationInfo
+                {
+                    OpenData = new OpenDataPublicationInfo
+                    {
+                        Assessment = new OpenDataAssessmentInfo
+                        {
+                            Completed = true,
+                            CompletedOnUtc = new DateTime(2017, 09, 25)
+                        },
+                        SignOff = new OpenDataSignOffInfo
+                        {
+                            DateUtc = new DateTime(2017, 09, 26)
+                        },
+                        Paused = false,
+                        LastAttempt = new PublicationAttempt
+                        {
+                            DateUtc = new DateTime(2017, 09, 27)
+                        },
+                        LastSuccess = new PublicationAttempt
+                        {
+                            DateUtc = new DateTime(2017, 09, 27)
+                        }
+                    }
+                };
+                r.Footer = new Footer();
+            });
+
+            TestRecordNotReturned(publishedAndOutOfDateRecord);
+        }
+
+        [Test]
+        public void pending_upload_test_with_ready_to_republish_record()
+        {
+            var readyToRepublishRecord = new Record().With(r =>
+            {
+                r.Id = new Guid("d41f3ffc-0b60-49b4-af15-94e0f3180f29");
+                r.Path = @"X:\path\to\uploader\test";
+                r.Validation = Validation.Gemini;
+                r.Gemini = Library.Example().With(m =>
+                {
+                    m.MetadataDate = new DateTime(2017, 09, 29);
+                });
+                r.Publication = new PublicationInfo
+                {
+                    OpenData = new OpenDataPublicationInfo
+                    {
+                        Assessment = new OpenDataAssessmentInfo
+                        {
+                            Completed = true,
+                            CompletedOnUtc = new DateTime(2017, 09, 28)
+                        },
+                        SignOff = new OpenDataSignOffInfo
+                        {
+                            DateUtc = new DateTime(2017, 09, 29)
+                        },
+                        LastAttempt = new PublicationAttempt
+                        {
+                            DateUtc = new DateTime(2017, 09, 27)
+                        },
+                        LastSuccess = new PublicationAttempt
+                        {
+                            DateUtc = new DateTime(2017, 09, 27)
+                        }
+                    }
+                };
+                r.Footer = new Footer();
+            });
+
+            TestRecordReturned(readyToRepublishRecord);
+        }
+
+        [Test]
+        public void pending_upload_test_with_published_and_reassessed_record()
+        {
+            var publishedAndReassessedRecord = new Record().With(r =>
+            {
+                r.Id = new Guid("b41a3f52-05de-4e52-abb6-18a6d835e39f");
+                r.Path = @"X:\path\to\uploader\test";
+                r.Validation = Validation.Gemini;
+                r.Gemini = Library.Example().With(m =>
+                {
+                    m.MetadataDate = new DateTime(2017, 09, 28);
+                });
+                r.Publication = new PublicationInfo
+                {
+                    OpenData = new OpenDataPublicationInfo
+                    {
+                        Assessment = new OpenDataAssessmentInfo
+                        {
+                            Completed = true,
+                            CompletedOnUtc = new DateTime(2017, 09, 28)
+                        },
+                        SignOff = new OpenDataSignOffInfo
+                        {
+                            DateUtc = new DateTime(2017, 09, 26)
+                        },
+                        LastAttempt = new PublicationAttempt
+                        {
+                            DateUtc = new DateTime(2017, 09, 27)
+                        },
+                        LastSuccess = new PublicationAttempt
+                        {
+                            DateUtc = new DateTime(2017, 09, 27)
+                        }
+                    }
+                };
+                r.Footer = new Footer();
+            });
+
+            TestRecordNotReturned(publishedAndReassessedRecord);
+        }
+
+        [Test]
+        public void pending_upload_test_with_signed_off_and_out_of_date_record()
+        {
+            var publishedAssessedSignedOffThenEditedRecord = new Record().With(r =>
+            {
+                r.Id = new Guid("6e48d4c7-3174-409f-a4d4-00d6909b7c8f");
+                r.Path = @"X:\path\to\uploader\test";
+                r.Validation = Validation.Gemini;
+                r.Gemini = Library.Example().With(m =>
+                {
+                    m.MetadataDate = new DateTime(2017, 09, 30);
+                });
+                r.Publication = new PublicationInfo
+                {
+                    OpenData = new OpenDataPublicationInfo
+                    {
+                        Assessment = new OpenDataAssessmentInfo
+                        {
+                            Completed = true,
+                            CompletedOnUtc = new DateTime(2017, 09, 28)
+                        },
+                        SignOff = new OpenDataSignOffInfo
+                        {
+                            DateUtc = new DateTime(2017, 09, 29)
+                        },
+                        LastAttempt = new PublicationAttempt
+                        {
+                            DateUtc = new DateTime(2017, 09, 27)
+                        },
+                        LastSuccess = new PublicationAttempt
+                        {
+                            DateUtc = new DateTime(2017, 09, 27)
+                        }
+                    }
+                };
+                r.Footer = new Footer();
+            });
+
+            TestRecordNotReturned(publishedAssessedSignedOffThenEditedRecord);
+        }
+
+        private void TestRecordNotReturned(Record record)
+        {
+            var pendingRecords = PendingUploadTest(record);
+            pendingRecords.Count.Should().Be(0);
+        }
+
+        private void TestRecordReturned(Record record)
+        {
+            var pendingRecords = PendingUploadTest(record);
+            pendingRecords.Count.Should().Be(1);
+            pendingRecords.Contains(record).Should().BeTrue();
+        }
+
+        private List<Record> PendingUploadTest(Record record)
+        {
             var store = new InMemoryDatabaseHelper().Create();
             using (var db = store.OpenSession())
             {
-                db.Store(assessedRecord);
-                db.Store(nullPublicationRecord);
-                db.Store(assessedAndSignedOffRecord);
-                db.Store(signedOffOnlyRecord);
-                db.Store(pausedRecord);
-                db.Store(attemptedButFailedRecord);
-                db.Store(alreadyUploadedRecord);
+                db.Store(record);
                 db.SaveChanges();
 
                 Thread.Sleep(100); // Allow time for indexing
@@ -320,10 +430,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Robot
                 var uploadHelperMock = new Mock<IOpenDataUploadHelper>();
                 var robotUploader = new RobotUploader(db, uploadServiceMock.Object, uploadHelperMock.Object);
 
-                var pendingRecords = robotUploader.GetRecordsPendingUpload();
-                pendingRecords.Count.Should().Be(2);
-                pendingRecords.Contains(assessedAndSignedOffRecord).Should().BeTrue();
-                pendingRecords.Contains(attemptedButFailedRecord).Should().BeTrue();
+                return robotUploader.GetRecordsPendingUpload();
             }
         }
     }

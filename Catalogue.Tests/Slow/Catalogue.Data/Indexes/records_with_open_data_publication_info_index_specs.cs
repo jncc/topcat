@@ -20,7 +20,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Data.Indexes
         [Test]
         public void should_be_able_to_get_all_records_with_publishing_info()
         {
-            Db.Query<Record, RecordsWithOpenDataPublicationInfoIndex>().Count().Should().Be(9);
+            Db.Query<Record, RecordsWithOpenDataPublicationInfoIndex>().Count().Should().Be(8);
         }
         
         [Test]
@@ -28,7 +28,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Data.Indexes
         {
             Db.Query<RecordsWithOpenDataPublicationInfoIndex.Result, RecordsWithOpenDataPublicationInfoIndex>()
                 .Where(x => x.PublicationNeverAttempted)
-                .Count().Should().Be(2);
+                .Count().Should().Be(1);
         }
 
         [Test]
@@ -39,7 +39,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Data.Indexes
                 .OfType<Record>()
                 .ToList();
 
-            results.Count().Should().Be(1);
+            results.Count.Should().Be(1);
             results.Single().Id.Should().Be("b2691fed-e421-4e48-9da9-99bd77e0b8ba");
         }
 
@@ -53,7 +53,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Data.Indexes
                 .OfType<Record>()
                 .ToList();
 
-            results.Count().Should().Be(1);
+            results.Count.Should().Be(1);
             results.Single().Id.Should().Be("d9c14587-90d8-4eba-b670-4cf36e45196d");
         }
 
@@ -66,7 +66,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Data.Indexes
                 .OfType<Record>()
                 .ToList();
 
-            results.Count().Should().Be(8);
+            results.Count.Should().Be(7);
             results.Should().Contain(r => r.Id.ToString() == "19b8c7ab-5c33-4d55-bc1d-3762b8207a9f");
         }
 
@@ -78,7 +78,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Data.Indexes
                 .OfType<Record>()
                 .ToList();
 
-            results.Count().Should().Be(8);
+            results.Count.Should().Be(7);
         }
     }
 }

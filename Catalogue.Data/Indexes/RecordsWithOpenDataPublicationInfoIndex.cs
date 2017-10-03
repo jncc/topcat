@@ -13,11 +13,10 @@ namespace Catalogue.Data.Indexes
             public DateTime LastPublicationAttemptDate { get; set; }
             public DateTime LastSuccessfulPublicationAttemptDate { get; set; }
             public bool GeminiValidated { get; set; }
-            public bool AssessmentCompleted { get; set; }
+            public bool Assessed { get; set; }
             public bool SignedOff { get; set; }
             public bool PublicationNeverAttempted { get; set; }
             public bool LastPublicationAttemptWasUnsuccessful { get; set; }
-            public bool PublishedSuccessfully { get; set; }
             public bool PublishedSinceLastUpdated { get; set; }
             public bool PublishingIsPaused { get; set; }
         }
@@ -30,13 +29,17 @@ namespace Catalogue.Data.Indexes
             Map = records => from r in records
                              where r.Publication != null
                              where r.Publication.OpenData != null
-                             let signedOff = r.Publication.OpenData.SignOff != null
+                             let assessed = r.Publication.OpenData.Assessment.Completed
+                                && (r.Publication.OpenData.Assessment.CompletedOnUtc == r.Gemini.MetadataDate
+                                || r.Publication.OpenData.SignOff.DateUtc == r.Gemini.MetadataDate
+                                || r.Publication.OpenData.LastAttempt.DateUtc == r.Gemini.MetadataDate)
+                             let signedOff = r.Publication.OpenData.SignOff.DateUtc == r.Gemini.MetadataDate
+                                || r.Publication.OpenData.LastAttempt.DateUtc == r.Gemini.MetadataDate
                              let recordLastUpdatedDate = r.Gemini.MetadataDate
                              let lastAttemptDate = r.Publication.OpenData.LastAttempt == null ? DateTime.MinValue : r.Publication.OpenData.LastAttempt.DateUtc
                              let lastSuccessDate = r.Publication.OpenData.LastSuccess == null ? DateTime.MinValue : r.Publication.OpenData.LastSuccess.DateUtc
-                             let neverAttempted = lastAttemptDate == DateTime.MinValue && signedOff
-                             let publishedSinceLastUpdated = r.Publication.OpenData.LastSuccess != null && lastSuccessDate >= recordLastUpdatedDate
-                             let publishedSuccessfully = r.Publication.OpenData.LastSuccess != null
+                             let neverAttempted = lastAttemptDate == DateTime.MinValue && r.Publication.OpenData.SignOff != null
+                             let publishedSinceLastUpdated = r.Publication.OpenData.LastSuccess.DateUtc == r.Gemini.MetadataDate
 
                              select new Result
                              {
@@ -44,11 +47,10 @@ namespace Catalogue.Data.Indexes
                                  LastPublicationAttemptDate = lastAttemptDate,
                                  LastSuccessfulPublicationAttemptDate = lastSuccessDate,
                                  GeminiValidated = r.Validation == Validation.Gemini,
-                                 AssessmentCompleted = r.Publication.OpenData.Assessment.Completed,
+                                 Assessed = assessed,
                                  SignedOff = signedOff,
                                  PublicationNeverAttempted = neverAttempted,
                                  LastPublicationAttemptWasUnsuccessful = lastAttemptDate > lastSuccessDate,
-                                 PublishedSuccessfully = publishedSuccessfully,
                                  PublishedSinceLastUpdated = publishedSinceLastUpdated,
                                  PublishingIsPaused = r.Publication.OpenData.Paused,
                              };
