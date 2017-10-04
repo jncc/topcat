@@ -70,6 +70,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Data.Write
                 updatedRecord.Publication.OpenData.LastAttempt.Message.Should().BeNull();
                 updatedRecord.Publication.OpenData.LastSuccess.DateUtc.Should().Be(testTime);
                 updatedRecord.Publication.OpenData.LastSuccess.Message.Should().BeNull();
+                updatedRecord.Gemini.MetadataDate.Should().Be(testTime);
                 updatedRecord.Gemini.ResourceLocator.Should().Be("http://data.jncc.gov.uk/data/eb189a2f-ebce-4232-8dc6-1ad486cacf21-test");
                 uploadHelperMock.Verify(x => x.UploadDataFile(record.Id, record.Path), Times.Once);
                 uploadHelperMock.Verify(x => x.UploadMetadataDocument(record), Times.Once);
@@ -133,6 +134,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Data.Write
                 updatedRecord.Publication.OpenData.LastAttempt.Message.Should().BeNull();
                 updatedRecord.Publication.OpenData.LastSuccess.DateUtc.Should().Be(testTime);
                 updatedRecord.Publication.OpenData.LastSuccess.Message.Should().BeNull();
+                updatedRecord.Gemini.MetadataDate.Should().Be(testTime);
                 updatedRecord.Gemini.ResourceLocator.Should().BeNull();
                 uploadHelperMock.Verify(x => x.UploadAlternativeResources(record), Times.Once);
                 uploadHelperMock.Verify(x => x.UploadDataFile(record.Id, record.Path), Times.Never);
@@ -197,6 +199,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Data.Write
                 updatedRecord.Publication.OpenData.LastAttempt.DateUtc.Should().Be(testTime);
                 updatedRecord.Publication.OpenData.LastAttempt.Message.Should().Be("test message");
                 updatedRecord.Publication.OpenData.LastSuccess.Should().BeNull();
+                updatedRecord.Gemini.MetadataDate.Should().Be(testTime);
 
                 Clock.CurrentUtcDateTimeGetter = currentTime;
             }
@@ -257,6 +260,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Data.Write
                 updatedRecord.Publication.OpenData.LastAttempt.Message.Should().BeNull();
                 updatedRecord.Publication.OpenData.LastSuccess.DateUtc.Should().Be(testTime);
                 updatedRecord.Publication.OpenData.LastSuccess.Message.Should().BeNull();
+                updatedRecord.Gemini.MetadataDate.Should().Be(testTime);
                 updatedRecord.Gemini.ResourceLocator.Should().Be("http://jncc.defra.gov.uk/opendata");
                 uploadHelperMock.Verify(x => x.UploadAlternativeResources(record), Times.Never);
                 uploadHelperMock.Verify(x => x.UploadDataFile(record.Id, record.Path), Times.Never);
@@ -322,6 +326,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Data.Write
                 updatedRecord.Publication.OpenData.LastAttempt.Message.Should().BeNull();
                 updatedRecord.Publication.OpenData.LastSuccess.DateUtc.Should().Be(testTime);
                 updatedRecord.Publication.OpenData.LastSuccess.Message.Should().BeNull();
+                updatedRecord.Gemini.MetadataDate.Should().Be(testTime);
                 updatedRecord.Gemini.ResourceLocator.Should().Be("http://www.someexternallinkhere.com");
                 uploadHelperMock.Verify(x => x.UploadAlternativeResources(record), Times.Never);
                 uploadHelperMock.Verify(x => x.UploadDataFile(record.Id, record.Path), Times.Never);
@@ -387,6 +392,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Data.Write
                 updatedRecord.Publication.OpenData.LastAttempt.Message.Should().BeNull();
                 updatedRecord.Publication.OpenData.LastSuccess.DateUtc.Should().Be(testTime);
                 updatedRecord.Publication.OpenData.LastSuccess.Message.Should().BeNull();
+                updatedRecord.Gemini.MetadataDate.Should().Be(testTime);
                 updatedRecord.Gemini.ResourceLocator.Should().Be("http://data.jncc.gov.uk/data/filename");
                 uploadHelperMock.Verify(x => x.UploadAlternativeResources(record), Times.Never);
                 uploadHelperMock.Verify(x => x.UploadDataFile(record.Id, record.Path), Times.Never);
@@ -451,6 +457,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Data.Write
                 updatedRecord.Publication.OpenData.LastAttempt.Message.Should().BeNull();
                 updatedRecord.Publication.OpenData.LastSuccess.DateUtc.Should().Be(testTime);
                 updatedRecord.Publication.OpenData.LastSuccess.Message.Should().BeNull();
+                updatedRecord.Gemini.MetadataDate.Should().Be(testTime);
                 updatedRecord.Gemini.ResourceLocator.Should().Be("http://www.someexternallinkhere.com");
                 uploadHelperMock.Verify(x => x.UploadAlternativeResources(record), Times.Never);
                 uploadHelperMock.Verify(x => x.UploadDataFile(record.Id, record.Path), Times.Never);

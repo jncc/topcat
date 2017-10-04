@@ -53,10 +53,10 @@
                             For more information and guidance about the publishing process, please open <a href="file:///Z:\Prog110-FutureData\0264 Information Management\Tools\Topcat\Guidance\Risk Assessment for Open Data Publication.pdf">this file</a> by copying and pasting the link into Windows Explorer.
                         </p>
                         <br/>
-                        <span ng-if="form.publication.openData.assessment.completed">
+                        <span class="publishing-extra-info"
+                              ng-if="form.publication.openData.assessment.completed">
                             <p>
-                                {{assessmentCompletedByUser}}<br />
-                                {{assessmentCompletedOnDate}}
+                                {{assessmentCompletedInfo}}
                             </p>
                         </span>
                         <span class="pull-right" ng-if="!isAssessedAndUpToDate(form)">
@@ -71,10 +71,10 @@
                         <p>To proceed, this record must be signed off by an Information Asset Owner. Please review the record with your Information Asset Owner and then ask them to sign off by clicking the button below.</p>
                         <p>Alternatively, sign off can be provided on the <a ng-click="$dismiss()" href="#opendatapublishing/signoff">Final Approval</a> page.</p>
                         <br />
-                        <span ng-if="form.publication.openData.signOff != null">
+                        <span class="publishing-extra-info"
+                              ng-if="form.publication.openData.signOff != null">
                             <p>
-                                {{signOffCompletedByUser}}<br />
-                                {{signOffCompletedOnDate}}
+                                {{signOffCompletedInfo}}
                             </p>
                         </span>
                         <span class="pull-right" ng-if="publishingStatus.signOff.showButton">
@@ -90,10 +90,13 @@
                         <h3>Data upload</h3>
                         <p>The record is now waiting to be automatically uploaded to data.gov.uk. The upload process may take a day so please check back later.</p>
                         <br />
-                        <span>
+                        <span class="publishing-extra-info">
                             <p>
-                                Last upload attempt: {{uploadLastAttempted}}<br />
-                                Last upload success: {{uploadLastSucceeded}}
+                                Upload last attempted on {{uploadLastAttempted}}<br/>
+                                Upload last succeeded on {{uploadLastSucceeded}}
+                            </p>
+                            <p>
+                                Current status: {{uploadStatus}}
                             </p>
                         </span>
                     </div>

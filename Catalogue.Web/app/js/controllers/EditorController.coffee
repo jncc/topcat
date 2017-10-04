@@ -30,6 +30,9 @@
         $scope.updateDataFormatObj = updateDataFormatObj
         $scope.getPendingSignOff = getPendingSignOff
         $scope.getOpenDataButtonText = getOpenDataButtonText
+        $scope.isAssessedAndUpToDate = isAssessedAndUpToDate
+        $scope.isSignedOffAndUpToDate = isSignedOffAndUpToDate
+        $scope.isUploadedAndUpToDate = isUploadedAndUpToDate
         
         $scope.cancel = ->
             $scope.reset()
@@ -148,14 +151,16 @@
 
 
 
-getOpenDataButtonText = (publication) ->
-    if publication == null
+getOpenDataButtonText = (record) ->
+    if record.publication == null
         return "Not Open Data"
-    else if publication.openData.lastSuccess != null
+    else if record.publication.openData.lastSuccess != null && !isAssessedAndUpToDate record
+        return "Out of Date"
+    else if isUploadedAndUpToDate record
         return "Published"
-    else if publication.openData.signOff != null
+    else if isSignedOffAndUpToDate record
         return "Signed Off"
-    else if publication.openData.assessment.completed
+    else if isAssessedAndUpToDate record
         return "Assessed"
     else
         return "Not Open Data"
@@ -199,4 +204,33 @@ updateDataFormatObj = (name, formats, form) ->
 fakeValidationData = errors: [
     { message: 'There was an error' }
     { message: 'There was another error' } ]
+
+
+isAssessedAndUpToDate = (record) ->
+    if record.publication == null
+        return false
+    else if !record.publication.openData.assessment.completed
+        return false
+    else if record.publication.openData.assessment.completedOnUtc == record.gemini.metadataDate
+        return true
+    else
+        return isSignedOffAndUpToDate(record)
+
+isSignedOffAndUpToDate = (record) ->
+    if record.publication == null
+        return false
+    else if record.publication.openData.signOff != null && record.publication.openData.signOff.dateUtc == record.gemini.metadataDate
+        return true
+    else if record.publication.openData.lastAttempt != null && record.publication.openData.lastAttempt.dateUtc == record.gemini.metadataDate
+        return true
+    else
+        return isUploadedAndUpToDate(record)
+
+isUploadedAndUpToDate = (record) ->
+    if record.publication == null
+        return false
+    else if record.publication.openData.lastSuccess != null && record.publication.openData.lastSuccess.dateUtc == record.gemini.metadataDate
+        return true
+    else
+        return false
         

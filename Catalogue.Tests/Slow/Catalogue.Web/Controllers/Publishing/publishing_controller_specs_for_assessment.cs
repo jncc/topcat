@@ -47,6 +47,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Web.Controllers.Publishing
             openDataInfo.Assessment.CompletedByUser.DisplayName.Should().Be("Test User");
             openDataInfo.Assessment.CompletedByUser.Email.Should().Be("tester@example.com");
             openDataInfo.Assessment.CompletedOnUtc.Should().NotBe(DateTime.MinValue);
+            resultRecord.Gemini.MetadataDate.Should().Be(openDataInfo.Assessment.CompletedOnUtc);
         }
 
         [Test]
@@ -309,6 +310,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Web.Controllers.Publishing
                 openDataInfo.Assessment.CompletedByUser.DisplayName.Should().Be("Pete");
                 openDataInfo.Assessment.CompletedByUser.Email.Should().Be("pete@example.com");
                 openDataInfo.Assessment.CompletedOnUtc.Should().Be(new DateTime(2017, 07, 21));
+                resultRecord.Gemini.MetadataDate.Should().NotBe(openDataInfo.Assessment.CompletedOnUtc);
             }
         }
 
@@ -378,6 +380,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Web.Controllers.Publishing
                 openDataInfo.Assessment.CompletedByUser.DisplayName.Should().Be("Pete");
                 openDataInfo.Assessment.CompletedByUser.Email.Should().Be("pete@example.com");
                 openDataInfo.Assessment.CompletedOnUtc.Should().Be(new DateTime(2017, 07, 21));
+                resultRecord.Gemini.MetadataDate.Should().NotBe(openDataInfo.Assessment.CompletedOnUtc);
             }
         }
 
@@ -433,6 +436,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Web.Controllers.Publishing
             openDataInfo.Assessment.CompletedOnUtc.Should().NotBe(new DateTime(2017, 07, 21));
             openDataInfo.Assessment.CompletedOnUtc.Should().NotBe(DateTime.MinValue);
             openDataInfo.Assessment.InitialAssessmentWasDoneOnSpreadsheet.Should().BeTrue();
+            resultRecord.Gemini.MetadataDate.Should().Be(openDataInfo.Assessment.CompletedOnUtc);
         }
 
         private static Record TestAssessment(Record record)

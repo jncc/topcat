@@ -54,6 +54,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Web.Controllers.Publishing
             openDataInfo.SignOff.User.Email.Should().Be("tester@example.com");
             openDataInfo.SignOff.DateUtc.Should().NotBe(DateTime.MinValue);
             openDataInfo.SignOff.Comment.Should().Be("Sign off test");
+            resultRecord.Gemini.MetadataDate.Should().Be(openDataInfo.SignOff.DateUtc);
         }
 
         [Test]
@@ -293,6 +294,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Web.Controllers.Publishing
             openDataInfo.SignOff.User.DisplayName.Should().Be("Cathy");
             openDataInfo.SignOff.User.Email.Should().Be("cathy@example.com");
             openDataInfo.SignOff.DateUtc.Should().Be(new DateTime(2017, 07, 10));
+            resultRecord.Gemini.MetadataDate.Should().NotBe(openDataInfo.SignOff.DateUtc);
         }
 
         [Test]
@@ -350,6 +352,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Web.Controllers.Publishing
             openDataInfo.SignOff.User.DisplayName.Should().Be("Cathy");
             openDataInfo.SignOff.User.Email.Should().Be("cathy@example.com");
             openDataInfo.SignOff.DateUtc.Should().Be(new DateTime(2017, 07, 10));
+            resultRecord.Gemini.MetadataDate.Should().NotBe(openDataInfo.SignOff.DateUtc);
         }
 
         [Test]
@@ -411,6 +414,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Web.Controllers.Publishing
             openDataInfo.SignOff.User.DisplayName.Should().Be("Cathy");
             openDataInfo.SignOff.User.Email.Should().Be("cathy@example.com");
             openDataInfo.SignOff.DateUtc.Should().Be(new DateTime(2017, 07, 10));
+            resultRecord.Gemini.MetadataDate.Should().NotBe(openDataInfo.SignOff.DateUtc);
         }
 
         [Test]
@@ -553,7 +557,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Web.Controllers.Publishing
                 r.Gemini = Library.Example().With(m =>
                 {
                     m.Title = "Retrieve Sign Off Test 6";
-                    m.MetadataDate = new DateTime(2017, 09, 30);
+                    m.MetadataDate = new DateTime(2017, 09, 28);
                 });
                 r.Publication = new PublicationInfo
                 {
@@ -571,7 +575,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Web.Controllers.Publishing
                         },
                         LastAttempt = new PublicationAttempt
                         {
-                            DateUtc = new DateTime(2017, 09, 26)
+                            DateUtc = new DateTime(2017, 09, 28)
                         }
                     }
                 };
@@ -586,7 +590,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Web.Controllers.Publishing
                 r.Gemini = Library.Example().With(m =>
                 {
                     m.Title = "Retrieve Sign Off Test 7";
-                    m.MetadataDate = new DateTime(2017, 09, 25);
+                    m.MetadataDate = new DateTime(2017, 09, 30);
                 });
                 r.Publication = new PublicationInfo
                 {
