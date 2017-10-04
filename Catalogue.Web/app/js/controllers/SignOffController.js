@@ -55,12 +55,23 @@
       delete m.signOffTimeoutMap[recordId];
       return m.signOffStatus[recordId] = "Sign Off";
     };
-    return $scope.signOffButtonClick = function(recordId) {
+    $scope.signOffButtonClick = function(recordId) {
       if (!(recordId in m.signOffTimeoutMap)) {
         m.signOffTimeoutMap[recordId] = 10;
         return $scope.allowGraceTime(recordId);
       } else {
         return $scope.cancelSignOff(recordId);
+      }
+    };
+    return $scope.isAssessedAndUpToDate = function(recordRepresentation) {
+      if (recordRepresentation.openData === null) {
+        return false;
+      } else if (!recordRepresentation.openData.assessment.completed) {
+        return false;
+      } else if (recordRepresentation.openData.assessment.completedOnUtc === recordRepresentation.metadataDate) {
+        return true;
+      } else {
+        return false;
       }
     };
   });

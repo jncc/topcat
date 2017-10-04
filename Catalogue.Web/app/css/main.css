@@ -671,6 +671,12 @@ form .ng-invalid {
   display: block;
   width: 55%;
   margin: 0 auto;
+  text-align: justify;
+  text-justify: inter-word;
+}
+.publishing-extra-info {
+  font-weight: bold;
+  color: #666;
 }
 .fade-in-with-delay.ng-hide-remove {
   transition: all cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.5s;
@@ -716,10 +722,6 @@ form .ng-invalid {
 }
 .nav > li > a {
   color: #666666;
-}
-.publishing-extra-info {
-  font-weight: bold;
-  color: #666;
 }
 .cd-multi-steps {
   width: 90%;

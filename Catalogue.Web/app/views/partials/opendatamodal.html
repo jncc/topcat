@@ -34,7 +34,13 @@
                 <div class="publishing-status">
                     <div ng-show="publishingStatus.currentActiveView == 'risk assessment'">
                         <h3>Risk assessment</h3>
-                        <p>To proceed you must agree to the below assessment criteria for publishing:</p>
+                        <p>In order to be published as Open Data, the data must first be risk assessed. If an update is made to the data or metadata which requires republishing, the assessment must be completed again.</p>
+                        <p>
+                            For more information on Open Data publishing, please read <a href="file:///Z:\Prog110-FutureData\0264 Information Management\Open Data\Guidance\Open Data Publication - Advice for Data Managers.pdf">Open Data Publication - Advice for Data Managers</a>.
+                            For more guidance on risk assessments, please read <a href="file:///Z:\Prog110-FutureData\0264 Information Management\Tools\Topcat\Guidance\Risk Assessment for Open Data Publication.pdf">Risk Assessment for Open Data Publication</a>.
+                            Note: you will need to copy and paste the links into Windows Explorer.
+                        </p>
+                        <p>To proceed, you must agree to the below assessment criteria for Open Data publishing:</p>
                         <ol>
                             <li>This dataset does not contain personal data.</li>
                             <li>
@@ -49,9 +55,6 @@
                             <li>This dataset does not contain sensitive or environmental policy information.</li>
                             <li>This dataset does not contain free text fields or comments fields.</li>
                         </ol>
-                        <p>
-                            For more information and guidance about the publishing process, please open <a href="file:///Z:\Prog110-FutureData\0264 Information Management\Tools\Topcat\Guidance\Risk Assessment for Open Data Publication.pdf">this file</a> by copying and pasting the link into Windows Explorer.
-                        </p>
                         <br/>
                         <span class="publishing-extra-info"
                               ng-if="form.publication.openData.assessment.completed">
@@ -68,7 +71,7 @@
                     </div>
                     <div ng-show="publishingStatus.currentActiveView == 'sign off'">
                         <h3>Final approval</h3>
-                        <p>To proceed, this record must be signed off by an Information Asset Owner. Please review the record with your Information Asset Owner and then ask them to sign off by clicking the button below.</p>
+                        <p>Publication of the data must be approved by an Information Asset Owner. Please review the record with your Information Asset Owner and ask them to sign off by clicking the button below.</p>
                         <p>Alternatively, sign off can be provided on the <a ng-click="$dismiss()" href="#opendatapublishing/signoff">Final Approval</a> page.</p>
                         <br />
                         <span class="publishing-extra-info"

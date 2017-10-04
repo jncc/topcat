@@ -53,3 +53,12 @@
             else
                 $scope.cancelSignOff recordId
                 
+        $scope.isAssessedAndUpToDate = (recordRepresentation) ->
+            if recordRepresentation.openData == null
+                return false
+            else if !recordRepresentation.openData.assessment.completed
+                return false
+            else if recordRepresentation.openData.assessment.completedOnUtc == recordRepresentation.metadataDate
+                return true
+            else
+                return false
