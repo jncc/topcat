@@ -40,6 +40,7 @@ namespace Catalogue.Data.Seed
             using (var db = store.OpenSession())
             {
                 var s = new Seeder(db, new RecordService(db, new RecordValidator()));
+                var timeGetter = Clock.CurrentUtcDateTimeGetter;
                 Clock.CurrentUtcDateTimeGetter = () => new DateTime(2015, 1, 1, 12, 0, 0);
 
                 s.AddVocabularies();
@@ -60,6 +61,8 @@ namespace Catalogue.Data.Seed
                 s.AddDatesForTimeline();
 
                 db.SaveChanges();
+
+                Clock.CurrentUtcDateTimeGetter = timeGetter;
             }
         }
 
