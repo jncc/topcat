@@ -793,6 +793,17 @@ form .ng-invalid {
     }
 }
 
+.quick-fade-in {
+    &.ng-hide-remove {
+        transition: 0.5s;
+        opacity: 0;
+    }
+
+    &.ng-hide-remove-active {
+        opacity: 1;
+    }
+}
+
 
 // Create boxes for clicking on for use in the data formats
 // selector control

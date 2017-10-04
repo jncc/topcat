@@ -32,7 +32,7 @@
         <div class="row">
             <div class="col-sm-12">
                 <div class="publishing-status">
-                    <div ng-show="publishingStatus.currentActiveView == 'risk assessment'">
+                    <div ng-show="publishingStatus.currentActiveView == 'risk assessment'" class="quick-fade-in">
                         <h3>Risk assessment</h3>
                         <p>In order to be published as Open Data, the data must first be risk assessed. If an update is made to the data or metadata which requires republishing, the assessment must be completed again.</p>
                         <p>
@@ -69,7 +69,7 @@
                             </button>
                         </span>
                     </div>
-                    <div ng-show="publishingStatus.currentActiveView == 'sign off'">
+                    <div ng-show="publishingStatus.currentActiveView == 'sign off'" class="quick-fade-in">
                         <h3>Final approval</h3>
                         <p>Publication of the data must be approved by an Information Asset Owner. Please review the record with your Information Asset Owner and ask them to sign off by clicking the button below.</p>
                         <p>Alternatively, sign off can be provided on the <a ng-click="$dismiss()" href="#opendatapublishing/signoff">Final Approval</a> page.</p>
@@ -89,7 +89,7 @@
                             </button>
                         </span>
                     </div>
-                    <div ng-show="publishingStatus.currentActiveView == 'upload'">
+                    <div ng-show="publishingStatus.currentActiveView == 'upload'" class="quick-fade-in">
                         <h3>Data upload</h3>
                         <p>The record is now waiting to be automatically uploaded to data.gov.uk. The upload process may take a day so please check back later.</p>
                         <br />

@@ -687,6 +687,13 @@ form .ng-invalid {
 .fade-in-with-delay.ng-hide-remove.ng-hide-remove-active {
   opacity: 1;
 }
+.quick-fade-in.ng-hide-remove {
+  transition: 0.5s;
+  opacity: 0;
+}
+.quick-fade-in.ng-hide-remove-active {
+  opacity: 1;
+}
 .data-format-list-item {
   float: left;
   padding: 10px;

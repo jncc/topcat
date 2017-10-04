@@ -340,7 +340,7 @@ namespace Catalogue.Data.Seed
                                 DisplayName = "Pete Montgomery",
                                 Email = "pete.montgomery@jncc.gov.uk"
                             },
-                            DateUtc = new DateTime(2015, 01, 01),
+                            DateUtc = new DateTime(2015, 1, 1, 12, 0, 0),
                             Comment = "All OK now."
                         }
                     },
