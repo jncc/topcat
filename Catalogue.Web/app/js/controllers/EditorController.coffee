@@ -237,7 +237,7 @@ isSignedOffAndUpToDate = (record) ->
 isUploadedAndUpToDate = (record) ->
     if record.publication == null
         return false
-    else if record.publication.openData.lastSuccess != null && record.publication.openData.lastSuccess.dateUtc == record.gemini.metadataDate
+    else if record.publication.openData.lastSuccess != null && record.publication.openData.lastSuccess.dateUtc >= record.gemini.metadataDate
         return true
     else
         return false
