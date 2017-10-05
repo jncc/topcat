@@ -33,6 +33,7 @@
         $scope.isAssessedAndUpToDate = isAssessedAndUpToDate
         $scope.isSignedOffAndUpToDate = isSignedOffAndUpToDate
         $scope.isUploadedAndUpToDate = isUploadedAndUpToDate
+        $scope.getOpenDataButtonToolTip = getOpenDataButtonToolTip
         
         $scope.cancel = ->
             $scope.reset()
@@ -150,12 +151,19 @@
             keyword.vocab = $item.vocab
 
 
+getOpenDataButtonToolTip = (record) ->
+    if record.publication == null
+        return "The open data publication status of the record, editing the record may affect the status."
+    else if record.publication.openData.lastSuccess != null && !isAssessedAndUpToDate record
+        return "This record has been changed since it was last published, it may need republishing."
+    else
+        return "The open data publication status of the record, editing the record may affect the status."
 
 getOpenDataButtonText = (record) ->
     if record.publication == null
         return "Not Open Data"
     else if record.publication.openData.lastSuccess != null && !isAssessedAndUpToDate record
-        return "Out of Date"
+        return "Republish"
     else if isUploadedAndUpToDate record
         return "Published"
     else if isSignedOffAndUpToDate record

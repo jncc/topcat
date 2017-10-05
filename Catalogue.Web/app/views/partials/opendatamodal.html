@@ -95,8 +95,18 @@
                         <br />
                         <span class="publishing-extra-info">
                             <p>
-                                Upload last attempted on {{uploadLastAttempted}}<br/>
-                                Upload last succeeded on {{uploadLastSucceeded}}
+                                <span ng-if="form.publication.openData.lastAttempt != null">
+                                    Upload last attempted on {{uploadLastAttempted}}<br/>
+                                </span>
+                                <span ng-if="form.publication.openData.lastAttempt.message != null">
+                                    Attempt message: {{form.publication.openData.lastAttempt.message}}
+                                </span>
+                                <span ng-if="form.publication.openData.lastSuccess != null">
+                                    Upload last succeeded on {{uploadLastSucceeded}}
+                                </span>
+                                <span ng-if="form.publication.openData.lastSuccess.message != null">
+                                    Success message: {{uploadLastSucceeded}}
+                                </span>
                             </p>
                             <p>
                                 Current status: {{uploadStatus}}

@@ -8,10 +8,10 @@
     <table class="table publishing-list">
         <thead>
         <tr>
-            <th>Records pending final approval ({{m.openData.list.length}})</th>
+            <th class="first">Records pending final approval ({{m.openData.list.length}})</th>
             <th>Metadata date</th>
-            <th>Gemini</th>
             <th>Risk assessed by</th>
+            <th>Last published</th>
             <th></th>
         </tr>
         </thead>
@@ -19,8 +19,11 @@
             <tr ng-repeat="r in m.openData.list">
                 <td><a ng-href="#/editor/{{r.id}}" target="_blank" ng-bind-html="r.title"></a></td>
                 <td><span tc-tip title="{{r.metadataDate | date:'yyyy-MM-dd HH:mm:ss'}}">{{r.metadataDate | date}}</span></td>
-                <td>{{r.isGeminiValid}}</td>
                 <td>{{r.openData.assessment.completedByUser.displayName}}</td>
+                <td>
+                    <span ng-if="r.openData.lastSuccess != null" tc-tip title="{{r.openData.lastSuccess.dateUtc | date:'yyyy-MM-dd HH:mm:ss'}}">{{r.openData.lastSuccess.dateUtc | date}}</span>
+                    <span ng-if="r.openData.lastSuccess == null">Never</span>
+                </td>
                 <td>
 <!--                    <div class="btn-group" ng-class="{open: open}"-->
 <!--                         ng-if="isIaoUser && r.openData.assessment.completed && !r.openData.signOff">-->

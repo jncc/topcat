@@ -536,7 +536,7 @@
                     <span>Open Data</span>
                 </div>
                 <div class="layout-col pull-right"
-                            title="The open data publication status of the record."
+                            title="{{ getOpenDataButtonToolTip(form) }}"
                             tc-tip>
                     
                     <button type="button" class="btn"
@@ -637,9 +637,5 @@
 
 
     <!-- <pre>{{form}}</pre>-->
-
-    <hr/>
-    <h3>Publication info</h3>
-    <pre>{{form.publication.openData}}</pre>
     </div>
 </div>
