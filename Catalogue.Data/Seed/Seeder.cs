@@ -248,7 +248,7 @@ namespace Catalogue.Data.Seed
             {
                 r.Id = new Guid("471da4f2-d9e2-4a5a-b72b-3ae8cc40ae57");
                 r.Gemini.Title = "A record with assessment completed on spreadsheet";
-                r.Gemini.MetadataDate = new DateTime(2015, 1, 1, 10, 0, 0);
+                r.Gemini.MetadataDate = new DateTime(2015, 1, 1, 09, 59, 59);
                 r.Publication = new PublicationInfo
                 {
                     OpenData = new OpenDataPublicationInfo
@@ -467,7 +467,7 @@ namespace Catalogue.Data.Seed
                 };
             });
 
-            recordService.Insert(assessmentCompletedOnSpreadsheetRecord, userInfo, Clock.NowUtc);
+            recordService.Insert(assessmentCompletedOnSpreadsheetRecord, userInfo, new DateTime(2015, 1, 1, 09, 59, 59));
             recordService.Insert(neverPublishedRecord, userInfo, Clock.NowUtc);
             recordService.Insert(assessedButNotCompletelyRecord, userInfo, Clock.NowUtc);
             recordService.Insert(assessedButNotSignedOffRecord, userInfo, Clock.NowUtc);

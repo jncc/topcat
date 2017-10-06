@@ -38,7 +38,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Data.Indexes
         }
 
         [Test]
-        public void should_be_able_to_get_the_successful_attempt_record()
+        public void should_be_able_to_get_successful_attempt_records()
         {
             // in other words, the last publication was successful and the record hasn't been updated since!
 
@@ -47,8 +47,9 @@ namespace Catalogue.Tests.Slow.Catalogue.Data.Indexes
                 .OfType<Record>()
                 .ToList();
 
-            results.Count.Should().Be(1);
-            results.Single().Id.Should().Be("d9c14587-90d8-4eba-b670-4cf36e45196d");
+            results.Count.Should().Be(2);
+            results.Should().Contain(r => r.Id.ToString() == "471da4f2-d9e2-4a5a-b72b-3ae8cc40ae57");
+            results.Should().Contain(r => r.Id.ToString() == "d9c14587-90d8-4eba-b670-4cf36e45196d");
         }
 
         [Test]
@@ -60,7 +61,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Data.Indexes
                 .OfType<Record>()
                 .ToList();
 
-            results.Count.Should().Be(7);
+            results.Count.Should().Be(6);
             results.Should().Contain(r => r.Id.ToString() == "19b8c7ab-5c33-4d55-bc1d-3762b8207a9f");
         }
 
@@ -73,6 +74,19 @@ namespace Catalogue.Tests.Slow.Catalogue.Data.Indexes
                 .ToList();
 
             results.Count.Should().Be(7);
+        }
+
+        [Test]
+        public void should_be_able_to_get_published_since_last_updated()
+        {
+            var results = Db.Query<RecordsWithOpenDataPublicationInfoIndex.Result, RecordsWithOpenDataPublicationInfoIndex>()
+                .Where(x => x.PublishedSinceLastUpdated)
+                .OfType<Record>()
+                .ToList();
+
+            results.Count.Should().Be(2);
+            results.Should().Contain(r => r.Id.ToString() == "471da4f2-d9e2-4a5a-b72b-3ae8cc40ae57");
+            results.Should().Contain(r => r.Id.ToString() == "d9c14587-90d8-4eba-b670-4cf36e45196d");
         }
     }
 }
