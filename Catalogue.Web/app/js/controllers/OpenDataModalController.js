@@ -72,7 +72,7 @@
     }
     refreshAssessmentInfo = function() {
       if ($scope.form.publication !== null && $scope.form.publication.openData.assessment.completed) {
-        if ($scope.form.publication.openData.assessment.completedBy === null && $scope.form.publication.openData.assessment.initialAssessmentWasDoneOnSpreadsheet) {
+        if ($scope.form.publication.openData.assessment.completedByUser === null && $scope.form.publication.openData.assessment.initialAssessmentWasDoneOnSpreadsheet) {
           return $scope.assessmentCompletedInfo = "Initial assessment completed on spreadsheet";
         } else if ($scope.isAssessedAndUpToDate($scope.form)) {
           return $scope.assessmentCompletedInfo = "Completed by " + $scope.form.publication.openData.assessment.completedByUser.displayName + " on " + moment(new Date($scope.form.publication.openData.assessment.completedOnUtc)).format('DD MMM YYYY h:mm a');
