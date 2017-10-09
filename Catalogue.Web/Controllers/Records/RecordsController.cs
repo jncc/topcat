@@ -30,10 +30,11 @@ namespace Catalogue.Web.Controllers.Records
         {
             if (id == Guid.Empty) // a nice empty record for making a new one
                 return MakeNewRecord();
-            else if (clone)
+
+            if (clone)
                 return Clone(db.Load<Record>(id));
-            else
-                return db.Load<Record>(id);
+            
+            return db.Load<Record>(id);
         }
 
         private Record Clone(Record record)
@@ -43,6 +44,7 @@ namespace Catalogue.Web.Controllers.Records
             clonedRecord.Id = Guid.Empty;
             clonedRecord.Path = String.Empty;
             clonedRecord.Gemini.Title = String.Empty;
+            clonedRecord.Publication = null;
 
             return clonedRecord;
         }
