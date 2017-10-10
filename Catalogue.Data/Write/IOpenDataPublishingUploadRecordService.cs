@@ -2,7 +2,7 @@
 
 namespace Catalogue.Data.Write
 {
-    public interface IOpenDataPublishingUploadService
+    public interface IOpenDataPublishingUploadRecordService
     {
         void UpdateLastAttempt(Record record, PublicationAttempt attempt);
         void UpdateLastSuccess(Record record, PublicationAttempt attempt);

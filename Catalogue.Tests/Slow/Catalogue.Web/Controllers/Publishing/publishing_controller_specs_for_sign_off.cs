@@ -41,7 +41,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Web.Controllers.Publishing
                 r.Footer = new Footer();
             });
 
-            var resultRecord = GetSignOffPublishingResponse(GetNewDbWithRecord(record), record).Record;
+            var resultRecord = GetSignOffPublishingResponse(GetNewDbWithRecord(record), record).RecordOutputModel.Record;
             resultRecord.Publication.Should().NotBeNull();
 
             var openDataInfo = resultRecord.Publication.OpenData;
@@ -220,7 +220,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Web.Controllers.Publishing
                 r.Footer = new Footer();
             });
 
-            var resultRecord = GetSignOffPublishingResponse(GetNewDbWithRecord(record), record).Record;
+            var resultRecord = GetSignOffPublishingResponse(GetNewDbWithRecord(record), record).RecordOutputModel.Record;
             resultRecord.Publication.Should().NotBeNull();
 
             var openDataInfo = resultRecord.Publication.OpenData;

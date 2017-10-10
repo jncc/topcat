@@ -87,7 +87,7 @@ namespace Catalogue.Data.Import
                     n++;
                     Results.Add(result);
 
-                    keywords.AddRange(result.Record.Gemini.Keywords);
+                    keywords.AddRange(result.RecordOutputModel.Record.Gemini.Keywords);
                 }
             }
             catch (CsvHelperException ex)

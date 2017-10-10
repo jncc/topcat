@@ -454,7 +454,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Web.Controllers.Publishing
                     Id = record.Id
                 };
 
-                return publishingController.Assess(request).Record;
+                return publishingController.Assess(request).RecordOutputModel.Record;
             }
         }
 

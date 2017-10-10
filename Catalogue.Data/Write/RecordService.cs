@@ -1,19 +1,18 @@
 ﻿using Catalogue.Data.Model;
 using Catalogue.Gemini.Spatial;
 using Catalogue.Utilities.Text;
-using Catalogue.Utilities.Time;
 using Raven.Client;
-using System;
 using System.Linq;
+using Catalogue.Data.Query;
 
 namespace Catalogue.Data.Write
 {
-    public class RecordService
+    public abstract class RecordService
     {
         protected readonly IDocumentSession db;
         protected readonly IRecordValidator validator;
 
-        public RecordService(IDocumentSession db, IRecordValidator validator)
+        protected RecordService(IDocumentSession db, IRecordValidator validator)
         {
             this.db = db;
             this.validator = validator;
@@ -35,7 +34,16 @@ namespace Catalogue.Data.Write
 
             return new RecordServiceResult
                 {
-                    Record = record,
+                    RecordOutputModel = new RecordOutputModel
+                    {
+                        Record = record,
+                        PublishingState = new PublishingState
+                        {
+                            AssessedAndUpToDate = record.IsAssessedAndUpToDate(),
+                            SignedOffAndUpToDate = record.IsSignedOffAndUpToDate(),
+                            UploadedAndUpToDate = record.IsUploadedAndUpToDate()
+                        }
+                    },
                     Validation = validation,
                 };
         }
@@ -81,7 +89,7 @@ namespace Catalogue.Data.Write
         /// <summary>
         /// The (possibly modified) record that was submitted.
         /// </summary>
-        public Record Record { get; set; }
+        public RecordOutputModel RecordOutputModel { get; set; }
 
         /// <summary>
         /// A convenience result for tests, etc.

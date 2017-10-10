@@ -135,9 +135,9 @@
     <Compile Include="Test\RavenUtility.cs" />
     <Compile Include="UserToUserInfoConverter.cs" />
     <Compile Include="Write\IOpenDataPublishingRecordService.cs" />
-    <Compile Include="Write\IOpenDataPublishingUploadService.cs" />
+    <Compile Include="Write\IOpenDataPublishingUploadRecordService.cs" />
     <Compile Include="Write\IUserRecordService.cs" />
-    <Compile Include="Write\OpenDataPublishingUploadService.cs" />
+    <Compile Include="Write\OpenDataPublishingUploadRecordService.cs" />
     <Compile Include="Write\OpenDataPublishingRecordService.cs" />
     <Compile Include="Write\RecordService.cs" />
     <Compile Include="Write\RecordValidator.cs" />

@@ -1,11 +1,11 @@
 ﻿angular.module('app.controllers').controller 'EditorController',
 
     ($scope, $http, $routeParams, $location, record, $modal) -> 
-    
+
         $scope.editing = {}
         $scope.lookups = {}
         $scope.lookups.currentDataFormat = {}
-        $scope.record = record
+        $scope.recordOutput = record
 
         # store a vocabulator scope here to save state between modal instances
         $scope.vocabulator = {}
@@ -30,9 +30,6 @@
         $scope.updateDataFormatObj = updateDataFormatObj
         $scope.getPendingSignOff = getPendingSignOff
         $scope.getOpenDataButtonText = getOpenDataButtonText
-        $scope.isAssessedAndUpToDate = isAssessedAndUpToDate
-        $scope.isSignedOffAndUpToDate = isSignedOffAndUpToDate
-        $scope.isUploadedAndUpToDate = isUploadedAndUpToDate
         $scope.getOpenDataButtonToolTip = getOpenDataButtonToolTip
         
         $scope.cancel = ->
@@ -52,16 +49,16 @@
             $scope.notifications.add 'Edits saved'
 
         $scope.reloadRecord = (response) ->
-            $scope.record = response
+            $scope.recordOutput = response
             $scope.validation = {}
             $scope.reset()
             $scope.status.refresh()
-            $location.path('/editor/' + $scope.record.id)
+            $location.path('/editor/' + $scope.recordOutput.record.id)
 
         $scope.save = ->
             processResult = (response) ->
                 if response.data.success
-                    $scope.successResponse response.data.record
+                    $scope.successResponse response.data.recordOutputModel
                 else
                     $scope.validation = response.data.validation
                     # tell the form that fields are invalid
@@ -79,17 +76,17 @@
             if $scope.isNew()
                 $http.post('../api/records', $scope.form).then processResult
             else
-                $http.put('../api/records/' + $scope.record.id, $scope.form).then processResult
+                $http.put('../api/records/' + $scope.recordOutput.record.id, $scope.form).then processResult
 
         $scope.clone = ->
             $location.path( '/clone/' + $scope.form.id )
             
         $scope.reset = -> 
-            $scope.form = angular.copy($scope.record)
-            
+            $scope.form = angular.copy($scope.recordOutput.record)
+
         $scope.isNew = -> $scope.form.id is '00000000-0000-0000-0000-000000000000'
-        $scope.isClean = -> angular.equals($scope.form, $scope.record)
-        $scope.isSaveHidden = -> $scope.isClean() or $scope.record.readOnly
+        $scope.isClean = -> angular.equals($scope.form, $scope.recordOutput.record)
+        $scope.isSaveHidden = -> $scope.isClean() or $scope.recordOutput.record.readOnly
         $scope.isCancelHidden = -> $scope.isClean()
         $scope.isSaveDisabled = -> $scope.isClean() # || $scope.theForm.$invalid 
         $scope.isCloneHidden = -> $scope.isNew()
@@ -130,6 +127,7 @@
                 templateUrl: 'views/partials/opendatamodal.html?' + new Date().getTime() # stop iis express caching the html
                 size:        'lg'
                 scope:       $scope
+                resolve:     'recordOutput': -> $scope.recordOutput
                 backdrop:  'static'
             modal.result
                 .then (result) -> $scope.reloadRecord result
@@ -151,24 +149,24 @@
             keyword.vocab = $item.vocab
 
 
-getOpenDataButtonToolTip = (record) ->
+getOpenDataButtonToolTip = (record, publishingState) ->
     if record.publication == null
         return "The open data publication status of the record, editing the record may affect the status."
-    else if record.publication.openData.lastSuccess != null && !isAssessedAndUpToDate record
+    else if record.publication.openData.lastSuccess != null && !publishingState.assessedAndUpToDate
         return "This record has been changed since it was last published, it may need republishing."
     else
         return "The open data publication status of the record, editing the record may affect the status."
 
-getOpenDataButtonText = (record) ->
+getOpenDataButtonText = (record, publishingState) ->
     if record.publication == null
         return "Not Open Data"
-    else if record.publication.openData.lastSuccess != null && !isAssessedAndUpToDate record
+    else if record.publication.openData.lastSuccess != null && !publishingState.assessedAndUpToDate
         return "Republish"
-    else if isUploadedAndUpToDate record
+    else if publishingState.uploadedAndUpToDate
         return "Published"
-    else if isSignedOffAndUpToDate record
+    else if publishingState.signedOffAndUpToDate
         return "Signed Off"
-    else if isAssessedAndUpToDate record
+    else if publishingState.assessedAndUpToDate
         return "Assessed"
     else
         return "Not Open Data"
@@ -213,32 +211,4 @@ fakeValidationData = errors: [
     { message: 'There was an error' }
     { message: 'There was another error' } ]
 
-
-isAssessedAndUpToDate = (record) ->
-    if record.publication == null
-        return false
-    else if !record.publication.openData.assessment.completed
-        return false
-    else if record.publication.openData.assessment.completedOnUtc == record.gemini.metadataDate
-        return true
-    else
-        return isSignedOffAndUpToDate(record)
-
-isSignedOffAndUpToDate = (record) ->
-    if record.publication == null
-        return false
-    else if record.publication.openData.signOff != null && record.publication.openData.signOff.dateUtc == record.gemini.metadataDate
-        return true
-    else if record.publication.openData.lastAttempt != null && record.publication.openData.lastAttempt.dateUtc == record.gemini.metadataDate
-        return true
-    else
-        return isUploadedAndUpToDate(record)
-
-isUploadedAndUpToDate = (record) ->
-    if record.publication == null
-        return false
-    else if record.publication.openData.lastSuccess != null && record.publication.openData.lastSuccess.dateUtc >= record.gemini.metadataDate
-        return true
-    else
-        return false
         

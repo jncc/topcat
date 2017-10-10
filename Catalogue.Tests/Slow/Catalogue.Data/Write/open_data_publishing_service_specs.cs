@@ -57,7 +57,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Data.Write
                 var testTime = new DateTime(2017, 08, 18, 12, 0, 0);
                 Clock.CurrentUtcDateTimeGetter = () => testTime;
 
-                var uploadService = new OpenDataPublishingUploadService(db, new RecordValidator());
+                var uploadService = new OpenDataPublishingUploadRecordService(db, new RecordValidator());
                 var uploadHelperMock = new Mock<IOpenDataUploadHelper>();
                 var uploader = new RobotUploader(db, uploadService, uploadHelperMock.Object);
 
@@ -121,7 +121,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Data.Write
                 var testTime = new DateTime(2017, 08, 18, 12, 0, 0);
                 Clock.CurrentUtcDateTimeGetter = () => testTime;
 
-                var uploadService = new OpenDataPublishingUploadService(db, new RecordValidator());
+                var uploadService = new OpenDataPublishingUploadRecordService(db, new RecordValidator());
                 var uploadHelperMock = new Mock<IOpenDataUploadHelper>();
                 var uploader = new RobotUploader(db, uploadService, uploadHelperMock.Object);
 
@@ -186,7 +186,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Data.Write
                 var testTime = new DateTime(2017, 08, 18, 12, 0, 0);
                 Clock.CurrentUtcDateTimeGetter = () => testTime;
 
-                var uploadService = new OpenDataPublishingUploadService(db, new RecordValidator());
+                var uploadService = new OpenDataPublishingUploadRecordService(db, new RecordValidator());
                 var uploadHelperMock = new Mock<IOpenDataUploadHelper>();
                 var uploader = new RobotUploader(db, uploadService, uploadHelperMock.Object);
 
@@ -250,7 +250,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Data.Write
                 var testTime = new DateTime(2017, 08, 18, 12, 0, 0);
                 Clock.CurrentUtcDateTimeGetter = () => testTime;
 
-                var uploadService = new OpenDataPublishingUploadService(db, new RecordValidator());
+                var uploadService = new OpenDataPublishingUploadRecordService(db, new RecordValidator());
                 var uploadHelperMock = new Mock<IOpenDataUploadHelper>();
                 var uploader = new RobotUploader(db, uploadService, uploadHelperMock.Object);
                 uploader.Upload(new List<Record> { record });
@@ -316,7 +316,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Data.Write
                 var testTime = new DateTime(2017, 08, 18, 12, 0, 0);
                 Clock.CurrentUtcDateTimeGetter = () => testTime;
 
-                var uploadService = new OpenDataPublishingUploadService(db, new RecordValidator());
+                var uploadService = new OpenDataPublishingUploadRecordService(db, new RecordValidator());
                 var uploadHelperMock = new Mock<IOpenDataUploadHelper>();
                 var uploader = new RobotUploader(db, uploadService, uploadHelperMock.Object);
                 uploader.Upload(new List<Record> { record });
@@ -382,7 +382,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Data.Write
                 var testTime = new DateTime(2017, 08, 18, 12, 0, 0);
                 Clock.CurrentUtcDateTimeGetter = () => testTime;
 
-                var uploadService = new OpenDataPublishingUploadService(db, new RecordValidator());
+                var uploadService = new OpenDataPublishingUploadRecordService(db, new RecordValidator());
                 var uploadHelperMock = new Mock<IOpenDataUploadHelper>();
                 var uploader = new RobotUploader(db, uploadService, uploadHelperMock.Object);
                 uploader.Upload(new List<Record> { record });
@@ -444,7 +444,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Data.Write
                 var testTime = new DateTime(2017, 08, 18, 12, 0, 0);
                 Clock.CurrentUtcDateTimeGetter = () => testTime;
 
-                var uploadService = new OpenDataPublishingUploadService(db, new RecordValidator());
+                var uploadService = new OpenDataPublishingUploadRecordService(db, new RecordValidator());
                 var uploadHelperMock = new Mock<IOpenDataUploadHelper>();
                 var uploader = new RobotUploader(db, uploadService, uploadHelperMock.Object);
 

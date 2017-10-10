@@ -62,7 +62,7 @@ namespace Catalogue.Web.Controllers.Publishing
 
             return new PublishingResponse
             {
-                Record = updatedRecord
+                RecordOutputModel = updatedRecord
             };
         }
 
@@ -87,7 +87,7 @@ namespace Catalogue.Web.Controllers.Publishing
 
             return new PublishingResponse
             {
-                Record = updatedRecord
+                RecordOutputModel = updatedRecord
             };
         }
 

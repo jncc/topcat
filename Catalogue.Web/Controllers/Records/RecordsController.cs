@@ -8,6 +8,7 @@ using Catalogue.Web.Account;
 using Raven.Client;
 using System;
 using System.Web.Http;
+using Catalogue.Data.Query;
 
 namespace Catalogue.Web.Controllers.Records
 {
@@ -26,15 +27,27 @@ namespace Catalogue.Web.Controllers.Records
 
         // GET api/records/57d34691-9064-4c1e-90a7-7b0c112daa8d (get a record)
 
-        public Record Get(Guid id, bool clone = false)
+        public RecordOutputModel Get(Guid id, bool clone = false)
         {
-            if (id == Guid.Empty) // a nice empty record for making a new one
-                return MakeNewRecord();
+            Record record;
 
-            if (clone)
-                return Clone(db.Load<Record>(id));
-            
-            return db.Load<Record>(id);
+            if (id == Guid.Empty)
+                record = MakeNewRecord(); // a nice empty record for making a new one
+            else if (clone)
+                record = Clone(db.Load<Record>(id));
+            else
+                record = db.Load<Record>(id);
+
+            return new RecordOutputModel
+            {
+                Record = record,
+                PublishingState = new PublishingState
+                {
+                    AssessedAndUpToDate = record.IsAssessedAndUpToDate(),
+                    SignedOffAndUpToDate = record.IsSignedOffAndUpToDate(),
+                    UploadedAndUpToDate = record.IsUploadedAndUpToDate()
+                }
+            };
         }
 
         private Record Clone(Record record)
@@ -61,7 +74,7 @@ namespace Catalogue.Web.Controllers.Records
 
             var result = service.Update(record, userInfo);
 
-            if (result.Record.Id != id) throw new Exception("The ID of the record does not match that supplied to the put method");
+            if (result.RecordOutputModel.Record.Id != id) throw new Exception("The ID of the record does not match that supplied to the put method");
 
             if (result.Success)
                 db.SaveChanges();

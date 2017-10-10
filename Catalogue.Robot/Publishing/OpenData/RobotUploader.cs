@@ -17,13 +17,13 @@ namespace Catalogue.Robot.Publishing.OpenData
         private static readonly ILog Logger = LogManager.GetLogger(typeof(RobotUploader));
 
         private readonly IDocumentSession db;
-        private readonly IOpenDataPublishingUploadService uploadService;
+        private readonly IOpenDataPublishingUploadRecordService uploadRecordService;
         private readonly IOpenDataUploadHelper uploadHelper;
 
-        public RobotUploader(IDocumentSession db, IOpenDataPublishingUploadService uploadService, IOpenDataUploadHelper uploadHelper)
+        public RobotUploader(IDocumentSession db, IOpenDataPublishingUploadRecordService uploadRecordService, IOpenDataUploadHelper uploadHelper)
         {
             this.db = db;
-            this.uploadService = uploadService;
+            this.uploadRecordService = uploadRecordService;
             this.uploadHelper = uploadHelper;
         }
 
@@ -55,7 +55,7 @@ namespace Catalogue.Robot.Publishing.OpenData
         private void UploadRecord(Record record)
         {
             var attempt = new PublicationAttempt { DateUtc = Clock.NowUtc };
-            uploadService.UpdateLastAttempt(record, attempt);
+            uploadRecordService.UpdateLastAttempt(record, attempt);
             db.SaveChanges();
 
             bool alternativeResources = record.Publication != null && record.Publication.OpenData != null && record.Publication.OpenData.Resources != null && record.Publication.OpenData.Resources.Any();
@@ -74,7 +74,7 @@ namespace Catalogue.Robot.Publishing.OpenData
                     {
                         // set the resource locator to the download request page; don't upload any resources
                         if (record.Gemini.ResourceLocator.IsBlank()) // arguably should always do it actually
-                            uploadService.UpdateTheResourceLocatorToBeTheOpenDataDownloadPage(record);
+                            uploadRecordService.UpdateTheResourceLocatorToBeTheOpenDataDownloadPage(record);
                     }
                     else if (record.Gemini.ResourceLocator.IsBlank() || record.Gemini.ResourceLocator.Contains(uploadHelper.GetHttpRootUrl()))
                     {
@@ -82,7 +82,7 @@ namespace Catalogue.Robot.Publishing.OpenData
                         // upload the resource pointed at by record.Path, and update the resource locator to match
                         uploadHelper.UploadDataFile(record.Id, record.Path);
                         string dataHttpPath = uploadHelper.GetHttpRootUrl() + "/" + GetUnrootedDataPath(record.Id, record.Path);
-                        uploadService.UpdateResourceLocatorToMatchMainDataFile(record, dataHttpPath);
+                        uploadRecordService.UpdateResourceLocatorToMatchMainDataFile(record, dataHttpPath);
                     }
                     else
                     {
@@ -94,7 +94,7 @@ namespace Catalogue.Robot.Publishing.OpenData
                 uploadHelper.UploadMetadataDocument(record);
                 uploadHelper.UploadWafIndexDocument(record);
 
-                uploadService.UpdateLastSuccess(record, attempt);
+                uploadRecordService.UpdateLastSuccess(record, attempt);
             }
             catch (WebException ex)
             {

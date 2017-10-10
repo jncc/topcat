@@ -9,6 +9,7 @@ using Moq;
 using NUnit.Framework;
 using Raven.Client;
 using System;
+using Catalogue.Data.Query;
 
 namespace Catalogue.Tests.Slow.Catalogue.Web.Controllers.Records
 {
@@ -18,10 +19,10 @@ namespace Catalogue.Tests.Slow.Catalogue.Web.Controllers.Records
         public void should_return_blank_record_for_empty_guid()
         {
             var controller = new RecordsController(Mock.Of<IUserRecordService>(), Mock.Of<IDocumentSession>(), new TestUserContext());
-            var record = controller.Get(Guid.Empty);
+            var recordResult = controller.Get(Guid.Empty);
 
-            record.Gemini.Title.Should().BeBlank();
-            record.Path.Should().BeBlank();
+            recordResult.Record.Gemini.Title.Should().BeBlank();
+            recordResult.Record.Path.Should().BeBlank();
         }
 
         [Test]
@@ -32,13 +33,13 @@ namespace Catalogue.Tests.Slow.Catalogue.Web.Controllers.Records
                 Path = @"X:\some\path",
                 Gemini = Library.Blank().With(m => m.Title = "Some new record!")
             };
-            var rsr = RecordServiceResult.SuccessfulResult.With(r => r.Record = record);
+            var rsr = RecordServiceResult.SuccessfulResult.With(r => r.RecordOutputModel = new RecordOutputModel{ Record = record});
             var service = Mock.Of<IUserRecordService>(s => s.Insert(It.IsAny<Record>(), It.IsAny<UserInfo>()) == rsr);
             var controller = new RecordsController(service, Mock.Of<IDocumentSession>(), new TestUserContext());
 
             var result = controller.Post(record);
 
-            result.Record.Id.Should().NotBeEmpty();
+            result.RecordOutputModel.Record.Id.Should().NotBeEmpty();
         }
 
         [Test]
@@ -65,7 +66,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Web.Controllers.Records
             var service = Mock.Of<IUserRecordService>();
             var controller = new RecordsController(service, db, new TestUserContext());
 
-            var result = controller.Get(record.Id, true);
+            var result = controller.Get(record.Id, true).Record;
             result.Id.Should().BeEmpty();
             result.Path.Should().BeEmpty();
             result.Gemini.Title.Should().BeEmpty();

@@ -31,7 +31,7 @@
                                 tc-tip title="Publishing sign off for Information Asset Owners"
                                 ng-click="signOffButtonClick(r.id)"
                                 ng-disabled="m.signOffStatus[r.id] == 'Signed Off'"
-                                ng-if="user.isIaoUser && isAssessedAndUpToDate(r)">
+                                ng-if="user.isIaoUser">
                             <span ng-if="m.signOffStatus[r.id] == 'Sign Off'" class="glyphicon glyphicon-check"></span>
                             <span ng-if="m.signOffStatus[r.id] == 'Signed Off'" class="glyphicon glyphicon-ok"></span>
                             <span ng-if="m.signOffStatus[r.id].indexOf('Cancel') == 0" class="glyphicon glyphicon-remove sign-off"></span>

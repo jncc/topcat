@@ -62,7 +62,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Data.Write
             var record = BasicRecord();
             var result = service.Update(record, TestUser);
 
-            result.Record.Should().Be(record);
+            result.RecordOutputModel.Record.Should().Be(record);
         }
 
         [Test]
@@ -171,7 +171,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Data.Write
             var service = new UserRecordService(database, ValidatorStub());
 
             var result = service.Insert(record, TestUser);
-            var footer = result.Record.Footer;
+            var footer = result.RecordOutputModel.Record.Footer;
             footer.Should().NotBeNull();
             footer.CreatedOnUtc.Should().NotBe(DateTime.MinValue);
             footer.CreatedByUser.DisplayName.Should().Be("Test User");
@@ -211,7 +211,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Data.Write
             var service = new UserRecordService(database, ValidatorStub());
 
             var result = service.Update(record, TestUser);
-            var footer = result.Record.Footer;
+            var footer = result.RecordOutputModel.Record.Footer;
             footer.Should().NotBeNull();
             footer.CreatedOnUtc.Should().Be(new DateTime(2015, 1, 1, 10, 0, 0));
             footer.CreatedByUser.DisplayName.Should().Be("Creator");

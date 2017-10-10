@@ -7,11 +7,11 @@ using Raven.Client;
 
 namespace Catalogue.Data.Write
 {
-    public class OpenDataPublishingUploadService : RecordService, IOpenDataPublishingUploadService
+    public class OpenDataPublishingUploadRecordService : RecordService, IOpenDataPublishingUploadRecordService
     {
-        private static readonly ILog Logger = LogManager.GetLogger(typeof(OpenDataPublishingUploadService));
+        private static readonly ILog Logger = LogManager.GetLogger(typeof(OpenDataPublishingUploadRecordService));
 
-        public OpenDataPublishingUploadService(IDocumentSession db, IRecordValidator validator) : base(db, validator)
+        public OpenDataPublishingUploadRecordService(IDocumentSession db, IRecordValidator validator) : base(db, validator)
         {
         }
 
@@ -19,13 +19,6 @@ namespace Catalogue.Data.Write
         {
             record.Publication.OpenData.LastAttempt = attempt;
             UpdateMetadataDate(record, attempt.DateUtc);
-
-            var userInfo = new UserInfo
-            {
-                DisplayName = "Robot Uploader",
-                Email = "data@jncc.gov.uk"
-            };
-            SetFooterForUpdatedRecord(record, userInfo);
 
             var recordServiceResult = Upsert(record);
             if (!recordServiceResult.Success)
@@ -66,12 +59,6 @@ namespace Catalogue.Data.Write
         private void UpdateMetadataDate(Record record, DateTime metadataDate)
         {
             record.Gemini.MetadataDate = metadataDate;
-        }
-
-        private void SetFooterForUpdatedRecord(Record record, UserInfo userInfo)
-        {
-            record.Footer.ModifiedOnUtc = Clock.NowUtc;
-            record.Footer.ModifiedByUser = userInfo;
         }
     }
 }

@@ -13,17 +13,17 @@
                 <ol class="cd-multi-steps text-center">
                     <li ng-class="publishingStatus.riskAssessment.currentClass">
                         <a ng-click="publishingStatus.currentActiveView = 'risk assessment'">
-                            1. Risk assessment <span ng-if="isAssessedAndUpToDate(form)" class="glyphicon glyphicon-ok"></span>
+                            1. Risk assessment <span ng-if="recordOutput.publishingState.assessedAndUpToDate" class="glyphicon glyphicon-ok"></span>
                         </a>
                     </li>
                     <li ng-class="publishingStatus.signOff.currentClass">
                         <a ng-click="publishingStatus.currentActiveView = 'sign off'">
-                            2. Final approval <span ng-if="isSignedOffAndUpToDate(form)" class="glyphicon glyphicon-ok"></span>
+                            2. Final approval <span ng-if="recordOutput.publishingState.signedOffAndUpToDate" class="glyphicon glyphicon-ok"></span>
                         </a>
                     </li>
                     <li ng-class="publishingStatus.upload.currentClass">
                         <a ng-click="publishingStatus.currentActiveView = 'upload'">
-                            3. Data upload <span ng-if="isUploadedAndUpToDate(form)" class="glyphicon glyphicon-ok"></span>
+                            3. Data upload <span ng-if="recordOutput.publishingState.uploadedAndUpToDate" class="glyphicon glyphicon-ok"></span>
                         </a>
                     </li>
                 </ol>
@@ -62,7 +62,7 @@
                                 {{assessmentCompletedInfo}}
                             </p>
                         </span>
-                        <span class="pull-right" ng-if="!isAssessedAndUpToDate(form)">
+                        <span class="pull-right" ng-if="!recordOutput.publishingState.assessedAndUpToDate">
                             <button type="button" class="btn btn-primary"
                                     ng-click="assessButtonClick()">
                                 I AGREE

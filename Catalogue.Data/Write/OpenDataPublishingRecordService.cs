@@ -1,5 +1,6 @@
 ﻿using Catalogue.Data.Model;
 using System;
+using Catalogue.Data.Query;
 using Catalogue.Utilities.Time;
 using Raven.Client;
 
@@ -11,7 +12,7 @@ namespace Catalogue.Data.Write
         {
         }
 
-        public Record Assess(Record record, OpenDataAssessmentInfo assessmentInfo)
+        public RecordOutputModel Assess(Record record, OpenDataAssessmentInfo assessmentInfo)
         {
             if (record.IsAssessedAndUpToDate())
                 throw new InvalidOperationException("Assessment has already been completed and is up to date");
@@ -42,10 +43,10 @@ namespace Catalogue.Data.Write
                 throw new Exception("Error while saving assessment changes.");
             }
 
-            return recordServiceResult.Record;
+            return recordServiceResult.RecordOutputModel;
         }
 
-        public Record SignOff(Record record, OpenDataSignOffInfo signOffInfo)
+        public RecordOutputModel SignOff(Record record, OpenDataSignOffInfo signOffInfo)
         {
             if (!record.IsAssessedAndUpToDate())
                 throw new InvalidOperationException("Couldn't sign-off record for publication - assessment not completed or out of date");
@@ -61,12 +62,12 @@ namespace Catalogue.Data.Write
             if (!recordServiceResult.Success)
                 throw new Exception("Error while saving sign off changes");
 
-            return recordServiceResult.Record;
+            return recordServiceResult.RecordOutputModel;
         }
 
-        public IOpenDataPublishingUploadService Upload()
+        public IOpenDataPublishingUploadRecordService Upload()
         {
-            return new OpenDataPublishingUploadService(db, validator);
+            return new OpenDataPublishingUploadRecordService(db, validator);
         }
 
         private void UpdateMetadataDate(Record record, DateTime metadataDate)

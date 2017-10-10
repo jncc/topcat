@@ -426,7 +426,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Robot
 
                 Thread.Sleep(100); // Allow time for indexing
 
-                var uploadServiceMock = new Mock<IOpenDataPublishingUploadService>();
+                var uploadServiceMock = new Mock<IOpenDataPublishingUploadRecordService>();
                 var uploadHelperMock = new Mock<IOpenDataUploadHelper>();
                 var robotUploader = new RobotUploader(db, uploadServiceMock.Object, uploadHelperMock.Object);
 
