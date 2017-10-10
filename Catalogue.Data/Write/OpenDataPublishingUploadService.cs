@@ -1,26 +1,33 @@
 ﻿using Catalogue.Utilities.Logging;
 using Catalogue.Data.Model;
 using System;
+using Catalogue.Utilities.Time;
 using log4net;
+using Raven.Client;
 
 namespace Catalogue.Data.Write
 {
-    public class OpenDataPublishingUploadService : IOpenDataPublishingUploadService
+    public class OpenDataPublishingUploadService : RecordService, IOpenDataPublishingUploadService
     {
         private static readonly ILog Logger = LogManager.GetLogger(typeof(OpenDataPublishingUploadService));
 
-        private readonly IRecordService recordService;
-
-        public OpenDataPublishingUploadService(IRecordService recordService)
+        public OpenDataPublishingUploadService(IDocumentSession db, IRecordValidator validator) : base(db, validator)
         {
-            this.recordService = recordService;
         }
 
-        public void UpdateLastAttempt(Record record, PublicationAttempt attempt, UserInfo userInfo)
+        public void UpdateLastAttempt(Record record, PublicationAttempt attempt)
         {
             record.Publication.OpenData.LastAttempt = attempt;
+            UpdateMetadataDate(record, attempt.DateUtc);
 
-            var recordServiceResult = recordService.Update(record, userInfo, attempt.DateUtc);
+            var userInfo = new UserInfo
+            {
+                DisplayName = "Robot Uploader",
+                Email = "data@jncc.gov.uk"
+            };
+            SetFooterForUpdatedRecord(record, userInfo);
+
+            var recordServiceResult = Upsert(record);
             if (!recordServiceResult.Success)
             {
                 var e = new Exception("Error while saving upload changes.");
@@ -28,11 +35,12 @@ namespace Catalogue.Data.Write
             }
         }
 
-        public void UpdateLastSuccess(Record record, PublicationAttempt attempt, UserInfo userInfo)
+        public void UpdateLastSuccess(Record record, PublicationAttempt attempt)
         {
             record.Publication.OpenData.LastSuccess = attempt;
+            UpdateMetadataDate(record, attempt.DateUtc);
 
-            var recordServiceResult = recordService.Update(record, userInfo, attempt.DateUtc);
+            var recordServiceResult = Upsert(record);
             if (!recordServiceResult.Success)
             {
                 var e = new Exception("Error while saving upload changes.");
@@ -55,5 +63,15 @@ namespace Catalogue.Data.Write
             Logger.Info("ResourceLocator updated to point to the data file.");
         }
 
+        private void UpdateMetadataDate(Record record, DateTime metadataDate)
+        {
+            record.Gemini.MetadataDate = metadataDate;
+        }
+
+        private void SetFooterForUpdatedRecord(Record record, UserInfo userInfo)
+        {
+            record.Footer.ModifiedOnUtc = Clock.NowUtc;
+            record.Footer.ModifiedByUser = userInfo;
+        }
     }
 }

@@ -17,7 +17,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Web.Controllers.Records
         [Test]
         public void should_return_blank_record_for_empty_guid()
         {
-            var controller = new RecordsController(Mock.Of<IRecordService>(), Mock.Of<IDocumentSession>(), new TestUserContext());
+            var controller = new RecordsController(Mock.Of<IUserRecordService>(), Mock.Of<IDocumentSession>(), new TestUserContext());
             var record = controller.Get(Guid.Empty);
 
             record.Gemini.Title.Should().BeBlank();
@@ -33,7 +33,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Web.Controllers.Records
                 Gemini = Library.Blank().With(m => m.Title = "Some new record!")
             };
             var rsr = RecordServiceResult.SuccessfulResult.With(r => r.Record = record);
-            var service = Mock.Of<IRecordService>(s => s.Insert(It.IsAny<Record>(), It.IsAny<UserInfo>(), It.IsAny<DateTime>()) == rsr);
+            var service = Mock.Of<IUserRecordService>(s => s.Insert(It.IsAny<Record>(), It.IsAny<UserInfo>()) == rsr);
             var controller = new RecordsController(service, Mock.Of<IDocumentSession>(), new TestUserContext());
 
             var result = controller.Post(record);
@@ -62,7 +62,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Web.Controllers.Records
             };
 
             var db = Mock.Of<IDocumentSession>(d => d.Load<Record>(It.IsAny<Guid>()) == record);
-            var service = Mock.Of<IRecordService>();
+            var service = Mock.Of<IUserRecordService>();
             var controller = new RecordsController(service, db, new TestUserContext());
 
             var result = controller.Get(record.Id, true);

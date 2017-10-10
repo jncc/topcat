@@ -22,7 +22,7 @@ namespace Catalogue.Data.Import
             return new Importer(
                 mapping,
                 new FileSystem(),
-                new RecordService(db, new RecordValidator()),
+                new UserRecordService(db, new RecordValidator()),
                 new VocabularyService(db, new VocabularyValidator()),
                 new UserInfo
                 {
@@ -33,7 +33,7 @@ namespace Catalogue.Data.Import
 
         readonly IMapping mapping;
         readonly IFileSystem fileSystem;
-        readonly IRecordService recordService;
+        readonly IUserRecordService userRecordService;
         readonly IVocabularyService vocabularyService;
         readonly UserInfo userInfo;
 
@@ -41,11 +41,11 @@ namespace Catalogue.Data.Import
 
         public readonly List<RecordServiceResult> Results = new List<RecordServiceResult>();
 
-        public Importer(IMapping mapping, IFileSystem fileSystem, IRecordService recordService, IVocabularyService vocabularyService, UserInfo userInfo)
+        public Importer(IMapping mapping, IFileSystem fileSystem, IUserRecordService userRecordService, IVocabularyService vocabularyService, UserInfo userInfo)
         {
             this.mapping = mapping;
             this.fileSystem = fileSystem;
-            this.recordService = recordService;
+            this.userRecordService = userRecordService;
             this.vocabularyService = vocabularyService;
             this.userInfo = userInfo;
         }
@@ -73,7 +73,7 @@ namespace Catalogue.Data.Import
             {
                 foreach (var record in records)
                 {
-                    var result = recordService.Insert(record, userInfo, Clock.NowUtc);
+                    var result = userRecordService.Insert(record, userInfo);
 
                     if (!result.Success)
                     {

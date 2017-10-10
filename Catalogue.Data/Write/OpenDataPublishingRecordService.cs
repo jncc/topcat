@@ -1,15 +1,14 @@
 ﻿using Catalogue.Data.Model;
 using System;
+using Catalogue.Utilities.Time;
+using Raven.Client;
 
 namespace Catalogue.Data.Write
 {
-    public class OpenDataPublishingService : IOpenDataPublishingService
+    public class OpenDataPublishingRecordService : RecordService, IOpenDataPublishingRecordService
     {
-        private readonly IRecordService recordService;
-
-        public OpenDataPublishingService(IRecordService recordService)
+        public OpenDataPublishingRecordService(IDocumentSession db, IRecordValidator validator) : base(db, validator)
         {
-            this.recordService = recordService;
         }
 
         public Record Assess(Record record, OpenDataAssessmentInfo assessmentInfo)
@@ -34,8 +33,10 @@ namespace Catalogue.Data.Write
             }
 
             record.Publication.OpenData.Assessment = assessmentInfo;
+            UpdateMetadataDate(record, assessmentInfo.CompletedOnUtc);
+            SetFooterForUpdatedRecord(record, assessmentInfo.CompletedByUser);
 
-            var recordServiceResult = recordService.Update(record, assessmentInfo.CompletedByUser, assessmentInfo.CompletedOnUtc);
+            var recordServiceResult = Upsert(record);
             if (!recordServiceResult.Success)
             {
                 throw new Exception("Error while saving assessment changes.");
@@ -53,8 +54,10 @@ namespace Catalogue.Data.Write
                 throw new InvalidOperationException("The record has already been signed off");
 
             record.Publication.OpenData.SignOff = signOffInfo;
+            UpdateMetadataDate(record, signOffInfo.DateUtc);
+            SetFooterForUpdatedRecord(record, signOffInfo.User);
 
-            var recordServiceResult = recordService.Update(record, signOffInfo.User, signOffInfo.DateUtc);
+            var recordServiceResult = Upsert(record);
             if (!recordServiceResult.Success)
                 throw new Exception("Error while saving sign off changes");
 
@@ -63,7 +66,18 @@ namespace Catalogue.Data.Write
 
         public IOpenDataPublishingUploadService Upload()
         {
-            return new OpenDataPublishingUploadService(recordService);
+            return new OpenDataPublishingUploadService(db, validator);
+        }
+
+        private void UpdateMetadataDate(Record record, DateTime metadataDate)
+        {
+            record.Gemini.MetadataDate = metadataDate;
+        }
+
+        private void SetFooterForUpdatedRecord(Record record, UserInfo userInfo)
+        {
+            record.Footer.ModifiedOnUtc = Clock.NowUtc;
+            record.Footer.ModifiedByUser = userInfo;
         }
     }
 }

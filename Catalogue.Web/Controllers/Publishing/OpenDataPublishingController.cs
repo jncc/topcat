@@ -15,13 +15,13 @@ namespace Catalogue.Web.Controllers.Publishing
     public class OpenDataPublishingController : ApiController
     {
         readonly IDocumentSession db;
-        readonly IOpenDataPublishingService openDataPublishingService;
+        readonly IOpenDataPublishingRecordService openDataPublishingRecordService;
         readonly IUserContext user;
 
-        public OpenDataPublishingController(IDocumentSession db, IOpenDataPublishingService openDataPublishingService, IUserContext user)
+        public OpenDataPublishingController(IDocumentSession db, IOpenDataPublishingRecordService openDataPublishingRecordService, IUserContext user)
         {
             this.db = db;
-            this.openDataPublishingService = openDataPublishingService;
+            this.openDataPublishingRecordService = openDataPublishingRecordService;
             this.user = user;
         }
 
@@ -56,7 +56,7 @@ namespace Catalogue.Web.Controllers.Publishing
                 InitialAssessmentWasDoneOnSpreadsheet = record.Publication?.OpenData?.Assessment?.InitialAssessmentWasDoneOnSpreadsheet == true
             };
 
-            var updatedRecord = openDataPublishingService.Assess(record, assessmentInfo);
+            var updatedRecord = openDataPublishingRecordService.Assess(record, assessmentInfo);
 
             db.SaveChanges();
 
@@ -81,7 +81,7 @@ namespace Catalogue.Web.Controllers.Publishing
                 Comment = signOffRequest.Comment
             };
 
-            var updatedRecord = openDataPublishingService.SignOff(record, signOffInfo);
+            var updatedRecord = openDataPublishingRecordService.SignOff(record, signOffInfo);
 
             db.SaveChanges();
 

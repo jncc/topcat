@@ -33,7 +33,7 @@ namespace Catalogue.Robot.Publishing.OpenData
             using (var db = store.OpenSession())
             {
                 var config = GetConfigFile();
-                var publishingService = new OpenDataPublishingService(new RecordService(db, new RecordValidator()));
+                var publishingService = new OpenDataPublishingRecordService(db, new RecordValidator());
                 var uploadService = publishingService.Upload();
                 var uploadHelper = new OpenDataUploadHelper(config);
 

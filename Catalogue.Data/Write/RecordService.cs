@@ -8,16 +8,10 @@ using System.Linq;
 
 namespace Catalogue.Data.Write
 {
-    public interface IRecordService
+    public class RecordService
     {
-        RecordServiceResult Insert(Record record, UserInfo user, DateTime metadataDate);
-        RecordServiceResult Update(Record record, UserInfo user, DateTime metadataDate);
-    }
-
-    public class RecordService : IRecordService
-    {
-        private readonly IDocumentSession db;
-        private readonly IRecordValidator validator;
+        protected readonly IDocumentSession db;
+        protected readonly IRecordValidator validator;
 
         public RecordService(IDocumentSession db, IRecordValidator validator)
         {
@@ -25,28 +19,10 @@ namespace Catalogue.Data.Write
             this.validator = validator;
         }
 
-        public RecordServiceResult Insert(Record record, UserInfo user, DateTime metadataDate)
-        {
-            SetFooterForNewlyCreatedRecord(record, user);
-
-            return Upsert(record, metadataDate);
-        }
-
-        public RecordServiceResult Update(Record record, UserInfo user, DateTime metadataDate)
-        {
-            if (record.ReadOnly)
-                throw new InvalidOperationException("Cannot update a read-only record.");
-
-            SetFooterForUpdatedRecord(record, user);
-
-            return Upsert(record, metadataDate);
-        }
-
-        internal RecordServiceResult Upsert(Record record, DateTime metadataDate)
+        internal RecordServiceResult Upsert(Record record)
         {
             CorrectlyOrderKeywords(record);
             StandardiseUnconditionalUseConstraints(record);
-            UpdateMetadataDate(record, metadataDate);
             SetMetadataPointOfContactRoleToOnlyAllowedValue(record);
 
             var validation = validator.Validate(record);
@@ -94,29 +70,6 @@ namespace Catalogue.Data.Write
 
             if (record.Gemini.UseConstraints.IsNotBlank() && record.Gemini.UseConstraints.ToLowerInvariant().Trim() == unconditional)
                 record.Gemini.UseConstraints = unconditional;
-        }
-
-        void UpdateMetadataDate(Record record, DateTime metadataDate)
-        {
-            record.Gemini.MetadataDate = metadataDate;
-        }
-
-        private void SetFooterForNewlyCreatedRecord(Record record, UserInfo userInfo)
-        {
-            var currentTime = Clock.NowUtc;
-            record.Footer = new Footer
-            {
-                CreatedOnUtc = currentTime,
-                CreatedByUser = userInfo,
-                ModifiedOnUtc = currentTime,
-                ModifiedByUser = userInfo
-            };
-        }
-
-        private void SetFooterForUpdatedRecord(Record record, UserInfo userInfo)
-        {
-            record.Footer.ModifiedOnUtc = Clock.NowUtc;
-            record.Footer.ModifiedByUser = userInfo;
         }
     }
 

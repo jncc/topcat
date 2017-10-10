@@ -189,11 +189,11 @@ namespace Catalogue.Web.Controllers.Patch
 
             var records = _queryer.Query(query).ToList();
 
-            var service = new RecordService(db, new RecordValidator());
+            var service = new UserRecordService(db, new RecordValidator());
 
             foreach (var record in records)
             {
-                service.Update(record, record.Footer.ModifiedByUser, Clock.NowUtc);
+                service.Update(record, record.Footer.ModifiedByUser);
             }
 
             db.SaveChanges();
@@ -213,12 +213,12 @@ namespace Catalogue.Web.Controllers.Patch
 
             var records = _queryer.Query(query).ToList();
 
-            var service = new RecordService(db, new RecordValidator());
+            var service = new UserRecordService(db, new RecordValidator());
 
             foreach (var record in records)
             {
                 record.Gemini.ResponsibleOrganisation.Role = "custodian";
-                service.Update(record, record.Footer.ModifiedByUser, Clock.NowUtc);
+                service.Update(record, record.Footer.ModifiedByUser);
             }
 
 

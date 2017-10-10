@@ -14,10 +14,10 @@ namespace Catalogue.Web.Controllers.Records
     public class RecordsController : ApiController
     {
         readonly IDocumentSession db;
-        readonly IRecordService service;
+        readonly IUserRecordService service;
         readonly IUserContext user;
 
-        public RecordsController(IRecordService service, IDocumentSession db, IUserContext user)
+        public RecordsController(IUserRecordService service, IDocumentSession db, IUserContext user)
         {
             this.service = service;
             this.db = db;
@@ -59,7 +59,7 @@ namespace Catalogue.Web.Controllers.Records
                 Email = user.User.Email
             };
 
-            var result = service.Update(record, userInfo, Clock.NowUtc);
+            var result = service.Update(record, userInfo);
 
             if (result.Record.Id != id) throw new Exception("The ID of the record does not match that supplied to the put method");
 
@@ -79,7 +79,7 @@ namespace Catalogue.Web.Controllers.Records
                 Email = user.User.Email
             };
 
-            var result = service.Insert(record, userInfo, Clock.NowUtc);
+            var result = service.Insert(record, userInfo);
 
             if (result.Success)
                 db.SaveChanges();

@@ -2,7 +2,7 @@
 
 namespace Catalogue.Data.Write
 {
-    public interface IOpenDataPublishingService
+    public interface IOpenDataPublishingRecordService
     {
         Record Assess(Record record, OpenDataAssessmentInfo assessmentInfo);
         Record SignOff(Record record, OpenDataSignOffInfo signOffInfo);

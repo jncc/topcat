@@ -21,13 +21,13 @@ namespace Catalogue.Data.Seed
     public class Seeder
     {
         readonly IDocumentSession db;
-        readonly IRecordService recordService;
+        readonly IUserRecordService userRecordService;
         readonly UserInfo userInfo;
 
-        public Seeder(IDocumentSession db, IRecordService recordService)
+        public Seeder(IDocumentSession db, IUserRecordService userRecordService)
         {
             this.db = db;
-            this.recordService = recordService;
+            this.userRecordService = userRecordService;
             userInfo = new UserInfo
             {
                 DisplayName = "Guest",
@@ -39,7 +39,7 @@ namespace Catalogue.Data.Seed
         {
             using (var db = store.OpenSession())
             {
-                var s = new Seeder(db, new RecordService(db, new RecordValidator()));
+                var s = new Seeder(db, new UserRecordService(db, new RecordValidator()));
                 var timeGetter = Clock.CurrentUtcDateTimeGetter;
                 Clock.CurrentUtcDateTimeGetter = () => new DateTime(2015, 1, 1, 12, 0, 0);
 
@@ -122,7 +122,7 @@ namespace Catalogue.Data.Seed
                 };
             });
 
-            recordService.Insert(record, userInfo, Clock.NowUtc);
+            userRecordService.Insert(record, userInfo);
         }
 
         void AddOverseasTerritoriesRecord()
@@ -147,7 +147,7 @@ namespace Catalogue.Data.Seed
                 };
             });
 
-            recordService.Insert(record, userInfo, Clock.NowUtc);
+            userRecordService.Insert(record, userInfo);
         }
 
         void AddSimpleGeminiExampleRecord()
@@ -196,7 +196,7 @@ namespace Catalogue.Data.Seed
                     });
             });
 
-            recordService.Insert(record, userInfo, Clock.NowUtc);
+            userRecordService.Insert(record, userInfo);
         }
 
         void AddRecordsWithOpenDataPublishingInfo()
@@ -467,15 +467,19 @@ namespace Catalogue.Data.Seed
                 };
             });
 
-            recordService.Insert(assessmentCompletedOnSpreadsheetRecord, userInfo, new DateTime(2015, 1, 1, 09, 59, 59));
-            recordService.Insert(neverPublishedRecord, userInfo, Clock.NowUtc);
-            recordService.Insert(assessedButNotCompletelyRecord, userInfo, Clock.NowUtc);
-            recordService.Insert(assessedButNotSignedOffRecord, userInfo, Clock.NowUtc);
-            recordService.Insert(signedOffRecord, userInfo, Clock.NowUtc);
-            recordService.Insert(earlierUnsuccessfullyPublishedRecord, userInfo, Clock.NowUtc);
-            recordService.Insert(laterSuccessfullyPublishedRecord, userInfo, Clock.NowUtc);
-            recordService.Insert(updatedSinceSuccessfullyPublishedRecordAndNowPaused, userInfo, Clock.NowUtc);
-            recordService.Insert(recordWithAlternativeResources, userInfo, Clock.NowUtc);
+            var timeGetter = Clock.CurrentUtcDateTimeGetter;
+            Clock.CurrentUtcDateTimeGetter = () => new DateTime(2015, 1, 1, 09, 59, 59);
+            userRecordService.Insert(assessmentCompletedOnSpreadsheetRecord, userInfo);
+            Clock.CurrentUtcDateTimeGetter = timeGetter;
+
+            userRecordService.Insert(neverPublishedRecord, userInfo);
+            userRecordService.Insert(assessedButNotCompletelyRecord, userInfo);
+            userRecordService.Insert(assessedButNotSignedOffRecord, userInfo);
+            userRecordService.Insert(signedOffRecord, userInfo);
+            userRecordService.Insert(earlierUnsuccessfullyPublishedRecord, userInfo);
+            userRecordService.Insert(laterSuccessfullyPublishedRecord, userInfo);
+            userRecordService.Insert(updatedSinceSuccessfullyPublishedRecordAndNowPaused, userInfo);
+            userRecordService.Insert(recordWithAlternativeResources, userInfo);
         }
 
         void AddRecordWithLotsOfVocablessTags()
@@ -495,7 +499,7 @@ namespace Catalogue.Data.Seed
                 });
             });
 
-            recordService.Insert(record, userInfo, Clock.NowUtc);
+            userRecordService.Insert(record, userInfo);
         }
 
         void AddReadOnlyRecord()
@@ -512,7 +516,7 @@ namespace Catalogue.Data.Seed
                         });
                 });
 
-            recordService.Insert(record, userInfo, Clock.NowUtc);
+            userRecordService.Insert(record, userInfo);
         }
 
         void AddNonGeographicDataset()
@@ -529,7 +533,7 @@ namespace Catalogue.Data.Seed
                 });
             });
 
-            recordService.Insert(record, userInfo, Clock.NowUtc);
+            userRecordService.Insert(record, userInfo);
         }
 
         void AddSecureRecords()
@@ -546,7 +550,7 @@ namespace Catalogue.Data.Seed
                         });
                 });
 
-            recordService.Insert(record, userInfo, Clock.NowUtc);
+            userRecordService.Insert(record, userInfo);
         }
 
         void AddNonTopCopyRecord()
@@ -563,7 +567,7 @@ namespace Catalogue.Data.Seed
                         });
                 });
 
-            recordService.Insert(record, userInfo, Clock.NowUtc);
+            userRecordService.Insert(record, userInfo);
         }
 
         void AddVariousDataFormatRecords()
@@ -587,7 +591,7 @@ namespace Catalogue.Data.Seed
                             });
                     });
 
-                recordService.Insert(record, userInfo, Clock.NowUtc);
+                userRecordService.Insert(record, userInfo);
             }
         }
 
@@ -606,7 +610,7 @@ namespace Catalogue.Data.Seed
                 r.Gemini.Keywords.Add(new MetadataKeyword { Vocab = "http://vocab.jncc.gov.uk/some-vocab", Value = "Two words" });
             });
 
-            recordService.Insert(record, userInfo, Clock.NowUtc);
+            userRecordService.Insert(record, userInfo);
         }
 
         void AddTwoRecordsWithTheSameBoundingBox()
@@ -637,8 +641,8 @@ namespace Catalogue.Data.Seed
                 r.Gemini.Keywords.Add(new MetadataKeyword { Vocab = "http://vocab.jncc.gov.uk/some-vocab", Value = "Bounding boxes" });
             });
 
-            recordService.Insert(record1, userInfo, Clock.NowUtc);
-            recordService.Insert(record2, userInfo, Clock.NowUtc);
+            userRecordService.Insert(record1, userInfo);
+            userRecordService.Insert(record2, userInfo);
         }
 
         void AddBboxes()
@@ -655,7 +659,7 @@ namespace Catalogue.Data.Seed
                         });
                 });
 
-           recordService.Insert(smallBox, userInfo, Clock.NowUtc);
+           userRecordService.Insert(smallBox, userInfo);
         }
 
         void AddVocabularies()
@@ -815,7 +819,7 @@ namespace Catalogue.Data.Seed
                     ModifiedByUser = cathyUser
                 };
             });
-            recordService.Update(timelineTest1, timelineTest1.Footer.ModifiedByUser, Clock.NowUtc);
+            userRecordService.Update(timelineTest1, timelineTest1.Footer.ModifiedByUser);
 
             Clock.CurrentUtcDateTimeGetter = () => DateTime.Now.AddHours(-5);
             var timelineTest2 = MakeExampleSeedRecord().With(r =>
@@ -835,7 +839,7 @@ namespace Catalogue.Data.Seed
                     ModifiedByUser = peteUser
                 };
             });
-            recordService.Update(timelineTest2, timelineTest2.Footer.ModifiedByUser, Clock.NowUtc);
+            userRecordService.Update(timelineTest2, timelineTest2.Footer.ModifiedByUser);
 
             Clock.CurrentUtcDateTimeGetter = () => DateTime.Now.AddDays(-2);
             var timelineTest3 = MakeExampleSeedRecord().With(r =>
@@ -855,7 +859,7 @@ namespace Catalogue.Data.Seed
                     ModifiedByUser = felixUser
                 };
             });
-            recordService.Update(timelineTest3, timelineTest3.Footer.ModifiedByUser, Clock.NowUtc);
+            userRecordService.Update(timelineTest3, timelineTest3.Footer.ModifiedByUser);
 
             Clock.CurrentUtcDateTimeGetter = () => DateTime.Now.AddMonths(-4);
             var timelineTest4 = MakeExampleSeedRecord().With(r =>
@@ -875,7 +879,7 @@ namespace Catalogue.Data.Seed
                     ModifiedByUser = peteUser
                 };
             });
-            recordService.Update(timelineTest4, timelineTest4.Footer.ModifiedByUser, Clock.NowUtc);
+            userRecordService.Update(timelineTest4, timelineTest4.Footer.ModifiedByUser);
 
             Clock.CurrentUtcDateTimeGetter = timeGetter;
         }

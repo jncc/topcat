@@ -45,23 +45,17 @@ namespace Catalogue.Robot.Publishing.OpenData
 
         public void Upload(List<Record> records)
         {
-            var userInfo = new UserInfo
-            {
-                DisplayName = "Robot Uploader",
-                Email = "data@jncc.gov.uk"
-            };
-
             foreach (Record record in records)
             {
                 Logger.Info("Uploading record with title: " + record.Gemini.Title);
-                UploadRecord(record, userInfo);
+                UploadRecord(record);
             }
         }
 
-        private void UploadRecord(Record record, UserInfo userInfo)
+        private void UploadRecord(Record record)
         {
             var attempt = new PublicationAttempt { DateUtc = Clock.NowUtc };
-            uploadService.UpdateLastAttempt(record, attempt, userInfo);
+            uploadService.UpdateLastAttempt(record, attempt);
             db.SaveChanges();
 
             bool alternativeResources = record.Publication != null && record.Publication.OpenData != null && record.Publication.OpenData.Resources != null && record.Publication.OpenData.Resources.Any();
@@ -100,7 +94,7 @@ namespace Catalogue.Robot.Publishing.OpenData
                 uploadHelper.UploadMetadataDocument(record);
                 uploadHelper.UploadWafIndexDocument(record);
 
-                uploadService.UpdateLastSuccess(record, attempt, userInfo);
+                uploadService.UpdateLastSuccess(record, attempt);
             }
             catch (WebException ex)
             {
