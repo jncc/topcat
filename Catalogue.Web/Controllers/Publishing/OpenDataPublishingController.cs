@@ -15,13 +15,13 @@ namespace Catalogue.Web.Controllers.Publishing
     public class OpenDataPublishingController : ApiController
     {
         readonly IDocumentSession db;
-        readonly IOpenDataPublishingService openDataPublishingService;
+        readonly IOpenDataPublishingRecordService openDataPublishingRecordService;
         readonly IUserContext user;
 
-        public OpenDataPublishingController(IDocumentSession db, IOpenDataPublishingService openDataPublishingService, IUserContext user)
+        public OpenDataPublishingController(IDocumentSession db, IOpenDataPublishingRecordService openDataPublishingRecordService, IUserContext user)
         {
             this.db = db;
-            this.openDataPublishingService = openDataPublishingService;
+            this.openDataPublishingRecordService = openDataPublishingRecordService;
             this.user = user;
         }
 
@@ -36,12 +36,12 @@ namespace Catalogue.Web.Controllers.Publishing
                     CountOfNotYetPublishedSinceLastUpdated = query.Count(x => !x.PublishedSinceLastUpdated && x.SignedOff),
                     CountOfPublicationNeverAttempted = query.Count(x => x.PublicationNeverAttempted),
                     CountOfLastPublicationAttemptWasUnsuccessful = query.Count(x => x.LastPublicationAttemptWasUnsuccessful),
-                    CountOfPendingSignOff = query.Count(x => x.AssessmentCompleted && !x.SignedOff)
+                    CountOfPendingSignOff = query.Count(x => x.Assessed && !x.SignedOff)
             };
         }
 
         [HttpPut, Route("api/publishing/opendata/assess")]
-        public PublishingResponse Assess(AssessmentRequest assessmentRequest)
+        public object Assess(AssessmentRequest assessmentRequest)
         {
             var record = db.Load<Record>(assessmentRequest.Id);
             var assessmentInfo = new OpenDataAssessmentInfo
@@ -52,22 +52,19 @@ namespace Catalogue.Web.Controllers.Publishing
                     DisplayName = user.User.DisplayName,
                     Email = user.User.Email
                 },
-                CompletedOnUtc = DateTime.Now,
-                InitialAssessmentWasDoneOnSpreadsheet = false
+                CompletedOnUtc = Clock.NowUtc,
+                InitialAssessmentWasDoneOnSpreadsheet = record.Publication?.OpenData?.Assessment?.InitialAssessmentWasDoneOnSpreadsheet == true
             };
 
-            var updatedRecord = openDataPublishingService.Assess(record, assessmentInfo);
+            var updatedRecord = openDataPublishingRecordService.Assess(record, assessmentInfo);
 
             db.SaveChanges();
 
-            return new PublishingResponse
-            {
-                Record = updatedRecord
-            };
+            return updatedRecord;
         }
 
         [HttpPut, Route("api/publishing/opendata/signoff"), AuthorizeOpenDataIao]
-        public PublishingResponse SignOff(SignOffRequest signOffRequest)
+        public object SignOff(SignOffRequest signOffRequest)
         {
             var record = db.Load<Record>(signOffRequest.Id);
             var signOffInfo = new OpenDataSignOffInfo
@@ -77,18 +74,15 @@ namespace Catalogue.Web.Controllers.Publishing
                     DisplayName = user.User.DisplayName,
                     Email = user.User.Email
                 },
-                DateUtc = DateTime.Now,
+                DateUtc = Clock.NowUtc,
                 Comment = signOffRequest.Comment
             };
 
-            var updatedRecord = openDataPublishingService.SignOff(record, signOffInfo);
+            var updatedRecord = openDataPublishingRecordService.SignOff(record, signOffInfo);
 
             db.SaveChanges();
 
-            return new PublishingResponse
-            {
-                Record = updatedRecord
-            };
+            return updatedRecord;
         }
 
         [HttpGet, Route("api/publishing/opendata/pendingsignoff")]
@@ -96,7 +90,7 @@ namespace Catalogue.Web.Controllers.Publishing
         {
             var query = db
                 .Query<RecordsWithOpenDataPublicationInfoIndex.Result, RecordsWithOpenDataPublicationInfoIndex>()
-                .Where(x => x.AssessmentCompleted && !x.SignedOff);
+                .Where(x => x.Assessed && !x.SignedOff);
 
             return GetRecords(query, p);
         }
@@ -106,7 +100,7 @@ namespace Catalogue.Web.Controllers.Publishing
         {
             int count = db
                 .Query<RecordsWithOpenDataPublicationInfoIndex.Result, RecordsWithOpenDataPublicationInfoIndex>()
-                .Count(x => x.AssessmentCompleted && !x.SignedOff);
+                .Count(x => x.Assessed && !x.SignedOff);
 
             // if user is an IAO, then (for now) they can see all records for sign off
             // if they're not an IAO, it's nothing to do with them, so they have none

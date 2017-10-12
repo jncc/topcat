@@ -536,7 +536,7 @@
                     <span>Open Data</span>
                 </div>
                 <div class="layout-col pull-right"
-                            title="The open data publication status of the record."
+                            title="{{ getOpenDataButtonToolTip(form, recordOutput.recordState.openDataPublishingState) }}"
                             tc-tip>
                     
                     <button type="button" class="btn"
@@ -544,7 +544,7 @@
                             ng-disabled="isPublishingModalButtonDisabled()"
                             ng-class="{ 'btn-default': !form.publication.openData.assessment.completed,
                                 'btn-danger': form.publication.openData.assessment.completed}">
-                        {{ getOpenDataButtonText(form.publication) }}
+                        {{ getOpenDataButtonText(form, recordOutput.recordState.openDataPublishingState) }}
                     </button>
                 </div>
             </div>
@@ -637,9 +637,5 @@
 
 
     <!-- <pre>{{form}}</pre>-->
-
-    <hr/>
-    <h3>Publication info</h3>
-    <pre>{{form.publication.openData}}</pre>
     </div>
 </div>

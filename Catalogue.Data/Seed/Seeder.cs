@@ -40,6 +40,7 @@ namespace Catalogue.Data.Seed
             using (var db = store.OpenSession())
             {
                 var s = new Seeder(db, new RecordService(db, new RecordValidator()));
+                var timeGetter = Clock.CurrentUtcDateTimeGetter;
                 Clock.CurrentUtcDateTimeGetter = () => new DateTime(2015, 1, 1, 12, 0, 0);
 
                 s.AddVocabularies();
@@ -60,6 +61,8 @@ namespace Catalogue.Data.Seed
                 s.AddDatesForTimeline();
 
                 db.SaveChanges();
+
+                Clock.CurrentUtcDateTimeGetter = timeGetter;
             }
         }
 
@@ -224,7 +227,6 @@ namespace Catalogue.Data.Seed
                     m.UseConstraints = "no conditions apply";
                     m.SpatialReferenceSystem = "http://www.opengis.net/def/crs/EPSG/0/4326";
                     m.Extent = new StringPairList().ToExtentList();
-                    m.MetadataDate = Convert.ToDateTime("2015-05-07");
                     m.MetadataPointOfContact = new ResponsibleParty
                     {
                         Name = "Joint Nature Conservation Committee (JNCC)",
@@ -246,6 +248,7 @@ namespace Catalogue.Data.Seed
             {
                 r.Id = new Guid("471da4f2-d9e2-4a5a-b72b-3ae8cc40ae57");
                 r.Gemini.Title = "A record with assessment completed on spreadsheet";
+                r.Gemini.MetadataDate = new DateTime(2015, 1, 1, 09, 59, 59);
                 r.Publication = new PublicationInfo
                 {
                     OpenData = new OpenDataPublicationInfo
@@ -253,10 +256,22 @@ namespace Catalogue.Data.Seed
                         Assessment = new OpenDataAssessmentInfo
                         {
                             Completed = true,
+                            CompletedOnUtc = DateTime.MinValue,
                             InitialAssessmentWasDoneOnSpreadsheet = true
                         },
-                        SignOff = new OpenDataSignOffInfo()
-                    },
+                        SignOff = new OpenDataSignOffInfo
+                        {
+                            DateUtc = DateTime.MinValue
+                        },
+                        LastAttempt = new PublicationAttempt
+                        {
+                            DateUtc = new DateTime(2015, 1, 1, 10, 0, 0)
+                        },
+                        LastSuccess = new PublicationAttempt
+                        {
+                            DateUtc = new DateTime(2015, 1, 1, 10, 0, 0)
+                        }
+                    }
                 };
             });
 
@@ -264,6 +279,7 @@ namespace Catalogue.Data.Seed
             {
                 r.Id = new Guid("39f9442a-45e5-464f-8b20-876051560964");
                 r.Gemini.Title = "A record with an incomplete risk-assessment";
+                r.Gemini.MetadataDate = new DateTime(2015, 05, 17, 0, 0, 0);
                 r.Publication = new PublicationInfo
                 {
                     OpenData = new OpenDataPublicationInfo
@@ -271,10 +287,9 @@ namespace Catalogue.Data.Seed
                         Assessment = new OpenDataAssessmentInfo
                         {
                             // todo add more assessment fields
-                            Completed = false,
-
+                            Completed = false
                         }
-                    },
+                    }
                 };
             });
 
@@ -282,6 +297,7 @@ namespace Catalogue.Data.Seed
             {
                 r.Id = new Guid("46003050-66f3-4fb2-b2b0-f66b382c8d37");
                 r.Gemini.Title = "An assessed but not signed-off record";
+                r.Gemini.MetadataDate = new DateTime(2015, 1, 1, 12, 0, 0);
                 r.Publication = new PublicationInfo
                 {
                     OpenData = new OpenDataPublicationInfo
@@ -294,10 +310,11 @@ namespace Catalogue.Data.Seed
                             {
                                 DisplayName = "Cathy",
                                 Email = "cathy@example.com"
-                            }
+                            },
+                            CompletedOnUtc = new DateTime(2015, 1, 1, 12, 0, 0)
                         },
-                        SignOff = null,
-                    },
+                        SignOff = null
+                    }
                 };
             });
 
@@ -305,6 +322,7 @@ namespace Catalogue.Data.Seed
             {
                 r.Id = new Guid("82ee6baf-26dc-438d-a579-dc7bcbdd1688");
                 r.Gemini.Title = "A signed-off record for publication";
+                r.Gemini.MetadataDate = new DateTime(2015, 1, 1, 12, 0, 0);
                 r.Publication = new PublicationInfo
                 {
                     OpenData = new OpenDataPublicationInfo
@@ -313,6 +331,7 @@ namespace Catalogue.Data.Seed
                         {
                             // todo add more assessment fields
                             Completed = true,
+                            CompletedOnUtc = new DateTime(2014, 12, 06)
                         },
                         SignOff = new OpenDataSignOffInfo
                         {
@@ -321,7 +340,7 @@ namespace Catalogue.Data.Seed
                                 DisplayName = "Pete Montgomery",
                                 Email = "pete.montgomery@jncc.gov.uk"
                             },
-                            DateUtc = new DateTime(2017, 4, 14, 10, 0, 0),
+                            DateUtc = new DateTime(2015, 1, 1, 12, 0, 0),
                             Comment = "All OK now."
                         }
                     },
@@ -333,14 +352,7 @@ namespace Catalogue.Data.Seed
             {
                 r.Id = new Guid("bd4a2f8a-b548-4ce4-a70c-3f2fdb44005c");
                 r.Gemini.Title = "A never-published record";
-                r.Publication = new PublicationInfo
-                {
-                    OpenData = new OpenDataPublicationInfo
-                    {
-                        LastAttempt = null,
-                        LastSuccess = null,
-                    }
-                };
+                r.Publication = null;
             });
 
 
@@ -348,11 +360,12 @@ namespace Catalogue.Data.Seed
             {
                 r.Id = new Guid("b2691fed-e421-4e48-9da9-99bd77e0b8ba");
                 r.Gemini.Title = "An earlier unsuccessfully published record";
+                r.Gemini.MetadataDate = new DateTime(2015, 1, 1, 12, 0, 0);
                 r.Publication = new PublicationInfo
                 {
                     OpenData = new OpenDataPublicationInfo
                     {
-                        LastAttempt = new PublicationAttempt { DateUtc = new DateTime(2015, 1, 1, 11, 0, 0), Message = "Failed with a terrible error in Sector 7G"},
+                        LastAttempt = new PublicationAttempt { DateUtc = new DateTime(2015, 1, 1, 12, 0, 0), Message = "Failed with a terrible error in Sector 7G"},
                         LastSuccess = null,
                         Assessment = new OpenDataAssessmentInfo
                         {
@@ -361,11 +374,12 @@ namespace Catalogue.Data.Seed
                             {
                                 DisplayName = "Cathy",
                                 Email = "cathy@example.com"
-                            }
+                            },
+                            CompletedOnUtc = new DateTime(2014, 01, 01)
                         },
                         SignOff = new OpenDataSignOffInfo
                         {
-                            DateUtc = Clock.NowUtc,
+                            DateUtc = new DateTime(2014, 02, 01),
                             User = userInfo
                         }
                     }
@@ -376,20 +390,22 @@ namespace Catalogue.Data.Seed
             {
                 r.Id = new Guid("d9c14587-90d8-4eba-b670-4cf36e45196d");
                 r.Gemini.Title = "A later successfully published record";
+                r.Gemini.MetadataDate = new DateTime(2015, 1, 1, 12, 0, 0);
                 r.Publication = new PublicationInfo
                 {
                     OpenData = new OpenDataPublicationInfo
                     {
-                        LastAttempt = new PublicationAttempt { DateUtc = new DateTime(2016, 1, 1, 13, 0, 0) },
-                        LastSuccess = new PublicationAttempt { DateUtc = new DateTime(2016, 1, 1, 13, 0, 0) },
+                        LastAttempt = new PublicationAttempt { DateUtc = new DateTime(2015, 1, 1, 12, 0, 0) },
+                        LastSuccess = new PublicationAttempt { DateUtc = new DateTime(2015, 1, 1, 12, 0, 0) },
                         Assessment = new OpenDataAssessmentInfo
                         {
                             Completed = true,
-                            CompletedByUser = userInfo
+                            CompletedByUser = userInfo,
+                            CompletedOnUtc = new DateTime(2014, 01, 01)
                         },
                         SignOff = new OpenDataSignOffInfo
                         {
-                            DateUtc = Clock.NowUtc,
+                            DateUtc = new DateTime(2014, 01, 02),
                             User = userInfo
                         }
                     }
@@ -402,6 +418,7 @@ namespace Catalogue.Data.Seed
             {
                 r.Id = new Guid("19b8c7ab-5c33-4d55-bc1d-3762b8207a9f");
                 r.Gemini.Title = "An updated since successfully published record, now paused";
+                r.Gemini.MetadataDate = new DateTime(2015, 1, 1, 12, 0, 0);
                 r.Publication = new PublicationInfo
                 {
                     OpenData = new OpenDataPublicationInfo
@@ -411,11 +428,12 @@ namespace Catalogue.Data.Seed
                         Paused = true,
                         Assessment = new OpenDataAssessmentInfo
                         {
-                            Completed = true
+                            Completed = true,
+                            CompletedOnUtc = new DateTime(2014, 12, 28)
                         },
                         SignOff = new OpenDataSignOffInfo
                         {
-                            DateUtc = Clock.NowUtc,
+                            DateUtc = new DateTime(2014, 12, 29),
                             User = userInfo
                         }
                     }
@@ -426,6 +444,7 @@ namespace Catalogue.Data.Seed
             {
                 r.Id = new Guid("90fe83ac-d3e4-4342-8eeb-5919b38bc670");
                 r.Gemini.Title = "A record with alternative resources";
+                r.Gemini.MetadataDate = new DateTime(2014, 12, 31);
                 r.Gemini.ResourceLocator = "http://example.com/this/will/get/ignored/when/published";
                 r.Publication = new PublicationInfo
                 {
@@ -441,13 +460,18 @@ namespace Catalogue.Data.Seed
                         Assessment = new OpenDataAssessmentInfo
                         {
                             Completed = true,
-                            CompletedByUser = userInfo
+                            CompletedByUser = userInfo,
+                            CompletedOnUtc = new DateTime(2014, 12, 31)
                         }
                     }
                 };
             });
 
+            var timeGetter = Clock.CurrentUtcDateTimeGetter;
+            Clock.CurrentUtcDateTimeGetter = () => new DateTime(2015, 1, 1, 09, 59, 59);
             recordService.Insert(assessmentCompletedOnSpreadsheetRecord, userInfo);
+            Clock.CurrentUtcDateTimeGetter = timeGetter;
+
             recordService.Insert(neverPublishedRecord, userInfo);
             recordService.Insert(assessedButNotCompletelyRecord, userInfo);
             recordService.Insert(assessedButNotSignedOffRecord, userInfo);

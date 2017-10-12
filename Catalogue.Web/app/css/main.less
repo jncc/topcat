@@ -748,6 +748,13 @@ form .ng-invalid {
     display: block;
     width: 55%;
     margin: 0 auto;
+    text-align: justify;
+    text-justify: inter-word;
+}
+
+.publishing-extra-info {
+    font-weight: bold;
+    color: @dark;
 }
 
 
@@ -783,6 +790,17 @@ form .ng-invalid {
         left: 0;
         opacity: 1;
         &.ng-leave-active { left: -15px; opacity: 0; }
+    }
+}
+
+.quick-fade-in {
+    &.ng-hide-remove {
+        transition: 0.5s;
+        opacity: 0;
+    }
+
+    &.ng-hide-remove-active {
+        opacity: 1;
     }
 }
 

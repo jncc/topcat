@@ -1,8 +1,10 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using Catalogue.Data.Import;
 using Catalogue.Data.Import.Mappings;
 using Catalogue.Data.Model;
+using Catalogue.Data.Query;
 using Catalogue.Data.Write;
 using Catalogue.Gemini.Model;
 using Catalogue.Gemini.Templates;
@@ -26,7 +28,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Data.Import
                 Gemini = Library.Blank().With(m => m.Title = "Some new record"),
                 Footer = new Footer()
             };
-            var result = RecordServiceResult.SuccessfulResult.With(r => r.Record = record);
+            var result = RecordServiceResult.SuccessfulResult.With(r => r.Record = record );
             recordService = Mock.Of<IRecordService>(rs => rs.Insert(It.IsAny<Record>(), It.IsAny<UserInfo>()) == result);
 
             string path = @"c:\some\path.csv";

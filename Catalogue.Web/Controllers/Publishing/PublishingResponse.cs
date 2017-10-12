@@ -1,9 +1,10 @@
-﻿using Catalogue.Data.Model;
+﻿using Catalogue.Data.Query;
+using Catalogue.Web.Controllers.Records;
 
 namespace Catalogue.Web.Controllers.Publishing
 {
     public class PublishingResponse
     {
-        public Record Record { get; set; }
+        public RecordOutputModel RecordOutputModel { get; set; }
     }
 }

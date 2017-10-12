@@ -27,9 +27,10 @@
         <tr>
             <th class="first"></th>
             <th>Metadata date</th>
-            <th>Gemini</th>
+            <th ng-if="m.tab != 5">Gemini</th>
             <th ng-if="m.tab != 5">Signed off by</th>
             <th ng-if="m.tab == 5">Risk assessed by</th>
+            <th ng-if="m.tab == 5">Last published</th>
             <th ng-if="m.tab != 5">Last attempt</th>
             <th ng-if="m.tab != 5">Last success</th>
             <th ng-if="m.tab != 5"></th>
@@ -39,9 +40,13 @@
             <tr ng-repeat="r in m.openData.list">
                 <td><a ng-href="#/editor/{{r.id}}" target="_blank" ng-bind-html="r.title"></a></td>
                 <td><span tc-tip title="{{r.metadataDate | date:'yyyy-MM-dd HH:mm:ss'}}">{{r.metadataDate | date}}</span></td>
-                <td>{{r.isGeminiValid}}</td>
+                <td ng-if="m.tab != 5">{{r.isGeminiValid}}</td>
                 <td ng-if="m.tab == 5">{{r.openData.assessment.completedByUser.displayName}}</td>
                 <td ng-if="m.tab != 5">{{r.openData.signOff.user.displayName}}</td>
+                <td ng-if="m.tab == 5">
+                    <span ng-if="r.openData.lastSuccess != null" tc-tip title="{{r.openData.lastSuccess.dateUtc | date:'yyyy-MM-dd HH:mm:ss'}}">{{r.openData.lastSuccess.dateUtc | date}}</span>
+                    <span ng-if="r.openData.lastSuccess == null">Never</span>
+                </td>
                 <td ng-if="m.tab != 5"><span ng-if="r.openData.lastAttempt.dateUtc" tc-tip title="{{r.openData.lastAttempt.dateUtc | date:'yyyy-MM-dd HH:mm:ss'}}">{{r.openData.lastAttempt.dateUtc | date}}</span></td>
                 <td ng-if="m.tab != 5"><span ng-if="r.openData.lastSuccess.dateUtc" tc-tip title="{{r.openData.lastSuccess.dateUtc | date:'yyyy-MM-dd HH:mm:ss'}}">{{r.openData.lastSuccess.dateUtc | date}}</span></td>
                 <td ng-if="m.tab != 5"><span ng-show="r.openData.paused" class="glyphicon glyphicon-pause" tc-tip title="Publishing of this record is currently paused"></span></td>

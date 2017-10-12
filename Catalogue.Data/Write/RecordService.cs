@@ -1,19 +1,11 @@
-﻿using Catalogue.Data.Model;
-using Catalogue.Gemini.Spatial;
-using Catalogue.Utilities.Text;
+﻿using System;
+using Catalogue.Data.Model;
 using Catalogue.Utilities.Time;
 using Raven.Client;
-using System;
-using System.Linq;
+using static Catalogue.Data.Write.RecordServiceHelper;
 
 namespace Catalogue.Data.Write
 {
-    public interface IRecordService
-    {
-        RecordServiceResult Insert(Record record, UserInfo user);
-        RecordServiceResult Update(Record record, UserInfo user);
-    }
-
     public class RecordService : IRecordService
     {
         private readonly IDocumentSession db;
@@ -28,8 +20,9 @@ namespace Catalogue.Data.Write
         public RecordServiceResult Insert(Record record, UserInfo user)
         {
             SetFooterForNewlyCreatedRecord(record, user);
+            UpdateMetadataDate(record);
 
-            return Upsert(record);
+            return Upsert(record, db, validator);
         }
 
         public RecordServiceResult Update(Record record, UserInfo user)
@@ -38,67 +31,9 @@ namespace Catalogue.Data.Write
                 throw new InvalidOperationException("Cannot update a read-only record.");
 
             SetFooterForUpdatedRecord(record, user);
+            UpdateMetadataDate(record);
 
-            return Upsert(record);
-        }
-
-        internal RecordServiceResult Upsert(Record record)
-        {
-            CorrectlyOrderKeywords(record);
-            StandardiseUnconditionalUseConstraints(record);
-            UpdateMetadataDateToNow(record);
-            SetMetadataPointOfContactRoleToOnlyAllowedValue(record);
-
-            var validation = validator.Validate(record);
-
-            if (!validation.Errors.Any())
-            {
-                PerformDenormalizations(record);
-                db.Store(record);
-            }
-
-            return new RecordServiceResult
-                {
-                    Record = record,
-                    Validation = validation,
-                };
-        }
-
-        void SetMetadataPointOfContactRoleToOnlyAllowedValue(Record record)
-        {
-            // the point of contact must be the point of contact (gemini validation)
-            record.Gemini.MetadataPointOfContact.Role = "pointOfContact";
-        }
-
-        void PerformDenormalizations(Record record)
-        {
-            // we store the bounding box as wkt so we can index it
-            if (!BoundingBoxUtility.IsBlank(record.Gemini.BoundingBox))
-                record.Wkt = BoundingBoxUtility.ToWkt(record.Gemini.BoundingBox);
-        }
-
-        void CorrectlyOrderKeywords(Record record)
-        {
-            record.Gemini.Keywords = record.Gemini.Keywords
-                .OrderByDescending(k => k.Vocab == "http://vocab.jncc.gov.uk/jncc-domain")
-                .ThenByDescending(k => k.Vocab == "http://vocab.jncc.gov.uk/jncc-category")
-                .ThenByDescending(k => k.Vocab.IsNotBlank())
-                .ThenBy(k => k.Vocab)
-                .ThenBy(k => k.Value)
-                .ToList();
-        }
-
-        void StandardiseUnconditionalUseConstraints(Record record)
-        {
-            const string unconditional = "no conditions apply";
-
-            if (record.Gemini.UseConstraints.IsNotBlank() && record.Gemini.UseConstraints.ToLowerInvariant().Trim() == unconditional)
-                record.Gemini.UseConstraints = unconditional;
-        }
-
-        void UpdateMetadataDateToNow(Record record)
-        {
-            record.Gemini.MetadataDate = Clock.NowUtc;
+            return Upsert(record, db, validator);
         }
 
         private void SetFooterForNewlyCreatedRecord(Record record, UserInfo userInfo)
@@ -118,21 +53,10 @@ namespace Catalogue.Data.Write
             record.Footer.ModifiedOnUtc = Clock.NowUtc;
             record.Footer.ModifiedByUser = userInfo;
         }
-    }
 
-    public class RecordServiceResult
-    {
-        public ValidationResult<Record> Validation { get; set; }
-        public bool Success { get { return !Validation.Errors.Any(); } }
-
-        /// <summary>
-        /// The (possibly modified) record that was submitted.
-        /// </summary>
-        public Record Record { get; set; }
-
-        /// <summary>
-        /// A convenience result for tests, etc.
-        /// </summary>
-        public static readonly RecordServiceResult SuccessfulResult = new RecordServiceResult { Validation = new ValidationResult<Record>() };
+        private void UpdateMetadataDate(Record record)
+        {
+            record.Gemini.MetadataDate = Clock.NowUtc;
+        }
     }
 }

@@ -8,6 +8,8 @@ using Catalogue.Web.Account;
 using Raven.Client;
 using System;
 using System.Web.Http;
+using Catalogue.Data.Query;
+using NUnit.Framework;
 
 namespace Catalogue.Web.Controllers.Records
 {
@@ -26,14 +28,30 @@ namespace Catalogue.Web.Controllers.Records
 
         // GET api/records/57d34691-9064-4c1e-90a7-7b0c112daa8d (get a record)
 
-        public Record Get(Guid id, bool clone = false)
+        public object Get(Guid id, bool clone = false)
         {
-            if (id == Guid.Empty) // a nice empty record for making a new one
-                return MakeNewRecord();
+            Record record;
+
+            if (id == Guid.Empty)
+                record = MakeNewRecord(); // a nice empty record for making a new one
             else if (clone)
-                return Clone(db.Load<Record>(id));
+                record = Clone(db.Load<Record>(id));
             else
-                return db.Load<Record>(id);
+                record = db.Load<Record>(id);
+
+            return new RecordOutputModel
+            {
+                Record = record,
+                RecordState = new RecordState
+                {
+                    OpenDataPublishingState = new OpenDataPublishingState
+                    {
+                        AssessedAndUpToDate = record.IsAssessedAndUpToDate(),
+                        SignedOffAndUpToDate = record.IsSignedOffAndUpToDate(),
+                        UploadedAndUpToDate = record.IsUploadedAndUpToDate()
+                    }
+                }
+            };
         }
 
         private Record Clone(Record record)
@@ -43,13 +61,14 @@ namespace Catalogue.Web.Controllers.Records
             clonedRecord.Id = Guid.Empty;
             clonedRecord.Path = String.Empty;
             clonedRecord.Gemini.Title = String.Empty;
+            clonedRecord.Publication = null;
 
             return clonedRecord;
         }
 
         // PUT api/records/57d34691-9064-4c1e-90a7-7b0c112daa8d (update/replace a record)
 
-        public RecordServiceResult Put(Guid id, [FromBody]Record record)
+        public object Put(Guid id, [FromBody]Record record)
         {
             var userInfo = new UserInfo
             {
@@ -67,7 +86,7 @@ namespace Catalogue.Web.Controllers.Records
             return result;
         }
 
-        public RecordServiceResult Post([FromBody] Record record)
+        public object Post([FromBody] Record record)
         {
             record.Id = Guid.NewGuid();
 
