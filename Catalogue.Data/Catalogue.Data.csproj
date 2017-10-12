@@ -117,6 +117,7 @@
     <Compile Include="Indexes\RecordSpatialIndex.cs" />
     <Compile Include="Indexes\RecordIndex.cs" />
     <Compile Include="Model\Footer.cs" />
+    <Compile Include="Model\OpenDataPublishingState.cs" />
     <Compile Include="Model\PublicationInfo.cs" />
     <Compile Include="Model\Record.cs" />
     <Compile Include="Model\RecordExtensions.cs" />
@@ -136,12 +137,13 @@
     <Compile Include="UserToUserInfoConverter.cs" />
     <Compile Include="Write\IOpenDataPublishingRecordService.cs" />
     <Compile Include="Write\IOpenDataPublishingUploadRecordService.cs" />
-    <Compile Include="Write\IUserRecordService.cs" />
+    <Compile Include="Write\IRecordService.cs" />
     <Compile Include="Write\OpenDataPublishingUploadRecordService.cs" />
     <Compile Include="Write\OpenDataPublishingRecordService.cs" />
-    <Compile Include="Write\RecordService.cs" />
+    <Compile Include="Write\RecordServiceHelper.cs" />
+    <Compile Include="Model\RecordState.cs" />
     <Compile Include="Write\RecordValidator.cs" />
-    <Compile Include="Write\UserRecordService.cs" />
+    <Compile Include="Write\RecordService.cs" />
     <Compile Include="Write\ValidationResult.cs" />
     <Compile Include="Write\VocabularyService.cs" />
     <Compile Include="Write\VocabularyValidator.cs" />

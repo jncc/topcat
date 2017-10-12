@@ -41,7 +41,7 @@ namespace Catalogue.Web.Controllers.Publishing
         }
 
         [HttpPut, Route("api/publishing/opendata/assess")]
-        public PublishingResponse Assess(AssessmentRequest assessmentRequest)
+        public object Assess(AssessmentRequest assessmentRequest)
         {
             var record = db.Load<Record>(assessmentRequest.Id);
             var assessmentInfo = new OpenDataAssessmentInfo
@@ -60,14 +60,11 @@ namespace Catalogue.Web.Controllers.Publishing
 
             db.SaveChanges();
 
-            return new PublishingResponse
-            {
-                RecordOutputModel = updatedRecord
-            };
+            return updatedRecord;
         }
 
         [HttpPut, Route("api/publishing/opendata/signoff"), AuthorizeOpenDataIao]
-        public PublishingResponse SignOff(SignOffRequest signOffRequest)
+        public object SignOff(SignOffRequest signOffRequest)
         {
             var record = db.Load<Record>(signOffRequest.Id);
             var signOffInfo = new OpenDataSignOffInfo
@@ -85,10 +82,7 @@ namespace Catalogue.Web.Controllers.Publishing
 
             db.SaveChanges();
 
-            return new PublishingResponse
-            {
-                RecordOutputModel = updatedRecord
-            };
+            return updatedRecord;
         }
 
         [HttpGet, Route("api/publishing/opendata/pendingsignoff")]

@@ -19,7 +19,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Data.Write
         [Test]
         public void should_fail_when_record_is_readonly_on_update()
         {
-            var service = new UserRecordService(Mock.Of<IDocumentSession>(), Mock.Of<IRecordValidator>());
+            var service = new RecordService(Mock.Of<IDocumentSession>(), Mock.Of<IRecordValidator>());
             var record = new Record { ReadOnly = true };
 
             service.Invoking(s => s.Update(record, TestUser))
@@ -31,7 +31,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Data.Write
         public void should_store_valid_record_in_the_database()
         {
             var database = Mock.Of<IDocumentSession>();
-            var service = new UserRecordService(database, ValidatorStub());
+            var service = new RecordService(database, ValidatorStub());
 
             var record = BasicRecord();
             service.Update(record, TestUser);
@@ -43,7 +43,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Data.Write
         public void should_not_store_invalid_record_in_the_database()
         {
             var database = Mock.Of<IDocumentSession>();
-            var service = new UserRecordService(database, FailingValidatorStub());
+            var service = new RecordService(database, FailingValidatorStub());
 
             service.Update(BasicRecord(), TestUser);
 
@@ -57,19 +57,19 @@ namespace Catalogue.Tests.Slow.Catalogue.Data.Write
             // without an unnecessary fetch from the database
 
             var database = Mock.Of<IDocumentSession>();
-            var service = new UserRecordService(database, ValidatorStub());
+            var service = new RecordService(database, ValidatorStub());
 
             var record = BasicRecord();
             var result = service.Update(record, TestUser);
 
-            result.RecordOutputModel.Record.Should().Be(record);
+            result.Record.Should().Be(record);
         }
 
         [Test]
         public void should_store_bounding_box_as_wkt()
         {
             var database = Mock.Of<IDocumentSession>();
-            var service = new UserRecordService(database, ValidatorStub());
+            var service = new RecordService(database, ValidatorStub());
 
             var e = Library.Example();
             var record = new Record
@@ -90,7 +90,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Data.Write
             // to avoid raven / lucene indexing errors
 
             var database = Mock.Of<IDocumentSession>();
-            var service = new UserRecordService(database, ValidatorStub());
+            var service = new RecordService(database, ValidatorStub());
 
             service.Update(BasicRecord(), TestUser);
 
@@ -101,7 +101,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Data.Write
         public void should_standardise_unconditional_use_constraints()
         {
             var database = Mock.Of<IDocumentSession>();
-            var service = new UserRecordService(database, ValidatorStub());
+            var service = new RecordService(database, ValidatorStub());
 
             var record = BasicRecord().With(r => r.Gemini.UseConstraints = "   No conditions APPLY");
             service.Update(record, TestUser);
@@ -113,7 +113,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Data.Write
         public void should_set_security_to_official_by_default()
         {
             var database = Mock.Of<IDocumentSession>();
-            var service = new UserRecordService(database, ValidatorStub());
+            var service = new RecordService(database, ValidatorStub());
 
             service.Update(BasicRecord(), TestUser);
 
@@ -127,7 +127,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Data.Write
             // finally, keywords with no namespace should be last
 
             var database = Mock.Of<IDocumentSession>();
-            var service = new UserRecordService(database, ValidatorStub());
+            var service = new RecordService(database, ValidatorStub());
 
             var record = BasicRecord().With(r =>
             {
@@ -168,10 +168,10 @@ namespace Catalogue.Tests.Slow.Catalogue.Data.Write
                 Gemini = Library.Blank().With(m => m.Title = "Footer creation test")
             };
             var database = Mock.Of<IDocumentSession>();
-            var service = new UserRecordService(database, ValidatorStub());
+            var service = new RecordService(database, ValidatorStub());
 
             var result = service.Insert(record, TestUser);
-            var footer = result.RecordOutputModel.Record.Footer;
+            var footer = result.Record.Footer;
             footer.Should().NotBeNull();
             footer.CreatedOnUtc.Should().NotBe(DateTime.MinValue);
             footer.CreatedByUser.DisplayName.Should().Be("Test User");
@@ -208,10 +208,10 @@ namespace Catalogue.Tests.Slow.Catalogue.Data.Write
             };
 
             var database = Mock.Of<IDocumentSession>();
-            var service = new UserRecordService(database, ValidatorStub());
+            var service = new RecordService(database, ValidatorStub());
 
             var result = service.Update(record, TestUser);
-            var footer = result.RecordOutputModel.Record.Footer;
+            var footer = result.Record.Footer;
             footer.Should().NotBeNull();
             footer.CreatedOnUtc.Should().Be(new DateTime(2015, 1, 1, 10, 0, 0));
             footer.CreatedByUser.DisplayName.Should().Be("Creator");

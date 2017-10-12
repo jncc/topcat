@@ -44,17 +44,4 @@ namespace Catalogue.Data.Query
         public string Vocab { get; set; }
         public bool Squash { get; set; }
     }
-
-    public class RecordOutputModel
-    {
-        public Record Record { get; set; }
-        public PublishingState PublishingState { get; set; }
-    }
-
-    public class PublishingState
-    {
-        public bool AssessedAndUpToDate { get; set; }
-        public bool SignedOffAndUpToDate { get; set; }
-        public bool UploadedAndUpToDate { get; set; }
-    }
 }

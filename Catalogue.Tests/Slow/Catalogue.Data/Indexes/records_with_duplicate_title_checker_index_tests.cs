@@ -18,7 +18,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Data.Indexes
         [Test]
         public void should_count_records_with_duplicate_titles()
         {
-            var service = new UserRecordService(Db, new RecordValidator());
+            var service = new RecordService(Db, new RecordValidator());
 
             var record1 = new Record().With(r =>
             {

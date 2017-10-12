@@ -10,6 +10,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
+using Catalogue.Data.Write;
 
 namespace Catalogue.Tests.Slow.Catalogue.Web.Controllers.Publishing
 {
@@ -41,7 +42,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Web.Controllers.Publishing
                 r.Footer = new Footer();
             });
 
-            var resultRecord = GetSignOffPublishingResponse(GetNewDbWithRecord(record), record).RecordOutputModel.Record;
+            var resultRecord = GetSignOffPublishingResponse(GetNewDbWithRecord(record), record).Record;
             resultRecord.Publication.Should().NotBeNull();
 
             var openDataInfo = resultRecord.Publication.OpenData;
@@ -220,7 +221,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Web.Controllers.Publishing
                 r.Footer = new Footer();
             });
 
-            var resultRecord = GetSignOffPublishingResponse(GetNewDbWithRecord(record), record).RecordOutputModel.Record;
+            var resultRecord = GetSignOffPublishingResponse(GetNewDbWithRecord(record), record).Record;
             resultRecord.Publication.Should().NotBeNull();
 
             var openDataInfo = resultRecord.Publication.OpenData;
@@ -671,7 +672,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Web.Controllers.Publishing
             }
         }
 
-        private PublishingResponse GetSignOffPublishingResponse(IDocumentSession db, Record record)
+        private RecordServiceResult GetSignOffPublishingResponse(IDocumentSession db, Record record)
         {
             var publishingController = GetTestOpenDataPublishingController(db);
 
@@ -681,7 +682,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Web.Controllers.Publishing
                 Comment = "Sign off test"
             };
 
-            return publishingController.SignOff(request);
+            return (RecordServiceResult) publishingController.SignOff(request);
         }
     }
 }

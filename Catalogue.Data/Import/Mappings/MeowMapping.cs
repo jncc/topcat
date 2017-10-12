@@ -143,7 +143,7 @@ namespace Catalogue.Data.Import.Mappings
 
                     var errors = importer.Results
                         .Where(r => !r.Success)
-                        .Select(r => r.RecordOutputModel.Record.Gemini.Title + Environment.NewLine + JsonConvert.SerializeObject(r.Validation) + Environment.NewLine);
+                        .Select(r => r.Record.Gemini.Title + Environment.NewLine + JsonConvert.SerializeObject(r.Validation) + Environment.NewLine);
                     File.WriteAllLines(@"C:\work\meow-errors.txt", errors);
 
                     db.SaveChanges();

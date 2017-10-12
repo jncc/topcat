@@ -4,15 +4,21 @@ using System;
 using Catalogue.Utilities.Time;
 using log4net;
 using Raven.Client;
+using static Catalogue.Data.Write.RecordServiceHelper;
 
 namespace Catalogue.Data.Write
 {
-    public class OpenDataPublishingUploadRecordService : RecordService, IOpenDataPublishingUploadRecordService
+    public class OpenDataPublishingUploadRecordService : IOpenDataPublishingUploadRecordService
     {
         private static readonly ILog Logger = LogManager.GetLogger(typeof(OpenDataPublishingUploadRecordService));
 
-        public OpenDataPublishingUploadRecordService(IDocumentSession db, IRecordValidator validator) : base(db, validator)
+        private readonly IDocumentSession db;
+        private readonly IRecordValidator validator;
+
+        public OpenDataPublishingUploadRecordService(IDocumentSession db, IRecordValidator validator)
         {
+            this.db = db;
+            this.validator = validator;
         }
 
         public void UpdateLastAttempt(Record record, PublicationAttempt attempt)
@@ -20,7 +26,7 @@ namespace Catalogue.Data.Write
             record.Publication.OpenData.LastAttempt = attempt;
             UpdateMetadataDate(record, attempt.DateUtc);
 
-            var recordServiceResult = Upsert(record);
+            var recordServiceResult = Upsert(record, db, validator);
             if (!recordServiceResult.Success)
             {
                 var e = new Exception("Error while saving upload changes.");
@@ -33,7 +39,7 @@ namespace Catalogue.Data.Write
             record.Publication.OpenData.LastSuccess = attempt;
             UpdateMetadataDate(record, attempt.DateUtc);
 
-            var recordServiceResult = Upsert(record);
+            var recordServiceResult = Upsert(record, db, validator);
             if (!recordServiceResult.Success)
             {
                 var e = new Exception("Error while saving upload changes.");

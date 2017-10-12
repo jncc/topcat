@@ -42,7 +42,10 @@
       return $scope.notifications.add('Edits saved');
     };
     $scope.reloadRecord = function(response) {
-      $scope.recordOutput = response;
+      $scope.recordOutput = {
+        record: response.record,
+        recordState: response.recordState
+      };
       $scope.validation = {};
       $scope.reset();
       $scope.status.refresh();
@@ -53,7 +56,7 @@
       processResult = function(response) {
         var e, errors, field, _i, _j, _len, _len1, _ref;
         if (response.data.success) {
-          $scope.successResponse(response.data.recordOutputModel);
+          $scope.successResponse(response.data);
         } else {
           $scope.validation = response.data.validation;
           errors = response.data.validation.errors;

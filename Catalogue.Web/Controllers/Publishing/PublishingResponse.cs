@@ -1,4 +1,5 @@
 ﻿using Catalogue.Data.Query;
+using Catalogue.Web.Controllers.Records;
 
 namespace Catalogue.Web.Controllers.Publishing
 {

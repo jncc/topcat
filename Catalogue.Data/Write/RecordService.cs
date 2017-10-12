@@ -1,99 +1,62 @@
-﻿using Catalogue.Data.Model;
-using Catalogue.Gemini.Spatial;
-using Catalogue.Utilities.Text;
+﻿using System;
+using Catalogue.Data.Model;
+using Catalogue.Utilities.Time;
 using Raven.Client;
-using System.Linq;
-using Catalogue.Data.Query;
+using static Catalogue.Data.Write.RecordServiceHelper;
 
 namespace Catalogue.Data.Write
 {
-    public abstract class RecordService
+    public class RecordService : IRecordService
     {
-        protected readonly IDocumentSession db;
-        protected readonly IRecordValidator validator;
+        private readonly IDocumentSession db;
+        private readonly IRecordValidator validator;
 
-        protected RecordService(IDocumentSession db, IRecordValidator validator)
+        public RecordService(IDocumentSession db, IRecordValidator validator)
         {
             this.db = db;
             this.validator = validator;
         }
 
-        internal RecordServiceResult Upsert(Record record)
+        public RecordServiceResult Insert(Record record, UserInfo user)
         {
-            CorrectlyOrderKeywords(record);
-            StandardiseUnconditionalUseConstraints(record);
-            SetMetadataPointOfContactRoleToOnlyAllowedValue(record);
+            SetFooterForNewlyCreatedRecord(record, user);
+            UpdateMetadataDate(record);
 
-            var validation = validator.Validate(record);
+            return Upsert(record, db, validator);
+        }
 
-            if (!validation.Errors.Any())
+        public RecordServiceResult Update(Record record, UserInfo user)
+        {
+            if (record.ReadOnly)
+                throw new InvalidOperationException("Cannot update a read-only record.");
+
+            SetFooterForUpdatedRecord(record, user);
+            UpdateMetadataDate(record);
+
+            return Upsert(record, db, validator);
+        }
+
+        private void SetFooterForNewlyCreatedRecord(Record record, UserInfo userInfo)
+        {
+            var currentTime = Clock.NowUtc;
+            record.Footer = new Footer
             {
-                PerformDenormalizations(record);
-                db.Store(record);
-            }
-
-            return new RecordServiceResult
-                {
-                    RecordOutputModel = new RecordOutputModel
-                    {
-                        Record = record,
-                        PublishingState = new PublishingState
-                        {
-                            AssessedAndUpToDate = record.IsAssessedAndUpToDate(),
-                            SignedOffAndUpToDate = record.IsSignedOffAndUpToDate(),
-                            UploadedAndUpToDate = record.IsUploadedAndUpToDate()
-                        }
-                    },
-                    Validation = validation,
-                };
+                CreatedOnUtc = currentTime,
+                CreatedByUser = userInfo,
+                ModifiedOnUtc = currentTime,
+                ModifiedByUser = userInfo
+            };
         }
 
-        void SetMetadataPointOfContactRoleToOnlyAllowedValue(Record record)
+        private void SetFooterForUpdatedRecord(Record record, UserInfo userInfo)
         {
-            // the point of contact must be the point of contact (gemini validation)
-            record.Gemini.MetadataPointOfContact.Role = "pointOfContact";
+            record.Footer.ModifiedOnUtc = Clock.NowUtc;
+            record.Footer.ModifiedByUser = userInfo;
         }
 
-        void PerformDenormalizations(Record record)
+        private void UpdateMetadataDate(Record record)
         {
-            // we store the bounding box as wkt so we can index it
-            if (!BoundingBoxUtility.IsBlank(record.Gemini.BoundingBox))
-                record.Wkt = BoundingBoxUtility.ToWkt(record.Gemini.BoundingBox);
+            record.Gemini.MetadataDate = Clock.NowUtc;
         }
-
-        void CorrectlyOrderKeywords(Record record)
-        {
-            record.Gemini.Keywords = record.Gemini.Keywords
-                .OrderByDescending(k => k.Vocab == "http://vocab.jncc.gov.uk/jncc-domain")
-                .ThenByDescending(k => k.Vocab == "http://vocab.jncc.gov.uk/jncc-category")
-                .ThenByDescending(k => k.Vocab.IsNotBlank())
-                .ThenBy(k => k.Vocab)
-                .ThenBy(k => k.Value)
-                .ToList();
-        }
-
-        void StandardiseUnconditionalUseConstraints(Record record)
-        {
-            const string unconditional = "no conditions apply";
-
-            if (record.Gemini.UseConstraints.IsNotBlank() && record.Gemini.UseConstraints.ToLowerInvariant().Trim() == unconditional)
-                record.Gemini.UseConstraints = unconditional;
-        }
-    }
-
-    public class RecordServiceResult
-    {
-        public ValidationResult<Record> Validation { get; set; }
-        public bool Success { get { return !Validation.Errors.Any(); } }
-
-        /// <summary>
-        /// The (possibly modified) record that was submitted.
-        /// </summary>
-        public RecordOutputModel RecordOutputModel { get; set; }
-
-        /// <summary>
-        /// A convenience result for tests, etc.
-        /// </summary>
-        public static readonly RecordServiceResult SuccessfulResult = new RecordServiceResult { Validation = new ValidationResult<Record>() };
     }
 }

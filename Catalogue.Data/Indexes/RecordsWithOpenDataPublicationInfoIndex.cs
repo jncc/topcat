@@ -47,40 +47,6 @@ namespace Catalogue.Data.Indexes
                                 PublishedSinceLastUpdated = r.Publication.OpenData.LastSuccess.DateUtc >= r.Gemini.MetadataDate,
                                 PublishingIsPaused = r.Publication.OpenData.Paused
                             });
-//            Map = records => from r in records
-//                             where r.Publication != null
-//                             where r.Publication.OpenData != null
-//                             let assessed = r.Publication.OpenData.Assessment.Completed
-//                                && (r.Publication.OpenData.Assessment.CompletedOnUtc == r.Gemini.MetadataDate
-//                                || r.Publication.OpenData.SignOff.DateUtc == r.Gemini.MetadataDate
-//                                || r.Publication.OpenData.LastAttempt.DateUtc == r.Gemini.MetadataDate)
-//                             let signedOff = r.Publication.OpenData.SignOff.DateUtc == r.Gemini.MetadataDate
-//                                || r.Publication.OpenData.LastAttempt.DateUtc == r.Gemini.MetadataDate
-//                             let recordLastUpdatedDate = r.Gemini.MetadataDate
-//                             let lastAttemptDate = r.Publication.OpenData.LastAttempt == null ? DateTime.MinValue : r.Publication.OpenData.LastAttempt.DateUtc
-//                             let lastSuccessDate = r.Publication.OpenData.LastSuccess == null ? DateTime.MinValue : r.Publication.OpenData.LastSuccess.DateUtc
-//                             let neverAttempted = lastAttemptDate == DateTime.MinValue && signedOff
-//                             let publishedSinceLastUpdated = r.Publication.OpenData.LastSuccess.DateUtc >= r.Gemini.MetadataDate
-//
-//                             select new Result
-//                             {
-//                                 RecordLastUpdatedDate = recordLastUpdatedDate,
-//                                 LastPublicationAttemptDate = lastAttemptDate,
-//                                 LastSuccessfulPublicationAttemptDate = lastSuccessDate,
-//                                 GeminiValidated = r.Validation == Validation.Gemini,
-//                                 Assessed = assessed,
-//                                 SignedOff = signedOff,
-//                                 PublicationNeverAttempted = neverAttempted,
-//                                 LastPublicationAttemptWasUnsuccessful = lastAttemptDate > lastSuccessDate,
-//                                 PublishedSinceLastUpdated = publishedSinceLastUpdated,
-//                                 PublishingIsPaused = r.Publication.OpenData.Paused,
-//                             };
-        }
-
-        public static Expression<Func<Record, bool>> GetAssessedAndUpToDateExpression()
-        {
-            return r => r.Publication.OpenData.SignOff.DateUtc == r.Gemini.MetadataDate
-                     || r.Publication.OpenData.LastAttempt.DateUtc == r.Gemini.MetadataDate;
         }
     }
 }

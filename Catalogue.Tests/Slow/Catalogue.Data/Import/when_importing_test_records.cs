@@ -17,7 +17,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Data.Import
 {
     class when_importing_test_records
     {
-        IUserRecordService userRecordService;
+        IRecordService recordService;
 
         [SetUp]
         public void setup()
@@ -28,27 +28,27 @@ namespace Catalogue.Tests.Slow.Catalogue.Data.Import
                 Gemini = Library.Blank().With(m => m.Title = "Some new record"),
                 Footer = new Footer()
             };
-            var result = RecordServiceResult.SuccessfulResult.With(r => r.RecordOutputModel = new RecordOutputModel { Record = record });
-            userRecordService = Mock.Of<IUserRecordService>(rs => rs.Insert(It.IsAny<Record>(), It.IsAny<UserInfo>()) == result);
+            var result = RecordServiceResult.SuccessfulResult.With(r => r.Record = record );
+            recordService = Mock.Of<IRecordService>(rs => rs.Insert(It.IsAny<Record>(), It.IsAny<UserInfo>()) == result);
 
             string path = @"c:\some\path.csv";
             var fileSystem = Mock.Of<IFileSystem>(fs => fs.OpenReader(path) == new StringReader(testData));
 
-            var importer = new Importer(new TestDataMapping(), fileSystem, userRecordService, Mock.Of<IVocabularyService>(), new UserInfo());
+            var importer = new Importer(new TestDataMapping(), fileSystem, recordService, Mock.Of<IVocabularyService>(), new UserInfo());
             importer.Import(path);
         }
 
         [Test]
         public void should_import_both_records()
         {
-            Mock.Get(userRecordService).Verify(s => s.Insert(It.IsAny<Record>(), It.IsAny<UserInfo>()), Times.Exactly(2));
+            Mock.Get(recordService).Verify(s => s.Insert(It.IsAny<Record>(), It.IsAny<UserInfo>()), Times.Exactly(2));
         }
 
         [Test]
         public void should_import_gemini_object()
         {
             // make sure that the importer is filling in the gemini object as well as the top-level field(s)
-            Mock.Get(userRecordService).Verify(s => s.Insert(It.Is((Record r) => r.Gemini.Abstract == "This is the abstract"), It.IsAny<UserInfo>()));
+            Mock.Get(recordService).Verify(s => s.Insert(It.Is((Record r) => r.Gemini.Abstract == "This is the abstract"), It.IsAny<UserInfo>()));
         }
 
         string testData =

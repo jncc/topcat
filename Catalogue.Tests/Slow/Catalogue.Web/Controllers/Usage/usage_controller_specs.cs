@@ -87,8 +87,8 @@ namespace Catalogue.Tests.Slow.Catalogue.Web.Controllers.Usage
             var store = new InMemoryDatabaseHelper().Create();
             using (var db = store.OpenSession())
             {
-                IUserRecordService userRecordService = new UserRecordService(db, new RecordValidator());
-                AddLastModifiedDateRecords(testRecords, userRecordService);
+                IRecordService recordService = new RecordService(db, new RecordValidator());
+                AddLastModifiedDateRecords(testRecords, recordService);
                 db.SaveChanges();
 
                 var usageController = new UsageController(db);
@@ -99,7 +99,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Web.Controllers.Usage
             }
         }
 
-        private static void AddLastModifiedDateRecords(List<RecentlyModifiedRecord> testRecords, IUserRecordService userRecordService)
+        private static void AddLastModifiedDateRecords(List<RecentlyModifiedRecord> testRecords, IRecordService recordService)
         {
             foreach (var testRecord in testRecords)
             {
@@ -135,7 +135,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Web.Controllers.Usage
                     };
                 });
 
-                userRecordService.Update(record, record.Footer.ModifiedByUser);
+                recordService.Update(record, record.Footer.ModifiedByUser);
             }
         }
     }

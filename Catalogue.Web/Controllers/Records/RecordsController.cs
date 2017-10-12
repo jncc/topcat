@@ -9,16 +9,17 @@ using Raven.Client;
 using System;
 using System.Web.Http;
 using Catalogue.Data.Query;
+using NUnit.Framework;
 
 namespace Catalogue.Web.Controllers.Records
 {
     public class RecordsController : ApiController
     {
         readonly IDocumentSession db;
-        readonly IUserRecordService service;
+        readonly IRecordService service;
         readonly IUserContext user;
 
-        public RecordsController(IUserRecordService service, IDocumentSession db, IUserContext user)
+        public RecordsController(IRecordService service, IDocumentSession db, IUserContext user)
         {
             this.service = service;
             this.db = db;
@@ -27,7 +28,7 @@ namespace Catalogue.Web.Controllers.Records
 
         // GET api/records/57d34691-9064-4c1e-90a7-7b0c112daa8d (get a record)
 
-        public RecordOutputModel Get(Guid id, bool clone = false)
+        public object Get(Guid id, bool clone = false)
         {
             Record record;
 
@@ -41,11 +42,14 @@ namespace Catalogue.Web.Controllers.Records
             return new RecordOutputModel
             {
                 Record = record,
-                PublishingState = new PublishingState
+                RecordState = new RecordState
                 {
-                    AssessedAndUpToDate = record.IsAssessedAndUpToDate(),
-                    SignedOffAndUpToDate = record.IsSignedOffAndUpToDate(),
-                    UploadedAndUpToDate = record.IsUploadedAndUpToDate()
+                    OpenDataPublishingState = new OpenDataPublishingState
+                    {
+                        AssessedAndUpToDate = record.IsAssessedAndUpToDate(),
+                        SignedOffAndUpToDate = record.IsSignedOffAndUpToDate(),
+                        UploadedAndUpToDate = record.IsUploadedAndUpToDate()
+                    }
                 }
             };
         }
@@ -64,7 +68,7 @@ namespace Catalogue.Web.Controllers.Records
 
         // PUT api/records/57d34691-9064-4c1e-90a7-7b0c112daa8d (update/replace a record)
 
-        public RecordServiceResult Put(Guid id, [FromBody]Record record)
+        public object Put(Guid id, [FromBody]Record record)
         {
             var userInfo = new UserInfo
             {
@@ -74,7 +78,7 @@ namespace Catalogue.Web.Controllers.Records
 
             var result = service.Update(record, userInfo);
 
-            if (result.RecordOutputModel.Record.Id != id) throw new Exception("The ID of the record does not match that supplied to the put method");
+            if (result.Record.Id != id) throw new Exception("The ID of the record does not match that supplied to the put method");
 
             if (result.Success)
                 db.SaveChanges();
@@ -82,7 +86,7 @@ namespace Catalogue.Web.Controllers.Records
             return result;
         }
 
-        public RecordServiceResult Post([FromBody] Record record)
+        public object Post([FromBody] Record record)
         {
             record.Id = Guid.NewGuid();
 

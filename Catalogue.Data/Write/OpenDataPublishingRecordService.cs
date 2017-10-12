@@ -1,18 +1,23 @@
 ﻿using Catalogue.Data.Model;
-using System;
-using Catalogue.Data.Query;
 using Catalogue.Utilities.Time;
 using Raven.Client;
+using System;
+using static Catalogue.Data.Write.RecordServiceHelper;
 
 namespace Catalogue.Data.Write
 {
-    public class OpenDataPublishingRecordService : RecordService, IOpenDataPublishingRecordService
+    public class OpenDataPublishingRecordService : IOpenDataPublishingRecordService
     {
-        public OpenDataPublishingRecordService(IDocumentSession db, IRecordValidator validator) : base(db, validator)
+        private readonly IDocumentSession db;
+        private readonly IRecordValidator validator;
+
+        public OpenDataPublishingRecordService(IDocumentSession db, IRecordValidator validator)
         {
+            this.db = db;
+            this.validator = validator;
         }
 
-        public RecordOutputModel Assess(Record record, OpenDataAssessmentInfo assessmentInfo)
+        public RecordServiceResult Assess(Record record, OpenDataAssessmentInfo assessmentInfo)
         {
             if (record.IsAssessedAndUpToDate())
                 throw new InvalidOperationException("Assessment has already been completed and is up to date");
@@ -37,16 +42,16 @@ namespace Catalogue.Data.Write
             UpdateMetadataDate(record, assessmentInfo.CompletedOnUtc);
             SetFooterForUpdatedRecord(record, assessmentInfo.CompletedByUser);
 
-            var recordServiceResult = Upsert(record);
+            var recordServiceResult = Upsert(record, db, validator);
             if (!recordServiceResult.Success)
             {
                 throw new Exception("Error while saving assessment changes.");
             }
 
-            return recordServiceResult.RecordOutputModel;
+            return recordServiceResult;
         }
 
-        public RecordOutputModel SignOff(Record record, OpenDataSignOffInfo signOffInfo)
+        public RecordServiceResult SignOff(Record record, OpenDataSignOffInfo signOffInfo)
         {
             if (!record.IsAssessedAndUpToDate())
                 throw new InvalidOperationException("Couldn't sign-off record for publication - assessment not completed or out of date");
@@ -58,11 +63,11 @@ namespace Catalogue.Data.Write
             UpdateMetadataDate(record, signOffInfo.DateUtc);
             SetFooterForUpdatedRecord(record, signOffInfo.User);
 
-            var recordServiceResult = Upsert(record);
+            var recordServiceResult = Upsert(record, db, validator);
             if (!recordServiceResult.Success)
                 throw new Exception("Error while saving sign off changes");
 
-            return recordServiceResult.RecordOutputModel;
+            return recordServiceResult;
         }
 
         public IOpenDataPublishingUploadRecordService Upload()
