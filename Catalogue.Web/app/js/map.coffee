@@ -78,7 +78,7 @@ module.directive 'tcSearchMap', ($window, $location, $anchorScroll) ->
             if newer and newer isnt older
                 # zoom in and set current.selected
                 tuple = _(tuples).find((x) -> x.r is newer)
-                map.fitBounds tuple.bounds, padding: [100, 100]
+                map.fitBounds tuple.bounds, padding: [50, 50]
                 scope.current.selected = newer
 
 module.directive 'tcSearchResultScrollHighlighter', ($window) ->
