@@ -203,6 +203,15 @@ namespace Catalogue.Data.Import.Mappings
         {
             public RecordMap()
             {
+                Map(m => m.Id).ConvertUsing(row =>
+                {
+                    var id = row.GetField("Id");
+                    if (string.IsNullOrWhiteSpace(id))
+                    {
+                        return new Guid();
+                    }
+                    return new Guid(id.Trim());
+                });
                 Map(m => m.Path);
                 Map(m => m.TopCopy).Value(true);
                 Map(m => m.Validation).Value(Validation.Gemini);
@@ -235,12 +244,12 @@ namespace Catalogue.Data.Import.Mappings
                 {
                     var importer = Importer.CreateImporter(db, new SeabedSurveyMapping());
                     importer.SkipBadRecords = true; // see log for skipped bad records
-                    importer.Import(@"C:\Work\data\Offshore_survey_TopCat_data_part2_20160506_EL.csv");
+                    importer.Import(@"D:\workspace\test_import.csv");
 
                     var errors = importer.Results
                         .Where(r => !r.Success)
                         .Select(r => r.Record.Gemini.Title + Environment.NewLine + JsonConvert.SerializeObject(r.Validation) + Environment.NewLine);
-                    File.WriteAllLines(@"C:\work\data\Offshore_survey_TopCat_data_part2_20160506_EL.csv.errors.txt", errors);
+                    File.WriteAllLines(@"D:\workspace\test_import.csv.errors.txt", errors);
 
                     db.SaveChanges();
 
@@ -260,7 +269,7 @@ namespace Catalogue.Data.Import.Mappings
         [Test, Explicit] // this isn't seed data, so these tests are (were) only used for the "one-off" import
         public void should_import_expected_number_of_records()
         {
-            imported.Count().Should().Be(193);
+            imported.Count().Should().Be(147);
         }
 
         [Test, Explicit]
@@ -272,12 +281,12 @@ namespace Catalogue.Data.Import.Mappings
         [Test, Explicit]
         public void MakeAnXmlFile()
         {
-            var record = imported.Single(r => r.Gemini.Title == "Seabed still images from Bassurelle Sandbanks SCI");
+            var record = imported.Single(r => r.Gemini.Title == @"Cruise report from Braemar Pockmarks (CEND 19x/12)");
             record.Gemini.ResourceLocator = String.Format("http://example.com/{0}", record.Id);
             var xml = new global::Catalogue.Gemini.Encoding.XmlEncoder().Create(record.Id, record.Gemini);
             //var ceh = new global::Catalogue.Gemini.Validation.Validator().Validate(xml);
             string filename = "topcat-record-" + record.Id.ToString().ToLower() + ".xml";
-            xml.Save(Path.Combine(@"C:\work", filename));
+            xml.Save(Path.Combine(@"D:\workspace", filename));
         }
     }
 
