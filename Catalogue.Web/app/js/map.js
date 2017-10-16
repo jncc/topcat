@@ -76,7 +76,7 @@
       _results = [];
       for (_i = 0, _len = results.length; _i < _len; _i++) {
         r = results[_i];
-        if (r.box !== null) {
+        if (r.box !== null && r.box.north) {
           _results.push((function(r) {
             var bounds, rect;
             bounds = [[r.box.south, r.box.west], [r.box.north, r.box.east]];
