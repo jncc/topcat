@@ -37,7 +37,7 @@ getBestPadding = (tuples) ->
 tuples = {}
 
 updateTuples = (results, scope) ->
-    tuples = for r in results when r.box.north 
+    tuples = for r in results when r.box != null 
         do (r) ->
             bounds = [[r.box.south, r.box.west], [r.box.north, r.box.east]]
             rect = L.rectangle bounds, normal
