@@ -37,7 +37,7 @@ getBestPadding = (tuples) ->
 tuples = {}
 
 updateTuples = (results, scope) ->
-    tuples = for r in results when r.box != null && r.box.north
+    tuples = for r in results when r.box isnt null and r.box.north
         do (r) ->
             bounds = [[r.box.south, r.box.west], [r.box.north, r.box.east]]
             rect = L.rectangle bounds, normal
@@ -78,7 +78,7 @@ module.directive 'tcSearchMap', ($window, $location, $anchorScroll) ->
             if newer and newer isnt older
                 # zoom in and set current.selected
                 tuple = _(tuples).find((x) -> x.r is newer)
-                map.fitBounds tuple.bounds, padding: [100, 100]
+                map.fitBounds tuple.bounds, padding: [50, 50]
                 scope.current.selected = newer
 
 module.directive 'tcSearchResultScrollHighlighter', ($window) ->

@@ -166,7 +166,7 @@
               return x.r === newer;
             });
             map.fitBounds(tuple.bounds, {
-              padding: [100, 100]
+              padding: [50, 50]
             });
             return scope.current.selected = newer;
           }
