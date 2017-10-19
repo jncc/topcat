@@ -86,14 +86,12 @@
         <div class="layout-col" ng-show="result.total > 0" style="text-align: right;">
             <div class="btn-group">
                 <button type="button" class="btn btn-white dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" tc-tip title="Sort">
-                    {{getSortOptionText(query.o)}} <span class="caret"></span>
+                    {{sortOptions[query.o]}} <span class="caret"></span>
                 </button>
                 <ul class="dropdown-menu dropdown-menu-right" role="menu">
-                    <li><a ng-click="query.o = 0; doSearch(query)">{{getSortOptionText(0)}}</a></li>
-                    <li><a ng-click="query.o = 1; doSearch(query)">{{getSortOptionText(1)}}</a></li>
-                    <li><a ng-click="query.o = 2; doSearch(query)">{{getSortOptionText(2)}}</a></li>
-                    <li><a ng-click="query.o = 3; doSearch(query)">{{getSortOptionText(3)}}</a></li>
-                    <li><a ng-click="query.o = 4; doSearch(query)">{{getSortOptionText(4)}}</a></li>
+                    <li ng-repeat="(index, text) in sortOptions">
+                        <a ng-click="query.o = index; doSearch(query)">{{text}}</a>
+                    </li>
                 </ul>
             </div>
             <div class="search-results-view-picker btn-group" role="group">

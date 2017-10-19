@@ -74,22 +74,7 @@
         o: 0
       };
     };
-    $scope.getSortOptionText = function(sortOption) {
-      return $scope.sortType = (function() {
-        switch (sortOption) {
-          case 0:
-            return "Relevance";
-          case 1:
-            return "Title A-Z";
-          case 2:
-            return "Title Z-A";
-          case 3:
-            return "Newest to oldest";
-          case 4:
-            return "Oldest to newest";
-        }
-      })();
-    };
+    $scope.sortOptions = ["Relevance", "Title A-Z", "Title Z-A", "Newest to oldest", "Oldest to newest"];
     parseQuerystring = function() {
       var o;
       o = $location.search();

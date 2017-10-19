@@ -65,13 +65,8 @@
             d: null,
             o: 0
 
-        $scope.getSortOptionText = (sortOption) ->
-            $scope.sortType = switch sortOption
-                when 0 then "Relevance"
-                when 1 then "Title A-Z"
-                when 2 then "Title Z-A"
-                when 3 then "Newest to oldest"
-                when 4 then "Oldest to newest"
+        # all sort options in correct order
+        $scope.sortOptions = [ "Relevance", "Title A-Z", "Title Z-A", "Newest to oldest", "Oldest to newest" ]
 
         parseQuerystring = ->
             o = $location.search() # angular api for getting the querystring as an object
