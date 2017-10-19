@@ -14,6 +14,7 @@ namespace Catalogue.Data.Query
             Q = String.Empty;
             K = new string[0];
             D = null;
+            O = 0;
         }
 
         /// <summary>
@@ -46,5 +47,15 @@ namespace Catalogue.Data.Query
         /// The earliest metadata date from which records should be returned.
         /// </summary>
         public DateTime? D { get; set; }
+
+        /// <summary>
+        /// The sort option for results.
+        /// 0 - Relevance
+        /// 1 - Title desc
+        /// 2 - Title asc
+        /// 3 - Dataset reference date desc
+        /// 4 - Dataset reference date asc
+        /// </summary>
+        public int O { get; set; }
     }
 }

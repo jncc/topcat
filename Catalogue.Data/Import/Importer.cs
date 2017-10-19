@@ -8,7 +8,6 @@ using Raven.Client;
 using System;
 using System.Collections.Generic;
 using System.IO;
-using Catalogue.Utilities.Time;
 
 namespace Catalogue.Data.Import
 {

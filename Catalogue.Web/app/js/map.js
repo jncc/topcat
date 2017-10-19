@@ -112,7 +112,12 @@
     return {
       link: function(scope, elem, attrs) {
         var group, map;
-        map = L.map(elem[0]);
+        map = L.map(elem[0], {
+          zoomControl: false
+        });
+        L.control.zoom({
+          position: 'topright'
+        }).addTo(map);
         map.addLayer(baseLayer);
         group = L.layerGroup().addTo(map);
         scope.$watch('result.results', function(results) {
