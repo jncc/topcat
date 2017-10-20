@@ -8,6 +8,8 @@ using Raven.Client.Linq;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
+using System.Web.UI.WebControls;
 
 namespace Catalogue.Data.Query
 {
@@ -92,7 +94,7 @@ namespace Catalogue.Data.Query
             var recordQuery = query.As<Record>(); // ravendb method to project from the index result type to the actual document type
 
             recordQuery = SortRecords(recordQuery, input);
-            
+
             // allow N to be negative
             if (input.N >= 0)
             {
@@ -172,33 +174,33 @@ namespace Catalogue.Data.Query
             return output;
         }
 
-        private IQueryable<Record> SortRecords(IQueryable<Record> records, RecordQueryInputModel input)
+        private IQueryable<Record> SortRecords(IQueryable<Record> recordQuery, RecordQueryInputModel input)
         {
-            var sortedRecords = records;
-            Func<Record, Object> orderByFunc;
+            var sortedRecords = recordQuery;
+            Expression<Func<Record, Object>> orderByFunc;
             switch (input.O)
             {
                 case 0:
                     break;
                 case 1:
                     orderByFunc = record => record.Gemini.Title;
-                    sortedRecords = records.OrderBy(orderByFunc).AsQueryable();
+                    sortedRecords = recordQuery.OrderBy(orderByFunc);
                     break;
                 case 2:
                     orderByFunc = record => record.Gemini.Title;
-                    sortedRecords = records.OrderByDescending(orderByFunc).AsQueryable();
+                    sortedRecords = recordQuery.OrderByDescending(orderByFunc);
                     break;
                 case 3:
                     orderByFunc = record => record.Gemini.DatasetReferenceDate;
-                    sortedRecords = records.OrderByDescending(orderByFunc).AsQueryable();
+                    sortedRecords = recordQuery.OrderByDescending(orderByFunc);
                     break;
                 case 4:
                     orderByFunc = record => record.Gemini.DatasetReferenceDate;
-                    sortedRecords = records.OrderBy(orderByFunc).AsQueryable();
+                    sortedRecords = recordQuery.OrderBy(orderByFunc);
                     break;
             }
 
-            return sortedRecords.AsQueryable();
+            return sortedRecords;
         }
     }
 }
