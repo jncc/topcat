@@ -27,7 +27,6 @@
             $http.get('../api/search?' + $.param query, true)
                 .success (result) ->
                     # don't overwrite with earlier but slower queries!
-                    console.log result
                     if angular.equals result.query, query
                         $scope.result = result
                 .error (e) -> $scope.notifications.add 'Oops! ' + e.message

@@ -28,7 +28,6 @@
     };
     queryRecords = function(query) {
       return $http.get('../api/search?' + $.param(query, true)).success(function(result) {
-        console.log(result);
         if (angular.equals(result.query, query)) {
           return $scope.result = result;
         }
