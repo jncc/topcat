@@ -10,7 +10,7 @@
             </span>
 
             <span class="input-group-btn">
-                <button class="btn btn-primary big-button" type="button" ng-click="doSearch(query)">
+                <button class="btn btn-primary big-button" type="button" ng-click="query.p = 0; doSearch(query)">
                     <span class="glyphicon glyphicon-search"></span>
                 </button>
             </span>
@@ -84,13 +84,13 @@
 
         <!-- results view / export buttons -->
         <div class="layout-col" ng-show="result.total > 0" style="text-align: right;">
-            <div class="btn-group">
+            <div class="search-results-sort-dropdown btn-group">
                 <button type="button" class="btn btn-white dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" tc-tip title="Sort">
-                    {{sortOptions[query.o]}} <span class="caret"></span>
+                    {{sortOptions[query.o]}} <span class="pull-right"><span class="caret"></span></span>
                 </button>
                 <ul class="dropdown-menu dropdown-menu-right" role="menu">
                     <li ng-repeat="(index, text) in sortOptions">
-                        <a ng-click="query.o = index; doSearch(query)">{{text}}</a>
+                        <a ng-click="query.o = index; query.p = 0">{{text}}</a>
                     </li>
                 </ul>
             </div>

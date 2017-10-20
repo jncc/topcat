@@ -27,6 +27,7 @@
             $http.get('../api/search?' + $.param query, true)
                 .success (result) ->
                     # don't overwrite with earlier but slower queries!
+                    console.log result
                     if angular.equals result.query, query
                         $scope.result = result
                 .error (e) -> $scope.notifications.add 'Oops! ' + e.message
@@ -66,7 +67,7 @@
             o: 0
 
         # all sort options in correct order
-        $scope.sortOptions = [ "Relevance", "Title A-Z", "Title Z-A", "Newest to oldest", "Oldest to newest" ]
+        $scope.sortOptions = [ "Most relevant", "Title A-Z", "Title Z-A", "Newest to oldest", "Oldest to newest" ]
 
         parseQuerystring = ->
             o = $location.search() # angular api for getting the querystring as an object

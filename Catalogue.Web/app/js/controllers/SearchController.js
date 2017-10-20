@@ -28,6 +28,7 @@
     };
     queryRecords = function(query) {
       return $http.get('../api/search?' + $.param(query, true)).success(function(result) {
+        console.log(result);
         if (angular.equals(result.query, query)) {
           return $scope.result = result;
         }
@@ -74,7 +75,7 @@
         o: 0
       };
     };
-    $scope.sortOptions = ["Relevance", "Title A-Z", "Title Z-A", "Newest to oldest", "Oldest to newest"];
+    $scope.sortOptions = ["Most relevant", "Title A-Z", "Title Z-A", "Newest to oldest", "Oldest to newest"];
     parseQuerystring = function() {
       var o;
       o = $location.search();

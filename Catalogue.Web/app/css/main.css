@@ -223,6 +223,10 @@ label {
 .search-results-view-picker button span {
   font-size: smaller;
 }
+.search-results-sort-dropdown button {
+  width: 10.5em;
+  text-align: left;
+}
 .search-results-header {
   margin-bottom: 0.4em;
 }
