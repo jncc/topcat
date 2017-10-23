@@ -1,15 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Catalogue.Data.Indexes;
+﻿using Catalogue.Data.Indexes;
 using Catalogue.Data.Model;
 using Catalogue.Gemini.DataFormats;
 using Catalogue.Gemini.Model;
 using Catalogue.Utilities.Text;
 using Raven.Client;
 using Raven.Client.Linq;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Linq.Expressions;
+using static Catalogue.Data.Query.RecordQueryInputModel.SortOptions;
 
 namespace Catalogue.Data.Query
 {
@@ -93,6 +93,8 @@ namespace Catalogue.Data.Query
 
             var recordQuery = query.As<Record>(); // ravendb method to project from the index result type to the actual document type
 
+            recordQuery = SortRecords(recordQuery, input);
+
             // allow N to be negative
             if (input.N >= 0)
             {
@@ -113,7 +115,7 @@ namespace Catalogue.Data.Query
             // materializing the query will populate our stats
 
             var results = from r in Query(input).ToList()
-                        let titleFragments = titleLites.GetFragments("records/" + r.Id).Concat(titleNLites.GetFragments("records/" + r.Id))
+                          let titleFragments = titleLites.GetFragments("records/" + r.Id).Concat(titleNLites.GetFragments("records/" + r.Id))
                         let abstractFragments = abstractLites.GetFragments("records/" + r.Id).Concat(abstractNLites.GetFragments("records/" + r.Id))
                         let title = titleFragments.Select(f => f.TruncateNicely(200)).FirstOrDefault()
                                     ?? r.Gemini.Title.TruncateNicely(200)
@@ -170,6 +172,35 @@ namespace Catalogue.Data.Query
                          };
 
             return output;
-        }    
+        }
+
+        private IQueryable<Record> SortRecords(IQueryable<Record> recordQuery, RecordQueryInputModel input)
+        {
+            var sortedRecords = recordQuery;
+            Expression<Func<Record, Object>> orderByFunc;
+            switch (input.O)
+            {
+                case MostRelevant:
+                    break;
+                case TitleAZ:
+                    orderByFunc = record => record.Gemini.Title;
+                    sortedRecords = recordQuery.OrderBy(orderByFunc);
+                    break;
+                case TitleZA:
+                    orderByFunc = record => record.Gemini.Title;
+                    sortedRecords = recordQuery.OrderByDescending(orderByFunc);
+                    break;
+                case NewestToOldest:
+                    orderByFunc = record => record.Gemini.DatasetReferenceDate;
+                    sortedRecords = recordQuery.OrderByDescending(orderByFunc);
+                    break;
+                case OldestToNewest:
+                    orderByFunc = record => record.Gemini.DatasetReferenceDate;
+                    sortedRecords = recordQuery.OrderBy(orderByFunc);
+                    break;
+            }
+
+            return sortedRecords;
+        }
     }
 }

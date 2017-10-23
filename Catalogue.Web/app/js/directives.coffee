@@ -38,6 +38,10 @@ module.directive 'tcTip', () ->
             $(elem).qtip $.extend {}, qtipDefaults, position:
                 my: 'top center',
                 at: 'bottom center',
+        else if (attrs.tcTip == 'left')
+            $(elem).qtip $.extend {}, qtipDefaults, position:
+                my: 'center right',
+                at: 'center left',
         else
             $(elem).qtip qtipDefaults
             

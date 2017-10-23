@@ -20,6 +20,7 @@
             $location.search 'k', query.k # angular does the right thing here
             $location.search 'p', query.p || null
             $location.search 'd', query.d || null
+            $location.search 'o', query.o || null
             #$location.search('n', $scope.query.n)
         
         queryRecords = (query) ->
@@ -55,13 +56,17 @@
             else
                 $scope.keywordSuggestions = {}
                 $scope.result = {}
-                
+
         blankQuery = ->
             q: '',
             k: [],
             p: 0,
             n: $scope.pageSize,
-            d: null
+            d: null,
+            o: 0
+
+        # all sort options in correct order
+        $scope.sortOptions = [ "Most relevant", "Title A-Z", "Title Z-A", "Newest to oldest", "Oldest to newest" ]
 
         parseQuerystring = ->
             o = $location.search() # angular api for getting the querystring as an object

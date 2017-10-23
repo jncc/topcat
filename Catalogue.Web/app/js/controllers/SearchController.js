@@ -23,7 +23,8 @@
       $location.search('q', query.q || null);
       $location.search('k', query.k);
       $location.search('p', query.p || null);
-      return $location.search('d', query.d || null);
+      $location.search('d', query.d || null);
+      return $location.search('o', query.o || null);
     };
     queryRecords = function(query) {
       return $http.get('../api/search?' + $.param(query, true)).success(function(result) {
@@ -69,9 +70,11 @@
         k: [],
         p: 0,
         n: $scope.pageSize,
-        d: null
+        d: null,
+        o: 0
       };
     };
+    $scope.sortOptions = ["Most relevant", "Title A-Z", "Title Z-A", "Newest to oldest", "Oldest to newest"];
     parseQuerystring = function() {
       var o;
       o = $location.search();

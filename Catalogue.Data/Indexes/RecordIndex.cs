@@ -17,12 +17,14 @@ namespace Catalogue.Data.Indexes
         public class Result
         {
             public string   Title        { get; set; }
+            public string   Gemini_Title { get; set; }
             public string   TitleN       { get; set; }
             public string   Abstract     { get; set; }
             public string   AbstractN    { get; set; }
             public string[] Keywords     { get; set; }
             public string[] KeywordsN    { get; set; }
             public DateTime MetadataDate { get; set; }
+            public DateTime Gemini_DatasetReferenceDate { get; set; }
             public string   Target       { get; set; }
         }
 
@@ -33,13 +35,17 @@ namespace Catalogue.Data.Indexes
                                  {
                                      // redundant explicit property names are actually needed - index doesn't work properly without!
                                      Title = record.Gemini.Title,
+                                     Gemini_Title = record.Gemini.Title,
                                      TitleN = record.Gemini.Title, 
                                      Abstract = record.Gemini.Abstract,
                                      AbstractN = record.Gemini.Abstract,
                                      Keywords = record.Gemini.Keywords.Select(k => k.Vocab + "/" + k.Value), // for filtering exactly on keywords
                                      KeywordsN = record.Gemini.Keywords.Select(k => k.Value), // for full-text search matching on keywords
-                                     MetadataDate = record.Gemini.MetadataDate
-                                 };
+                                     MetadataDate = record.Gemini.MetadataDate,
+                                     Gemini_DatasetReferenceDate = record.Gemini.DatasetReferenceDate
+                             };
+
+            Sort(r => r.Title, SortOptions.String);
 
             // store and analyse the Title field
             Analyze(x => x.Title, typeof(StemAnalyzer).AssemblyQualifiedName);

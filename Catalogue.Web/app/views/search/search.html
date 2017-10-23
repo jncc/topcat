@@ -10,7 +10,7 @@
             </span>
 
             <span class="input-group-btn">
-                <button class="btn btn-primary big-button" type="button" ng-click="doSearch(query)">
+                <button class="btn btn-primary big-button" type="button" ng-click="query.p = 0; doSearch(query)">
                     <span class="glyphicon glyphicon-search"></span>
                 </button>
             </span>
@@ -84,6 +84,18 @@
 
         <!-- results view / export buttons -->
         <div class="layout-col" ng-show="result.total > 0" style="text-align: right;">
+            <div class="search-results-sort-dropdown btn-group">
+                <button type="button" class="btn btn-white dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" tc-tip title="Sort">
+                    {{sortOptions[query.o]}} <span class="pull-right"><span class="caret"></span></span>
+                </button>
+                <ul class="dropdown-menu dropdown-menu-right" role="menu">
+                    <li tc-tip="left" title="Gemini Title, Abstract, and Keywords"><a ng-click="query.o = 0; query.p = 0">{{sortOptions[0]}}</a></li>
+                    <li tc-tip="left" title="Gemini Title"><a ng-click="query.o = 1; query.p = 0">{{sortOptions[1]}}</a></li>
+                    <li tc-tip="left" title="Gemini Title"><a ng-click="query.o = 2; query.p = 0">{{sortOptions[2]}}</a></li>
+                    <li tc-tip="left" title="Gemini Published/Revised Date"><a ng-click="query.o = 3; query.p = 0">{{sortOptions[3]}}</a></li>
+                    <li tc-tip="left" title="Gemini Published/Revised Date"><a ng-click="query.o = 4; query.p = 0">{{sortOptions[4]}}</a></li>
+                </ul>
+            </div>
             <div class="search-results-view-picker btn-group" role="group">
                 <button class="btn big-button" tc-tip title="List view" ng-click="resultsView = 'list'" ng-class="{ 'btn-primary': resultsView == 'list', 'btn-default': resultsView != 'list' }">
                     <span class="glyphicon glyphicon-align-left"></span>

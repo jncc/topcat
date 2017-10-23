@@ -1,12 +1,11 @@
 ﻿using System;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using Catalogue.Utilities.Text;
 
 namespace Catalogue.Data.Query
 {
     public class RecordQueryInputModel
     {
+        public enum SortOptions { MostRelevant, TitleAZ, TitleZA, NewestToOldest, OldestToNewest};
+
         public RecordQueryInputModel()
         {
             N = 15;
@@ -14,6 +13,7 @@ namespace Catalogue.Data.Query
             Q = String.Empty;
             K = new string[0];
             D = null;
+            O = 0;
         }
 
         /// <summary>
@@ -46,5 +46,15 @@ namespace Catalogue.Data.Query
         /// The earliest metadata date from which records should be returned.
         /// </summary>
         public DateTime? D { get; set; }
+
+        /// <summary>
+        /// The sort option for results.
+        /// 0 - Relevance
+        /// 1 - Title desc
+        /// 2 - Title asc
+        /// 3 - Dataset reference date desc
+        /// 4 - Dataset reference date asc
+        /// </summary>
+        public SortOptions O { get; set; }
     }
 }
