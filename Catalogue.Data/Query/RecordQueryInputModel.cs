@@ -1,12 +1,11 @@
 ﻿using System;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using Catalogue.Utilities.Text;
 
 namespace Catalogue.Data.Query
 {
     public class RecordQueryInputModel
     {
+        public enum SortOptions { MostRelevant, TitleAZ, TitleZA, NewestToOldest, OldestToNewest};
+
         public RecordQueryInputModel()
         {
             N = 15;
@@ -56,6 +55,6 @@ namespace Catalogue.Data.Query
         /// 3 - Dataset reference date desc
         /// 4 - Dataset reference date asc
         /// </summary>
-        public int O { get; set; }
+        public SortOptions O { get; set; }
     }
 }

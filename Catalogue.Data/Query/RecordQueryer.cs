@@ -9,7 +9,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
-using System.Web.UI.WebControls;
+using static Catalogue.Data.Query.RecordQueryInputModel.SortOptions;
 
 namespace Catalogue.Data.Query
 {
@@ -180,21 +180,21 @@ namespace Catalogue.Data.Query
             Expression<Func<Record, Object>> orderByFunc;
             switch (input.O)
             {
-                case 0:
+                case MostRelevant:
                     break;
-                case 1:
+                case TitleAZ:
                     orderByFunc = record => record.Gemini.Title;
                     sortedRecords = recordQuery.OrderBy(orderByFunc);
                     break;
-                case 2:
+                case TitleZA:
                     orderByFunc = record => record.Gemini.Title;
                     sortedRecords = recordQuery.OrderByDescending(orderByFunc);
                     break;
-                case 3:
+                case NewestToOldest:
                     orderByFunc = record => record.Gemini.DatasetReferenceDate;
                     sortedRecords = recordQuery.OrderByDescending(orderByFunc);
                     break;
-                case 4:
+                case OldestToNewest:
                     orderByFunc = record => record.Gemini.DatasetReferenceDate;
                     sortedRecords = recordQuery.OrderBy(orderByFunc);
                     break;

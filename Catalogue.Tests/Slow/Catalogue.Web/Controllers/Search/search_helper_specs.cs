@@ -14,6 +14,7 @@ using FluentAssertions;
 using NUnit.Framework;
 using Raven.Client;
 using Raven.Database.Indexing.Collation;
+using static Catalogue.Data.Query.RecordQueryInputModel.SortOptions;
 
 namespace Catalogue.Tests.Slow.Catalogue.Web.Controllers.Search
 {
@@ -136,7 +137,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Web.Controllers.Search
                     P = 0,
                     N = 25,
                     D = null,
-                    O = 1
+                    O = TitleAZ
                 };
 
                 var results = helper.Search(input).Results;
@@ -162,7 +163,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Web.Controllers.Search
                     P = 0,
                     N = 25,
                     D = null,
-                    O = 2
+                    O = TitleZA
                 };
 
                 var results = helper.Search(input).Results;
@@ -188,7 +189,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Web.Controllers.Search
                     P = 0,
                     N = 25,
                     D = null,
-                    O = 3
+                    O = NewestToOldest
                 };
 
                 var results = helper.Search(input).Results;
@@ -214,7 +215,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Web.Controllers.Search
                     P = 0,
                     N = 25,
                     D = null,
-                    O = 4
+                    O = OldestToNewest
                 };
 
                 var results = helper.Search(input).Results;
@@ -249,7 +250,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Web.Controllers.Search
                     P = 0,
                     N = 25,
                     D = null,
-                    O = 1
+                    O = TitleAZ
                 };
 
                 var results = helper.Search(input).Results;
@@ -265,7 +266,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Web.Controllers.Search
                     P = 0,
                     N = 25,
                     D = null,
-                    O = 2
+                    O = TitleZA
                 };
 
                 results = helper.Search(input).Results;

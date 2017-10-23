@@ -1,5 +1,6 @@
 ﻿using Catalogue.Data.Query;
 using NUnit.Framework;
+using static Catalogue.Data.Query.RecordQueryInputModel.SortOptions;
 
 namespace Catalogue.Tests.Web.Search
 {
@@ -51,7 +52,7 @@ namespace Catalogue.Tests.Web.Search
                 Q = "se",
                 N = 25,
                 P = 0,
-                O = 1
+                O = TitleAZ
             };
 
             var results = _recordQueryer.Search(queryInput);
