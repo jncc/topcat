@@ -89,9 +89,11 @@
                     {{sortOptions[query.o]}} <span class="pull-right"><span class="caret"></span></span>
                 </button>
                 <ul class="dropdown-menu dropdown-menu-right" role="menu">
-                    <li ng-repeat="(index, text) in sortOptions">
-                        <a ng-click="query.o = index; query.p = 0">{{text}}</a>
-                    </li>
+                    <li tc-tip="left" title="Gemini Title, Abstract, and Keywords"><a ng-click="query.o = 0; query.p = 0">{{sortOptions[0]}}</a></li>
+                    <li tc-tip="left" title="Gemini Title"><a ng-click="query.o = 1; query.p = 0">{{sortOptions[1]}}</a></li>
+                    <li tc-tip="left" title="Gemini Title"><a ng-click="query.o = 2; query.p = 0">{{sortOptions[2]}}</a></li>
+                    <li tc-tip="left" title="Gemini Published/Revised Date"><a ng-click="query.o = 3; query.p = 0">{{sortOptions[3]}}</a></li>
+                    <li tc-tip="left" title="Gemini Published/Revised Date"><a ng-click="query.o = 4; query.p = 0">{{sortOptions[4]}}</a></li>
                 </ul>
             </div>
             <div class="search-results-view-picker btn-group" role="group">
