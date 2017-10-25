@@ -127,6 +127,7 @@
     <Compile Include="Model\Validation.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Query\ParameterHelper.cs" />
+    <Compile Include="Query\QueryExtensions.cs" />
     <Compile Include="Query\RecordQueryer.cs" />
     <Compile Include="Query\RecordQueryInputModel.cs" />
     <Compile Include="Query\SearchOutputModel.cs" />
