@@ -75,7 +75,7 @@ namespace Catalogue.Data.Query
                 query = query
                     .SearchMultiple(r => r.Title, input.Q, 10, SearchOptions.And)
                     .Search(r => r.TitleN, input.Q, 1, SearchOptions.Or)
-                    .Search(r => r.Abstract, input.Q, 1, SearchOptions.Or)
+                    .SearchMultiple(r => r.Abstract, input.Q, 1, SearchOptions.Or)
                     .Search(r => r.AbstractN, input.Q, 1, SearchOptions.Or)
                     .Search(r => r.KeywordsN, input.Q, 1, SearchOptions.Or);
             }

@@ -17,14 +17,12 @@ namespace Catalogue.Data.Indexes
         public class Result
         {
             public string   Title        { get; set; }
-            public string   Gemini_Title { get; set; }
             public string   TitleN       { get; set; }
             public string   Abstract     { get; set; }
             public string   AbstractN    { get; set; }
             public string[] Keywords     { get; set; }
             public string[] KeywordsN    { get; set; }
             public DateTime MetadataDate { get; set; }
-            public DateTime Gemini_DatasetReferenceDate { get; set; }
             public string   Target       { get; set; }
         }
 
