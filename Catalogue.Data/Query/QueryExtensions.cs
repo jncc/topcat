@@ -12,7 +12,8 @@ namespace Catalogue.Data.Query
         public static IQueryable<RecordIndex.Result> SearchMultiple(this IQueryable<RecordIndex.Result> query,
             Expression<Func<RecordIndex.Result, object>> expression, string terms, int boost, SearchOptions option)
         {
-            var reg = new Regex("[^\\s\"']+|\"[^\"]*\"|'[^']*'"); //Splits string by spaces, groups words into phrases if surrounded by quotes
+            //Splits string by spaces, groups words into phrases if surrounded by quotes
+            var reg = new Regex("[^\\s\"']+|\"[^\"]*\"|'[^']*'");
             var searchTerms = reg.Matches(terms).Cast<Match>().Select(m => m.Value).ToList();
 
             foreach (var term in searchTerms)

@@ -9,7 +9,9 @@ using FluentAssertions;
 using NUnit.Framework;
 using Raven.Client;
 using System;
+using System.Collections.Generic;
 using System.Linq;
+using Catalogue.Gemini.Model;
 using static Catalogue.Data.Query.RecordQueryInputModel.SortOptions;
 
 namespace Catalogue.Tests.Slow.Catalogue.Web.Controllers.Search
@@ -119,6 +121,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Web.Controllers.Search
         }
 
         [Test]
+        [Ignore] //Only works if we decide to AND search terms instead of ORing
         public void test_simple_search_with_multiple_terms_and_numbers()
         {
             using (var db = GetDbForSortTests())
@@ -144,6 +147,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Web.Controllers.Search
         }
 
         [Test]
+        [Ignore] //Only works if we decide to AND search terms instead of ORing
         public void test_simple_search_with_multiple_terms()
         {
             using (var db = GetDbForSortTests())
@@ -333,6 +337,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Web.Controllers.Search
         }
 
         [Test]
+        [Ignore] //Only works if we decide to AND search terms instead of ORing
         public void test_multiple_exact_search_terms()
         {
             using (var db = GetDbForSortTests())
@@ -378,6 +383,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Web.Controllers.Search
         }
 
         [Test]
+        [Ignore] //Only works if we decide to AND search terms instead of ORing
         public void test_exact_search_term_with_normal_search_term()
         {
             using (var db = GetDbForSortTests())
@@ -443,6 +449,73 @@ namespace Catalogue.Tests.Slow.Catalogue.Web.Controllers.Search
                 results.ToList()[0].Title.Should().Be("<b>sea</b>1234");
                 results.ToList()[1].Title.Should().Be("<b>sea</b>");
                 results.ToList()[2].Title.Should().Be("<b>sea</b> 1234");
+            }
+        }
+
+        [Test]
+        public void test_exact_search_checks_abstract_too()
+        {
+            var store = new InMemoryDatabaseHelper().Create();
+            var db = store.OpenSession();
+
+            using (db)
+            {
+                var record1 = SimpleRecord().With(m =>
+                {
+                    m.Gemini.Title = "marine conservation zone";
+                    m.Gemini.Abstract = "population analysis data for zone";
+                });
+                var record2 = SimpleRecord().With(m =>
+                {
+                    m.Gemini.Title = "habitat data";
+                    m.Gemini.Abstract = "marine conservation analysis data";
+                });
+
+                db.Store(record1);
+                db.Store(record2);
+                db.SaveChanges();
+
+                var helper = new RecordQueryer(db);
+                var input = new RecordQueryInputModel
+                {
+                    Q = @"""marine conservation""",
+                    K = null,
+                    P = 0,
+                    N = 25,
+                    D = null,
+                    O = MostRelevant
+                };
+                var results = helper.Search(input).Results;
+                results.Count.Should().Be(2);
+                results.ToList()[0].Title.Should().Be("<b>marine conservation</b> zone");
+                results.ToList()[1].Title.Should().Be("habitat data");
+
+                input = new RecordQueryInputModel
+                {
+                    Q = @"""analysis data""",
+                    K = null,
+                    P = 0,
+                    N = 25,
+                    D = null,
+                    O = MostRelevant
+                };
+                results = helper.Search(input).Results;
+                results.Count.Should().Be(2);
+                results.ToList()[0].Title.Should().Be("marine conservation zone");
+                results.ToList()[1].Title.Should().Be("habitat data");
+
+                input = new RecordQueryInputModel
+                {
+                    Q = @"""population analysis""",
+                    K = null,
+                    P = 0,
+                    N = 25,
+                    D = null,
+                    O = MostRelevant
+                };
+                results = helper.Search(input).Results;
+                results.Count.Should().Be(1);
+                results.ToList()[0].Title.Should().Be("marine conservation zone");
             }
         }
 
