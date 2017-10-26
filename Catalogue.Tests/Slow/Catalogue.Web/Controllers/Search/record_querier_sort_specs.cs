@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
-using Catalogue.Data.Model;
+﻿using Catalogue.Data.Model;
 using Catalogue.Data.Query;
 using Catalogue.Data.Test;
 using Catalogue.Gemini.Helpers;
@@ -14,6 +8,7 @@ using Catalogue.Utilities.Collections;
 using FluentAssertions;
 using NUnit.Framework;
 using Raven.Client;
+using System.Linq;
 using static Catalogue.Data.Query.RecordQueryInputModel.SortOptions;
 
 namespace Catalogue.Tests.Slow.Catalogue.Web.Controllers.Search
@@ -189,8 +184,6 @@ namespace Catalogue.Tests.Slow.Catalogue.Web.Controllers.Search
                 db.Store(record);
                 db.SaveChanges();
 
-                Thread.Sleep(100);
-
                 var input = new RecordQueryInputModel
                 {
                     Q = "sea",
@@ -256,8 +249,6 @@ namespace Catalogue.Tests.Slow.Catalogue.Web.Controllers.Search
                 db.Store(record3);
                 db.Store(record4);
                 db.SaveChanges();
-
-                Thread.Sleep(100);
 
                 return db;
             }
