@@ -184,8 +184,6 @@ namespace Catalogue.Tests.Slow.Catalogue.Web.Controllers.Search
                 db.Store(record);
                 db.SaveChanges();
 
-                Thread.Sleep(100);
-
                 var input = new RecordQueryInputModel
                 {
                     Q = "sea",
