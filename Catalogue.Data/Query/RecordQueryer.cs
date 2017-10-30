@@ -73,9 +73,9 @@ namespace Catalogue.Data.Query
             if (input.Q.IsNotBlank())
             {
                 query = query
-                    .SearchMultiple(r => r.Title, input.Q, 10, SearchOptions.Or)
+                    .Search(r => r.Title, input.Q, 10, SearchOptions.Or, EscapeQueryOptions.RawQuery)
                     .Search(r => r.TitleN, input.Q, 1, SearchOptions.Or)
-                    .SearchMultiple(r => r.Abstract, input.Q, 1, SearchOptions.Or)
+                    .Search(r => r.Abstract, input.Q, 1, SearchOptions.Or, EscapeQueryOptions.RawQuery)
                     .Search(r => r.AbstractN, input.Q, 1, SearchOptions.Or)
                     .Search(r => r.KeywordsN, input.Q, 1, SearchOptions.Or);
             }
