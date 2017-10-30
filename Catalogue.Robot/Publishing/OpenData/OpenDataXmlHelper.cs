@@ -1,13 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Xml.Linq;
-using Catalogue.Data.Model;
+﻿using Catalogue.Data.Model;
 using Catalogue.Gemini.Model;
 using Catalogue.Utilities.Text;
+using System.IO;
+using System.Linq;
+using System.Xml.Linq;
 
 namespace Catalogue.Robot.Publishing.OpenData
 {

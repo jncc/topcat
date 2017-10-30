@@ -9,7 +9,10 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
+using Lucene.Net.Analysis.Standard;
+using Lucene.Net.QueryParsers;
 using static Catalogue.Data.Query.RecordQueryInputModel.SortOptions;
+using Version = Lucene.Net.Util.Version;
 
 namespace Catalogue.Data.Query
 {
@@ -70,11 +73,11 @@ namespace Catalogue.Data.Query
             if (input.Q.IsNotBlank())
             {
                 query = query
-                    .Search(r => r.Title, input.Q, boost: 10)
-                    .Search(r => r.TitleN, input.Q)
-                    .Search(r => r.Abstract, input.Q)
-                    .Search(r => r.AbstractN, input.Q)
-                    .Search(r => r.KeywordsN, input.Q);
+                    .Search(r => r.Title, input.Q, 10, SearchOptions.Or, EscapeQueryOptions.RawQuery)
+                    .Search(r => r.TitleN, input.Q, 1, SearchOptions.Or)
+                    .Search(r => r.Abstract, input.Q, 1, SearchOptions.Or, EscapeQueryOptions.RawQuery)
+                    .Search(r => r.AbstractN, input.Q, 1, SearchOptions.Or)
+                    .Search(r => r.KeywordsN, input.Q, 1, SearchOptions.Or);
             }
 
             if (input.K != null && input.K.Any())

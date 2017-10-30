@@ -1,15 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Catalogue.Data.Import.Mappings;
+﻿using Catalogue.Data.Import.Mappings;
 using Catalogue.Data.Model;
 using Catalogue.Gemini.Model;
 using CsvHelper;
 using CsvHelper.TypeConversion;
 using Newtonsoft.Json;
+using System;
+using System.Collections.Generic;
+using System.IO;
 
 namespace Catalogue.Data.Export
 {

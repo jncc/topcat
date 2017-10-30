@@ -120,7 +120,8 @@
     <Compile Include="Slow\Catalogue.Web\Controllers\Publishing\publishing_controller_specs_for_sign_off.cs" />
     <Compile Include="Slow\Catalogue.Web\Controllers\Publishing\publishing_controller_specs_for_assessment.cs" />
     <Compile Include="Slow\Catalogue.Web\Controllers\Records\records_controllers_tests.cs" />
-    <Compile Include="Slow\Catalogue.Web\Controllers\Search\search_helper_specs.cs" />
+    <Compile Include="Slow\Catalogue.Web\Controllers\Search\record_querier_search_specs.cs" />
+    <Compile Include="Slow\Catalogue.Web\Controllers\Search\record_querier_sort_specs.cs" />
     <Compile Include="Slow\Catalogue.Web\Controllers\Usage\usage_controller_specs.cs" />
     <Compile Include="Slow\Spatial\when_querying_spatial_test_data.cs" />
     <Compile Include="Slow\when_testing_this_application.cs" />
