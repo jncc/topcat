@@ -20,7 +20,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Web.Controllers.Export
             var input = new RecordQueryInputModel
             {
                 Q = "",
-                K = new[] { "vocab.jncc.gov.uk/jncc-category/Seabed Habitat Maps" },
+                F = new FilterOptions{Keywords = new[] { "vocab.jncc.gov.uk/jncc-category/Seabed Habitat Maps" }},
                 P = 0,
                 N = -1
             };

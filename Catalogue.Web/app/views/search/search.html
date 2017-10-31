@@ -14,16 +14,15 @@
                     <span class="glyphicon glyphicon-search"></span>
                 </button>
             </span>
+
+            <span class="input-group-btn">
+                <button ng-click="advanced = !advanced" class="btn btn-default big-button" tc-tip title="Advanced search options">
+                    <span class="glyphicon" ng-class="advanced ? 'glyphicon-chevron-up' : 'glyphicon-chevron-down'"></span>
+                </button>
+            </span>
         </div>
 
     </div>
-    <!--    <div class="col-md-1">-->
-    <!--        <div class="form-inline">-->
-    <!--            <button ng-click="advanced = !advanced" class="btn btn-default big-button" tc-tip title="Advanced search options">-->
-    <!--                <span class="glyphicon" ng-class="advanced ? 'glyphicon-chevron-up' : 'glyphicon-chevron-down'"></span>-->
-    <!--            </button>-->
-    <!--        </div>-->
-    <!--    </div>-->
     <div class="col-sm-2">
         <div class="form-inline">
             <a href="#editor/00000000-0000-0000-0000-000000000000" class="btn btn-default big-button" tc-tip title="Add a record">
@@ -39,7 +38,7 @@
             <span ng-bind-html="k.value | highlight:query.q"></span>
         </span>
     </span>
-    <button ng-show="!result.query.k[0]" class="search-open-vocabulator btn btn-sm btn-dialogue" tc-tip title="Add tags (keywords) to query" ng-click="openVocabulator()">
+    <button ng-show="!result.query.f.keywords[0]" class="search-open-vocabulator btn btn-sm btn-dialogue" tc-tip title="Add tags (keywords) to query" ng-click="openVocabulator()">
         &bull;&bull;&bull;
     </button>
 </div>
@@ -62,11 +61,11 @@
             </span>
             {{result.total || 0}} records
             <!-- <span ng-show="result.speed">in {{(result.speed / 1000) | number:2}} seconds</span>-->
-            <span ng-show="result.query.k[0]">
+            <span ng-show="result.query.f.keywords[0]">
                 <span class="search-results-header-tagged">
                     tagged
                     <span></span>
-                    <span tc-tag ng-repeat="s in result.query.k" ng-init="k = keywordFromString(s)">
+                    <span tc-tag ng-repeat="s in result.query.f.keywords" ng-init="k = keywordFromString(s)">
                         {{k.value}}
                         <span class="glyphicon glyphicon-remove" ng-click="removeKeywordFromQuery(k)" tc-tip title="Remove"></span>
                     </span>
@@ -78,7 +77,7 @@
 
             <span ng-show="result.query.q">
                 matching '<b>{{result.query.q}}</b>'
-                <span ng-show="result.query.k[0]" class="glyphicon glyphicon-remove" ng-click="query.q = ''" tc-tip title="Remove"></span>
+                <span ng-show="result.query.f.keywords[0]" class="glyphicon glyphicon-remove" ng-click="query.q = ''" tc-tip title="Remove"></span>
             </span>
         </div>
 
@@ -179,7 +178,7 @@
 
 
 
-<div ng-show="!query.q && !query.k[0] && !app.starting" class="fade-in-with-delay">
+<div ng-show="!query.q && !query.f.keywords[0] && !app.starting" class="fade-in-with-delay">
     <div class="row">
         <div class="col-md-8 welcome">
             <h1>

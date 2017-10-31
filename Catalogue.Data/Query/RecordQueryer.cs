@@ -9,10 +9,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
-using Lucene.Net.Analysis.Standard;
-using Lucene.Net.QueryParsers;
-using static Catalogue.Data.Query.RecordQueryInputModel.SortOptions;
-using Version = Lucene.Net.Util.Version;
+using static Catalogue.Data.Query.SortOptions;
 
 namespace Catalogue.Data.Query
 {
@@ -80,18 +77,31 @@ namespace Catalogue.Data.Query
                     .Search(r => r.KeywordsN, input.Q, 1, SearchOptions.Or);
             }
 
-            if (input.K != null && input.K.Any())
+            if (input.F != null)
             {
-                foreach (var keyword in ParameterHelper.ParseMetadataKeywords(input.K))
+                if (input.F.Keywords != null && input.F.Keywords.Any())
                 {
-                    string k = keyword.Vocab + "/" + keyword.Value;
-                    query = query.Where(r => r.Keywords.Contains(k));
+                    foreach (var keyword in ParameterHelper.ParseMetadataKeywords(input.F.Keywords))
+                    {
+                        string k = keyword.Vocab + "/" + keyword.Value;
+                        query = query.Where(r => r.Keywords.Contains(k));
+                    }
                 }
-            }
 
-            if (input.D != null)
-            {
-                query = query.Where(r => r.MetadataDate >= input.D);
+                if (input.F.DataFormats != null && input.F.DataFormats.Any())
+                {
+                    var formatTypes = new List<string>();
+                    foreach (var format in input.F.DataFormats)
+                    {
+                        formatTypes.AddRange(DataFormats.GetFormatsForGroup(format));
+                    }
+                    query = query.Where(r => r.DataFormat.In(formatTypes));
+                }
+
+                if (input.F.MetadataDate != null)
+                {
+                    query = query.Where(r => r.MetadataDate >= input.F.MetadataDate);
+                }
             }
 
             var recordQuery = query.As<Record>(); // ravendb method to project from the index result type to the actual document type

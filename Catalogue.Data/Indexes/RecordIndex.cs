@@ -2,6 +2,7 @@
 using System.Linq;
 using Catalogue.Data.Analyzers;
 using Catalogue.Data.Model;
+using Catalogue.Gemini.DataFormats;
 using Lucene.Net.Analysis;
 using Lucene.Net.Analysis.Standard;
 using Raven.Abstractions.Indexing;
@@ -23,6 +24,7 @@ namespace Catalogue.Data.Indexes
             public string[] Keywords     { get; set; }
             public string[] KeywordsN    { get; set; }
             public DateTime MetadataDate { get; set; }
+            public string   DataFormat   { get; set; }
             public string   Target       { get; set; }
         }
 
@@ -40,6 +42,7 @@ namespace Catalogue.Data.Indexes
                                      Keywords = record.Gemini.Keywords.Select(k => k.Vocab + "/" + k.Value), // for filtering exactly on keywords
                                      KeywordsN = record.Gemini.Keywords.Select(k => k.Value), // for full-text search matching on keywords
                                      MetadataDate = record.Gemini.MetadataDate,
+                                     DataFormat = record.Gemini.DataFormat,
                                      Gemini_DatasetReferenceDate = record.Gemini.DatasetReferenceDate
                              };
 

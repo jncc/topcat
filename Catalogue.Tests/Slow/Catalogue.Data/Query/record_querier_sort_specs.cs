@@ -1,4 +1,5 @@
-﻿using Catalogue.Data.Model;
+﻿using System.Linq;
+using Catalogue.Data.Model;
 using Catalogue.Data.Query;
 using Catalogue.Data.Test;
 using Catalogue.Gemini.Helpers;
@@ -8,10 +9,8 @@ using Catalogue.Utilities.Collections;
 using FluentAssertions;
 using NUnit.Framework;
 using Raven.Client;
-using System.Linq;
-using static Catalogue.Data.Query.RecordQueryInputModel.SortOptions;
 
-namespace Catalogue.Tests.Slow.Catalogue.Web.Controllers.Search
+namespace Catalogue.Tests.Slow.Catalogue.Data.Query
 {
     class record_querier_sort_specs
     {
@@ -44,11 +43,10 @@ namespace Catalogue.Tests.Slow.Catalogue.Web.Controllers.Search
                 var input = new RecordQueryInputModel
                 {
                     Q = "birds",
-                    K = null,
+                    F = null,
                     P = 0,
                     N = 25,
-                    D = null,
-                    O = MostRelevant
+                    O = SortOptions.MostRelevant
                 };
 
                 var results = helper.Search(input).Results;
@@ -70,11 +68,10 @@ namespace Catalogue.Tests.Slow.Catalogue.Web.Controllers.Search
                 var input = new RecordQueryInputModel
                 {
                     Q = "",
-                    K = null,
+                    F = null,
                     P = 0,
                     N = 25,
-                    D = null,
-                    O = TitleAZ
+                    O = SortOptions.TitleAZ
                 };
 
                 var results = helper.Search(input).Results;
@@ -97,11 +94,10 @@ namespace Catalogue.Tests.Slow.Catalogue.Web.Controllers.Search
                 var input = new RecordQueryInputModel
                 {
                     Q = "",
-                    K = null,
+                    F = null,
                     P = 0,
                     N = 25,
-                    D = null,
-                    O = TitleZA
+                    O = SortOptions.TitleZA
                 };
 
                 var results = helper.Search(input).Results;
@@ -124,11 +120,10 @@ namespace Catalogue.Tests.Slow.Catalogue.Web.Controllers.Search
                 var input = new RecordQueryInputModel
                 {
                     Q = "",
-                    K = null,
+                    F = null,
                     P = 0,
                     N = 25,
-                    D = null,
-                    O = NewestToOldest
+                    O = SortOptions.NewestToOldest
                 };
 
                 var results = helper.Search(input).Results;
@@ -151,11 +146,10 @@ namespace Catalogue.Tests.Slow.Catalogue.Web.Controllers.Search
                 var input = new RecordQueryInputModel
                 {
                     Q = "",
-                    K = null,
+                    F = null,
                     P = 0,
                     N = 25,
-                    D = null,
-                    O = OldestToNewest
+                    O = SortOptions.OldestToNewest
                 };
 
                 var results = helper.Search(input).Results;
@@ -187,11 +181,10 @@ namespace Catalogue.Tests.Slow.Catalogue.Web.Controllers.Search
                 var input = new RecordQueryInputModel
                 {
                     Q = "sea",
-                    K = null,
+                    F = null,
                     P = 0,
                     N = 25,
-                    D = null,
-                    O = TitleAZ
+                    O = SortOptions.TitleAZ
                 };
 
                 var results = helper.Search(input).Results;
@@ -203,11 +196,10 @@ namespace Catalogue.Tests.Slow.Catalogue.Web.Controllers.Search
                 input = new RecordQueryInputModel
                 {
                     Q = "sea",
-                    K = null,
+                    F = null,
                     P = 0,
                     N = 25,
-                    D = null,
-                    O = TitleZA
+                    O = SortOptions.TitleZA
                 };
 
                 results = helper.Search(input).Results;

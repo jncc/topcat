@@ -1,99 +1,15 @@
-﻿using Catalogue.Data.Model;
+﻿using System.Linq;
 using Catalogue.Data.Query;
 using Catalogue.Data.Test;
-using Catalogue.Gemini.Helpers;
-using Catalogue.Gemini.Templates;
 using Catalogue.Utilities.Clone;
-using Catalogue.Utilities.Collections;
 using FluentAssertions;
 using NUnit.Framework;
 using Raven.Client;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using Catalogue.Gemini.Model;
-using static Catalogue.Data.Query.RecordQueryInputModel.SortOptions;
 
-namespace Catalogue.Tests.Slow.Catalogue.Web.Controllers.Search
+namespace Catalogue.Tests.Slow.Catalogue.Data.Query
 {
-    class record_querier_search_specs : DatabaseTestFixture
+    class record_querier_search_specs
     {
-        private Record SimpleRecord()
-        {
-            return new Record
-            {
-                Path = @"X:\some\path",
-                Gemini = Library.Blank().With(m =>
-                {
-                    m.Title = "Some title";
-                    m.Keywords = new StringPairList
-                            {
-                                { "http://vocab.jncc.gov.uk/jncc-domain", "Example Domain" },
-                                { "http://vocab.jncc.gov.uk/jncc-category", "Example Category" },
-                            }
-                        .ToKeywordList();
-                }),
-            };
-        }
-
-        [Test]
-        public void keyword_search_test()
-        {
-            var helper = new RecordQueryer(Db);
-
-            var input = new RecordQueryInputModel
-                {
-                    Q = "",
-                    K = new [] { "vocab.jncc.gov.uk/jncc-category/Seabed Habitat Maps" },
-                    P = 0,
-                    N = 25,
-                    D = null,
-                    O = 0
-                };
-
-            helper.Search(input).Results.Count().Should().Be(25);
-        }
-
-        [Test]
-        public void search_by_metadata_date()
-        {
-            //Save some data
-            using (var db1 = ReusableDocumentStore.OpenSession())
-            {
-                var record = new Record
-                {
-                    Path = @"X:\some\path",
-                    Gemini = Library.Blank().With(m =>
-                    {
-                        m.Title = "Some title";
-                        m.MetadataDate = DateTime.Parse("2020-01-01");
-                    }),
-                    Footer = new Footer()
-                };
-
-                Db.Store(record);
-                Db.SaveChanges();
-            }
-
-            using (var db2 = ReusableDocumentStore.OpenSession())
-            {
-                var helper = new RecordQueryer(db2);
-
-                var input = new RecordQueryInputModel
-                {
-                    Q = "",
-                    K = null,
-                    P = 0,
-                    N = 25,
-                    D = DateTime.Parse("2020-01-01"),
-                    O = 0
-                };
-
-                helper.Query(input).Count().Should().Be(1);
-
-            }
-        }
-
         [Test]
         public void test_simple_search()
         {
@@ -101,15 +17,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Web.Controllers.Search
             {
                 var helper = new RecordQueryer(db);
 
-                var input = new RecordQueryInputModel
-                {
-                    Q = "sea",
-                    K = null,
-                    P = 0,
-                    N = 25,
-                    D = null,
-                    O = MostRelevant
-                };
+                var input = QueryTestHelper.EmptySearchInput().With(x => x.Q = "sea");
 
                 var results = helper.Search(input).Results;
                 results.Count.Should().Be(4);
@@ -128,15 +36,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Web.Controllers.Search
             {
                 var helper = new RecordQueryer(db);
 
-                var input = new RecordQueryInputModel
-                {
-                    Q = "sea 34",
-                    K = null,
-                    P = 0,
-                    N = 25,
-                    D = null,
-                    O = MostRelevant
-                };
+                var input = QueryTestHelper.EmptySearchInput().With(x => x.Q = "sea 34");
 
                 var results = helper.Search(input).Results;
                 results.Count.Should().Be(3);
@@ -154,15 +54,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Web.Controllers.Search
             {
                 var helper = new RecordQueryer(db);
 
-                var input = new RecordQueryInputModel
-                {
-                    Q = "coastal bird",
-                    K = null,
-                    P = 0,
-                    N = 25,
-                    D = null,
-                    O = MostRelevant
-                };
+                var input = QueryTestHelper.EmptySearchInput().With(x => x.Q = "coastal bird");
 
                 var results = helper.Search(input).Results;
                 results.Count.Should().Be(1);
@@ -177,15 +69,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Web.Controllers.Search
             {
                 var helper = new RecordQueryer(db);
 
-                var input = new RecordQueryInputModel
-                {
-                    Q = @"""coastal""",
-                    K = null,
-                    P = 0,
-                    N = 25,
-                    D = null,
-                    O = MostRelevant
-                };
+                var input = QueryTestHelper.EmptySearchInput().With(x => x.Q = @"""coastal""");
 
                 var results = helper.Search(input).Results;
                 results.Count.Should().Be(1);
@@ -200,15 +84,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Web.Controllers.Search
             {
                 var helper = new RecordQueryer(db);
 
-                var input = new RecordQueryInputModel
-                {
-                    Q = @"""sea""",
-                    K = null,
-                    P = 0,
-                    N = 25,
-                    D = null,
-                    O = MostRelevant
-                };
+                var input = QueryTestHelper.EmptySearchInput().With(x => x.Q = @"""sea""");
 
                 var results = helper.Search(input).Results;
                 results.Count.Should().Be(3);
@@ -228,11 +104,10 @@ namespace Catalogue.Tests.Slow.Catalogue.Web.Controllers.Search
                 var input = new RecordQueryInputModel
                 {
                     Q = @"""birds""",
-                    K = null,
+                    F = null,
                     P = 0,
                     N = 25,
-                    D = null,
-                    O = TitleAZ
+                    O = SortOptions.TitleAZ
                 };
 
                 var results = helper.Search(input).Results;
@@ -249,15 +124,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Web.Controllers.Search
             {
                 var helper = new RecordQueryer(db);
 
-                var input = new RecordQueryInputModel
-                {
-                    Q = @"""coast""",
-                    K = null,
-                    P = 0,
-                    N = 25,
-                    D = null,
-                    O = MostRelevant
-                };
+                var input = QueryTestHelper.EmptySearchInput().With(x => x.Q = @"""coast""");
 
                 var results = helper.Search(input).Results;
                 results.Count.Should().Be(0);
@@ -271,15 +138,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Web.Controllers.Search
             {
                 var helper = new RecordQueryer(db);
 
-                var input = new RecordQueryInputModel
-                {
-                    Q = @"""coastal birds""",
-                    K = null,
-                    P = 0,
-                    N = 25,
-                    D = null,
-                    O = MostRelevant
-                };
+                var input = QueryTestHelper.EmptySearchInput().With(x => x.Q = @"""coastal birds""");
 
                 var results = helper.Search(input).Results;
                 results.Count.Should().Be(1);
@@ -294,15 +153,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Web.Controllers.Search
             {
                 var helper = new RecordQueryer(db);
 
-                var input = new RecordQueryInputModel
-                {
-                    Q = "BIRDS",
-                    K = null,
-                    P = 0,
-                    N = 25,
-                    D = null,
-                    O = TitleAZ
-                };
+                var input = QueryTestHelper.EmptySearchInput().With(x => { x.Q = "BIRDS"; x.O = SortOptions.TitleAZ; });
 
                 var results = helper.Search(input).Results;
                 results.Count.Should().Be(3);
@@ -319,15 +170,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Web.Controllers.Search
             {
                 var helper = new RecordQueryer(db);
 
-                var input = new RecordQueryInputModel
-                {
-                    Q = @"""BIRDS""",
-                    K = null,
-                    P = 0,
-                    N = 25,
-                    D = null,
-                    O = TitleAZ
-                };
+                var input = QueryTestHelper.EmptySearchInput().With(x => { x.Q = @"""BIRDS"""; x.O = SortOptions.TitleAZ; });
 
                 var results = helper.Search(input).Results;
                 results.Count.Should().Be(2);
@@ -344,15 +187,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Web.Controllers.Search
             {
                 var helper = new RecordQueryer(db);
 
-                var input = new RecordQueryInputModel
-                {
-                    Q = @"""birds"" ""coastal""",
-                    K = null,
-                    P = 0,
-                    N = 25,
-                    D = null,
-                    O = MostRelevant
-                };
+                var input = QueryTestHelper.EmptySearchInput().With(x => x.Q = @"""birds"" ""coastal""");
 
                 var results = helper.Search(input).Results;
                 results.Count.Should().Be(1);
@@ -367,15 +202,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Web.Controllers.Search
             {
                 var helper = new RecordQueryer(db);
 
-                var input = new RecordQueryInputModel
-                {
-                    Q = @"""birds coastal""",
-                    K = null,
-                    P = 0,
-                    N = 25,
-                    D = null,
-                    O = MostRelevant
-                };
+                var input = QueryTestHelper.EmptySearchInput().With(x => x.Q = @"""birds coastal""");
 
                 var results = helper.Search(input).Results;
                 results.Count.Should().Be(0);
@@ -390,15 +217,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Web.Controllers.Search
             {
                 var helper = new RecordQueryer(db);
 
-                var input = new RecordQueryInputModel
-                {
-                    Q = @"""coastal"" bird",
-                    K = null,
-                    P = 0,
-                    N = 25,
-                    D = null,
-                    O = MostRelevant
-                };
+                var input = QueryTestHelper.EmptySearchInput().With(x => x.Q = @"""coastal"" bird");
 
                 var results = helper.Search(input).Results;
                 results.Count.Should().Be(1);
@@ -412,15 +231,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Web.Controllers.Search
             using (var db = GetDbForSortTests())
             {
                 var helper = new RecordQueryer(db);
-                var input = new RecordQueryInputModel
-                {
-                    Q = "123",
-                    K = null,
-                    P = 0,
-                    N = 25,
-                    D = null,
-                    O = MostRelevant
-                };
+                var input = QueryTestHelper.EmptySearchInput().With(x => x.Q = "123");
                 var results = helper.Search(input).Results;
                 results.Count.Should().Be(3);
                 results.ToList()[0].Title.Should().Be("<b>123</b>4");
@@ -435,15 +246,8 @@ namespace Catalogue.Tests.Slow.Catalogue.Web.Controllers.Search
             using (var db = GetDbForSortTests())
             {
                 var helper = new RecordQueryer(db);
-                var input = new RecordQueryInputModel
-                {
-                    Q = "sea12",
-                    K = null,
-                    P = 0,
-                    N = 25,
-                    D = null,
-                    O = MostRelevant
-                };
+                var input = QueryTestHelper.EmptySearchInput().With(x => x.Q = "sea12");
+
                 var results = helper.Search(input).Results;
                 results.Count.Should().Be(3);
                 results.ToList()[0].Title.Should().Be("<b>sea</b>1234");
@@ -460,12 +264,12 @@ namespace Catalogue.Tests.Slow.Catalogue.Web.Controllers.Search
 
             using (db)
             {
-                var record1 = SimpleRecord().With(m =>
+                var record1 = QueryTestHelper.SimpleRecord().With(m =>
                 {
                     m.Gemini.Title = "marine conservation zone";
                     m.Gemini.Abstract = "population analysis data for zone";
                 });
-                var record2 = SimpleRecord().With(m =>
+                var record2 = QueryTestHelper.SimpleRecord().With(m =>
                 {
                     m.Gemini.Title = "habitat data";
                     m.Gemini.Abstract = "marine conservation analysis data";
@@ -476,43 +280,23 @@ namespace Catalogue.Tests.Slow.Catalogue.Web.Controllers.Search
                 db.SaveChanges();
 
                 var helper = new RecordQueryer(db);
-                var input = new RecordQueryInputModel
-                {
-                    Q = @"""marine conservation""",
-                    K = null,
-                    P = 0,
-                    N = 25,
-                    D = null,
-                    O = MostRelevant
-                };
+
+                var input = QueryTestHelper.EmptySearchInput().With(x => x.Q = @"""marine conservation""");
+
                 var results = helper.Search(input).Results;
                 results.Count.Should().Be(2);
                 results.ToList()[0].Title.Should().Be("<b>marine conservation</b> zone");
                 results.ToList()[1].Title.Should().Be("habitat data");
 
-                input = new RecordQueryInputModel
-                {
-                    Q = @"""analysis data""",
-                    K = null,
-                    P = 0,
-                    N = 25,
-                    D = null,
-                    O = MostRelevant
-                };
+                input = QueryTestHelper.EmptySearchInput().With(x => x.Q = @"""analysis data""");
+                
                 results = helper.Search(input).Results;
                 results.Count.Should().Be(2);
                 results.ToList()[0].Title.Should().Be("marine conservation zone");
                 results.ToList()[1].Title.Should().Be("habitat data");
 
-                input = new RecordQueryInputModel
-                {
-                    Q = @"""population analysis""",
-                    K = null,
-                    P = 0,
-                    N = 25,
-                    D = null,
-                    O = MostRelevant
-                };
+                input = QueryTestHelper.EmptySearchInput().With(x => x.Q = @"""population analysis""");
+
                 results = helper.Search(input).Results;
                 results.Count.Should().Be(1);
                 results.ToList()[0].Title.Should().Be("marine conservation zone");
@@ -524,31 +308,31 @@ namespace Catalogue.Tests.Slow.Catalogue.Web.Controllers.Search
             var store = new InMemoryDatabaseHelper().Create();
             var db = store.OpenSession();
             
-            var record1 = SimpleRecord().With(m =>
+            var record1 = QueryTestHelper.SimpleRecord().With(m =>
             {
                 m.Gemini.Title = "sea";
             });
-            var record2 = SimpleRecord().With(m =>
+            var record2 = QueryTestHelper.SimpleRecord().With(m =>
             {
                 m.Gemini.Title = "seabirds";
             });
-            var record3 = SimpleRecord().With(m =>
+            var record3 = QueryTestHelper.SimpleRecord().With(m =>
             {
                 m.Gemini.Title = "birds";
             });
-            var record4 = SimpleRecord().With(m =>
+            var record4 = QueryTestHelper.SimpleRecord().With(m =>
             {
                 m.Gemini.Title = "coastal birds";
             });
-            var record5 = SimpleRecord().With(m =>
+            var record5 = QueryTestHelper.SimpleRecord().With(m =>
             {
                 m.Gemini.Title = "1234";
             });
-            var record6 = SimpleRecord().With(m =>
+            var record6 = QueryTestHelper.SimpleRecord().With(m =>
             {
                 m.Gemini.Title = "sea1234";
             });
-            var record7 = SimpleRecord().With(m =>
+            var record7 = QueryTestHelper.SimpleRecord().With(m =>
             {
                 m.Gemini.Title = "sea 1234";
             });

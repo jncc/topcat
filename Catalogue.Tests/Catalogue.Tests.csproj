@@ -85,6 +85,7 @@
     <Compile Include="Explicit\Catalogue.Data\Export\octonaughts_lets_do_this.cs" />
     <Compile Include="Explicit\Catalogue.Data\Indexes\my_record_index_tests.cs" />
     <Compile Include="Explicit\Catalogue.Import\import_runner.cs" />
+    <Compile Include="Slow\Catalogue.Data\Query\QueryTestHelper.cs" />
     <Compile Include="Slow\Catalogue.Robot\opendataxmlhelper_specs.cs" />
     <Compile Include="Explicit\Catalogue.Robot\try_out_link_checker.cs" />
     <Compile Include="Explicit\Catalogue.Robot\try_out_stuff.cs" />
@@ -105,7 +106,6 @@
     <Compile Include="Slow\Catalogue.Data\Indexes\records_with_duplicate_title_checker_index_tests.cs" />
     <Compile Include="Slow\Catalogue.Data\Indexes\records_with_open_data_publication_info_index_specs.cs" />
     <Compile Include="Slow\Catalogue.Data\Indexes\records_search_index_specs.cs" />
-    <Compile Include="Slow\Catalogue.Data\Query\record_queryer_specs.cs" />
     <Compile Include="Slow\Catalogue.Data\Seed\when_seeding.cs" />
     <Compile Include="Slow\Catalogue.Data\Versioning\versioning_specs.cs" />
     <Compile Include="Slow\Catalogue.Data\Write\open_data_publishing_service_specs.cs" />
@@ -120,8 +120,9 @@
     <Compile Include="Slow\Catalogue.Web\Controllers\Publishing\publishing_controller_specs_for_sign_off.cs" />
     <Compile Include="Slow\Catalogue.Web\Controllers\Publishing\publishing_controller_specs_for_assessment.cs" />
     <Compile Include="Slow\Catalogue.Web\Controllers\Records\records_controllers_tests.cs" />
-    <Compile Include="Slow\Catalogue.Web\Controllers\Search\record_querier_search_specs.cs" />
-    <Compile Include="Slow\Catalogue.Web\Controllers\Search\record_querier_sort_specs.cs" />
+    <Compile Include="Slow\Catalogue.Data\Query\record_querier_filter_specs.cs" />
+    <Compile Include="Slow\Catalogue.Data\Query\record_querier_search_specs.cs" />
+    <Compile Include="Slow\Catalogue.Data\Query\record_querier_sort_specs.cs" />
     <Compile Include="Slow\Catalogue.Web\Controllers\Usage\usage_controller_specs.cs" />
     <Compile Include="Slow\Spatial\when_querying_spatial_test_data.cs" />
     <Compile Include="Slow\when_testing_this_application.cs" />
