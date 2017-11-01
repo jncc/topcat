@@ -101,7 +101,7 @@ namespace Catalogue.Data.Query
                     }
 
                     if (input.F.DataFormats.Contains("Other"))
-                        query = query.Where(r => r.DataFormat.In(formatTypes) || r.DataFormat.Equals(null));
+                        query = query.Where(r => r.DataFormat.In(formatTypes) || r.DataFormat.Equals(null) || r.DataFormat.Equals(""));
                     else
                         query = query.Where(r => r.DataFormat.In(formatTypes));
                 }
