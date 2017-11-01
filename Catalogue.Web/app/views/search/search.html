@@ -27,7 +27,7 @@
             <div class="well well-sm">
                 <h4>Advanced search options</h4>
                 <form>
-                    <label ng-repeat="f in dataFormatOptions">
+                    <label tc-tip title="Filter by data format (multiple choice)" ng-repeat="f in dataFormatOptions">
                         <input type="checkbox" ng-checked="query.f.dataFormats.includes(f)" ng-click="addOrRemoveDataFormat(f)"/> {{f}}&nbsp;&nbsp;
                     </label>
                 </form>
