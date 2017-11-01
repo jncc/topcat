@@ -70,16 +70,16 @@ namespace Catalogue.Data.Query
             if (input.Q.IsNotBlank())
             {
                 query = query
-                    .Search(r => r.Title, input.Q, 10, SearchOptions.Or, EscapeQueryOptions.RawQuery)
-                    .Search(r => r.TitleN, input.Q, 1, SearchOptions.Or)
-                    .Search(r => r.Abstract, input.Q, 1, SearchOptions.Or, EscapeQueryOptions.RawQuery)
-                    .Search(r => r.AbstractN, input.Q, 1, SearchOptions.Or)
-                    .Search(r => r.KeywordsN, input.Q, 1, SearchOptions.Or);
+                    .Search(r => r.Title, input.Q, 10, SearchOptions.Guess, EscapeQueryOptions.RawQuery)
+                    .Search(r => r.TitleN, input.Q)
+                    .Search(r => r.Abstract, input.Q, 1, SearchOptions.Guess, EscapeQueryOptions.RawQuery)
+                    .Search(r => r.AbstractN, input.Q)
+                    .Search(r => r.KeywordsN, input.Q);
             }
 
             if (input.F != null)
             {
-                if (input.F.Keywords != null && input.F.Keywords.Any())
+                if (input.F.Keywords != null && input.F.Keywords.Any() && input.F.Keywords[0].IsNotBlank())
                 {
                     foreach (var keyword in ParameterHelper.ParseMetadataKeywords(input.F.Keywords))
                     {

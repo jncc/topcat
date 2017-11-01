@@ -17,7 +17,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Data.Query
     {
         object[] KeywordTestCases =
         {
-            new object[] { "", 0 },
+            new object[] { "", 224 },
             new object[] { "vocab.jncc.gov.uk/human-activity/Extraction ", 0 },
             new object[] { "vocab.jncc.gov.uk/human-activity/Extraction (abstraction)", 0 },
             new object[] { "vocab.jncc.gov.uk/human-activity/Extraction – Water (abstraction)", 1 }, // note unicode dash!!
@@ -98,7 +98,30 @@ namespace Catalogue.Tests.Slow.Catalogue.Data.Query
             using(var db = GetDbForFilterTests())
             {
                 var queryer = new RecordQueryer(db);
-                var input = QueryTestHelper.EmptySearchInput().With(x => x.F = new FilterOptions { DataFormats = new List<DataFormatGroups> { Geospatial } });
+                var input = QueryTestHelper.EmptySearchInput().With(x =>
+                {
+                    x.Q = "record";
+                    x.F = new FilterOptions {DataFormats = new[] {Geospatial}};
+                });
+
+                var results = queryer.Search(input).Results;
+                results.Count.Should().Be(2);
+                results.Any(r => r.Title == "geospatial <b>record</b> 1").Should().BeTrue();
+                results.Any(r => r.Title == "geospatial <b>record</b> 2").Should().BeTrue();
+            }
+        }
+
+        [Test]
+        public void filter_by_format_test_with_no_query()
+        {
+            using (var db = GetDbForFilterTests())
+            {
+                var queryer = new RecordQueryer(db);
+                var input = QueryTestHelper.EmptySearchInput().With(x =>
+                {
+                    x.Q = "";
+                    x.F = new FilterOptions { DataFormats = new[] { Geospatial } };
+                });
 
                 var results = queryer.Search(input).Results;
                 results.Count.Should().Be(2);
@@ -113,12 +136,16 @@ namespace Catalogue.Tests.Slow.Catalogue.Data.Query
             using (var db = GetDbForFilterTests())
             {
                 var queryer = new RecordQueryer(db);
-                var input = QueryTestHelper.EmptySearchInput().With(x => x.F = new FilterOptions { DataFormats = new List<DataFormatGroups> { Spreadsheet, Database } });
+                var input = QueryTestHelper.EmptySearchInput().With(x =>
+                {
+                    x.Q = "record";
+                    x.F = new FilterOptions {DataFormats = new[] {Spreadsheet, Database}};
+                });
 
                 var results = queryer.Search(input).Results;
                 results.Count.Should().Be(2);
-                results.Any(r => r.Title == "spreadsheet record").Should().BeTrue();
-                results.Any(r => r.Title == "database record").Should().BeTrue();
+                results.Any(r => r.Title == "spreadsheet <b>record</b>").Should().BeTrue();
+                results.Any(r => r.Title == "database <b>record</b>").Should().BeTrue();
             }
         }
 
@@ -128,7 +155,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Data.Query
             using (var db = GetDbForFilterTests())
             {
                 var queryer = new RecordQueryer(db);
-                var input = QueryTestHelper.EmptySearchInput().With(x => x.F = new FilterOptions { DataFormats = new List<DataFormatGroups>() });
+                var input = QueryTestHelper.EmptySearchInput().With(x => x.F = new FilterOptions { DataFormats = new DataFormatGroups[0]});
 
                 var results = queryer.Search(input).Results;
                 results.Count.Should().Be(4);

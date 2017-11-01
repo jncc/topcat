@@ -20,9 +20,26 @@
                     <span class="glyphicon" ng-class="advanced ? 'glyphicon-chevron-up' : 'glyphicon-chevron-down'"></span>
                 </button>
             </span>
+            
         </div>
-
+        
+        <div class="search-advanced" ng-show="advanced">
+            <div class="well well-sm">
+                <h4>Advanced search options</h4>
+                <form>
+                    <label>Database <input type="checkbox" ng-click="addOrRemoveDataFormat(0)" /></label>
+                    <label>Spreadsheet <input type="checkbox" ng-click="addOrRemoveDataFormat(1)" /></label>
+                    <label>Documents <input type="checkbox" ng-click="addOrRemoveDataFormat(2)" /></label>
+                    <label>Geospatial <input type="checkbox" ng-click="addOrRemoveDataFormat(3)" /></label>
+                    <label>Image <input type="checkbox" ng-click="addOrRemoveDataFormat(4)" /></label>
+                    <label>Audio <input type="checkbox" ng-click="addOrRemoveDataFormat(5)" /></label>
+                    <label>Video <input type="checkbox" ng-click="addOrRemoveDataFormat(6)" /></label>
+                    <label>Other <input type="checkbox" ng-click="addOrRemoveDataFormat(7)" /></label>
+                </form>
+            </div>
+        </div>
     </div>
+
     <div class="col-sm-2">
         <div class="form-inline">
             <a href="#editor/00000000-0000-0000-0000-000000000000" class="btn btn-default big-button" tc-tip title="Add a record">
@@ -42,14 +59,6 @@
         &bull;&bull;&bull;
     </button>
 </div>
-
-<!--<div class="row search-advanced" ng-show="advanced">-->
-<!--    <div class="col-md-7 col-md-offset-2">-->
-<!--        <div class="well well-sm">-->
-<!--            advanced search options might appear here...?-->
-<!--        </div>-->
-<!--    </div>-->
-<!--</div>-->
 
 <div ng-show="result.query" class="search-results-header well well-sm">
 

@@ -16,7 +16,7 @@ namespace Catalogue.Data.Query
         /// <summary>
         /// The data formats to restrict the query to.
         /// </summary>
-        public List<DataFormatGroups> DataFormats { get; set; }
+        public DataFormatGroups[] DataFormats { get; set; }
 
         /// <summary>
         /// The earliest metadata date from which records should be returned.

@@ -25,13 +25,11 @@
             #$location.search('n', $scope.query.n)
         
         queryRecords = (query) ->
-            console.log query
-            $http.get('../api/search?' + $.param query, true)
+            $http.get('../api/search?' + $.param query)
                 .success (result) ->
                     # don't overwrite with earlier but slower queries!
-                    console.log query
-                    console.log result.query
-                    if angular.equals result.query, query
+                    #console.log query
+                    if moreOrLessTheSame result.query, query
                         $scope.result = result
                 .error (e) -> $scope.notifications.add 'Oops! ' + e.message
         
@@ -43,11 +41,22 @@
             else
                 $q["defer"]() # return an empty promise https://github.com/madskristensen/WebCompiler/issues/202
 
+        moreOrLessTheSame = (resultQuery, query) ->
+            # ugly hack to get empty array and null to be the same because on the UI side the array is empty, but it's passed to the API as null
+            groomedQuery = {}
+            angular.copy query, groomedQuery
+            if groomedQuery.f
+                if groomedQuery.f.dataFormats and groomedQuery.f.dataFormats.length is 0
+                    groomedQuery.f.dataFormats = null
+                if groomedQuery.f.keywords and groomedQuery.f.keywords.length is 0
+                    groomedQuery.f.keywords = null
+            return angular.equals resultQuery, groomedQuery
+
         # called whenever the $scope.query object changes
         # (also called explicitly from search button)
         $scope.doSearch = (query) ->
             updateUrl query
-            if query.q or query.f.keywords[0]
+            if query.q or query.f and query.f.keywords and query.f.keywords[0]
                 $scope.busy.start()
                 keywordsPromise = queryKeywords query
                 recordsPromise  = queryRecords query
@@ -78,7 +87,8 @@
             o = $location.search() # angular api for getting the querystring as an object
             # when there is exactly one keyword, angular's $location.search does not return an array
             # so fix it up (make k an array of one keyword)
-            o.f.keywords = [o.f.keywords] if o.f and o.f.keywords and not $.isArray o.f.keywords
+            if o.f
+                o.f.keywords = [o.f.keywords] if o.f.keywords and not $.isArray o.f.keywords
             o.p = o.p * 1 if o.p
             $.extend {}, blankQuery(), o
 
@@ -100,7 +110,18 @@
         # function to get the current querystring in the view (for constructing export url)
         $scope.querystring = -> $.param $scope.query, true # true means traditional serialization (no square brackets for arrays)
 
+        $scope.addOrRemoveDataFormat = (dataFormat) ->
+            if !$scope.query.f.dataFormats
+                $scope.query.f.dataFormats = []
+
+            if $scope.query.f.dataFormats.indexOf(dataFormat) != -1
+                $scope.query.f.dataFormats.splice($scope.query.f.dataFormats.indexOf(dataFormat), 1)
+            else
+                $scope.query.f.dataFormats.push(dataFormat)
+
         $scope.addKeywordsToQuery = (keywords) ->
+            if !$scope.query.f.keywords
+                $scope.query.f.keywords = []
             [keywordsAlreadyInQuery, keywordsToAddToQuery] = _(keywords)
                 .map $scope.keywordToString
                 .partition (k) -> k in $scope.query.f.keywords
@@ -110,7 +131,7 @@
             $scope.notifications.add "Your query already contains the '#{ $scope.keywordFromString(k).value }' keyword" for k in keywordsAlreadyInQuery
             # for usability, when keywords are added, clear the rest of the current query
             if keywordsToAddToQuery.length
-                $scope.query = angular.extend {}, blankQuery(), { 'f.keywords': $scope.query.f.keywords }
+                $scope.query = _.merge {}, blankQuery(), { 'f': $scope.query.f }
                 
         $scope.removeKeywordFromQuery = (keyword) ->
             s = $scope.keywordToString keyword
