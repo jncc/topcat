@@ -88,14 +88,22 @@ namespace Catalogue.Data.Query
                     }
                 }
 
-                if (input.F.DataFormats != null && input.F.DataFormats.Any())
+                if (input.F.DataFormats != null && input.F.DataFormats.Any() && input.F.DataFormats[0].IsNotBlank())
                 {
                     var formatTypes = new List<string>();
                     foreach (var format in input.F.DataFormats)
                     {
-                        formatTypes.AddRange(DataFormats.GetFormatsForGroup(format));
+                        var formatTypesList = DataFormats.Known.Find(x => x.Name.Equals(format)).Formats;
+                        foreach (var formatType in formatTypesList)
+                        {
+                            formatTypes.Add(formatType.Name);
+                        }
                     }
-                    query = query.Where(r => r.DataFormat.In(formatTypes));
+
+                    if (input.F.DataFormats.Contains("Other"))
+                        query = query.Where(r => r.DataFormat.In(formatTypes) || r.DataFormat.Equals(null));
+                    else
+                        query = query.Where(r => r.DataFormat.In(formatTypes));
                 }
 
                 if (input.F.MetadataDate != null)

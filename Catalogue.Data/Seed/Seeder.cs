@@ -576,7 +576,7 @@ namespace Catalogue.Data.Seed
 
             foreach (var g in DataFormats.Known)
             {
-                string n = g.Name.ToLower();
+                string n = g.Name.ToString().ToLower();
 
                 var record = MakeExampleSeedRecord().With(r =>
                     {

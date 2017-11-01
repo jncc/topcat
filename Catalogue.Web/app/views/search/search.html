@@ -27,14 +27,9 @@
             <div class="well well-sm">
                 <h4>Advanced search options</h4>
                 <form>
-                    <label>Database <input type="checkbox" ng-click="addOrRemoveDataFormat(0)" /></label>
-                    <label>Spreadsheet <input type="checkbox" ng-click="addOrRemoveDataFormat(1)" /></label>
-                    <label>Documents <input type="checkbox" ng-click="addOrRemoveDataFormat(2)" /></label>
-                    <label>Geospatial <input type="checkbox" ng-click="addOrRemoveDataFormat(3)" /></label>
-                    <label>Image <input type="checkbox" ng-click="addOrRemoveDataFormat(4)" /></label>
-                    <label>Audio <input type="checkbox" ng-click="addOrRemoveDataFormat(5)" /></label>
-                    <label>Video <input type="checkbox" ng-click="addOrRemoveDataFormat(6)" /></label>
-                    <label>Other <input type="checkbox" ng-click="addOrRemoveDataFormat(7)" /></label>
+                    <label ng-repeat="f in dataFormatOptions">
+                        <input type="checkbox" ng-checked="query.f.dataFormats.includes(f)" ng-click="addOrRemoveDataFormat(f)"/> {{f}}&nbsp;&nbsp;
+                    </label>
                 </form>
             </div>
         </div>
@@ -88,22 +83,20 @@
                 matching '<b>{{result.query.q}}</b>'
                 <span ng-show="result.query.f.keywords[0]" class="glyphicon glyphicon-remove" ng-click="query.q = ''" tc-tip title="Remove"></span>
             </span>
+
+            <span ng-show="result.query.f.dataFormats[0]">
+                <span>
+                    filtered by 
+                    <span ng-repeat="f in result.query.f.dataFormats">
+                        <b>{{f}}</b>
+                        <span ng-show="result.query.f.dataFormats[0]" class="glyphicon glyphicon-remove" ng-click="addOrRemoveDataFormat(f)" tc-tip title="Remove"></span>
+                    </span>
+                </span>
+            </span>
         </div>
 
         <!-- results view / export buttons -->
-        <div class="layout-col" ng-show="result.total > 0" style="text-align: right;">
-            <div class="search-results-sort-dropdown btn-group">
-                <button type="button" class="btn btn-white dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" tc-tip title="Sort">
-                    {{sortOptions[query.o]}} <span class="pull-right"><span class="caret"></span></span>
-                </button>
-                <ul class="dropdown-menu dropdown-menu-right" role="menu">
-                    <li tc-tip="left" title="Gemini Title, Abstract, and Keywords"><a ng-click="query.o = 0; query.p = 0">{{sortOptions[0]}}</a></li>
-                    <li tc-tip="left" title="Gemini Title"><a ng-click="query.o = 1; query.p = 0">{{sortOptions[1]}}</a></li>
-                    <li tc-tip="left" title="Gemini Title"><a ng-click="query.o = 2; query.p = 0">{{sortOptions[2]}}</a></li>
-                    <li tc-tip="left" title="Gemini Published/Revised Date"><a ng-click="query.o = 3; query.p = 0">{{sortOptions[3]}}</a></li>
-                    <li tc-tip="left" title="Gemini Published/Revised Date"><a ng-click="query.o = 4; query.p = 0">{{sortOptions[4]}}</a></li>
-                </ul>
-            </div>
+        <div class="layout-col pull-right" ng-show="result.total > 0">
             <div class="search-results-view-picker btn-group" role="group">
                 <button class="btn big-button" tc-tip title="List view" ng-click="resultsView = 'list'" ng-class="{ 'btn-primary': resultsView == 'list', 'btn-default': resultsView != 'list' }">
                     <span class="glyphicon glyphicon-align-left"></span>
@@ -121,6 +114,18 @@
                     <!--<li class="divider"></li> might be useful-->
                 </ul>
             </div>
+        </div>
+        <div class="layout-col pull-right search-results-sort-dropdown btn-group" ng-show="result.total > 0">
+            <button type="button" class="btn btn-white dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" tc-tip title="Sort">
+                {{sortOptions[query.o]}} <span class="pull-right"><span class="caret"></span></span>
+            </button>
+            <ul class="dropdown-menu dropdown-menu-right" role="menu">
+                <li tc-tip="left" title="Gemini Title, Abstract, and Keywords"><a ng-click="query.o = 0; query.p = 0">{{sortOptions[0]}}</a></li>
+                <li tc-tip="left" title="Gemini Title"><a ng-click="query.o = 1; query.p = 0">{{sortOptions[1]}}</a></li>
+                <li tc-tip="left" title="Gemini Title"><a ng-click="query.o = 2; query.p = 0">{{sortOptions[2]}}</a></li>
+                <li tc-tip="left" title="Gemini Published/Revised Date"><a ng-click="query.o = 3; query.p = 0">{{sortOptions[3]}}</a></li>
+                <li tc-tip="left" title="Gemini Published/Revised Date"><a ng-click="query.o = 4; query.p = 0">{{sortOptions[4]}}</a></li>
+            </ul>
         </div>
     </div>
 

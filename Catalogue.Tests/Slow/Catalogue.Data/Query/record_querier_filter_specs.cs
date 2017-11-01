@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using Catalogue.Data.Model;
+﻿using Catalogue.Data.Model;
 using Catalogue.Data.Query;
 using Catalogue.Data.Test;
 using Catalogue.Gemini.Templates;
@@ -9,7 +6,8 @@ using Catalogue.Utilities.Clone;
 using FluentAssertions;
 using NUnit.Framework;
 using Raven.Client;
-using static Catalogue.Data.Query.DataFormatGroups;
+using System;
+using System.Linq;
 
 namespace Catalogue.Tests.Slow.Catalogue.Data.Query
 {
@@ -17,7 +15,6 @@ namespace Catalogue.Tests.Slow.Catalogue.Data.Query
     {
         object[] KeywordTestCases =
         {
-            new object[] { "", 224 },
             new object[] { "vocab.jncc.gov.uk/human-activity/Extraction ", 0 },
             new object[] { "vocab.jncc.gov.uk/human-activity/Extraction (abstraction)", 0 },
             new object[] { "vocab.jncc.gov.uk/human-activity/Extraction – Water (abstraction)", 1 }, // note unicode dash!!
@@ -51,6 +48,23 @@ namespace Catalogue.Tests.Slow.Catalogue.Data.Query
             };
 
             helper.Search(input).Results.Count().Should().Be(25);
+        }
+
+        [Test]
+        public void blank_keyword_search_test()
+        {
+            var helper = new RecordQueryer(GetDbForFilterTests());
+
+            var input = new RecordQueryInputModel
+            {
+                Q = "",
+                F = new FilterOptions { Keywords = new[] { "" } },
+                P = 0,
+                N = 25,
+                O = 0
+            };
+
+            helper.Search(input).Results.Count.Should().Be(5);
         }
 
         [Test]
@@ -101,7 +115,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Data.Query
                 var input = QueryTestHelper.EmptySearchInput().With(x =>
                 {
                     x.Q = "record";
-                    x.F = new FilterOptions {DataFormats = new[] {Geospatial}};
+                    x.F = new FilterOptions {DataFormats = new[] { "Geospatial" }};
                 });
 
                 var results = queryer.Search(input).Results;
@@ -120,7 +134,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Data.Query
                 var input = QueryTestHelper.EmptySearchInput().With(x =>
                 {
                     x.Q = "";
-                    x.F = new FilterOptions { DataFormats = new[] { Geospatial } };
+                    x.F = new FilterOptions { DataFormats = new[] { "Geospatial" } };
                 });
 
                 var results = queryer.Search(input).Results;
@@ -139,7 +153,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Data.Query
                 var input = QueryTestHelper.EmptySearchInput().With(x =>
                 {
                     x.Q = "record";
-                    x.F = new FilterOptions {DataFormats = new[] {Spreadsheet, Database}};
+                    x.F = new FilterOptions {DataFormats = new[] { "Spreadsheet", "Database" }};
                 });
 
                 var results = queryer.Search(input).Results;
@@ -155,10 +169,47 @@ namespace Catalogue.Tests.Slow.Catalogue.Data.Query
             using (var db = GetDbForFilterTests())
             {
                 var queryer = new RecordQueryer(db);
-                var input = QueryTestHelper.EmptySearchInput().With(x => x.F = new FilterOptions { DataFormats = new DataFormatGroups[0]});
+                var input = QueryTestHelper.EmptySearchInput().With(x => x.F = new FilterOptions { DataFormats = new string[0]});
 
                 var results = queryer.Search(input).Results;
-                results.Count.Should().Be(4);
+                results.Count.Should().Be(5);
+            }
+        }
+
+        [Test]
+        public void filter_by_other_formats_test()
+        {
+            using (var db = GetDbForFilterTests())
+            {
+                var queryer = new RecordQueryer(db);
+                var input = QueryTestHelper.EmptySearchInput().With(x =>
+                {
+                    x.Q = "record";
+                    x.F = new FilterOptions { DataFormats = new[] { "Other" } };
+                });
+
+                var results = queryer.Search(input).Results;
+                results.Count.Should().Be(1);
+                results.Any(r => r.Title == "<b>record</b> with no data format").Should().BeTrue();
+            }
+        }
+
+        [Test]
+        public void filter_by_multiple_formats_including_other_test()
+        {
+            using (var db = GetDbForFilterTests())
+            {
+                var queryer = new RecordQueryer(db);
+                var input = QueryTestHelper.EmptySearchInput().With(x =>
+                {
+                    x.Q = "record";
+                    x.F = new FilterOptions { DataFormats = new[] { "Other", "Database" } };
+                });
+
+                var results = queryer.Search(input).Results;
+                results.Count.Should().Be(2);
+                results.Any(r => r.Title == "<b>record</b> with no data format").Should().BeTrue();
+                results.Any(r => r.Title == "database <b>record</b>").Should().BeTrue();
             }
         }
 
@@ -170,28 +221,34 @@ namespace Catalogue.Tests.Slow.Catalogue.Data.Query
                 var record1 = QueryTestHelper.SimpleRecord().With(m =>
                 {
                     m.Gemini.Title = "spreadsheet record";
-                    m.Gemini.DataFormat = "Microsoft Excel for Windows (xls)";
+                    m.Gemini.DataFormat = "Microsoft Excel for Windows";
                 });
                 var record2 = QueryTestHelper.SimpleRecord().With(m =>
                 {
                     m.Gemini.Title = "database record";
-                    m.Gemini.DataFormat = "Microsoft SQL Server Database (mdf)";
+                    m.Gemini.DataFormat = "Database";
                 });
                 var record3 = QueryTestHelper.SimpleRecord().With(m =>
                 {
                     m.Gemini.Title = "geospatial record 1";
-                    m.Gemini.DataFormat = "ESRI Arc/View ShapeFile (shp)";
+                    m.Gemini.DataFormat = "ESRI Arc/View ShapeFile";
                 });
                 var record4 = QueryTestHelper.SimpleRecord().With(m =>
                 {
                     m.Gemini.Title = "geospatial record 2";
                     m.Gemini.DataFormat = "Geospatial (vector polygon)";
                 });
+                var record5 = QueryTestHelper.SimpleRecord().With(m =>
+                {
+                    m.Gemini.Title = "record with no data format";
+                    m.Gemini.DataFormat = null;
+                });
 
                 db.Store(record1);
                 db.Store(record2);
                 db.Store(record3);
                 db.Store(record4);
+                db.Store(record5);
                 db.SaveChanges();
 
                 return db;

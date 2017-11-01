@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Catalogue.Data.Query
 {
@@ -16,7 +12,7 @@ namespace Catalogue.Data.Query
         /// <summary>
         /// The data formats to restrict the query to.
         /// </summary>
-        public DataFormatGroups[] DataFormats { get; set; }
+        public string[] DataFormats { get; set; }
 
         /// <summary>
         /// The earliest metadata date from which records should be returned.

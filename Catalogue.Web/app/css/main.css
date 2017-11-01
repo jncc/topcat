@@ -220,6 +220,9 @@ label {
 .search-results-view-picker button span {
   font-size: smaller;
 }
+.search-results-sort-dropdown {
+  margin-right: 0.5em;
+}
 .search-results-sort-dropdown button {
   width: 10.5em;
   text-align: left;

@@ -127,8 +127,6 @@
     <Compile Include="Model\Validation.cs" />
     <Compile Include="NoStaleQueriesListener.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Query\DataFormats.cs" />
-    <Compile Include="Query\DataFormatAttr.cs" />
     <Compile Include="Query\FilterOptions.cs" />
     <Compile Include="Query\ParameterHelper.cs" />
     <Compile Include="Query\QueryEnums.cs" />

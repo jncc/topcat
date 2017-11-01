@@ -93,6 +93,7 @@
       };
     };
     $scope.sortOptions = ["Most relevant", "Title A-Z", "Title Z-A", "Newest to oldest", "Oldest to newest"];
+    $scope.dataFormatOptions = ["Database", "Spreadsheet", "Documents", "Geospatial", "Image", "Audio", "Video", "Other"];
     parseQuerystring = function() {
       var o;
       o = $location.search();
