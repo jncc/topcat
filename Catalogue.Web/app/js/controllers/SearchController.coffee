@@ -25,7 +25,7 @@
             #$location.search('n', $scope.query.n)
         
         queryRecords = (query) ->
-            $http.get('../api/search?' + $.param query)
+            $http.get('../api/search?' + $.param query, false)
                 .success (result) ->
                     # don't overwrite with earlier but slower queries!
                     if moreOrLessTheSame result.query, query
@@ -109,7 +109,10 @@
         #)
         
         # function to get the current querystring in the view (for constructing export url)
-        $scope.querystring = -> $.param $scope.query, true # true means traditional serialization (no square brackets for arrays)
+        $scope.querystring = -> $.param $scope.query, false # false means non-traditional serialization (square brackets for arrays)
+
+        # using this redundant array so that the checkboxes in IE work properly
+        $scope.dataFormatSelections = []
 
         $scope.addOrRemoveDataFormat = (dataFormat) ->
             if !$scope.query.f.dataFormats
@@ -117,8 +120,10 @@
 
             if $scope.query.f.dataFormats.indexOf(dataFormat) != -1
                 $scope.query.f.dataFormats.splice($scope.query.f.dataFormats.indexOf(dataFormat), 1)
+                $scope.dataFormatSelections[dataFormat] = false
             else
                 $scope.query.f.dataFormats.push(dataFormat)
+                $scope.dataFormatSelections[dataFormat] = true
 
         $scope.addKeywordsToQuery = (keywords) ->
             if !$scope.query.f.keywords

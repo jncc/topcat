@@ -28,7 +28,7 @@
       return $location.search('f.dataFormats', query.f.dataFormats || null);
     };
     queryRecords = function(query) {
-      return $http.get('../api/search?' + $.param(query)).success(function(result) {
+      return $http.get('../api/search?' + $.param(query, false)).success(function(result) {
         if (moreOrLessTheSame(result.query, query)) {
           return $scope.result = result;
         }
@@ -110,16 +110,19 @@
     $scope.query = parseQuerystring();
     $scope.$watch('query', $scope.doSearch, true);
     $scope.querystring = function() {
-      return $.param($scope.query, true);
+      return $.param($scope.query, false);
     };
+    $scope.dataFormatSelections = [];
     $scope.addOrRemoveDataFormat = function(dataFormat) {
       if (!$scope.query.f.dataFormats) {
         $scope.query.f.dataFormats = [];
       }
       if ($scope.query.f.dataFormats.indexOf(dataFormat) !== -1) {
-        return $scope.query.f.dataFormats.splice($scope.query.f.dataFormats.indexOf(dataFormat), 1);
+        $scope.query.f.dataFormats.splice($scope.query.f.dataFormats.indexOf(dataFormat), 1);
+        return $scope.dataFormatSelections[dataFormat] = false;
       } else {
-        return $scope.query.f.dataFormats.push(dataFormat);
+        $scope.query.f.dataFormats.push(dataFormat);
+        return $scope.dataFormatSelections[dataFormat] = true;
       }
     };
     $scope.addKeywordsToQuery = function(keywords) {

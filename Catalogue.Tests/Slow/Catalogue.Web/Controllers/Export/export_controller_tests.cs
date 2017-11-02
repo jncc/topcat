@@ -33,5 +33,25 @@ namespace Catalogue.Tests.Slow.Catalogue.Web.Controllers.Export
             var matches = Regex.Matches(content, @"""""Value"""":""""GB\d{6}"""""); // match a mesh identifier e.g. GB000272
             matches.Count.Should().Be(189);  // the number of mesh records
         }
+
+        [Test]
+        public void export_with_format_filter()
+        {
+            var controller = new ExportController(Db, new RecordQueryer(Db));
+            var input = new RecordQueryInputModel
+            {
+                Q = "sea",
+                F = new FilterOptions { DataFormats = new[] { "Other" } },
+                P = 0,
+                N = 15
+            };
+
+            var result = controller.Get(input);
+
+            var task = (PushStreamContent)result.Content;
+            string content = task.ReadAsStringAsync().Result;
+            content.Should().Contain("A simple Overseas Territories example record");
+            Regex.Matches(content, @"\r\n").Count.Should().Be(2); // 2 new lines means only one record
+        }
     }
 }

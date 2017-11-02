@@ -86,6 +86,8 @@
     <Compile Include="Explicit\Catalogue.Data\Indexes\my_record_index_tests.cs" />
     <Compile Include="Explicit\Catalogue.Import\import_runner.cs" />
     <Compile Include="Slow\Catalogue.Data\Query\QueryTestHelper.cs" />
+    <Compile Include="Slow\Catalogue.Data\Write\basic_record_validator_specs.cs" />
+    <Compile Include="Slow\Catalogue.Data\Write\gemini_record_validator_specs.cs" />
     <Compile Include="Slow\Catalogue.Robot\opendataxmlhelper_specs.cs" />
     <Compile Include="Explicit\Catalogue.Robot\try_out_link_checker.cs" />
     <Compile Include="Explicit\Catalogue.Robot\try_out_stuff.cs" />
