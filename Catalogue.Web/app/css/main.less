@@ -290,6 +290,7 @@ label {
 .search-advanced {
 }
 
+
 .search-keyword-suggestions {
     margin-bottom: 1em;
 }
@@ -819,6 +820,24 @@ form .ng-invalid {
 
     &.ng-hide-remove-active {
         opacity: 1;
+    }
+}
+
+.slide-down {
+
+    &.ng-hide-add {
+        max-height: 100px;
+        transition: all linear 0.3s;
+    }
+
+    &.ng-hide-remove {
+        max-height: 100px;
+        transition: all linear 0.2s;
+    }
+
+    &.ng-hide {
+        opacity: 0;
+        max-height: 0;
     }
 }
 

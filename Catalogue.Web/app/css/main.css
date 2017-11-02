@@ -706,6 +706,18 @@ form .ng-invalid {
 .quick-fade-in.ng-hide-remove-active {
   opacity: 1;
 }
+.slide-down.ng-hide-add {
+  max-height: 100px;
+  transition: all linear 0.3s;
+}
+.slide-down.ng-hide-remove {
+  max-height: 100px;
+  transition: all linear 0.2s;
+}
+.slide-down.ng-hide {
+  opacity: 0;
+  max-height: 0;
+}
 .data-format-list-item {
   float: left;
   padding: 10px;
