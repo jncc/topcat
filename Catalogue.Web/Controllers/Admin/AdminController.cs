@@ -103,7 +103,7 @@ namespace Catalogue.Web.Controllers.Admin
         {
             var query = new RecordQueryInputModel
             {
-                K = new[] { keyword },
+                F = new FilterOptions{Keywords = new[] { keyword }},
                 N = 1024,
             };
 

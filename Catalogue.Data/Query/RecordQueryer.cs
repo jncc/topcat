@@ -9,7 +9,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
-using static Catalogue.Data.Query.RecordQueryInputModel.SortOptions;
+using static Catalogue.Data.Query.SortOptions;
 
 namespace Catalogue.Data.Query
 {
@@ -70,25 +70,46 @@ namespace Catalogue.Data.Query
             if (input.Q.IsNotBlank())
             {
                 query = query
-                    .Search(r => r.Title, input.Q, boost: 10)
+                    .Search(r => r.Title, input.Q, 10, SearchOptions.Guess, EscapeQueryOptions.RawQuery)
                     .Search(r => r.TitleN, input.Q)
-                    .Search(r => r.Abstract, input.Q)
+                    .Search(r => r.Abstract, input.Q, 1, SearchOptions.Guess, EscapeQueryOptions.RawQuery)
                     .Search(r => r.AbstractN, input.Q)
                     .Search(r => r.KeywordsN, input.Q);
             }
 
-            if (input.K != null && input.K.Any())
+            if (input.F != null)
             {
-                foreach (var keyword in ParameterHelper.ParseMetadataKeywords(input.K))
+                if (input.F.Keywords != null && input.F.Keywords.Any() && input.F.Keywords[0].IsNotBlank())
                 {
-                    string k = keyword.Vocab + "/" + keyword.Value;
-                    query = query.Where(r => r.Keywords.Contains(k));
+                    foreach (var keyword in ParameterHelper.ParseMetadataKeywords(input.F.Keywords))
+                    {
+                        string k = keyword.Vocab + "/" + keyword.Value;
+                        query = query.Where(r => r.Keywords.Contains(k));
+                    }
                 }
-            }
 
-            if (input.D != null)
-            {
-                query = query.Where(r => r.MetadataDate >= input.D);
+                if (input.F.DataFormats != null && input.F.DataFormats.Any() && input.F.DataFormats[0].IsNotBlank())
+                {
+                    var formatTypes = new List<string>();
+                    foreach (var format in input.F.DataFormats)
+                    {
+                        var formatTypesList = DataFormats.Known.Find(x => x.Name.Equals(format)).Formats;
+                        foreach (var formatType in formatTypesList)
+                        {
+                            formatTypes.Add(formatType.Name);
+                        }
+                    }
+
+                    if (input.F.DataFormats.Contains("Other"))
+                        query = query.Where(r => r.DataFormat.In(formatTypes) || r.DataFormat.Equals(null) || r.DataFormat.Equals(""));
+                    else
+                        query = query.Where(r => r.DataFormat.In(formatTypes));
+                }
+
+                if (input.F.MetadataDate != null)
+                {
+                    query = query.Where(r => r.MetadataDate >= input.F.MetadataDate);
+                }
             }
 
             var recordQuery = query.As<Record>(); // ravendb method to project from the index result type to the actual document type

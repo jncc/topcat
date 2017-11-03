@@ -4,15 +4,12 @@ namespace Catalogue.Data.Query
 {
     public class RecordQueryInputModel
     {
-        public enum SortOptions { MostRelevant, TitleAZ, TitleZA, NewestToOldest, OldestToNewest};
-
         public RecordQueryInputModel()
         {
             N = 15;
             P = 0;
             Q = String.Empty;
-            K = new string[0];
-            D = null;
+            F = null;
             O = 0;
         }
 
@@ -38,14 +35,9 @@ namespace Catalogue.Data.Query
         }
 
         /// <summary>
-        /// The keywords to restrict the query to.
+        /// The criteria to filter the results by.
         /// </summary>
-        public string[] K { get; set; }
-
-        /// <summary>
-        /// The earliest metadata date from which records should be returned.
-        /// </summary>
-        public DateTime? D { get; set; }
+        public FilterOptions F { get; set; }
 
         /// <summary>
         /// The sort option for results.

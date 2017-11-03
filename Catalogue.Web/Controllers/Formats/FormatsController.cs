@@ -1,9 +1,9 @@
-﻿using System.Linq;
-using System.Web.Http;
-using Catalogue.Gemini.DataFormats;
+﻿using Catalogue.Gemini.DataFormats;
 using Catalogue.Utilities.Text;
 using FluentAssertions;
 using NUnit.Framework;
+using System.Linq;
+using System.Web.Http;
 
 namespace Catalogue.Web.Controllers.Formats
 {

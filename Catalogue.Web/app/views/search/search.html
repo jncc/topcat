@@ -14,16 +14,27 @@
                     <span class="glyphicon glyphicon-search"></span>
                 </button>
             </span>
-        </div>
 
+            <span class="input-group-btn">
+                <button ng-click="advanced = !advanced" class="btn btn-default big-button" tc-tip title="Advanced search options">
+                    <span class="glyphicon" ng-class="advanced ? 'glyphicon-chevron-up' : 'glyphicon-chevron-down'"></span>
+                </button>
+            </span>
+            
+        </div>
+        
+        <div class="search-advanced slide-down" ng-show="advanced">
+            <div class="well well-sm">
+                <h4>Advanced search options</h4>
+                <form>
+                    <label tc-tip title="Filter by data format (multiple choice)" ng-repeat="f in dataFormatOptions">
+                        <input type="checkbox" ng-checked="dataFormatSelections[f]" ng-click="addOrRemoveDataFormat(f)"/> {{f}}&nbsp;&nbsp;
+                    </label>
+                </form>
+            </div>
+        </div>
     </div>
-    <!--    <div class="col-md-1">-->
-    <!--        <div class="form-inline">-->
-    <!--            <button ng-click="advanced = !advanced" class="btn btn-default big-button" tc-tip title="Advanced search options">-->
-    <!--                <span class="glyphicon" ng-class="advanced ? 'glyphicon-chevron-up' : 'glyphicon-chevron-down'"></span>-->
-    <!--            </button>-->
-    <!--        </div>-->
-    <!--    </div>-->
+
     <div class="col-sm-2">
         <div class="form-inline">
             <a href="#editor/00000000-0000-0000-0000-000000000000" class="btn btn-default big-button" tc-tip title="Add a record">
@@ -39,18 +50,10 @@
             <span ng-bind-html="k.value | highlight:query.q"></span>
         </span>
     </span>
-    <button ng-show="!result.query.k[0]" class="search-open-vocabulator btn btn-sm btn-dialogue" tc-tip title="Add tags (keywords) to query" ng-click="openVocabulator()">
+    <button ng-show="!result.query.f.keywords[0]" class="search-open-vocabulator btn btn-sm btn-dialogue" tc-tip title="Add tags (keywords) to query" ng-click="openVocabulator()">
         &bull;&bull;&bull;
     </button>
 </div>
-
-<!--<div class="row search-advanced" ng-show="advanced">-->
-<!--    <div class="col-md-7 col-md-offset-2">-->
-<!--        <div class="well well-sm">-->
-<!--            advanced search options might appear here...?-->
-<!--        </div>-->
-<!--    </div>-->
-<!--</div>-->
 
 <div ng-show="result.query" class="search-results-header well well-sm">
 
@@ -62,11 +65,11 @@
             </span>
             {{result.total || 0}} records
             <!-- <span ng-show="result.speed">in {{(result.speed / 1000) | number:2}} seconds</span>-->
-            <span ng-show="result.query.k[0]">
+            <span ng-show="result.query.f.keywords[0]">
                 <span class="search-results-header-tagged">
                     tagged
                     <span></span>
-                    <span tc-tag ng-repeat="s in result.query.k" ng-init="k = keywordFromString(s)">
+                    <span tc-tag ng-repeat="s in result.query.f.keywords" ng-init="k = keywordFromString(s)">
                         {{k.value}}
                         <span class="glyphicon glyphicon-remove" ng-click="removeKeywordFromQuery(k)" tc-tip title="Remove"></span>
                     </span>
@@ -78,24 +81,22 @@
 
             <span ng-show="result.query.q">
                 matching '<b>{{result.query.q}}</b>'
-                <span ng-show="result.query.k[0]" class="glyphicon glyphicon-remove" ng-click="query.q = ''" tc-tip title="Remove"></span>
+                <span ng-show="result.query.f.keywords[0]" class="glyphicon glyphicon-remove" ng-click="query.q = ''" tc-tip title="Remove"></span>
+            </span>
+
+            <span ng-show="result.query.f.dataFormats[0]">
+                <span>
+                    filtered by 
+                    <span ng-repeat="f in result.query.f.dataFormats">
+                        <b>{{f}}</b>
+                        <span ng-show="result.query.f.dataFormats[0]" class="glyphicon glyphicon-remove" ng-click="addOrRemoveDataFormat(f)" tc-tip title="Remove">&nbsp;</span>
+                    </span>
+                </span>
             </span>
         </div>
 
         <!-- results view / export buttons -->
-        <div class="layout-col" ng-show="result.total > 0" style="text-align: right;">
-            <div class="search-results-sort-dropdown btn-group">
-                <button type="button" class="btn btn-white dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" tc-tip title="Sort">
-                    {{sortOptions[query.o]}} <span class="pull-right"><span class="caret"></span></span>
-                </button>
-                <ul class="dropdown-menu dropdown-menu-right" role="menu">
-                    <li tc-tip="left" title="Gemini Title, Abstract, and Keywords"><a ng-click="query.o = 0; query.p = 0">{{sortOptions[0]}}</a></li>
-                    <li tc-tip="left" title="Gemini Title"><a ng-click="query.o = 1; query.p = 0">{{sortOptions[1]}}</a></li>
-                    <li tc-tip="left" title="Gemini Title"><a ng-click="query.o = 2; query.p = 0">{{sortOptions[2]}}</a></li>
-                    <li tc-tip="left" title="Gemini Published/Revised Date"><a ng-click="query.o = 3; query.p = 0">{{sortOptions[3]}}</a></li>
-                    <li tc-tip="left" title="Gemini Published/Revised Date"><a ng-click="query.o = 4; query.p = 0">{{sortOptions[4]}}</a></li>
-                </ul>
-            </div>
+        <div class="layout-col pull-right" ng-show="result.total > 0">
             <div class="search-results-view-picker btn-group" role="group">
                 <button class="btn big-button" tc-tip title="List view" ng-click="resultsView = 'list'" ng-class="{ 'btn-primary': resultsView == 'list', 'btn-default': resultsView != 'list' }">
                     <span class="glyphicon glyphicon-align-left"></span>
@@ -113,6 +114,18 @@
                     <!--<li class="divider"></li> might be useful-->
                 </ul>
             </div>
+        </div>
+        <div class="layout-col pull-right search-results-sort-dropdown btn-group" ng-show="result.total > 0">
+            <button type="button" class="btn btn-white dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" tc-tip title="Sort">
+                {{sortOptions[query.o]}} <span class="pull-right"><span class="caret"></span></span>
+            </button>
+            <ul class="dropdown-menu dropdown-menu-right" role="menu">
+                <li tc-tip="left" title="Gemini Title, Abstract, and Keywords"><a ng-click="query.o = 0; query.p = 0">{{sortOptions[0]}}</a></li>
+                <li tc-tip="left" title="Gemini Title"><a ng-click="query.o = 1; query.p = 0">{{sortOptions[1]}}</a></li>
+                <li tc-tip="left" title="Gemini Title"><a ng-click="query.o = 2; query.p = 0">{{sortOptions[2]}}</a></li>
+                <li tc-tip="left" title="Gemini Published/Revised Date"><a ng-click="query.o = 3; query.p = 0">{{sortOptions[3]}}</a></li>
+                <li tc-tip="left" title="Gemini Published/Revised Date"><a ng-click="query.o = 4; query.p = 0">{{sortOptions[4]}}</a></li>
+            </ul>
         </div>
     </div>
 
@@ -179,7 +192,7 @@
 
 
 
-<div ng-show="!query.q && !query.k[0] && !app.starting" class="fade-in-with-delay">
+<div ng-show="!query.q && !query.f.keywords[0] && !app.starting" class="fade-in-with-delay">
     <div class="row">
         <div class="col-md-8 welcome">
             <h1>

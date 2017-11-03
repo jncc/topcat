@@ -3,7 +3,7 @@
   var __indexOf = [].indexOf || function(item) { for (var i = 0, l = this.length; i < l; i++) { if (i in this && this[i] === item) return i; } return -1; };
 
   angular.module('app.controllers').controller('SearchController', function($scope, $rootScope, $location, $http, $timeout, $q, $modal) {
-    var blankQuery, parseQuerystring, queryKeywords, queryRecords, updateUrl;
+    var blankQuery, moreOrLessTheSame, parseQuerystring, queryKeywords, queryRecords, updateUrl;
     $scope.app = {
       starting: true
     };
@@ -21,14 +21,15 @@
       var blank;
       blank = blankQuery();
       $location.search('q', query.q || null);
-      $location.search('k', query.k);
+      $location.search('f.keywords', query.f.keywords);
       $location.search('p', query.p || null);
-      $location.search('d', query.d || null);
-      return $location.search('o', query.o || null);
+      $location.search('o', query.o || null);
+      $location.search('f.metadataDate', query.f.metadataDate || null);
+      return $location.search('f.dataFormats', query.f.dataFormats || null);
     };
     queryRecords = function(query) {
-      return $http.get('../api/search?' + $.param(query, true)).success(function(result) {
-        if (angular.equals(result.query, query)) {
+      return $http.get('../api/search?' + $.param(query, false)).success(function(result) {
+        if (moreOrLessTheSame(result.query, query)) {
           return $scope.result = result;
         }
       }).error(function(e) {
@@ -46,10 +47,24 @@
         return $q["defer"]();
       }
     };
+    moreOrLessTheSame = function(resultQuery, query) {
+      var groomedQuery;
+      groomedQuery = {};
+      angular.copy(query, groomedQuery);
+      if (groomedQuery.f) {
+        if (groomedQuery.f.dataFormats && groomedQuery.f.dataFormats.length === 0) {
+          groomedQuery.f.dataFormats = null;
+        }
+        if (groomedQuery.f.keywords && groomedQuery.f.keywords.length === 0) {
+          groomedQuery.f.keywords = null;
+        }
+      }
+      return angular.equals(resultQuery, groomedQuery);
+    };
     $scope.doSearch = function(query) {
       var keywordsPromise, recordsPromise;
       updateUrl(query);
-      if (query.q || query.k[0]) {
+      if (query.q || query.f && query.f.keywords && query.f.keywords[0]) {
         $scope.busy.start();
         keywordsPromise = queryKeywords(query);
         recordsPromise = queryRecords(query);
@@ -67,19 +82,25 @@
     blankQuery = function() {
       return {
         q: '',
-        k: [],
+        f: {
+          keywords: [],
+          dataFormats: [],
+          metadataDate: null
+        },
         p: 0,
         n: $scope.pageSize,
-        d: null,
         o: 0
       };
     };
     $scope.sortOptions = ["Most relevant", "Title A-Z", "Title Z-A", "Newest to oldest", "Oldest to newest"];
+    $scope.dataFormatOptions = ["Database", "Spreadsheet", "Documents", "Geospatial", "Image", "Audio", "Video", "Other"];
     parseQuerystring = function() {
       var o;
       o = $location.search();
-      if (o.k && !$.isArray(o.k)) {
-        o.k = [o.k];
+      if (o.f) {
+        if (o.f.keywords && !$.isArray(o.f.keywords)) {
+          o.f.keywords = [o.f.keywords];
+        }
       }
       if (o.p) {
         o.p = o.p * 1;
@@ -89,31 +110,47 @@
     $scope.query = parseQuerystring();
     $scope.$watch('query', $scope.doSearch, true);
     $scope.querystring = function() {
-      return $.param($scope.query, true);
+      return $.param($scope.query, false);
+    };
+    $scope.dataFormatSelections = [];
+    $scope.addOrRemoveDataFormat = function(dataFormat) {
+      if (!$scope.query.f.dataFormats) {
+        $scope.query.f.dataFormats = [];
+      }
+      if ($scope.query.f.dataFormats.indexOf(dataFormat) !== -1) {
+        $scope.query.f.dataFormats.splice($scope.query.f.dataFormats.indexOf(dataFormat), 1);
+        return $scope.dataFormatSelections[dataFormat] = false;
+      } else {
+        $scope.query.f.dataFormats.push(dataFormat);
+        return $scope.dataFormatSelections[dataFormat] = true;
+      }
     };
     $scope.addKeywordsToQuery = function(keywords) {
       var k, keywordsAlreadyInQuery, keywordsToAddToQuery, _i, _j, _len, _len1, _ref;
+      if (!$scope.query.f.keywords) {
+        $scope.query.f.keywords = [];
+      }
       _ref = _(keywords).map($scope.keywordToString).partition(function(k) {
-        return __indexOf.call($scope.query.k, k) >= 0;
+        return __indexOf.call($scope.query.f.keywords, k) >= 0;
       }).value(), keywordsAlreadyInQuery = _ref[0], keywordsToAddToQuery = _ref[1];
       for (_i = 0, _len = keywordsToAddToQuery.length; _i < _len; _i++) {
         k = keywordsToAddToQuery[_i];
-        $scope.query.k.push(k);
+        $scope.query.f.keywords.push(k);
       }
       for (_j = 0, _len1 = keywordsAlreadyInQuery.length; _j < _len1; _j++) {
         k = keywordsAlreadyInQuery[_j];
         $scope.notifications.add("Your query already contains the '" + ($scope.keywordFromString(k).value) + "' keyword");
       }
       if (keywordsToAddToQuery.length) {
-        return $scope.query = angular.extend({}, blankQuery(), {
-          'k': $scope.query.k
+        return $scope.query = _.merge({}, blankQuery(), {
+          'f': $scope.query.f
         });
       }
     };
     $scope.removeKeywordFromQuery = function(keyword) {
       var s;
       s = $scope.keywordToString(keyword);
-      return $scope.query.k.splice($.inArray(s, $scope.query.k), 1);
+      return $scope.query.f.keywords.splice($.inArray(s, $scope.query.f.keywords), 1);
     };
     $scope.keywordToString = function(k) {
       var s;
