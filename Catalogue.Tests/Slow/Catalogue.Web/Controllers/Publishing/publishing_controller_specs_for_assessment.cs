@@ -439,6 +439,43 @@ namespace Catalogue.Tests.Slow.Catalogue.Web.Controllers.Publishing
             resultRecord.Gemini.MetadataDate.Should().Be(openDataInfo.Assessment.CompletedOnUtc);
         }
 
+        [Test]
+        public void not_eligible_for_assessment_test()
+        {
+            var recordId = new Guid("d82afb6c-2699-4570-a72f-cdf2cf93fa4c");
+            var record = new Record().With(r =>
+            {
+                r.Id = recordId;
+                r.Path = @"postgres://username@hostname/databasename";
+                r.Validation = Validation.Gemini;
+                r.Gemini = Library.Example().With(m =>
+                {
+                    m.MetadataDate = new DateTime(2017, 07, 30);
+                });
+                r.Footer = new Footer();
+            });
+
+            var store = new InMemoryDatabaseHelper().Create();
+            using (var db = store.OpenSession())
+            {
+                db.Store(record);
+                db.SaveChanges();
+
+                var publishingController = GetTestOpenDataPublishingController(db);
+
+                var request = new AssessmentRequest
+                {
+                    Id = record.Id
+                };
+
+                Action a = () => publishingController.Assess(request);
+                a.ShouldThrow<InvalidOperationException>().And.Message.Should().Be("Must have a file path for publishing");
+
+                var resultRecord = db.Load<Record>(record.Id);
+                resultRecord.Publication.Should().BeNull();
+            }
+        }
+
         private static Record TestAssessment(Record record)
         {
             var store = new InMemoryDatabaseHelper().Create();

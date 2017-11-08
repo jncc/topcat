@@ -1,7 +1,22 @@
-﻿namespace Catalogue.Data.Model
+﻿using System;
+using Catalogue.Data.Model;
+
+namespace Catalogue.Data.Extensions
 {
     public static class RecordExtensions
     {
+        public static bool IsEligibleForOpenDataPublishing(this Record record)
+        {
+            var eligible = false;
+
+            if (Uri.TryCreate(record.Path, UriKind.Absolute, out Uri uri))
+            {
+                eligible = uri.IsFile;
+            }
+
+            return eligible;
+        }
+
         public static bool IsAssessedAndUpToDate(this Record record)
         {
             return record.Publication?.OpenData.Assessment != null

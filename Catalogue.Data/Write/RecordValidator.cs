@@ -64,27 +64,12 @@ namespace Catalogue.Data.Write
             else // (let's not add additional errors if it's just that it's blank)
             {
                 // path_must_be_an_acceptable_kind
-                // currently, a file system path or paul's experimental OGR connection string
-                Uri uri;
+                // currently quite lax to allow for a file system path, paul's experimental OGR connection string,
+                // URL, or generic database connection string
 
-                // allow OGR connection strings (experimental)
-                if (record.Path.StartsWith("PG:"))
+                if (!Uri.TryCreate(record.Path, UriKind.Absolute, out Uri uri))
                 {
-                    if (!Regex.IsMatch(record.Path, "PG:\".+\""))
-                    {
-                        result.Errors.Add("Path doesn't appear to be a valid OGR connection string");
-                    }
-                }
-                else if (Uri.TryCreate(record.Path, UriKind.Absolute, out uri))
-                {
-                    if (uri.Scheme != Uri.UriSchemeFile)
-                    {
-                        result.Errors.Add("Path must be a file system path", r => r.Path);
-                    }
-                }
-                else
-                {
-                    result.Errors.Add("Path is invalid. Normally should be a file system path", r => r.Path);
+                    result.Errors.Add("Path is an invalid URI. Normally should be a file system path", r => r.Path);
                 }
             }
         }

@@ -2,6 +2,7 @@
 using Catalogue.Utilities.Time;
 using Raven.Client;
 using System;
+using Catalogue.Data.Extensions;
 using static Catalogue.Data.Write.RecordServiceHelper;
 
 namespace Catalogue.Data.Write
@@ -19,6 +20,9 @@ namespace Catalogue.Data.Write
 
         public RecordServiceResult Assess(Record record, OpenDataAssessmentInfo assessmentInfo)
         {
+            if (!record.IsEligibleForOpenDataPublishing())
+                throw new InvalidOperationException("Must have a file path for publishing");
+
             if (record.IsAssessedAndUpToDate())
                 throw new InvalidOperationException("Assessment has already been completed and is up to date");
 
