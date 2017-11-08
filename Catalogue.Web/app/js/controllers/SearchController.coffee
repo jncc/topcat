@@ -41,7 +41,8 @@
                 $q["defer"]() # return an empty promise https://github.com/madskristensen/WebCompiler/issues/202
 
         moreOrLessTheSame = (resultQuery, query) ->
-            # ugly hack to get empty array and null to be the same because on the UI side the array is empty, but it's passed to the API as null
+            # ugly hack to get empty array and null to be the same because on the UI side the array is empty,
+            # but it's passed to the API as null
             groomedQuery = {}
             angular.copy query, groomedQuery
             if groomedQuery.f

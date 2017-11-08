@@ -37,17 +37,18 @@ getBestPadding = (tuples) ->
 tuples = {}
 
 updateTuples = (results, scope) ->
-    tuples = for r in results when r.box isnt null and r.box.north
-        do (r) ->
-            bounds = [[r.box.south, r.box.west], [r.box.north, r.box.east]]
-            rect = L.rectangle bounds, normal
-            rect.on 'mouseover', -> rect.setStyle fillOpacity: 0.4
-            rect.on 'mouseout', -> rect.setStyle fillOpacity: 0.2
-            rect.on 'click', -> scope.$apply ->
-                scope.current.zoomed = r
-                #$location.hash(r.id);
-                #$anchorScroll();
-            { r, bounds, rect }
+    if results
+        tuples = for r in results when r.box isnt null and r.box.north
+            do (r) ->
+                bounds = [[r.box.south, r.box.west], [r.box.north, r.box.east]]
+                rect = L.rectangle bounds, normal
+                rect.on 'mouseover', -> rect.setStyle fillOpacity: 0.4
+                rect.on 'mouseout', -> rect.setStyle fillOpacity: 0.2
+                rect.on 'click', -> scope.$apply ->
+                    scope.current.zoomed = r
+                    #$location.hash(r.id);
+                    #$anchorScroll();
+                { r, bounds, rect }
     
 module.directive 'tcSearchMap', ($window, $location, $anchorScroll) ->
     link: (scope, elem, attrs) ->
