@@ -131,7 +131,7 @@
 
 </div>
 
-<div ng-if="result.results" ng-switch="resultsView">
+<div ng-show="result.results" ng-switch="resultsView">
     <div ng-switch-when="list" class="row">
         <div class="col-md-9" tc-search-result-scroll-highlighter>
             <div ng-repeat="r in result.results" class="layout-row search-result"
@@ -253,17 +253,17 @@
             <div class="well well-sm">
                 <h2>Roadmap</h2>
                 <ul>
-                    <li>Better publishing to data.gov.uk<span class="label label-info">In progress</span></li>
-                    <li>Keyword browser <span class="label label-success">Done</span></li>
-                    <li>Spatial visualisation <span class="label label-success">Done</span></li>
-                    <li>Export & download <span class="label label-success">Done</span></li>
                     <li>Standardised bounding boxes <span class="label label-info">In progress</span></li>
                     <li>Metadata entry wizard</li>
                     <li>Better validation</li>
                     <li>Spatial search</li>
                     <li>Bounding box editor</li>
-                    <li>Advanced search</li>
                     <li>Vocabularies <span class="label label-info">In progress</span></li>
+                    <li>Advanced search <span class="label label-info">In progress</span></li>
+                    <li>Phrase search with quotes <span class="label label-success">Done</span></li>
+                    <li>Sort results by title and date <span class="label label-success">Done</span></li>
+                    <li>URIs instead of file paths <span class="label label-info">In progress</span></li>
+                    <li>Digital Object Identifier field </li>
                 </ul>
             </div>
 

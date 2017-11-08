@@ -71,41 +71,43 @@
 
   updateTuples = function(results, scope) {
     var r;
-    return tuples = (function() {
-      var _i, _len, _results;
-      _results = [];
-      for (_i = 0, _len = results.length; _i < _len; _i++) {
-        r = results[_i];
-        if (r.box !== null && r.box.north) {
-          _results.push((function(r) {
-            var bounds, rect;
-            bounds = [[r.box.south, r.box.west], [r.box.north, r.box.east]];
-            rect = L.rectangle(bounds, normal);
-            rect.on('mouseover', function() {
-              return rect.setStyle({
-                fillOpacity: 0.4
+    if (results) {
+      return tuples = (function() {
+        var _i, _len, _results;
+        _results = [];
+        for (_i = 0, _len = results.length; _i < _len; _i++) {
+          r = results[_i];
+          if (r.box !== null && r.box.north) {
+            _results.push((function(r) {
+              var bounds, rect;
+              bounds = [[r.box.south, r.box.west], [r.box.north, r.box.east]];
+              rect = L.rectangle(bounds, normal);
+              rect.on('mouseover', function() {
+                return rect.setStyle({
+                  fillOpacity: 0.4
+                });
               });
-            });
-            rect.on('mouseout', function() {
-              return rect.setStyle({
-                fillOpacity: 0.2
+              rect.on('mouseout', function() {
+                return rect.setStyle({
+                  fillOpacity: 0.2
+                });
               });
-            });
-            rect.on('click', function() {
-              return scope.$apply(function() {
-                return scope.current.zoomed = r;
+              rect.on('click', function() {
+                return scope.$apply(function() {
+                  return scope.current.zoomed = r;
+                });
               });
-            });
-            return {
-              r: r,
-              bounds: bounds,
-              rect: rect
-            };
-          })(r));
+              return {
+                r: r,
+                bounds: bounds,
+                rect: rect
+              };
+            })(r));
+          }
         }
-      }
-      return _results;
-    })();
+        return _results;
+      })();
+    }
   };
 
   module.directive('tcSearchMap', function($window, $location, $anchorScroll) {
