@@ -93,8 +93,8 @@
         $scope.isSaveDisabled = -> $scope.isClean() # || $scope.theForm.$invalid 
         $scope.isCloneHidden = -> $scope.isNew()
         $scope.isCloneDisabled = -> !$scope.isClean()
-        $scope.isPublishingModalButtonDisabled = -> !$scope.isSaveHidden()
-
+        $scope.isHttpPath = (path) -> path.toLowerCase().startsWith "http"
+        $scope.isPublishingModalButtonEnabled = -> isFilePath($scope.form.path) and $scope.isSaveHidden()
         $scope.hasUsageConstraints = () -> (!!$scope.form.gemini.limitationsOnPublicAccess and $scope.form.gemini.limitationsOnPublicAccess isnt 'no limitations') or (!!$scope.form.gemini.useConstraints and $scope.form.gemini.useConstraints isnt 'no conditions apply')
 
         # keywords # update arg name and use cs in
@@ -150,9 +150,12 @@
         $scope.setKeyword = ($item, keyword) ->
             keyword.vocab = $item.vocab
 
+isFilePath = (path) -> path.match /^([a-z]:|\\\\jncc-corpfile\\)/i
 
 getOpenDataButtonToolTip = (record, publishingState) ->
-    if record.publication == null
+    if !isFilePath(record.path)
+        return "Open data publishing not available for non-file resources"
+    else if record.publication == null
         return "The open data publication status of the record, editing the record may affect the status."
     else if record.publication.openData.lastSuccess != null && !publishingState.assessedAndUpToDate
         return "This record has been changed since it was last published, it may need republishing."

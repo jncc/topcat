@@ -51,6 +51,24 @@ namespace Catalogue.Tests.Slow.Catalogue.Web.Controllers.Publishing
         }
 
         [Test]
+        public void assessment_completed_with_unc_path_test()
+        {
+            var recordId = new Guid("b69f47c1-4c17-42d0-a396-8209aa5568b1");
+            var record = new Record().With(r =>
+            {
+                r.Id = recordId;
+                r.Path = @"\\jncc-corpfile\testfile";
+                r.Validation = Validation.Gemini;
+                r.Gemini = Library.Example();
+                r.Footer = new Footer();
+            });
+
+            var resultRecord = TestAssessment(record);
+            var openDataInfo = resultRecord.Publication.OpenData;
+            openDataInfo.Assessment.Completed.Should().BeTrue();
+        }
+
+        [Test]
         public void assessment_started_then_completed_test()
         {
             var recordId = new Guid("ec0db5b3-8b9d-42c3-ac70-2fd50ff3bbca");
@@ -439,22 +457,37 @@ namespace Catalogue.Tests.Slow.Catalogue.Web.Controllers.Publishing
             resultRecord.Gemini.MetadataDate.Should().Be(openDataInfo.Assessment.CompletedOnUtc);
         }
 
-        [Test]
-        public void not_eligible_for_assessment_test()
+        static readonly Record[] NotEligibleForAssessmentRecords =
         {
-            var recordId = new Guid("d82afb6c-2699-4570-a72f-cdf2cf93fa4c");
-            var record = new Record().With(r =>
+            new Record().With(r =>
             {
-                r.Id = recordId;
+                r.Id = new Guid("dc370d41-c8b4-4eba-8e39-6e2d70c50c07");
+                r.Path = @"http://www.example.com";
+                r.Validation = Validation.Gemini;
+                r.Gemini = Library.Example();
+                r.Footer = new Footer();
+            }),
+            new Record().With(r =>
+            {
+                r.Id = new Guid("60df47fc-d4df-48ce-9bdd-289c145f7de0");
+                r.Path = @"https://www.example.com";
+                r.Validation = Validation.Gemini;
+                r.Gemini = Library.Example();
+                r.Footer = new Footer();
+            }),
+            new Record().With(r =>
+            {
+                r.Id = new Guid("d82afb6c-2699-4570-a72f-cdf2cf93fa4c");
                 r.Path = @"postgres://username@hostname/databasename";
                 r.Validation = Validation.Gemini;
-                r.Gemini = Library.Example().With(m =>
-                {
-                    m.MetadataDate = new DateTime(2017, 07, 30);
-                });
+                r.Gemini = Library.Example();
                 r.Footer = new Footer();
-            });
+            })
+        };
 
+        [Test, TestCaseSource(nameof(NotEligibleForAssessmentRecords))]
+        public void not_eligible_for_assessment_when_path_is_not_file_path(Record record)
+        {
             var store = new InMemoryDatabaseHelper().Create();
             using (var db = store.OpenSession())
             {
