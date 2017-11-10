@@ -13,7 +13,7 @@ namespace Catalogue.Web
     {
         public string Domain
         {
-            get { return "jncc-dc08.green.jncc.gov.uk"; }
+            get { return "jncc-dc12.green.jncc.gov.uk"; }
         }
 
         public string OpenDataIaoRole
