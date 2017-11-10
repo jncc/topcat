@@ -63,20 +63,23 @@
                 <div class="well well-sm form-group">
                     <div class="editor-path input-group">
                         <span class="input-group-addon well-input-group-addon"
-                              tc-tip title="The path to the resource on the file share">
+                              tc-tip title="The file share path, URL, or database connection string of the resource">
                             <span class="dark glyphicon glyphicon-th-large"></span>
                         </span>
 
                         <input id="form-path" name="path" ng-model="form.path"
                                type="text" class="form-control"
                                placeholder="Location"
-                               tc-focus-tip title="The path to the resource on the file share"
+                               tc-focus-tip title="The file share path, URL, or database connection string of the resource"
                                spellcheck="false" />
-
-                        <span class="input-group-addon pointable"
-                              ng-disabled="!form.path"
-                              tc-copy-path-to-clipboard="form-path"
-                              data-clipboard-target="form-path">
+                        
+                        <a href="{{form.path}}" ng-if="isHttpPath(form.path)" target="_blank" class="input-group-addon pointable" ng-disabled="!form.path">
+                            <span class="dark glyphicon glyphicon-new-window" title="Go to resource" tc-tip></span>
+                        </a>
+                        <span ng-if="!isHttpPath(form.path)" class="input-group-addon pointable"
+                                ng-disabled="!form.path"
+                                tc-copy-path-to-clipboard="form-path"
+                                data-clipboard-target="form-path">
                             <span class="dark glyphicon glyphicon-folder-open"></span>
                         </span>
 
@@ -541,7 +544,7 @@
                     
                     <button type="button" class="btn"
                             ng-click="openPublishingModal()"
-                            ng-disabled="isPublishingModalButtonDisabled()"
+                            ng-disabled="!isPublishingModalButtonEnabled()"
                             ng-class="{ 'btn-default': !form.publication.openData.assessment.completed,
                                 'btn-danger': form.publication.openData.assessment.completed}">
                         {{ getOpenDataButtonText(form, recordOutput.recordState.openDataPublishingState) }}

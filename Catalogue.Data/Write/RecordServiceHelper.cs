@@ -4,6 +4,7 @@ using Catalogue.Utilities.Text;
 using Catalogue.Web.Controllers.Records;
 using Raven.Client;
 using System.Linq;
+using Catalogue.Data.Extensions;
 
 namespace Catalogue.Data.Write
 {

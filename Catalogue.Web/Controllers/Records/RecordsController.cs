@@ -8,6 +8,7 @@ using Catalogue.Web.Account;
 using Raven.Client;
 using System;
 using System.Web.Http;
+using Catalogue.Data.Extensions;
 using Catalogue.Data.Query;
 using NUnit.Framework;
 
