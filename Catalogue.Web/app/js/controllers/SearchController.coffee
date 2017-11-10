@@ -56,7 +56,7 @@
         # (also called explicitly from search button)
         $scope.doSearch = (query) ->
             updateUrl query
-            if query.q or query.f and query.f.keywords and query.f.keywords[0]
+            if query.q or (query.f and (query.f.keywords and query.f.keywords[0]) or (query.f.dataFormats and query.f.dataFormats[0]))
                 $scope.busy.start()
                 keywordsPromise = queryKeywords query
                 recordsPromise  = queryRecords query

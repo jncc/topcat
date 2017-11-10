@@ -64,7 +64,7 @@
     $scope.doSearch = function(query) {
       var keywordsPromise, recordsPromise;
       updateUrl(query);
-      if (query.q || query.f && query.f.keywords && query.f.keywords[0]) {
+      if (query.q || (query.f && (query.f.keywords && query.f.keywords[0]) || (query.f.dataFormats && query.f.dataFormats[0]))) {
         $scope.busy.start();
         keywordsPromise = queryKeywords(query);
         recordsPromise = queryRecords(query);
