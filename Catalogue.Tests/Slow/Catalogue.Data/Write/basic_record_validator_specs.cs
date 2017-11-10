@@ -257,5 +257,24 @@ namespace Catalogue.Tests.Slow.Catalogue.Data.Write
             var result = new RecordValidator().Validate(record);
             result.Errors.Single().Fields.Should().Contain("gemini.keywords");
         }
+
+        [Test]
+        public void doi_with_invalid_formats([Values(" ", "a bad doi", "baddoi", "104124/ABC-123", "10.4124/ABC-123?", "AB.1234/ABC-123")] string doi)
+        {
+            var record = SimpleRecord().With(r => r.DigitalObjectIdentifier = doi);
+            var result = new RecordValidator().Validate(record);
+
+            result.Errors.Single().Message.Should().Contain("Digital Object Identifier is not in a valid format");
+            result.Errors.Single().Fields.Single().Should().Be("digitalObjectIdentifier");
+        }
+
+        [Test]
+        public void doi_with_valid_formats([Values(null, "" ,"12.3456/ABC123", "00.1234/long.string+which-is:still_valid/123")] string doi)
+        {
+            var record = SimpleRecord().With(r => r.DigitalObjectIdentifier = doi);
+            var result = new RecordValidator().Validate(record);
+
+            result.Errors.Should().BeEmpty();
+        }
     }
 }

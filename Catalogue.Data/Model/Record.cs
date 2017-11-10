@@ -21,6 +21,11 @@ namespace Catalogue.Data.Model
         public string     Notes      { get; set; }
 
         /// <summary>
+        /// DataCite digital object identifier (DOI) registered to the dataset, if any.
+        /// </summary>
+        public string DigitalObjectIdentifier { get; set; }
+
+        /// <summary>
         /// An optional identifier for records imported from another source.
         /// </summary>
         public string SourceIdentifier { get; set; }
