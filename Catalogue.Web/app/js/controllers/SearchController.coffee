@@ -17,17 +17,18 @@
             blank = blankQuery()
             # update the url querystring to match the query object
             $location.search 'q', query.q || null
-            $location.search 'k', query.k # angular does the right thing here
+            $location.search 'f.keywords', query.f.keywords # angular does the right thing here
             $location.search 'p', query.p || null
-            $location.search 'd', query.d || null
             $location.search 'o', query.o || null
+            $location.search 'f.metadataDate', query.f.metadataDate || null
+            $location.search 'f.dataFormats', query.f.dataFormats || null
             #$location.search('n', $scope.query.n)
         
         queryRecords = (query) ->
-            $http.get('../api/search?' + $.param query, true)
+            $http.get('../api/search?' + $.param query, false)
                 .success (result) ->
                     # don't overwrite with earlier but slower queries!
-                    if angular.equals result.query, query
+                    if moreOrLessTheSame result.query, query
                         $scope.result = result
                 .error (e) -> $scope.notifications.add 'Oops! ' + e.message
         
@@ -39,11 +40,23 @@
             else
                 $q["defer"]() # return an empty promise https://github.com/madskristensen/WebCompiler/issues/202
 
+        moreOrLessTheSame = (resultQuery, query) ->
+            # ugly hack to get empty array and null to be the same because on the UI side the array is empty,
+            # but it's passed to the API as null
+            groomedQuery = {}
+            angular.copy query, groomedQuery
+            if groomedQuery.f
+                if groomedQuery.f.dataFormats and groomedQuery.f.dataFormats.length is 0
+                    groomedQuery.f.dataFormats = null
+                if groomedQuery.f.keywords and groomedQuery.f.keywords.length is 0
+                    groomedQuery.f.keywords = null
+            return angular.equals resultQuery, groomedQuery
+
         # called whenever the $scope.query object changes
         # (also called explicitly from search button)
         $scope.doSearch = (query) ->
             updateUrl query
-            if query.q or query.k[0]
+            if query.q or query.f and query.f.keywords and query.f.keywords[0]
                 $scope.busy.start()
                 keywordsPromise = queryKeywords query
                 recordsPromise  = queryRecords query
@@ -59,20 +72,25 @@
 
         blankQuery = ->
             q: '',
-            k: [],
+            f:
+                keywords: [],
+                dataFormats: [],
+                metadataDate: null
             p: 0,
             n: $scope.pageSize,
-            d: null,
             o: 0
 
         # all sort options in correct order
         $scope.sortOptions = [ "Most relevant", "Title A-Z", "Title Z-A", "Newest to oldest", "Oldest to newest" ]
 
+        $scope.dataFormatOptions = [ "Database", "Spreadsheet", "Documents", "Geospatial", "Image", "Audio", "Video", "Other" ]
+
         parseQuerystring = ->
             o = $location.search() # angular api for getting the querystring as an object
             # when there is exactly one keyword, angular's $location.search does not return an array
             # so fix it up (make k an array of one keyword)
-            o.k = [o.k] if o.k and not $.isArray o.k
+            if o.f
+                o.f.keywords = [o.f.keywords] if o.f.keywords and not $.isArray o.f.keywords
             o.p = o.p * 1 if o.p
             $.extend {}, blankQuery(), o
 
@@ -92,23 +110,39 @@
         #)
         
         # function to get the current querystring in the view (for constructing export url)
-        $scope.querystring = -> $.param $scope.query, true # true means traditional serialization (no square brackets for arrays)
+        $scope.querystring = -> $.param $scope.query, false # false means non-traditional serialization (square brackets for arrays)
+
+        # using this redundant array so that the checkboxes in IE work properly
+        $scope.dataFormatSelections = []
+
+        $scope.addOrRemoveDataFormat = (dataFormat) ->
+            if !$scope.query.f.dataFormats
+                $scope.query.f.dataFormats = []
+
+            if $scope.query.f.dataFormats.indexOf(dataFormat) != -1
+                $scope.query.f.dataFormats.splice($scope.query.f.dataFormats.indexOf(dataFormat), 1)
+                $scope.dataFormatSelections[dataFormat] = false
+            else
+                $scope.query.f.dataFormats.push(dataFormat)
+                $scope.dataFormatSelections[dataFormat] = true
 
         $scope.addKeywordsToQuery = (keywords) ->
+            if !$scope.query.f.keywords
+                $scope.query.f.keywords = []
             [keywordsAlreadyInQuery, keywordsToAddToQuery] = _(keywords)
                 .map $scope.keywordToString
-                .partition (k) -> k in $scope.query.k
+                .partition (k) -> k in $scope.query.f.keywords
                 .value()
             # add keywords not already in the query
-            $scope.query.k.push k for k in keywordsToAddToQuery
+            $scope.query.f.keywords.push k for k in keywordsToAddToQuery
             $scope.notifications.add "Your query already contains the '#{ $scope.keywordFromString(k).value }' keyword" for k in keywordsAlreadyInQuery
             # for usability, when keywords are added, clear the rest of the current query
             if keywordsToAddToQuery.length
-                $scope.query = angular.extend {}, blankQuery(), { 'k': $scope.query.k }
+                $scope.query = _.merge {}, blankQuery(), { 'f': $scope.query.f }
                 
         $scope.removeKeywordFromQuery = (keyword) ->
             s = $scope.keywordToString keyword
-            $scope.query.k.splice ($.inArray s, $scope.query.k), 1
+            $scope.query.f.keywords.splice ($.inArray s, $scope.query.f.keywords), 1
        
         # keyword helper functions
         $scope.keywordToString = (k) ->

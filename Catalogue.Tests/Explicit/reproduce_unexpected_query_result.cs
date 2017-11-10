@@ -44,7 +44,7 @@ namespace Catalogue.Tests.Explicit
 //                    var results = query.As<Record>().Take(10).ToList();
 //                    results.Count.Should().Be(n);
 
-                    var input = EmptyQuery().With(q => q.K = new[] { k });
+                    var input = EmptyQuery().With(q => q.F.Keywords = new[] { k });
                     var output = new RecordQueryer(db).Search(input);
                     output.Total.Should().Be(n);
                 };
@@ -79,7 +79,7 @@ namespace Catalogue.Tests.Explicit
             return new RecordQueryInputModel
             {
                 Q = "",
-                K = new string[0],
+                F = new FilterOptions{ Keywords = new string[0] },
                 P = 0,
                 N = 25,
             };

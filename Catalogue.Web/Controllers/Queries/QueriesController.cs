@@ -26,10 +26,10 @@ namespace Catalogue.Web.Controllers.Queries
         public List<string> SeabedHabitatMapsWithNoGui()
         {
             var query = new RecordQueryInputModel
-                {
-                    N = 1000,
-                    K = new [] { "vocab.jncc.gov.uk/jncc-category/Seabed Habitat Maps" },
-                };
+            {
+                N = 1000,
+                F = new FilterOptions{ Keywords = new[] { "vocab.jncc.gov.uk/jncc-category/Seabed Habitat Maps" }}
+            };
 
             var records = recordQueryer.Query(query).ToList();
 

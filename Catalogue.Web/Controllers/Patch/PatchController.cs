@@ -33,7 +33,7 @@ namespace Catalogue.Web.Controllers.Patch
             // protected sites
             var query2 = new RecordQueryInputModel
             {
-                K = new[] { "vocab.jncc.gov.uk/jncc-broad-category/Marine Protected Sites" },
+                F = new FilterOptions{Keywords = new[] { "vocab.jncc.gov.uk/jncc-broad-category/Marine Protected Sites" }},
                 P = 0,
                 N = 1024,
             };
@@ -108,7 +108,7 @@ namespace Catalogue.Web.Controllers.Patch
         {
             var query = new RecordQueryInputModel
             {
-                K = new[] { "vocab.jncc.gov.uk/jncc-category/Human Activities" },
+                F = new FilterOptions{Keywords = new[] { "vocab.jncc.gov.uk/jncc-category/Human Activities" }},
                 P = 0,
                 N = 1024,
             };
@@ -130,7 +130,7 @@ namespace Catalogue.Web.Controllers.Patch
         {
             var query = new RecordQueryInputModel
             {
-                K = new[] { "vocab.jncc.gov.uk/jncc-category/Overseas Territories" },
+                F = new FilterOptions{Keywords = new[] { "vocab.jncc.gov.uk/jncc-category/Overseas Territories" }},
                 P = 0,
                 N = 1024,
             };
@@ -182,7 +182,7 @@ namespace Catalogue.Web.Controllers.Patch
         {
             var query = new RecordQueryInputModel
             {
-                K = new[] { "vocab.jncc.gov.uk/jncc-category/" + category },
+                F = new FilterOptions{Keywords = new[] { "vocab.jncc.gov.uk/jncc-category/" + category }},
                 P = 0,
                 N = 1024,
             };
@@ -206,7 +206,7 @@ namespace Catalogue.Web.Controllers.Patch
         {
             var query = new RecordQueryInputModel
             {
-                K = new[] { "vocab.jncc.gov.uk/jncc-category/Offshore Seabed Survey" },
+                F = new FilterOptions{Keywords = new[] { "vocab.jncc.gov.uk/jncc-category/Offshore Seabed Survey" }},
                 P = 0,
                 N = 1024,
             };

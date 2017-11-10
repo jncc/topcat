@@ -1,6 +1,6 @@
 ﻿using Catalogue.Data.Query;
 using NUnit.Framework;
-using static Catalogue.Data.Query.RecordQueryInputModel.SortOptions;
+using static Catalogue.Data.Query.SortOptions;
 
 namespace Catalogue.Tests.Web.Search
 {

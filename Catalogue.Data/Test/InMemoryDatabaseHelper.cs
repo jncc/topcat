@@ -2,8 +2,10 @@
 using Catalogue.Data.Model;
 using Raven.Bundles.Versioning.Data;
 using Raven.Client;
+using Raven.Client.Document;
 using Raven.Client.Embedded;
 using Raven.Client.Indexes;
+using Raven.Client.Listeners;
 
 namespace Catalogue.Data.Test
 {
@@ -19,7 +21,13 @@ namespace Catalogue.Data.Test
                 RunInMemory = true,
                 DefaultDatabase = "topcat"
             };
-            
+
+            var dsl = new DocumentSessionListeners
+            {
+                QueryListeners = new IDocumentQueryListener[] { new NoStaleQueriesListener() }
+            };
+            store.SetListeners(dsl);
+
             // activate versioning bundle
             store.Configuration.Settings.Add("Raven/ActiveBundles", "Versioning");
 
