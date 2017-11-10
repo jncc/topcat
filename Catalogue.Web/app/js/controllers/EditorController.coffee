@@ -93,7 +93,7 @@
         $scope.isSaveDisabled = -> $scope.isClean() # || $scope.theForm.$invalid 
         $scope.isCloneHidden = -> $scope.isNew()
         $scope.isCloneDisabled = -> !$scope.isClean()
-        $scope.isHttpPath = (path) -> path.toLowerCase().startsWith "http"
+        $scope.isHttpPath = (path) -> path and path.toLowerCase().startsWith "http"
         $scope.isPublishingModalButtonEnabled = -> isFilePath($scope.form.path) and $scope.isSaveHidden()
         $scope.hasUsageConstraints = () -> (!!$scope.form.gemini.limitationsOnPublicAccess and $scope.form.gemini.limitationsOnPublicAccess isnt 'no limitations') or (!!$scope.form.gemini.useConstraints and $scope.form.gemini.useConstraints isnt 'no conditions apply')
 
@@ -150,7 +150,7 @@
         $scope.setKeyword = ($item, keyword) ->
             keyword.vocab = $item.vocab
 
-isFilePath = (path) -> path.match /^([a-z]:|\\\\jncc-corpfile\\)/i
+isFilePath = (path) -> path and path.match /^([a-z]:|\\\\jncc-corpfile\\)/i
 
 getOpenDataButtonToolTip = (record, publishingState) ->
     if !isFilePath(record.path)

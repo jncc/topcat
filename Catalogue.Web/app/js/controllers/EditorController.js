@@ -111,7 +111,7 @@
       return !$scope.isClean();
     };
     $scope.isHttpPath = function(path) {
-      return path.toLowerCase().startsWith("http");
+      return path && path.toLowerCase().startsWith("http");
     };
     $scope.isPublishingModalButtonEnabled = function() {
       return isFilePath($scope.form.path) && $scope.isSaveHidden();
@@ -203,7 +203,7 @@
   });
 
   isFilePath = function(path) {
-    return path.match(/^([a-z]:|\\\\jncc-corpfile\\)/i);
+    return path && path.match(/^([a-z]:|\\\\jncc-corpfile\\)/i);
   };
 
   getOpenDataButtonToolTip = function(record, publishingState) {
