@@ -82,15 +82,6 @@
                                 data-clipboard-target="form-path">
                             <span class="dark glyphicon glyphicon-folder-open"></span>
                         </span>
-
-                        <!--                        <span class="input-group-btn">-->
-                        <!--                            <button class="btn btn-primary" type="button" tabindex="-1"-->
-                        <!--                                    ng-disabled="!form.path"-->
-                        <!--                                    tc-copy-path-to-clipboard="form-path"-->
-                        <!--                                    data-clipboard-target="form-path">-->
-                        <!--                                <span class="glyphicon glyphicon-new-window"></span>-->
-                        <!--                            </button>-->
-                        <!--                        </span>-->
                     </div>
                 </div>
             </div>
@@ -225,9 +216,9 @@
                 <div class="editor-resource-locator form-group">
                     <div class="input-group">
                         <span class="input-group-addon well-input-group-addon"
-                                              tc-tip title="Published location for online access (URL)">
-                                            <span class="dark glyphicon glyphicon-globe"></span>
-                                        </span>
+                              tc-tip title="Published location for online access (URL)">
+                            <span class="dark glyphicon glyphicon-globe"></span>
+                        </span>
 
                         <input name="gemini.resourceLocator" ng-model="form.gemini.resourceLocator"
                                type="text" class="form-control"
@@ -304,8 +295,32 @@
                 </select>
             </div>
         </div>
+        
+        <br />
 
+        <!-- digital object identifier (doi) -->
+        <div class="form-group">
+            <div class="input-group">
+                <span class="input-group-addon well-input-group-addon"
+                      tc-tip title="Digital Object Identifier (DOI) for global identification and reuse">
+                    <span class="dark glyphicon glyphicon-barcode"></span>
+                </span>
 
+                <input type="text"
+                       maxlength="100"
+                       ng-model="form.digitalObjectIdentifier"
+                       name="digitalObjectIdentifier"
+                       placeholder="Digital Object Identifier (DOI)"
+                       class="form-control"
+                       title="The DataCite DOI assigned to this record, if any"
+                       tc-focus-tip />
+
+                <a href="http://dx.doi.org/{{form.digitalObjectIdentifier}}" target="_blank" class="input-group-addon pointable" ng-disabled="!form.digitalObjectIdentifier">
+                    <span class="dark glyphicon glyphicon-new-window" title="Go to DOI resource" tc-tip></span>
+                </a>
+            </div>
+        </div>
+        
 
 
     </div>
