@@ -53,7 +53,7 @@ updateTuples = (results, scope) ->
 module.directive 'tcSearchMap', ($window, $location, $anchorScroll) ->
     link: (scope, elem, attrs) ->
         map = L.map elem[0], { zoomControl: false }
-        L.control.zoom { position: 'topright'}
+        L.control.zoom { position: 'bottomright'}
             .addTo map
         map.addLayer baseLayer
         group = L.layerGroup().addTo map # a group for the rectangles

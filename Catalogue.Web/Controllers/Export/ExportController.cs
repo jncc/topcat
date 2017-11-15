@@ -20,12 +20,12 @@ namespace Catalogue.Web.Controllers.Export
 {
     public class ExportController : ApiController
     {
-        IDocumentSession _db;
+        IDocumentSession db;
         IRecordQueryer recordQueryer;
 
         public ExportController(IDocumentSession db, IRecordQueryer recordQueryer)
         {
-            this._db = db;
+            this.db = db;
             this.recordQueryer = recordQueryer;
         }
 
@@ -39,47 +39,29 @@ namespace Catalogue.Web.Controllers.Export
         /// Exports a csv file of records using the standard export format. 
         /// Ignores the paging parameter P and size parameter N
         /// </summary>
-        public HttpResponseMessage Get([FromUri] RecordQueryInputModel input)
+        public HttpResponseMessage Get([FromUri] RecordQueryInputModel input, string format)
         {
-            RemovePagingParametersFromRecordQuery(input);
+            var response = new HttpResponseMessage();
+            string exportFormat;
 
-            using (var adb = _db.Advanced.DocumentStore.OpenAsyncSession())
+            if (!string.IsNullOrWhiteSpace(format) && format.ToLower().Equals("csv"))
             {
-                var response = new HttpResponseMessage();
-
-                response.Content = new PushStreamContent(
-                    async (stream,  content,  context) =>
-                    {
-                        using (stream)
-                        using (var enumerator = await adb.Advanced.StreamAsync(recordQueryer.AsyncQuery(adb,input)))
-                        {
-                            var writeHeaders = true;
-                            while (await enumerator.MoveNextAsync())
-                            {
-                                var writer = new StringWriter();
-                                var exporter = new Exporter();
-                                if (writeHeaders)
-                                {
-                                    exporter.ExportHeader(writer);
-                                    writeHeaders = false;
-                                }
-
-                                exporter.ExportRecord(enumerator.Current.Document, writer);
-                                var data = UTF8Encoding.UTF8.GetBytes(writer.ToString());
-
-                                await stream.WriteAsync(data, 0, data.Length);
-                            }
-                        }
-                    });
-
-                response.Content.Headers.ContentDisposition = new ContentDispositionHeaderValue("attachment")
-                {
-                    FileName = "topcat-export-" + DateTime.Now.ToString("yyyyMMdd-HHmmss") + ".tsv"
-                };
-                response.Content.Headers.ContentType = new MediaTypeHeaderValue("application/octet-stream");
-
-                return response;
+                exportFormat = "csv";
+                response.Content = GetResponseContent(input, ",");
             }
+            else
+            {
+                exportFormat = "tsv";
+                response.Content = GetResponseContent(input, "\t");
+            }
+
+            response.Content.Headers.ContentDisposition = new ContentDispositionHeaderValue("attachment")
+            {
+                FileName = "topcat-export-" + DateTime.Now.ToString("yyyyMMdd-HHmmss") + "." + exportFormat
+            };
+            response.Content.Headers.ContentType = new MediaTypeHeaderValue("application/octet-stream");
+
+            return response;
         }
 
         /// <summary>
@@ -102,6 +84,42 @@ namespace Catalogue.Web.Controllers.Export
 
             var result = new HttpResponseMessage(HttpStatusCode.OK) { Content = new StringContent(output) };
             return result;
+        }
+
+        private PushStreamContent GetResponseContent(RecordQueryInputModel input, string delimiter)
+        {
+            RemovePagingParametersFromRecordQuery(input);
+
+            using (var adb = db.Advanced.DocumentStore.OpenAsyncSession())
+            {
+                var responseContent = new PushStreamContent(
+                    async (stream, content, context) =>
+                    {
+                        using (stream)
+                        using (var enumerator =
+                            await adb.Advanced.StreamAsync(recordQueryer.AsyncQuery(adb, input)))
+                        {
+                            var writeHeaders = true;
+                            while (await enumerator.MoveNextAsync())
+                            {
+                                var writer = new StringWriter();
+                                var exporter = new Exporter();
+                                if (writeHeaders)
+                                {
+                                    exporter.ExportHeader(writer, delimiter);
+                                    writeHeaders = false;
+                                }
+
+                                exporter.ExportRecord(enumerator.Current.Document, writer, delimiter);
+                                var data = UTF8Encoding.UTF8.GetBytes(writer.ToString());
+
+                                await stream.WriteAsync(data, 0, data.Length);
+                            }
+                        }
+                    });
+
+                return responseContent;
+            }
         }
     }
 }
