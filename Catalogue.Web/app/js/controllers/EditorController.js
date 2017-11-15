@@ -2,7 +2,10 @@
 (function() {
   var fakeValidationData, getDataFormatObj, getOpenDataButtonText, getOpenDataButtonToolTip, getPendingSignOff, getSecurityText, isFilePath, updateDataFormatObj;
 
-  angular.module('app.controllers').controller('EditorController', function($scope, $http, $routeParams, $location, record, $modal) {
+  angular.module('app.controllers').controller('EditorController', function($scope, $http, $routeParams, $location, record, $modal, Account) {
+    Account.then(function(user) {
+      return $scope.user = user;
+    });
     $scope.editing = {};
     $scope.lookups = {};
     $scope.lookups.currentDataFormat = {};
@@ -197,8 +200,15 @@
         return response.data;
       });
     };
-    return $scope.setKeyword = function($item, keyword) {
+    $scope.setKeyword = function($item, keyword) {
       return keyword.vocab = $item.vocab;
+    };
+    return $scope.fillInternalContact = function() {
+      if (!$scope.form.internalContact) {
+        $scope.form.internalContact = {};
+      }
+      $scope.form.internalContact.displayName = $scope.user.displayName;
+      return $scope.form.internalContact.email = $scope.user.email;
     };
   });
 
