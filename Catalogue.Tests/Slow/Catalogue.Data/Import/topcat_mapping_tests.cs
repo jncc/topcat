@@ -19,7 +19,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Data.Import
         {
             var records = new [] { GetExampleRecord() };
             var writer = new StringWriter();
-            new Exporter().Export(records, writer);
+            new Exporter().Export(records, writer, "\t");
 
             string s = writer.ToString();
             s.Should().Contain("some/path");

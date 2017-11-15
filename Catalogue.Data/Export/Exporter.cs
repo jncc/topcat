@@ -12,30 +12,30 @@ namespace Catalogue.Data.Export
 {
     public class Exporter
     {
-        public void Export(IEnumerable<Record> records, TextWriter writer)
+        public void Export(IEnumerable<Record> records, TextWriter writer, string delimiter)
         {
             var csv = new CsvWriter(writer);
 
-            TopcatMapping.ApplyStandardTopcatCsvConfiguration(csv.Configuration);
+            TopcatMapping.ApplyStandardTopcatConfiguration(csv.Configuration, delimiter);
 
             csv.WriteRecords(records);
         }
 
 
-        public void ExportHeader(TextWriter writer)
+        public void ExportHeader(TextWriter writer, string delimiter)
         {
             var csv = new CsvWriter(writer);
 
-            TopcatMapping.ApplyStandardTopcatCsvConfiguration(csv.Configuration);
+            TopcatMapping.ApplyStandardTopcatConfiguration(csv.Configuration, delimiter);
 
             csv.WriteHeader<Record>();
         }
 
-        public void ExportRecord(Record record, TextWriter writer)
+        public void ExportRecord(Record record, TextWriter writer, string delimiter)
         {
             var csv = new CsvWriter(writer);
 
-            TopcatMapping.ApplyStandardTopcatCsvConfiguration(csv.Configuration);
+            TopcatMapping.ApplyStandardTopcatConfiguration(csv.Configuration, delimiter);
 
             csv.WriteRecord(record);
         }

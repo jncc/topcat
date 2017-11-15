@@ -110,7 +110,8 @@
                     <span class="glyphicon glyphicon-cloud-download"></span> <span class="caret"></span>
                 </button>
                 <ul class="dropdown-menu dropdown-menu-right" role="menu">
-                    <li><a ng-href="../api/export?{{querystring()}}">Export as text file (tab-separated)</a></li>
+                    <li><a ng-href="../api/export?format=tsv&{{querystring()}}">Export as text file (tab-separated)</a></li>
+                    <li><a ng-href="../api/export?format=csv&{{querystring()}}">Export as csv file (comma-separated)</a></li>
                     <!--<li class="divider"></li> might be useful-->
                 </ul>
             </div>

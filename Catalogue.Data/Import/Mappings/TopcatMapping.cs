@@ -31,13 +31,13 @@ namespace Catalogue.Data.Import.Mappings
         
         public void Apply(CsvConfiguration config)
         {
-            ApplyStandardTopcatCsvConfiguration(config);
+            ApplyStandardTopcatConfiguration(config, "\t");
             // do nothing else! for this import mapping we're going to use defaults
         }
 
-        public static CsvConfiguration ApplyStandardTopcatCsvConfiguration(CsvConfiguration config)
+        public static CsvConfiguration ApplyStandardTopcatConfiguration(CsvConfiguration config, string delimiter)
         {
-            config.Delimiter = "\t";
+            config.Delimiter = delimiter;
             config.PrefixReferenceHeaders = true;
             TypeConverterFactory.AddConverter<List<MetadataKeyword>>(new Exporter.MetadataKeywordConverter());
             TypeConverterFactory.AddConverter<List<Extent>>(new Exporter.ExtentListConverter());

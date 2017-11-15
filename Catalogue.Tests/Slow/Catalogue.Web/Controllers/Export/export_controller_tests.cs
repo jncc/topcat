@@ -25,9 +25,30 @@ namespace Catalogue.Tests.Slow.Catalogue.Web.Controllers.Export
                 N = -1
             };
 
-            var result = controller.Get(input);
+            var result = controller.Get(input, "tsv");
 
             var task = (PushStreamContent) result.Content;
+            string content = task.ReadAsStringAsync().Result;
+
+            var matches = Regex.Matches(content, @"""""Value"""":""""GB\d{6}"""""); // match a mesh identifier e.g. GB000272
+            matches.Count.Should().Be(189);  // the number of mesh records
+        }
+
+        [Test]
+        public void export_as_csv_sanity_check()
+        {
+            var controller = new ExportController(Db, new RecordQueryer(Db));
+            var input = new RecordQueryInputModel
+            {
+                Q = "",
+                F = new FilterOptions { Keywords = new[] { "vocab.jncc.gov.uk/jncc-category/Seabed Habitat Maps" } },
+                P = 0,
+                N = -1
+            };
+
+            var result = controller.Get(input, "CSV");
+
+            var task = (PushStreamContent)result.Content;
             string content = task.ReadAsStringAsync().Result;
 
             var matches = Regex.Matches(content, @"""""Value"""":""""GB\d{6}"""""); // match a mesh identifier e.g. GB000272
@@ -46,7 +67,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Web.Controllers.Export
                 N = 15
             };
 
-            var result = controller.Get(input);
+            var result = controller.Get(input, "csv");
 
             var task = (PushStreamContent)result.Content;
             string content = task.ReadAsStringAsync().Result;

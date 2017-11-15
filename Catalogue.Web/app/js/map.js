@@ -118,7 +118,7 @@
           zoomControl: false
         });
         L.control.zoom({
-          position: 'topright'
+          position: 'bottomright'
         }).addTo(map);
         map.addLayer(baseLayer);
         group = L.layerGroup().addTo(map);
