@@ -45,6 +45,7 @@ namespace Catalogue.Data.Write
             ValidatePublishableInvariants(record, result);
             ValidateBoundingBox(record, result);
             ValidateJnccSpecificRules(record, result);
+            ValidateDoiFormat(record, result);
 
             if (record.Validation == Validation.Gemini)
             {
@@ -257,6 +258,21 @@ namespace Catalogue.Data.Write
 
             if (meshGuiKeywords.Any(k => !Regex.IsMatch(k.Value, "^GB[0-9]{6}$")))
                 result.Errors.Add("MESH GUI not valid", r => r.Gemini.Keywords);
+        }
+
+        void ValidateDoiFormat(Record record, ValidationResult<Record> result)
+        {
+            var doi = record.DigitalObjectIdentifier;
+
+            if (string.IsNullOrEmpty(doi)) return;
+
+            // if not blank it should look like 10.4124/ABC-123 where the digits before the slash are
+            // an account prefix and after the slash can be any combination of numbers, letters, - . _ : + and / 
+            var regex = new Regex(@"^[0-9]{2}\.[0-9]{4}\/[a-zA-Z0-9\-\._\:\+\/]+$");
+            if (!regex.Match(doi).Success)
+            {
+                result.Errors.Add("Digital Object Identifier is not in a valid format", r => r.DigitalObjectIdentifier);
+            }
         }
 
         public static bool IsValidDate(string date)

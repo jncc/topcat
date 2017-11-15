@@ -221,6 +221,18 @@ namespace Catalogue.Tests.Slow.Catalogue.Data.Write
             footer.ModifiedByUser.Email.Should().Be("tester@example.com");
         }
 
+        [Test]
+        public void digital_object_identifier_can_be_saved_to_record()
+        {
+            var database = Mock.Of<IDocumentSession>();
+            var service = new RecordService(database, ValidatorStub());
+
+            var record = BasicRecord().With(r => r.DigitalObjectIdentifier = "10.4124/1.ABC-123");
+            service.Update(record, TestUser);
+
+            Mock.Get(database).Verify(db => db.Store(record));
+        }
+
         Record BasicRecord()
         {
             return new Record
