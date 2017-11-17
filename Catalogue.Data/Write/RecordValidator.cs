@@ -80,12 +80,12 @@ namespace Catalogue.Data.Write
                 {
                     if (uri.Scheme != Uri.UriSchemeFile && uri.Scheme != Uri.UriSchemeHttp && uri.Scheme != Uri.UriSchemeHttps)
                     {
-                        result.Errors.Add("Path must be a file system path", r => r.Path);
+                        result.Errors.Add("Path must be a file system path or URL", r => r.Path);
                     }
                 }
                 else
                 {
-                    result.Errors.Add("Path is invalid. Normally should be a file system path", r => r.Path);
+                    result.Errors.Add("Path is invalid. Normally should be a file system path or URL", r => r.Path);
                 }
             }
         }
