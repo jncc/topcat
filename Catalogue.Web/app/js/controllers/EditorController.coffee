@@ -1,6 +1,8 @@
 ﻿angular.module('app.controllers').controller 'EditorController',
 
-    ($scope, $http, $routeParams, $location, record, $modal) -> 
+    ($scope, $http, $routeParams, $location, record, $modal, Account) -> 
+
+        Account.then (user) -> $scope.user = user
 
         $scope.editing = {}
         $scope.lookups = {}
@@ -149,6 +151,13 @@
         
         $scope.setKeyword = ($item, keyword) ->
             keyword.vocab = $item.vocab
+
+        $scope.fillInternalContact = () ->
+            if not $scope.form.internalContact then $scope.form.internalContact = {}
+            $scope.form.internalContact.displayName = $scope.user.displayName
+            $scope.form.internalContact.email = $scope.user.email
+
+
 
 isFilePath = (path) -> path and path.match /^([a-z]:|\\\\jncc-corpfile\\)/i
 

@@ -109,8 +109,9 @@ namespace Catalogue.Tests.Slow.Catalogue.Data.Write
             "PG:\"host=spatial-store dbname=spatial layer=SSSI_England_Units\"",
             @"\\jncc-corpfile\jncc corporate data\my_dataset.xlsx",
             @"http://www.example.com",
-            @"https://www.example.com",
-            @"postgres://username@hostname/databasename")] string path)
+            @"https://www.example.com"
+            //@"postgres://username@hostname/databasename"
+            )] string path)
         {
             var result = new RecordValidator().Validate(SimpleRecord().With(r => r.Path = path));
             result.Errors.Should().BeEmpty();

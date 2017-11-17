@@ -606,7 +606,11 @@ label {
   margin-bottom: 10px;
 }
 .editor-notes {
-  margin-top: 2em;
+  margin-top: 1.5em;
+}
+.editor-contact {
+  margin-top: 1.5em;
+  margin-bottom: 1em;
 }
 .editor-validation-summary {
   margin-bottom: 20px;

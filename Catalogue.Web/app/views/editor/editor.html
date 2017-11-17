@@ -63,14 +63,14 @@
                 <div class="well well-sm form-group">
                     <div class="editor-path input-group">
                         <span class="input-group-addon well-input-group-addon"
-                              tc-tip title="The file share path, URL, or database connection string of the resource">
+                              tc-tip title="The file share path or URL of the resource">
                             <span class="dark glyphicon glyphicon-th-large"></span>
                         </span>
 
                         <input id="form-path" name="path" ng-model="form.path"
                                type="text" class="form-control"
                                placeholder="Location"
-                               tc-focus-tip title="The file share path, URL, or database connection string of the resource"
+                               tc-focus-tip title="The file share path or URL of the resource"
                                spellcheck="false" />
                         
                         <a href="{{form.path}}" ng-if="isHttpPath(form.path)" target="_blank" class="input-group-addon pointable" ng-disabled="!form.path">
@@ -608,6 +608,7 @@
             </div>
 
             <hr/>
+
             <div class="editor-review layout-row">
                 <div class="layout-col">
                     <span>Review</span>
@@ -624,21 +625,48 @@
                                ng-click="open($event,'review')"
                                title="The date for reviewing this record"/>
                         <span class="input-group-addon" ng-click="open($event,'review')">
-                                    <span class="dark glyphicon glyphicon-calendar"></span>
-                                </span>
+                            <span class="dark glyphicon glyphicon-calendar"></span>
+                        </span>
                     </div>
                 </div>
             </div>
-
-            <hr/>
+            
+            <hr />
 
             <div class="editor-notes form-group">
                 <textarea ng-model="form.notes" type="text" rows="4"
-                          tc-autosize
-                          class="form-control"
-                          placeholder="Notes"
-                          title="Notes to keep separate from the Gemini record"
-                          tc-focus-tip></textarea>
+                            tc-autosize
+                            class="form-control"
+                            placeholder="Notes"
+                            title="Notes to keep separate from the Gemini record"
+                            tc-focus-tip></textarea>
+            </div>
+            
+            <hr/>
+            
+            <div class="editor-contact">
+                <div class="layout-row">
+                    <div class="layout-col">
+                        <span>Internal contact</span>
+                    </div>
+                    <div class="layout-col pull-right">
+                        <a href="" ng-click="fillInternalContact()">assign yourself</a>
+                    </div>
+                </div>
+                <div class="layout-row">
+                    <input type="text" class="form-control"
+                           placeholder="Name/post"
+                           tc-focus-tip
+                           title="Internal contact for JNCC use only"
+                           ng-model="form.internalContact.displayName" />
+                </div>
+                <div class="layout-row">
+                    <input type="text" class="form-control"
+                           placeholder="Email"
+                           tc-focus-tip
+                           title="Internal contact email for JNCC use only"
+                           ng-model="form.internalContact.email"/>
+                </div>
             </div>
 
         </div>
