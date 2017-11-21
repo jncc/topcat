@@ -15,6 +15,11 @@ namespace Catalogue.Data
         public static IDocumentStore Production()
         {
             var store = new DocumentStore { ConnectionStringName = "Data" };
+            var dsl = new DocumentSessionListeners
+            {
+                ConversionListeners = new IDocumentConversionListener[] { new InternalContactToManagerConverter() }
+            };
+            store.SetListeners(dsl);
             store.Initialize();
             IndexCreation.CreateIndexes(typeof(Record).Assembly, store);
             return store;

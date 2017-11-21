@@ -116,6 +116,7 @@
     <Compile Include="Indexes\RecordKeywordIndex.cs" />
     <Compile Include="Indexes\RecordSpatialIndex.cs" />
     <Compile Include="Indexes\RecordIndex.cs" />
+    <Compile Include="InternalContactToManagerConverter.cs" />
     <Compile Include="Model\Footer.cs" />
     <Compile Include="Model\OpenDataPublishingState.cs" />
     <Compile Include="Model\PublicationInfo.cs" />

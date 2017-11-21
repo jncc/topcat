@@ -19,7 +19,7 @@ namespace Catalogue.Data.Model
         public Security   Security        { get; set; }
         public DateTime?  Review          { get; set; }
         public string     Notes           { get; set; }
-        public UserInfo   InternalContact { get; set; }
+        public UserInfo   Manager         { get; set; }
 
         /// <summary>
         /// DataCite digital object identifier (DOI) registered to the dataset, if any.

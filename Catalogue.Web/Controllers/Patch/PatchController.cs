@@ -342,18 +342,18 @@ namespace Catalogue.Web.Controllers.Patch
 
             foreach (var record in records)
             {
-                if (!record.ReadOnly && record.Gemini.MetadataPointOfContact != null && record.InternalContact == null)
+                if (!record.ReadOnly && record.Gemini.MetadataPointOfContact != null && record.Manager == null)
                 {
-                    record.InternalContact = new UserInfo();
+                    record.Manager = new UserInfo();
 
                     if (record.Gemini.MetadataPointOfContact.Name != null)
                     {
-                        record.InternalContact.DisplayName = record.Gemini.MetadataPointOfContact.Name;
+                        record.Manager.DisplayName = record.Gemini.MetadataPointOfContact.Name;
                     }
 
                     if (record.Gemini.MetadataPointOfContact.Email != null)
                     {
-                        record.InternalContact.Email = record.Gemini.MetadataPointOfContact.Email;
+                        record.Manager.Email = record.Gemini.MetadataPointOfContact.Email;
                     }
                 }
             }
