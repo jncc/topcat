@@ -27,9 +27,10 @@ namespace Catalogue.Data
 
             if (r.Manager == null)
             {
-                var internalContact = document.Value<RavenJObject>("InternalContact");
-                if (internalContact != null)
+                
+                if (document.Value<string>("InternalContact") != null)
                 {
+                    var internalContact = document.Value<RavenJObject>("InternalContact");
                     r.Manager = new UserInfo();
 
                     var displayName = internalContact.Value<string>("DisplayName");
