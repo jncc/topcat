@@ -647,25 +647,25 @@
             <div class="editor-contact">
                 <div class="layout-row">
                     <div class="layout-col">
-                        <span>Internal contact</span>
+                        <span>Manager</span>
                     </div>
                     <div class="layout-col pull-right">
-                        <a href="" ng-click="fillInternalContact()">assign yourself</a>
+                        <a href="" ng-click="fillManagerDetails()">assign yourself</a>
                     </div>
                 </div>
                 <div class="layout-row">
                     <input type="text" class="form-control"
-                           placeholder="Name/post"
+                           placeholder="Name"
                            tc-focus-tip
-                           title="Internal contact for JNCC use only"
-                           ng-model="form.internalContact.displayName" />
+                           title="Dataset manager name for internal use only"
+                           ng-model="form.manager.displayName" />
                 </div>
                 <div class="layout-row">
                     <input type="text" class="form-control"
                            placeholder="Email"
                            tc-focus-tip
-                           title="Internal contact email for JNCC use only"
-                           ng-model="form.internalContact.email"/>
+                           title="Dataset manager email for internal use only"
+                           ng-model="form.manager.email"/>
                 </div>
             </div>
 

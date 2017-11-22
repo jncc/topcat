@@ -342,18 +342,18 @@ namespace Catalogue.Web.Controllers.Patch
 
             foreach (var record in records)
             {
-                if (!record.ReadOnly && record.Gemini.MetadataPointOfContact != null && record.InternalContact == null)
+                if (!record.ReadOnly && record.Gemini.MetadataPointOfContact != null && record.Manager == null)
                 {
-                    record.InternalContact = new UserInfo();
+                    record.Manager = new UserInfo();
 
                     if (record.Gemini.MetadataPointOfContact.Name != null)
                     {
-                        record.InternalContact.DisplayName = record.Gemini.MetadataPointOfContact.Name;
+                        record.Manager.DisplayName = record.Gemini.MetadataPointOfContact.Name;
                     }
 
                     if (record.Gemini.MetadataPointOfContact.Email != null)
                     {
-                        record.InternalContact.Email = record.Gemini.MetadataPointOfContact.Email;
+                        record.Manager.Email = record.Gemini.MetadataPointOfContact.Email;
                     }
                 }
             }
@@ -362,6 +362,44 @@ namespace Catalogue.Web.Controllers.Patch
 
             return new HttpResponseMessage { Content = new StringContent("Updated " + records.Count + " records.") };
 
+        }
+
+        [HttpPost, Route("api/patch/migrateinternalcontact")]
+        public HttpResponseMessage MigrateInternalContact()
+        {
+            var records1 = db
+                .Query<Record>()
+                .As<Record>()
+                .Skip(0)
+                .Take(1024)
+                .ToList();
+
+            var records2 = db
+                .Query<Record>()
+                .As<Record>()
+                .Skip(1024)
+                .Take(1024)
+                .ToList();
+
+            var records3 = db
+                .Query<Record>()
+                .As<Record>()
+                .Skip(2048)
+                .Take(1024)
+                .ToList();
+
+            var records4 = db
+                .Query<Record>()
+                .As<Record>()
+                .Skip(3072)
+                .Take(1024)
+                .ToList();
+
+            var records = records1.Concat(records2).Concat(records3).Concat(records4).ToList();
+
+            db.SaveChanges();
+
+            return new HttpResponseMessage { Content = new StringContent("Updated " + records.Count + " records.") };
         }
     }
 }

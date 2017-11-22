@@ -152,10 +152,10 @@
         $scope.setKeyword = ($item, keyword) ->
             keyword.vocab = $item.vocab
 
-        $scope.fillInternalContact = () ->
-            if not $scope.form.internalContact then $scope.form.internalContact = {}
-            $scope.form.internalContact.displayName = $scope.user.displayName
-            $scope.form.internalContact.email = $scope.user.email
+        $scope.fillManagerDetails = () ->
+            if not $scope.form.manager then $scope.form.manager = {}
+            $scope.form.manager.displayName = $scope.user.displayName
+            $scope.form.manager.email = $scope.user.email
 
 
 

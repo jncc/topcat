@@ -203,12 +203,12 @@
     $scope.setKeyword = function($item, keyword) {
       return keyword.vocab = $item.vocab;
     };
-    return $scope.fillInternalContact = function() {
-      if (!$scope.form.internalContact) {
-        $scope.form.internalContact = {};
+    return $scope.fillManagerDetails = function() {
+      if (!$scope.form.manager) {
+        $scope.form.manager = {};
       }
-      $scope.form.internalContact.displayName = $scope.user.displayName;
-      return $scope.form.internalContact.email = $scope.user.email;
+      $scope.form.manager.displayName = $scope.user.displayName;
+      return $scope.form.manager.email = $scope.user.email;
     };
   });
 
