@@ -34,6 +34,12 @@ namespace Catalogue.Data
                     store.Configuration.Port = port;
                     NonAdminHttp.EnsureCanListenToWhenInNonAdminContext(port);
                     store.UseEmbeddedHttpServer = true;
+
+                    var dsl = new DocumentSessionListeners
+                    {
+                        ConversionListeners = new IDocumentConversionListener[] { new InternalContactToManagerConverter() }
+                    };
+                    store.SetListeners(dsl);
                 },
                 PostInitializationAction = Seeder.Seed
             }.Create();

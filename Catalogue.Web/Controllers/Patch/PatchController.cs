@@ -363,5 +363,43 @@ namespace Catalogue.Web.Controllers.Patch
             return new HttpResponseMessage { Content = new StringContent("Updated " + records.Count + " records.") };
 
         }
+
+        [HttpPost, Route("api/patch/migrateinternalcontact")]
+        public HttpResponseMessage MigrateInternalContact()
+        {
+            var records1 = db
+                .Query<Record>()
+                .As<Record>()
+                .Skip(0)
+                .Take(1024)
+                .ToList();
+
+            var records2 = db
+                .Query<Record>()
+                .As<Record>()
+                .Skip(1024)
+                .Take(1024)
+                .ToList();
+
+            var records3 = db
+                .Query<Record>()
+                .As<Record>()
+                .Skip(2048)
+                .Take(1024)
+                .ToList();
+
+            var records4 = db
+                .Query<Record>()
+                .As<Record>()
+                .Skip(3072)
+                .Take(1024)
+                .ToList();
+
+            var records = records1.Concat(records2).Concat(records3).Concat(records4).ToList();
+
+            db.SaveChanges();
+
+            return new HttpResponseMessage { Content = new StringContent("Updated " + records.Count + " records.") };
+        }
     }
 }
