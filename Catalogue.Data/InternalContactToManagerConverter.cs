@@ -25,22 +25,9 @@ namespace Catalogue.Data
 
             var r = (Record)entity;
 
-            if (r.Manager == null)
+            if (r.Manager == null && r.InternalContact != null)
             {
-                
-                if (document.Value<string>("InternalContact") != null)
-                {
-                    var internalContact = document.Value<RavenJObject>("InternalContact");
-                    r.Manager = new UserInfo();
-
-                    var displayName = internalContact.Value<string>("DisplayName");
-                    if (displayName != null)
-                        r.Manager.DisplayName = displayName;
-
-                    var email = internalContact.Value<string>("Email");
-                    if (email != null)
-                        r.Manager.Email = email;
-                }
+                r.Manager = r.InternalContact;
             }
         }
     }
