@@ -194,6 +194,7 @@ namespace Catalogue.Data.Seed
                             West = -8.14m,
                         };
                     });
+                r.Manager = userInfo;
             });
 
             recordService.Insert(record, userInfo);
