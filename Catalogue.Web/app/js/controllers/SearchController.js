@@ -19,19 +19,25 @@
     $scope.resultsView = 'list';
     updateUrl = function(query) {
       var blank;
+      console.log("doing something");
       blank = blankQuery();
       $location.search('q', query.q || null);
       $location.search('f.keywords', query.f.keywords);
       $location.search('p', query.p || null);
       $location.search('o', query.o || null);
       $location.search('f.metadataDate', query.f.metadataDate || null);
-      return $location.search('f.dataFormats', query.f.dataFormats || null);
+      $location.search('f.dataFormats', query.f.dataFormats || null);
+      $location.search('f.user.displayName', query.f.user.displayName || null);
+      return $location.search('f.user.email', query.f.user.email || null);
     };
     queryRecords = function(query) {
+      console.log($.param(query));
       return $http.get('../api/search?' + $.param(query, false)).success(function(result) {
         if (moreOrLessTheSame(result.query, query)) {
-          return $scope.result = result;
+          $scope.result = result;
+          console.log("same result");
         }
+        return console.log(result);
       }).error(function(e) {
         return $scope.notifications.add('Oops! ' + e.message);
       });
@@ -64,15 +70,16 @@
     $scope.doSearch = function(query) {
       var keywordsPromise, recordsPromise;
       updateUrl(query);
-      if (query.q || (query.f && (query.f.keywords && query.f.keywords[0]) || (query.f.dataFormats && query.f.dataFormats[0]))) {
+      if (query.q || (query.f && (query.f.keywords && query.f.keywords[0]) || (query.f.dataFormats && query.f.dataFormats[0]) || query.f.user.displayName || query.f.user.email)) {
         $scope.busy.start();
         keywordsPromise = queryKeywords(query);
         recordsPromise = queryRecords(query);
         return $q.all([keywordsPromise, recordsPromise])["finally"](function() {
           $scope.busy.stop();
           if (!$scope.result.query.q) {
-            return $scope.keywordSuggestions = {};
+            $scope.keywordSuggestions = {};
           }
+          return console.log("done");
         });
       } else {
         $scope.keywordSuggestions = {};
@@ -85,7 +92,11 @@
         f: {
           keywords: [],
           dataFormats: [],
-          metadataDate: null
+          metadataDate: null,
+          user: {
+            displayName: null,
+            email: null
+          }
         },
         p: 0,
         n: $scope.pageSize,
@@ -124,6 +135,12 @@
         $scope.query.f.dataFormats.push(dataFormat);
         return $scope.dataFormatSelections[dataFormat] = true;
       }
+    };
+    $scope.removeManagerName = function() {
+      return $scope.query.f.user.displayName = null;
+    };
+    $scope.removeManagerEmail = function() {
+      return $scope.query.f.user.email = null;
     };
     $scope.addKeywordsToQuery = function(keywords) {
       var k, keywordsAlreadyInQuery, keywordsToAddToQuery, _i, _j, _len, _len1, _ref;

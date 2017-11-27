@@ -213,6 +213,96 @@ namespace Catalogue.Tests.Slow.Catalogue.Data.Query
             }
         }
 
+        [Test]
+        public void filter_user_with_partial_user_name_test()
+        {
+            using (var db = GetDbForFilterTests())
+            {
+                var queryer = new RecordQueryer(db);
+                var input = QueryTestHelper.EmptySearchInput().With(x =>
+                {
+                    x.Q = "record";
+                    x.F = new FilterOptions { User = new UserInfo{ DisplayName = "CATHY" } };
+                });
+
+                var results = queryer.Search(input).Results;
+                results.Count.Should().Be(1);
+                results.Any(r => r.Title == "spreadsheet <b>record</b>").Should().BeTrue();
+            }
+        }
+
+        [Test]
+        public void filter_user_with_full_user_name_test()
+        {
+            using (var db = GetDbForFilterTests())
+            {
+                var queryer = new RecordQueryer(db);
+                var input = QueryTestHelper.EmptySearchInput().With(x =>
+                {
+                    x.Q = "record";
+                    x.F = new FilterOptions { User = new UserInfo { DisplayName = "cathy TEST" } };
+                });
+
+                var results = queryer.Search(input).Results;
+                results.Count.Should().Be(1);
+                results.Any(r => r.Title == "spreadsheet <b>record</b>").Should().BeTrue();
+            }
+        }
+
+        [Test]
+        public void filter_user_with_email_test()
+        {
+            using (var db = GetDbForFilterTests())
+            {
+                var queryer = new RecordQueryer(db);
+                var input = QueryTestHelper.EmptySearchInput().With(x =>
+                {
+                    x.Q = "record";
+                    x.F = new FilterOptions { User = new UserInfo { Email = "cathy.test@jncc.gov.uk" } };
+                });
+
+                var results = queryer.Search(input).Results;
+                results.Count.Should().Be(2);
+                results.Any(r => r.Title == "spreadsheet <b>record</b>").Should().BeTrue();
+                results.Any(r => r.Title == "geospatial <b>record</b> 2").Should().BeTrue();
+            }
+        }
+
+        [Test]
+        public void filter_user_with_name_and_email_test()
+        {
+            using (var db = GetDbForFilterTests())
+            {
+                var queryer = new RecordQueryer(db);
+                var input = QueryTestHelper.EmptySearchInput().With(x =>
+                {
+                    x.Q = "record";
+                    x.F = new FilterOptions { User = new UserInfo { DisplayName = "cathy test", Email = "cathy test" } };
+                });
+
+                var results = queryer.Search(input).Results;
+                results.Count.Should().Be(1);
+                results.Any(r => r.Title == "spreadsheet <b>record</b>").Should().BeTrue();
+            }
+        }
+
+        [Test]
+        public void filter_by_email_test()
+        {
+            using (var db = GetDbForFilterTests())
+            {
+                var queryer = new RecordQueryer(db);
+                var input = QueryTestHelper.EmptySearchInput().With(x =>
+                {
+                    x.Q = "record";
+                    x.F = new FilterOptions { User = new UserInfo { Email = "test" } };
+                });
+
+                var results = queryer.Search(input).Results;
+                results.Count.Should().Be(3);
+            }
+        }
+
         private IDocumentSession GetDbForFilterTests()
         {
             var store = new InMemoryDatabaseHelper().Create();
@@ -222,21 +312,25 @@ namespace Catalogue.Tests.Slow.Catalogue.Data.Query
                 {
                     m.Gemini.Title = "spreadsheet record";
                     m.Gemini.DataFormat = "Microsoft Excel for Windows";
+                    m.Manager = new UserInfo {DisplayName = "cathy test", Email = "cathy.test@jncc.gov.uk"};
                 });
                 var record2 = QueryTestHelper.SimpleRecord().With(m =>
                 {
                     m.Gemini.Title = "database record";
                     m.Gemini.DataFormat = "Database";
+                    m.Manager = new UserInfo { DisplayName = "pete test", Email = "pete.test@jncc.gov.uk" };
                 });
                 var record3 = QueryTestHelper.SimpleRecord().With(m =>
                 {
                     m.Gemini.Title = "geospatial record 1";
                     m.Gemini.DataFormat = "ESRI Arc/View ShapeFile";
+                    m.Manager = new UserInfo { DisplayName = "pete test"};
                 });
                 var record4 = QueryTestHelper.SimpleRecord().With(m =>
                 {
                     m.Gemini.Title = "geospatial record 2";
                     m.Gemini.DataFormat = "Geospatial (vector polygon)";
+                    m.Manager = new UserInfo { Email = "cathy.test@jncc.gov.uk" };
                 });
                 var record5 = QueryTestHelper.SimpleRecord().With(m =>
                 {

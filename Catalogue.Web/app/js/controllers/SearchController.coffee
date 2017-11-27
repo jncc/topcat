@@ -13,7 +13,9 @@
         $scope.vocabulator = {}         # vocabulator scope to save state between modal instances
         $scope.resultsView = 'list'     # results view style (list|grid)
 
+
         updateUrl = (query) ->
+            console.log "doing something"
             blank = blankQuery()
             # update the url querystring to match the query object
             $location.search 'q', query.q || null
@@ -22,14 +24,19 @@
             $location.search 'o', query.o || null
             $location.search 'f.metadataDate', query.f.metadataDate || null
             $location.search 'f.dataFormats', query.f.dataFormats || null
+            $location.search 'f.user.displayName', query.f.user.displayName || null
+            $location.search 'f.user.email', query.f.user.email || null
             #$location.search('n', $scope.query.n)
         
         queryRecords = (query) ->
+            console.log $.param query
             $http.get('../api/search?' + $.param query, false)
                 .success (result) ->
                     # don't overwrite with earlier but slower queries!
                     if moreOrLessTheSame result.query, query
                         $scope.result = result
+                        console.log "same result"
+                    console.log result
                 .error (e) -> $scope.notifications.add 'Oops! ' + e.message
         
         queryKeywords = (query) ->
@@ -56,7 +63,7 @@
         # (also called explicitly from search button)
         $scope.doSearch = (query) ->
             updateUrl query
-            if query.q or (query.f and (query.f.keywords and query.f.keywords[0]) or (query.f.dataFormats and query.f.dataFormats[0]))
+            if query.q or (query.f and (query.f.keywords and query.f.keywords[0]) or (query.f.dataFormats and query.f.dataFormats[0]) or query.f.user.displayName or query.f.user.email)
                 $scope.busy.start()
                 keywordsPromise = queryKeywords query
                 recordsPromise  = queryRecords query
@@ -66,6 +73,7 @@
                         $scope.busy.stop()
                         if !$scope.result.query.q
                             $scope.keywordSuggestions = {}
+                        console.log "done"
             else
                 $scope.keywordSuggestions = {}
                 $scope.result = {}
@@ -75,7 +83,10 @@
             f:
                 keywords: [],
                 dataFormats: [],
-                metadataDate: null
+                metadataDate: null,
+                user:
+                    displayName: null,
+                    email: null
             p: 0,
             n: $scope.pageSize,
             o: 0
@@ -96,6 +107,9 @@
 
         # initialise the query to whatever is in the querystring
         $scope.query = parseQuerystring()
+
+        # show home page if there's no ongoing query
+        # $scope.showHomePage = !query.q && !query.f.dataFormats[0] && !query.f.keywords[0] && !query.f.user.displayName && !query.f.user.email && !app.starting
         
         # when the model query value is updated, do the search
         $scope.$watch 'query', $scope.doSearch, true
@@ -125,6 +139,9 @@
             else
                 $scope.query.f.dataFormats.push(dataFormat)
                 $scope.dataFormatSelections[dataFormat] = true
+
+        $scope.removeManagerName = () -> $scope.query.f.user.displayName = null
+        $scope.removeManagerEmail = () -> $scope.query.f.user.email = null
 
         $scope.addKeywordsToQuery = (keywords) ->
             if !$scope.query.f.keywords

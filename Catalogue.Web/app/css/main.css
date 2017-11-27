@@ -214,6 +214,10 @@ label {
 .search-box {
   margin-bottom: 2em;
 }
+.search-advanced .option {
+  color: #444;
+  font-weight: bold;
+}
 .search-keyword-suggestions {
   margin-bottom: 1em;
 }
