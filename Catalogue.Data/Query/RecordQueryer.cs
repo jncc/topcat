@@ -242,17 +242,9 @@ namespace Catalogue.Data.Query
 
         private IQueryable<RecordIndex.Result> AddManagerToQuery(RecordQueryInputModel input, IQueryable<RecordIndex.Result> query)
         {
-            if (input.F.User != null)
+            if (!string.IsNullOrWhiteSpace(input.F.Manager))
             {
-                if (!string.IsNullOrWhiteSpace(input.F.User.DisplayName))
-                {
-                    query = query.SearchMultiple(r => r.ManagerName, input.F.User.DisplayName, 1, SearchOptions.And);
-                }
-
-                if (!string.IsNullOrWhiteSpace(input.F.User.Email))
-                {
-                    query = query.SearchMultiple(r => r.ManagerEmail, input.F.User.Email, 1, SearchOptions.And);
-                }
+                query = query.SearchMultiple(r => r.Manager, input.F.Manager, 1, SearchOptions.And);
             }
 
             return query;

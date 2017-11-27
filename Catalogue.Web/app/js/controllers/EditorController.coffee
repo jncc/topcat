@@ -155,7 +155,6 @@
         $scope.fillManagerDetails = () ->
             if not $scope.form.manager then $scope.form.manager = {}
             $scope.form.manager.displayName = $scope.user.displayName
-            $scope.form.manager.email = $scope.user.email
 
 
 

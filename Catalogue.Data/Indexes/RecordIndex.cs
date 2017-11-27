@@ -26,8 +26,7 @@ namespace Catalogue.Data.Indexes
             public DateTime MetadataDate { get; set; }
             public string   DataFormat   { get; set; }
             public string   Target       { get; set; }
-            public string   ManagerName  { get; set; }
-            public string   ManagerEmail { get; set; }
+            public string   Manager  { get; set; }
         }
 
         public RecordIndex()
@@ -46,8 +45,7 @@ namespace Catalogue.Data.Indexes
                                      MetadataDate = record.Gemini.MetadataDate,
                                      DataFormat = record.Gemini.DataFormat,
                                      Gemini_DatasetReferenceDate = record.Gemini.DatasetReferenceDate,
-                                     ManagerName = record.Manager.DisplayName,
-                                     ManagerEmail = record.Manager.Email
+                                     Manager = record.Manager.DisplayName,
                              };
 
             // store and analyse the Title field
@@ -72,14 +70,9 @@ namespace Catalogue.Data.Indexes
             TermVector(x => x.KeywordsN, FieldTermVector.WithPositionsAndOffsets);
 
             // store and analyse the Manager DisplayName field
-            Analyze(x => x.ManagerName, typeof(SimpleAnalyzer).AssemblyQualifiedName);
-            Stores.Add(x => x.ManagerName, FieldStorage.Yes);
-            TermVector(x => x.ManagerName, FieldTermVector.WithPositionsAndOffsets);
-
-            // store and analyse the Manager Email field
-            Analyze(x => x.ManagerEmail, typeof(SimpleAnalyzer).AssemblyQualifiedName);
-            Stores.Add(x => x.ManagerEmail, FieldStorage.Yes);
-            TermVector(x => x.ManagerEmail, FieldTermVector.WithPositionsAndOffsets);
+            Analyze(x => x.Manager, typeof(SimpleAnalyzer).AssemblyQualifiedName);
+            Stores.Add(x => x.Manager, FieldStorage.Yes);
+            TermVector(x => x.Manager, FieldTermVector.WithPositionsAndOffsets);
         }
     }
 }

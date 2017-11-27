@@ -21,8 +21,8 @@ namespace Catalogue.Data.Query
         public DateTime? MetadataDate { get; set; }
 
         /// <summary>
-        /// The manager name or email to restrict the query to.
+        /// The manager name, post, or email to restrict the query to.
         /// </summary>
-        public UserInfo User { get; set; }
+        public string Manager { get; set; }
     }
 }

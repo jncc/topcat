@@ -207,8 +207,7 @@
       if (!$scope.form.manager) {
         $scope.form.manager = {};
       }
-      $scope.form.manager.displayName = $scope.user.displayName;
-      return $scope.form.manager.email = $scope.user.email;
+      return $scope.form.manager.displayName = $scope.user.displayName;
     };
   });
 

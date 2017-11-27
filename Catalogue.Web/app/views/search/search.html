@@ -36,23 +36,13 @@
                 <br />
                     
                 <span class="search-advanced option">Manager</span><br />
-                <div class="form-inline">
-                    <!-- dateset reference date -->
-                    <div class="form-group"></div>
-                    <div class="form-group">
-                        <label>Name</label>
-                        <input type="text" class="form-control"
-                               ng-model="query.f.user.displayName"
-                               tc-focus-tip
-                               tc-debounce
-                               title="The dataset reference date"/>
-                    </div>
-                    <label>Email</label>
+                <div class="form-group">
                     <input type="text" class="form-control"
-                           ng-model="query.f.user.email"
-                           tc-focus-tip
-                           tc-debounce
-                           title="The dataset reference date" />
+                            ng-model="query.f.manager"
+                            tc-focus-tip
+                            tc-debounce
+                            title="The manager's name, post, or email to search for"
+                            placeholder="Name, post, or email" />
                 </div>
             </div>
         </div>
@@ -107,7 +97,7 @@
                 <span ng-show="result.query.f.keywords[0]" class="glyphicon glyphicon-remove" ng-click="query.q = ''" tc-tip title="Remove"></span>
             </span>
 
-            <span ng-show="result.query.f.dataFormats[0] || result.query.f.user.displayName || result.query.f.user.email">
+            <span ng-show="result.query.f.dataFormats[0] || result.query.f.manager">
                 <span>
                     filtered by 
                     <span ng-repeat="f in result.query.f.dataFormats">
@@ -115,10 +105,8 @@
                         <span ng-show="result.query.f.dataFormats[0]" class="glyphicon glyphicon-remove" ng-click="addOrRemoveDataFormat(f)" tc-tip title="Remove">&nbsp;</span>
                     </span>
                     <span>
-                        <b>{{result.query.f.user.displayName}}</b>
-                        <span ng-show="result.query.f.user.displayName" class="glyphicon glyphicon-remove" ng-click="removeManagerName()" tc-tip title="Remove">&nbsp;</span>
-                        <b>{{result.query.f.user.email}}</b>
-                        <span ng-show="result.query.f.user.email" class="glyphicon glyphicon-remove" ng-click="removeManagerEmail()" tc-tip title="Remove">&nbsp;</span>
+                        <b>{{result.query.f.manager}}</b>
+                        <span ng-show="result.query.f.manager" class="glyphicon glyphicon-remove" ng-click="removeManager()" tc-tip title="Remove">&nbsp;</span>
                     </span>
                 </span>
             </span>
@@ -222,7 +210,7 @@
 
 
 
-<div ng-show="!query.q && !query.f.dataFormats[0] && !query.f.keywords[0] && !query.f.user.displayName && !query.f.user.email && !app.starting" class="fade-in-with-delay">
+<div ng-show="!query.q && !query.f.dataFormats[0] && !query.f.keywords[0] && !query.f.manager && !app.starting" class="fade-in-with-delay">
     <div class="row">
         <div class="col-md-8 welcome">
             <h1>
