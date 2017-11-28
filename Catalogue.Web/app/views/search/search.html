@@ -26,26 +26,22 @@
         <div class="search-advanced slide-down" ng-show="advanced">
             <div class="well well-sm">
                 <h4>Advanced search options</h4>
-                <form>
-                    <span class="search-advanced option">Data format</span><br />
+                <div class="search-advanced option">
+                    <span class="search-advanced option-text">Data format</span><br />
                     <label tc-tip title="Filter by data format (multiple choice)" ng-repeat="f in dataFormatOptions">
                         <input type="checkbox" ng-checked="dataFormatSelections[f]" ng-click="addOrRemoveSelection(f, dataFormatSelections, query.f.dataFormats)"/> {{f}}&nbsp;&nbsp;
                     </label>
-                </form>
+                </div>
                 
-                <br />
-                    
-                <form>
-                    <span class="search-advanced option">Resource type</span><br />
+                <div class="search-advanced option">
+                    <span class="search-advanced option-text">Resource type</span><br />
                     <label tc-tip title="Filter by resource type (multiple choice)" ng-repeat="(key,value) in resourceTypeOptions">
                         <input type="checkbox" ng-checked="resourceTypeSelections[value]" ng-click="addOrRemoveSelection(value, resourceTypeSelections, query.f.resourceTypes)" /> {{key}}&nbsp;&nbsp;
                     </label>
-                </form>
+                </div>
                 
-                <br />
-
-                <span class="search-advanced option">Manager</span><br />
-                <div class="form-group">
+                <div class="search-advanced option">
+                    <span class="search-advanced option-text">Manager</span><br />
                     <input type="text" class="form-control"
                             ng-model="query.f.manager"
                             tc-focus-tip
