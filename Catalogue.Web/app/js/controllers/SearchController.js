@@ -25,7 +25,8 @@
       $location.search('p', query.p || null);
       $location.search('o', query.o || null);
       $location.search('f.metadataDate', query.f.metadataDate || null);
-      return $location.search('f.dataFormats', query.f.dataFormats || null);
+      $location.search('f.dataFormats', query.f.dataFormats || null);
+      return $location.search('f.manager', query.f.manager || null);
     };
     queryRecords = function(query) {
       return $http.get('../api/search?' + $.param(query, false)).success(function(result) {
@@ -64,7 +65,7 @@
     $scope.doSearch = function(query) {
       var keywordsPromise, recordsPromise;
       updateUrl(query);
-      if (query.q || (query.f && (query.f.keywords && query.f.keywords[0]) || (query.f.dataFormats && query.f.dataFormats[0]))) {
+      if (query.q || (query.f && (query.f.keywords && query.f.keywords[0]) || (query.f.dataFormats && query.f.dataFormats[0]) || query.f.manager)) {
         $scope.busy.start();
         keywordsPromise = queryKeywords(query);
         recordsPromise = queryRecords(query);
@@ -85,7 +86,8 @@
         f: {
           keywords: [],
           dataFormats: [],
-          metadataDate: null
+          metadataDate: null,
+          manager: null
         },
         p: 0,
         n: $scope.pageSize,
@@ -124,6 +126,9 @@
         $scope.query.f.dataFormats.push(dataFormat);
         return $scope.dataFormatSelections[dataFormat] = true;
       }
+    };
+    $scope.removeManager = function() {
+      return $scope.query.f.manager = null;
     };
     $scope.addKeywordsToQuery = function(keywords) {
       var k, keywordsAlreadyInQuery, keywordsToAddToQuery, _i, _j, _len, _len1, _ref;

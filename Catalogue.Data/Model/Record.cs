@@ -46,7 +46,5 @@ namespace Catalogue.Data.Model
         public int Revision { get; internal set; }
 
         public Footer Footer { get; set; }
-
-        public UserInfo InternalContact { get; set; }
     }
 }

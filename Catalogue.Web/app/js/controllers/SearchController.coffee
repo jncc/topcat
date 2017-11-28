@@ -13,6 +13,7 @@
         $scope.vocabulator = {}         # vocabulator scope to save state between modal instances
         $scope.resultsView = 'list'     # results view style (list|grid)
 
+
         updateUrl = (query) ->
             blank = blankQuery()
             # update the url querystring to match the query object
@@ -22,6 +23,7 @@
             $location.search 'o', query.o || null
             $location.search 'f.metadataDate', query.f.metadataDate || null
             $location.search 'f.dataFormats', query.f.dataFormats || null
+            $location.search 'f.manager', query.f.manager || null
             #$location.search('n', $scope.query.n)
         
         queryRecords = (query) ->
@@ -56,7 +58,7 @@
         # (also called explicitly from search button)
         $scope.doSearch = (query) ->
             updateUrl query
-            if query.q or (query.f and (query.f.keywords and query.f.keywords[0]) or (query.f.dataFormats and query.f.dataFormats[0]))
+            if query.q or (query.f and (query.f.keywords and query.f.keywords[0]) or (query.f.dataFormats and query.f.dataFormats[0]) or query.f.manager)
                 $scope.busy.start()
                 keywordsPromise = queryKeywords query
                 recordsPromise  = queryRecords query
@@ -75,7 +77,8 @@
             f:
                 keywords: [],
                 dataFormats: [],
-                metadataDate: null
+                metadataDate: null,
+                manager: null
             p: 0,
             n: $scope.pageSize,
             o: 0
@@ -125,6 +128,8 @@
             else
                 $scope.query.f.dataFormats.push(dataFormat)
                 $scope.dataFormatSelections[dataFormat] = true
+
+        $scope.removeManager = () -> $scope.query.f.manager = null
 
         $scope.addKeywordsToQuery = (keywords) ->
             if !$scope.query.f.keywords

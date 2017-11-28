@@ -27,10 +27,23 @@
             <div class="well well-sm">
                 <h4>Advanced search options</h4>
                 <form>
+                    <span class="search-advanced option">Data format</span><br />
                     <label tc-tip title="Filter by data format (multiple choice)" ng-repeat="f in dataFormatOptions">
                         <input type="checkbox" ng-checked="dataFormatSelections[f]" ng-click="addOrRemoveDataFormat(f)"/> {{f}}&nbsp;&nbsp;
                     </label>
                 </form>
+                
+                <br />
+                    
+                <span class="search-advanced option">Manager</span><br />
+                <div class="form-group">
+                    <input type="text" class="form-control"
+                            ng-model="query.f.manager"
+                            tc-focus-tip
+                            tc-debounce
+                            title="The manager's name, post, or email to search for"
+                            placeholder="Name, post, or email" />
+                </div>
             </div>
         </div>
     </div>
@@ -84,12 +97,16 @@
                 <span ng-show="result.query.f.keywords[0]" class="glyphicon glyphicon-remove" ng-click="query.q = ''" tc-tip title="Remove"></span>
             </span>
 
-            <span ng-show="result.query.f.dataFormats[0]">
+            <span ng-show="result.query.f.dataFormats[0] || result.query.f.manager">
                 <span>
                     filtered by 
                     <span ng-repeat="f in result.query.f.dataFormats">
                         <b>{{f}}</b>
                         <span ng-show="result.query.f.dataFormats[0]" class="glyphicon glyphicon-remove" ng-click="addOrRemoveDataFormat(f)" tc-tip title="Remove">&nbsp;</span>
+                    </span>
+                    <span>
+                        <b>{{result.query.f.manager}}</b>
+                        <span ng-show="result.query.f.manager" class="glyphicon glyphicon-remove" ng-click="removeManager()" tc-tip title="Remove">&nbsp;</span>
                     </span>
                 </span>
             </span>
@@ -193,7 +210,7 @@
 
 
 
-<div ng-show="!query.q && !query.f.dataFormats[0] && !query.f.keywords[0] && !app.starting" class="fade-in-with-delay">
+<div ng-show="!query.q && !query.f.dataFormats[0] && !query.f.keywords[0] && !query.f.manager && !app.starting" class="fade-in-with-delay">
     <div class="row">
         <div class="col-md-8 welcome">
             <h1>

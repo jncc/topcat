@@ -214,6 +214,10 @@ label {
 .search-box {
   margin-bottom: 2em;
 }
+.search-advanced .option {
+  color: #444;
+  font-weight: bold;
+}
 .search-keyword-suggestions {
   margin-bottom: 1em;
 }
@@ -711,11 +715,11 @@ form .ng-invalid {
   opacity: 1;
 }
 .slide-down.ng-hide-add {
-  max-height: 100px;
+  max-height: 250px;
   transition: all linear 0.3s;
 }
 .slide-down.ng-hide-remove {
-  max-height: 100px;
+  max-height: 250px;
   transition: all linear 0.2s;
 }
 .slide-down.ng-hide {

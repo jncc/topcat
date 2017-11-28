@@ -1,4 +1,5 @@
 ﻿using System;
+using Catalogue.Data.Model;
 
 namespace Catalogue.Data.Query
 {
@@ -18,5 +19,10 @@ namespace Catalogue.Data.Query
         /// The earliest metadata date from which records should be returned.
         /// </summary>
         public DateTime? MetadataDate { get; set; }
+
+        /// <summary>
+        /// The manager name, post, or email to restrict the query to.
+        /// </summary>
+        public string Manager { get; set; }
     }
 }

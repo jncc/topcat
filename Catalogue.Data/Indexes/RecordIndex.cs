@@ -26,6 +26,7 @@ namespace Catalogue.Data.Indexes
             public DateTime MetadataDate { get; set; }
             public string   DataFormat   { get; set; }
             public string   Target       { get; set; }
+            public string   Manager  { get; set; }
         }
 
         public RecordIndex()
@@ -43,10 +44,9 @@ namespace Catalogue.Data.Indexes
                                      KeywordsN = record.Gemini.Keywords.Select(k => k.Value), // for full-text search matching on keywords
                                      MetadataDate = record.Gemini.MetadataDate,
                                      DataFormat = record.Gemini.DataFormat,
-                                     Gemini_DatasetReferenceDate = record.Gemini.DatasetReferenceDate
+                                     Gemini_DatasetReferenceDate = record.Gemini.DatasetReferenceDate,
+                                     Manager = record.Manager.DisplayName,
                              };
-
-            Sort(r => r.Title, SortOptions.String);
 
             // store and analyse the Title field
             Analyze(x => x.Title, typeof(StemAnalyzer).AssemblyQualifiedName);
@@ -68,6 +68,11 @@ namespace Catalogue.Data.Indexes
             Analyze(x => x.KeywordsN, typeof(NGramAnalyzer).AssemblyQualifiedName);
             Stores.Add(x => x.KeywordsN, FieldStorage.Yes);
             TermVector(x => x.KeywordsN, FieldTermVector.WithPositionsAndOffsets);
+
+            // store and analyse the Manager DisplayName field
+            Analyze(x => x.Manager, typeof(SimpleAnalyzer).AssemblyQualifiedName);
+            Stores.Add(x => x.Manager, FieldStorage.Yes);
+            TermVector(x => x.Manager, FieldTermVector.WithPositionsAndOffsets);
         }
     }
 }
