@@ -53,16 +53,12 @@
       var groomedQuery;
       groomedQuery = {};
       angular.copy(query, groomedQuery);
-      if (groomedQuery.f) {
-        if (groomedQuery.f.dataFormats && groomedQuery.f.dataFormats.length === 0) {
-          groomedQuery.f.dataFormats = null;
-        }
-        if (groomedQuery.f.resourceTypes && groomedQuery.f.resourceTypes.length === 0) {
-          groomedQuery.f.resourceTypes = null;
-        }
-        if (groomedQuery.f.keywords && groomedQuery.f.keywords.length === 0) {
-          groomedQuery.f.keywords = null;
-        }
+      if (query.f) {
+        Object.keys(query.f).forEach(function(key, index) {
+          if (groomedQuery.f[key] !== void 0 && groomedQuery.f[key] !== null && groomedQuery.f[key].constructor === Array && groomedQuery.f[key].length < 1) {
+            return groomedQuery.f[key] = null;
+          }
+        });
       }
       return angular.equals(resultQuery, groomedQuery);
     };

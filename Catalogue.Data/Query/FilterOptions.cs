@@ -16,6 +16,11 @@ namespace Catalogue.Data.Query
         public string[] DataFormats { get; set; }
 
         /// <summary>
+        /// The resource types to restrict the query to.
+        /// </summary>
+        public string[] ResourceTypes { get; set; }
+
+        /// <summary>
         /// The earliest metadata date from which records should be returned.
         /// </summary>
         public DateTime? MetadataDate { get; set; }
@@ -24,10 +29,5 @@ namespace Catalogue.Data.Query
         /// The manager name, post, or email to restrict the query to.
         /// </summary>
         public string Manager { get; set; }
-
-        /// <summary>
-        /// The resource type to restrict the query to.
-        /// </summary>
-        public string[] ResourceTypes { get; set; }
     }
 }

@@ -48,13 +48,10 @@
             # but it's passed to the API as null
             groomedQuery = {}
             angular.copy query, groomedQuery
-            if groomedQuery.f
-                if groomedQuery.f.dataFormats and groomedQuery.f.dataFormats.length is 0
-                    groomedQuery.f.dataFormats = null
-                if groomedQuery.f.resourceTypes and groomedQuery.f.resourceTypes.length is 0
-                    groomedQuery.f.resourceTypes = null
-                if groomedQuery.f.keywords and groomedQuery.f.keywords.length is 0
-                    groomedQuery.f.keywords = null
+            if query.f
+                Object.keys(query.f).forEach (key, index) ->
+                    if groomedQuery.f[key] != undefined and groomedQuery.f[key] != null and groomedQuery.f[key].constructor is Array and groomedQuery.f[key].length < 1
+                        groomedQuery.f[key] = null
             return angular.equals resultQuery, groomedQuery
 
         # called whenever the $scope.query object changes
@@ -129,7 +126,8 @@
         $scope.resourceTypeSelections = []
 
         $scope.addOrRemoveSelection = (newSelection, currentSelections, queryField) ->
-            if !queryField then queryField = []
+            if !queryField
+                queryField = []
 
             if queryField.indexOf(newSelection) != -1
                 queryField.splice(queryField.indexOf(newSelection), 1)
