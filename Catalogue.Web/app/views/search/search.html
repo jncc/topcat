@@ -29,12 +29,21 @@
                 <form>
                     <span class="search-advanced option">Data format</span><br />
                     <label tc-tip title="Filter by data format (multiple choice)" ng-repeat="f in dataFormatOptions">
-                        <input type="checkbox" ng-checked="dataFormatSelections[f]" ng-click="addOrRemoveDataFormat(f)"/> {{f}}&nbsp;&nbsp;
+                        <input type="checkbox" ng-checked="dataFormatSelections[f]" ng-click="addOrRemoveSelection(f, dataFormatSelections, query.f.dataFormats)"/> {{f}}&nbsp;&nbsp;
                     </label>
                 </form>
                 
                 <br />
                     
+                <form>
+                    <span class="search-advanced option">Resource type</span><br />
+                    <label tc-tip title="Filter by resource type (multiple choice)" ng-repeat="(key,value) in resourceTypeOptions">
+                        <input type="checkbox" ng-checked="resourceTypeSelections[value]" ng-click="addOrRemoveSelection(value, resourceTypeSelections, query.f.resourceTypes)" /> {{key}}&nbsp;&nbsp;
+                    </label>
+                </form>
+                
+                <br />
+
                 <span class="search-advanced option">Manager</span><br />
                 <div class="form-group">
                     <input type="text" class="form-control"
@@ -97,12 +106,16 @@
                 <span ng-show="result.query.f.keywords[0]" class="glyphicon glyphicon-remove" ng-click="query.q = ''" tc-tip title="Remove"></span>
             </span>
 
-            <span ng-show="result.query.f.dataFormats[0] || result.query.f.manager">
+            <span ng-show="result.query.f.dataFormats[0] || result.query.f.manager || result.query.f.resourceTypes[0]">
                 <span>
                     filtered by 
                     <span ng-repeat="f in result.query.f.dataFormats">
                         <b>{{f}}</b>
-                        <span ng-show="result.query.f.dataFormats[0]" class="glyphicon glyphicon-remove" ng-click="addOrRemoveDataFormat(f)" tc-tip title="Remove">&nbsp;</span>
+                        <span ng-show="result.query.f.dataFormats[0]" class="glyphicon glyphicon-remove" ng-click="addOrRemoveSelection(f, dataFormatSelections, query.f.dataFormats)" tc-tip title="Remove">&nbsp;</span>
+                    </span>
+                    <span ng-repeat="t in result.query.f.resourceTypes">
+                        <b>{{t}}</b>
+                        <span ng-show="result.query.f.resourceTypes[0]" class="glyphicon glyphicon-remove" ng-click="addOrRemoveSelection(t, resourceTypeSelections, query.f.resourceTypes)" tc-tip title="Remove">&nbsp;</span>
                     </span>
                     <span>
                         <b>{{result.query.f.manager}}</b>
@@ -210,7 +223,7 @@
 
 
 
-<div ng-show="!query.q && !query.f.dataFormats[0] && !query.f.keywords[0] && !query.f.manager && !app.starting" class="fade-in-with-delay">
+<div ng-show="!query.q && !query.f.dataFormats[0] && !query.f.keywords[0] && !query.f.manager && !query.f.resourceTypes[0] && !app.starting" class="fade-in-with-delay">
     <div class="row">
         <div class="col-md-8 welcome">
             <h1>
@@ -280,8 +293,9 @@
                     <li>URLs instead of file paths <span class="label label-success">Done</span></li>
                     <li>Digital Object Identifier field <span class="label label-success">Done</span></li>
                     <li>Dataset manager field <span class="label label-success">Done</span></li>
-                    <li>Search by name</li>
+                    <li>Search by name<span class="label label-success">Done</span></li>
                     <li>Search by data format type</li>
+                    <li>Search by resource type</li>
                 </ul>
             </div>
 

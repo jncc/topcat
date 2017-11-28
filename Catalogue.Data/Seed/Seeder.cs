@@ -185,7 +185,7 @@ namespace Catalogue.Data.Seed
                             Email = "some.user@jncc.gov.uk",
                             Role = "pointOfContact",
                         };
-                        m.ResourceType = "dataset";
+                        m.ResourceType = "publication";
                         m.BoundingBox = new BoundingBox
                         {
                             North = 60.77m,

@@ -24,5 +24,10 @@ namespace Catalogue.Data.Query
         /// The manager name, post, or email to restrict the query to.
         /// </summary>
         public string Manager { get; set; }
+
+        /// <summary>
+        /// The resource type to restrict the query to.
+        /// </summary>
+        public string[] ResourceTypes { get; set; }
     }
 }

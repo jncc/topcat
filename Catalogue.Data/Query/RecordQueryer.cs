@@ -83,6 +83,7 @@ namespace Catalogue.Data.Query
                 query = AddDataFormatsToQuery(input, query);
                 query = AddMetadataDateToQuery(input, query);
                 query = AddManagerToQuery(input, query);
+                query = AddResourceTypesToQuery(input, query);
             }
 
             var recordQuery = query.As<Record>(); // ravendb method to project from the index result type to the actual document type
@@ -247,6 +248,15 @@ namespace Catalogue.Data.Query
                 query = query.SearchMultiple(r => r.Manager, input.F.Manager, 1, SearchOptions.And);
             }
 
+            return query;
+        }
+
+        private IQueryable<RecordIndex.Result> AddResourceTypesToQuery(RecordQueryInputModel input, IQueryable<RecordIndex.Result> query)
+        {
+            if (input.F.ResourceTypes != null && input.F.ResourceTypes.Any() && input.F.ResourceTypes[0].IsNotBlank())
+            {
+                query = query.Where(r => r.ResourceType.In(input.F.ResourceTypes));
+            }
             return query;
         }
     }

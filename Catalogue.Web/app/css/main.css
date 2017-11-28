@@ -715,11 +715,11 @@ form .ng-invalid {
   opacity: 1;
 }
 .slide-down.ng-hide-add {
-  max-height: 250px;
+  max-height: 300px;
   transition: all linear 0.3s;
 }
 .slide-down.ng-hide-remove {
-  max-height: 250px;
+  max-height: 300px;
   transition: all linear 0.2s;
 }
 .slide-down.ng-hide {
