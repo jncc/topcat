@@ -306,6 +306,44 @@ namespace Catalogue.Tests.Slow.Catalogue.Data.Query
             }
         }
 
+        [Test]
+        public void filter_by_one_resource_type()
+        {
+            using (var db = GetDbForFilterTests())
+            {
+                var queryer = new RecordQueryer(db);
+                var input = QueryTestHelper.EmptySearchInput().With(x =>
+                {
+                    x.Q = "record";
+                    x.F = new FilterOptions { ResourceTypes = new [] {"Dataset"} };
+                });
+
+                var results = queryer.Search(input).Results;
+                results.Count.Should().Be(2);
+                results.Any(r => r.Title == "geospatial <b>record</b> 1").Should().BeTrue();
+                results.Any(r => r.Title == "<b>record</b> with no data format").Should().BeTrue();
+            }
+        }
+
+        [Test]
+        public void filter_by_multiple_resource_types()
+        {
+            using (var db = GetDbForFilterTests())
+            {
+                var queryer = new RecordQueryer(db);
+                var input = QueryTestHelper.EmptySearchInput().With(x =>
+                {
+                    x.Q = "record";
+                    x.F = new FilterOptions { ResourceTypes = new[] { "publication", "nonGeographicDataset" } };
+                });
+
+                var results = queryer.Search(input).Results;
+                results.Count.Should().Be(2);
+                results.Any(r => r.Title == "spreadsheet <b>record</b>").Should().BeTrue();
+                results.Any(r => r.Title == "database <b>record</b>").Should().BeTrue();
+            }
+        }
+
         private IDocumentSession GetDbForFilterTests()
         {
             var store = new InMemoryDatabaseHelper().Create();
@@ -315,30 +353,35 @@ namespace Catalogue.Tests.Slow.Catalogue.Data.Query
                 {
                     m.Gemini.Title = "spreadsheet record";
                     m.Gemini.DataFormat = "Microsoft Excel for Windows";
+                    m.Gemini.ResourceType = "publication";
                     m.Manager = new UserInfo {DisplayName = "cathy test cathy.test@jncc.gov.uk" };
                 });
                 var record2 = QueryTestHelper.SimpleRecord().With(m =>
                 {
                     m.Gemini.Title = "database record";
                     m.Gemini.DataFormat = "Database";
+                    m.Gemini.ResourceType = "nonGeographicDataset";
                     m.Manager = new UserInfo { DisplayName = "pete test pete.test@jncc.gov.uk" };
                 });
                 var record3 = QueryTestHelper.SimpleRecord().With(m =>
                 {
                     m.Gemini.Title = "geospatial record 1";
                     m.Gemini.DataFormat = "ESRI Arc/View ShapeFile";
+                    m.Gemini.ResourceType = "dataset";
                     m.Manager = new UserInfo { DisplayName = "pete test"};
                 });
                 var record4 = QueryTestHelper.SimpleRecord().With(m =>
                 {
                     m.Gemini.Title = "geospatial record 2";
                     m.Gemini.DataFormat = "Geospatial (vector polygon)";
+                    m.Gemini.ResourceType = "service";
                     m.Manager = new UserInfo { DisplayName = "cathy.test@jncc.gov.uk" };
                 });
                 var record5 = QueryTestHelper.SimpleRecord().With(m =>
                 {
                     m.Gemini.Title = "record with no data format";
                     m.Gemini.DataFormat = null;
+                    m.Gemini.ResourceType = "dataset";
                 });
 
                 db.Store(record1);

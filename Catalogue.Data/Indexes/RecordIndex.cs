@@ -26,7 +26,8 @@ namespace Catalogue.Data.Indexes
             public DateTime MetadataDate { get; set; }
             public string   DataFormat   { get; set; }
             public string   Target       { get; set; }
-            public string   Manager  { get; set; }
+            public string   Manager      { get; set; }
+            public string   ResourceType { get; set; }
         }
 
         public RecordIndex()
@@ -46,6 +47,7 @@ namespace Catalogue.Data.Indexes
                                      DataFormat = record.Gemini.DataFormat,
                                      Gemini_DatasetReferenceDate = record.Gemini.DatasetReferenceDate,
                                      Manager = record.Manager.DisplayName,
+                                     ResourceType = record.Gemini.ResourceType
                              };
 
             // store and analyse the Title field

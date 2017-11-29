@@ -215,6 +215,9 @@ label {
   margin-bottom: 2em;
 }
 .search-advanced .option {
+  margin-top: .5em;
+}
+.search-advanced .option .option-text {
   color: #444;
   font-weight: bold;
 }

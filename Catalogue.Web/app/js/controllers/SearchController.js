@@ -26,6 +26,7 @@
       $location.search('o', query.o || null);
       $location.search('f.metadataDate', query.f.metadataDate || null);
       $location.search('f.dataFormats', query.f.dataFormats || null);
+      $location.search('f.resourceTypes', query.f.resourceTypes || null);
       return $location.search('f.manager', query.f.manager || null);
     };
     queryRecords = function(query) {
@@ -52,20 +53,19 @@
       var groomedQuery;
       groomedQuery = {};
       angular.copy(query, groomedQuery);
-      if (groomedQuery.f) {
-        if (groomedQuery.f.dataFormats && groomedQuery.f.dataFormats.length === 0) {
-          groomedQuery.f.dataFormats = null;
-        }
-        if (groomedQuery.f.keywords && groomedQuery.f.keywords.length === 0) {
-          groomedQuery.f.keywords = null;
-        }
+      if (query.f) {
+        Object.keys(query.f).forEach(function(key, index) {
+          if (groomedQuery.f[key] !== void 0 && groomedQuery.f[key] !== null && groomedQuery.f[key].constructor === Array && groomedQuery.f[key].length < 1) {
+            return groomedQuery.f[key] = null;
+          }
+        });
       }
       return angular.equals(resultQuery, groomedQuery);
     };
     $scope.doSearch = function(query) {
       var keywordsPromise, recordsPromise;
       updateUrl(query);
-      if (query.q || (query.f && (query.f.keywords && query.f.keywords[0]) || (query.f.dataFormats && query.f.dataFormats[0]) || query.f.manager)) {
+      if (query.q || (query.f && (query.f.keywords && query.f.keywords[0]) || (query.f.dataFormats && query.f.dataFormats[0]) || (query.f.resourceTypes && query.f.resourceTypes[0]) || query.f.manager)) {
         $scope.busy.start();
         keywordsPromise = queryKeywords(query);
         recordsPromise = queryRecords(query);
@@ -86,6 +86,7 @@
         f: {
           keywords: [],
           dataFormats: [],
+          resourceTypes: [],
           metadataDate: null,
           manager: null
         },
@@ -96,6 +97,12 @@
     };
     $scope.sortOptions = ["Most relevant", "Title A-Z", "Title Z-A", "Newest to oldest", "Oldest to newest"];
     $scope.dataFormatOptions = ["Database", "Spreadsheet", "Documents", "Geospatial", "Image", "Audio", "Video", "Other"];
+    $scope.resourceTypeOptions = {
+      "Dataset": "dataset",
+      "Publication": "publication",
+      "Service": "service",
+      "Non-geographic dataset": "nonGeographicDataset"
+    };
     parseQuerystring = function() {
       var o;
       o = $location.search();
@@ -115,16 +122,17 @@
       return $.param($scope.query, false);
     };
     $scope.dataFormatSelections = [];
-    $scope.addOrRemoveDataFormat = function(dataFormat) {
-      if (!$scope.query.f.dataFormats) {
-        $scope.query.f.dataFormats = [];
+    $scope.resourceTypeSelections = [];
+    $scope.addOrRemoveSelection = function(newSelection, currentSelections, queryField) {
+      if (!queryField) {
+        queryField = [];
       }
-      if ($scope.query.f.dataFormats.indexOf(dataFormat) !== -1) {
-        $scope.query.f.dataFormats.splice($scope.query.f.dataFormats.indexOf(dataFormat), 1);
-        return $scope.dataFormatSelections[dataFormat] = false;
+      if (queryField.indexOf(newSelection) !== -1) {
+        queryField.splice(queryField.indexOf(newSelection), 1);
+        return currentSelections[newSelection] = false;
       } else {
-        $scope.query.f.dataFormats.push(dataFormat);
-        return $scope.dataFormatSelections[dataFormat] = true;
+        queryField.push(newSelection);
+        return currentSelections[newSelection] = true;
       }
     };
     $scope.removeManager = function() {

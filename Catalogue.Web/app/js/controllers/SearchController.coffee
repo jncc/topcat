@@ -23,6 +23,7 @@
             $location.search 'o', query.o || null
             $location.search 'f.metadataDate', query.f.metadataDate || null
             $location.search 'f.dataFormats', query.f.dataFormats || null
+            $location.search 'f.resourceTypes', query.f.resourceTypes || null
             $location.search 'f.manager', query.f.manager || null
             #$location.search('n', $scope.query.n)
         
@@ -47,18 +48,17 @@
             # but it's passed to the API as null
             groomedQuery = {}
             angular.copy query, groomedQuery
-            if groomedQuery.f
-                if groomedQuery.f.dataFormats and groomedQuery.f.dataFormats.length is 0
-                    groomedQuery.f.dataFormats = null
-                if groomedQuery.f.keywords and groomedQuery.f.keywords.length is 0
-                    groomedQuery.f.keywords = null
+            if query.f
+                Object.keys(query.f).forEach (key, index) ->
+                    if groomedQuery.f[key] != undefined and groomedQuery.f[key] != null and groomedQuery.f[key].constructor is Array and groomedQuery.f[key].length < 1
+                        groomedQuery.f[key] = null
             return angular.equals resultQuery, groomedQuery
 
         # called whenever the $scope.query object changes
         # (also called explicitly from search button)
         $scope.doSearch = (query) ->
             updateUrl query
-            if query.q or (query.f and (query.f.keywords and query.f.keywords[0]) or (query.f.dataFormats and query.f.dataFormats[0]) or query.f.manager)
+            if query.q or (query.f and (query.f.keywords and query.f.keywords[0]) or (query.f.dataFormats and query.f.dataFormats[0]) or (query.f.resourceTypes and query.f.resourceTypes[0]) or query.f.manager)
                 $scope.busy.start()
                 keywordsPromise = queryKeywords query
                 recordsPromise  = queryRecords query
@@ -77,6 +77,7 @@
             f:
                 keywords: [],
                 dataFormats: [],
+                resourceTypes: [],
                 metadataDate: null,
                 manager: null
             p: 0,
@@ -87,6 +88,11 @@
         $scope.sortOptions = [ "Most relevant", "Title A-Z", "Title Z-A", "Newest to oldest", "Oldest to newest" ]
 
         $scope.dataFormatOptions = [ "Database", "Spreadsheet", "Documents", "Geospatial", "Image", "Audio", "Video", "Other" ]
+        $scope.resourceTypeOptions = {
+            "Dataset": "dataset",
+            "Publication": "publication",
+            "Service": "service",
+            "Non-geographic dataset": "nonGeographicDataset" }
 
         parseQuerystring = ->
             o = $location.search() # angular api for getting the querystring as an object
@@ -115,19 +121,20 @@
         # function to get the current querystring in the view (for constructing export url)
         $scope.querystring = -> $.param $scope.query, false # false means non-traditional serialization (square brackets for arrays)
 
-        # using this redundant array so that the checkboxes in IE work properly
+        # using these redundant arrays so that the checkboxes in IE work properly
         $scope.dataFormatSelections = []
+        $scope.resourceTypeSelections = []
 
-        $scope.addOrRemoveDataFormat = (dataFormat) ->
-            if !$scope.query.f.dataFormats
-                $scope.query.f.dataFormats = []
+        $scope.addOrRemoveSelection = (newSelection, currentSelections, queryField) ->
+            if !queryField
+                queryField = []
 
-            if $scope.query.f.dataFormats.indexOf(dataFormat) != -1
-                $scope.query.f.dataFormats.splice($scope.query.f.dataFormats.indexOf(dataFormat), 1)
-                $scope.dataFormatSelections[dataFormat] = false
+            if queryField.indexOf(newSelection) != -1
+                queryField.splice(queryField.indexOf(newSelection), 1)
+                currentSelections[newSelection] = false
             else
-                $scope.query.f.dataFormats.push(dataFormat)
-                $scope.dataFormatSelections[dataFormat] = true
+                queryField.push(newSelection)
+                currentSelections[newSelection] = true
 
         $scope.removeManager = () -> $scope.query.f.manager = null
 
