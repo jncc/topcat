@@ -11,6 +11,11 @@ namespace Catalogue.Data.Model
     public class OpenDataPublicationInfo
     {
         /// <summary>
+        /// Captures whether the record should be published as Open Data. 
+        /// </summary>
+        public bool? Publishable { get; set; }
+
+        /// <summary>
         /// Captures the record's "risk assessment" information. 
         /// </summary>
         public OpenDataAssessmentInfo Assessment { get; set; }
