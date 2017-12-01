@@ -38,9 +38,11 @@
     $scope.publishingStatus = publishingStatus;
     publishingStatus.signOff.timeout = -1;
     $scope.refreshPublishingStatus = function() {
-      publishingStatus.riskAssessment.completed = $scope.form.publication !== null && $scope.form.publication.openData.assessment.completed;
-      publishingStatus.signOff.completed = $scope.form.publication !== null && $scope.form.publication.openData.signOff !== null;
-      publishingStatus.upload.completed = $scope.form.publication !== null && $scope.form.publication.openData.lastSuccess !== null;
+      if ($scope.form.publication.openData !== null) {
+        publishingStatus.riskAssessment.completed = $scope.form.publication.openData.assessment !== null && $scope.form.publication.openData.assessment.completed;
+        publishingStatus.signOff.completed = $scope.form.publication.openData.signOff !== null;
+        publishingStatus.upload.completed = $scope.form.publication.openData.lastSuccess !== null;
+      }
       if ($scope.recordOutput.recordState.openDataPublishingState.assessedAndUpToDate) {
         publishingStatus.riskAssessment.currentClass = "visited";
       } else if (publishingStatus.riskAssessment.completed) {
@@ -72,7 +74,7 @@
       publishingStatus.currentActiveView = "risk assessment";
     }
     refreshAssessmentInfo = function() {
-      if ($scope.form.publication !== null && $scope.form.publication.openData.assessment.completed) {
+      if ($scope.form.publication.openData.assessment !== null && $scope.form.publication.openData.assessment.completed) {
         if ($scope.form.publication.openData.assessment.completedByUser === null && $scope.form.publication.openData.assessment.initialAssessmentWasDoneOnSpreadsheet) {
           return $scope.assessmentCompletedInfo = "Initial assessment completed on spreadsheet";
         } else if ($scope.recordOutput.recordState.openDataPublishingState.assessedAndUpToDate) {

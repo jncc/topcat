@@ -586,9 +586,55 @@ namespace Catalogue.Tests.Slow.Catalogue.Web.Controllers.Publishing
         }
 
         [Test]
+        public void reassessment_for_not_publishable_record_should_fail_test()
+        {
+            var recordId = new Guid("13da2640-9241-4ad8-a14f-aad02109cf59");
+            var record = new Record().With(r =>
+            {
+                r.Id = recordId;
+                r.Path = @"X:\path\to\assessment\test";
+                r.Validation = Validation.Gemini;
+                r.Gemini = Library.Blank().With(m =>
+                {
+                    m.MetadataDate = new DateTime(2017, 07, 30);
+                });
+                r.Publication = new PublicationInfo
+                {
+                    OpenData = new OpenDataPublicationInfo
+                    {
+                        Publishable = false,
+                        Assessment = new OpenDataAssessmentInfo
+                        {
+                            Completed = true,
+                            CompletedOnUtc = new DateTime(2017, 07, 21),
+                            CompletedByUser = new UserInfo
+                            {
+                                DisplayName = "Pete",
+                                Email = "pete@example.com"
+                            },
+                            InitialAssessmentWasDoneOnSpreadsheet = false
+                        },
+                        SignOff = new OpenDataSignOffInfo
+                        {
+                            DateUtc = new DateTime(2017, 07, 22)
+                        },
+                        LastAttempt = new PublicationAttempt
+                        {
+                            DateUtc = new DateTime(2017, 07, 23)
+                        }
+                    }
+                };
+                r.Footer = new Footer();
+            });
+
+            Action a = () => TestAssessment(record);
+            a.ShouldThrow<InvalidOperationException>().And.Message.Should().Be("Record must be publishable as Open Data");
+        }
+
+        [Test]
         public void assessment_for_record_with_null_publishable_field_should_fail_test()
         {
-            var recordId = new Guid("3e3fef01-1c43-4a16-82b3-4caab363a55a");
+            var recordId = new Guid("71639cc0-94bd-430a-a0f2-37247698abe3");
             var record = new Record().With(r =>
             {
                 r.Id = recordId;

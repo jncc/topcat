@@ -119,6 +119,9 @@
     $scope.isPublishingModalButtonEnabled = function() {
       return isFilePath($scope.form.path) && $scope.isSaveHidden();
     };
+    $scope.isPublishingModalButtonVisible = function() {
+      return $scope.form.publication.openData.publishable === true;
+    };
     $scope.hasUsageConstraints = function() {
       return (!!$scope.form.gemini.limitationsOnPublicAccess && $scope.form.gemini.limitationsOnPublicAccess !== 'no limitations') || (!!$scope.form.gemini.useConstraints && $scope.form.gemini.useConstraints !== 'no conditions apply');
     };

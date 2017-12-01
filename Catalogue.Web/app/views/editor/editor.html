@@ -548,22 +548,43 @@
             </div>
 
             <hr/>
-
-            <div class="editor-publishing layout-row">
-                <div class="layout-col">
-                    <span>Open Data</span>
-                </div>
-                <div class="layout-col pull-right"
-                            title="{{ getOpenDataButtonToolTip(form, recordOutput.recordState.openDataPublishingState) }}"
-                            tc-tip>
+            
+            <div class="editor-publishing open-data">
+                <div class="layout-row">
+                    <div class="layout-col">
+                        <span>Open Data</span>
+                    </div>
+                    <div class="layout-col pull-right"
+                         title="{{ getOpenDataButtonToolTip(form, recordOutput.recordState.openDataPublishingState) }}"
+                         tc-tip>
                     
-                    <button type="button" class="btn"
-                            ng-click="openPublishingModal()"
-                            ng-disabled="!isPublishingModalButtonEnabled()"
-                            ng-class="{ 'btn-default': !form.publication.openData.assessment.completed,
-                                'btn-danger': form.publication.openData.assessment.completed}">
-                        {{ getOpenDataButtonText(form, recordOutput.recordState.openDataPublishingState) }}
-                    </button>
+                        <button type="button" class="btn"
+                                ng-click="openPublishingModal()"
+                                ng-disabled="!isPublishingModalButtonEnabled()"
+                                ng-show="isPublishingModalButtonVisible()"
+                                ng-class="{ 'btn-default': !form.publication.openData.assessment.completed,
+                                    'btn-danger': form.publication.openData.assessment.completed}">
+                            {{ getOpenDataButtonText(form, recordOutput.recordState.openDataPublishingState) }}
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="layout-row">
+                <div class="layout-col">
+                    <span>Publishable</span>
+                </div>
+                <div class="layout-col pull-right">
+                    <div class="btn-group">
+                        <button ng-click="form.publication.openData.publishable = true" ng-class="{ 'btn-primary': form.publication.openData.publishable, 'btn-default': !form.publication.openData.publishable }" class="btn"
+                                title="Could this record be published as Open Data?"
+                                tc-tip>
+                            Yes
+                        </button>
+                        <button ng-click="form.publication.openData.publishable = false" ng-class="{ 'btn-primary': !form.publication.openData.publishable, 'btn-default': form.publication.openData.publishable  }" class="btn">
+                            No
+                        </button>
+                    </div>
                 </div>
             </div>
 

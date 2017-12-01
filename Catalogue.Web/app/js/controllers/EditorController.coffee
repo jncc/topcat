@@ -97,6 +97,7 @@
         $scope.isCloneDisabled = -> !$scope.isClean()
         $scope.isHttpPath = (path) -> path and path.toLowerCase().startsWith "http"
         $scope.isPublishingModalButtonEnabled = -> isFilePath($scope.form.path) and $scope.isSaveHidden()
+        $scope.isPublishingModalButtonVisible = -> $scope.form.publication.openData.publishable == true
         $scope.hasUsageConstraints = () -> (!!$scope.form.gemini.limitationsOnPublicAccess and $scope.form.gemini.limitationsOnPublicAccess isnt 'no limitations') or (!!$scope.form.gemini.useConstraints and $scope.form.gemini.useConstraints isnt 'no conditions apply')
 
         # keywords # update arg name and use cs in

@@ -701,6 +701,9 @@ form .ng-invalid {
   font-weight: bold;
   color: #666;
 }
+.open-data {
+  margin-bottom: 0.3em;
+}
 .fade-in-with-delay.ng-hide-remove {
   transition: all cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.5s;
   transition-delay: 1s;
