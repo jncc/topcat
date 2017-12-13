@@ -113,19 +113,7 @@ namespace Catalogue.Web.Controllers.Records
                 Gemini = Library.Blank().With(m =>
                     {
                         m.ResourceType = "dataset";
-                        m.ResponsibleOrganisation = new ResponsibleParty
-                            {
-                                Name = "Joint Nature Conservation Committee (JNCC)",
-                                Email = "data@jncc.gov.uk",
-                                Role = "distributor",
-                            };
                         m.MetadataDate = Clock.NowUtc;
-                        m.MetadataPointOfContact = new ResponsibleParty
-                            {
-                                Name = user.User.DisplayName,
-                                Email = user.User.Email,
-                                Role = "author", // it's a new record, so let's suppose the user must be the metadata author
-                            };
                     }),
                 Review = DateTime.Now.AddYears(3) // arbitrarily decided to default to 3 years from now
             };
