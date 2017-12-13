@@ -254,6 +254,7 @@ namespace Catalogue.Data.Seed
                 {
                     OpenData = new OpenDataPublicationInfo
                     {
+                        Publishable = true,
                         Assessment = new OpenDataAssessmentInfo
                         {
                             Completed = true,
@@ -285,6 +286,7 @@ namespace Catalogue.Data.Seed
                 {
                     OpenData = new OpenDataPublicationInfo
                     {
+                        Publishable = true,
                         Assessment = new OpenDataAssessmentInfo
                         {
                             // todo add more assessment fields
@@ -303,6 +305,7 @@ namespace Catalogue.Data.Seed
                 {
                     OpenData = new OpenDataPublicationInfo
                     {
+                        Publishable = true,
                         Assessment = new OpenDataAssessmentInfo
                         {
                             // todo add more assessment fields
@@ -328,6 +331,7 @@ namespace Catalogue.Data.Seed
                 {
                     OpenData = new OpenDataPublicationInfo
                     {
+                        Publishable = true,
                         Assessment = new OpenDataAssessmentInfo
                         {
                             // todo add more assessment fields
@@ -366,6 +370,7 @@ namespace Catalogue.Data.Seed
                 {
                     OpenData = new OpenDataPublicationInfo
                     {
+                        Publishable = true,
                         LastAttempt = new PublicationAttempt { DateUtc = new DateTime(2015, 1, 1, 12, 0, 0), Message = "Failed with a terrible error in Sector 7G"},
                         LastSuccess = null,
                         Assessment = new OpenDataAssessmentInfo
@@ -396,6 +401,7 @@ namespace Catalogue.Data.Seed
                 {
                     OpenData = new OpenDataPublicationInfo
                     {
+                        Publishable = true,
                         LastAttempt = new PublicationAttempt { DateUtc = new DateTime(2015, 1, 1, 12, 0, 0) },
                         LastSuccess = new PublicationAttempt { DateUtc = new DateTime(2015, 1, 1, 12, 0, 0) },
                         Assessment = new OpenDataAssessmentInfo
@@ -424,6 +430,7 @@ namespace Catalogue.Data.Seed
                 {
                     OpenData = new OpenDataPublicationInfo
                     {
+                        Publishable = true,
                         LastAttempt = new PublicationAttempt { DateUtc = new DateTime(2014, 12, 31) },
                         LastSuccess = new PublicationAttempt { DateUtc = new DateTime(2014, 12, 31) },
                         Paused = true,
@@ -451,6 +458,7 @@ namespace Catalogue.Data.Seed
                 {
                     OpenData = new OpenDataPublicationInfo
                     {
+                        Publishable = true,
                         LastAttempt = null,
                         LastSuccess = null,
                         Resources = new List<Resource>
@@ -468,6 +476,21 @@ namespace Catalogue.Data.Seed
                 };
             });
 
+            var unpublishableRecord = record.With(r =>
+            {
+                r.Id = new Guid("fef1d883-b6ea-4ade-93ae-8bf0abd4e29b");
+                r.Gemini.Title = "A record which is unpublishable";
+                r.Gemini.MetadataDate = new DateTime(2014, 12, 31);
+                r.Gemini.ResourceLocator = "http://example.com/this/will/get/ignored/when/published";
+                r.Publication = new PublicationInfo
+                {
+                    OpenData = new OpenDataPublicationInfo
+                    {
+                        Publishable = false
+                    }
+                };
+            });
+
             var timeGetter = Clock.CurrentUtcDateTimeGetter;
             Clock.CurrentUtcDateTimeGetter = () => new DateTime(2015, 1, 1, 09, 59, 59);
             recordService.Insert(assessmentCompletedOnSpreadsheetRecord, userInfo);
@@ -481,6 +504,7 @@ namespace Catalogue.Data.Seed
             recordService.Insert(laterSuccessfullyPublishedRecord, userInfo);
             recordService.Insert(updatedSinceSuccessfullyPublishedRecordAndNowPaused, userInfo);
             recordService.Insert(recordWithAlternativeResources, userInfo);
+            recordService.Insert(unpublishableRecord, userInfo);
         }
 
         void AddRecordWithLotsOfVocablessTags()
