@@ -28,8 +28,6 @@
                                     
         # helper functions for UI
         $scope.getSecurityText = getSecurityText
-        $scope.getPublishableText = getPublishableText
-        $scope.getNextPublishableValue = getNextPublishableValue
         $scope.getDataFormatObj = getDataFormatObj
         $scope.updateDataFormatObj = updateDataFormatObj
         $scope.getPendingSignOff = getPendingSignOff
@@ -224,18 +222,6 @@ getSecurityText = (n) -> switch n
     when 0 then 'Official'
     when 1 then 'Official-Sensitive'
     when 2 then 'Secret'
-
-getPublishableText = (n) ->
-    switch n
-        when undefined, null then 'Undecided'
-        when true then 'Yes'
-        when false then 'No'
-
-getNextPublishableValue = (n) ->
-    switch n
-        when undefined, null then true
-        when true then false
-        when false then null
     
 getDataFormatObj = (name, formats) ->
     if (name != undefined && formats != undefined)
