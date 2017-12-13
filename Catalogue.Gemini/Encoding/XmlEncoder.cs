@@ -55,7 +55,8 @@ namespace Catalogue.Gemini.Encoding
                             new XElement(gmd + "extent",
                                 new XElement(gmd + "EX_Extent",
                                     MakeBoundingBox(m),
-                                    MakeTemporalExtent(m))))),
+                                    MakeTemporalExtent(m))),
+                            MakeAdditionalInformationSource(m))),
                     new XElement(gmd + "distributionInfo",
                         new XElement(gmd + "MD_Distribution",
                             MakeDataFormat(m),
@@ -187,6 +188,15 @@ namespace Catalogue.Gemini.Encoding
         {
             return new XElement(gmd + "topicCategory",
                 new XElement(gmd + "MD_TopicCategoryCode", metadata.TopicCategory));
+        }
+
+        XElement MakeAdditionalInformationSource(Metadata metadata)
+        {
+            if (String.IsNullOrWhiteSpace(metadata.AdditionalInformationSource))
+                return null;
+
+            return new XElement(gmd + "supplementalInformation",
+                new XElement(gco + "CharacterString", metadata.AdditionalInformationSource));
         }
 
         XElement MakeBoundingBox(Metadata metadata)

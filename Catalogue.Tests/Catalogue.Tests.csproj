@@ -136,6 +136,7 @@
     <None Include="app.config" />
     <None Include="packages.config" />
     <EmbeddedResource Include="TestResources\records\c6f3632d-8789-460b-a09d-c132841a7190.json" />
+    <EmbeddedResource Include="TestResources\records\4cb2cca3-ec95-4962-9618-8556d88390fd.json" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="TestResources\wafs\index_initial.html" />
@@ -172,6 +173,9 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="TestResources\wafs\c6f3632d-8789-460b-a09d-c132841a7190.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="TestResources\wafs\4cb2cca3-ec95-4962-9618-8556d88390fd.xml" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
