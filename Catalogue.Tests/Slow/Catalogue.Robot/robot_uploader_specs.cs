@@ -76,6 +76,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Robot
                 {
                     OpenData = new OpenDataPublicationInfo
                     {
+                        Publishable = true,
                         Assessment = new OpenDataAssessmentInfo
                         {
                             Completed = true,
@@ -175,6 +176,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Robot
                 {
                     OpenData = new OpenDataPublicationInfo
                     {
+                        Publishable = true,
                         Assessment = new OpenDataAssessmentInfo
                         {
                             Completed = true,
@@ -296,6 +298,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Robot
                 {
                     OpenData = new OpenDataPublicationInfo
                     {
+                        Publishable = true,
                         Assessment = new OpenDataAssessmentInfo
                         {
                             Completed = true,
@@ -401,6 +404,116 @@ namespace Catalogue.Tests.Slow.Catalogue.Robot
             });
 
             TestRecordNotReturned(publishedAssessedSignedOffThenEditedRecord);
+        }
+
+        [Test]
+        public void pending_upload_test_with_unpublishable_record()
+        {
+            var unpublishableRecord = new Record().With(r =>
+            {
+                r.Id = new Guid("7859f8b7-5d27-47f6-af4a-85f2c296beeb");
+                r.Path = @"X:\path\to\uploader\test";
+                r.Validation = Validation.Gemini;
+                r.Gemini = Library.Example().With(m =>
+                {
+                    m.MetadataDate = new DateTime(2017, 09, 26);
+                });
+                r.Publication = new PublicationInfo
+                {
+                    OpenData = new OpenDataPublicationInfo
+                    {
+                        Publishable = false,
+                        Assessment = new OpenDataAssessmentInfo
+                        {
+                            Completed = true,
+                            CompletedOnUtc = new DateTime(2017, 09, 25)
+                        },
+                        SignOff = new OpenDataSignOffInfo
+                        {
+                            DateUtc = new DateTime(2017, 09, 26)
+                        }
+                    }
+                };
+                r.Footer = new Footer();
+            });
+
+            TestRecordNotReturned(unpublishableRecord);
+        }
+
+        [Test]
+        public void pending_upload_test_with_null_publishable_record()
+        {
+            var unpublishableRecord = new Record().With(r =>
+            {
+                r.Id = new Guid("1e776af7-2c77-4017-b7e9-4d31ad560fd2");
+                r.Path = @"X:\path\to\uploader\test";
+                r.Validation = Validation.Gemini;
+                r.Gemini = Library.Example().With(m =>
+                {
+                    m.MetadataDate = new DateTime(2017, 09, 26);
+                });
+                r.Publication = new PublicationInfo
+                {
+                    OpenData = new OpenDataPublicationInfo
+                    {
+                        Publishable = null,
+                        Assessment = new OpenDataAssessmentInfo
+                        {
+                            Completed = true,
+                            CompletedOnUtc = new DateTime(2017, 09, 25)
+                        },
+                        SignOff = new OpenDataSignOffInfo
+                        {
+                            DateUtc = new DateTime(2017, 09, 26)
+                        }
+                    }
+                };
+                r.Footer = new Footer();
+            });
+
+            TestRecordNotReturned(unpublishableRecord);
+        }
+
+        [Test]
+        public void pending_reupload_test_with_unpublishable_record()
+        {
+            var unpublishableRecord = new Record().With(r =>
+            {
+                r.Id = new Guid("f725ebb4-0ef5-4ef6-bded-68d77aee4ad4");
+                r.Path = @"X:\path\to\uploader\test";
+                r.Validation = Validation.Gemini;
+                r.Gemini = Library.Example().With(m =>
+                {
+                    m.MetadataDate = new DateTime(2017, 09, 29);
+                });
+                r.Publication = new PublicationInfo
+                {
+                    OpenData = new OpenDataPublicationInfo
+                    {
+                        Publishable = false,
+                        Assessment = new OpenDataAssessmentInfo
+                        {
+                            Completed = true,
+                            CompletedOnUtc = new DateTime(2017, 09, 28)
+                        },
+                        SignOff = new OpenDataSignOffInfo
+                        {
+                            DateUtc = new DateTime(2017, 09, 29)
+                        },
+                        LastAttempt = new PublicationAttempt
+                        {
+                            DateUtc = new DateTime(2017, 09, 27)
+                        },
+                        LastSuccess = new PublicationAttempt
+                        {
+                            DateUtc = new DateTime(2017, 09, 27)
+                        }
+                    }
+                };
+                r.Footer = new Footer();
+            });
+
+            TestRecordNotReturned(unpublishableRecord);
         }
 
         private void TestRecordNotReturned(Record record)

@@ -14,6 +14,7 @@ namespace Catalogue.Data.Indexes
             public DateTime LastPublicationAttemptDate { get; set; }
             public DateTime LastSuccessfulPublicationAttemptDate { get; set; }
             public bool GeminiValidated { get; set; }
+            public bool? Publishable { get; set; }
             public bool Assessed { get; set; }
             public bool SignedOff { get; set; }
             public bool PublicationNeverAttempted { get; set; }
@@ -34,6 +35,7 @@ namespace Catalogue.Data.Indexes
                                 LastPublicationAttemptDate = r.Publication.OpenData.LastAttempt == null ? DateTime.MinValue : r.Publication.OpenData.LastAttempt.DateUtc,
                                 LastSuccessfulPublicationAttemptDate = r.Publication.OpenData.LastSuccess == null ? DateTime.MinValue : r.Publication.OpenData.LastSuccess.DateUtc,
                                 GeminiValidated = r.Validation == Validation.Gemini,
+                                Publishable = r.Publication.OpenData.Publishable,
                                 Assessed = r.Publication.OpenData.Assessment.Completed
                                            && (r.Publication.OpenData.Assessment.CompletedOnUtc == r.Gemini.MetadataDate
                                                || r.Publication.OpenData.SignOff.DateUtc == r.Gemini.MetadataDate

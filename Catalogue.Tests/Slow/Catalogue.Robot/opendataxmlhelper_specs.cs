@@ -42,6 +42,20 @@ namespace Catalogue.Tests.Slow.Catalogue.Robot
         }
 
         [Test]
+        public void metadata_document_generated_correctly_for_record_with_additional_resource()
+        {
+            var record = GetRecordFromFile(new Guid("4cb2cca3-ec95-4962-9618-8556d88390fd"), @"records.4cb2cca3-ec95-4962-9618-8556d88390fd.json");
+            var expectedXmlDoc = GetInputFileAsXmlDoc(@"wafs.4cb2cca3-ec95-4962-9618-8556d88390fd.xml");
+
+            var xmlHelper = new OpenDataXmlHelper();
+            var actualWaf = xmlHelper.GetMetadataDocument(record, "");
+            var actualXmlDoc = GetByteArrayAsXmlDoc(actualWaf);
+
+            XmlDiff xmlDiff = new XmlDiff();
+            Assert.True(xmlDiff.Compare(expectedXmlDoc, actualXmlDoc));
+        }
+
+        [Test]
         public void waf_index_document_generated_correctly()
         {
             var record = GetRecordFromFile(new Guid("721643b8-7e42-40ca-87d9-23f19221238e"), @"records.721643b8-7e42-40ca-87d9-23f19221238e.json");

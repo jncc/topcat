@@ -548,22 +548,32 @@
             </div>
 
             <hr/>
-
-            <div class="editor-publishing layout-row">
-                <div class="layout-col">
-                    <span>Open Data</span>
-                </div>
-                <div class="layout-col pull-right"
-                            title="{{ getOpenDataButtonToolTip(form, recordOutput.recordState.openDataPublishingState) }}"
-                            tc-tip>
+            
+            <div class="editor-publishing">
+                <div class="layout-row">
+                    <div class="layout-col">
+                        <span>Open Data</span>
+                    </div>
+                    <div class="layout-col pull-right">
                     
-                    <button type="button" class="btn"
-                            ng-click="openPublishingModal()"
-                            ng-disabled="!isPublishingModalButtonEnabled()"
-                            ng-class="{ 'btn-default': !form.publication.openData.assessment.completed,
-                                'btn-danger': form.publication.openData.assessment.completed}">
-                        {{ getOpenDataButtonText(form, recordOutput.recordState.openDataPublishingState) }}
-                    </button>
+                        <button ng-click="togglePublishable()" ng-class="{ 'btn-primary': form.publication.openData.publishable != null, 'btn-default': form.publication.openData.publishable == null }" class="btn"
+                                title="Could this record be published as Open Data?"
+                                tc-tip>
+                            <span class="glyphicon glyphicon-repeat"></span>
+                            <span ng-if="form.publication.openData.publishable == false">Unpublishable</span>
+                            <span ng-if="form.publication.openData.publishable == null">Undecided</span>
+                        </button>
+                        <button type="button" class="btn"
+                                title="{{ getOpenDataButtonToolTip(form, recordOutput.recordState.openDataPublishingState) }}" tc-tip
+                                ng-click="openPublishingModal()"
+                                ng-disabled="!isPublishingModalButtonEnabled()"
+                                ng-show="isPublishingModalButtonVisible()"
+                                ng-class="{ 'btn-default': !form.publication.openData.assessment.completed,
+                                'btn-primary': recordOutput.recordState.openDataPublishingState.uploadedAndUpToDate,
+                                'btn-danger': form.publication.openData.assessment.completed && !recordOutput.recordState.openDataPublishingState.uploadedAndUpToDate}">
+                            {{ getOpenDataButtonText(form, recordOutput.recordState.openDataPublishingState) }}
+                        </button>
+                    </div>
                 </div>
             </div>
 
@@ -583,6 +593,7 @@
                         <span class="glyphicon glyphicon-repeat" ng-class="{ 'dark': form.validation == 0 }"></span>
                         {{form.validation == 1 ? 'Gemini':'Basic';}}
                     </button>
+                    
 
                 </div>
             </div>

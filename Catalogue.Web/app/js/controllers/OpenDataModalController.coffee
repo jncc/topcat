@@ -35,10 +35,11 @@ angular.module('app.controllers').controller 'OpenDataModalController',
         publishingStatus.signOff.timeout = -1
 
         # change multistep status
-        $scope.refreshPublishingStatus = () ->            
-            publishingStatus.riskAssessment.completed = $scope.form.publication != null && $scope.form.publication.openData.assessment.completed
-            publishingStatus.signOff.completed = $scope.form.publication != null && $scope.form.publication.openData.signOff != null
-            publishingStatus.upload.completed = $scope.form.publication != null && $scope.form.publication.openData.lastSuccess != null
+        $scope.refreshPublishingStatus = () ->
+            if $scope.form.publication.openData != null
+                publishingStatus.riskAssessment.completed = $scope.form.publication.openData.assessment != null && $scope.form.publication.openData.assessment.completed
+                publishingStatus.signOff.completed = $scope.form.publication.openData.signOff != null
+                publishingStatus.upload.completed = $scope.form.publication.openData.lastSuccess != null
 
             if $scope.recordOutput.recordState.openDataPublishingState.assessedAndUpToDate
                 publishingStatus.riskAssessment.currentClass = "visited"
@@ -73,7 +74,7 @@ angular.module('app.controllers').controller 'OpenDataModalController',
 
         # Refresh text on assess and sign off buttons
         refreshAssessmentInfo = () ->
-            if $scope.form.publication != null && $scope.form.publication.openData.assessment.completed
+            if $scope.form.publication.openData.assessment != null && $scope.form.publication.openData.assessment.completed
                 if $scope.form.publication.openData.assessment.completedByUser == null && $scope.form.publication.openData.assessment.initialAssessmentWasDoneOnSpreadsheet
                     $scope.assessmentCompletedInfo = "Initial assessment completed on spreadsheet"
                 else if $scope.recordOutput.recordState.openDataPublishingState.assessedAndUpToDate

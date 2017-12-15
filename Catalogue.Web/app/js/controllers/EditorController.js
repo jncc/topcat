@@ -119,6 +119,9 @@
     $scope.isPublishingModalButtonEnabled = function() {
       return isFilePath($scope.form.path) && $scope.isSaveHidden();
     };
+    $scope.isPublishingModalButtonVisible = function() {
+      return $scope.form.publication && $scope.form.publication.openData && $scope.form.publication.openData.publishable === true;
+    };
     $scope.hasUsageConstraints = function() {
       return (!!$scope.form.gemini.limitationsOnPublicAccess && $scope.form.gemini.limitationsOnPublicAccess !== 'no limitations') || (!!$scope.form.gemini.useConstraints && $scope.form.gemini.useConstraints !== 'no conditions apply');
     };
@@ -203,11 +206,40 @@
     $scope.setKeyword = function($item, keyword) {
       return keyword.vocab = $item.vocab;
     };
-    return $scope.fillManagerDetails = function() {
+    $scope.fillManagerDetails = function() {
       if (!$scope.form.manager) {
         $scope.form.manager = {};
       }
       return $scope.form.manager.displayName = $scope.user.displayName;
+    };
+    $scope.setPublishable = function(value) {
+      if (!$scope.form.publication) {
+        $scope.form.publication = {};
+      }
+      if (!$scope.form.publication.openData) {
+        $scope.form.publication.openData = {};
+      }
+      if ((value === true && $scope.form.publication.openData.publishable === true) || (value === false && $scope.form.publication.openData.publishable === false)) {
+        return $scope.form.publication.openData.publishable = null;
+      } else {
+        return $scope.form.publication.openData.publishable = value;
+      }
+    };
+    return $scope.togglePublishable = function() {
+      if (!$scope.form.publication) {
+        $scope.form.publication = {};
+      }
+      if (!$scope.form.publication.openData) {
+        $scope.form.publication.openData = {};
+        $scope.form.publication.openData.publishable = null;
+      }
+      if ($scope.form.publication.openData.publishable === null) {
+        return $scope.form.publication.openData.publishable = true;
+      } else if ($scope.form.publication.openData.publishable === true) {
+        return $scope.form.publication.openData.publishable = false;
+      } else {
+        return $scope.form.publication.openData.publishable = null;
+      }
     };
   });
 
@@ -218,9 +250,9 @@
   getOpenDataButtonToolTip = function(record, publishingState) {
     if (!isFilePath(record.path)) {
       return "Open data publishing not available for non-file resources";
-    } else if (record.publication === null) {
+    } else if (record.publication === null || record.publication.openData === null || record.publication.openData.publishable !== true) {
       return "The open data publication status of the record, editing the record may affect the status.";
-    } else if (record.publication.openData.lastSuccess !== null && !publishingState.assessedAndUpToDate) {
+    } else if (record.publication.openData.lastSuccess !== null && record.publication.openData.lastSuccess !== void 0 && !publishingState.assessedAndUpToDate) {
       return "This record has been changed since it was last published, it may need republishing.";
     } else {
       return "The open data publication status of the record, editing the record may affect the status.";
@@ -228,9 +260,9 @@
   };
 
   getOpenDataButtonText = function(record, publishingState) {
-    if (record.publication === null) {
-      return "Not Open Data";
-    } else if (record.publication.openData.lastSuccess !== null && !publishingState.assessedAndUpToDate) {
+    if (record.publication === null || record.publication.openData === null || record.publication.openData.publishable !== true) {
+      return "Publishable";
+    } else if (record.publication.openData.lastSuccess !== null && record.publication.openData.lastSuccess !== void 0 && !publishingState.assessedAndUpToDate) {
       return "Republish";
     } else if (publishingState.uploadedAndUpToDate) {
       return "Published";
@@ -239,7 +271,7 @@
     } else if (publishingState.assessedAndUpToDate) {
       return "Assessed";
     } else {
-      return "Not Open Data";
+      return "Publishable";
     }
   };
 

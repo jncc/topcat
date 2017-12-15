@@ -20,6 +20,9 @@ namespace Catalogue.Data.Write
 
         public RecordServiceResult Assess(Record record, OpenDataAssessmentInfo assessmentInfo)
         {
+            if (record.Publication?.OpenData?.Publishable != true)
+                throw new InvalidOperationException("Record must be publishable as Open Data");
+
             if (!record.IsEligibleForOpenDataPublishing())
                 throw new InvalidOperationException("Must have a file path for publishing");
 
@@ -57,6 +60,9 @@ namespace Catalogue.Data.Write
 
         public RecordServiceResult SignOff(Record record, OpenDataSignOffInfo signOffInfo)
         {
+            if (record.Publication?.OpenData?.Publishable != true)
+                throw new InvalidOperationException("Record must be publishable as Open Data");
+
             if (!record.IsAssessedAndUpToDate())
                 throw new InvalidOperationException("Couldn't sign-off record for publication - assessment not completed or out of date");
 

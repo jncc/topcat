@@ -97,6 +97,7 @@
         $scope.isCloneDisabled = -> !$scope.isClean()
         $scope.isHttpPath = (path) -> path and path.toLowerCase().startsWith "http"
         $scope.isPublishingModalButtonEnabled = -> isFilePath($scope.form.path) and $scope.isSaveHidden()
+        $scope.isPublishingModalButtonVisible = -> $scope.form.publication && $scope.form.publication.openData && $scope.form.publication.openData.publishable == true
         $scope.hasUsageConstraints = () -> (!!$scope.form.gemini.limitationsOnPublicAccess and $scope.form.gemini.limitationsOnPublicAccess isnt 'no limitations') or (!!$scope.form.gemini.useConstraints and $scope.form.gemini.useConstraints isnt 'no conditions apply')
 
         # keywords # update arg name and use cs in
@@ -156,6 +157,33 @@
             if not $scope.form.manager then $scope.form.manager = {}
             $scope.form.manager.displayName = $scope.user.displayName
 
+        $scope.setPublishable = (value) ->
+            if !$scope.form.publication
+                $scope.form.publication = {}
+
+            if !$scope.form.publication.openData
+                $scope.form.publication.openData = {}
+
+            if (value == true && $scope.form.publication.openData.publishable == true) or (value == false && $scope.form.publication.openData.publishable == false)
+                $scope.form.publication.openData.publishable = null
+            else
+                $scope.form.publication.openData.publishable = value
+
+        $scope.togglePublishable = () ->
+            if !$scope.form.publication
+                $scope.form.publication = {}
+
+            if !$scope.form.publication.openData
+                $scope.form.publication.openData = {}
+                $scope.form.publication.openData.publishable = null
+
+            if $scope.form.publication.openData.publishable == null
+                $scope.form.publication.openData.publishable = true
+            else if $scope.form.publication.openData.publishable == true
+                $scope.form.publication.openData.publishable = false
+            else
+                $scope.form.publication.openData.publishable = null
+
 
 
 isFilePath = (path) -> path and path.match /^([a-z]:|\\\\jncc-corpfile\\)/i
@@ -163,17 +191,17 @@ isFilePath = (path) -> path and path.match /^([a-z]:|\\\\jncc-corpfile\\)/i
 getOpenDataButtonToolTip = (record, publishingState) ->
     if !isFilePath(record.path)
         return "Open data publishing not available for non-file resources"
-    else if record.publication == null
+    else if record.publication == null or record.publication.openData == null or record.publication.openData.publishable != true
         return "The open data publication status of the record, editing the record may affect the status."
-    else if record.publication.openData.lastSuccess != null && !publishingState.assessedAndUpToDate
+    else if record.publication.openData.lastSuccess != null && record.publication.openData.lastSuccess != undefined && !publishingState.assessedAndUpToDate
         return "This record has been changed since it was last published, it may need republishing."
     else
         return "The open data publication status of the record, editing the record may affect the status."
 
 getOpenDataButtonText = (record, publishingState) ->
-    if record.publication == null
-        return "Not Open Data"
-    else if record.publication.openData.lastSuccess != null && !publishingState.assessedAndUpToDate
+    if record.publication == null || record.publication.openData == null || record.publication.openData.publishable != true
+        return "Publishable"
+    else if record.publication.openData.lastSuccess != null && record.publication.openData.lastSuccess != undefined && !publishingState.assessedAndUpToDate
         return "Republish"
     else if publishingState.uploadedAndUpToDate
         return "Published"
@@ -182,7 +210,7 @@ getOpenDataButtonText = (record, publishingState) ->
     else if publishingState.assessedAndUpToDate
         return "Assessed"
     else
-        return "Not Open Data"
+        return "Publishable"
 
 getPendingSignOff = (publication) ->
     if (publication != null && publication.openData.assessment.completed && publication.openData.signOff == null)

@@ -268,47 +268,8 @@ namespace Catalogue.Web.Controllers.Patch
 
         }
 
-        [HttpPost, Route("api/patch/migrateuserinfo")]
-        public HttpResponseMessage MigrateUserInfo()
-        {
-            var records1 = db
-                .Query<Record>()
-                .As<Record>()
-                .Skip(0)
-                .Take(1024)
-                .ToList();
-
-            var records2 = db
-                .Query<Record>()
-                .As<Record>()
-                .Skip(1024)
-                .Take(1024)
-                .ToList();
-
-            var records3 = db
-                .Query<Record>()
-                .As<Record>()
-                .Skip(2048)
-                .Take(1024)
-                .ToList();
-
-            var records4 = db
-                .Query<Record>()
-                .As<Record>()
-                .Skip(3072)
-                .Take(1024)
-                .ToList();
-
-            var records = records1.Concat(records2).Concat(records3).Concat(records4).ToList();
-
-            db.SaveChanges();
-
-            return new HttpResponseMessage { Content = new StringContent("Updated " + records.Count + " records.") };
-
-        }
-
-        [HttpPost, Route("api/patch/internalcontact")]
-        public HttpResponseMessage PopulateInternalContact()
+        [HttpPost, Route("api/patch/publishable")]
+        public HttpResponseMessage PopulatePublishable()
         {
             var records1 = db
                 .Query<Record>()
@@ -342,60 +303,12 @@ namespace Catalogue.Web.Controllers.Patch
 
             foreach (var record in records)
             {
-                if (!record.ReadOnly && record.Gemini.MetadataPointOfContact != null && record.Manager == null)
+                if (record.Publication != null && record.Publication.OpenData != null)
                 {
-                    record.Manager = new UserInfo();
-
-                    if (record.Gemini.MetadataPointOfContact.Name != null)
-                    {
-                        record.Manager.DisplayName = record.Gemini.MetadataPointOfContact.Name;
-                    }
-
-                    if (record.Gemini.MetadataPointOfContact.Email != null)
-                    {
-                        record.Manager.Email = record.Gemini.MetadataPointOfContact.Email;
-                    }
+                    if (record.Publication.OpenData.Assessment != null && record.Publication.OpenData.Assessment.Completed)
+                        record.Publication.OpenData.Publishable = true;
                 }
             }
-
-            db.SaveChanges();
-
-            return new HttpResponseMessage { Content = new StringContent("Updated " + records.Count + " records.") };
-
-        }
-
-        [HttpPost, Route("api/patch/migrateinternalcontact")]
-        public HttpResponseMessage MigrateInternalContact()
-        {
-            var records1 = db
-                .Query<Record>()
-                .As<Record>()
-                .Skip(0)
-                .Take(1024)
-                .ToList();
-
-            var records2 = db
-                .Query<Record>()
-                .As<Record>()
-                .Skip(1024)
-                .Take(1024)
-                .ToList();
-
-            var records3 = db
-                .Query<Record>()
-                .As<Record>()
-                .Skip(2048)
-                .Take(1024)
-                .ToList();
-
-            var records4 = db
-                .Query<Record>()
-                .As<Record>()
-                .Skip(3072)
-                .Take(1024)
-                .ToList();
-
-            var records = records1.Concat(records2).Concat(records3).Concat(records4).ToList();
 
             db.SaveChanges();
 
