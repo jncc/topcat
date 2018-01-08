@@ -283,7 +283,7 @@ namespace Catalogue.Data.Write
 
             // if not blank it should look like 10.4124/ABC-123 where the digits before the slash are
             // an account prefix and after the slash can be any combination of numbers, letters, - . _ : + and / 
-            var regex = new Regex(@"^[0-9]{2}\.[0-9]{4}\/[a-zA-Z0-9\-\._\:\+\/]+$");
+            var regex = new Regex(@"^[0-9]{2}\.[0-9]+\/[a-zA-Z0-9\-\._\:\+\/]+$");
             if (!regex.Match(doi).Success)
             {
                 result.Errors.Add("Digital Object Identifier is not in a valid format", r => r.DigitalObjectIdentifier);
