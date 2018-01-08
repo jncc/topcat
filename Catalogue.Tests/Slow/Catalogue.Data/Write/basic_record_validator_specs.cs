@@ -260,7 +260,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Data.Write
         }
 
         [Test]
-        public void doi_with_invalid_formats([Values(" ", "a bad doi", "baddoi", "104124/ABC-123", "10.4124/ABC-123?", "AB.1234/ABC-123")] string doi)
+        public void doi_with_invalid_formats([Values(" ", "a bad doi", "baddoi", "104124/ABC-123", "10./ABC-123", "10.4124/ABC-123?", "AB.1234/ABC-123")] string doi)
         {
             var record = SimpleRecord().With(r => r.DigitalObjectIdentifier = doi);
             var result = new RecordValidator().Validate(record);
@@ -270,7 +270,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Data.Write
         }
 
         [Test]
-        public void doi_with_valid_formats([Values(null, "" ,"12.3456/ABC123", "00.1234/long.string+which-is:still_valid/123")] string doi)
+        public void doi_with_valid_formats([Values(null, "", "12.3456/ABC123", "12.3456789/ABC123", "00.1234/long.string+which-is:still_valid/123")] string doi)
         {
             var record = SimpleRecord().With(r => r.DigitalObjectIdentifier = doi);
             var result = new RecordValidator().Validate(record);
