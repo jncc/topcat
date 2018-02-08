@@ -8,9 +8,9 @@ using Raven.Client;
 
 namespace Catalogue.Tests.Slow.Catalogue.Web.Controllers.Publishing
 {
-    public class PublishingTest
+    public static class PublishingTestHelper
     {
-        protected IDocumentSession GetNewDbWithRecord(Record record)
+        public static IDocumentSession GetNewDbSessionWithThisRecordAdded(Record record)
         {
             var store = new InMemoryDatabaseHelper().Create();
             using (var db = store.OpenSession())
@@ -22,7 +22,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Web.Controllers.Publishing
             }
         }
 
-        protected OpenDataPublishingController GetTestOpenDataPublishingController(IDocumentSession db)
+        public static OpenDataPublishingController GetTestOpenDataPublishingController(IDocumentSession db)
         {
             var testUserContext = new TestUserContext();
             var userContextMock = new Mock<IUserContext>();

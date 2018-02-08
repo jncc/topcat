@@ -118,7 +118,7 @@
     <Compile Include="Slow\Catalogue.Utilities\jncc_drive_mappings_tests.cs" />
     <Compile Include="Slow\Catalogue.Web\Controllers\Account\account_controller_specs.cs" />
     <Compile Include="Slow\Catalogue.Web\Controllers\Export\export_controller_tests.cs" />
-    <Compile Include="Slow\Catalogue.Web\Controllers\Publishing\PublishingTest.cs" />
+    <Compile Include="Slow\Catalogue.Web\Controllers\Publishing\PublishingTestHelper.cs" />
     <Compile Include="Slow\Catalogue.Web\Controllers\Publishing\publishing_controller_specs_for_sign_off.cs" />
     <Compile Include="Slow\Catalogue.Web\Controllers\Publishing\publishing_controller_specs_for_assessment.cs" />
     <Compile Include="Slow\Catalogue.Web\Controllers\Records\records_controllers_tests.cs" />
