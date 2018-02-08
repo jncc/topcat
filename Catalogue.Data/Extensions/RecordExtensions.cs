@@ -9,7 +9,9 @@ namespace Catalogue.Data.Extensions
         {
             var eligible = false;
 
-            if (Uri.TryCreate(record.Path, UriKind.Absolute, out Uri uri))
+            Uri uri;
+
+            if (Uri.TryCreate(record.Path, UriKind.Absolute, out uri))
             {
                 eligible = uri.IsFile;
             }
