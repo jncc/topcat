@@ -110,9 +110,9 @@ namespace Catalogue.Data.Import.Mappings
 
         }
 
-        internal class GeminiMap : CsvClassMap<Metadata>
+        internal sealed class GeminiMap : CsvClassMap<Metadata>
         {
-            public override void CreateMap()
+            public GeminiMap()
             {
                 Map(m => m.Title).Name("Title");
                 Map(m => m.ResponsibleOrganisation).ConvertUsing(row =>
@@ -294,9 +294,9 @@ namespace Catalogue.Data.Import.Mappings
 
         }
 
-        internal class RecordMap : CsvClassMap<Record>
+        internal sealed class RecordMap : CsvClassMap<Record>
         {
-            public override void CreateMap()
+            public RecordMap()
             {
                 Map(m => m.Path).Name("Path");
                 Map(m => m.TopCopy).ConvertUsing(row => true);

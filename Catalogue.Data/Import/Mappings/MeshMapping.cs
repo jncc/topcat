@@ -103,9 +103,9 @@ namespace Catalogue.Data.Import.Mappings
             }
         }
 
-        public class GeminiMap : CsvClassMap<Metadata>
+        public sealed class GeminiMap : CsvClassMap<Metadata>
         {
-            public override void CreateMap()
+            public GeminiMap()
             {
                 Map(m => m.Title);
                 Map(m => m.Abstract);
@@ -178,9 +178,9 @@ namespace Catalogue.Data.Import.Mappings
             }
         }
 
-        public class RecordMap : CsvClassMap<Record>
+        public sealed class RecordMap : CsvClassMap<Record>
         {
-            public override void CreateMap()
+            public RecordMap()
             {
                 Map(m => m.Path);
                 Map(m => m.TopCopy).ConvertUsing(row => true); // all mesh data is top copy
