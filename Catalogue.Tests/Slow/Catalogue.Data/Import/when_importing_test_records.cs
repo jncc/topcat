@@ -75,21 +75,21 @@ Another abstract,Some more notes,file:///z/some/location";
             config.RegisterClassMap<MetadataMap>();
         }
 
-        public class RecordMap : CsvClassMap<Record>
+        public sealed class RecordMap : CsvClassMap<Record>
         {
-            public override void CreateMap()
+            public RecordMap()
             {
-                this.Map(m => m.Path);
-                this.Map(m => m.Notes);
-                this.References<MetadataMap>(m => m.Gemini);
+                Map(m => m.Path);
+                Map(m => m.Notes);
+                References<MetadataMap>(m => m.Gemini);
             }
         }
 
-        public class MetadataMap : CsvClassMap<Metadata>
+        public sealed class MetadataMap : CsvClassMap<Metadata>
         {
-            public override void CreateMap()
+            public MetadataMap()
             {
-                this.Map(m => m.Abstract);
+                Map(m => m.Abstract);
             }
         }
     }
