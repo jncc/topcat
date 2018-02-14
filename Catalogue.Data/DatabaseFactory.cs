@@ -6,6 +6,7 @@ using Raven.Client;
 using Raven.Client.Document;
 using Raven.Client.Indexes;
 using Raven.Client.Listeners;
+using Raven.Database.Config;
 using Raven.Database.Server;
 
 namespace Catalogue.Data
@@ -29,6 +30,7 @@ namespace Catalogue.Data
                     store.Configuration.Port = port;
                     NonAdminHttp.EnsureCanListenToWhenInNonAdminContext(port);
                     store.UseEmbeddedHttpServer = true;
+                    store.RunInMemory = true;
                 },
                 PostInitializationAction = Seeder.Seed
             }.Create();
