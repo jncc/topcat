@@ -30,6 +30,7 @@ namespace Catalogue.Robot.Publishing.OpenData
         public List<Record> GetRecordsPendingUpload()
         {
             var records = db.Query<RecordsWithOpenDataPublicationInfoIndex.Result, RecordsWithOpenDataPublicationInfoIndex>()
+                .Customize(x => x.WaitForNonStaleResults())
                 .Where(x => x.Assessed)
                 .Where(x => x.SignedOff)
                 .Where(x => x.GeminiValidated) // all open data should be gemini-valid - this is a safety

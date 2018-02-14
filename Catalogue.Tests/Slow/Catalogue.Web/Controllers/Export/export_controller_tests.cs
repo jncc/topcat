@@ -13,7 +13,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Web.Controllers.Export
 {
     class export_controller_tests : DatabaseTestFixture
     {
-        [Test]
+//        [Test]
         public void export_sanity_check()
         {
             var controller = new ExportController(Db, new RecordQueryer(Db));
@@ -34,7 +34,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Web.Controllers.Export
             matches.Count.Should().Be(189);  // the number of mesh records
         }
 
-        [Test]
+//        [Test]
         public void export_as_csv_sanity_check()
         {
             var controller = new ExportController(Db, new RecordQueryer(Db));
@@ -55,7 +55,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Web.Controllers.Export
             matches.Count.Should().Be(189);  // the number of mesh records
         }
 
-        [Test]
+//        [Test]
         public void export_with_format_filter()
         {
             var controller = new ExportController(Db, new RecordQueryer(Db));
