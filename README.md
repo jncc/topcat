@@ -9,6 +9,8 @@ Licensed under [Open Government Licence v2](http://www.nationalarchives.gov.uk/d
 Development
 -----------
 
+Since the recent upgrade to RavenDB 3.5 you need to **run Visual Studio as an Administrator**, unfortunatley, or the database throws errors at dev time. We're looking into why this is the case.
+
 ### Web Essentials
 Install the Visual Studio Web Essentials extensions pack (and now the "Web Compiler" extension) for design-time support for CoffeeScript (.coffee) and LESS (.less). These are essential if you want to edit the application's Javascript or CSS.
 
