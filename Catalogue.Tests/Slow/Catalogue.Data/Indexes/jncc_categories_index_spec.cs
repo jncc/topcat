@@ -15,7 +15,9 @@ namespace Catalogue.Tests.Slow.Catalogue.Data.Indexes
         [Test]
         public void should_be_able_to_get_collection_record_counts()
         {
-            var counts = Db.Query<RecordCountForKeywordIndex.Result, RecordCountForKeywordIndex>().ToList();
+            var counts = Db.Query<RecordCountForKeywordIndex.Result, RecordCountForKeywordIndex>()
+                .Customize(x => x.WaitForNonStaleResults())
+                .ToList();
 
             counts.Count.Should().BeGreaterOrEqualTo(2);
             
