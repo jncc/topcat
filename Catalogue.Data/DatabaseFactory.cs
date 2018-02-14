@@ -30,7 +30,6 @@ namespace Catalogue.Data
                     store.Configuration.Port = port;
                     NonAdminHttp.EnsureCanListenToWhenInNonAdminContext(port);
                     store.UseEmbeddedHttpServer = true;
-                    store.RunInMemory = true;
                 },
                 PostInitializationAction = Seeder.Seed
             }.Create();
