@@ -10,7 +10,7 @@ using NUnit.Framework;
 
 namespace Catalogue.Tests.Slow.Catalogue.Data.Indexes
 {
-    class jncc_categories_index_spec : DatabaseTestFixture
+    internal class jncc_categories_index_spec : DatabaseTestFixture
     {
         [Test]
         public void should_be_able_to_get_collection_record_counts()
