@@ -50,6 +50,7 @@ namespace Catalogue.Data.Seed
                 s.AddSimpleGeminiExampleRecord();
                 s.AddRecordsWithOpenDataPublishingInfo();
                 s.AddRecordWithLotsOfVocablessTags();
+                s.AddRecordsWithSameKeywordsInDifferentVocabs();
                 s.AddReadOnlyRecord();
                 s.AddNonGeographicDataset();
                 s.AddSecureRecords();
@@ -525,6 +526,36 @@ namespace Catalogue.Data.Seed
             });
 
             recordService.Insert(record, userInfo);
+        }
+
+        void AddRecordsWithSameKeywordsInDifferentVocabs()
+        {
+            var recordA = MakeExampleSeedRecord().With(r =>
+            {
+                r.Id = new Guid("b51a21de-b2ac-4a99-9b7e-5c5222d280c1");
+                r.Path = @"X:\butterflies\a";
+                r.Gemini = r.Gemini.With(m =>
+                {
+                    m.Title = "This record has a keyword 'butterfly' in vocab 'vocabulary-a'";
+                    m.Abstract = "This is just another example record.";
+                    m.Keywords.Add(new MetadataKeyword { Vocab = "vocabulary-a", Value = "butterfly" });
+                });
+            });
+
+            var recordB = MakeExampleSeedRecord().With(r =>
+            {
+                r.Id = new Guid("4a3e084b-666b-4c85-ae44-c2c7a266a455");
+                r.Path = @"X:\butterflies\b";
+                r.Gemini = r.Gemini.With(m =>
+                {
+                    m.Title = "This record has a keyword 'butterfly' in vocab 'vocabulary-b'";
+                    m.Abstract = "This is just another example record.";
+                    m.Keywords.Add(new MetadataKeyword { Vocab = "vocabulary-b", Value = "butterfly" });
+                });
+            });
+
+            recordService.Insert(recordA, userInfo);
+            recordService.Insert(recordB, userInfo);
         }
 
         void AddReadOnlyRecord()

@@ -28,5 +28,17 @@ namespace Catalogue.Tests.Slow.Catalogue.Data.Indexes
                 .Single()
                 .Should().Be(189);
         }
+
+        [Test]
+        public void should_not_count_keywords_in_different_vocabs()
+        {
+            // there are two seeded records with the keyword 'butterfly' but they're in different vocabs 
+            var results = Db.Query<RecordCountForKeywordIndex.Result, RecordCountForKeywordIndex>()
+                .Customize(x => x.WaitForNonStaleResults())
+                .Where(x => x.KeywordValue == "butterfly")
+                .ToList();
+
+            results.Count.Should().Be(2);
+        }
     }
 }

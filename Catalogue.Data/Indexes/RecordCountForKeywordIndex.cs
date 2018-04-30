@@ -12,6 +12,7 @@ namespace Catalogue.Data.Indexes
     {
         public class Result
         {
+            public string Key { get; set; }
             public string KeywordVocab { get; set; }
             public string KeywordValue { get; set; }
             public int RecordCount { get; set; }
@@ -26,17 +27,19 @@ namespace Catalogue.Data.Indexes
                              from keyword in record.Gemini.Keywords
                              select new
                              {
+                                 Key = keyword.Vocab + "::" + keyword.Value, // make a unique key field
                                  KeywordVocab = keyword.Vocab,
                                  KeywordValue = keyword.Value,
                                  RecordCount = 1
                              };
 
             Reduce = results => from result in results
-                                group result by result.KeywordValue into g
+                                group result by result.Key into g
                                 select new
                                 {
+                                    Key = g.Key,
                                     KeywordVocab = g.Select(r => r.KeywordVocab).FirstOrDefault(),
-                                    KeywordValue = g.Key,
+                                    KeywordValue = g.Select(r => r.KeywordValue).FirstOrDefault(),
                                     RecordCount = g.Sum(r => r.RecordCount)
                                 };
 
