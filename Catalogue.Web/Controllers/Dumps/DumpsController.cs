@@ -60,6 +60,7 @@ namespace Catalogue.Web.Controllers.Dumps
             var results = db.Query<RecordCountForKeywordIndex.Result, RecordCountForKeywordIndex>().Fetch(5000); // but server maxpagesize is..?
 
             var q = from r in results
+                    where r.KeywordVocab != ""
                     group r by r.KeywordVocab into g
                     select new RecordCountByVocabAndKeywordResultShape
                     {
