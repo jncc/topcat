@@ -61,6 +61,7 @@ namespace Catalogue.Web.Controllers.Dumps
 
             var q = from r in results
                     where r.KeywordVocab != ""
+                    orderby r.KeywordVocab == "http://vocab.jncc.gov.uk/jncc-domain" || r.KeywordVocab == "http://vocab.jncc.gov.uk/jncc-category" descending 
                     group r by r.KeywordVocab into g
                     select new RecordCountByVocabAndKeywordResultShape
                     {
