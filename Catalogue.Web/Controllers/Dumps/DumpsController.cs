@@ -7,6 +7,7 @@ using System.Web.Http;
 using Catalogue.Data.Indexes;
 using Catalogue.Data.Model;
 using Catalogue.Gemini.Model;
+using Catalogue.Utilities.Raven;
 using Raven.Client;
 
 namespace Catalogue.Web.Controllers.Dumps
@@ -23,10 +24,7 @@ namespace Catalogue.Web.Controllers.Dumps
         [HttpGet, Route("api/dumps/allkeywordsinrecords")]
         public List<MetadataKeyword> AllKeywordsInRecords()
         {
-            var q = db.Query<RecordKeywordIndex.Result, RecordKeywordIndex>();
-
-            var result = q.Take(1024).ToList();
-            if (result.Count == 1024) throw new Exception("Too many results. Needs to page them!");
+            var result = db.Query<RecordKeywordIndex.Result, RecordKeywordIndex>().Fetch(1024);
             
             return result.Select(k => new MetadataKeyword { Vocab = k.Vocab, Value = k.Value }).ToList();
         }
@@ -34,27 +32,20 @@ namespace Catalogue.Web.Controllers.Dumps
         [HttpGet, Route("api/dumps/recordswithgdbinpath")]
         public List<string> RecordsWithGdbInPath()
         {
-            var q = db.Query<Record>();
+            var result = db.Query<Record>().Fetch(1024);
 
-            var result = q.Take(1024).ToList();
-            if (result.Count == 1024) throw new Exception("Too many results. Needs to page them!");
-
-            var q2 = result
+            return result
                 .Where(r => r.Path.Contains(".gdb"))
-                .Select(r => r.Id.ToString());
-
-            return q2.ToList();
+                .Select(r => r.Id.ToString())
+                .ToList();
         }
 
         [HttpGet, Route("api/dumps/recordswithpublishinginfo")]
-        public List<RecordWithPublicationInfo> RecordsWithPublishingInfo()
+        public List<RecordWithPublicationInfoResultShape> RecordsWithPublishingInfo()
         {
-            var q = db.Query<Record, RecordsWithOpenDataPublicationInfoIndex>();
+            var results = db.Query<Record, RecordsWithOpenDataPublicationInfoIndex>().Fetch(1024);
 
-            var results = q.Take(1024).ToList();
-            if (results.Count == 1024) throw new Exception("Too many results. Needs to page them!");
-
-            return results.Select(r => new RecordWithPublicationInfo
+            return results.Select(r => new RecordWithPublicationInfoResultShape
                 {
                     Id = r.Id,
                     Title = r.Gemini.Title,
@@ -63,7 +54,31 @@ namespace Catalogue.Web.Controllers.Dumps
                 }).ToList();
         }
 
-        public class RecordWithPublicationInfo
+        [HttpGet, Route("api/dumps/recordcountbyvocabandkeyword")]
+        public List<RecordCountByVocabAndKeywordResultShape> RecordCountByVocabAndKeyword()
+        {
+            var results = db.Query<RecordCountForKeywordIndex.Result, RecordCountForKeywordIndex>().Fetch(5000); // but server maxpagesize is..?
+
+            var q = from r in results
+                    group r by r.KeywordVocab into g
+                    select new RecordCountByVocabAndKeywordResultShape
+                    {
+                        Vocab = g.Key,
+                        KeywordCount = g.Count(),
+                        RecordCount = g.Sum(x => x.RecordCount),
+                        Keywords = from x in g
+                                   where x.RecordCount > 1
+                                   select new RecordCountByVocabAndKeywordResultShape.RecordCountByKeywordResultShape
+                                   {
+                                       Keyword = x.KeywordValue,
+                                       RecordCount = x.RecordCount
+                                   }
+                    };
+
+            return q.ToList();
+        }
+
+        public class RecordWithPublicationInfoResultShape
         {
             public Guid Id { get; set; }
             public string Title { get; set; }
@@ -72,18 +87,29 @@ namespace Catalogue.Web.Controllers.Dumps
 
         }
 
-        [HttpGet, Route("api/dumps/recordsnotpublishedsincelastupdated")]
-        public List<RecordWithPublicationInfo> RecordsNotPublishedSinceLastUpdated()
+        public class RecordCountByVocabAndKeywordResultShape
         {
-            var q = db.Query<RecordsWithOpenDataPublicationInfoIndex.Result, RecordsWithOpenDataPublicationInfoIndex>()
+            public string Vocab { get; set; }
+            public int KeywordCount { get; set; }
+            public int RecordCount { get; set; }
+            public IEnumerable<RecordCountByKeywordResultShape> Keywords { get; set; }
+
+            public class RecordCountByKeywordResultShape
+            {
+                public string Keyword { get; set; }
+                public int RecordCount { get; set; }
+            }
+        }
+
+        [HttpGet, Route("api/dumps/recordsnotpublishedsincelastupdated")]
+        public List<RecordWithPublicationInfoResultShape> RecordsNotPublishedSinceLastUpdated()
+        {
+            var results = db.Query<RecordsWithOpenDataPublicationInfoIndex.Result, RecordsWithOpenDataPublicationInfoIndex>()
                 .Where(r => !r.PublishedSinceLastUpdated)
                 .OfType<Record>()
-                .ToList();
+                .Fetch(1024);
 
-            var results = q.Take(1024).ToList();
-            if (results.Count == 1024) throw new Exception("Too many results. Needs to page them!");
-
-            return results.Select(r => new RecordWithPublicationInfo
+            return results.Select(r => new RecordWithPublicationInfoResultShape
             {
                 Id = r.Id,
                 Title = r.Gemini.Title,

@@ -5,12 +5,13 @@ using System.Text;
 using System.Threading.Tasks;
 using Catalogue.Data.Indexes;
 using Catalogue.Gemini.Model;
+using Catalogue.Utilities.Raven;
 using FluentAssertions;
 using NUnit.Framework;
 
 namespace Catalogue.Tests.Slow.Catalogue.Data.Indexes
 {
-    internal class jncc_categories_index_spec : DatabaseTestFixture
+    internal class record_count_for_keyword_index_specs : DatabaseTestFixture
     {
         [Test]
         public void should_be_able_to_get_collection_record_counts()
@@ -40,5 +41,18 @@ namespace Catalogue.Tests.Slow.Catalogue.Data.Indexes
 
             results.Count.Should().Be(2);
         }
+
+        [Test]
+        public void should_be_able_to_get_all_keywords()
+        {
+            var results = Db.Query<RecordCountForKeywordIndex.Result, RecordCountForKeywordIndex>()
+                .Customize(x => x.WaitForNonStaleResults())
+                .Fetch(5000);
+
+            Console.WriteLine(results.Count);
+            results.Count.Should().BeGreaterThan(2);
+        }
+
+
     }
 }

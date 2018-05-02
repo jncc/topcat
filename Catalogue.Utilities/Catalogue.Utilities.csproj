@@ -78,6 +78,7 @@
     <Compile Include="Logging\ExceptionExtensions.cs" />
     <Compile Include="DriveMapping\JnccDriveMappings.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Raven\RavenUtilities.cs" />
     <Compile Include="Text\StringUtility.cs" />
     <Compile Include="Text\WebificationUtility.cs" />
     <Compile Include="Time\Clock.cs" />

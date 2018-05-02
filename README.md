@@ -11,6 +11,8 @@ Development
 
 Since the recent upgrade to RavenDB 3.5 you need to **run Visual Studio as an Administrator**, unfortunatley, or the database throws errors at dev time. We're looking into why this is the case.
 
+To run the tests, you need to **run IIS Express in 64-bit mode**. https://ppolyzos.com/2015/12/01/enable-x64-bit-version-of-iis-express/
+
 ### Web Essentials
 Install the Visual Studio Web Essentials extensions pack (and now the "Web Compiler" extension) for design-time support for CoffeeScript (.coffee) and LESS (.less). These are essential if you want to edit the application's Javascript or CSS.
 
