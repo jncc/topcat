@@ -362,26 +362,7 @@ namespace Catalogue.Data.Write
             // 18 Spatial resolution, where it can be specified it should - so its optional
 
             // 19 resource location, conditional
-            // when online access is availble, should be a valid url
-            // when do not yet perform a get request and get a 200 response, the only true way to validate a url
-            if (record.Gemini.ResourceLocator.IsNotBlank())
-            {
-                Uri url;
-
-                if (Uri.TryCreate(record.Gemini.ResourceLocator, UriKind.Absolute, out url))
-                {
-                    if (url.Scheme != Uri.UriSchemeHttp)
-                    {
-                        result.Errors.Add("Resource locator must be an http url",
-                            r => r.Gemini.ResourceLocator);
-                    }
-                }
-                else
-                {
-                    result.Errors.Add("Resource locator must be a valid url",
-                        r => r.Gemini.ResourceLocator);
-                }
-            }
+            // already checked during basic validation
 
             // 21 DataFormat optional 
 
