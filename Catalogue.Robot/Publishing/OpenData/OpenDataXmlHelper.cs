@@ -4,6 +4,7 @@ using Catalogue.Utilities.Text;
 using System.IO;
 using System.Linq;
 using System.Xml.Linq;
+using Catalogue.Utilities.Clone;
 
 namespace Catalogue.Robot.Publishing.OpenData
 {
@@ -11,13 +12,20 @@ namespace Catalogue.Robot.Publishing.OpenData
     {
         public byte[] GetMetadataDocument(Record record, string resourceUrl)
         {
-            bool alternativeResources = record.Publication != null && record.Publication.OpenData != null && record.Publication.OpenData.Resources != null && record.Publication.OpenData.Resources.Any();
-            var doc = new Gemini.Encoding.XmlEncoder().Create(record.Id, record.Gemini);
+            // redact the record for open data publishing (for GDPR etc.)
+            var redacted = GetRedactedRecordToPublish(record);
 
-            if (alternativeResources)
+            // generate the XML
+            var doc = new Gemini.Encoding.XmlEncoder().Create(redacted.Id, redacted.Gemini);
+
+            bool anyAlternativeResources = record.Publication?.OpenData?.Resources != null
+                && record.Publication.OpenData.Resources.Any();
+
+            // mung (mutate) the metadata doc so data.gov.uk knows about the resources
+            // todo: this could be improved when we support multiple resources better
+            if (anyAlternativeResources)
             {
-                // mung (mutate) the metadata doc so data.gov.uk knows about the resources
-                var onlineResources = record.Publication.OpenData.Resources
+                var onlineResources = redacted.Publication.OpenData.Resources
                     .Select(r => new OnlineResource
                     {
                         Name = WebificationUtility.ToUrlFriendlyString(Path.GetFileName(r.Path)),
@@ -31,6 +39,19 @@ namespace Catalogue.Robot.Publishing.OpenData
             doc.Save(s);
 
             return s.ToArray();
+        }
+
+        static Record GetRedactedRecordToPublish(Record record)
+        {
+            // create a *clone* of the record with redacted properties
+            // (because we don't want to accidentally save this back to the database)
+            var redacted = record.With(r =>
+            {
+                r.Gemini.MetadataPointOfContact.Name = "Joint Nature Conservation Committee";
+                r.Gemini.MetadataPointOfContact.Email = "data@jncc.gov.uk";
+            });
+
+            return redacted;
         }
 
         public string UpdateWafIndexDocument(Record record, string indexDocHtml)
