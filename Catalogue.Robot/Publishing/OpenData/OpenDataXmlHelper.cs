@@ -47,7 +47,7 @@ namespace Catalogue.Robot.Publishing.OpenData
             // (because we don't want to accidentally save this back to the database)
             var redacted = record.With(r =>
             {
-                r.Gemini.MetadataPointOfContact.Name = "Joint Nature Conservation Committee";
+                r.Gemini.MetadataPointOfContact.Name = "Digital and Data Solutions, JNCC";
                 r.Gemini.MetadataPointOfContact.Email = "data@jncc.gov.uk";
             });
 

@@ -12,7 +12,7 @@
   <gmd:contact>
     <gmd:CI_ResponsibleParty>
       <gmd:organisationName>
-        <gco:CharacterString>Joint Nature Conservation Committee</gco:CharacterString>
+        <gco:CharacterString>Digital and Data Solutions, JNCC</gco:CharacterString>
       </gmd:organisationName>
       <gmd:contactInfo>
         <gmd:CI_Contact>
