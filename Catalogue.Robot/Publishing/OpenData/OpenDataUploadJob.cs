@@ -28,7 +28,7 @@ namespace Catalogue.Robot.Publishing.OpenData
             Logger.Info("Finished all jobs");
         }
 
-        public void RunUpload()
+        public void RunUpload(bool metadataOnly = false)
         {
             using (var db = store.OpenSession())
             {
@@ -42,7 +42,7 @@ namespace Catalogue.Robot.Publishing.OpenData
                 var records = robotUploader.GetRecordsPendingUpload();
                 Logger.Info("Number of records to upload: " + records.Count);
 
-                robotUploader.Upload(records);
+                robotUploader.Upload(records, metadataOnly);
             }
         }
 

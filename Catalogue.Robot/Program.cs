@@ -48,9 +48,11 @@ namespace Catalogue.Robot
 
             if (runOnce)
             {
-                Logger.Info("Running upload in runOnce mode");
+                bool metadataOnly = args.Length > 1 && "metadataOnly".Equals(args[1]);
+                Logger.Info("Running upload in runOnce mode, metadataOnly=" + metadataOnly);
+
                 var uploadJob = CreateUploadJob();
-                uploadJob.RunUpload();
+                uploadJob.RunUpload(metadataOnly);
                 Logger.Info("Finished run");
             }
             else
