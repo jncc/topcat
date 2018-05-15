@@ -1,12 +1,9 @@
-﻿using Catalogue.Data.Indexes;
-using Catalogue.Data.Model;
+﻿using Catalogue.Data.Model;
 using Catalogue.Data.Seed;
 using Catalogue.Data.Test;
 using Raven.Client;
 using Raven.Client.Document;
 using Raven.Client.Indexes;
-using Raven.Client.Listeners;
-using Raven.Database.Config;
 using Raven.Database.Server;
 
 namespace Catalogue.Data
@@ -16,6 +13,7 @@ namespace Catalogue.Data
         public static IDocumentStore Production()
         {
             var store = new DocumentStore { ConnectionStringName = "Data" };
+            store.Conventions.MaxNumberOfRequestsPerSession = 100;
             store.Initialize();
             IndexCreation.CreateIndexes(typeof(Record).Assembly, store);
             return store;

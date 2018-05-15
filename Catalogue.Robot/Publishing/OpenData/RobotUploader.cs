@@ -52,6 +52,8 @@ namespace Catalogue.Robot.Publishing.OpenData
                 Logger.Info("Uploading record with title: " + record.Gemini.Title);
                 UploadRecord(record, metadataOnly);
             }
+            // commit the changes - to both the record (resource locator may have changed) and the attempt object
+            db.SaveChanges();
         }
 
         private void UploadRecord(Record record, bool metadataOnly)
@@ -109,9 +111,6 @@ namespace Catalogue.Robot.Publishing.OpenData
                 attempt.Message = message;
                 Logger.Error("Upload failed for record with GUID="+record.Id, ex);
             }
-
-            // commit the changes - to both the record (resource locator may have changed) and the attempt object
-            db.SaveChanges();
         }
     }
 }
