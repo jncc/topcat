@@ -1,8 +1,9 @@
-﻿using Catalogue.Data.Model;
-using Catalogue.Utilities.Logging;
+﻿using Catalogue.Utilities.Logging;
+using Catalogue.Data.Model;
+using System;
+using Catalogue.Utilities.Time;
 using log4net;
 using Raven.Client;
-using System;
 using static Catalogue.Data.Write.RecordServiceHelper;
 
 namespace Catalogue.Data.Write
@@ -28,9 +29,8 @@ namespace Catalogue.Data.Write
             var recordServiceResult = Upsert(record, db, validator);
             if (!recordServiceResult.Success)
             {
-                Logger.Error("Error while saving upload changes for record with ID=" + record.Id + " and Title=" + record.Gemini.Title);
-//                var e = new Exception("Error while saving upload changes");
-//                e.LogAndThrow(Logger);
+                var e = new Exception("Error while saving upload changes.");
+                e.LogAndThrow(Logger);
             }
         }
 
