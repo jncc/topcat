@@ -7,7 +7,7 @@ using Catalogue.Data.Model;
 using Catalogue.Robot.Publishing.OpenData;
 using Microsoft.XmlDiffPatch;
 using NUnit.Framework;
-using Raven.Imports.Newtonsoft.Json;
+using Newtonsoft.Json;
 
 namespace Catalogue.Tests.Slow.Catalogue.Robot
 {

@@ -75,6 +75,7 @@
     <Compile Include="Vocabs\TopicCategories.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="app.config" />
     <None Include="GEMINI2.2.pdf" />
     <None Include="packages.config" />
   </ItemGroup>
