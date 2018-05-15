@@ -273,7 +273,7 @@ namespace Catalogue.Web.Controllers.Patch
         }
 
         [HttpPost, Route("api/patch/republishredactions")]
-        public HttpResponseMessage PopulatePublishable()
+        public HttpResponseMessage RepublishRedactions()
         {
             var records1 = db
                 .Query<Record>()
@@ -341,9 +341,30 @@ namespace Catalogue.Web.Controllers.Patch
                     {
                         if (record.Id.Equals(metadataContactRecord.Id))
                         {
-                            record.Gemini.MetadataPointOfContact.Name = metadataContactRecord.Gemini.MetadataPointOfContact.Name;
-                            record.Gemini.MetadataPointOfContact.Email = metadataContactRecord.Gemini.MetadataPointOfContact.Email;
-                            record.Manager.DisplayName = metadataContactRecord.Manager.DisplayName;
+                            if (record.Gemini.MetadataPointOfContact != null)
+                            {
+                                record.Gemini.MetadataPointOfContact.Name =
+                                    metadataContactRecord.Gemini.MetadataPointOfContact.Name;
+                                record.Gemini.MetadataPointOfContact.Email =
+                                    metadataContactRecord.Gemini.MetadataPointOfContact.Email;
+                            }
+                            else
+                            {
+                                record.Gemini.MetadataPointOfContact =
+                                    metadataContactRecord.Gemini.MetadataPointOfContact;
+                            }
+
+                            if (record.Manager != null)
+                            {
+                                record.Manager.DisplayName = metadataContactRecord.Manager.DisplayName;
+                            }
+                            else
+                            {
+                                record.Manager = new UserInfo
+                                {
+                                    DisplayName = metadataContactRecord.Manager.DisplayName
+                                };
+                            }
                         }
                     }
 
