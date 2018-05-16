@@ -45,16 +45,18 @@ namespace Catalogue.Robot.Publishing.OpenData
             return records;
         }
 
-        public void Upload(List<Record> records)
+        public void Upload(List<Record> records, bool metadataOnly = false)
         {
             foreach (Record record in records)
             {
                 Logger.Info("Uploading record with title: " + record.Gemini.Title);
-                UploadRecord(record);
+                UploadRecord(record, metadataOnly);
             }
+            // commit the changes - to both the record (resource locator may have changed) and the attempt object
+            db.SaveChanges();
         }
 
-        private void UploadRecord(Record record)
+        private void UploadRecord(Record record, bool metadataOnly)
         {
             var attempt = new PublicationAttempt { DateUtc = Clock.NowUtc };
             uploadRecordService.UpdateLastAttempt(record, attempt);
@@ -65,31 +67,36 @@ namespace Catalogue.Robot.Publishing.OpenData
 
             try
             {
-                if (alternativeResources)
+                if (!metadataOnly)
                 {
-                    // upload the alternative resources; don't touch the resource locator
-                    uploadHelper.UploadAlternativeResources(record);
-                }
-                else
-                {
-                    if (corpulent)
+                    if (alternativeResources)
                     {
-                        // set the resource locator to the download request page; don't upload any resources
-                        if (record.Gemini.ResourceLocator.IsBlank()) // arguably should always do it actually
-                            uploadRecordService.UpdateTheResourceLocatorToBeTheOpenDataDownloadPage(record);
-                    }
-                    else if (record.Gemini.ResourceLocator.IsBlank() || record.Gemini.ResourceLocator.Contains(uploadHelper.GetHttpRootUrl()))
-                    {
-                        // "normal" case - if the resource locator is blank or already data.jncc.gov.uk
-                        // upload the resource pointed at by record.Path, and update the resource locator to match
-                        uploadHelper.UploadDataFile(record.Id, record.Path);
-                        string dataHttpPath = uploadHelper.GetHttpRootUrl() + "/" + GetUnrootedDataPath(record.Id, record.Path);
-                        uploadRecordService.UpdateResourceLocatorToMatchMainDataFile(record, dataHttpPath);
+                        // upload the alternative resources; don't touch the resource locator
+                        uploadHelper.UploadAlternativeResources(record);
                     }
                     else
                     {
-                        // do nothing - don't change the resource locator, don't upload anything
-                        Logger.Info("Deferring to existing resource locator - not uploading.");
+                        if (corpulent)
+                        {
+                            // set the resource locator to the download request page; don't upload any resources
+                            if (record.Gemini.ResourceLocator.IsBlank()) // arguably should always do it actually
+                                uploadRecordService.UpdateTheResourceLocatorToBeTheOpenDataDownloadPage(record);
+                        }
+                        else if (record.Gemini.ResourceLocator.IsBlank() ||
+                                 record.Gemini.ResourceLocator.Contains(uploadHelper.GetHttpRootUrl()))
+                        {
+                            // "normal" case - if the resource locator is blank or already data.jncc.gov.uk
+                            // upload the resource pointed at by record.Path, and update the resource locator to match
+                            uploadHelper.UploadDataFile(record.Id, record.Path);
+                            string dataHttpPath = uploadHelper.GetHttpRootUrl() + "/" +
+                                                  GetUnrootedDataPath(record.Id, record.Path);
+                            uploadRecordService.UpdateResourceLocatorToMatchMainDataFile(record, dataHttpPath);
+                        }
+                        else
+                        {
+                            // do nothing - don't change the resource locator, don't upload anything
+                            Logger.Info("Deferring to existing resource locator - not uploading.");
+                        }
                     }
                 }
 
@@ -104,9 +111,6 @@ namespace Catalogue.Robot.Publishing.OpenData
                 attempt.Message = message;
                 Logger.Error("Upload failed for record with GUID="+record.Id, ex);
             }
-
-            // commit the changes - to both the record (resource locator may have changed) and the attempt object
-            db.SaveChanges();
         }
     }
 }

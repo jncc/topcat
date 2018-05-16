@@ -8,9 +8,13 @@ using Catalogue.Gemini.Spatial;
 using Raven.Client;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Net.Http;
 using System.Web.Http;
+using Catalogue.Data.Import.Mappings;
+using Catalogue.Utilities.Time;
+using CsvHelper;
 
 namespace Catalogue.Web.Controllers.Patch
 {
@@ -268,8 +272,8 @@ namespace Catalogue.Web.Controllers.Patch
 
         }
 
-        [HttpPost, Route("api/patch/publishable")]
-        public HttpResponseMessage PopulatePublishable()
+        [HttpPost, Route("api/patch/republishredactions")]
+        public HttpResponseMessage RepublishRedactions()
         {
             var records1 = db
                 .Query<Record>()
@@ -301,18 +305,103 @@ namespace Catalogue.Web.Controllers.Patch
 
             var records = records1.Concat(records2).Concat(records3).Concat(records4).ToList();
 
-            foreach (var record in records)
+            var timestamp = Clock.NowUtc;
+            var signOffUser = new UserInfo
             {
-                if (record.Publication != null && record.Publication.OpenData != null)
+                DisplayName = "Sonia Khela",
+                Email = "Sonia.Khela@jncc.gov.uk"
+            };
+
+            var useContraintsMapping = InstantiateMapping("UseConstraintsMapping");
+            var metadataContactMapping = InstantiateMapping("MetadataContactMapping");
+            using (var useConstraintsReader = new StreamReader("C:\\temp\\TOPCAT_297.csv"))
+            using (var metadataReader = new StreamReader("C:\\temp\\TOPCAT_299.csv"))
+            {
+                var useConstraintsCsv = new CsvReader(useConstraintsReader);
+                var metadataCsv = new CsvReader(metadataReader);
+
+                useContraintsMapping.Apply(useConstraintsCsv.Configuration);
+                metadataContactMapping.Apply(metadataCsv.Configuration);
+
+                var useConstraintsRecords = useConstraintsCsv.GetRecords<Record>().ToList();
+                var metadataContactRecords = metadataCsv.GetRecords<Record>().ToList();
+
+                foreach (var record in records)
                 {
-                    if (record.Publication.OpenData.Assessment != null && record.Publication.OpenData.Assessment.Completed)
-                        record.Publication.OpenData.Publishable = true;
+                    foreach (var useConstraintsRecord in useConstraintsRecords)
+                    {
+                        if (record.Id.Equals(useConstraintsRecord.Id))
+                        {
+                            record.Gemini.LimitationsOnPublicAccess = useConstraintsRecord.Gemini.LimitationsOnPublicAccess;
+                            record.Gemini.UseConstraints = useConstraintsRecord.Gemini.UseConstraints;
+                        }
+                    }
+
+                    foreach (var metadataContactRecord in metadataContactRecords)
+                    {
+                        if (record.Id.Equals(metadataContactRecord.Id))
+                        {
+                            if (record.Gemini.MetadataPointOfContact != null)
+                            {
+                                record.Gemini.MetadataPointOfContact.Name =
+                                    metadataContactRecord.Gemini.MetadataPointOfContact.Name;
+                                record.Gemini.MetadataPointOfContact.Email =
+                                    metadataContactRecord.Gemini.MetadataPointOfContact.Email;
+                            }
+                            else
+                            {
+                                record.Gemini.MetadataPointOfContact =
+                                    metadataContactRecord.Gemini.MetadataPointOfContact;
+                            }
+
+                            if (record.Manager != null)
+                            {
+                                record.Manager.DisplayName = metadataContactRecord.Manager.DisplayName;
+                            }
+                            else
+                            {
+                                record.Manager = new UserInfo
+                                {
+                                    DisplayName = metadataContactRecord.Manager.DisplayName
+                                };
+                            }
+                        }
+                    }
+
+                    if (record.Publication?.OpenData?.LastSuccess != null && record.Publication?.OpenData?.Publishable == true && record.Validation == Validation.Gemini && record.Publication?.OpenData?.Paused == false)
+                    {
+                        if (record.ReadOnly)
+                        {
+                            record.ReadOnly = false;
+                        }
+
+                        if (record.Gemini.ResponsibleOrganisation != null && record.Gemini.ResponsibleOrganisation.Name == "Joint Nature Conservation Committee (JNCC)" && string.IsNullOrEmpty(record.Gemini.ResponsibleOrganisation.Role))
+                        {
+                            record.Gemini.ResponsibleOrganisation.Role = "custodian";
+                        }
+
+                        record.Gemini.MetadataDate = timestamp;
+                        record.Publication.OpenData.Assessment.CompletedByUser = signOffUser;
+                        record.Publication.OpenData.Assessment.CompletedOnUtc = timestamp.AddMinutes(-1);
+                        record.Publication.OpenData.SignOff.User = signOffUser;
+                        record.Publication.OpenData.SignOff.DateUtc = timestamp;
+                    }
                 }
             }
 
             db.SaveChanges();
 
             return new HttpResponseMessage { Content = new StringContent("Updated " + records.Count + " records.") };
+        }
+
+        IMapping InstantiateMapping(string mapper)
+        {
+            var type = typeof(IMapping).Assembly.GetType("Catalogue.Data.Import.Mappings." + mapper);
+
+            if (type == null)
+                throw new Exception(String.Format("The import mapping '{0}' couldn't be found or does not exist.", mapper));
+
+            return (IMapping)Activator.CreateInstance(type);
         }
     }
 }
