@@ -368,8 +368,13 @@ namespace Catalogue.Web.Controllers.Patch
                         }
                     }
 
-                    if (record.Publication?.OpenData?.LastSuccess != null && record.Publication?.OpenData?.Publishable == true && record.Validation == Validation.Gemini && record.Publication?.OpenData?.Paused == false && !record.ReadOnly)
+                    if (record.Publication?.OpenData?.LastSuccess != null && record.Publication?.OpenData?.Publishable == true && record.Validation == Validation.Gemini && record.Publication?.OpenData?.Paused == false)
                     {
+                        if (record.ReadOnly)
+                        {
+                            record.ReadOnly = false;
+                        }
+
                         if (record.Gemini.ResponsibleOrganisation != null && record.Gemini.ResponsibleOrganisation.Name == "Joint Nature Conservation Committee (JNCC)" && string.IsNullOrEmpty(record.Gemini.ResponsibleOrganisation.Role))
                         {
                             record.Gemini.ResponsibleOrganisation.Role = "custodian";
