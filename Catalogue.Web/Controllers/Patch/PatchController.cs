@@ -308,32 +308,31 @@ namespace Catalogue.Web.Controllers.Patch
             var timestamp = Clock.NowUtc;
             var signOffUser = new UserInfo
             {
-                DisplayName = "Sonia Khela",
-                Email = "Sonia.Khela@jncc.gov.uk"
+                DisplayName = "Owen Boswarva",
+                Email = "Owen.Boswarva@jncc.gov.uk"
             };
 
-            var useContraintsMapping = InstantiateMapping("UseConstraintsMapping");
+            var resourceLocatorMapping = InstantiateMapping("ResourceLocatorMapping");
             var metadataContactMapping = InstantiateMapping("MetadataContactMapping");
-            using (var useConstraintsReader = new StreamReader("C:\\temp\\TOPCAT_297.csv"))
-            using (var metadataReader = new StreamReader("C:\\temp\\TOPCAT_299.csv"))
+            using (var resourceLocatorReader = new StreamReader("C:\\temp\\TOPCAT_300.csv"))
+            using (var metadataReader = new StreamReader("C:\\temp\\TOPCAT_299_2.csv"))
             {
-                var useConstraintsCsv = new CsvReader(useConstraintsReader);
+                var resourceLocatorCsv = new CsvReader(resourceLocatorReader);
                 var metadataCsv = new CsvReader(metadataReader);
 
-                useContraintsMapping.Apply(useConstraintsCsv.Configuration);
+                resourceLocatorMapping.Apply(resourceLocatorCsv.Configuration);
                 metadataContactMapping.Apply(metadataCsv.Configuration);
 
-                var useConstraintsRecords = useConstraintsCsv.GetRecords<Record>().ToList();
+                var resourceLocatorRecords = resourceLocatorCsv.GetRecords<Record>().ToList();
                 var metadataContactRecords = metadataCsv.GetRecords<Record>().ToList();
 
                 foreach (var record in records)
                 {
-                    foreach (var useConstraintsRecord in useConstraintsRecords)
+                    foreach (var resourceLocatorRecord in resourceLocatorRecords)
                     {
-                        if (record.Id.Equals(useConstraintsRecord.Id))
+                        if (record.Id.Equals(resourceLocatorRecord.Id))
                         {
-                            record.Gemini.LimitationsOnPublicAccess = useConstraintsRecord.Gemini.LimitationsOnPublicAccess;
-                            record.Gemini.UseConstraints = useConstraintsRecord.Gemini.UseConstraints;
+                            record.Gemini.ResourceLocator = resourceLocatorRecord.Gemini.ResourceLocator;
                         }
                     }
 
@@ -370,16 +369,6 @@ namespace Catalogue.Web.Controllers.Patch
 
                     if (record.Publication?.OpenData?.LastSuccess != null && record.Publication?.OpenData?.Publishable == true && record.Validation == Validation.Gemini && record.Publication?.OpenData?.Paused == false)
                     {
-                        if (record.ReadOnly)
-                        {
-                            record.ReadOnly = false;
-                        }
-
-                        if (record.Gemini.ResponsibleOrganisation != null && record.Gemini.ResponsibleOrganisation.Name == "Joint Nature Conservation Committee (JNCC)" && string.IsNullOrEmpty(record.Gemini.ResponsibleOrganisation.Role))
-                        {
-                            record.Gemini.ResponsibleOrganisation.Role = "custodian";
-                        }
-
                         record.Gemini.MetadataDate = timestamp;
                         record.Publication.OpenData.Assessment.CompletedByUser = signOffUser;
                         record.Publication.OpenData.Assessment.CompletedOnUtc = timestamp.AddMinutes(-1);
