@@ -13,7 +13,6 @@ namespace Catalogue.Data
         public static IDocumentStore Production()
         {
             var store = new DocumentStore { ConnectionStringName = "Data" };
-            store.Conventions.MaxNumberOfRequestsPerSession = 1000;
             store.Initialize();
             IndexCreation.CreateIndexes(typeof(Record).Assembly, store);
             return store;
