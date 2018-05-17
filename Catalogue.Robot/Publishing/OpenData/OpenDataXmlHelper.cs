@@ -18,23 +18,6 @@ namespace Catalogue.Robot.Publishing.OpenData
             // generate the XML
             var doc = new Gemini.Encoding.XmlEncoder().Create(redacted.Id, redacted.Gemini);
 
-            bool anyAlternativeResources = record.Publication?.OpenData?.Resources != null
-                && record.Publication.OpenData.Resources.Any();
-
-            // mung (mutate) the metadata doc so data.gov.uk knows about the resources
-            // todo: this could be improved when we support multiple resources better
-            if (anyAlternativeResources)
-            {
-                var onlineResources = redacted.Publication.OpenData.Resources
-                    .Select(r => new OnlineResource
-                    {
-                        Name = WebificationUtility.ToUrlFriendlyString(Path.GetFileName(r.Path)),
-                        Url = resourceUrl
-                    }).ToList();
-
-                Gemini.Encoding.XmlEncoder.ReplaceDigitalTransferOptions(doc, onlineResources);
-            }
-
             var s = new MemoryStream();
             doc.Save(s);
 
@@ -47,6 +30,8 @@ namespace Catalogue.Robot.Publishing.OpenData
             // (because we don't want to accidentally save this back to the database)
             var redacted = record.With(r =>
             {
+                r.Gemini.ResponsibleOrganisation.Name = "Digital and Data Solutions, JNCC";
+                r.Gemini.ResponsibleOrganisation.Email = "data@jncc.gov.uk";
                 r.Gemini.MetadataPointOfContact.Name = "Digital and Data Solutions, JNCC";
                 r.Gemini.MetadataPointOfContact.Email = "data@jncc.gov.uk";
             });
