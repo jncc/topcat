@@ -103,7 +103,7 @@
     <Compile Include="Import\Mappings\PubCatMapping.cs" />
     <Compile Include="Import\ImportUtility.cs" />
     <Compile Include="Import\Mappings\MetadataContactMapping.cs" />
-    <Compile Include="Import\Mappings\UseContraintsMapping.cs" />
+    <Compile Include="Import\Mappings\ResourceLocatorMapping.cs" />
     <Compile Include="Import\Mappings\SeabirdSurveyMapping.cs" />
     <Compile Include="Import\Mappings\StandardishMapping.cs" />
     <Compile Include="Import\Mappings\TopcatMapping.cs" />

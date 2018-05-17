@@ -1,59 +1,59 @@
 ﻿{
-    "Gemini": {
+  "Gemini": {
     "Title": "GIS grab Log data from North Sea Acoustic Herring survey 2010",
     "Abstract": "GIS grab log data from the North Sea Acoustic Herring survey during 2010 on the research vessel Scotia. The aim of the survey was obtain information on seabed habitats in the North Sea.",
     "TopicCategory": "oceans",
     "Keywords": [
-        {
+      {
         "Value": "Marine",
         "Vocab": "http://vocab.jncc.gov.uk/jncc-domain"
-        },
-        {
+      },
+      {
         "Value": "Offshore Seabed Survey",
         "Vocab": "http://vocab.jncc.gov.uk/jncc-category"
-        },
-        {
+      },
+      {
         "Value": "North East Scotland",
         "Vocab": "http://vocab.jncc.gov.uk/location"
-        },
-        {
+      },
+      {
         "Value": "North Sea",
         "Vocab": "http://vocab.jncc.gov.uk/location"
-        },
-        {
+      },
+      {
         "Value": "0810S",
         "Vocab": "http://vocab.jncc.gov.uk/seabed-survey-cruise-id"
-        },
-        {
+      },
+      {
         "Value": "Processed",
         "Vocab": "http://vocab.jncc.gov.uk/seabed-survey-data-type"
-        },
-        {
+      },
+      {
         "Value": "North East Scotland",
         "Vocab": "http://vocab.jncc.gov.uk/seabed-survey-technique"
-        },
-        {
+      },
+      {
         "Value": "North Sea",
         "Vocab": "http://vocab.jncc.gov.uk/seabed-survey-technique"
-        },
-        {
+      },
+      {
         "Value": "MRV Scotia",
         "Vocab": "http://vocab.jncc.gov.uk/seabed-survey-vessel"
-        }
+      }
     ],
     "TemporalExtent": {
-        "Begin": "2010-06-28",
-        "End": "2010-07-18"
+      "Begin": "2010-06-28",
+      "End": "2010-07-18"
     },
     "DatasetReferenceDate": "2015-09-01",
     "Lineage": "This dataset is an output of a collaborative offshore seabed survey undertaken with Joint Nature Conservation Committee (JNCC).",
-    "ResourceLocator": null,
+    "ResourceLocator": "http://data.jncc.gov.uk/data/721643b8-7e42-40ca-87d9-23f19221238e-Scotia-Herring-Acoustic-Grab",
     "AdditionalInformationSource": null,
     "DataFormat": "Geospatial (Vector point)",
     "ResponsibleOrganisation": {
-        "Name": "Joint Nature Conservation Committee (JNCC)/Marine Scotland Science (MSS)",
-        "Email": "data@jncc.gov.uk",
-        "Role": "custodian"
+      "Name": "Joint Nature Conservation Committee (JNCC)/Marine Scotland Science (MSS)",
+      "Email": "data@jncc.gov.uk",
+      "Role": "custodian"
     },
     "LimitationsOnPublicAccess": "No limitations",
     "UseConstraints": "This resource is made available under the Open Government Licence (OGL) v2.0 http://www.nationalarchives.gov.uk/doc/open-government-licence/version/2/",
@@ -62,18 +62,18 @@
     "Extent": null,
     "MetadataDate": "2016-07-07T21:50:18.5356357Z",
     "MetadataPointOfContact": {
-        "Name": "Joint Nature Conservation Committee",
-        "Email": "data@jncc.gov.uk",
-        "Role": "pointOfContact"
+      "Name": "Joint Nature Conservation Committee",
+      "Email": "data@jncc.gov.uk",
+      "Role": "pointOfContact"
     },
     "ResourceType": "dataset",
     "BoundingBox": {
-        "North": 61.283,
-        "South": 58.066,
-        "East": 1.724,
-        "West": -2.297
+      "North": 61.283,
+      "South": 58.066,
+      "East": 1.724,
+      "West": -2.297
     }
-    },
+  },
     "Path": "X:\\OffshoreSurvey\\SurveyData\\2010_06_RVScotia_NorthSea_HerringAcousticSurvey\\Groundtruthing\\Sampling\\Logs\\Scotia_Herring_Acoustic_Grab",
     "TopCopy": true,
     "Status": "Internal",

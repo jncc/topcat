@@ -299,31 +299,5 @@ namespace Catalogue.Gemini.Encoding
         }
 
         #endregion
-
-
-        /// <summary>
-        /// Replaces the resource locator contents in the document with the specified alternative online resources.
-        /// For Open Data publishing.
-        /// </summary>
-        public static void ReplaceDigitalTransferOptions(XDocument doc, List<OnlineResource> resources)
-        {
-            var digitalTransferOptions = doc.Root
-                .Element(gmd + "distributionInfo")
-                .Element(gmd + "MD_Distribution")
-                .Element(gmd + "transferOptions")
-                .Element(gmd + "MD_DigitalTransferOptions");
-
-            digitalTransferOptions.RemoveAll(); // remove anything that's there
-
-            var elements = from r in resources
-                           select new XElement(gmd + "onLine",
-                               new XElement(gmd + "CI_OnlineResource",
-                                   new XElement(gmd + "linkage",
-                                       new XElement(gmd + "URL", r.Url)),
-                                   new XElement(gmd + "name",
-                                       new XElement(gco + "CharacterString", r.Name))));
-
-            digitalTransferOptions.Add(elements); // insert the alternative resources instead
-        }
     }
 }

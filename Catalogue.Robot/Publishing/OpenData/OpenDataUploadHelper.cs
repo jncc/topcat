@@ -39,25 +39,6 @@ namespace Catalogue.Robot.Publishing.OpenData
             Logger.Info("Uploaded data file successfully");
         }
 
-        public void UploadAlternativeResources(Record record)
-        {
-            // check no duplicate filenames after webifying
-            var fileNames = from r in record.Publication.OpenData.Resources
-                let fileName = WebificationUtility.ToUrlFriendlyString(Path.GetFileName(r.Path))
-                group r by fileName;
-            if (fileNames.Count() != record.Publication.OpenData.Resources.Count)
-            {
-                var e = new Exception("There are duplicate resource file names (after webifying) for this record.");
-                e.LogAndThrow(Logger);
-            }
-
-            // upload the resources
-            foreach (var r in record.Publication.OpenData.Resources)
-            {
-                UploadDataFile(record.Id, r.Path);
-            }
-        }
-
         public void UploadMetadataDocument(Record record)
         {
             string resourceUrl = config.HttpRootUrl + "/" + WebificationUtility.GetUnrootedDataPath(record.Id, record.Path);

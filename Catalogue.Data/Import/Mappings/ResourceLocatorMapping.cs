@@ -7,7 +7,7 @@ using System.Collections.Generic;
 namespace Catalogue.Data.Import.Mappings
 {
 
-    public class UseConstraintsMapping : IMapping
+    public class ResourceLocatorMapping : IMapping
     {
         public IEnumerable<Vocabulary> RequiredVocabularies
         {
@@ -34,8 +34,7 @@ namespace Catalogue.Data.Import.Mappings
         {
             public GeminiMap()
             {
-                Map(m => m.LimitationsOnPublicAccess).Field("Gemini.LimitationsOnPublicAccess");
-                Map(m => m.UseConstraints).Field("Gemini.UseConstraints");
+                Map(m => m.ResourceLocator).Field("RESOURCE_URL");
             }
         }
 
@@ -43,7 +42,7 @@ namespace Catalogue.Data.Import.Mappings
         {
             public RecordMap()
             {
-                Map(m => m.Id);
+                Map(m => m.Id).Field("TOPCAT_ID");
                 References<GeminiMap>(m => m.Gemini);
             }
         }

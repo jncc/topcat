@@ -62,42 +62,34 @@ namespace Catalogue.Robot.Publishing.OpenData
             uploadRecordService.UpdateLastAttempt(record, attempt);
             db.SaveChanges();
 
-            bool alternativeResources = record.Publication != null && record.Publication.OpenData != null && record.Publication.OpenData.Resources != null && record.Publication.OpenData.Resources.Any();
             bool corpulent = record.Gemini.Keywords.Any(k => k.Vocab == "http://vocab.jncc.gov.uk/metadata-admin" && k.Value == "Corpulent");
 
             try
             {
                 if (!metadataOnly)
                 {
-                    if (alternativeResources)
+                    if (corpulent)
                     {
-                        // upload the alternative resources; don't touch the resource locator
-                        uploadHelper.UploadAlternativeResources(record);
+                        // set the resource locator to the download request page; don't upload any resources
+                        if (record.Gemini.ResourceLocator.IsBlank()) // arguably should always do it actually
+                            uploadRecordService.UpdateTheResourceLocatorToBeTheOpenDataDownloadPage(record);
+                    }
+                    else if (record.Gemini.ResourceLocator.IsBlank() ||
+                                record.Gemini.ResourceLocator.Contains(uploadHelper.GetHttpRootUrl()))
+                    {
+                        // "normal" case - if the resource locator is blank or already data.jncc.gov.uk
+                        // upload the resource pointed at by record.Path, and update the resource locator to match
+                        uploadHelper.UploadDataFile(record.Id, record.Path);
+                        string dataHttpPath = uploadHelper.GetHttpRootUrl() + "/" +
+                                                GetUnrootedDataPath(record.Id, record.Path);
+                        uploadRecordService.UpdateResourceLocatorToMatchMainDataFile(record, dataHttpPath);
                     }
                     else
                     {
-                        if (corpulent)
-                        {
-                            // set the resource locator to the download request page; don't upload any resources
-                            if (record.Gemini.ResourceLocator.IsBlank()) // arguably should always do it actually
-                                uploadRecordService.UpdateTheResourceLocatorToBeTheOpenDataDownloadPage(record);
-                        }
-                        else if (record.Gemini.ResourceLocator.IsBlank() ||
-                                 record.Gemini.ResourceLocator.Contains(uploadHelper.GetHttpRootUrl()))
-                        {
-                            // "normal" case - if the resource locator is blank or already data.jncc.gov.uk
-                            // upload the resource pointed at by record.Path, and update the resource locator to match
-                            uploadHelper.UploadDataFile(record.Id, record.Path);
-                            string dataHttpPath = uploadHelper.GetHttpRootUrl() + "/" +
-                                                  GetUnrootedDataPath(record.Id, record.Path);
-                            uploadRecordService.UpdateResourceLocatorToMatchMainDataFile(record, dataHttpPath);
-                        }
-                        else
-                        {
-                            // do nothing - don't change the resource locator, don't upload anything
-                            Logger.Info("Deferring to existing resource locator - not uploading.");
-                        }
+                        // do nothing - don't change the resource locator, don't upload anything
+                        Logger.Info("Deferring to existing resource locator - not uploading.");
                     }
+                    
                 }
 
                 uploadHelper.UploadMetadataDocument(record);
