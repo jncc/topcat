@@ -8,11 +8,8 @@ using Catalogue.Toolbox.Importing;
 using CommandLine;
 using log4net;
 using log4net.Config;
-using Raven.Abstractions.Data;
-using Raven.Abstractions.Logging;
-using Raven.Client;
-using ILog = Raven.Abstractions.Logging.ILog;
-using LogManager = Raven.Abstractions.Logging.LogManager;
+using Raven.Client.Documents;
+using Raven.Client.Documents.Queries;
 
 namespace Catalogue.Toolbox
 {
@@ -71,21 +68,23 @@ namespace Catalogue.Toolbox
 
             string luceneQuery = "Keywords:\"http://vocab.jncc.gov.uk/metadata-admin/Delete\"";
 
-            using (var db = DocumentStore.OpenSession())
-            {
-                // this loads all the records into memory because i can't figure out how to do it better
-                // https://groups.google.com/forum/#!topic/ravendb/ELqhzCs2amY
-                var records = db.Advanced.DocumentQuery<Record>("RecordIndex").Where(luceneQuery).ToList();
-                Logger.Info("Deleting {0} records:", records.Count);
-                foreach (var record in records)
-                    Logger.Info("{0} ({1})", record.Id, record.Gemini.Title);
-                Logger.Info("If this said 128 then it could be more!");
-            }
+// raven4
 
-            if (!options.WhatIf)
-            {
-                DocumentStore.DatabaseCommands.DeleteByIndex("RecordIndex", new IndexQuery { Query = luceneQuery });
-            }
+//            using (var db = DocumentStore.OpenSession())
+//            {
+//                // this loads all the records into memory because i can't figure out how to do it better
+//                // https://groups.google.com/forum/#!topic/ravendb/ELqhzCs2amY
+//                var records = db.Advanced.DocumentQuery<Record>("RecordIndex").Where(luceneQuery).ToList();
+//                Logger.Info($"Deleting {records.Count} records:");
+//                foreach (var record in records)
+//                    Logger.Info("${record.Id} ({record.Gemini.Title})");
+//                Logger.Info("If this said 128 then it could be more!");
+//            }
+//
+//            if (!options.WhatIf)
+//            {
+//                DocumentStore.DatabaseCommands.DeleteByIndex("RecordIndex", new IndexQuery { Query = luceneQuery });
+//            }
 
             Logger.Info("Delete request sent to database.");
 

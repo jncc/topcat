@@ -4,10 +4,10 @@ using Catalogue.Data.Write;
 using Catalogue.Utilities.Text;
 using Catalogue.Utilities.Time;
 using log4net;
-using Raven.Client;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
+using Raven.Client.Documents.Session;
 using static Catalogue.Utilities.Text.WebificationUtility;
 
 namespace Catalogue.Robot.Publishing.OpenData

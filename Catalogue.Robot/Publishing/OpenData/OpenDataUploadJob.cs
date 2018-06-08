@@ -6,7 +6,7 @@ using Catalogue.Utilities.Text;
 using log4net;
 using Newtonsoft.Json;
 using Quartz;
-using Raven.Client;
+using Raven.Client.Documents;
 
 namespace Catalogue.Robot.Publishing.OpenData
 {

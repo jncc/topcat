@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Catalogue.Data.Indexes;
 using Catalogue.Data.Model;
-using Raven.Client;
+using Raven.Client.Documents.Session;
 
 namespace Catalogue.Robot.DeadLinks
 {

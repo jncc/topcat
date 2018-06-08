@@ -5,9 +5,10 @@ using System.Linq;
 using Catalogue.Data.Import;
 using Catalogue.Data.Import.Mappings;
 using Catalogue.Data.Write;
+using log4net;
 using Newtonsoft.Json;
-using Raven.Abstractions.Logging;
 using Raven.Client;
+using Raven.Client.Documents.Session;
 
 namespace Catalogue.Toolbox.Importing
 {
@@ -36,9 +37,9 @@ namespace Catalogue.Toolbox.Importing
             foreach (var result in results)
             {
                 if (result.Success)
-                    Logger.Info("{0} ({1}) imported successfully", result.Record.Id, result.Record.Gemini.Title);
+                    Logger.Info($"{result.Record.Id} ({result.Record.Gemini.Title}) imported successfully");
                 else
-                    Logger.Info("{0} ({1}) skipped", result.Record.Id, result.Record.Gemini.Title);
+                    Logger.Info($"{result.Record.Id} ({result.Record.Gemini.Title}) skipped");
             }
 
             string errorFilePath = GetErrorFilePath(options);
@@ -49,8 +50,8 @@ namespace Catalogue.Toolbox.Importing
             int successes = results.Count(r => r.Success);
             int failures = results.Count(r => !r.Success);
 
-            Logger.Info("Imported {0} records", successes);
-            Logger.Info("Skipped {0} records", failures);
+            Logger.Info($"Imported {successes} records");
+            Logger.Info($"Skipped {failures} records");
 
             if (failures > 0)
             {
