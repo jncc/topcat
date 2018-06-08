@@ -3,9 +3,7 @@ using Catalogue.Data.Analyzers;
 using Catalogue.Data.Model;
 using Lucene.Net.Analysis;
 using Lucene.Net.Analysis.Standard;
-using Raven.Abstractions.Indexing;
-using Raven.Client.Indexes;
-using Raven.Database.Indexing;
+using Raven.Client.Documents.Indexes;
 
 namespace Catalogue.Data.Indexes
 {

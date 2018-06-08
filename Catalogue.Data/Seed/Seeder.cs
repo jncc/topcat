@@ -14,7 +14,8 @@ using Catalogue.Gemini.Templates;
 using Catalogue.Utilities.Clone;
 using Catalogue.Utilities.Collections;
 using Catalogue.Utilities.Time;
-using Raven.Client;
+using Raven.Client.Documents;
+using Raven.Client.Documents.Session;
 
 namespace Catalogue.Data.Seed
 {

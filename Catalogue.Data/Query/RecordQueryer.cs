@@ -3,12 +3,13 @@ using Catalogue.Data.Model;
 using Catalogue.Gemini.DataFormats;
 using Catalogue.Gemini.Model;
 using Catalogue.Utilities.Text;
-using Raven.Client;
-using Raven.Client.Linq;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
+using Raven.Client.Documents;
+using Raven.Client.Documents.Linq;
+using Raven.Client.Documents.Session;
 using static Catalogue.Data.Query.SortOptions;
 
 namespace Catalogue.Data.Query
@@ -31,16 +32,17 @@ namespace Catalogue.Data.Query
         }
 
         // these fields are member variables only so they can be accessed from both query methods
-        RavenQueryStatistics stats;
-        FieldHighlightings titleLites;
-        FieldHighlightings titleNLites;
-        FieldHighlightings abstractLites;
-        FieldHighlightings abstractNLites;
+//        RavenQueryStatistics stats;
+//        FieldHighlightings titleLites;
+//        FieldHighlightings titleNLites;
+//        FieldHighlightings abstractLites;
+//        FieldHighlightings abstractNLites;
 
         public IQueryable<Record> AsyncQuery(IAsyncDocumentSession adb, RecordQueryInputModel input)
         {
             var query = adb.Query<RecordIndex.Result, RecordIndex>()
-                .Statistics(out stats);
+//                .Statistics(out stats);
+                ;
 
             return RecordQueryImpl(input, query);
         }
@@ -54,12 +56,14 @@ namespace Catalogue.Data.Query
         {
 
             var query = _db.Query<RecordIndex.Result, RecordIndex>()
-                .Statistics(out stats)
-                .Customize(x => x.Highlight("Title", 202, 1, out titleLites))
-                .Customize(x => x.Highlight("TitleN", 202, 1, out titleNLites))
-                .Customize(x => x.Highlight("Abstract", 202, 1, out abstractLites))
-                .Customize(x => x.Highlight("AbstractN", 202, 1, out abstractNLites))
-                .Customize(x => x.SetHighlighterTags("<b>", "</b>"));
+// raven4
+//                .Statistics(out stats)
+//                .Customize(x => x.Highlight("Title", 202, 1, out titleLites))
+//                .Customize(x => x.Highlight("TitleN", 202, 1, out titleNLites))
+//                .Customize(x => x.Highlight("Abstract", 202, 1, out abstractLites))
+//                .Customize(x => x.Highlight("AbstractN", 202, 1, out abstractNLites))
+//                .Customize(x => x.SetHighlighterTags("<b>", "</b>"));
+                ;
 
             return RecordQueryImpl(input, query);
 
@@ -69,12 +73,14 @@ namespace Catalogue.Data.Query
         {
             if (input.Q.IsNotBlank())
             {
-                query = query
-                    .Search(r => r.Title, input.Q, 10, SearchOptions.Guess, EscapeQueryOptions.RawQuery)
-                    .Search(r => r.TitleN, input.Q)
-                    .Search(r => r.Abstract, input.Q, 1, SearchOptions.Guess, EscapeQueryOptions.RawQuery)
-                    .Search(r => r.AbstractN, input.Q)
-                    .Search(r => r.KeywordsN, input.Q);
+// raven4
+//                query = query
+//                    .Search(r => r.Title, input.Q, 10, SearchOptions.Guess, EscapeQueryOptions.RawQuery)
+//                    .Search(r => r.TitleN, input.Q)
+//                    .Search(r => r.Abstract, input.Q, 1, SearchOptions.Guess, EscapeQueryOptions.RawQuery)
+//                    .Search(r => r.AbstractN, input.Q)
+//                    .Search(r => r.KeywordsN, input.Q);
+
             }
 
             if (input.F != null)
@@ -107,19 +113,21 @@ namespace Catalogue.Data.Query
         {
             // materializing the query will populate our stats
 
+// raven4 (below)
+
             var results = from r in Query(input).ToList()
-                          let titleFragments = titleLites.GetFragments("records/" + r.Id).Concat(titleNLites.GetFragments("records/" + r.Id))
-                        let abstractFragments = abstractLites.GetFragments("records/" + r.Id).Concat(abstractNLites.GetFragments("records/" + r.Id))
-                        let title = titleFragments.Select(f => f.TruncateNicely(200)).FirstOrDefault()
-                                    ?? r.Gemini.Title.TruncateNicely(200)
-                        let snippet = abstractFragments.Select(f => f.TruncateNicely(200)).FirstOrDefault()
-                                       ?? r.Gemini.Abstract.TruncateNicely(200)
+//                          let titleFragments = titleLites.GetFragments("records/" + r.Id).Concat(titleNLites.GetFragments("records/" + r.Id))
+//                        let abstractFragments = abstractLites.GetFragments("records/" + r.Id).Concat(abstractNLites.GetFragments("records/" + r.Id))
+//                        let title = titleFragments.Select(f => f.TruncateNicely(200)).FirstOrDefault()
+//                                    ?? r.Gemini.Title.TruncateNicely(200)
+//                        let snippet = abstractFragments.Select(f => f.TruncateNicely(200)).FirstOrDefault()
+//                                       ?? r.Gemini.Abstract.TruncateNicely(200)
                         let format = DataFormatQueries.GetDataFormatInfo(r.Gemini.DataFormat)
                         select new ResultOutputModel
                         {
                             Id = r.Id,
-                            Title = title, // could be better; always want the whole title, highlighted
-                            Snippet = snippet,
+//                            Title = title, // could be better; always want the whole title, highlighted
+//                            Snippet = snippet,
                             Format = new FormatOutputModel
                             {
                                 Group = format.Group,
@@ -139,9 +147,9 @@ namespace Catalogue.Data.Query
 
             return new SearchOutputModel
             {
-                Total = stats.TotalResults,
+//                Total = stats.TotalResults,
                 Results = results.ToList(),
-                Speed = stats.DurationMilliseconds,
+//                Speed = stats.DurationMilliseconds,
                 Query = input
             };
         }

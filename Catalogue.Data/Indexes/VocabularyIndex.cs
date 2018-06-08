@@ -1,8 +1,7 @@
 ﻿using System.Linq;
 using Catalogue.Data.Analyzers;
 using Catalogue.Gemini.Model;
-using Raven.Abstractions.Indexing;
-using Raven.Client.Indexes;
+using Raven.Client.Documents.Indexes;
 
 namespace Catalogue.Data.Indexes
 {

@@ -1,8 +1,8 @@
 ﻿using Catalogue.Data.Model;
 using Catalogue.Utilities.Time;
-using Raven.Client;
 using System;
 using Catalogue.Data.Extensions;
+using Raven.Client.Documents.Session;
 using static Catalogue.Data.Write.RecordServiceHelper;
 
 namespace Catalogue.Data.Write

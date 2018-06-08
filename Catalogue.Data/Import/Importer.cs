@@ -4,10 +4,10 @@ using Catalogue.Data.Write;
 using Catalogue.Gemini.Model;
 using Catalogue.Utilities.Text;
 using CsvHelper;
-using Raven.Client;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using Raven.Client.Documents.Session;
 
 namespace Catalogue.Data.Import
 {

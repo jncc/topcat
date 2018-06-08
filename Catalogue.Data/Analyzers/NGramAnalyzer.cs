@@ -3,7 +3,6 @@ using System.IO;
 using Lucene.Net.Analysis;
 using Lucene.Net.Analysis.Standard;
 using Lucene.Net.Analysis.Tokenattributes;
-using Raven.Database.Indexing;
 using Version = Lucene.Net.Util.Version;
 
 namespace Catalogue.Data.Analyzers
@@ -106,7 +105,7 @@ namespace Catalogue.Data.Analyzers
         }
     }
 
-    [NotForQuerying]
+//    [NotForQuerying] // raven4
     public class NGramAnalyzer : Analyzer
     {
         public override TokenStream TokenStream(string fieldName, TextReader reader)
@@ -133,7 +132,7 @@ namespace Catalogue.Data.Analyzers
         }
     }
 
-    [NotForQuerying]
+//    [NotForQuerying] // raven4
     public class CustomKeywordAnalyzer : Analyzer
     {
         public override TokenStream TokenStream(string fieldName, TextReader reader)
@@ -148,7 +147,7 @@ namespace Catalogue.Data.Analyzers
         }
     }
 
-    [NotForQuerying]
+//    [NotForQuerying] // raven4
     public class CustomKeywordAnalyzer2 : Analyzer
     {
         public override TokenStream TokenStream(string fieldName, TextReader reader)

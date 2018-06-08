@@ -8,7 +8,7 @@ using Catalogue.Data;
 using Catalogue.Web.Customization;
 using Catalogue.Web.Logging;
 using Newtonsoft.Json.Serialization;
-using Raven.Client;
+using Raven.Client.Documents;
 
 namespace Catalogue.Web
 {

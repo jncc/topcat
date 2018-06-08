@@ -17,8 +17,7 @@ using FluentAssertions;
 using Lucene.Net.Search;
 using Newtonsoft.Json;
 using NUnit.Framework;
-using Raven.Client;
-using Raven.Client.Document;
+using Raven.Client.Documents.Session;
 
 namespace Catalogue.Data.Import.Mappings
 {

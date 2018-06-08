@@ -5,8 +5,7 @@ using Catalogue.Data.Model;
 using Catalogue.Gemini.DataFormats;
 using Lucene.Net.Analysis;
 using Lucene.Net.Analysis.Standard;
-using Raven.Abstractions.Indexing;
-using Raven.Client.Indexes;
+using Raven.Client.Documents.Indexes;
 
 namespace Catalogue.Data.Indexes
 {
