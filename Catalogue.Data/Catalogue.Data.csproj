@@ -176,6 +176,7 @@
     <Compile Include="DatabaseFactory.cs" />
     <Compile Include="Exchange\TopcatExchangeFormat.cs" />
     <Compile Include="Export\Exporter.cs" />
+    <Compile Include="Helpers.cs" />
     <Compile Include="Import\CsvHelperHelpers.cs" />
     <Compile Include="Import\FileSystem.cs" />
     <Compile Include="Import\ImportException.cs" />

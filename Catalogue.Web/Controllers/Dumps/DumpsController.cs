@@ -1,14 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Net;
-using System.Net.Http;
 using System.Web.Http;
 using Catalogue.Data.Indexes;
 using Catalogue.Data.Model;
 using Catalogue.Gemini.Model;
 using Catalogue.Utilities.Raven;
-using Raven.Client;
+using Raven.Client.Documents.Session;
 
 namespace Catalogue.Web.Controllers.Dumps
 {

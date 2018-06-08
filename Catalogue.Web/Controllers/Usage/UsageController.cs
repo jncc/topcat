@@ -1,8 +1,7 @@
 ﻿using Catalogue.Data.Model;
-using Raven.Client;
-using Raven.Client.Linq;
 using System.Linq;
 using System.Web.Http;
+using Raven.Client.Documents.Session;
 
 namespace Catalogue.Web.Controllers.Usage
 {

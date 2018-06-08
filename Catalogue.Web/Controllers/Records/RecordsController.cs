@@ -8,9 +8,11 @@ using Catalogue.Web.Account;
 using Raven.Client;
 using System;
 using System.Web.Http;
+using Catalogue.Data;
 using Catalogue.Data.Extensions;
 using Catalogue.Data.Query;
 using NUnit.Framework;
+using Raven.Client.Documents.Session;
 
 namespace Catalogue.Web.Controllers.Records
 {
@@ -36,9 +38,9 @@ namespace Catalogue.Web.Controllers.Records
             if (id == Guid.Empty)
                 record = MakeNewRecord(); // a nice empty record for making a new one
             else if (clone)
-                record = Clone(db.Load<Record>(id));
+                record = Clone(db.Load<Record>(Helpers.GetRecordId(id)));
             else
-                record = db.Load<Record>(id);
+                record = db.Load<Record>(Helpers.GetRecordId(id));
 
             return new RecordOutputModel
             {

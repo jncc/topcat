@@ -2,7 +2,6 @@
 using Catalogue.Data.Query;
 using Catalogue.Data.Seed;
 using Catalogue.Web.Code;
-using Raven.Abstractions.Data;
 using Raven.Client;
 using System;
 using System.Collections.Generic;
@@ -10,6 +9,10 @@ using System.IO;
 using System.Linq;
 using System.Net.Http;
 using System.Web.Http;
+using Raven.Client.Documents.Operations;
+using Raven.Client.Documents.Queries;
+using Raven.Client.Documents.Session;
+using Raven.Client.ServerWide.Operations;
 
 namespace Catalogue.Web.Controllers.Admin
 {
@@ -56,7 +59,13 @@ namespace Catalogue.Web.Controllers.Admin
         {
             ThrowIfLiveEnvironment();
 
-            WebApiApplication.DocumentStore.DatabaseCommands.DeleteByIndex("Raven/DocumentsByEntityName", new IndexQuery());
+            throw new Exception("raven4");
+            var parameters = new DeleteDatabasesOperation.Parameters
+            {
+                DatabaseNames = new [] { "topcat-environment-db" },
+                HardDelete = true,
+            };
+            WebApiApplication.DocumentStore.Maintenance.Server.Send(new DeleteDatabasesOperation(parameters));
 
             return new HttpResponseMessage { Content = new StringContent("Done") };
         }
@@ -68,16 +77,22 @@ namespace Catalogue.Web.Controllers.Admin
         public HttpResponseMessage Delete()
         {
 
-            string luceneQuery = "Keywords:\"http://vocab.jncc.gov.uk/metadata-admin/Delete\"";
-            int recordsToDelete = db.Advanced.DocumentQuery<Record>("RecordIndex").Where(luceneQuery).ToList().Count;
+// raven4
+//            string luceneQuery = "Keywords:\"http://vocab.jncc.gov.uk/metadata-admin/Delete\"";
+//            int recordsToDelete = db.Advanced.DocumentQuery<Record>("RecordIndex").Where(luceneQuery).ToList().Count;
+//
+//            WebApiApplication.DocumentStore.DatabaseCommands.DeleteByIndex("RecordIndex",
+//                new IndexQuery
+//                {
+//                    Query = "Keywords:\"http://vocab.jncc.gov.uk/metadata-admin/Delete\""
+//                });
+//
+//            return new HttpResponseMessage { Content = new StringContent("Asked to delete "  + recordsToDelete + " records") };
 
-            WebApiApplication.DocumentStore.DatabaseCommands.DeleteByIndex("RecordIndex",
-                new IndexQuery
-                {
-                    Query = "Keywords:\"http://vocab.jncc.gov.uk/metadata-admin/Delete\""
-                });
+// something like:
+//            WebApiApplication.DocumentStore.Operations.Send(new DeleteByQueryOperation<Record, Person_ByAge>(x => x.Age < 35));
 
-            return new HttpResponseMessage { Content = new StringContent("Asked to delete "  + recordsToDelete + " records") };
+            return null;
         }
 
         /// <summary>
@@ -89,11 +104,12 @@ namespace Catalogue.Web.Controllers.Admin
         {
             ThrowIfLiveEnvironment();
 
-            WebApiApplication.DocumentStore.DatabaseCommands.DeleteByIndex("RecordIndex",
-                new IndexQuery
-                {
-                    Query = String.Format("Keywords:\"http://vocab.jncc.gov.uk/jncc-category/{0}\"", category)
-                });
+// raven4
+//            WebApiApplication.DocumentStore.DatabaseCommands.DeleteByIndex("RecordIndex",
+//                new IndexQuery
+//                {
+//                    Query = String.Format("Keywords:\"http://vocab.jncc.gov.uk/jncc-category/{0}\"", category)
+//                });
 
             return new HttpResponseMessage { Content = new StringContent("Done") };
         }

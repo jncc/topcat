@@ -73,13 +73,12 @@ namespace Catalogue.Data.Query
         {
             if (input.Q.IsNotBlank())
             {
-// raven4
-//                query = query
-//                    .Search(r => r.Title, input.Q, 10, SearchOptions.Guess, EscapeQueryOptions.RawQuery)
-//                    .Search(r => r.TitleN, input.Q)
-//                    .Search(r => r.Abstract, input.Q, 1, SearchOptions.Guess, EscapeQueryOptions.RawQuery)
-//                    .Search(r => r.AbstractN, input.Q)
-//                    .Search(r => r.KeywordsN, input.Q);
+                query = query
+                    .Search(r => r.Title, input.Q, 10)
+                    .Search(r => r.TitleN, input.Q)
+                    .Search(r => r.Abstract, input.Q, 1)
+                    .Search(r => r.AbstractN, input.Q)
+                    .Search(r => r.KeywordsN, input.Q);
 
             }
 

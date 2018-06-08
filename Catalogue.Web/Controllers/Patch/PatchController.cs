@@ -5,7 +5,6 @@ using Catalogue.Data.Write;
 using Catalogue.Gemini.BoundingBoxes;
 using Catalogue.Gemini.Model;
 using Catalogue.Gemini.Spatial;
-using Raven.Client;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -15,6 +14,7 @@ using System.Web.Http;
 using Catalogue.Data.Import.Mappings;
 using Catalogue.Utilities.Time;
 using CsvHelper;
+using Raven.Client.Documents.Session;
 
 namespace Catalogue.Web.Controllers.Patch
 {
@@ -229,159 +229,160 @@ namespace Catalogue.Web.Controllers.Patch
             return new HttpResponseMessage { Content = new StringContent("Updated " + records.Count + " records.") };
         }
 
-        [HttpPost, Route("api/patch/migrateopendatapublicationinfo")]
-        public HttpResponseMessage MigrateOpenDataPublicationInfo()
-        {
-            var records1 = db
-                .Query<RecordsWithOpenDataPublicationInfoIndex.Result, RecordsWithOpenDataPublicationInfoIndex>()
-                .As<Record>()
-                .Skip(0)
-                .Take(1024)
-                .ToList();
-
-            var records2 = db
-                .Query<RecordsWithOpenDataPublicationInfoIndex.Result, RecordsWithOpenDataPublicationInfoIndex>()
-                .As<Record>()
-                .Skip(1024)
-                .Take(1024)
-                .ToList();
-
-            var records = records1.Concat(records2).ToList();
-
-            foreach (var record in records)
-            {
-                var old = record.Publication.OpenData;
-
-                if (old.SignOff == null)
-                {
-                    record.Publication.OpenData = new OpenDataPublicationInfo
-                    {
-                        Assessment = new OpenDataAssessmentInfo { Completed = true, InitialAssessmentWasDoneOnSpreadsheet = true },
-                        SignOff = new OpenDataSignOffInfo(),
-                        LastAttempt = old.LastAttempt,
-                        LastSuccess = old.LastSuccess,
-                        Paused = old.Paused,
-                        Resources = old.Resources,
-                    };
-                }
-            }
-
-            db.SaveChanges();
-
-            return new HttpResponseMessage { Content = new StringContent("Updated " + records.Count + " records.") };
-
-        }
-
-        [HttpPost, Route("api/patch/republishredactions")]
-        public HttpResponseMessage RepublishRedactions()
-        {
-            var records1 = db
-                .Query<Record>()
-                .As<Record>()
-                .Skip(0)
-                .Take(1024)
-                .ToList();
-
-            var records2 = db
-                .Query<Record>()
-                .As<Record>()
-                .Skip(1024)
-                .Take(1024)
-                .ToList();
-
-            var records3 = db
-                .Query<Record>()
-                .As<Record>()
-                .Skip(2048)
-                .Take(1024)
-                .ToList();
-
-            var records4 = db
-                .Query<Record>()
-                .As<Record>()
-                .Skip(3072)
-                .Take(1024)
-                .ToList();
-
-            var records = records1.Concat(records2).Concat(records3).Concat(records4).ToList();
-
-            var timestamp = Clock.NowUtc;
-            var signOffUser = new UserInfo
-            {
-                DisplayName = "Owen Boswarva",
-                Email = "Owen.Boswarva@jncc.gov.uk"
-            };
-
-            var resourceLocatorMapping = InstantiateMapping("ResourceLocatorMapping");
-            var metadataContactMapping = InstantiateMapping("MetadataContactMapping");
-            using (var resourceLocatorReader = new StreamReader("C:\\temp\\TOPCAT_300.csv"))
-            using (var metadataReader = new StreamReader("C:\\temp\\TOPCAT_299_2.csv"))
-            {
-                var resourceLocatorCsv = new CsvReader(resourceLocatorReader);
-                var metadataCsv = new CsvReader(metadataReader);
-
-                resourceLocatorMapping.Apply(resourceLocatorCsv.Configuration);
-                metadataContactMapping.Apply(metadataCsv.Configuration);
-
-                var resourceLocatorRecords = resourceLocatorCsv.GetRecords<Record>().ToList();
-                var metadataContactRecords = metadataCsv.GetRecords<Record>().ToList();
-
-                foreach (var record in records)
-                {
-                    foreach (var resourceLocatorRecord in resourceLocatorRecords)
-                    {
-                        if (record.Id.Equals(resourceLocatorRecord.Id))
-                        {
-                            record.Gemini.ResourceLocator = resourceLocatorRecord.Gemini.ResourceLocator;
-                        }
-                    }
-
-                    foreach (var metadataContactRecord in metadataContactRecords)
-                    {
-                        if (record.Id.Equals(metadataContactRecord.Id))
-                        {
-                            if (record.Gemini.MetadataPointOfContact != null)
-                            {
-                                record.Gemini.MetadataPointOfContact.Name =
-                                    metadataContactRecord.Gemini.MetadataPointOfContact.Name;
-                                record.Gemini.MetadataPointOfContact.Email =
-                                    metadataContactRecord.Gemini.MetadataPointOfContact.Email;
-                            }
-                            else
-                            {
-                                record.Gemini.MetadataPointOfContact =
-                                    metadataContactRecord.Gemini.MetadataPointOfContact;
-                            }
-
-                            if (record.Manager != null)
-                            {
-                                record.Manager.DisplayName = metadataContactRecord.Manager.DisplayName;
-                            }
-                            else
-                            {
-                                record.Manager = new UserInfo
-                                {
-                                    DisplayName = metadataContactRecord.Manager.DisplayName
-                                };
-                            }
-                        }
-                    }
-
-                    if (record.Publication?.OpenData?.LastSuccess != null && record.Publication?.OpenData?.Publishable == true && record.Validation == Validation.Gemini && record.Publication?.OpenData?.Paused == false)
-                    {
-                        record.Gemini.MetadataDate = timestamp;
-                        record.Publication.OpenData.Assessment.CompletedByUser = signOffUser;
-                        record.Publication.OpenData.Assessment.CompletedOnUtc = timestamp.AddMinutes(-1);
-                        record.Publication.OpenData.SignOff.User = signOffUser;
-                        record.Publication.OpenData.SignOff.DateUtc = timestamp;
-                    }
-                }
-            }
-
-            db.SaveChanges();
-
-            return new HttpResponseMessage { Content = new StringContent("Updated " + records.Count + " records.") };
-        }
+// raven4
+//        [HttpPost, Route("api/patch/migrateopendatapublicationinfo")]
+//        public HttpResponseMessage MigrateOpenDataPublicationInfo()
+//        {
+//            var records1 = db
+//                .Query<RecordsWithOpenDataPublicationInfoIndex.Result, RecordsWithOpenDataPublicationInfoIndex>()
+//                .As<Record>()
+//                .Skip(0)
+//                .Take(1024)
+//                .ToList();
+//
+//            var records2 = db
+//                .Query<RecordsWithOpenDataPublicationInfoIndex.Result, RecordsWithOpenDataPublicationInfoIndex>()
+//                .As<Record>()
+//                .Skip(1024)
+//                .Take(1024)
+//                .ToList();
+//
+//            var records = records1.Concat(records2).ToList();
+//
+//            foreach (var record in records)
+//            {
+//                var old = record.Publication.OpenData;
+//
+//                if (old.SignOff == null)
+//                {
+//                    record.Publication.OpenData = new OpenDataPublicationInfo
+//                    {
+//                        Assessment = new OpenDataAssessmentInfo { Completed = true, InitialAssessmentWasDoneOnSpreadsheet = true },
+//                        SignOff = new OpenDataSignOffInfo(),
+//                        LastAttempt = old.LastAttempt,
+//                        LastSuccess = old.LastSuccess,
+//                        Paused = old.Paused,
+//                        Resources = old.Resources,
+//                    };
+//                }
+//            }
+//
+//            db.SaveChanges();
+//
+//            return new HttpResponseMessage { Content = new StringContent("Updated " + records.Count + " records.") };
+//
+//        }
+//
+//        [HttpPost, Route("api/patch/republishredactions")]
+//        public HttpResponseMessage RepublishRedactions()
+//        {
+//            var records1 = db
+//                .Query<Record>()
+//                .As<Record>()
+//                .Skip(0)
+//                .Take(1024)
+//                .ToList();
+//
+//            var records2 = db
+//                .Query<Record>()
+//                .As<Record>()
+//                .Skip(1024)
+//                .Take(1024)
+//                .ToList();
+//
+//            var records3 = db
+//                .Query<Record>()
+//                .As<Record>()
+//                .Skip(2048)
+//                .Take(1024)
+//                .ToList();
+//
+//            var records4 = db
+//                .Query<Record>()
+//                .As<Record>()
+//                .Skip(3072)
+//                .Take(1024)
+//                .ToList();
+//
+//            var records = records1.Concat(records2).Concat(records3).Concat(records4).ToList();
+//
+//            var timestamp = Clock.NowUtc;
+//            var signOffUser = new UserInfo
+//            {
+//                DisplayName = "Owen Boswarva",
+//                Email = "Owen.Boswarva@jncc.gov.uk"
+//            };
+//
+//            var resourceLocatorMapping = InstantiateMapping("ResourceLocatorMapping");
+//            var metadataContactMapping = InstantiateMapping("MetadataContactMapping");
+//            using (var resourceLocatorReader = new StreamReader("C:\\temp\\TOPCAT_300.csv"))
+//            using (var metadataReader = new StreamReader("C:\\temp\\TOPCAT_299_2.csv"))
+//            {
+//                var resourceLocatorCsv = new CsvReader(resourceLocatorReader);
+//                var metadataCsv = new CsvReader(metadataReader);
+//
+//                resourceLocatorMapping.Apply(resourceLocatorCsv.Configuration);
+//                metadataContactMapping.Apply(metadataCsv.Configuration);
+//
+//                var resourceLocatorRecords = resourceLocatorCsv.GetRecords<Record>().ToList();
+//                var metadataContactRecords = metadataCsv.GetRecords<Record>().ToList();
+//
+//                foreach (var record in records)
+//                {
+//                    foreach (var resourceLocatorRecord in resourceLocatorRecords)
+//                    {
+//                        if (record.Id.Equals(resourceLocatorRecord.Id))
+//                        {
+//                            record.Gemini.ResourceLocator = resourceLocatorRecord.Gemini.ResourceLocator;
+//                        }
+//                    }
+//
+//                    foreach (var metadataContactRecord in metadataContactRecords)
+//                    {
+//                        if (record.Id.Equals(metadataContactRecord.Id))
+//                        {
+//                            if (record.Gemini.MetadataPointOfContact != null)
+//                            {
+//                                record.Gemini.MetadataPointOfContact.Name =
+//                                    metadataContactRecord.Gemini.MetadataPointOfContact.Name;
+//                                record.Gemini.MetadataPointOfContact.Email =
+//                                    metadataContactRecord.Gemini.MetadataPointOfContact.Email;
+//                            }
+//                            else
+//                            {
+//                                record.Gemini.MetadataPointOfContact =
+//                                    metadataContactRecord.Gemini.MetadataPointOfContact;
+//                            }
+//
+//                            if (record.Manager != null)
+//                            {
+//                                record.Manager.DisplayName = metadataContactRecord.Manager.DisplayName;
+//                            }
+//                            else
+//                            {
+//                                record.Manager = new UserInfo
+//                                {
+//                                    DisplayName = metadataContactRecord.Manager.DisplayName
+//                                };
+//                            }
+//                        }
+//                    }
+//
+//                    if (record.Publication?.OpenData?.LastSuccess != null && record.Publication?.OpenData?.Publishable == true && record.Validation == Validation.Gemini && record.Publication?.OpenData?.Paused == false)
+//                    {
+//                        record.Gemini.MetadataDate = timestamp;
+//                        record.Publication.OpenData.Assessment.CompletedByUser = signOffUser;
+//                        record.Publication.OpenData.Assessment.CompletedOnUtc = timestamp.AddMinutes(-1);
+//                        record.Publication.OpenData.SignOff.User = signOffUser;
+//                        record.Publication.OpenData.SignOff.DateUtc = timestamp;
+//                    }
+//                }
+//            }
+//
+//            db.SaveChanges();
+//
+//            return new HttpResponseMessage { Content = new StringContent("Updated " + records.Count + " records.") };
+//        }
 
         IMapping InstantiateMapping(string mapper)
         {
