@@ -326,6 +326,7 @@ namespace Catalogue.Web.Controllers.Patch
                         if (record.Id.Equals(resourceLocatorRecord.Id))
                         {
                             record.Gemini.ResourceLocator = resourceLocatorRecord.Gemini.ResourceLocator;
+                            record.Gemini.MetadataDate = Clock.NowUtc;
                         }
                     }
 
@@ -336,8 +337,6 @@ namespace Catalogue.Web.Controllers.Patch
                             record.Path = pathRecord.Path;
                         }
                     }
-
-                    record.Gemini.MetadataDate = Clock.NowUtc;
                 }
             }
 
