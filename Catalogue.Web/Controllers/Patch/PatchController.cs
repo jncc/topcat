@@ -272,8 +272,8 @@ namespace Catalogue.Web.Controllers.Patch
 
         }
 
-        [HttpPost, Route("api/patch/republishredactions")]
-        public HttpResponseMessage RepublishRedactions()
+        [HttpPost, Route("api/patch/bulkupdate")]
+        public HttpResponseMessage BulkUpdate()
         {
             var records1 = db
                 .Query<Record>()
@@ -305,26 +305,19 @@ namespace Catalogue.Web.Controllers.Patch
 
             var records = records1.Concat(records2).Concat(records3).Concat(records4).ToList();
 
-            var timestamp = Clock.NowUtc;
-            var signOffUser = new UserInfo
-            {
-                DisplayName = "Owen Boswarva",
-                Email = "Owen.Boswarva@jncc.gov.uk"
-            };
-
             var resourceLocatorMapping = InstantiateMapping("ResourceLocatorMapping");
-            var metadataContactMapping = InstantiateMapping("MetadataContactMapping");
-            using (var resourceLocatorReader = new StreamReader("C:\\temp\\TOPCAT_300.csv"))
-            using (var metadataReader = new StreamReader("C:\\temp\\TOPCAT_299_2.csv"))
+            var pathMapping = InstantiateMapping("PathMapping");
+            using (var resourceLocatorReader = new StreamReader("C:\\temp\\TOPCAT_327.csv"))
+            using (var pathReader = new StreamReader("C:\\temp\\TOPCAT_298.csv"))
             {
                 var resourceLocatorCsv = new CsvReader(resourceLocatorReader);
-                var metadataCsv = new CsvReader(metadataReader);
+                var pathCsv = new CsvReader(pathReader);
 
                 resourceLocatorMapping.Apply(resourceLocatorCsv.Configuration);
-                metadataContactMapping.Apply(metadataCsv.Configuration);
+                pathMapping.Apply(pathCsv.Configuration);
 
                 var resourceLocatorRecords = resourceLocatorCsv.GetRecords<Record>().ToList();
-                var metadataContactRecords = metadataCsv.GetRecords<Record>().ToList();
+                var pathRecords = pathCsv.GetRecords<Record>().ToList();
 
                 foreach (var record in records)
                 {
@@ -333,47 +326,16 @@ namespace Catalogue.Web.Controllers.Patch
                         if (record.Id.Equals(resourceLocatorRecord.Id))
                         {
                             record.Gemini.ResourceLocator = resourceLocatorRecord.Gemini.ResourceLocator;
+                            record.Gemini.MetadataDate = Clock.NowUtc;
                         }
                     }
 
-                    foreach (var metadataContactRecord in metadataContactRecords)
+                    foreach (var pathRecord in pathRecords)
                     {
-                        if (record.Id.Equals(metadataContactRecord.Id))
+                        if (record.Id.Equals(pathRecord.Id))
                         {
-                            if (record.Gemini.MetadataPointOfContact != null)
-                            {
-                                record.Gemini.MetadataPointOfContact.Name =
-                                    metadataContactRecord.Gemini.MetadataPointOfContact.Name;
-                                record.Gemini.MetadataPointOfContact.Email =
-                                    metadataContactRecord.Gemini.MetadataPointOfContact.Email;
-                            }
-                            else
-                            {
-                                record.Gemini.MetadataPointOfContact =
-                                    metadataContactRecord.Gemini.MetadataPointOfContact;
-                            }
-
-                            if (record.Manager != null)
-                            {
-                                record.Manager.DisplayName = metadataContactRecord.Manager.DisplayName;
-                            }
-                            else
-                            {
-                                record.Manager = new UserInfo
-                                {
-                                    DisplayName = metadataContactRecord.Manager.DisplayName
-                                };
-                            }
+                            record.Path = pathRecord.Path;
                         }
-                    }
-
-                    if (record.Publication?.OpenData?.LastSuccess != null && record.Publication?.OpenData?.Publishable == true && record.Validation == Validation.Gemini && record.Publication?.OpenData?.Paused == false)
-                    {
-                        record.Gemini.MetadataDate = timestamp;
-                        record.Publication.OpenData.Assessment.CompletedByUser = signOffUser;
-                        record.Publication.OpenData.Assessment.CompletedOnUtc = timestamp.AddMinutes(-1);
-                        record.Publication.OpenData.SignOff.User = signOffUser;
-                        record.Publication.OpenData.SignOff.DateUtc = timestamp;
                     }
                 }
             }
