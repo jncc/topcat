@@ -33,7 +33,7 @@ namespace Catalogue.Utilities.Text
         /// <summary>
         /// Gets a path like "data/3148e1e2-bd6b-4623-b72a-5408263b9056-Some-Data-File.csv"
         /// </summary>
-        public static string GetUnrootedDataPath(Guid recordId, string filePath)
+        public static string GetUnrootedDataPath(string recordId, string filePath)
         {
             string fileName = Path.GetFileName(filePath);
 

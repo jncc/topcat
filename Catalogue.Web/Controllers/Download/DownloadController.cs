@@ -19,9 +19,9 @@ namespace Catalogue.Web.Controllers.Download
             this.db = db;
         }
 
-        public HttpResponseMessage Get(Guid id)
+        public HttpResponseMessage Get(string id)
         {
-            var record = db.Load<Record>(Helpers.GetRecordId(id));
+            var record = db.Load<Record>(id);
 
             var xml = new XmlEncoder().Create(record.Id, record.Gemini);
             var result = new HttpResponseMessage(HttpStatusCode.OK) { Content = new StringContent(xml.ToString()) };

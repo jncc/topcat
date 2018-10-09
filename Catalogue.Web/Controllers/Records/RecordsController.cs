@@ -31,16 +31,16 @@ namespace Catalogue.Web.Controllers.Records
 
         // GET api/records/57d34691-9064-4c1e-90a7-7b0c112daa8d (get a record)
 
-        public object Get(Guid id, bool clone = false)
+        public object Get(string id, bool clone = false)
         {
             Record record;
 
-            if (id == Guid.Empty)
+            if (String.IsNullOrEmpty(id))
                 record = MakeNewRecord(); // a nice empty record for making a new one
             else if (clone)
-                record = Clone(db.Load<Record>(Helpers.GetRecordId(id)));
+                record = Clone(db.Load<Record>(id));
             else
-                record = db.Load<Record>(Helpers.GetRecordId(id));
+                record = db.Load<Record>(id);
 
             return new RecordOutputModel
             {
@@ -61,7 +61,7 @@ namespace Catalogue.Web.Controllers.Records
         {
             var clonedRecord = record.Copy();
 
-            clonedRecord.Id = Guid.Empty;
+            clonedRecord.Id = String.Empty;
             clonedRecord.Path = String.Empty;
             clonedRecord.Gemini.Title = String.Empty;
             clonedRecord.Publication = null;
@@ -71,7 +71,7 @@ namespace Catalogue.Web.Controllers.Records
 
         // PUT api/records/57d34691-9064-4c1e-90a7-7b0c112daa8d (update/replace a record)
 
-        public object Put(Guid id, [FromBody]Record record)
+        public object Put(string id, [FromBody]Record record)
         {
             var userInfo = new UserInfo
             {
@@ -91,7 +91,7 @@ namespace Catalogue.Web.Controllers.Records
 
         public object Post([FromBody] Record record)
         {
-            record.Id = Guid.NewGuid();
+            record.Id = String.Empty;
 
             var userInfo = new UserInfo
             {
@@ -111,7 +111,7 @@ namespace Catalogue.Web.Controllers.Records
         {
             return new Record
             {
-                Id = Guid.Empty,
+                Id = String.Empty,
                 Gemini = Library.Blank().With(m =>
                     {
                         m.ResourceType = "dataset";

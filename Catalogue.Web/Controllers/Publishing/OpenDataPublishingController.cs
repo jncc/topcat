@@ -44,7 +44,7 @@ namespace Catalogue.Web.Controllers.Publishing
         [HttpPut, Route("api/publishing/opendata/assess")]
         public object Assess(AssessmentRequest assessmentRequest)
         {
-            var record = db.Load<Record>(Helpers.GetRecordId(assessmentRequest.Id));
+            var record = db.Load<Record>(assessmentRequest.Id);
             var assessmentInfo = new OpenDataAssessmentInfo
             {
                 Completed = true,
@@ -67,7 +67,7 @@ namespace Catalogue.Web.Controllers.Publishing
         [HttpPut, Route("api/publishing/opendata/signoff"), AuthorizeOpenDataIao]
         public object SignOff(SignOffRequest signOffRequest)
         {
-            var record = db.Load<Record>(Helpers.GetRecordId(signOffRequest.Id));
+            var record = db.Load<Record>(signOffRequest.Id);
             var signOffInfo = new OpenDataSignOffInfo
             {
                 User = new UserInfo
@@ -176,7 +176,7 @@ namespace Catalogue.Web.Controllers.Publishing
 
     public class RecordRepresentation
     {
-        public Guid Id { get; set; }
+        public string Id { get; set; }
         public string Title { get; set; }
         public DateTime MetadataDate { get; set; }
         public bool IsGeminiValid { get; set; }

@@ -9,7 +9,7 @@ namespace Catalogue.Robot.DeadLinks
 {
     public class FileLinkChecker
     {
-        public LinkCheckResult Check(Guid id, Uri fileUri)
+        public LinkCheckResult Check(string id, Uri fileUri)
         {
             string uri = fileUri.ToString();
 

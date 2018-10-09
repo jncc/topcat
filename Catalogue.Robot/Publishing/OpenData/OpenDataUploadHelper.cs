@@ -25,7 +25,7 @@ namespace Catalogue.Robot.Publishing.OpenData
             xmlHelper = new OpenDataXmlHelper();
         }
 
-        public void UploadDataFile(Guid recordId, string filePath)
+        public void UploadDataFile(string recordId, string filePath)
         {
             filePath = JnccDriveMappings.GetUncPath(filePath);
 

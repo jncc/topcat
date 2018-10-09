@@ -80,7 +80,7 @@ namespace Catalogue.Web.Controllers.Dumps
 
         public class RecordWithPublicationInfoResultShape
         {
-            public Guid Id { get; set; }
+            public string Id { get; set; }
             public string Title { get; set; }
             public DateTime MetadataDate { get; set; }
             public OpenDataPublicationInfo PublicationInfo { get; set; }

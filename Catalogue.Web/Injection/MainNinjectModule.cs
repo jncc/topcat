@@ -1,10 +1,15 @@
 ﻿using System.Security.Principal;
 using System.Web;
 using Catalogue.Web.Account;
-using Ninject.Extensions.Conventions;
+//using Ninject.Extensions.Conventions;
 using Ninject.Modules;
 using Ninject.Web.Common;
 using Raven.Client.Documents.Session;
+using Raven.Client.Documents;
+using Catalogue.Web.Code;
+using Catalogue.Data.Write;
+using System;
+using Raven.Embedded;
 
 namespace Catalogue.Web.Injection
 {
@@ -16,12 +21,20 @@ namespace Catalogue.Web.Injection
         public override void Load()
         {
             // use Ninject.Extensions.Conventions for easy ISomeType -> SomeType bindings
-            Kernel.Bind(x => x
-                .FromAssembliesMatching("Catalogue.*")
-                .SelectAllClasses()
-                .BindDefaultInterface());
+            //this.Bind(x => x
+            //    .FromAssembliesMatching("Catalogue.*")
+            //    .SelectAllClasses()
+            //    .BindDefaultInterface());
+
+            Bind<IEnvironment>().To<Code.Environment>();
+            Bind<ISettings>().To<Settings>();
+            Bind<IRecordService>().To<RecordService>();
+            Bind<IRecordValidator>().To<RecordValidator>();
+            Bind<IOpenDataPublishingRecordService>().To<OpenDataPublishingRecordService>();
+            Bind<IOpenDataPublishingUploadRecordService>().To<OpenDataPublishingUploadRecordService>();
 
             // inject a once-per-request raven document session
+
             Bind<IDocumentSession>()
                 .ToMethod(x => WebApiApplication.DocumentStore.OpenSession())
                 .InRequestScope();

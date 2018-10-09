@@ -5,6 +5,7 @@ using Raven.Client;
 //using Raven.Client.Document;
 using Raven.Client.Documents;
 using Raven.Client.Documents.Indexes;
+using Raven.Embedded;
 //using Raven.Client.Indexes;
 //using Raven.Database.Server;
 
@@ -25,19 +26,17 @@ namespace Catalogue.Data
 
         public static IDocumentStore InMemory(int port = 8888)
         {
-//            return new InMemoryDatabaseHelper
-//            {
-//                PreInitializationAction = store =>
-//                {
-//                    store.Configuration.Port = port;
-//                    NonAdminHttp.EnsureCanListenToWhenInNonAdminContext(port);
-//                    store.UseEmbeddedHttpServer = true;
-//                    store.Configuration.Storage.Voron.AllowOn32Bits = true;
-//                },
-//                PostInitializationAction = Seeder.Seed
-//            }.Create();
-
-            return null;
+            return new InMemoryDatabaseHelper
+            {
+                PreInitializationAction = store =>
+                {
+                    //store.GetConfiguration.Port = port;
+                    //NonAdminHttp.EnsureCanListenToWhenInNonAdminContext(port);
+                    //store.UseEmbeddedHttpServer = true;
+                    //store.Configuration.Storage.Voron.AllowOn32Bits = true;
+                },
+                PostInitializationAction = Seeder.Seed
+            }.Create();
         }
     }
 }
