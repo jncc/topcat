@@ -11,6 +11,7 @@ using Raven.Client.Documents;
 using Raven.Client.Documents.Linq;
 using Raven.Client.Documents.Session;
 using static Catalogue.Data.Query.SortOptions;
+using Raven.Client.Documents.Queries.Highlighting;
 
 namespace Catalogue.Data.Query
 {
@@ -32,17 +33,16 @@ namespace Catalogue.Data.Query
         }
 
         // these fields are member variables only so they can be accessed from both query methods
-//        RavenQueryStatistics stats;
-//        FieldHighlightings titleLites;
-//        FieldHighlightings titleNLites;
-//        FieldHighlightings abstractLites;
-//        FieldHighlightings abstractNLites;
+        QueryStatistics stats;
+        Highlightings titleLites;
+        Highlightings titleNLites;
+        Highlightings abstractLites;
+        Highlightings abstractNLites;
 
         public IQueryable<Record> AsyncQuery(IAsyncDocumentSession adb, RecordQueryInputModel input)
         {
             var query = adb.Query<RecordIndex.Result, RecordIndex>()
-//                .Statistics(out stats);
-                ;
+                .Statistics(out stats);
 
             return RecordQueryImpl(input, query);
         }
@@ -54,16 +54,19 @@ namespace Catalogue.Data.Query
         /// </summary>
         public IQueryable<Record> Query(RecordQueryInputModel input)
         {
+            var highlightingOptions = new HighlightingOptions
+            {
+                PreTags = new[] { "<b>" },
+                PostTags = new[] { "</b>" }
+            };
 
             var query = _db.Query<RecordIndex.Result, RecordIndex>()
-// raven4
-//                .Statistics(out stats)
-//                .Customize(x => x.Highlight("Title", 202, 1, out titleLites))
-//                .Customize(x => x.Highlight("TitleN", 202, 1, out titleNLites))
-//                .Customize(x => x.Highlight("Abstract", 202, 1, out abstractLites))
-//                .Customize(x => x.Highlight("AbstractN", 202, 1, out abstractNLites))
-//                .Customize(x => x.SetHighlighterTags("<b>", "</b>"));
-                ;
+                .Statistics(out stats)
+                .Highlight("Title", 202, 1, highlightingOptions, out titleLites)
+                .Highlight("TitleN", 202, 1, highlightingOptions, out titleNLites)
+                .Highlight("Abstract", 202, 1, highlightingOptions, out abstractLites)
+                .Highlight("AbstractN", 202, 1, highlightingOptions, out abstractNLites);
+            ;
 
             return RecordQueryImpl(input, query);
 
@@ -79,7 +82,6 @@ namespace Catalogue.Data.Query
                     .Search(r => r.Abstract, input.Q, 1)
                     .Search(r => r.AbstractN, input.Q)
                     .Search(r => r.KeywordsN, input.Q);
-
             }
 
             if (input.F != null)
@@ -101,7 +103,6 @@ namespace Catalogue.Data.Query
                 recordQuery = recordQuery.Skip(input.P * input.N).Take(input.N);
             }
 
-
             return recordQuery;
         }
 
@@ -112,21 +113,19 @@ namespace Catalogue.Data.Query
         {
             // materializing the query will populate our stats
 
-// raven4 (below)
-
             var results = from r in Query(input).ToList()
-//                          let titleFragments = titleLites.GetFragments("records/" + r.Id).Concat(titleNLites.GetFragments("records/" + r.Id))
-//                        let abstractFragments = abstractLites.GetFragments("records/" + r.Id).Concat(abstractNLites.GetFragments("records/" + r.Id))
-//                        let title = titleFragments.Select(f => f.TruncateNicely(200)).FirstOrDefault()
-//                                    ?? r.Gemini.Title.TruncateNicely(200)
-//                        let snippet = abstractFragments.Select(f => f.TruncateNicely(200)).FirstOrDefault()
-//                                       ?? r.Gemini.Abstract.TruncateNicely(200)
-                        let format = DataFormatQueries.GetDataFormatInfo(r.Gemini.DataFormat)
+                          let titleFragments = titleLites.GetFragments(r.Id).Concat(titleNLites.GetFragments(r.Id))
+                          let abstractFragments = abstractLites.GetFragments(r.Id).Concat(abstractNLites.GetFragments(r.Id))
+                          let title = titleFragments.Select(f => f.TruncateNicely(200)).FirstOrDefault()
+                                      ?? r.Gemini.Title.TruncateNicely(200)
+                          let snippet = abstractFragments.Select(f => f.TruncateNicely(200)).FirstOrDefault()
+                                         ?? r.Gemini.Abstract.TruncateNicely(200)
+                          let format = DataFormatQueries.GetDataFormatInfo(r.Gemini.DataFormat)
                         select new ResultOutputModel
                         {
                             Id = r.Id,
-//                            Title = title, // could be better; always want the whole title, highlighted
-//                            Snippet = snippet,
+                            Title = title, // could be better; always want the whole title, highlighted
+                            Snippet = snippet,
                             Format = new FormatOutputModel
                             {
                                 Group = format.Group,
@@ -146,9 +145,9 @@ namespace Catalogue.Data.Query
 
             return new SearchOutputModel
             {
-//                Total = stats.TotalResults,
+                Total = stats.TotalResults,
                 Results = results.ToList(),
-//                Speed = stats.DurationMilliseconds,
+                Speed = stats.DurationInMs,
                 Query = input
             };
         }

@@ -37,8 +37,8 @@ namespace Catalogue.Data.Indexes
 
             Stores.Add(x => x.Vocab, FieldStorage.Yes);
             Stores.Add(x => x.Name, FieldStorage.Yes);
-            Analyze(x => x.VocabN, typeof(CustomKeywordAnalyzer).AssemblyQualifiedName); 
-          
+            Analyze(x => x.VocabN, typeof(CustomKeywordAnalyzer).AssemblyQualifiedName);
+
         }
     }
 }

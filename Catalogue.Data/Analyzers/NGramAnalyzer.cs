@@ -146,19 +146,4 @@ namespace Catalogue.Data.Analyzers
             return filter;
         }
     }
-
-//    [NotForQuerying] // raven4
-    public class CustomKeywordAnalyzer2 : Analyzer
-    {
-        public override TokenStream TokenStream(string fieldName, TextReader reader)
-        {
-            var tokenizer = new StandardTokenizer(Version.LUCENE_30, reader);
-            tokenizer.MaxTokenLength = 255;
-            TokenStream filter = new StandardFilter(tokenizer);
-            filter = new LowerCaseFilter(filter);
-            filter = new NGramTokenFilter(filter, 2, 255);
-
-            return filter;
-        }
-    }
 }

@@ -7,6 +7,7 @@ using Catalogue.Data.Model;
 using Catalogue.Gemini.Model;
 using Catalogue.Utilities.Raven;
 using Raven.Client.Documents.Session;
+using Catalogue.Data;
 
 namespace Catalogue.Web.Controllers.Dumps
 {
@@ -45,7 +46,7 @@ namespace Catalogue.Web.Controllers.Dumps
 
             return results.Select(r => new RecordWithPublicationInfoResultShape
                 {
-                    Id = r.Id,
+                    Id = Helpers.RemoveCollection(r.Id),
                     Title = r.Gemini.Title,
                     MetadataDate = r.Gemini.MetadataDate,
                     PublicationInfo = r.Publication.OpenData,
@@ -111,7 +112,7 @@ namespace Catalogue.Web.Controllers.Dumps
 
             return results.Select(r => new RecordWithPublicationInfoResultShape
             {
-                Id = r.Id,
+                Id = Helpers.RemoveCollection(r.Id),
                 Title = r.Gemini.Title,
                 MetadataDate = r.Gemini.MetadataDate,
                 PublicationInfo = r.Publication.OpenData,

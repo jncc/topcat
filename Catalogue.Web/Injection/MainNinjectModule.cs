@@ -8,6 +8,7 @@ using Raven.Client.Documents.Session;
 using Raven.Client.Documents;
 using Catalogue.Web.Code;
 using Catalogue.Data.Write;
+using Catalogue.Data.Query;
 using System;
 using Raven.Embedded;
 
@@ -32,6 +33,7 @@ namespace Catalogue.Web.Injection
             Bind<IRecordValidator>().To<RecordValidator>();
             Bind<IOpenDataPublishingRecordService>().To<OpenDataPublishingRecordService>();
             Bind<IOpenDataPublishingUploadRecordService>().To<OpenDataPublishingUploadRecordService>();
+            Bind<IRecordQueryer>().To<RecordQueryer>();
 
             // inject a once-per-request raven document session
 

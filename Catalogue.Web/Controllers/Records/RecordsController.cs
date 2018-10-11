@@ -1,17 +1,13 @@
 ﻿using Catalogue.Data.Model;
 using Catalogue.Data.Write;
-using Catalogue.Gemini.Model;
 using Catalogue.Gemini.Templates;
 using Catalogue.Utilities.Clone;
 using Catalogue.Utilities.Time;
 using Catalogue.Web.Account;
-using Raven.Client;
 using System;
 using System.Web.Http;
 using Catalogue.Data;
 using Catalogue.Data.Extensions;
-using Catalogue.Data.Query;
-using NUnit.Framework;
 using Raven.Client.Documents.Session;
 
 namespace Catalogue.Web.Controllers.Records
@@ -38,13 +34,13 @@ namespace Catalogue.Web.Controllers.Records
             if (String.IsNullOrEmpty(id))
                 record = MakeNewRecord(); // a nice empty record for making a new one
             else if (clone)
-                record = Clone(db.Load<Record>(id));
+                record = Clone(db.Load<Record>(Helpers.AddCollection(id)));
             else
-                record = db.Load<Record>(id);
+                record = db.Load<Record>(Helpers.AddCollection(id));
 
             return new RecordOutputModel
             {
-                Record = record,
+                Record = Helpers.RemoveCollectionFromId(record),
                 RecordState = new RecordState
                 {
                     OpenDataPublishingState = new OpenDataPublishingState
@@ -73,6 +69,8 @@ namespace Catalogue.Web.Controllers.Records
 
         public object Put(string id, [FromBody]Record record)
         {
+            record = Helpers.AddCollectionToId(record);
+
             var userInfo = new UserInfo
             {
                 DisplayName = user.User.DisplayName,
@@ -80,12 +78,13 @@ namespace Catalogue.Web.Controllers.Records
             };
 
             var result = service.Update(record, userInfo);
-
-            if (result.Record.Id != id) throw new Exception("The ID of the record does not match that supplied to the put method");
+            
+            if (!result.Record.Id.Equals(id)) throw new Exception("The ID of the record does not match that supplied to the put method");
 
             if (result.Success)
                 db.SaveChanges();
 
+            result.Record = Helpers.RemoveCollectionFromId(result.Record);
             return result;
         }
 
@@ -104,6 +103,7 @@ namespace Catalogue.Web.Controllers.Records
             if (result.Success)
                 db.SaveChanges();
 
+            result.Record = Helpers.RemoveCollectionFromId(result.Record);
             return result;
         }
 
