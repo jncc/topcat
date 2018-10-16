@@ -31,9 +31,11 @@ namespace Catalogue.Web.Injection
             Bind<ISettings>().To<Settings>();
             Bind<IRecordService>().To<RecordService>();
             Bind<IRecordValidator>().To<RecordValidator>();
+            Bind<IRecordQueryer>().To<RecordQueryer>();
+            Bind<IVocabularyService>().To<VocabularyService>();
+            Bind<IVocabularyValidator>().To<VocabularyValidator>();
             Bind<IOpenDataPublishingRecordService>().To<OpenDataPublishingRecordService>();
             Bind<IOpenDataPublishingUploadRecordService>().To<OpenDataPublishingUploadRecordService>();
-            Bind<IRecordQueryer>().To<RecordQueryer>();
 
             // inject a once-per-request raven document session
 

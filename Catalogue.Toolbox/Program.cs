@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Configuration;
 using System.Linq;
 using System.Net.Http;
@@ -9,7 +10,8 @@ using CommandLine;
 using log4net;
 using log4net.Config;
 using Raven.Client.Documents;
-using Raven.Client.Documents.Queries;
+using Raven.Client.Documents.Commands;
+using Raven.Client.Documents.Operations;
 
 namespace Catalogue.Toolbox
 {
@@ -66,27 +68,31 @@ namespace Catalogue.Toolbox
         {
             InitDatabase();
 
+            // raven4
             string luceneQuery = "Keywords:\"http://vocab.jncc.gov.uk/metadata-admin/Delete\"";
+            
+            using (var db = DocumentStore.OpenSession())
+            {
+                // this loads all the records into memory because i can't figure out how to do it better
+                // https://groups.google.com/forum/#!topic/ravendb/ELqhzCs2amY
 
-// raven4
+                var records = db.Advanced.DocumentQuery<Record>("RecordIndex").WhereLucene("Keywords", luceneQuery).ToList();
+                Logger.Info($"Deleting {records.Count} records:");
+                foreach (var record in records)
+                    Logger.Info($"{record.Id} ({record.Gemini.Title})");
+                Logger.Info("If this said 128 then it could be more!");
 
-//            using (var db = DocumentStore.OpenSession())
-//            {
-//                // this loads all the records into memory because i can't figure out how to do it better
-//                // https://groups.google.com/forum/#!topic/ravendb/ELqhzCs2amY
-//                var records = db.Advanced.DocumentQuery<Record>("RecordIndex").Where(luceneQuery).ToList();
-//                Logger.Info($"Deleting {records.Count} records:");
-//                foreach (var record in records)
-//                    Logger.Info("${record.Id} ({record.Gemini.Title})");
-//                Logger.Info("If this said 128 then it could be more!");
-//            }
-//
-//            if (!options.WhatIf)
-//            {
-//                DocumentStore.DatabaseCommands.DeleteByIndex("RecordIndex", new IndexQuery { Query = luceneQuery });
-//            }
+                if (!options.WhatIf)
+                {
+                    foreach (var record in records)
+                    {
+                        var command = new DeleteDocumentCommand(record.Id, null);
+                        db.Advanced.RequestExecutor.Execute(command, db.Advanced.Context);
+                    }
+                }
 
-            Logger.Info("Delete request sent to database.");
+                Logger.Info("Delete requests sent to database.");
+            }
 
             if (options.WhatIf)
             {

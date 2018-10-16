@@ -67,9 +67,6 @@
     <Content Include="App.Live.config">
       <DependentUpon>App.config</DependentUpon>
     </Content>
-    <Content Include="App.Test.config">
-      <DependentUpon>App.config</DependentUpon>
-    </Content>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Catalogue.Data\Catalogue.Data.csproj">

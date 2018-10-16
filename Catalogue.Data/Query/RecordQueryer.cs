@@ -123,7 +123,7 @@ namespace Catalogue.Data.Query
                           let format = DataFormatQueries.GetDataFormatInfo(r.Gemini.DataFormat)
                         select new ResultOutputModel
                         {
-                            Id = r.Id,
+                            Id = Helpers.RemoveCollection(r.Id),
                             Title = title, // could be better; always want the whole title, highlighted
                             Snippet = snippet,
                             Format = new FormatOutputModel
@@ -133,9 +133,6 @@ namespace Catalogue.Data.Query
                                 Name = format.Name,
                             },
                             Keywords = MakeKeywordOutputModelList(r.Gemini.Keywords).ToList(),
-                            //.OrderBy(k => k.Vocab != "http://vocab.jncc.gov.uk/jncc-broad-category") // show first
-                            //.ThenBy(k => k.Vocab.IsBlank())
-                            //.ThenBy(k => k.Vocab).ToList(),
                             TopCopy = r.TopCopy,
                             Date = r.Gemini.DatasetReferenceDate,
                             ResourceType = r.Gemini.ResourceType.FirstCharToUpper(),

@@ -31,16 +31,20 @@ namespace Catalogue.Web.Controllers.Records
         {
             Record record;
 
-            if (String.IsNullOrEmpty(id))
+            var guid = new Guid(id);
+            if (guid == Guid.Empty)
                 record = MakeNewRecord(); // a nice empty record for making a new one
             else if (clone)
                 record = Clone(db.Load<Record>(Helpers.AddCollection(id)));
             else
+            {
                 record = db.Load<Record>(Helpers.AddCollection(id));
+                record = Helpers.RemoveCollectionFromId(record);
+            }
 
             return new RecordOutputModel
             {
-                Record = Helpers.RemoveCollectionFromId(record),
+                Record = record,
                 RecordState = new RecordState
                 {
                     OpenDataPublishingState = new OpenDataPublishingState
@@ -57,7 +61,7 @@ namespace Catalogue.Web.Controllers.Records
         {
             var clonedRecord = record.Copy();
 
-            clonedRecord.Id = String.Empty;
+            clonedRecord.Id = Guid.Empty.ToString();
             clonedRecord.Path = String.Empty;
             clonedRecord.Gemini.Title = String.Empty;
             clonedRecord.Publication = null;
@@ -79,7 +83,7 @@ namespace Catalogue.Web.Controllers.Records
 
             var result = service.Update(record, userInfo);
             
-            if (!result.Record.Id.Equals(id)) throw new Exception("The ID of the record does not match that supplied to the put method");
+            if (!result.Record.Id.Equals(record.Id)) throw new Exception("The ID of the record does not match that supplied to the put method");
 
             if (result.Success)
                 db.SaveChanges();
@@ -90,7 +94,7 @@ namespace Catalogue.Web.Controllers.Records
 
         public object Post([FromBody] Record record)
         {
-            record.Id = String.Empty;
+            record.Id = Helpers.AddCollection(Guid.NewGuid().ToString());
 
             var userInfo = new UserInfo
             {
@@ -111,7 +115,7 @@ namespace Catalogue.Web.Controllers.Records
         {
             return new Record
             {
-                Id = String.Empty,
+                Id = Guid.Empty.ToString(),
                 Gemini = Library.Blank().With(m =>
                     {
                         m.ResourceType = "dataset";

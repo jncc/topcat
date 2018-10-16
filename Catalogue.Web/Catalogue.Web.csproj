@@ -364,10 +364,6 @@
     <Content Include="Web.Dev.config">
       <DependentUpon>Web.config</DependentUpon>
     </Content>
-    <Content Include="Web.Test.config">
-      <DependentUpon>Web.config</DependentUpon>
-      <SubType>Designer</SubType>
-    </Content>
     <Content Include="Web.Beta.config">
       <DependentUpon>Web.config</DependentUpon>
       <SubType>Designer</SubType>
