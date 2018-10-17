@@ -1,4 +1,5 @@
-﻿using Catalogue.Data.Model;
+﻿using Catalogue.Data;
+using Catalogue.Data.Model;
 using Catalogue.Data.Test;
 using Catalogue.Data.Write;
 using Catalogue.Gemini.Templates;
@@ -8,7 +9,7 @@ using Catalogue.Web.Controllers.Publishing;
 using FluentAssertions;
 using Moq;
 using NUnit.Framework;
-using Raven.Client;
+using Raven.Client.Documents.Session;
 using System;
 
 namespace Catalogue.Tests.Slow.Catalogue.Web.Controllers.Publishing
@@ -18,7 +19,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Web.Controllers.Publishing
         [Test]
         public void assessment_completed_test()
         {
-            var recordId = new Guid("1a86bbbe-7f19-4fe2-82ff-7847e68266da");
+            var recordId = Helpers.AddCollection("1a86bbbe-7f19-4fe2-82ff-7847e68266da");
             var record = new Record().With(r =>
             {
                 r.Id = recordId;
@@ -60,7 +61,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Web.Controllers.Publishing
         [Test]
         public void assessment_completed_with_unc_path_test()
         {
-            var recordId = new Guid("b69f47c1-4c17-42d0-a396-8209aa5568b1");
+            var recordId = Helpers.AddCollection("b69f47c1-4c17-42d0-a396-8209aa5568b1");
             var record = new Record().With(r =>
             {
                 r.Id = recordId;
@@ -85,7 +86,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Web.Controllers.Publishing
         [Test]
         public void assessment_started_then_completed_test()
         {
-            var recordId = new Guid("ec0db5b3-8b9d-42c3-ac70-2fd50ff3bbca");
+            var recordId = Helpers.AddCollection("ec0db5b3-8b9d-42c3-ac70-2fd50ff3bbca");
             var record = new Record().With(r =>
             {
                 r.Id = recordId;
@@ -131,7 +132,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Web.Controllers.Publishing
         [Test]
         public void assessment_already_completed_test()
         {
-            var recordId = new Guid("1a86bbbe-7f19-4fe2-82ff-7847e68266da");
+            var recordId = Helpers.AddCollection("1a86bbbe-7f19-4fe2-82ff-7847e68266da");
             var record = new Record().With(r =>
             {
                 r.Id = recordId;
@@ -163,7 +164,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Web.Controllers.Publishing
         [Test]
         public void assessment_already_completed_on_spreadsheet_test()
         {
-            var recordId = new Guid("170001cf-1117-459d-a554-b1fc031d439c");
+            var recordId = Helpers.AddCollection("170001cf-1117-459d-a554-b1fc031d439c");
             var record = new Record().With(r =>
             {
                 r.Id = recordId;
@@ -204,7 +205,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Web.Controllers.Publishing
         [Test]
         public void assessment_for_non_Gemini_record_should_fail_test()
         {
-            var recordId = new Guid("aeda73dc-4723-427d-8555-19558087370a");
+            var recordId = Helpers.AddCollection("aeda73dc-4723-427d-8555-19558087370a");
             var record = new Record().With(r =>
             {
                 r.Id = recordId;
@@ -231,7 +232,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Web.Controllers.Publishing
         [Test]
         public void successful_reassessment_for_republishing()
         {
-            var recordId = new Guid("18c4b5bc-353f-4f0c-a243-1d7d06cacbec");
+            var recordId = Helpers.AddCollection("18c4b5bc-353f-4f0c-a243-1d7d06cacbec");
             var record = new Record().With(r =>
             {
                 r.Id = recordId;
@@ -290,7 +291,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Web.Controllers.Publishing
         [Test]
         public void fail_when_reassessing_up_to_date_record_at_sign_off_stage()
         {
-            var recordId = new Guid("4fbdba6e-9b5c-40bc-842c-e99b6c976a08");
+            var recordId = Helpers.AddCollection("4fbdba6e-9b5c-40bc-842c-e99b6c976a08");
             var record = new Record().With(r =>
             {
                 r.Id = recordId;
@@ -361,7 +362,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Web.Controllers.Publishing
         [Test]
         public void fail_when_reassessing_up_to_date_record_at_upload_stage()
         {
-            var recordId = new Guid("593177d9-885f-4450-903b-ecb9ea667575");
+            var recordId = Helpers.AddCollection("593177d9-885f-4450-903b-ecb9ea667575");
             var record = new Record().With(r =>
             {
                 r.Id = recordId;
@@ -432,7 +433,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Web.Controllers.Publishing
         [Test]
         public void successful_reassessment_from_spreadsheet_assessment()
         {
-            var recordId = new Guid("39af3c76-8769-4994-bb1a-4f1a1017c0b0");
+            var recordId = Helpers.AddCollection("39af3c76-8769-4994-bb1a-4f1a1017c0b0");
             var record = new Record().With(r =>
             {
                 r.Id = recordId;
@@ -489,7 +490,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Web.Controllers.Publishing
         {
             new Record().With(r =>
             {
-                r.Id = new Guid("dc370d41-c8b4-4eba-8e39-6e2d70c50c07");
+                r.Id = Helpers.AddCollection("dc370d41-c8b4-4eba-8e39-6e2d70c50c07");
                 r.Path = @"http://www.example.com";
                 r.Validation = Validation.Gemini;
                 r.Gemini = Library.Example();
@@ -504,7 +505,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Web.Controllers.Publishing
             }),
             new Record().With(r =>
             {
-                r.Id = new Guid("60df47fc-d4df-48ce-9bdd-289c145f7de0");
+                r.Id = Helpers.AddCollection("60df47fc-d4df-48ce-9bdd-289c145f7de0");
                 r.Path = @"https://www.example.com";
                 r.Validation = Validation.Gemini;
                 r.Gemini = Library.Example();
@@ -519,7 +520,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Web.Controllers.Publishing
             }),
             new Record().With(r =>
             {
-                r.Id = new Guid("d82afb6c-2699-4570-a72f-cdf2cf93fa4c");
+                r.Id = Helpers.AddCollection("d82afb6c-2699-4570-a72f-cdf2cf93fa4c");
                 r.Path = @"postgres://username@hostname/databasename";
                 r.Validation = Validation.Gemini;
                 r.Gemini = Library.Example();
@@ -561,7 +562,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Web.Controllers.Publishing
         [Test]
         public void assessment_for_not_publishable_record_should_fail_test()
         {
-            var recordId = new Guid("3e3fef01-1c43-4a16-82b3-4caab363a55a");
+            var recordId = Helpers.AddCollection("3e3fef01-1c43-4a16-82b3-4caab363a55a");
             var record = new Record().With(r =>
             {
                 r.Id = recordId;
@@ -588,7 +589,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Web.Controllers.Publishing
         [Test]
         public void reassessment_for_not_publishable_record_should_fail_test()
         {
-            var recordId = new Guid("13da2640-9241-4ad8-a14f-aad02109cf59");
+            var recordId = Helpers.AddCollection("13da2640-9241-4ad8-a14f-aad02109cf59");
             var record = new Record().With(r =>
             {
                 r.Id = recordId;
@@ -634,7 +635,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Web.Controllers.Publishing
         [Test]
         public void assessment_for_record_with_null_publishable_field_should_fail_test()
         {
-            var recordId = new Guid("71639cc0-94bd-430a-a0f2-37247698abe3");
+            var recordId = Helpers.AddCollection("71639cc0-94bd-430a-a0f2-37247698abe3");
             var record = new Record().With(r =>
             {
                 r.Id = recordId;

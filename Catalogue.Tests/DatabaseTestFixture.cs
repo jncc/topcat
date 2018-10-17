@@ -1,10 +1,9 @@
 using System;
 using Catalogue.Data;
-using Catalogue.Data.Seed;
-using Catalogue.Data.Test;
 using Catalogue.Utilities.Time;
 using NUnit.Framework;
-using Raven.Client;
+using Raven.Client.Documents;
+using Raven.Client.Documents.Session;
 
 namespace Catalogue.Tests
 {

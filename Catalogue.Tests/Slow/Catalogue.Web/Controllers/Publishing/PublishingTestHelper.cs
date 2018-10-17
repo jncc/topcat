@@ -1,10 +1,10 @@
-﻿using Catalogue.Data.Model;
-using Catalogue.Data.Test;
+﻿using Catalogue.Data;
+using Catalogue.Data.Model;
 using Catalogue.Data.Write;
 using Catalogue.Web.Account;
 using Catalogue.Web.Controllers.Publishing;
 using Moq;
-using Raven.Client;
+using Raven.Client.Documents.Session;
 
 namespace Catalogue.Tests.Slow.Catalogue.Web.Controllers.Publishing
 {
@@ -12,7 +12,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Web.Controllers.Publishing
     {
         public static IDocumentSession GetNewDbSessionWithThisRecordAdded(Record record)
         {
-            var store = new InMemoryDatabaseHelper().Create();
+            var store = DatabaseFactory.InMemory();
             using (var db = store.OpenSession())
             {
                 db.Store(record);

@@ -7,6 +7,8 @@ using FluentAssertions;
 using NUnit.Framework;
 using Raven.Client;
 using Raven.Client.Bundles.Versioning;
+using Raven.Client.Documents;
+using Raven.Client.Documents.Session;
 
 namespace Catalogue.Tests.Slow.Catalogue.Data.Versioning
 {
@@ -21,7 +23,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Data.Versioning
             // this test mutates data so we don't use the ResusableDocumentStore...
 
             IDocumentStore store = new InMemoryDatabaseHelper().Create();
-            Guid id = Guid.Parse("f7b444f7-76f3-47a4-b8d8-cc204d400728");
+            var id = ("records/f7b444f7-76f3-47a4-b8d8-cc204d400728");
 
             using (IDocumentSession db = store.OpenSession())
             {

@@ -6,6 +6,7 @@ using Catalogue.Utilities.Clone;
 using FluentAssertions;
 using NUnit.Framework;
 using Raven.Client;
+using Raven.Client.Documents.Session;
 using System;
 using System.Linq;
 

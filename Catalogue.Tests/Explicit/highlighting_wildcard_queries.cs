@@ -1,12 +1,12 @@
 ﻿using System;
 using System.Linq;
+using Catalogue.Data;
 using Catalogue.Data.Test;
 using FluentAssertions;
 using NUnit.Framework;
-using Raven.Abstractions.Indexing;
-using Raven.Client;
-using Raven.Client.Embedded;
-using Raven.Client.Indexes;
+using Raven.Client.Documents.Indexes;
+using Raven.Client.Documents.Queries.Highlighting;
+using Raven.Client.Documents.Session;
 
 namespace Catalogue.Tests.Explicit
 {
@@ -15,7 +15,7 @@ namespace Catalogue.Tests.Explicit
         [Explicit, Test]
         public void highlighting_should_work_with_wildcard_queries()
         {
-            var store = new EmbeddableDocumentStore {RunInMemory = true};
+            var store = DatabaseFactory.InMemory();
             store.Initialize();
 
             using (IDocumentSession db = store.OpenSession())
@@ -43,9 +43,9 @@ namespace Catalogue.Tests.Explicit
 
             using (IDocumentSession db = store.OpenSession())
             {
-                Func<string, FieldHighlightings> execute = q =>
+                Func<string, Highlightings> execute = q =>
                 {
-                    FieldHighlightings lites;
+                    Highlightings lites;
                     db.Advanced.DocumentQuery<Item>("SearchIndex")
                         .WaitForNonStaleResultsAsOfNow()
                         .Highlight("Title", 128, 2, out lites)

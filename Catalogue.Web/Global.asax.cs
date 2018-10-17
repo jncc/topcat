@@ -64,8 +64,7 @@ namespace Catalogue.Web
             if (ConfigurationManager.AppSettings["Environment"] == "Dev")
             {
                 // use in-memory database for development
-                //DocumentStore = DatabaseFactory.InMemory();
-                DocumentStore = DatabaseFactory.Production();
+                DocumentStore = DatabaseFactory.InMemory();
             }
             else
             {

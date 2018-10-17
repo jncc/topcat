@@ -1,10 +1,8 @@
 ﻿using System.Linq;
+using Catalogue.Data;
 using FluentAssertions;
 using NUnit.Framework;
-using Raven.Bundles.Versioning.Data;
-using Raven.Client;
-using Raven.Client.Bundles.Versioning;
-using Raven.Client.Embedded;
+using Raven.Client.Documents.Session;
 
 namespace Catalogue.Tests.Explicit
 {
@@ -13,7 +11,7 @@ namespace Catalogue.Tests.Explicit
         [Test, Explicit]
         public void versioning_should_work()
         {
-            var store = new EmbeddableDocumentStore {RunInMemory = true};
+            var store = DatabaseFactory.InMemory();
 
             store.Configuration.Settings.Add("Raven/ActiveBundles", "Versioning");
             store.Initialize();

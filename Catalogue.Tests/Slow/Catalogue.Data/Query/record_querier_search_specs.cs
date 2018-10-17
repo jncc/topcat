@@ -5,6 +5,7 @@ using Catalogue.Utilities.Clone;
 using FluentAssertions;
 using NUnit.Framework;
 using Raven.Client;
+using Raven.Client.Documents.Session;
 
 namespace Catalogue.Tests.Slow.Catalogue.Data.Query
 {

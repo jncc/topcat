@@ -1,9 +1,8 @@
 ﻿using Catalogue.Data.Import;
 using Catalogue.Data.Import.Mappings;
-using Catalogue.Data.Write;
 using NUnit.Framework;
-using Raven.Client;
-using Raven.Client.Document;
+using Raven.Client.Documents;
+using Raven.Client.Documents.Session;
 
 namespace Catalogue.Tests.Explicit.Catalogue.Import
 {
@@ -13,8 +12,10 @@ namespace Catalogue.Tests.Explicit.Catalogue.Import
         [Test]
         public void RunActivitiesImport()
         {
-            var store = new DocumentStore();
-            store.ParseConnectionString("Url=http://localhost:8888/");
+            var store = new DocumentStore
+            {
+                Urls = new[] { "http://localhost:8080/" }
+            };
             store.Initialize();
 
             using (IDocumentSession db = store.OpenSession())

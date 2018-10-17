@@ -172,7 +172,9 @@
       <DependentUpon>OpenDataModalController.js</DependentUpon>
     </Content>
     <Content Include="app\js\controllers\SignOffController.coffee" />
-    <None Include="app.config" />
+    <None Include="app.config">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="app\js\controllers\OpenDataManagementController.coffee" />
     <Content Include="app\js\controllers\MainController.js">
       <DependentUpon>MainController.coffee</DependentUpon>
@@ -649,6 +651,9 @@
     </PackageReference>
     <PackageReference Include="NETStandard.Library">
       <Version>1.6.1</Version>
+    </PackageReference>
+    <PackageReference Include="Ninject">
+      <Version>3.3.3</Version>
     </PackageReference>
     <PackageReference Include="Ninject.Extensions.Factory">
       <Version>3.3.2</Version>

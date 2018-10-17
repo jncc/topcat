@@ -50,7 +50,6 @@
   <ItemGroup>
     <Compile Include="Analyzers\NGramAnalyzer.cs" />
     <Compile Include="DatabaseFactory.cs" />
-    <Compile Include="DatabaseSettings.cs" />
     <Compile Include="Exchange\TopcatExchangeFormat.cs" />
     <Compile Include="Export\Exporter.cs" />
     <Compile Include="Helpers.cs" />
@@ -74,6 +73,7 @@
     <Compile Include="Import\Mappings\SeabirdSurveyMapping.cs" />
     <Compile Include="Import\Mappings\StandardishMapping.cs" />
     <Compile Include="Import\Mappings\TopcatMapping.cs" />
+    <Compile Include="Indexes\RecordSpatialIndex.cs" />
     <Compile Include="Indexes\RecordsWithNoFooterIndex.cs" />
     <Compile Include="Indexes\RecordCountForKeywordIndex.cs" />
     <Compile Include="Indexes\RecordsWithDuplicateTitleCheckerIndex.cs" />

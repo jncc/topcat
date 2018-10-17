@@ -5,12 +5,13 @@ using Catalogue.Utilities.Clone;
 using Catalogue.Web.Controllers.Publishing;
 using FluentAssertions;
 using NUnit.Framework;
-using Raven.Client;
+using Catalogue.Data;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using Catalogue.Data.Write;
+using Raven.Client.Documents.Session;
 
 namespace Catalogue.Tests.Slow.Catalogue.Web.Controllers.Publishing
 {
@@ -21,7 +22,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Web.Controllers.Publishing
         {
             var record = new Record().With(r =>
             {
-                r.Id = new Guid("f34de2d3-17af-47e2-8deb-a16b67c76b06");
+                r.Id = Helpers.AddCollection("f34de2d3-17af-47e2-8deb-a16b67c76b06");
                 r.Path = @"X:\path\to\signoff\test";
                 r.Validation = Validation.Gemini;
                 r.Gemini = Library.Example().With(m =>
@@ -64,7 +65,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Web.Controllers.Publishing
         {
             var record = new Record().With(r =>
             {
-                r.Id = new Guid("9f9d7a83-8fcb-4afc-956b-3d874d5632b1");
+                r.Id = Helpers.AddCollection("9f9d7a83-8fcb-4afc-956b-3d874d5632b1");
                 r.Path = @"X:\path\to\signoff\test";
                 r.Validation = Validation.Gemini;
                 r.Gemini = Library.Example().With(m =>
@@ -94,7 +95,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Web.Controllers.Publishing
         {
             var record = new Record().With(r =>
             {
-                r.Id = new Guid("eb6fc4d3-1d75-446d-adc8-296881110079");
+                r.Id = Helpers.AddCollection("eb6fc4d3-1d75-446d-adc8-296881110079");
                 r.Path = @"X:\path\to\signoff\test";
                 r.Validation = Validation.Gemini;
                 r.Gemini = Library.Example().With(m =>
@@ -134,7 +135,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Web.Controllers.Publishing
         {
             var record = new Record().With(r =>
             {
-                r.Id = new Guid("30f9aed6-62f2-478d-8851-c322ddb7beb8");
+                r.Id = Helpers.AddCollection("30f9aed6-62f2-478d-8851-c322ddb7beb8");
                 r.Path = @"X:\path\to\signoff\test";
                 r.Validation = Validation.Gemini;
                 r.Gemini = Library.Example().With(m =>
@@ -168,7 +169,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Web.Controllers.Publishing
         {
             var record = new Record().With(r =>
             {
-                r.Id = new Guid("9f9d7a83-8fcb-4afc-956b-3d874d5632b1");
+                r.Id = Helpers.AddCollection("9f9d7a83-8fcb-4afc-956b-3d874d5632b1");
                 r.Path = @"X:\path\to\signoff\test";
                 r.Validation = Validation.Gemini;
                 r.Gemini = Library.Example().With(m =>
@@ -188,7 +189,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Web.Controllers.Publishing
         {
             var record = new Record().With(r =>
             {
-                r.Id = new Guid("b288b636-026b-4187-96d4-a083e9cbe9e4");
+                r.Id = Helpers.AddCollection("b288b636-026b-4187-96d4-a083e9cbe9e4");
                 r.Path = @"X:\path\to\signoff\test";
                 r.Validation = Validation.Gemini;
                 r.Gemini = Library.Example().With(m =>
@@ -247,7 +248,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Web.Controllers.Publishing
         {
             var record = new Record().With(r =>
             {
-                r.Id = new Guid("84967e72-0a01-49f1-8793-b5a36df3d0be");
+                r.Id = Helpers.AddCollection("84967e72-0a01-49f1-8793-b5a36df3d0be");
                 r.Path = @"X:\path\to\signoff\test";
                 r.Validation = Validation.Gemini;
                 r.Gemini = Library.Example().With(m =>
@@ -310,7 +311,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Web.Controllers.Publishing
         {
             var record = new Record().With(r =>
             {
-                r.Id = new Guid("5d8ce359-4475-4a0e-9f31-0f70dbbc8bfc");
+                r.Id = Helpers.AddCollection("5d8ce359-4475-4a0e-9f31-0f70dbbc8bfc");
                 r.Path = @"X:\path\to\signoff\test";
                 r.Validation = Validation.Gemini;
                 r.Gemini = Library.Example().With(m =>
@@ -369,7 +370,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Web.Controllers.Publishing
         {
             var record = new Record().With(r =>
             {
-                r.Id = new Guid("d2183557-a36b-4cfb-8a57-279febdc4de5");
+                r.Id = Helpers.AddCollection("d2183557-a36b-4cfb-8a57-279febdc4de5");
                 r.Path = @"X:\path\to\signoff\test";
                 r.Validation = Validation.Gemini;
                 r.Gemini = Library.Example().With(m =>
@@ -432,7 +433,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Web.Controllers.Publishing
         {
             var retrieveSignOffTest1Record = new Record().With(r =>
             {
-                r.Id = new Guid("af8e531f-2bed-412e-9b03-2b339c672bff");
+                r.Id = Helpers.AddCollection("af8e531f-2bed-412e-9b03-2b339c672bff");
                 r.Path = @"X:\path\to\assessment\test";
                 r.Validation = Validation.Gemini;
                 r.Gemini = Library.Example().With(m =>
@@ -457,7 +458,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Web.Controllers.Publishing
 
             var retrieveSignOffTest2Record = new Record().With(r =>
             {
-                r.Id = new Guid("f4b6dd32-93ad-41cd-a7a0-2df0f5c7410b");
+                r.Id = Helpers.AddCollection("f4b6dd32-93ad-41cd-a7a0-2df0f5c7410b");
                 r.Path = @"X:\path\to\assessment\test";
                 r.Validation = Validation.Gemini;
                 r.Gemini = Library.Example().With(m =>
@@ -471,7 +472,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Web.Controllers.Publishing
 
             var retrieveSignOffTest3Record = new Record().With(r =>
             {
-                r.Id = new Guid("dbb9bf6e-c128-4611-bd3f-73bd7a9ae4e9");
+                r.Id = Helpers.AddCollection("dbb9bf6e-c128-4611-bd3f-73bd7a9ae4e9");
                 r.Path = @"X:\path\to\assessment\test";
                 r.Validation = Validation.Gemini;
                 r.Gemini = Library.Example().With(m =>
@@ -500,7 +501,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Web.Controllers.Publishing
 
             var retrieveSignOffTest4Record = new Record().With(r =>
             {
-                r.Id = new Guid("e1255428-90ec-4d8e-a9d9-0cf210c64dbd");
+                r.Id = Helpers.AddCollection("e1255428-90ec-4d8e-a9d9-0cf210c64dbd");
                 r.Path = @"X:\path\to\assessment\test";
                 r.Validation = Validation.Gemini;
                 r.Gemini = Library.Example().With(m =>
@@ -528,7 +529,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Web.Controllers.Publishing
 
             var retrieveSignOffTest5Record = new Record().With(r =>
             {
-                r.Id = new Guid("f37efe7f-3033-42d4-83a0-f6d7ab59d0c2");
+                r.Id = Helpers.AddCollection("f37efe7f-3033-42d4-83a0-f6d7ab59d0c2");
                 r.Path = @"X:\path\to\assessment\test";
                 r.Validation = Validation.Gemini;
                 r.Gemini = Library.Example().With(m =>
@@ -561,7 +562,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Web.Controllers.Publishing
 
             var retrieveSignOffTest6Record = new Record().With(r =>
             {
-                r.Id = new Guid("d038b054-269e-4d4f-a635-da75929e8fee");
+                r.Id = Helpers.AddCollection("d038b054-269e-4d4f-a635-da75929e8fee");
                 r.Path = @"X:\path\to\assessment\test";
                 r.Validation = Validation.Gemini;
                 r.Gemini = Library.Example().With(m =>
@@ -594,7 +595,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Web.Controllers.Publishing
 
             var retrieveSignOffTest7Record = new Record().With(r =>
             {
-                r.Id = new Guid("7ec978bc-2ecd-4ab4-a233-5aead4947ab2");
+                r.Id = Helpers.AddCollection("7ec978bc-2ecd-4ab4-a233-5aead4947ab2");
                 r.Path = @"X:\path\to\assessment\test";
                 r.Validation = Validation.Gemini;
                 r.Gemini = Library.Example().With(m =>
@@ -627,7 +628,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Web.Controllers.Publishing
 
             var retrieveSignOffTest8Record = new Record().With(r =>
             {
-                r.Id = new Guid("fd32ba72-41d4-4769-a365-34ad570fbf7b");
+                r.Id = Helpers.AddCollection("fd32ba72-41d4-4769-a365-34ad570fbf7b");
                 r.Path = @"X:\path\to\assessment\test";
                 r.Validation = Validation.Gemini;
                 r.Gemini = Library.Example().With(m =>
@@ -686,7 +687,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Web.Controllers.Publishing
         {
             var record = new Record().With(r =>
             {
-                r.Id = new Guid("10fc0e18-1250-46fe-825a-2003b7dbcfc5");
+                r.Id = Helpers.AddCollection("10fc0e18-1250-46fe-825a-2003b7dbcfc5");
                 r.Path = @"X:\path\to\signoff\test";
                 r.Validation = Validation.Gemini;
                 r.Gemini = Library.Example().With(m =>
@@ -717,7 +718,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Web.Controllers.Publishing
         {
             var record = new Record().With(r =>
             {
-                r.Id = new Guid("3ef3b040-30b4-4399-b223-e8b3599e415a");
+                r.Id = Helpers.AddCollection("3ef3b040-30b4-4399-b223-e8b3599e415a");
                 r.Path = @"X:\path\to\signoff\test";
                 r.Validation = Validation.Gemini;
                 r.Gemini = Library.Example().With(m =>
@@ -748,7 +749,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Web.Controllers.Publishing
         {
             var record = new Record().With(r =>
             {
-                r.Id = new Guid("10e31ac3-0066-47b8-8121-18059e9c3ca0");
+                r.Id = Helpers.AddCollection("10e31ac3-0066-47b8-8121-18059e9c3ca0");
                 r.Path = @"X:\path\to\signoff\test";
                 r.Validation = Validation.Gemini;
                 r.Gemini = Library.Example().With(m =>

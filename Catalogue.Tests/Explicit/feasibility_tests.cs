@@ -10,10 +10,10 @@ using Catalogue.Data.Test;
 using Catalogue.Gemini.Model;
 using Catalogue.Gemini.Spatial;
 using NUnit.Framework;
-using Raven.Abstractions.Indexing;
 using Raven.Client;
-using Raven.Client.Document;
-using Raven.Client.Indexes;
+using Raven.Client.Documents;
+using Raven.Client.Documents.Indexes;
+using Raven.Client.Documents.Session;
 
 namespace Catalogue.Tests.Explicit
 {
@@ -84,7 +84,7 @@ namespace Catalogue.Tests.Explicit
         public void query_gemini_records()
         {
             IDocumentStore store = new DocumentStore {Url = RavenUrl}.Initialize();
-            RavenUtility.WaitForIndexing(store);
+            WaitForIndexing(store);
 
             string peakDistrictBbox = BoundingBoxUtility.ToWkt(new BoundingBox
             {
