@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Catalogue.Data;
+﻿using Catalogue.Data;
 using Catalogue.Data.Indexes;
 using Catalogue.Data.Model;
 using Catalogue.Data.Query;
@@ -12,8 +7,9 @@ using Catalogue.Gemini.Model;
 using Catalogue.Utilities.Clone;
 using FluentAssertions;
 using NUnit.Framework;
-using Raven.Client;
-using Raven.Abstractions.Extensions;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace Catalogue.Tests.Explicit
 {
@@ -28,7 +24,12 @@ namespace Catalogue.Tests.Explicit
 
             using (var db = documentStore.OpenSession())
             {
-                new[] { "foo", "foo (bar)" }.Select(MakeRecord).ForEach(db.Store);
+                var records = new[] {"foo", "foo (bar)"}.Select(MakeRecord);
+
+                foreach (var record in records)
+                {
+                    db.Store(record);
+                }
 
                 db.SaveChanges();
             }

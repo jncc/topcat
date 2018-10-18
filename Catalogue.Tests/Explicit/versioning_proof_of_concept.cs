@@ -2,28 +2,31 @@
 using Catalogue.Data;
 using FluentAssertions;
 using NUnit.Framework;
+using Raven.Client.Documents.Operations.Revisions;
 using Raven.Client.Documents.Session;
 
 namespace Catalogue.Tests.Explicit
 {
     internal class versioning_proof_of_concept : DatabaseTestFixture
     {
+        // raven4
+        [Ignore]
         [Test, Explicit]
         public void versioning_should_work()
         {
             var store = DatabaseFactory.InMemory();
 
-            store.Configuration.Settings.Add("Raven/ActiveBundles", "Versioning");
+            //store.Configuration.Settings.Add("Raven/ActiveBundles", "Versioning");
             store.Initialize();
 
             using (IDocumentSession db = store.OpenSession())
             {
-                db.Store(new VersioningConfiguration
-                {
-                    Exclude = false,
-                    Id = "Raven/Versioning/Items",
-                    MaxRevisions = int.MaxValue
-                });
+                //db.Store(new RevisionsConfiguration
+                //{
+                //    Exclude = false,
+                //    Id = "Raven/Versioning/Items",
+                //    MaxRevisions = int.MaxValue
+                //});
                 db.SaveChanges();
             }
 
@@ -44,7 +47,7 @@ namespace Catalogue.Tests.Explicit
             {
                 Item item = db.Query<Item>().Customize(x => x.WaitForNonStaleResults()).First();
                 string id = db.Advanced.GetDocumentId(item);
-                Item[] revisions = db.Advanced.GetRevisionsFor<Item>(id, 0, 10);
+                var revisions = db.Advanced.Revisions.GetFor<Item>(id, 0, 10);
 
                 revisions.Should().NotBeEmpty();
             }

@@ -47,7 +47,7 @@ namespace Catalogue.Tests.Explicit
                 {
                     Highlightings lites;
                     db.Advanced.DocumentQuery<Item>("SearchIndex")
-                        .WaitForNonStaleResultsAsOfNow()
+                        .WaitForNonStaleResults()
                         .Highlight("Title", 128, 2, out lites)
                         .Search("Title", q)
                         .ToList();
@@ -72,7 +72,7 @@ namespace Catalogue.Tests.Explicit
                     select new {doc.Title});
 
 
-                Index(x => x.Title, FieldIndexing.Analyzed);
+                Index(x => x.Title, FieldIndexing.Search);
                 Store(x => x.Title, FieldStorage.Yes);
                 TermVector(x => x.Title, FieldTermVector.WithPositionsAndOffsets);
             }

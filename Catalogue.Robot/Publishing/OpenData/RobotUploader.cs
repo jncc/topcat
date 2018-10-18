@@ -7,6 +7,7 @@ using log4net;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
+using Catalogue.Data;
 using Raven.Client.Documents.Session;
 using static Catalogue.Utilities.Text.WebificationUtility;
 
@@ -79,9 +80,9 @@ namespace Catalogue.Robot.Publishing.OpenData
                     {
                         // "normal" case - if the resource locator is blank or already data.jncc.gov.uk
                         // upload the resource pointed at by record.Path, and update the resource locator to match
-                        uploadHelper.UploadDataFile(record.Id, record.Path);
+                        uploadHelper.UploadDataFile(Helpers.RemoveCollection(record.Id), record.Path);
                         string dataHttpPath = uploadHelper.GetHttpRootUrl() + "/" +
-                                                GetUnrootedDataPath(record.Id, record.Path);
+                                                GetUnrootedDataPath(Helpers.RemoveCollection(record.Id), record.Path);
                         uploadRecordService.UpdateResourceLocatorToMatchMainDataFile(record, dataHttpPath);
                     }
                     else
@@ -92,16 +93,16 @@ namespace Catalogue.Robot.Publishing.OpenData
                     
                 }
 
-                uploadHelper.UploadMetadataDocument(record);
-                uploadHelper.UploadWafIndexDocument(record);
+                uploadHelper.UploadMetadataDocument(Helpers.RemoveCollectionFromId(record));
+                uploadHelper.UploadWafIndexDocument(Helpers.RemoveCollectionFromId(record));
 
                 uploadRecordService.UpdateLastSuccess(record, attempt);
             }
             catch (WebException ex)
             {
-                string message = ex.Message + (ex.InnerException != null ? ex.InnerException.Message : "");
-                attempt.Message = message;
-                Logger.Error("Upload failed for record with GUID="+record.Id, ex);
+                attempt.Message = ex.Message + (ex.InnerException != null ? ex.InnerException.Message : "");
+                string errorDescription = ((FtpWebResponse) ex.Response).StatusDescription;
+                Logger.Error($"Upload failed for record with GUID={record.Id}, error description is: {errorDescription}", ex);
             }
         }
     }

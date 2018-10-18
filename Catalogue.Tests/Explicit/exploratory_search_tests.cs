@@ -5,6 +5,7 @@ using Catalogue.Data.Model;
 using FluentAssertions;
 using NUnit.Framework;
 using Raven.Client;
+using Raven.Client.Documents.Queries.Highlighting;
 
 namespace Catalogue.Tests.Explicit
 {
@@ -32,11 +33,16 @@ namespace Catalogue.Tests.Explicit
         [Explicit, Test]
         public void should_be_able_to_highlight_search_terms()
         {
-            FieldHighlightings lites;
+            Highlightings lites;
+
+            var highlightingOptions = new HighlightingOptions
+            {
+                PreTags = new[] { "<b>" },
+                PostTags = new[] { "</b>" }
+            };
 
             List<Record> results = Db.Advanced.DocumentQuery<Record>("Records/SearchQuery")
-                .Highlight("Title", 128, 2, out lites)
-                .SetHighlighterTags("<strong>", "</strong>")
+                .Highlight("Title", 128, 2, highlightingOptions, out lites)
                 .Search("Title", "north").Boost(10)
                 .Take(10)
                 .ToList();

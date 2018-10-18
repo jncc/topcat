@@ -8,6 +8,7 @@ using FluentAssertions;
 using NUnit.Framework;
 using System;
 using System.Linq;
+using Catalogue.Data;
 using static Catalogue.Tests.TestUserInfo;
 
 namespace Catalogue.Tests.Slow.Catalogue.Data.Indexes
@@ -22,7 +23,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Data.Indexes
 
             var record1 = new Record().With(r =>
             {
-                r.Id = new Guid("7ce85158-f6f9-491d-902e-b3f2c8bb5264");
+                r.Id = Helpers.AddCollection("7ce85158-f6f9-491d-902e-b3f2c8bb5264");
                 r.Path = @"X:\path\to\duplicate\record\1";
                 r.Gemini = new Metadata().With(m =>
                 {
@@ -33,7 +34,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Data.Indexes
             });
             var record2 = new Record().With(r =>
             {
-                r.Id = new Guid("afb4ebbf-4286-47ed-b09f-a4d40af139e1");
+                r.Id = Helpers.AddCollection("afb4ebbf-4286-47ed-b09f-a4d40af139e1");
                 r.Path = @"X:\path\to\duplicate\record\2";
                 r.Gemini = new Metadata().With(m =>
                 {

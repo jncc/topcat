@@ -24,7 +24,7 @@ namespace Catalogue.Tests.Explicit.Catalogue.Robot
         public void yep()
         {
             var checker = new Checker(Db, new FileLinkChecker());
-            var result = checker.CheckLink(Guid.NewGuid(), @"C:\work");
+            var result = checker.CheckLink("records/"+Guid.NewGuid(), @"C:\work");
 
             result.Status.Should().Be(LinkCheckStatus.Ok);
         }

@@ -43,7 +43,7 @@ namespace Catalogue.Robot.Publishing.OpenData
         {
             string resourceUrl = config.HttpRootUrl + "/" + WebificationUtility.GetUnrootedDataPath(record.Id, record.Path);
             var metaXmlDoc = xmlHelper.GetMetadataDocument(record, resourceUrl);
-            string metaPath = String.Format("waf/{0}.xml", record.Id);
+            string metaPath = $"waf/{record.Id}.xml";
             string metaFtpPath = config.FtpRootUrl + "/" + metaPath;
 
             Logger.Info("Metadata file path: " + metaPath);
@@ -55,7 +55,7 @@ namespace Catalogue.Robot.Publishing.OpenData
 
         public void UploadWafIndexDocument(Record record)
         {
-            string indexDocFtpPath = String.Format("{0}/waf/index.html", config.FtpRootUrl);
+            string indexDocFtpPath = $"{config.FtpRootUrl}/waf/index.html";
             string indexDocHtml = ftpClient.DownloadString(indexDocFtpPath);
             string updatedIndexDoc = xmlHelper.UpdateWafIndexDocument(record, indexDocHtml);
             ftpClient.UploadString(indexDocFtpPath, updatedIndexDoc);

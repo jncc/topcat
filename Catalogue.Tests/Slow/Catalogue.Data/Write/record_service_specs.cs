@@ -10,6 +10,8 @@ using Moq;
 using NUnit.Framework;
 using Raven.Client;
 using System;
+using Catalogue.Data;
+using Raven.Client.Documents.Session;
 using static Catalogue.Tests.TestUserInfo;
 
 namespace Catalogue.Tests.Slow.Catalogue.Data.Write
@@ -184,7 +186,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Data.Write
         [Test]
         public void should_update_footer_for_existing_record()
         {
-            var recordId = new Guid("4d909f48-4547-4129-a663-bfab64ae97e9");
+            var recordId = Helpers.AddCollection("4d909f48-4547-4129-a663-bfab64ae97e9");
             var record = new Record
             {
                 Id = recordId,

@@ -5,8 +5,6 @@ using Catalogue.Data.Test;
 using Catalogue.Gemini.Templates;
 using FluentAssertions;
 using NUnit.Framework;
-using Raven.Client;
-using Raven.Client.Bundles.Versioning;
 using Raven.Client.Documents;
 using Raven.Client.Documents.Session;
 
@@ -44,7 +42,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Data.Versioning
             using (IDocumentSession db = store.OpenSession())
             {
                 var record = db.Load<Record>(id);
-                Record[] revisions = db.Advanced.GetRevisionsFor<Record>(db.Advanced.GetDocumentId(record), 0, 10);
+                var revisions = db.Advanced.Revisions.GetFor<Record>(db.Advanced.GetDocumentId(record), 0, 10);
 
                 revisions.Count().Should().Be(2);
                 revisions.Select(r => r.Revision).Should().ContainInOrder(new[] {1, 2});

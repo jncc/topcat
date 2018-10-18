@@ -72,7 +72,7 @@ namespace Catalogue.Data.Import
             {
                 foreach (var record in records)
                 {
-                    var result = recordService.Insert(record, userInfo);
+                    var result = recordService.Insert(Helpers.AddCollectionToId(record), userInfo);
 
                     if (!result.Success)
                     {

@@ -1,12 +1,7 @@
-﻿using System;
+﻿using Catalogue.Data.Indexes;
+using NUnit.Framework;
 using System.Collections.Generic;
 using System.Linq;
-using Catalogue.Data.Indexes;
-using Catalogue.Data.Model;
-using FluentAssertions;
-using NUnit.Framework;
-using Raven.Abstractions.Extensions;
-using Raven.Client;
 
 namespace Catalogue.Tests.Slow.Catalogue.Data.Indexes
 {

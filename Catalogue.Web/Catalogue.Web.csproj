@@ -668,7 +668,7 @@
       <Version>2.6.2</Version>
     </PackageReference>
     <PackageReference Include="RavenDB.Client">
-      <Version>4.1.1</Version>
+      <Version>4.1.2</Version>
     </PackageReference>
     <PackageReference Include="System.Diagnostics.Contracts">
       <Version>4.3.0</Version>

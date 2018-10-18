@@ -13,6 +13,7 @@ using NUnit.Framework;
 using Raven.Client;
 using Raven.Client.Documents;
 using Raven.Client.Documents.Indexes;
+using Raven.Client.Documents.Indexes.Spatial;
 using Raven.Client.Documents.Session;
 
 namespace Catalogue.Tests.Explicit
@@ -56,7 +57,7 @@ namespace Catalogue.Tests.Explicit
             q.ForEach(Console.WriteLine);
 
 
-            IDocumentStore store = new DocumentStore {Url = RavenUrl}.Initialize();
+            IDocumentStore store = new DocumentStore { Urls = new[] { RavenUrl } }.Initialize();
 
             using (IDocumentSession db = store.OpenSession())
             {
@@ -80,11 +81,13 @@ namespace Catalogue.Tests.Explicit
             IndexCreation.CreateIndexes(typeof (Record).Assembly, store);
         }
 
+        // raven4
+        [Ignore]
         [Explicit, Test]
         public void query_gemini_records()
         {
-            IDocumentStore store = new DocumentStore {Url = RavenUrl}.Initialize();
-            WaitForIndexing(store);
+            IDocumentStore store = new DocumentStore { Urls = new[] { RavenUrl } }.Initialize();
+            //WaitForIndexing(store);
 
             string peakDistrictBbox = BoundingBoxUtility.ToWkt(new BoundingBox
             {
@@ -99,7 +102,7 @@ namespace Catalogue.Tests.Explicit
             using (IDocumentSession db = store.OpenSession())
             {
                 List<Record> results = db.Query<Record, RecordSpatialIndex>()
-                    .Customize(x => x.RelatesToShape(FieldNames.Spatial, peakDistrictBbox, SpatialRelation.Intersects))
+                    //.Customize(x => x.RelatesToShape(FieldNames.Spatial, peakDistrictBbox, SpatialRelation.Intersects))
                     .Where(i => i.Gemini.Title.StartsWith("GA"))
                     //.Take(10)
                     .ToList();

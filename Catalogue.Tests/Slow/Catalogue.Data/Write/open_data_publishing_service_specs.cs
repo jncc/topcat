@@ -10,6 +10,7 @@ using NUnit.Framework;
 using System;
 using System.Collections.Generic;
 using System.Net;
+using Catalogue.Data;
 using Catalogue.Robot.Publishing.OpenData;
 using Moq;
 
@@ -22,7 +23,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Data.Write
         {
             var record = new Record().With(r =>
             {
-                r.Id = new Guid("eb189a2f-ebce-4232-8dc6-1ad486cacf21");
+                r.Id = Helpers.AddCollection("eb189a2f-ebce-4232-8dc6-1ad486cacf21");
                 r.Path = @"X:\path\to\upload\test";
                 r.Validation = Validation.Gemini;
                 r.Gemini = Library.Example().With(m =>
@@ -85,7 +86,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Data.Write
         {
             var record = new Record().With(r =>
             {
-                r.Id = new Guid("eb189a2f-ebce-4232-8dc6-1ad486cacf21");
+                r.Id = Helpers.AddCollection("eb189a2f-ebce-4232-8dc6-1ad486cacf21");
                 r.Path = @"X:\path\to\upload\test";
                 r.Validation = Validation.Gemini;
                 r.Gemini = Library.Example().With(m =>
@@ -149,7 +150,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Data.Write
         {
             var record = new Record().With(r =>
             {
-                r.Id = new Guid("8ad134fa-9045-40af-a0cb-02bc3e868f5a");
+                r.Id = Helpers.AddCollection("8ad134fa-9045-40af-a0cb-02bc3e868f5a");
                 r.Path = @"X:\path\to\upload\test";
                 r.Validation = Validation.Gemini;
                 r.Gemini = Library.Example().With(m =>
@@ -208,7 +209,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Data.Write
         {
             var record = new Record().With(r =>
             {
-                r.Id = new Guid("e9f1eb92-3fcb-441f-9fdf-520ff52bcf56");
+                r.Id = Helpers.AddCollection("e9f1eb92-3fcb-441f-9fdf-520ff52bcf56");
                 r.Path = @"X:\path\to\upload\test";
                 r.Validation = Validation.Gemini;
                 r.Gemini = Library.Example().With(m =>
@@ -273,7 +274,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Data.Write
         {
             var record = new Record().With(r =>
             {
-                r.Id = new Guid("bd89e71a-07c4-4ce5-92f6-5121b104b8fe");
+                r.Id = Helpers.AddCollection("bd89e71a-07c4-4ce5-92f6-5121b104b8fe");
                 r.Path = @"X:\path\to\upload\test";
                 r.Validation = Validation.Gemini;
                 r.Gemini = Library.Example().With(m =>
@@ -338,7 +339,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Data.Write
         {
             var record = new Record().With(r =>
             {
-                r.Id = new Guid("5bc8cd79-7d7f-4c71-9653-cbe82226e174");;
+                r.Id = Helpers.AddCollection("5bc8cd79-7d7f-4c71-9653-cbe82226e174");;
                 r.Path = @"X:\path\to\upload\test";
                 r.Validation = Validation.Gemini;
                 r.Gemini = Library.Example().With(m =>
@@ -401,7 +402,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Data.Write
         [Test]
         public void record_not_corpulent_with_populated_resource_locator()
         {
-            var recordId = new Guid("88399fba-b6f5-4e0a-b1d1-fc0668ac7515");
+            var recordId = Helpers.AddCollection("88399fba-b6f5-4e0a-b1d1-fc0668ac7515");
             var record = new Record().With(r =>
             {
                 r.Id = recordId;

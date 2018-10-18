@@ -1,10 +1,8 @@
-﻿using System;
-using System.IO;
-using System.Linq;
-using Catalogue.Data.Model;
+﻿using Catalogue.Data.Model;
 using FluentAssertions;
 using NUnit.Framework;
-using Raven.Client;
+using Raven.Client.Documents.Session;
+using System.Linq;
 
 namespace Catalogue.Tests.Slow
 {
