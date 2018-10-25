@@ -11,13 +11,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using Catalogue.Data.Write;
-using Catalogue.Web.Account;
-using Moq;
 using Raven.Client.Documents.Session;
 
 namespace Catalogue.Tests.Slow.Catalogue.Web.Controllers.Publishing
 {
-    class publishing_controller_specs_for_sign_off : DatabaseTestFixture
+    class publishing_controller_specs_for_sign_off
     {
         [Test]
         public void successful_open_data_sign_off_test()
@@ -46,7 +44,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Web.Controllers.Publishing
                 r.Footer = new Footer();
             });
 
-            var resultRecord = GetSignOffPublishingResponse(record).Record;
+            var resultRecord = GetSignOffPublishingResponse(PublishingTestHelper.GetNewDbSessionWithThisRecordAdded(record), record).Record;
             resultRecord.Publication.Should().NotBeNull();
 
             var openDataInfo = resultRecord.Publication.OpenData;
@@ -88,7 +86,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Web.Controllers.Publishing
                 r.Footer = new Footer();
             });
 
-            Action a = () => GetSignOffPublishingResponse(record);
+            Action a = () => GetSignOffPublishingResponse(PublishingTestHelper.GetNewDbSessionWithThisRecordAdded(record), record);
             a.ShouldThrow<InvalidOperationException>().And.Message.Should().Be("Couldn't sign-off record for publication - assessment not completed or out of date");
         }
 
@@ -128,7 +126,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Web.Controllers.Publishing
                 r.Footer = new Footer();
             });
 
-            Action a = () => GetSignOffPublishingResponse(record);
+            Action a = () => GetSignOffPublishingResponse(PublishingTestHelper.GetNewDbSessionWithThisRecordAdded(record), record);
             a.ShouldThrow<InvalidOperationException>().And.Message.Should().Be("The record has already been signed off");
         }
 
@@ -162,7 +160,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Web.Controllers.Publishing
                 r.Footer = new Footer();
             });
 
-            Action a = () => GetSignOffPublishingResponse(record);
+            Action a = () => GetSignOffPublishingResponse(PublishingTestHelper.GetNewDbSessionWithThisRecordAdded(record), record);
             a.ShouldThrow<Exception>().And.Message.Should().Be("Error while saving sign off changes");
         }
 
@@ -182,7 +180,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Web.Controllers.Publishing
                 r.Footer = new Footer();
             });
 
-            Action a = () => GetSignOffPublishingResponse(record);
+            Action a = () => GetSignOffPublishingResponse(PublishingTestHelper.GetNewDbSessionWithThisRecordAdded(record), record);
             a.ShouldThrow<InvalidOperationException>().And.Message.Should().Be("Couldn't sign-off record for publication - assessment not completed or out of date");
         }
 
@@ -230,8 +228,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Web.Controllers.Publishing
                 r.Footer = new Footer();
             });
 
-            var resultRecord = GetSignOffPublishingResponse(record)
-                .Record;
+            var resultRecord = GetSignOffPublishingResponse(PublishingTestHelper.GetNewDbSessionWithThisRecordAdded(record), record).Record;
             resultRecord.Publication.Should().NotBeNull();
 
             var openDataInfo = resultRecord.Publication.OpenData;
@@ -243,7 +240,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Web.Controllers.Publishing
             openDataInfo.SignOff.User.DisplayName.Should().Be("Test User");
             openDataInfo.SignOff.User.Email.Should().Be("tester@example.com");
             openDataInfo.SignOff.DateUtc.Should().NotBe(DateTime.MinValue);
-            openDataInfo.SignOff.DateUtc.Should().NotBe(DateTime.Parse("2017-07-10T00:00:00.0000000Z"));       
+            openDataInfo.SignOff.DateUtc.Should().NotBe(DateTime.Parse("2017-07-10T00:00:00.0000000Z"));
         }
 
         [Test]
@@ -290,26 +287,23 @@ namespace Catalogue.Tests.Slow.Catalogue.Web.Controllers.Publishing
                 r.Footer = new Footer();
             });
 
-            using (var db = ReusableDocumentStore.OpenSession())
-            {
-                Action a = () => GetSignOffPublishingResponse(db, record);
-                a.ShouldThrow<InvalidOperationException>().And.Message.Should()
-                    .Be("The record has already been signed off");
+            IDocumentSession db = PublishingTestHelper.GetNewDbSessionWithThisRecordAdded(record);
+            Action a = () => GetSignOffPublishingResponse(db, record);
+            a.ShouldThrow<InvalidOperationException>().And.Message.Should().Be("The record has already been signed off");
 
-                var resultRecord = db.Load<Record>(record.Id);
-                resultRecord.Publication.Should().NotBeNull();
+            var resultRecord = db.Load<Record>(record.Id);
+            resultRecord.Publication.Should().NotBeNull();
 
-                var openDataInfo = resultRecord.Publication.OpenData;
-                openDataInfo.Should().NotBeNull();
-                openDataInfo.LastAttempt.DateUtc.Should().Be(new DateTime(2017, 07, 12));
-                openDataInfo.LastSuccess.DateUtc.Should().Be(new DateTime(2017, 07, 12));
-                openDataInfo.Resources.Should().BeNull();
-                openDataInfo.Paused.Should().BeFalse();
-                openDataInfo.SignOff.User.DisplayName.Should().Be("Cathy");
-                openDataInfo.SignOff.User.Email.Should().Be("cathy@example.com");
-                openDataInfo.SignOff.DateUtc.Should().Be(new DateTime(2017, 07, 10));
-                resultRecord.Gemini.MetadataDate.Should().NotBe(openDataInfo.SignOff.DateUtc);
-            }
+            var openDataInfo = resultRecord.Publication.OpenData;
+            openDataInfo.Should().NotBeNull();
+            openDataInfo.LastAttempt.DateUtc.Should().Be(new DateTime(2017, 07, 12));
+            openDataInfo.LastSuccess.DateUtc.Should().Be(new DateTime(2017, 07, 12));
+            openDataInfo.Resources.Should().BeNull();
+            openDataInfo.Paused.Should().BeFalse();
+            openDataInfo.SignOff.User.DisplayName.Should().Be("Cathy");
+            openDataInfo.SignOff.User.Email.Should().Be("cathy@example.com");
+            openDataInfo.SignOff.DateUtc.Should().Be(new DateTime(2017, 07, 10));
+            resultRecord.Gemini.MetadataDate.Should().NotBe(openDataInfo.SignOff.DateUtc);
         }
 
         [Test]
@@ -352,26 +346,23 @@ namespace Catalogue.Tests.Slow.Catalogue.Web.Controllers.Publishing
                 r.Footer = new Footer();
             });
 
-            using (var db = ReusableDocumentStore.OpenSession())
-            {
-                Action a = () => GetSignOffPublishingResponse(db, record);
-                a.ShouldThrow<InvalidOperationException>().And.Message.Should()
-                    .Be("The record has already been signed off");
+            var db = PublishingTestHelper.GetNewDbSessionWithThisRecordAdded(record);
+            Action a = () => GetSignOffPublishingResponse(db, record);
+            a.ShouldThrow<InvalidOperationException>().And.Message.Should().Be("The record has already been signed off");
 
-                var resultRecord = db.Load<Record>(record.Id);
-                resultRecord.Publication.Should().NotBeNull();
+            var resultRecord = db.Load<Record>(record.Id);
+            resultRecord.Publication.Should().NotBeNull();
 
-                var openDataInfo = resultRecord.Publication.OpenData;
-                openDataInfo.Should().NotBeNull();
-                openDataInfo.LastAttempt.DateUtc.Should().Be(new DateTime(2017, 07, 12));
-                openDataInfo.LastSuccess.Should().BeNull();
-                openDataInfo.Resources.Should().BeNull();
-                openDataInfo.Paused.Should().BeFalse();
-                openDataInfo.SignOff.User.DisplayName.Should().Be("Cathy");
-                openDataInfo.SignOff.User.Email.Should().Be("cathy@example.com");
-                openDataInfo.SignOff.DateUtc.Should().Be(new DateTime(2017, 07, 10));
-                resultRecord.Gemini.MetadataDate.Should().NotBe(openDataInfo.SignOff.DateUtc);
-            }
+            var openDataInfo = resultRecord.Publication.OpenData;
+            openDataInfo.Should().NotBeNull();
+            openDataInfo.LastAttempt.DateUtc.Should().Be(new DateTime(2017, 07, 12));
+            openDataInfo.LastSuccess.Should().BeNull();
+            openDataInfo.Resources.Should().BeNull();
+            openDataInfo.Paused.Should().BeFalse();
+            openDataInfo.SignOff.User.DisplayName.Should().Be("Cathy");
+            openDataInfo.SignOff.User.Email.Should().Be("cathy@example.com");
+            openDataInfo.SignOff.DateUtc.Should().Be(new DateTime(2017, 07, 10));
+            resultRecord.Gemini.MetadataDate.Should().NotBe(openDataInfo.SignOff.DateUtc);
         }
 
         [Test]
@@ -418,26 +409,23 @@ namespace Catalogue.Tests.Slow.Catalogue.Web.Controllers.Publishing
                 r.Footer = new Footer();
             });
 
-            using (var db = ReusableDocumentStore.OpenSession())
-            {
-                Action a = () => GetSignOffPublishingResponse(db, record);
-                a.ShouldThrow<InvalidOperationException>().And.Message.Should().Be(
-                    "Couldn't sign-off record for publication - assessment not completed or out of date");
+            var db = PublishingTestHelper.GetNewDbSessionWithThisRecordAdded(record);
+            Action a = () => GetSignOffPublishingResponse(db, record);
+            a.ShouldThrow<InvalidOperationException>().And.Message.Should().Be("Couldn't sign-off record for publication - assessment not completed or out of date");
 
-                var resultRecord = db.Load<Record>(record.Id);
-                resultRecord.Publication.Should().NotBeNull();
+            var resultRecord = db.Load<Record>(record.Id);
+            resultRecord.Publication.Should().NotBeNull();
 
-                var openDataInfo = resultRecord.Publication.OpenData;
-                openDataInfo.Should().NotBeNull();
-                openDataInfo.LastAttempt.DateUtc.Should().Be(new DateTime(2017, 07, 11));
-                openDataInfo.LastSuccess.DateUtc.Should().Be(new DateTime(2017, 07, 11));
-                openDataInfo.Resources.Should().BeNull();
-                openDataInfo.Paused.Should().BeFalse();
-                openDataInfo.SignOff.User.DisplayName.Should().Be("Cathy");
-                openDataInfo.SignOff.User.Email.Should().Be("cathy@example.com");
-                openDataInfo.SignOff.DateUtc.Should().Be(new DateTime(2017, 07, 10));
-                resultRecord.Gemini.MetadataDate.Should().NotBe(openDataInfo.SignOff.DateUtc);
-            }
+            var openDataInfo = resultRecord.Publication.OpenData;
+            openDataInfo.Should().NotBeNull();
+            openDataInfo.LastAttempt.DateUtc.Should().Be(new DateTime(2017, 07, 11));
+            openDataInfo.LastSuccess.DateUtc.Should().Be(new DateTime(2017, 07, 11));
+            openDataInfo.Resources.Should().BeNull();
+            openDataInfo.Paused.Should().BeFalse();
+            openDataInfo.SignOff.User.DisplayName.Should().Be("Cathy");
+            openDataInfo.SignOff.User.Email.Should().Be("cathy@example.com");
+            openDataInfo.SignOff.DateUtc.Should().Be(new DateTime(2017, 07, 10));
+            resultRecord.Gemini.MetadataDate.Should().NotBe(openDataInfo.SignOff.DateUtc);
         }
 
         [Test]
@@ -674,8 +662,9 @@ namespace Catalogue.Tests.Slow.Catalogue.Web.Controllers.Publishing
             var testRecords = new List<Record>(new [] {retrieveSignOffTest1Record, retrieveSignOffTest2Record,
                 retrieveSignOffTest3Record, retrieveSignOffTest4Record, retrieveSignOffTest5Record,
                 retrieveSignOffTest6Record, retrieveSignOffTest7Record, retrieveSignOffTest8Record});
-            
-            using (var db = ReusableDocumentStore.OpenSession())
+
+            var store = new InMemoryDatabaseHelper().Create();
+            using (var db = store.OpenSession())
             {
                 foreach (var record in testRecords)
                 {
@@ -683,9 +672,9 @@ namespace Catalogue.Tests.Slow.Catalogue.Web.Controllers.Publishing
                 }
                 db.SaveChanges();
 
-                WaitForIndexing(ReusableDocumentStore); // Allow time for indexing
+                Thread.Sleep(100); // Allow time for indexing
 
-                var publishingController = GetTestOpenDataPublishingController(db);
+                var publishingController = PublishingTestHelper.GetTestOpenDataPublishingController(db);
                 var result = publishingController.PendingSignOff();
                 result.Count.Should().Be(2);
                 result.Count(r => string.Equals(r.Title, "Retrieve Sign Off Test 1", StringComparison.CurrentCulture)).Should().Be(1);
@@ -720,7 +709,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Web.Controllers.Publishing
                 r.Footer = new Footer();
             });
 
-            Action a = () => GetSignOffPublishingResponse(record);
+            Action a = () => GetSignOffPublishingResponse(PublishingTestHelper.GetNewDbSessionWithThisRecordAdded(record), record);
             a.ShouldThrow<Exception>().And.Message.Should().Be("Record must be publishable as Open Data");
         }
 
@@ -751,7 +740,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Web.Controllers.Publishing
                 r.Footer = new Footer();
             });
 
-            Action a = () => GetSignOffPublishingResponse(record);
+            Action a = () => GetSignOffPublishingResponse(PublishingTestHelper.GetNewDbSessionWithThisRecordAdded(record), record);
             a.ShouldThrow<Exception>().And.Message.Should().Be("Record must be publishable as Open Data");
         }
 
@@ -799,43 +788,21 @@ namespace Catalogue.Tests.Slow.Catalogue.Web.Controllers.Publishing
                 r.Footer = new Footer();
             });
 
-            Action a = () => GetSignOffPublishingResponse(record);
+            Action a = () => GetSignOffPublishingResponse(PublishingTestHelper.GetNewDbSessionWithThisRecordAdded(record), record);
             a.ShouldThrow<Exception>().And.Message.Should().Be("Record must be publishable as Open Data");
         }
 
-        private static RecordServiceResult GetSignOffPublishingResponse(IDocumentSession db, Record record)
+        private RecordServiceResult GetSignOffPublishingResponse(IDocumentSession db, Record record)
         {
-            db.Store(record);
-            db.SaveChanges();
-
-            var publishingController = GetTestOpenDataPublishingController(db);
+            var publishingController = PublishingTestHelper.GetTestOpenDataPublishingController(db);
 
             var request = new SignOffRequest
             {
-                Id = Helpers.RemoveCollection(record.Id),
+                Id = record.Id,
                 Comment = "Sign off test"
             };
 
             return (RecordServiceResult) publishingController.SignOff(request);
-        }
-
-        private RecordServiceResult GetSignOffPublishingResponse(Record record)
-        {
-            using (var db = ReusableDocumentStore.OpenSession())
-            {
-                return GetSignOffPublishingResponse(db, record);
-            }
-        }
-
-        private static OpenDataPublishingController GetTestOpenDataPublishingController(IDocumentSession db)
-        {
-            var testUserContext = new TestUserContext();
-            var userContextMock = new Mock<IUserContext>();
-            userContextMock.Setup(u => u.User).Returns(testUserContext.User);
-
-            var publishingService = new OpenDataPublishingRecordService(db, new RecordValidator());
-
-            return new OpenDataPublishingController(db, publishingService, userContextMock.Object);
         }
     }
 }

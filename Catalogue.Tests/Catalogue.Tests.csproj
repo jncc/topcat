@@ -1,28 +1,32 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+<Project ToolsVersion="15.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{22E2CFF6-7EE4-4CF3-ABE8-3760B3854CF9}</ProjectGuid>
+    <ProjectGuid>{926579AE-5008-4237-811A-C408E7395DAE}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Catalogue.Tests</RootNamespace>
     <AssemblyName>Catalogue.Tests</AssemblyName>
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
-    <TargetFrameworkProfile />
+    <ProjectTypeGuids>{3AC096D0-A1C2-E12C-1390-A8335801FDAB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+    <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">15.0</VisualStudioVersion>
+    <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
+    <ReferencePath>$(ProgramFiles)\Common Files\microsoft shared\VSTT\$(VisualStudioVersion)\UITestExtensionPackages</ReferencePath>
+    <IsCodedUITest>False</IsCodedUITest>
+    <TestProjectType>UnitTest</TestProjectType>
+    <NuGetPackageImportStamp>
+    </NuGetPackageImportStamp>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
     <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <UseVSHostingProcess>false</UseVSHostingProcess>
-    <PlatformTarget>x64</PlatformTarget>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -33,102 +37,72 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="System" />
-    <Reference Include="System.ComponentModel.Composition" />
-    <Reference Include="System.Configuration" />
-    <Reference Include="System.Core" />
-    <Reference Include="System.Data.Services.Client" />
-    <Reference Include="System.IO.Compression.FileSystem" />
-    <Reference Include="System.Net.Http.Formatting, Version=5.2.2.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\Microsoft.AspNet.WebApi.Client.5.2.2\lib\net45\System.Net.Http.Formatting.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Numerics" />
-    <Reference Include="System.Web.Http, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\Microsoft.AspNet.WebApi.Core.5.2.2\lib\net45\System.Web.Http.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
-    <Reference Include="System.Data" />
-    <Reference Include="System.Xml" />
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Web" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Explicit\Catalogue.Data\Export\octonaughts_lets_do_this.cs" />
-    <Compile Include="Explicit\Catalogue.Data\Indexes\my_record_index_tests.cs" />
-    <Compile Include="Explicit\Catalogue.Import\import_runner.cs" />
-    <Compile Include="Slow\Catalogue.Data\Query\QueryTestHelper.cs" />
-    <Compile Include="Slow\Catalogue.Data\Write\basic_record_validator_specs.cs" />
-    <Compile Include="Slow\Catalogue.Data\Write\gemini_record_validator_specs.cs" />
-    <Compile Include="Slow\Catalogue.Robot\opendataxmlhelper_specs.cs" />
-    <Compile Include="Explicit\Catalogue.Robot\try_out_link_checker.cs" />
-    <Compile Include="Explicit\Catalogue.Robot\try_out_stuff.cs" />
-    <Compile Include="Explicit\exploratory_search_tests.cs" />
-    <Compile Include="Explicit\feasibility_tests.cs" />
-    <Compile Include="Explicit\Catalogue.Gemini\Vocabs\topic_category_codes.cs" />
-    <Compile Include="Explicit\highlighting_wildcard_queries.cs" />
-    <Compile Include="Explicit\multi_resource_spike.cs" />
-    <Compile Include="Explicit\reproduce_unexpected_query_result.cs" />
-    <Compile Include="Explicit\test_out_xml_encoding.cs" />
-    <Compile Include="Explicit\versioning_proof_of_concept.cs" />
-    <Compile Include="ISOLanguage.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Slow\Catalogue.Data\Import\when_importing_test_records.cs" />
-    <Compile Include="Slow\Catalogue.Data\Import\topcat_mapping_tests.cs" />
-    <Compile Include="Slow\Catalogue.Data\Indexes\record_count_for_keyword_index_specs.cs" />
-    <Compile Include="Slow\Catalogue.Data\Indexes\keywords_search_index_specs.cs" />
-    <Compile Include="Slow\Catalogue.Data\Indexes\records_with_duplicate_title_checker_index_tests.cs" />
-    <Compile Include="Slow\Catalogue.Data\Indexes\records_with_open_data_publication_info_index_specs.cs" />
-    <Compile Include="Slow\Catalogue.Data\Indexes\records_search_index_specs.cs" />
-    <Compile Include="Slow\Catalogue.Data\Seed\when_seeding.cs" />
-    <Compile Include="Slow\Catalogue.Data\Versioning\versioning_specs.cs" />
-    <Compile Include="Slow\Catalogue.Data\Write\open_data_publishing_service_specs.cs" />
-    <Compile Include="Slow\Catalogue.Data\Write\record_service_specs.cs" />
+    <Compile Include="DatabaseTestFixture.cs" />
     <Compile Include="Slow\Catalogue.Gemini\Validation\when_validating_the_example_document.cs" />
-    <Compile Include="Slow\Catalogue.Import\when_importing_mesh_data.cs" />
-    <Compile Include="Slow\Catalogue.Robot\robot_uploader_specs.cs" />
+    <Compile Include="Slow\Catalogue.Robot\opendataxmlhelper_specs.cs" />
     <Compile Include="Slow\Catalogue.Utilities\jncc_drive_mappings_tests.cs" />
     <Compile Include="Slow\Catalogue.Web\Controllers\Account\account_controller_specs.cs" />
     <Compile Include="Slow\Catalogue.Web\Controllers\Export\export_controller_tests.cs" />
-    <Compile Include="Slow\Catalogue.Web\Controllers\Publishing\PublishingTestHelper.cs" />
-    <Compile Include="Slow\Catalogue.Web\Controllers\Publishing\publishing_controller_specs_for_sign_off.cs" />
     <Compile Include="Slow\Catalogue.Web\Controllers\Publishing\publishing_controller_specs_for_assessment.cs" />
+    <Compile Include="Slow\Catalogue.Web\Controllers\Publishing\publishing_controller_specs_for_sign_off.cs" />
     <Compile Include="Slow\Catalogue.Web\Controllers\Records\records_controllers_tests.cs" />
-    <Compile Include="Slow\Catalogue.Data\Query\record_querier_filter_specs.cs" />
-    <Compile Include="Slow\Catalogue.Data\Query\record_querier_search_specs.cs" />
-    <Compile Include="Slow\Catalogue.Data\Query\record_querier_sort_specs.cs" />
     <Compile Include="Slow\Catalogue.Web\Controllers\Usage\usage_controller_specs.cs" />
-    <Compile Include="Slow\Spatial\when_querying_spatial_test_data.cs" />
-    <Compile Include="Slow\when_testing_this_application.cs" />
-    <Compile Include="DatabaseTestFixture.cs" />
     <Compile Include="TestUserInfo.cs" />
-    <Compile Include="Web\Search\SearchTest.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
-    <EmbeddedResource Include="TestResources\records\c6f3632d-8789-460b-a09d-c132841a7190.json" />
     <EmbeddedResource Include="TestResources\records\4cb2cca3-ec95-4962-9618-8556d88390fd.json" />
+    <EmbeddedResource Include="TestResources\records\721643b8-7e42-40ca-87d9-23f19221238e.json" />
+    <EmbeddedResource Include="TestResources\records\c6f3632d-8789-460b-a09d-c132841a7190.json" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="TestResources\wafs\index_initial.html" />
-    <EmbeddedResource Include="TestResources\wafs\index_expected.html" />
+    <PackageReference Include="CsvHelper">
+      <Version>2.13.2</Version>
+    </PackageReference>
+    <PackageReference Include="MSTest.TestAdapter">
+      <Version>1.2.1</Version>
+    </PackageReference>
+    <PackageReference Include="MSTest.TestFramework">
+      <Version>1.2.1</Version>
+    </PackageReference>
+    <PackageReference Include="NUnit">
+      <Version>3.11.0</Version>
+    </PackageReference>
+    <PackageReference Include="RavenDB.Embedded">
+      <Version>4.1.1</Version>
+    </PackageReference>
+    <PackageReference Include="RavenDB.TestDriver">
+      <Version>4.1.1</Version>
+    </PackageReference>
+    <PackageReference Include="System.Net.Http">
+      <Version>4.3.4</Version>
+    </PackageReference>
+    <PackageReference Include="XMLDiffPatch">
+      <Version>1.0.8.28</Version>
+    </PackageReference>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Catalogue.Data\Catalogue.Data.csproj">
-      <Project>{3ad6b61c-cab1-4cc4-8895-ba2dd3b58c59}</Project>
+      <Project>{3AD6B61C-CAB1-4CC4-8895-BA2DD3B58C59}</Project>
       <Name>Catalogue.Data</Name>
     </ProjectReference>
     <ProjectReference Include="..\Catalogue.Gemini\Catalogue.Gemini.csproj">
-      <Project>{b4789e53-cc5c-4e4e-8358-fc9739846ccc}</Project>
+      <Project>{B4789E53-CC5C-4E4E-8358-FC9739846CCC}</Project>
       <Name>Catalogue.Gemini</Name>
     </ProjectReference>
     <ProjectReference Include="..\Catalogue.Robot\Catalogue.Robot.csproj">
-      <Project>{27fdaf42-45d1-4ccf-9c5e-d6af36cd15ac}</Project>
+      <Project>{27FDAF42-45D1-4CCF-9C5E-D6AF36CD15AC}</Project>
       <Name>Catalogue.Robot</Name>
     </ProjectReference>
     <ProjectReference Include="..\Catalogue.Utilities\Catalogue.Utilities.csproj">
-      <Project>{b6b90aa2-bf70-4460-a975-5192ab5ecdca}</Project>
+      <Project>{B6B90AA2-BF70-4460-A975-5192AB5ECDCA}</Project>
       <Name>Catalogue.Utilities</Name>
     </ProjectReference>
     <ProjectReference Include="..\Catalogue.Web\Catalogue.Web.csproj">
@@ -137,77 +111,12 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Service Include="{82A7F48D-3B50-4B1E-B82E-3ADA8210C358}" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="TestResources\records\721643b8-7e42-40ca-87d9-23f19221238e.json" />
-    <EmbeddedResource Include="TestResources\wafs\721643b8-7e42-40ca-87d9-23f19221238e.xml" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="TestResources\wafs\c6f3632d-8789-460b-a09d-c132841a7190.xml" />
-  </ItemGroup>
-  <ItemGroup>
     <EmbeddedResource Include="TestResources\wafs\4cb2cca3-ec95-4962-9618-8556d88390fd.xml" />
+    <EmbeddedResource Include="TestResources\wafs\721643b8-7e42-40ca-87d9-23f19221238e.xml" />
+    <EmbeddedResource Include="TestResources\wafs\c6f3632d-8789-460b-a09d-c132841a7190.xml" />
+    <EmbeddedResource Include="TestResources\wafs\index_expected.html" />
+    <EmbeddedResource Include="TestResources\wafs\index_initial.html" />
   </ItemGroup>
-  <ItemGroup>
-    <PackageReference Include="CsvHelper">
-      <Version>2.13.2</Version>
-    </PackageReference>
-    <PackageReference Include="FluentAssertions">
-      <Version>2.0.1</Version>
-    </PackageReference>
-    <PackageReference Include="Moq">
-      <Version>4.1.1309.1617</Version>
-    </PackageReference>
-    <PackageReference Include="NETStandard.Library">
-      <Version>1.6.1</Version>
-    </PackageReference>
-    <PackageReference Include="NUnit">
-      <Version>2.6.2</Version>
-    </PackageReference>
-    <PackageReference Include="RavenDB.Client">
-      <Version>4.1.1</Version>
-    </PackageReference>
-    <PackageReference Include="System.Diagnostics.Contracts">
-      <Version>4.3.0</Version>
-    </PackageReference>
-    <PackageReference Include="System.Diagnostics.Process">
-      <Version>4.3.0</Version>
-    </PackageReference>
-    <PackageReference Include="System.IO.FileSystem.DriveInfo">
-      <Version>4.3.1</Version>
-    </PackageReference>
-    <PackageReference Include="System.Linq.Queryable">
-      <Version>4.3.0</Version>
-    </PackageReference>
-    <PackageReference Include="System.Net.Security">
-      <Version>4.3.2</Version>
-    </PackageReference>
-    <PackageReference Include="System.Net.WebSockets.Client">
-      <Version>4.3.2</Version>
-    </PackageReference>
-    <PackageReference Include="System.Reflection.TypeExtensions">
-      <Version>4.4.0</Version>
-    </PackageReference>
-    <PackageReference Include="System.Threading.Thread">
-      <Version>4.3.0</Version>
-    </PackageReference>
-    <PackageReference Include="System.Threading.ThreadPool">
-      <Version>4.3.0</Version>
-    </PackageReference>
-    <PackageReference Include="System.ValueTuple">
-      <Version>4.4.0</Version>
-    </PackageReference>
-    <PackageReference Include="XMLDiffPatch">
-      <Version>1.0.8.28</Version>
-    </PackageReference>
-  </ItemGroup>
+  <Import Project="$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets" Condition="Exists('$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets')" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
-       Other similar extension points exist, see Microsoft.Common.targets.
-  <Target Name="BeforeBuild">
-  </Target>
-  <Target Name="AfterBuild">
-  </Target>
-  -->
 </Project>

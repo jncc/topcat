@@ -3,11 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.26430.14
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Catalogue.Web", "Catalogue.Web\Catalogue.Web.csproj", "{7C796B6B-86B5-4C57-ADAA-12CF1FECDA71}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Catalogue.Web", "Catalogue.Web\Catalogue.Web.csproj", "{27B06CE1-415F-41AA-A822-E13AA61EA0D2}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Catalogue.Data", "Catalogue.Data\Catalogue.Data.csproj", "{3AD6B61C-CAB1-4CC4-8895-BA2DD3B58C59}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Catalogue.Tests", "Catalogue.Tests\Catalogue.Tests.csproj", "{22E2CFF6-7EE4-4CF3-ABE8-3760B3854CF9}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Catalogue.Tests.Old", "Catalogue.Tests\Catalogue.Tests.Old.csproj", "{22E2CFF6-7EE4-4CF3-ABE8-3760B3854CF9}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Catalogue.Utilities", "Catalogue.Utilities\Catalogue.Utilities.csproj", "{B6B90AA2-BF70-4460-A975-5192AB5ECDCA}"
 EndProject
@@ -17,16 +17,18 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Catalogue.Robot", "Catalogu
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Catalogue.Toolbox", "Catalogue.Toolbox\Catalogue.Toolbox.csproj", "{9CA6BFBA-6B9F-46B5-AB7F-70F027101328}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Catalogue.Tests", "Catalogue.Tests\Catalogue.Tests.csproj", "{926579AE-5008-4237-811A-C408E7395DAE}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{7C796B6B-86B5-4C57-ADAA-12CF1FECDA71}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{7C796B6B-86B5-4C57-ADAA-12CF1FECDA71}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{7C796B6B-86B5-4C57-ADAA-12CF1FECDA71}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{7C796B6B-86B5-4C57-ADAA-12CF1FECDA71}.Release|Any CPU.Build.0 = Release|Any CPU
+		{27B06CE1-415F-41AA-A822-E13AA61EA0D2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{27B06CE1-415F-41AA-A822-E13AA61EA0D2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{27B06CE1-415F-41AA-A822-E13AA61EA0D2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{27B06CE1-415F-41AA-A822-E13AA61EA0D2}.Release|Any CPU.Build.0 = Release|Any CPU
 		{3AD6B61C-CAB1-4CC4-8895-BA2DD3B58C59}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{3AD6B61C-CAB1-4CC4-8895-BA2DD3B58C59}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3AD6B61C-CAB1-4CC4-8895-BA2DD3B58C59}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -51,6 +53,10 @@ Global
 		{9CA6BFBA-6B9F-46B5-AB7F-70F027101328}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9CA6BFBA-6B9F-46B5-AB7F-70F027101328}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9CA6BFBA-6B9F-46B5-AB7F-70F027101328}.Release|Any CPU.Build.0 = Release|Any CPU
+		{926579AE-5008-4237-811A-C408E7395DAE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{926579AE-5008-4237-811A-C408E7395DAE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{926579AE-5008-4237-811A-C408E7395DAE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{926579AE-5008-4237-811A-C408E7395DAE}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

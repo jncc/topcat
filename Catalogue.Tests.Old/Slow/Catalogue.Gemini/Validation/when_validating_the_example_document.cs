@@ -6,6 +6,7 @@ using Catalogue.Gemini.Encoding;
 using Catalogue.Gemini.Model;
 using Catalogue.Gemini.Templates;
 using Catalogue.Gemini.Validation;
+using Catalogue.Data;
 using FluentAssertions;
 using NUnit.Framework;
 
@@ -28,7 +29,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Gemini.Validation
             Metadata metadata = Library.Example();
 
             // ...encode it into xml
-            XDocument doc = new XmlEncoder().Create("b97aac01-5e5d-4209-b626-514e40245bc1", metadata);
+            XDocument doc = new XmlEncoder().Create(Helpers.AddCollection("b97aac01-5e5d-4209-b626-514e40245bc1"), metadata);
 
             // ...validate it with the CEH validator
             ValidationResultSet result = new Validator().Validate(doc);

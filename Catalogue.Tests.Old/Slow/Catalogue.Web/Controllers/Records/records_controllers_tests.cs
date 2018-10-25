@@ -67,8 +67,8 @@ namespace Catalogue.Tests.Slow.Catalogue.Web.Controllers.Records
             var service = Mock.Of<IRecordService>();
             var controller = new RecordsController(service, db, new TestUserContext());
 
-            var result = (RecordOutputModel) controller.Get(Helpers.RemoveCollection(record.Id), true);
-            result.Record.Id.Should().Be(Guid.Empty.ToString());
+            var result = (RecordOutputModel) controller.Get(record.Id, true);
+            result.Record.Id.Should().BeEmpty();
             result.Record.Path.Should().BeEmpty();
             result.Record.Gemini.Title.Should().BeEmpty();
             result.Record.Publication.Should().BeNull();

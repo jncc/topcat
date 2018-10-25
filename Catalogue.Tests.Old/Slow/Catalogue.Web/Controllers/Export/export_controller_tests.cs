@@ -13,7 +13,6 @@ namespace Catalogue.Tests.Slow.Catalogue.Web.Controllers.Export
 {
     class export_controller_tests : DatabaseTestFixture
     {
-        // raven4 ?
 //        [Test]
         public void export_sanity_check()
         {

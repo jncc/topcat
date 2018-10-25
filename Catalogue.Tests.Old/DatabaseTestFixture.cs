@@ -1,12 +1,9 @@
 using System;
 using Catalogue.Data;
-using Catalogue.Data.Model;
 using Catalogue.Utilities.Time;
 using NUnit.Framework;
 using Raven.Client.Documents;
-using Raven.Client.Documents.Indexes;
 using Raven.Client.Documents.Session;
-using Raven.TestDriver;
 
 namespace Catalogue.Tests
 {
@@ -14,7 +11,7 @@ namespace Catalogue.Tests
     /// Extend this class for tests that require an instance of in-memory database
     /// use the Db references
     /// </summary>
-    public class DatabaseTestFixture : RavenTestDriver
+    public class DatabaseTestFixture
     {
         public static IDocumentStore ReusableDocumentStore { get; set; }
 
@@ -24,11 +21,7 @@ namespace Catalogue.Tests
             Clock.CurrentUtcDateTimeGetter = () => new DateTime(2015, 1, 1, 12, 0, 0);
 
             // initialise the ResusableDocumentStore once, in this static constructor
-            ConfigureServer(new TestServerOptions
-            {
-                FrameworkVersion = "2.1.5",
-                ServerUrl = "http://localhost:8888"
-            });
+            ReusableDocumentStore = DatabaseFactory.InMemory(); 
         }
 
         /// <summary>
@@ -36,20 +29,16 @@ namespace Catalogue.Tests
         /// </summary>
         protected IDocumentSession Db;
 
-        [OneTimeSetUp]
+        [TestFixtureSetUp]
         public void TestFixtureSetUp()
         {
-            var store = GetDocumentStore();
-            store.Initialize();
-            IndexCreation.CreateIndexes(typeof(Record).Assembly, store);
-            WaitForIndexing(store);
-            ReusableDocumentStore = store;
+            Db = ReusableDocumentStore.OpenSession();
         }
 
-        [OneTimeTearDown]
+        [TestFixtureTearDown]
         public void TestFixtureTearDown()
         {
-            ReusableDocumentStore.Dispose();
+            Db.Dispose();
         }
     }
 
@@ -69,13 +58,13 @@ namespace Catalogue.Tests
         /// </summary>
         protected IAsyncDocumentSession Db;
 
-        [OneTimeSetUp]
+        [TestFixtureSetUp]
         public void TestFixtureSetUp()
         {
             Db = ReusableDocumentStore.OpenAsyncSession();
         }
 
-        [OneTimeTearDown]
+        [TestFixtureTearDown]
         public void TestFixtureTearDown()
         {
             Db.Dispose();

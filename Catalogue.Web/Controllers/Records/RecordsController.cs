@@ -30,9 +30,8 @@ namespace Catalogue.Web.Controllers.Records
         public object Get(string id, bool clone = false)
         {
             Record record;
-
-            var guid = new Guid(id);
-            if (guid == Guid.Empty)
+            
+            if (String.IsNullOrWhiteSpace(id) || new Guid(id) == Guid.Empty)
                 record = MakeNewRecord(); // a nice empty record for making a new one
             else if (clone)
                 record = Clone(db.Load<Record>(Helpers.AddCollection(id)));

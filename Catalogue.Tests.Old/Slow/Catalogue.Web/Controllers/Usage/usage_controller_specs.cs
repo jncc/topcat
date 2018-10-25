@@ -15,7 +15,7 @@ using Catalogue.Data;
 
 namespace Catalogue.Tests.Slow.Catalogue.Web.Controllers.Usage
 {
-    public class usage_controller_specs : DatabaseTestFixture
+    public class usage_controller_specs
     {
 
         [Test]
@@ -84,8 +84,9 @@ namespace Catalogue.Tests.Slow.Catalogue.Web.Controllers.Usage
                 new Tuple<string, string, string>("DateTest_3", "Cathy", "edited"),
                 new Tuple<string, string, string>("DateTest_2", "Pete", "edited")
             };
-            
-            using (var db = ReusableDocumentStore.OpenSession())
+
+            var store = new InMemoryDatabaseHelper().Create();
+            using (var db = store.OpenSession())
             {
                 IRecordService recordService = new RecordService(db, new RecordValidator());
                 AddLastModifiedDateRecords(testRecords, recordService);

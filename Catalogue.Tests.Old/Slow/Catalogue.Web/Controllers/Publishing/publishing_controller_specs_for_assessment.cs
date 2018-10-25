@@ -14,7 +14,7 @@ using System;
 
 namespace Catalogue.Tests.Slow.Catalogue.Web.Controllers.Publishing
 {
-    class publishing_controller_specs_for_assessment : DatabaseTestFixture
+    class publishing_controller_specs_for_assessment
     {
         [Test]
         public void assessment_completed_test()
@@ -330,7 +330,8 @@ namespace Catalogue.Tests.Slow.Catalogue.Web.Controllers.Publishing
                 r.Footer = new Footer();
             });
 
-            using (var db = ReusableDocumentStore.OpenSession())
+            var store = new InMemoryDatabaseHelper().Create();
+            using (var db = store.OpenSession())
             {
                 db.Store(record);
                 db.SaveChanges();
@@ -339,7 +340,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Web.Controllers.Publishing
 
                 var request = new AssessmentRequest
                 {
-                    Id = Helpers.RemoveCollection(record.Id)
+                    Id = record.Id
                 };
 
                 Action a = () => publishingController.Assess(request);
@@ -399,8 +400,9 @@ namespace Catalogue.Tests.Slow.Catalogue.Web.Controllers.Publishing
                 };
                 r.Footer = new Footer();
             });
-            
-            using (var db = ReusableDocumentStore.OpenSession())
+
+            var store = new InMemoryDatabaseHelper().Create();
+            using (var db = store.OpenSession())
             {
                 db.Store(record);
                 db.SaveChanges();
@@ -409,7 +411,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Web.Controllers.Publishing
 
                 var request = new AssessmentRequest
                 {
-                    Id = Helpers.RemoveCollection(record.Id)
+                    Id = record.Id
                 };
 
                 Action a = () => publishingController.Assess(request);
@@ -536,7 +538,8 @@ namespace Catalogue.Tests.Slow.Catalogue.Web.Controllers.Publishing
         [Test, TestCaseSource(nameof(NotEligibleForAssessmentRecords))]
         public void not_eligible_for_assessment_when_path_is_not_file_path(Record record)
         {
-            using (var db = ReusableDocumentStore.OpenSession())
+            var store = new InMemoryDatabaseHelper().Create();
+            using (var db = store.OpenSession())
             {
                 db.Store(record);
                 db.SaveChanges();
@@ -545,7 +548,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Web.Controllers.Publishing
 
                 var request = new AssessmentRequest
                 {
-                    Id = Helpers.RemoveCollection(record.Id)
+                    Id = record.Id
                 };
 
                 Action a = () => publishingController.Assess(request);
@@ -649,9 +652,10 @@ namespace Catalogue.Tests.Slow.Catalogue.Web.Controllers.Publishing
             a.ShouldThrow<InvalidOperationException>().And.Message.Should().Be("Record must be publishable as Open Data");
         }
 
-        private Record TestAssessment(Record record)
+        private static Record TestAssessment(Record record)
         {
-            using (var db = ReusableDocumentStore.OpenSession())
+            var store = new InMemoryDatabaseHelper().Create();
+            using (var db = store.OpenSession())
             {
                 db.Store(record);
                 db.SaveChanges();
@@ -660,7 +664,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Web.Controllers.Publishing
 
                 var request = new AssessmentRequest
                 {
-                    Id = Helpers.RemoveCollection(record.Id)
+                    Id = record.Id
                 };
 
                 return ((RecordServiceResult) publishingController.Assess(request)).Record;
