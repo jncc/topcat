@@ -165,9 +165,6 @@
     <PackageReference Include="RavenDB.Client">
       <Version>4.1.1</Version>
     </PackageReference>
-    <PackageReference Include="RavenDB.Embedded">
-      <Version>4.1.1</Version>
-    </PackageReference>
     <PackageReference Include="RavenDB.TestDriver">
       <Version>4.1.1</Version>
     </PackageReference>

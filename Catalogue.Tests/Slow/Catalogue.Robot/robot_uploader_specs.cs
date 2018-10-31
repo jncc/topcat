@@ -9,12 +9,11 @@ using Moq;
 using NUnit.Framework;
 using System;
 using System.Collections.Generic;
-using System.Threading;
 using Catalogue.Data;
 
 namespace Catalogue.Tests.Slow.Catalogue.Robot
 {
-    class robot_uploader_specs
+    class robot_uploader_specs : DatabaseTestFixture
     {
         [Test]
         public void pending_upload_test_with_assessed_record()
@@ -532,17 +531,18 @@ namespace Catalogue.Tests.Slow.Catalogue.Robot
 
         private List<Record> PendingUploadTest(Record record)
         {
-            var store = new InMemoryDatabaseHelper().Create();
-            using (var db = store.OpenSession())
+            using (var db = ReusableDocumentStore.OpenSession())
             {
                 db.Store(record);
                 db.SaveChanges();
+                WaitForIndexing(ReusableDocumentStore);
 
                 var uploadServiceMock = new Mock<IOpenDataPublishingUploadRecordService>();
                 var uploadHelperMock = new Mock<IOpenDataUploadHelper>();
                 var robotUploader = new RobotUploader(db, uploadServiceMock.Object, uploadHelperMock.Object);
 
-                return robotUploader.GetRecordsPendingUpload();
+                var result = robotUploader.GetRecordsPendingUpload();
+                return result;
             }
         }
     }

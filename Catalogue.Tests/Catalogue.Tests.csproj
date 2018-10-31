@@ -44,8 +44,25 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DatabaseTestFixture.cs" />
+    <Compile Include="Slow\Catalogue.Data\Import\topcat_mapping_tests.cs" />
+    <Compile Include="Slow\Catalogue.Data\Import\when_importing_test_records.cs" />
+    <Compile Include="Slow\Catalogue.Data\Indexes\keywords_search_index_specs.cs" />
+    <Compile Include="Slow\Catalogue.Data\Indexes\records_search_index_specs.cs" />
+    <Compile Include="Slow\Catalogue.Data\Indexes\record_count_for_keyword_index_specs.cs" />
+    <Compile Include="Slow\Catalogue.Data\Query\QueryTestHelper.cs" />
+    <Compile Include="Slow\Catalogue.Data\Query\record_querier_filter_specs.cs" />
+    <Compile Include="Slow\Catalogue.Data\Query\record_querier_filter_specs_using_seeder.cs" />
+    <Compile Include="Slow\Catalogue.Data\Query\record_querier_search_specs.cs" />
+    <Compile Include="Slow\Catalogue.Data\Query\record_querier_sort_specs.cs" />
+    <Compile Include="Slow\Catalogue.Data\Seed\when_seeding.cs" />
+    <Compile Include="Slow\Catalogue.Data\Write\basic_record_validator_specs.cs" />
+    <Compile Include="Slow\Catalogue.Data\Write\gemini_record_validator_specs.cs" />
+    <Compile Include="Slow\Catalogue.Data\Write\open_data_publishing_service_specs.cs" />
+    <Compile Include="Slow\Catalogue.Data\Write\record_service_specs.cs" />
     <Compile Include="Slow\Catalogue.Gemini\Validation\when_validating_the_example_document.cs" />
+    <Compile Include="Slow\Catalogue.Import\when_importing_mesh_data.cs" />
     <Compile Include="Slow\Catalogue.Robot\opendataxmlhelper_specs.cs" />
+    <Compile Include="Slow\Catalogue.Robot\robot_uploader_specs.cs" />
     <Compile Include="Slow\Catalogue.Utilities\jncc_drive_mappings_tests.cs" />
     <Compile Include="Slow\Catalogue.Web\Controllers\Account\account_controller_specs.cs" />
     <Compile Include="Slow\Catalogue.Web\Controllers\Export\export_controller_tests.cs" />
@@ -74,9 +91,6 @@
     </PackageReference>
     <PackageReference Include="NUnit">
       <Version>3.11.0</Version>
-    </PackageReference>
-    <PackageReference Include="RavenDB.Embedded">
-      <Version>4.1.1</Version>
     </PackageReference>
     <PackageReference Include="RavenDB.TestDriver">
       <Version>4.1.1</Version>

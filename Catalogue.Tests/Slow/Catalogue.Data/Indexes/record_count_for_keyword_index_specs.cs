@@ -1,18 +1,29 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Catalogue.Data.Indexes;
-using Catalogue.Gemini.Model;
+using Catalogue.Data.Model;
+using Catalogue.Data.Seed;
 using Catalogue.Utilities.Raven;
 using FluentAssertions;
 using NUnit.Framework;
+using Raven.Client.Documents.Indexes;
 
 namespace Catalogue.Tests.Slow.Catalogue.Data.Indexes
 {
     internal class record_count_for_keyword_index_specs : DatabaseTestFixture
     {
+        [SetUp]
+        public void SetUp()
+        {
+            var store = GetDocumentStore();
+            store.Initialize();
+            Seeder.Seed(store);
+            IndexCreation.CreateIndexes(typeof(Record).Assembly, store);
+            WaitForIndexing(store);
+            ReusableDocumentStore = store;
+            Db = ReusableDocumentStore.OpenSession();
+        }
+
         [Test]
         public void should_be_able_to_get_collection_record_counts()
         {

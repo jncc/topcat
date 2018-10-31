@@ -13,7 +13,7 @@ using Raven.Client.Documents.Session;
 
 namespace Catalogue.Tests.Slow.Catalogue.Data.Query
 {
-    class record_querier_sort_specs
+    class record_querier_sort_specs : DatabaseTestFixture
     {
         private Record SimpleRecord()
         {
@@ -178,6 +178,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Data.Query
 
                 db.Store(record);
                 db.SaveChanges();
+                WaitForIndexing(ReusableDocumentStore);
 
                 var input = new RecordQueryInputModel
                 {
@@ -213,38 +214,36 @@ namespace Catalogue.Tests.Slow.Catalogue.Data.Query
 
         private IDocumentSession GetDbForSortTests()
         {
-            var store = new InMemoryDatabaseHelper().Create();
-            using (var db = store.OpenSession())
+
+            var record1 = SimpleRecord().With(m =>
             {
-                var record1 = SimpleRecord().With(m =>
-                {
-                    m.Gemini.Title = "sea";
-                    m.Gemini.DatasetReferenceDate = "2017-10-10";
-                });
-                var record2 = SimpleRecord().With(m =>
-                {
-                    m.Gemini.Title = "seabirds";
-                    m.Gemini.DatasetReferenceDate = "2017-10-19";
-                });
-                var record3 = SimpleRecord().With(m =>
-                {
-                    m.Gemini.Title = "birds";
-                    m.Gemini.DatasetReferenceDate = "2017-10-15";
-                });
-                var record4 = SimpleRecord().With(m =>
-                {
-                    m.Gemini.Title = "coastal birds";
-                    m.Gemini.DatasetReferenceDate = "2017-10-17";
-                });
+                m.Gemini.Title = "sea";
+                m.Gemini.DatasetReferenceDate = "2017-10-10";
+            });
+            var record2 = SimpleRecord().With(m =>
+            {
+                m.Gemini.Title = "seabirds";
+                m.Gemini.DatasetReferenceDate = "2017-10-19";
+            });
+            var record3 = SimpleRecord().With(m =>
+            {
+                m.Gemini.Title = "birds";
+                m.Gemini.DatasetReferenceDate = "2017-10-15";
+            });
+            var record4 = SimpleRecord().With(m =>
+            {
+                m.Gemini.Title = "coastal birds";
+                m.Gemini.DatasetReferenceDate = "2017-10-17";
+            });
 
-                db.Store(record1);
-                db.Store(record2);
-                db.Store(record3);
-                db.Store(record4);
-                db.SaveChanges();
+            Db.Store(record1);
+            Db.Store(record2);
+            Db.Store(record3);
+            Db.Store(record4);
+            Db.SaveChanges();
+            WaitForIndexing(ReusableDocumentStore);
 
-                return db;
-            }
+            return Db;
         }
     }
 }

@@ -16,7 +16,7 @@ using Moq;
 
 namespace Catalogue.Tests.Slow.Catalogue.Data.Write
 {
-    class open_data_publishing_service_specs
+    class open_data_publishing_service_specs : DatabaseTestFixture
     {
         [Test]
         public void successful_upload()
@@ -47,9 +47,8 @@ namespace Catalogue.Tests.Slow.Catalogue.Data.Write
                 };
                 r.Footer = new Footer();
             });
-
-            var store = new InMemoryDatabaseHelper().Create();
-            using (var db = store.OpenSession())
+            
+            using (var db = ReusableDocumentStore.OpenSession())
             {
                 db.Store(record);
                 db.SaveChanges();
@@ -73,7 +72,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Data.Write
                 updatedRecord.Publication.OpenData.LastSuccess.Message.Should().BeNull();
                 updatedRecord.Gemini.MetadataDate.Should().Be(testTime);
                 updatedRecord.Gemini.ResourceLocator.Should().Be("http://data.jncc.gov.uk/data/eb189a2f-ebce-4232-8dc6-1ad486cacf21-test");
-                uploadHelperMock.Verify(x => x.UploadDataFile(record.Id, record.Path), Times.Once);
+                uploadHelperMock.Verify(x => x.UploadDataFile(Helpers.RemoveCollection(record.Id), record.Path), Times.Once);
                 uploadHelperMock.Verify(x => x.UploadMetadataDocument(record), Times.Once);
                 uploadHelperMock.Verify(x => x.UploadWafIndexDocument(record), Times.Once);
 
@@ -111,9 +110,8 @@ namespace Catalogue.Tests.Slow.Catalogue.Data.Write
                 };
                 r.Footer = new Footer();
             });
-
-            var store = new InMemoryDatabaseHelper().Create();
-            using (var db = store.OpenSession())
+            
+            using (var db = ReusableDocumentStore.OpenSession())
             {
                 db.Store(record);
                 db.SaveChanges();
@@ -137,7 +135,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Data.Write
                 updatedRecord.Publication.OpenData.LastSuccess.Message.Should().BeNull();
                 updatedRecord.Gemini.MetadataDate.Should().Be(testTime);
                 updatedRecord.Gemini.ResourceLocator.Should().Be("http://data.jncc.gov.uk/data/eb189a2f-ebce-4232-8dc6-1ad486cacf21-test");
-                uploadHelperMock.Verify(x => x.UploadDataFile(record.Id, record.Path), Times.Once);
+                uploadHelperMock.Verify(x => x.UploadDataFile(Helpers.RemoveCollection(record.Id), record.Path), Times.Once);
                 uploadHelperMock.Verify(x => x.UploadMetadataDocument(record), Times.Once);
                 uploadHelperMock.Verify(x => x.UploadWafIndexDocument(record), Times.Once);
 
@@ -175,9 +173,8 @@ namespace Catalogue.Tests.Slow.Catalogue.Data.Write
                 };
                 r.Footer = new Footer();
             });
-
-            var store = new InMemoryDatabaseHelper().Create();
-            using (var db = store.OpenSession())
+            
+            using (var db = ReusableDocumentStore.OpenSession())
             {
                 db.Store(record);
                 db.SaveChanges();
@@ -190,7 +187,8 @@ namespace Catalogue.Tests.Slow.Catalogue.Data.Write
                 var uploadHelperMock = new Mock<IOpenDataUploadHelper>();
                 var uploader = new RobotUploader(db, uploadService, uploadHelperMock.Object);
 
-                uploadHelperMock.Setup(x => x.UploadMetadataDocument(record)).Throws(new WebException("test message"));
+                var recordWithoutCollection = Helpers.RemoveCollectionFromId(record);
+                uploadHelperMock.Setup(x => x.UploadMetadataDocument(recordWithoutCollection)).Throws(new WebException("test message"));
 
                 uploader.Upload(new List<Record> { record });
 
@@ -238,9 +236,8 @@ namespace Catalogue.Tests.Slow.Catalogue.Data.Write
                 };
                 r.Footer = new Footer();
             });
-
-            var store = new InMemoryDatabaseHelper().Create();
-            using (var db = store.OpenSession())
+            
+            using (var db = ReusableDocumentStore.OpenSession())
             {
                 db.Store(record);
                 db.SaveChanges();
@@ -303,9 +300,8 @@ namespace Catalogue.Tests.Slow.Catalogue.Data.Write
                 };
                 r.Footer = new Footer();
             });
-
-            var store = new InMemoryDatabaseHelper().Create();
-            using (var db = store.OpenSession())
+            
+            using (var db = ReusableDocumentStore.OpenSession())
             {
                 db.Store(record);
                 db.SaveChanges();
@@ -368,9 +364,8 @@ namespace Catalogue.Tests.Slow.Catalogue.Data.Write
                 };
                 r.Footer = new Footer();
             });
-
-            var store = new InMemoryDatabaseHelper().Create();
-            using (var db = store.OpenSession())
+            
+            using (var db = ReusableDocumentStore.OpenSession())
             {
                 db.Store(record);
                 db.SaveChanges();
@@ -429,9 +424,8 @@ namespace Catalogue.Tests.Slow.Catalogue.Data.Write
                 };
                 r.Footer = new Footer();
             });
-
-            var store = new InMemoryDatabaseHelper().Create();
-            using (var db = store.OpenSession())
+            
+            using (var db = ReusableDocumentStore.OpenSession())
             {
                 db.Store(record);
                 db.SaveChanges();

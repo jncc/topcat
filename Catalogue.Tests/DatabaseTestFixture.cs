@@ -36,7 +36,7 @@ namespace Catalogue.Tests
         /// </summary>
         protected IDocumentSession Db;
 
-        [OneTimeSetUp]
+        [SetUp]
         public void TestFixtureSetUp()
         {
             var store = GetDocumentStore();
@@ -44,12 +44,15 @@ namespace Catalogue.Tests
             IndexCreation.CreateIndexes(typeof(Record).Assembly, store);
             WaitForIndexing(store);
             ReusableDocumentStore = store;
+            Db = ReusableDocumentStore.OpenSession();
         }
 
-        [OneTimeTearDown]
+        [TearDown]
         public void TestFixtureTearDown()
         {
+            Db.Dispose();
             ReusableDocumentStore.Dispose();
+            Dispose();
         }
     }
 

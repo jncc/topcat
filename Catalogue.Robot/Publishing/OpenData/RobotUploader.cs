@@ -1,4 +1,5 @@
-﻿using Catalogue.Data.Indexes;
+﻿using System;
+using Catalogue.Data.Indexes;
 using Catalogue.Data.Model;
 using Catalogue.Data.Write;
 using Catalogue.Utilities.Text;
@@ -101,8 +102,7 @@ namespace Catalogue.Robot.Publishing.OpenData
             catch (WebException ex)
             {
                 attempt.Message = ex.Message + (ex.InnerException != null ? ex.InnerException.Message : "");
-                string errorDescription = ((FtpWebResponse) ex.Response).StatusDescription;
-                Logger.Error($"Upload failed for record with GUID={record.Id}, error description is: {errorDescription}", ex);
+                Logger.Error($"Upload failed for record with GUID={record.Id}", ex);
             }
         }
     }
