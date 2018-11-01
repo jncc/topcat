@@ -7,8 +7,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Catalogue.Web", "Catalogue.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Catalogue.Data", "Catalogue.Data\Catalogue.Data.csproj", "{3AD6B61C-CAB1-4CC4-8895-BA2DD3B58C59}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Catalogue.Tests.Old", "Catalogue.Tests\Catalogue.Tests.Old.csproj", "{22E2CFF6-7EE4-4CF3-ABE8-3760B3854CF9}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Catalogue.Utilities", "Catalogue.Utilities\Catalogue.Utilities.csproj", "{B6B90AA2-BF70-4460-A975-5192AB5ECDCA}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Catalogue.Gemini", "Catalogue.Gemini\Catalogue.Gemini.csproj", "{B4789E53-CC5C-4E4E-8358-FC9739846CCC}"
@@ -33,10 +31,6 @@ Global
 		{3AD6B61C-CAB1-4CC4-8895-BA2DD3B58C59}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3AD6B61C-CAB1-4CC4-8895-BA2DD3B58C59}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3AD6B61C-CAB1-4CC4-8895-BA2DD3B58C59}.Release|Any CPU.Build.0 = Release|Any CPU
-		{22E2CFF6-7EE4-4CF3-ABE8-3760B3854CF9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{22E2CFF6-7EE4-4CF3-ABE8-3760B3854CF9}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{22E2CFF6-7EE4-4CF3-ABE8-3760B3854CF9}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{22E2CFF6-7EE4-4CF3-ABE8-3760B3854CF9}.Release|Any CPU.Build.0 = Release|Any CPU
 		{B6B90AA2-BF70-4460-A975-5192AB5ECDCA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{B6B90AA2-BF70-4460-A975-5192AB5ECDCA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B6B90AA2-BF70-4460-A975-5192AB5ECDCA}.Release|Any CPU.ActiveCfg = Release|Any CPU

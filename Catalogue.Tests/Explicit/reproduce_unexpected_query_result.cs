@@ -1,8 +1,5 @@
-﻿using Catalogue.Data;
-using Catalogue.Data.Indexes;
-using Catalogue.Data.Model;
+﻿using Catalogue.Data.Model;
 using Catalogue.Data.Query;
-using Catalogue.Data.Test;
 using Catalogue.Gemini.Model;
 using Catalogue.Utilities.Clone;
 using FluentAssertions;
@@ -15,7 +12,7 @@ namespace Catalogue.Tests.Explicit
 {
     class reproduce_unexpected_query_result : SeededDbTest
     {
-        [Test]
+        [Test, Explicit]
         public void ShouldGetRightResults()
         {
             using (var db = ReusableDocumentStore.OpenSession())

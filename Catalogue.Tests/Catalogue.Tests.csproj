@@ -151,6 +151,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="bin\Debug\RavenDBServer\Catalogue.Data.Analyzers.dll" />
+    <Content Include="bin\Release\RavenDBServer\Catalogue.Data.Analyzers.dll" />
   </ItemGroup>
   <Import Project="$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets" Condition="Exists('$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets')" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
