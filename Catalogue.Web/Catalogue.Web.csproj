@@ -355,6 +355,7 @@
     <Content Include="app\views\Vocabularies\vocabularies.html" />
     <Content Include="favicon.ico" />
     <Content Include="Global.asax" />
+    <Content Include="RavenDBServer\Catalogue.Data.Analyzers.dll" />
     <Content Include="test\e2e\runner.html" />
     <Content Include="test\e2e\scenarios.js" />
     <Content Include="test\e2e\scenarios.min.js" />

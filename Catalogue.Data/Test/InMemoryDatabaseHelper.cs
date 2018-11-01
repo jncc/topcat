@@ -36,6 +36,7 @@ namespace Catalogue.Data.Test
                 PostInitializationAction(store);            
 
             IndexCreation.CreateIndexes(typeof(Record).Assembly, store);
+
             // raven4
             //RavenUtility.WaitForIndexing(store);
             WaitForIndexing(store);

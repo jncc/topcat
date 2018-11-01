@@ -16,7 +16,7 @@ using Moq;
 
 namespace Catalogue.Tests.Slow.Catalogue.Data.Write
 {
-    class open_data_publishing_service_specs : DatabaseTestFixture
+    class open_data_publishing_service_specs : CleanDbTest
     {
         [Test]
         public void successful_upload()

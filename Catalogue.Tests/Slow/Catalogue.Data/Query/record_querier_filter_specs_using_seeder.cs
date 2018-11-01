@@ -14,7 +14,7 @@ using Raven.Client.Documents.Indexes;
 
 namespace Catalogue.Tests.Slow.Catalogue.Data.Query
 {
-    class record_querier_filter_specs_using_seeder : DatabaseTestFixture
+    class record_querier_filter_specs_using_seeder : SeededDbTest
     {
         static object[] KeywordTestCases =
         {
@@ -26,18 +26,6 @@ namespace Catalogue.Tests.Slow.Catalogue.Data.Query
             new object[] { "vocab.jncc.gov.uk/jncc-category/Seabed Habitat Maps", 189 },
             new object[] { "vocab.jncc.gov.uk/some-vocab/Two words", 1 },
         };
-
-        [SetUp]
-        public void SetUp()
-        {
-            var store = GetDocumentStore();
-            store.Initialize();
-            Seeder.Seed(store);
-            IndexCreation.CreateIndexes(typeof(Record).Assembly, store);
-            WaitForIndexing(store);
-            ReusableDocumentStore = store;
-            Db = ReusableDocumentStore.OpenSession();
-        }
 
         [Test, TestCaseSource(nameof(KeywordTestCases))]
         public void should_return_correct_result_count_for_keywords(string keyword, int expected)

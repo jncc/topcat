@@ -1,26 +1,87 @@
 ﻿using Catalogue.Data.Model;
 using Catalogue.Data.Query;
-using Catalogue.Data.Test;
 using Catalogue.Gemini.Templates;
 using Catalogue.Utilities.Clone;
 using FluentAssertions;
 using NUnit.Framework;
-using Raven.Client;
 using Raven.Client.Documents.Session;
 using System;
 using System.Linq;
-using Catalogue.Data.Seed;
 using Raven.Client.Documents.Indexes;
 
 namespace Catalogue.Tests.Slow.Catalogue.Data.Query
 {
-    class record_querier_filter_specs : DatabaseTestFixture
+    class record_querier_filter_specs : CleanDbTest
     {
+        protected IDocumentSession Db;
+
+        [SetUp]
+        public new void SetUp()
+        {
+            var store = GetDocumentStore();
+            store.Initialize();
+            IndexCreation.CreateIndexes(typeof(Record).Assembly, store);
+            WaitForIndexing(store);
+            ReusableDocumentStore = store;
+
+            Db = ReusableDocumentStore.OpenSession();
+            
+            var record1 = QueryTestHelper.SimpleRecord().With(m =>
+            {
+                m.Gemini.Title = "spreadsheet record";
+                m.Gemini.DataFormat = "Microsoft Excel for Windows";
+                m.Gemini.ResourceType = "publication";
+                m.Manager = new UserInfo { DisplayName = "cathy test cathy.test@jncc.gov.uk" };
+            });
+            var record2 = QueryTestHelper.SimpleRecord().With(m =>
+            {
+                m.Gemini.Title = "database record";
+                m.Gemini.DataFormat = "Database";
+                m.Gemini.ResourceType = "nonGeographicDataset";
+                m.Manager = new UserInfo { DisplayName = "pete test pete.test@jncc.gov.uk" };
+            });
+            var record3 = QueryTestHelper.SimpleRecord().With(m =>
+            {
+                m.Gemini.Title = "geospatial record 1";
+                m.Gemini.DataFormat = "ESRI Arc/View ShapeFile";
+                m.Gemini.ResourceType = "dataset";
+                m.Manager = new UserInfo { DisplayName = "pete test" };
+            });
+            var record4 = QueryTestHelper.SimpleRecord().With(m =>
+            {
+                m.Gemini.Title = "geospatial record 2";
+                m.Gemini.DataFormat = "Geospatial (vector polygon)";
+                m.Gemini.ResourceType = "service";
+                m.Manager = new UserInfo { DisplayName = "cathy.test@jncc.gov.uk" };
+            });
+            var record5 = QueryTestHelper.SimpleRecord().With(m =>
+            {
+                m.Gemini.Title = "record with no data format";
+                m.Gemini.DataFormat = null;
+                m.Gemini.ResourceType = "dataset";
+            });
+
+            Db.Store(record1);
+            Db.Store(record2);
+            Db.Store(record3);
+            Db.Store(record4);
+            Db.Store(record5);
+            Db.SaveChanges();
+            WaitForIndexing(ReusableDocumentStore);
+        }
+
+        [TearDown]
+        public new void TearDown()
+        {
+            Db.Dispose();
+            ReusableDocumentStore.Dispose();
+            Dispose();
+        }
 
         [Test]
         public void blank_keyword_search_test()
         {
-            var helper = new RecordQueryer(GetDbForFilterTests());
+            var helper = new RecordQueryer(Db);
 
             var input = new RecordQueryInputModel
             {
@@ -73,290 +134,200 @@ namespace Catalogue.Tests.Slow.Catalogue.Data.Query
         [Test]
         public void filter_by_format_test()
         {
-            using(var db = GetDbForFilterTests())
+            var queryer = new RecordQueryer(Db);
+            var input = QueryTestHelper.EmptySearchInput().With(x =>
             {
-                var queryer = new RecordQueryer(db);
-                var input = QueryTestHelper.EmptySearchInput().With(x =>
-                {
-                    x.Q = "record";
-                    x.F = new FilterOptions {DataFormats = new[] { "Geospatial" }};
-                });
+                x.Q = "record";
+                x.F = new FilterOptions {DataFormats = new[] { "Geospatial" }};
+            });
 
-                var results = queryer.Search(input).Results;
-                results.Count.Should().Be(2);
-                results.Any(r => r.Title == "geospatial <b>record</b> 1").Should().BeTrue();
-                results.Any(r => r.Title == "geospatial <b>record</b> 2").Should().BeTrue();
-            }
+            var results = queryer.Search(input).Results;
+            results.Count.Should().Be(2);
+            results.Any(r => r.Title == "geospatial <b>record</b> 1").Should().BeTrue();
+            results.Any(r => r.Title == "geospatial <b>record</b> 2").Should().BeTrue();
         }
 
         [Test]
         public void filter_by_format_test_with_no_query()
         {
-            using (var db = GetDbForFilterTests())
+            var queryer = new RecordQueryer(Db);
+            var input = QueryTestHelper.EmptySearchInput().With(x =>
             {
-                var queryer = new RecordQueryer(db);
-                var input = QueryTestHelper.EmptySearchInput().With(x =>
-                {
-                    x.Q = "";
-                    x.F = new FilterOptions { DataFormats = new[] { "Geospatial" } };
-                });
+                x.Q = "";
+                x.F = new FilterOptions { DataFormats = new[] { "Geospatial" } };
+            });
 
-                var results = queryer.Search(input).Results;
-                results.Count.Should().Be(2);
-                results.Any(r => r.Title == "geospatial record 1").Should().BeTrue();
-                results.Any(r => r.Title == "geospatial record 2").Should().BeTrue();
-            }
+            var results = queryer.Search(input).Results;
+            results.Count.Should().Be(2);
+            results.Any(r => r.Title == "geospatial record 1").Should().BeTrue();
+            results.Any(r => r.Title == "geospatial record 2").Should().BeTrue();
         }
 
         [Test]
         public void filter_by_multiple_formats_test()
         {
-            using (var db = GetDbForFilterTests())
+            var queryer = new RecordQueryer(Db);
+            var input = QueryTestHelper.EmptySearchInput().With(x =>
             {
-                var queryer = new RecordQueryer(db);
-                var input = QueryTestHelper.EmptySearchInput().With(x =>
-                {
-                    x.Q = "record";
-                    x.F = new FilterOptions {DataFormats = new[] { "Spreadsheet", "Database" }};
-                });
+                x.Q = "record";
+                x.F = new FilterOptions {DataFormats = new[] { "Spreadsheet", "Database" }};
+            });
 
-                var results = queryer.Search(input).Results;
-                results.Count.Should().Be(2);
-                results.Any(r => r.Title == "spreadsheet <b>record</b>").Should().BeTrue();
-                results.Any(r => r.Title == "database <b>record</b>").Should().BeTrue();
-            }
+            var results = queryer.Search(input).Results;
+            results.Count.Should().Be(2);
+            results.Any(r => r.Title == "spreadsheet <b>record</b>").Should().BeTrue();
+            results.Any(r => r.Title == "database <b>record</b>").Should().BeTrue();
         }
 
         [Test]
         public void filter_by_no_formats_test()
         {
-            using (var db = GetDbForFilterTests())
-            {
-                var queryer = new RecordQueryer(db);
-                var input = QueryTestHelper.EmptySearchInput().With(x => x.F = new FilterOptions { DataFormats = new string[0]});
+            var queryer = new RecordQueryer(Db);
+            var input = QueryTestHelper.EmptySearchInput().With(x => x.F = new FilterOptions { DataFormats = new string[0]});
 
-                var results = queryer.Search(input).Results;
-                results.Count.Should().Be(5);
-            }
+            var results = queryer.Search(input).Results;
+            results.Count.Should().Be(5);
         }
 
         [Test]
         public void filter_by_other_formats_test()
         {
-            using (var db = GetDbForFilterTests())
+            var queryer = new RecordQueryer(Db);
+            var input = QueryTestHelper.EmptySearchInput().With(x =>
             {
-                var queryer = new RecordQueryer(db);
-                var input = QueryTestHelper.EmptySearchInput().With(x =>
-                {
-                    x.Q = "record";
-                    x.F = new FilterOptions { DataFormats = new[] { "Other" } };
-                });
+                x.Q = "record";
+                x.F = new FilterOptions { DataFormats = new[] { "Other" } };
+            });
 
-                var results = queryer.Search(input).Results;
-                results.Count.Should().Be(1);
-                results.Any(r => r.Title == "<b>record</b> with no data format").Should().BeTrue();
-            }
+            var results = queryer.Search(input).Results;
+            results.Count.Should().Be(1);
+            results.Any(r => r.Title == "<b>record</b> with no data format").Should().BeTrue();
         }
 
         [Test]
         public void filter_by_multiple_formats_including_other_test()
         {
-            using (var db = GetDbForFilterTests())
+            var queryer = new RecordQueryer(Db);
+            var input = QueryTestHelper.EmptySearchInput().With(x =>
             {
-                var queryer = new RecordQueryer(db);
-                var input = QueryTestHelper.EmptySearchInput().With(x =>
-                {
-                    x.Q = "record";
-                    x.F = new FilterOptions { DataFormats = new[] { "Other", "Database" } };
-                });
+                x.Q = "record";
+                x.F = new FilterOptions { DataFormats = new[] { "Other", "Database" } };
+            });
 
-                var results = queryer.Search(input).Results;
-                results.Count.Should().Be(2);
-                results.Any(r => r.Title == "<b>record</b> with no data format").Should().BeTrue();
-                results.Any(r => r.Title == "database <b>record</b>").Should().BeTrue();
-            }
+            var results = queryer.Search(input).Results;
+            results.Count.Should().Be(2);
+            results.Any(r => r.Title == "<b>record</b> with no data format").Should().BeTrue();
+            results.Any(r => r.Title == "database <b>record</b>").Should().BeTrue();
         }
 
         [Test]
         public void filter_user_with_partial_user_name_test()
         {
-            using (var db = GetDbForFilterTests())
+            var queryer = new RecordQueryer(Db);
+            var input = QueryTestHelper.EmptySearchInput().With(x =>
             {
-                var queryer = new RecordQueryer(db);
-                var input = QueryTestHelper.EmptySearchInput().With(x =>
-                {
-                    x.Q = "record";
-                    x.F = new FilterOptions { Manager = "CATHY" };
-                });
+                x.Q = "record";
+                x.F = new FilterOptions { Manager = "CATHY" };
+            });
 
-                var results = queryer.Search(input).Results;
-                results.Count.Should().Be(2);
-                results.Any(r => r.Title == "spreadsheet <b>record</b>").Should().BeTrue();
-                results.Any(r => r.Title == "geospatial <b>record</b> 2").Should().BeTrue();
-            }
+            var results = queryer.Search(input).Results;
+            results.Count.Should().Be(2);
+            results.Any(r => r.Title == "spreadsheet <b>record</b>").Should().BeTrue();
+            results.Any(r => r.Title == "geospatial <b>record</b> 2").Should().BeTrue();
         }
 
         [Test]
         public void filter_user_with_full_user_name_test()
         {
-            using (var db = GetDbForFilterTests())
+            var queryer = new RecordQueryer(Db);
+            var input = QueryTestHelper.EmptySearchInput().With(x =>
             {
-                var queryer = new RecordQueryer(db);
-                var input = QueryTestHelper.EmptySearchInput().With(x =>
-                {
-                    x.Q = "record";
-                    x.F = new FilterOptions { Manager = "cathy TEST" };
-                });
+                x.Q = "record";
+                x.F = new FilterOptions { Manager = "cathy TEST" };
+            });
 
-                var results = queryer.Search(input).Results;
-                results.Count.Should().Be(2);
-                results.Any(r => r.Title == "spreadsheet <b>record</b>").Should().BeTrue();
-                results.Any(r => r.Title == "geospatial <b>record</b> 2").Should().BeTrue();
-            }
+            var results = queryer.Search(input).Results;
+            results.Count.Should().Be(2);
+            results.Any(r => r.Title == "spreadsheet <b>record</b>").Should().BeTrue();
+            results.Any(r => r.Title == "geospatial <b>record</b> 2").Should().BeTrue();
         }
 
         [Test]
         public void filter_user_with_email_test()
         {
-            using (var db = GetDbForFilterTests())
+            var queryer = new RecordQueryer(Db);
+            var input = QueryTestHelper.EmptySearchInput().With(x =>
             {
-                var queryer = new RecordQueryer(db);
-                var input = QueryTestHelper.EmptySearchInput().With(x =>
-                {
-                    x.Q = "record";
-                    x.F = new FilterOptions { Manager = "cathy.test@jncc.gov.uk" };
-                });
+                x.Q = "record";
+                x.F = new FilterOptions { Manager = "cathy.test@jncc.gov.uk" };
+            });
 
-                var results = queryer.Search(input).Results;
-                results.Count.Should().Be(2);
-                results.Any(r => r.Title == "spreadsheet <b>record</b>").Should().BeTrue();
-                results.Any(r => r.Title == "geospatial <b>record</b> 2").Should().BeTrue();
-            }
+            var results = queryer.Search(input).Results;
+            results.Count.Should().Be(2);
+            results.Any(r => r.Title == "spreadsheet <b>record</b>").Should().BeTrue();
+            results.Any(r => r.Title == "geospatial <b>record</b> 2").Should().BeTrue();
         }
 
         [Test]
         public void filter_user_with_name_and_email_test()
         {
-            using (var db = GetDbForFilterTests())
+            var queryer = new RecordQueryer(Db);
+            var input = QueryTestHelper.EmptySearchInput().With(x =>
             {
-                var queryer = new RecordQueryer(db);
-                var input = QueryTestHelper.EmptySearchInput().With(x =>
-                {
-                    x.Q = "record";
-                    x.F = new FilterOptions { Manager = "cathy test" };
-                });
+                x.Q = "record";
+                x.F = new FilterOptions { Manager = "cathy test" };
+            });
 
-                var results = queryer.Search(input).Results;
-                results.Count.Should().Be(2);
-                results.Any(r => r.Title == "spreadsheet <b>record</b>").Should().BeTrue();
-                results.Any(r => r.Title == "geospatial <b>record</b> 2").Should().BeTrue();
-            }
+            var results = queryer.Search(input).Results;
+            results.Count.Should().Be(2);
+            results.Any(r => r.Title == "spreadsheet <b>record</b>").Should().BeTrue();
+            results.Any(r => r.Title == "geospatial <b>record</b> 2").Should().BeTrue();
         }
 
         [Test]
         public void filter_by_email_test()
         {
-            using (var db = GetDbForFilterTests())
+            var queryer = new RecordQueryer(Db);
+            var input = QueryTestHelper.EmptySearchInput().With(x =>
             {
-                var queryer = new RecordQueryer(db);
-                var input = QueryTestHelper.EmptySearchInput().With(x =>
-                {
-                    x.Q = "record";
-                    x.F = new FilterOptions { Manager = "jncc.gov.uk" };
-                });
+                x.Q = "record";
+                x.F = new FilterOptions { Manager = "jncc.gov.uk" };
+            });
 
-                var results = queryer.Search(input).Results;
-                results.Count.Should().Be(3);
-            }
+            var results = queryer.Search(input).Results;
+            results.Count.Should().Be(3);
         }
 
         [Test]
         public void filter_by_one_resource_type()
         {
-            using (var db = GetDbForFilterTests())
+            var queryer = new RecordQueryer(Db);
+            var input = QueryTestHelper.EmptySearchInput().With(x =>
             {
-                var queryer = new RecordQueryer(db);
-                var input = QueryTestHelper.EmptySearchInput().With(x =>
-                {
-                    x.Q = "record";
-                    x.F = new FilterOptions { ResourceTypes = new [] {"Dataset"} };
-                });
+                x.Q = "record";
+                x.F = new FilterOptions { ResourceTypes = new [] {"Dataset"} };
+            });
 
-                var results = queryer.Search(input).Results;
-                results.Count.Should().Be(2);
-                results.Any(r => r.Title == "geospatial <b>record</b> 1").Should().BeTrue();
-                results.Any(r => r.Title == "<b>record</b> with no data format").Should().BeTrue();
-            }
+            var results = queryer.Search(input).Results;
+            results.Count.Should().Be(2);
+            results.Any(r => r.Title == "geospatial <b>record</b> 1").Should().BeTrue();
+            results.Any(r => r.Title == "<b>record</b> with no data format").Should().BeTrue();
         }
 
         [Test]
         public void filter_by_multiple_resource_types()
         {
-            using (var db = GetDbForFilterTests())
+            var queryer = new RecordQueryer(Db);
+            var input = QueryTestHelper.EmptySearchInput().With(x =>
             {
-                var queryer = new RecordQueryer(db);
-                var input = QueryTestHelper.EmptySearchInput().With(x =>
-                {
-                    x.Q = "record";
-                    x.F = new FilterOptions { ResourceTypes = new[] { "publication", "nonGeographicDataset" } };
-                });
+                x.Q = "record";
+                x.F = new FilterOptions { ResourceTypes = new[] { "publication", "nonGeographicDataset" } };
+            });
 
-                var results = queryer.Search(input).Results;
-                results.Count.Should().Be(2);
-                results.Any(r => r.Title == "spreadsheet <b>record</b>").Should().BeTrue();
-                results.Any(r => r.Title == "database <b>record</b>").Should().BeTrue();
-            }
-        }
-
-        private IDocumentSession GetDbForFilterTests()
-        {
-            //using (var db = ReusableDocumentStore.OpenSession())
-            //{
-                var record1 = QueryTestHelper.SimpleRecord().With(m =>
-                {
-                    m.Gemini.Title = "spreadsheet record";
-                    m.Gemini.DataFormat = "Microsoft Excel for Windows";
-                    m.Gemini.ResourceType = "publication";
-                    m.Manager = new UserInfo {DisplayName = "cathy test cathy.test@jncc.gov.uk" };
-                });
-                var record2 = QueryTestHelper.SimpleRecord().With(m =>
-                {
-                    m.Gemini.Title = "database record";
-                    m.Gemini.DataFormat = "Database";
-                    m.Gemini.ResourceType = "nonGeographicDataset";
-                    m.Manager = new UserInfo { DisplayName = "pete test pete.test@jncc.gov.uk" };
-                });
-                var record3 = QueryTestHelper.SimpleRecord().With(m =>
-                {
-                    m.Gemini.Title = "geospatial record 1";
-                    m.Gemini.DataFormat = "ESRI Arc/View ShapeFile";
-                    m.Gemini.ResourceType = "dataset";
-                    m.Manager = new UserInfo { DisplayName = "pete test"};
-                });
-                var record4 = QueryTestHelper.SimpleRecord().With(m =>
-                {
-                    m.Gemini.Title = "geospatial record 2";
-                    m.Gemini.DataFormat = "Geospatial (vector polygon)";
-                    m.Gemini.ResourceType = "service";
-                    m.Manager = new UserInfo { DisplayName = "cathy.test@jncc.gov.uk" };
-                });
-                var record5 = QueryTestHelper.SimpleRecord().With(m =>
-                {
-                    m.Gemini.Title = "record with no data format";
-                    m.Gemini.DataFormat = null;
-                    m.Gemini.ResourceType = "dataset";
-                });
-
-                Db.Store(record1);
-                Db.Store(record2);
-                Db.Store(record3);
-                Db.Store(record4);
-                Db.Store(record5);
-                Db.SaveChanges();
-            WaitForIndexing(ReusableDocumentStore);
-
-                return Db;
-            //}
+            var results = queryer.Search(input).Results;
+            results.Count.Should().Be(2);
+            results.Any(r => r.Title == "spreadsheet <b>record</b>").Should().BeTrue();
+            results.Any(r => r.Title == "database <b>record</b>").Should().BeTrue();
         }
     }
 }

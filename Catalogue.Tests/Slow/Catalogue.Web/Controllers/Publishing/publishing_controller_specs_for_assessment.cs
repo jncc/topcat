@@ -14,7 +14,7 @@ using System;
 
 namespace Catalogue.Tests.Slow.Catalogue.Web.Controllers.Publishing
 {
-    class publishing_controller_specs_for_assessment : DatabaseTestFixture
+    class publishing_controller_specs_for_assessment : CleanDbTest
     {
         [Test]
         public void assessment_completed_test()

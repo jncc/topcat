@@ -11,21 +11,13 @@ using Raven.Client.Documents.Indexes;
 
 namespace Catalogue.Tests.Slow.Catalogue.Import
 {
-    internal class when_importing_mesh_data : DatabaseTestFixture
+    internal class when_importing_mesh_data : SeededDbTest
     {
         private List<Record> imported;
 
         [SetUp]
         public void SetUp()
         {
-            var store = GetDocumentStore();
-            store.Initialize();
-            Seeder.Seed(store);
-            IndexCreation.CreateIndexes(typeof(Record).Assembly, store);
-            WaitForIndexing(store);
-            ReusableDocumentStore = store;
-            Db = ReusableDocumentStore.OpenSession();
-
             // let's store everything in a list to allow standard linq-to-object queries
             // (all mesh records have a "GUI" field which seems to be unique and starts with 'GB')
             imported = Db.Query<Record>().Take(1000).ToList()

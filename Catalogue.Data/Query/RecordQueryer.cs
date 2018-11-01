@@ -79,7 +79,7 @@ namespace Catalogue.Data.Query
                 query = query
                     .Search(r => r.Title, input.Q, 10)
                     .Search(r => r.TitleN, input.Q)
-                    .Search(r => r.Abstract, input.Q, 1)
+                    .Search(r => r.Abstract, input.Q)
                     .Search(r => r.AbstractN, input.Q)
                     .Search(r => r.KeywordsN, input.Q);
             }

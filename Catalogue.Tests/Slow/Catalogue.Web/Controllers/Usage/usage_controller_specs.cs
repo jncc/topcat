@@ -1,5 +1,4 @@
 ﻿using Catalogue.Data.Model;
-using Catalogue.Data.Test;
 using Catalogue.Data.Write;
 using Catalogue.Gemini.Model;
 using Catalogue.Gemini.Templates;
@@ -15,9 +14,8 @@ using Catalogue.Data;
 
 namespace Catalogue.Tests.Slow.Catalogue.Web.Controllers.Usage
 {
-    public class usage_controller_specs : DatabaseTestFixture
+    public class usage_controller_specs : CleanDbTest
     {
-
         [Test]
         public void recently_modified_records()
         {

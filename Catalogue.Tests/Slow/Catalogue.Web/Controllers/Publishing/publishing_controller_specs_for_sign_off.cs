@@ -17,7 +17,7 @@ using Raven.Client.Documents.Session;
 
 namespace Catalogue.Tests.Slow.Catalogue.Web.Controllers.Publishing
 {
-    class publishing_controller_specs_for_sign_off : DatabaseTestFixture
+    class publishing_controller_specs_for_sign_off : CleanDbTest
     {
         [Test]
         public void successful_open_data_sign_off_test()

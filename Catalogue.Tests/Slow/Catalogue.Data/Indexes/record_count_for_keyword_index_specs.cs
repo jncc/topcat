@@ -10,20 +10,8 @@ using Raven.Client.Documents.Indexes;
 
 namespace Catalogue.Tests.Slow.Catalogue.Data.Indexes
 {
-    internal class record_count_for_keyword_index_specs : DatabaseTestFixture
+    internal class record_count_for_keyword_index_specs : SeededDbTest
     {
-        [SetUp]
-        public void SetUp()
-        {
-            var store = GetDocumentStore();
-            store.Initialize();
-            Seeder.Seed(store);
-            IndexCreation.CreateIndexes(typeof(Record).Assembly, store);
-            WaitForIndexing(store);
-            ReusableDocumentStore = store;
-            Db = ReusableDocumentStore.OpenSession();
-        }
-
         [Test]
         public void should_be_able_to_get_collection_record_counts()
         {

@@ -9,9 +9,9 @@ using Raven.Client.Documents.Indexes.Spatial;
 
 namespace Catalogue.Tests.Slow.Spatial
 {
-    internal class when_querying_spatial_test_data : DatabaseTestFixture
+    internal class when_querying_spatial_test_data : SeededDbTest
     {
-        [Test]
+        [Test, Ignore("raven4")]
         public void non_intersecting_boxes_should_not_intersect()
         {
             Db.Query<Record, RecordSpatialIndex>()

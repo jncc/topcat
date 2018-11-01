@@ -140,3 +140,7 @@ packages/Newtonsoft.Json.4.5.11/lib/winrt45/Newtonsoft.Json.xml
 Catalogue.Web/app/.idea/
 Catalogue.Web/app/js/controllers/AdminController.map
 Catalogue.Web/app/js/controllers/SearchController.map
+/Catalogue.Web/1BC7ED255D73C789.raven-cluster-topology
+/Catalogue.Web/Create_1.1BC7ED255D73C789.raven-database-topology
+/MigrationBackup
+/Catalogue.Web/RavenDBServer

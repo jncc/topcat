@@ -12,7 +12,7 @@ using NUnit.Framework;
 
 namespace Catalogue.Tests.Slow.Catalogue.Data.Import
 {
-    class topcat_mapping_tests : DatabaseTestFixture
+    class topcat_mapping_tests : CleanDbTest
     {
         [Test]
         public void blah()

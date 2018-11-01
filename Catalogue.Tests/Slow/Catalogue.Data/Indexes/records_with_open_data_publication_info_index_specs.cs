@@ -3,10 +3,13 @@ using Catalogue.Data.Model;
 using FluentAssertions;
 using NUnit.Framework;
 using System.Linq;
+using Catalogue.Data;
+using Catalogue.Data.Seed;
+using Raven.Client.Documents.Indexes;
 
 namespace Catalogue.Tests.Slow.Catalogue.Data.Indexes
 {
-    class records_with_open_data_publication_info_index_specs : DatabaseTestFixture
+    class records_with_open_data_publication_info_index_specs : SeededDbTest
     {
         // these tests rely on the seeded records - makes them a bit hard to understand - see AddRecordsWithPublishingInfo in Seeder.cs
         // note: the MetadataDate for seeded records is 2015-01-01 12:00:00
@@ -34,7 +37,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Data.Indexes
                 .ToList();
 
             results.Count.Should().Be(1);
-            results.Single().Id.Should().Be("b2691fed-e421-4e48-9da9-99bd77e0b8ba");
+            results.Single().Id.Should().Be(Helpers.AddCollection("b2691fed-e421-4e48-9da9-99bd77e0b8ba"));
         }
 
         [Test]
@@ -48,8 +51,8 @@ namespace Catalogue.Tests.Slow.Catalogue.Data.Indexes
                 .ToList();
 
             results.Count.Should().Be(2);
-            results.Should().Contain(r => r.Id.ToString() == "471da4f2-d9e2-4a5a-b72b-3ae8cc40ae57");
-            results.Should().Contain(r => r.Id.ToString() == "d9c14587-90d8-4eba-b670-4cf36e45196d");
+            results.Should().Contain(r => r.Id.ToString() == Helpers.AddCollection("471da4f2-d9e2-4a5a-b72b-3ae8cc40ae57"));
+            results.Should().Contain(r => r.Id.ToString() == Helpers.AddCollection("d9c14587-90d8-4eba-b670-4cf36e45196d"));
         }
 
         [Test]
@@ -62,7 +65,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Data.Indexes
                 .ToList();
 
             results.Count.Should().Be(7);
-            results.Should().Contain(r => r.Id.ToString() == "19b8c7ab-5c33-4d55-bc1d-3762b8207a9f");
+            results.Should().Contain(r => r.Id.ToString() == Helpers.AddCollection("19b8c7ab-5c33-4d55-bc1d-3762b8207a9f"));
         }
 
         [Test]
@@ -85,8 +88,8 @@ namespace Catalogue.Tests.Slow.Catalogue.Data.Indexes
                 .ToList();
 
             results.Count.Should().Be(2);
-            results.Should().Contain(r => r.Id.ToString() == "471da4f2-d9e2-4a5a-b72b-3ae8cc40ae57");
-            results.Should().Contain(r => r.Id.ToString() == "d9c14587-90d8-4eba-b670-4cf36e45196d");
+            results.Should().Contain(r => r.Id.ToString() == Helpers.AddCollection("471da4f2-d9e2-4a5a-b72b-3ae8cc40ae57"));
+            results.Should().Contain(r => r.Id.ToString() == Helpers.AddCollection("d9c14587-90d8-4eba-b670-4cf36e45196d"));
         }
     }
 }
