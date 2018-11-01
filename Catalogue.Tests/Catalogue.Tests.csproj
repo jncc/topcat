@@ -75,6 +75,7 @@
     <Compile Include="Slow\Catalogue.Data\Write\gemini_record_validator_specs.cs" />
     <Compile Include="Slow\Catalogue.Data\Write\open_data_publishing_service_specs.cs" />
     <Compile Include="Slow\Catalogue.Data\Write\record_service_specs.cs" />
+    <Compile Include="Slow\Catalogue.Data\Write\vocabulary_service_specs.cs" />
     <Compile Include="Slow\Catalogue.Gemini\Validation\when_validating_the_example_document.cs" />
     <Compile Include="Slow\Catalogue.Import\when_importing_mesh_data.cs" />
     <Compile Include="Slow\Catalogue.Robot\opendataxmlhelper_specs.cs" />
