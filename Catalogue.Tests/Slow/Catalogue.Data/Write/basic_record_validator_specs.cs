@@ -13,7 +13,7 @@ using System.Linq;
 
 namespace Catalogue.Tests.Slow.Catalogue.Data.Write
 {
-    class basic_record_validator_specs
+    public class basic_record_validator_specs
     {
         Record SimpleRecord()
         {

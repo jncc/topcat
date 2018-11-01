@@ -9,7 +9,7 @@ using Raven.Client.Documents.Indexes;
 
 namespace Catalogue.Tests.Slow.Catalogue.Data.Indexes
 {
-    internal class records_search_index_specs : SeededDbTest
+    public class records_search_index_specs : SeededDbTest
     {
         [Test]
         public void can_search_partial_matches()

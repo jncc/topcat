@@ -15,7 +15,7 @@ using NUnit.Framework;
 
 namespace Catalogue.Tests.Slow.Catalogue.Data.Import
 {
-    class when_importing_test_records
+    public class when_importing_test_records
     {
         IRecordService recordService;
 

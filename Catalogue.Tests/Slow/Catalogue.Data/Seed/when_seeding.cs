@@ -9,7 +9,7 @@ using Raven.Client.Documents.Indexes;
 
 namespace Catalogue.Tests.Slow.Catalogue.Data.Seed
 {
-    internal class when_seeding : SeededDbTest
+    public class when_seeding : SeededDbTest
     {
         [Test]
         public void should_seed_example_readonly_record()

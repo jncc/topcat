@@ -14,7 +14,7 @@ using Raven.Client.Documents.Indexes;
 
 namespace Catalogue.Tests.Slow.Catalogue.Data.Query
 {
-    class record_querier_filter_specs_using_seeder : SeededDbTest
+    public class record_querier_filter_specs_using_seeder : SeededDbTest
     {
         static object[] KeywordTestCases =
         {

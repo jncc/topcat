@@ -11,7 +11,7 @@ using Raven.Client.Documents.Session;
 
 namespace Catalogue.Tests.Slow.Catalogue.Data.Query
 {
-    class record_querier_search_specs : CleanDbTest
+    public class record_querier_search_specs : CleanDbTest
     {
         protected IDocumentSession Db;
 

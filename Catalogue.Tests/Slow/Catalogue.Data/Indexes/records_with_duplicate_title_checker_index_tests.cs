@@ -13,7 +13,7 @@ using static Catalogue.Tests.TestUserInfo;
 
 namespace Catalogue.Tests.Slow.Catalogue.Data.Indexes
 {
-    class records_with_duplicate_title_checker_index_tests : CleanDbTest
+    public class records_with_duplicate_title_checker_index_tests : CleanDbTest
     {
         [Test]
         public void should_count_records_with_duplicate_titles()

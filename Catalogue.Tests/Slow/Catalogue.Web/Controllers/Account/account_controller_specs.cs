@@ -5,7 +5,7 @@ using NUnit.Framework;
 
 namespace Catalogue.Tests.Slow.Catalogue.Web.Controllers.Account
 {
-    class account_controller_specs
+    public class account_controller_specs
     {
         [Test]
         public void account_in_iao_group()

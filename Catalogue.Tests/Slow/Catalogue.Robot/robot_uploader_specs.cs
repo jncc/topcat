@@ -13,7 +13,7 @@ using Catalogue.Data;
 
 namespace Catalogue.Tests.Slow.Catalogue.Robot
 {
-    class robot_uploader_specs : CleanDbTest
+    public class robot_uploader_specs : CleanDbTest
     {
         [Test]
         public void pending_upload_test_with_assessed_record()

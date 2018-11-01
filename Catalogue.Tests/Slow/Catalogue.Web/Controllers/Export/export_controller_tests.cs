@@ -11,7 +11,7 @@ using NUnit.Framework;
 
 namespace Catalogue.Tests.Slow.Catalogue.Web.Controllers.Export
 {
-    class export_controller_tests : SeededDbTest
+    public class export_controller_tests : SeededDbTest
     {
         [Test, Ignore("raven4 - async session not working")]
         public void export_sanity_check()

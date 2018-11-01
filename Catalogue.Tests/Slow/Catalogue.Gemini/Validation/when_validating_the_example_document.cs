@@ -15,7 +15,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Gemini.Validation
     ///     This is an end-to-end style test that exercises several bits of the system
     ///     and depends on an external web service.
     /// </summary>
-    internal class when_validating_the_example_document
+    public class when_validating_the_example_document
     {
         [Test, Explicit]
         public void should_be_valid_gemini()

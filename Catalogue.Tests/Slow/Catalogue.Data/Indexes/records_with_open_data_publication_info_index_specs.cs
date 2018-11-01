@@ -9,7 +9,7 @@ using Raven.Client.Documents.Indexes;
 
 namespace Catalogue.Tests.Slow.Catalogue.Data.Indexes
 {
-    class records_with_open_data_publication_info_index_specs : SeededDbTest
+    public class records_with_open_data_publication_info_index_specs : SeededDbTest
     {
         // these tests rely on the seeded records - makes them a bit hard to understand - see AddRecordsWithPublishingInfo in Seeder.cs
         // note: the MetadataDate for seeded records is 2015-01-01 12:00:00

@@ -11,7 +11,7 @@ using Raven.Client.Documents.Session;
 
 namespace Catalogue.Tests.Slow.Catalogue.Data.Write
 {
-    class when_upserting_a_vocabulary
+    public class when_upserting_a_vocabulary
     {
 
         private Mock<IDocumentSession> database;

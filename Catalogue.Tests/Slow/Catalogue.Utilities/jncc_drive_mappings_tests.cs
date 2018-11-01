@@ -4,7 +4,7 @@ using NUnit.Framework;
 
 namespace Catalogue.Tests.Slow.Catalogue.Utilities
 {
-    class jncc_drive_mappings_tests
+    public class jncc_drive_mappings_tests
     {
         [Test]
         public void z_path_converted_to_unc_test()

@@ -10,7 +10,7 @@ using Raven.Client.Documents.Session;
 
 namespace Catalogue.Tests.Slow.Catalogue.Data.Versioning
 {
-    internal class versioning_specs
+    public class versioning_specs
     {
         [Test, Ignore("raven4")]
         public void versioning_should_work()

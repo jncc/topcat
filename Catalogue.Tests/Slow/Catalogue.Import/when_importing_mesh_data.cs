@@ -11,7 +11,7 @@ using Raven.Client.Documents.Indexes;
 
 namespace Catalogue.Tests.Slow.Catalogue.Import
 {
-    internal class when_importing_mesh_data : SeededDbTest
+    public class when_importing_mesh_data : SeededDbTest
     {
         private List<Record> imported;
 

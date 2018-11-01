@@ -10,7 +10,7 @@ using Raven.Client.Documents.Indexes;
 
 namespace Catalogue.Tests.Slow.Catalogue.Data.Indexes
 {
-    internal class record_count_for_keyword_index_specs : SeededDbTest
+    public class record_count_for_keyword_index_specs : SeededDbTest
     {
         [Test]
         public void should_be_able_to_get_collection_record_counts()
