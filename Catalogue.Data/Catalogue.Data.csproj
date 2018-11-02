@@ -119,6 +119,7 @@
     <Compile Include="Write\VocabularyValidator.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Analyzers\Analyzers.zip" />
     <None Include="app.config">
       <SubType>Designer</SubType>
     </None>
