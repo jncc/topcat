@@ -142,9 +142,6 @@ File.WriteAllText(Path, content);
 
   </Target>
 
-  <CreateItem Include="*\bin\Release\Catalogue.Tests.dll">
-     <Output TaskParameter="Include" ItemName="TestAssemblies"/>
-  </CreateItem>
   <Target Name="Test">
 		<Message Text="=== Running tests in Catalogue" Importance="High" />
 		<MSBuild Projects="..\Catalogue.Tests\Catalogue.Tests.csproj"/>
