@@ -61,7 +61,7 @@ namespace Catalogue.Web
 
         private static void InitializeDataStore()
         {
-            if (ConfigurationManager.AppSettings["Environment"] == "Dev")
+            if (ConfigurationManager.AppSettings["Environment"] == "LocalDev")
             {
                 // use in-memory database for development
                 DocumentStore = DatabaseFactory.InMemory();
