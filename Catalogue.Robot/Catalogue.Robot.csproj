@@ -76,12 +76,14 @@
     </Content>
     <Content Include="App.Beta.config">
       <DependentUpon>App.config</DependentUpon>
+      <SubType>Designer</SubType>
     </Content>
     <Content Include="App.Dev.config">
       <DependentUpon>App.config</DependentUpon>
     </Content>
     <Content Include="App.Live.config">
       <DependentUpon>App.config</DependentUpon>
+      <SubType>Designer</SubType>
     </Content>
   </ItemGroup>
   <ItemGroup>
