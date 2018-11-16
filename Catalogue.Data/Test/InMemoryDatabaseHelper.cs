@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Configuration;
 using Catalogue.Data.Model;
 using Raven.Client.Documents;
 using Raven.Client.Documents.Indexes;
@@ -16,7 +17,7 @@ namespace Catalogue.Data.Test
             ConfigureServer(new TestServerOptions
             {
                 FrameworkVersion = "2.1.5",
-                ServerUrl = "http://localhost:8090"
+                ServerUrl = ConfigurationManager.AppSettings["RavenDbUrls"]
             });
             var store = GetDocumentStore();
             
