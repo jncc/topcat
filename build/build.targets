@@ -117,15 +117,15 @@ File.WriteAllText(Path, content);
             />
 							
 		<!-- build Catalogue.Robot -->
-        <MSBuild
-            Projects="..\Catalogue.Robot\Catalogue.Robot.csproj"
-            Properties="Configuration=$(Configuration);Environment=$(Environment)"
-            />
         <TransformXml
             OriginalDocumentPath="..\Catalogue.Robot\App.config"
             TransformDocumentPath="..\Catalogue.Robot\App.$(Environment).config"
             OutputDocumentPath="..\Catalogue.Robot\bin\$(Configuration)\Catalogue.Robot.exe.config"
             DeleteTransformDocuments="..\Catalogue.Robot\bin\$(Configuration)\App.*.config"
+            />
+        <MSBuild
+            Projects="..\Catalogue.Robot\Catalogue.Robot.csproj"
+            Properties="Configuration=$(Configuration);Environment=$(Environment)"
             />
 			
 		<!-- build Catalogue.Toolbox -->
