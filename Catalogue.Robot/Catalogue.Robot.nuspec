@@ -1,0 +1,13 @@
+﻿<?xml version="1.0"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
+  <metadata>
+    <id>Catalogue.Robot</id>
+    <title>Topcat Robot</title>
+    <version>1.0.0</version>
+    <authors>JNCC</authors>
+    <description>Topcat Robot for publishing records</description>
+  </metadata>
+  <files>
+    <file src="..\build\output\Catalogue.Robot\*" target="build" />
+  </files>
+</package>
