@@ -8,7 +8,6 @@ using System.Text;
 using System.Web.Http;
 using System.Xml.Linq;
 using Catalogue.Data.Export;
-using Catalogue.Data.Model;
 using Catalogue.Data.Query;
 using Catalogue.Gemini.Encoding;
 using Raven.Client.Documents.Session;
@@ -56,7 +55,7 @@ namespace Catalogue.Web.Controllers.Export
             {
                 FileName = "topcat-export-" + DateTime.Now.ToString("yyyyMMdd-HHmmss") + "." + exportFormat
             };
-            response.Content.Headers.ContentType = new MediaTypeHeaderValue("text/"+exportFormat);
+            response.Content.Headers.ContentType = new MediaTypeHeaderValue("application/octet-stream");
 
             return response;
         }
@@ -83,28 +82,40 @@ namespace Catalogue.Web.Controllers.Export
             return result;
         }
 
-        private StreamContent GetResponseContent(RecordQueryInputModel input, string delimiter)
+        private PushStreamContent GetResponseContent(RecordQueryInputModel input, string delimiter)
         {
             RemovePagingParametersFromRecordQuery(input);
 
-            var records = recordQueryer.Query(input).ToList();
-            var writer = new StringWriter();
-            var writeHeaders = true;
-            foreach (var record in records)
+            using (var adb = db.Advanced.DocumentStore.OpenAsyncSession())
             {
-                var exporter = new Exporter();
-                if (writeHeaders)
-                {
-                    exporter.ExportHeader(writer, delimiter);
-                    writeHeaders = false;
-                }
+                var responseContent = new PushStreamContent(
+                    async (stream, content, context) =>
+                    {
+                        using (stream)
+                        using (var enumerator =
+                            await adb.Advanced.StreamAsync(recordQueryer.AsyncQuery(adb, input)))
+                        {
+                            var writeHeaders = true;
+                            while (await enumerator.MoveNextAsync())
+                            {
+                                var writer = new StringWriter();
+                                var exporter = new Exporter();
+                                if (writeHeaders)
+                                {
+                                    exporter.ExportHeader(writer, delimiter);
+                                    writeHeaders = false;
+                                }
 
-                exporter.ExportRecord(record, writer, delimiter);
+                                exporter.ExportRecord(enumerator.Current.Document, writer, delimiter);
+                                var data = UTF8Encoding.UTF8.GetBytes(writer.ToString());
+
+                                await stream.WriteAsync(data, 0, data.Length);
+                            }
+                        }
+                    });
+
+                return responseContent;
             }
-            var dataBytes = Encoding.UTF8.GetBytes(writer.ToString());
-            var dataStream = new MemoryStream(dataBytes);
-
-            return new StreamContent(dataStream);
         }
     }
 }
