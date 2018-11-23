@@ -1,7 +1,6 @@
 ﻿using Ninject.Extensions.Conventions;
 using Ninject.Modules;
 using Quartz.Spi;
-using Raven.Client;
 using Raven.Client.Documents;
 
 namespace Catalogue.Robot.Injection

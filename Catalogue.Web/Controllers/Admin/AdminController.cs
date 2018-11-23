@@ -52,25 +52,6 @@ namespace Catalogue.Web.Controllers.Admin
         }
 
         /// <summary>
-        /// Wipes the entire database. Got that?
-        /// </summary>
-        [HttpPost, Route("api/admin/destroy")]
-        public HttpResponseMessage Destroy()
-        {
-            ThrowIfLiveEnvironment();
-
-            throw new Exception("raven4");
-            var parameters = new DeleteDatabasesOperation.Parameters
-            {
-                DatabaseNames = new [] { "topcat-environment-db" },
-                HardDelete = true,
-            };
-            WebApiApplication.DocumentStore.Maintenance.Server.Send(new DeleteDatabasesOperation(parameters));
-
-            return new HttpResponseMessage { Content = new StringContent("Done") };
-        }
-
-        /// <summary>
         /// Deletes all the records tagged with the special 'Delete' tag. This has been added to the Robot so could be deleted.
         /// </summary>
         [HttpPost, Route("api/admin/delete")]
