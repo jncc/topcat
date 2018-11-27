@@ -22,8 +22,8 @@ namespace Catalogue.Tests.Slow.Catalogue.Web.Controllers.Records
             var controller = new RecordsController(Mock.Of<IRecordService>(), Mock.Of<IDocumentSession>(), new TestUserContext());
             var recordResult = (RecordOutputModel) controller.Get(String.Empty);
 
-            recordResult.Record.Gemini.Title.Should().BeBlank();
-            recordResult.Record.Path.Should().BeBlank();
+            recordResult.Record.Gemini.Title.Should().Be("");
+            recordResult.Record.Path.Should().BeNull();
         }
 
         [Test]

@@ -60,14 +60,14 @@ namespace Catalogue.Toolbox.Importing
             }
         }
 
-        IMapping InstantiateMapping(ImportOptions options)
+        IReaderMapping InstantiateMapping(ImportOptions options)
         {
-            var type = typeof(IMapping).Assembly.GetType("Catalogue.Data.Import.Mappings." + options.Mapping);
+            var type = typeof(IReaderMapping).Assembly.GetType("Catalogue.Data.Import.Mappings." + options.Mapping);
 
             if (type == null)
                 throw new Exception(String.Format("The import mapping '{0}' couldn't be found or does not exist.", options.Mapping));
 
-            return (IMapping)Activator.CreateInstance(type);
+            return (IReaderMapping)Activator.CreateInstance(type);
         }
 
         string GetErrorFilePath(ImportOptions options)

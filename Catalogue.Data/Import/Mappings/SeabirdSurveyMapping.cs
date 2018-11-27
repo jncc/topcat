@@ -21,7 +21,7 @@ namespace Catalogue.Data.Import.Mappings
     /// <summary>
     /// Steps: unknown. Get CSV from someone.
     /// </summary>
-    public class SeabirdSurveyMapping : IMapping
+    public class SeabirdSurveyMapping : IReaderMapping
     {
         public IEnumerable<Vocabulary> RequiredVocabularies
         {
@@ -61,22 +61,22 @@ namespace Catalogue.Data.Import.Mappings
             }
         }
 
-        public void Apply(CsvConfiguration config)
+        public void Apply(IReaderConfiguration config)
         {
             config.RegisterClassMap<RecordMap>();
             config.RegisterClassMap<GeminiMap>();
 
-            config.WillThrowOnMissingField = false;
-            config.TrimFields = true;
+            config.MissingFieldFound = null;
+            config.TrimOptions = TrimOptions.Trim;
         }
 
-        public sealed class GeminiMap : CsvClassMap<Metadata>
+        public sealed class GeminiMap : ClassMap<Metadata>
         {
             public GeminiMap()
             {
-                Map(m => m.Title).Field("Gemini.Title");
-                Map(m => m.Abstract).Field("Gemini.Abstract");
-                Map(m => m.TopicCategory).Field("Gemini.TopicCategory", value => value.FirstCharToLower());
+                Map(m => m.Title).Name("Gemini.Title");
+                Map(m => m.Abstract).Name("Gemini.Abstract");
+                Map(m => m.TopicCategory).Name("Gemini.TopicCategory").ConvertUsing(row => row.GetField("Gemini.TopicCategory").FirstCharToLower());
                 Map(m => m.Keywords).ConvertUsing(row =>
                 {
                     string species = row.GetField("Gemini.Keywords.Species");
@@ -101,12 +101,15 @@ namespace Catalogue.Data.Import.Mappings
                     Begin = row.GetField("TemporalExtent.Begin"),
                     End = row.GetField("TemporalExtent.End")
                 });
-                Map(m => m.DatasetReferenceDate).Field("Gemini.DatasetReferenceDate");
-                Map(m => m.Lineage).Field("Gemini.Lineage");
+                Map(m => m.DatasetReferenceDate).Name("Gemini.DatasetReferenceDate");
+                Map(m => m.Lineage).Name("Gemini.Lineage");
                 Map(m => m.ResourceLocator).Ignore();
-                Map(m => m.AdditionalInformationSource).Field("Gemini.AdditionalInformationSource");
+                Map(m => m.AdditionalInformationSource).Name("Gemini.AdditionalInformationSource");
 
-                Map(m => m.DataFormat).Field("Gemini.DataFormat", s => s == "ArcGIS shapefile" ? "ESRI Arc/View ShapeFile" : s);
+                Map(m => m.DataFormat).Name("Gemini.DataFormat").ConvertUsing( row =>
+                {
+                    return row.GetField("Gemini.DataFormat") == "ArcGIS shapefile" ? "ESRI Arc/View ShapeFile" : row.GetField("Gemini.DataFormat");
+                });
                 Map(m => m.ResponsibleOrganisation).ConvertUsing(row =>
                 {
                     string name = row.GetField("ResponsibleOrganisation.Name").Trim();
@@ -115,16 +118,19 @@ namespace Catalogue.Data.Import.Mappings
 
                     return new ResponsibleParty { Name = name == "JNCC" ? "Joint Nature Conservation Committee (JNCC)" : name, Email = email, Role = role };
                 });
-                Map(m => m.LimitationsOnPublicAccess).Field("Gemini.LimitationsOnPublicAccess");
-                Map(m => m.UseConstraints).Field("Gemini.UseConstraints");
-                Map(m => m.Copyright).Field("Copyright");
-                Map(m => m.SpatialReferenceSystem).Field("Gemini.SpatialReferenceSystem", value => value == "N/A" ? null : value);
+                Map(m => m.LimitationsOnPublicAccess).Name("Gemini.LimitationsOnPublicAccess");
+                Map(m => m.UseConstraints).Name("Gemini.UseConstraints");
+                Map(m => m.Copyright).Name("Copyright");
+                Map(m => m.SpatialReferenceSystem).Name("Gemini.SpatialReferenceSystem").ConvertUsing(row =>
+                {
+                    return row.GetField("Gemini.SpatialReferenceSystem") == "N/A" ? null : row.GetField("Gemini.SpatialReferenceSystem");
+                });
                 Map(m => m.Extent).ConvertUsing(row =>
                 {
                     string val = row.GetField("Gemini.Extent");
                     return new List<Extent> { new Extent { Value = val } };
                 });
-                Map(m => m.MetadataDate).Value(DateTime.Now);
+                Map(m => m.MetadataDate).Constant(DateTime.Now);
                 Map(m => m.MetadataPointOfContact).ConvertUsing(row =>
                 {
 //                  string name = "Joint Nature Conservation Committee (JNCC)";
@@ -137,7 +143,7 @@ namespace Catalogue.Data.Import.Mappings
 
                     return new ResponsibleParty { Name = name, Email = email, Role = "pointOfContact" };
                 });
-                Map(m => m.ResourceType).Field("Gemini.ResourceType", value => value.FirstCharToLower());
+                Map(m => m.ResourceType).Name("Gemini.ResourceType").ConvertUsing(row => row.GetField("Gemini.ResourceType").FirstCharToLower());
                 Map(m => m.BoundingBox).ConvertUsing(row =>
                 {
                     string north = row.GetField("BoundingBox.North");
@@ -158,14 +164,14 @@ namespace Catalogue.Data.Import.Mappings
             }
         }
 
-        public sealed class RecordMap : CsvClassMap<Record>
+        public sealed class RecordMap : ClassMap<Record>
         {
             public RecordMap()
             {
                 Map(m => m.Path);
                 Map(m => m.TopCopy);
-                Map(m => m.Validation).Value(Validation.Gemini);
-                Map(m => m.Status).Value(Status.Publishable);
+                Map(m => m.Validation).Constant(Validation.Gemini);
+                Map(m => m.Status).Constant(Status.Publishable);
                 Map(m => m.Security).Ignore();
                 Map(m => m.Review).Ignore();
                 Map(m => m.Notes);
@@ -182,7 +188,7 @@ namespace Catalogue.Data.Import.Mappings
     {
         List<Record> imported;
 
-        [TestFixtureSetUp]
+        [OneTimeSetUp]
         public void SetUp()
         {
             var store = new InMemoryDatabaseHelper().Create();

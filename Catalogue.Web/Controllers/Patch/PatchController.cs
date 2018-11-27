@@ -226,15 +226,5 @@ namespace Catalogue.Web.Controllers.Patch
 
             return new HttpResponseMessage { Content = new StringContent("Updated " + records.Count + " records.") };
         }
-
-        IMapping InstantiateMapping(string mapper)
-        {
-            var type = typeof(IMapping).Assembly.GetType("Catalogue.Data.Import.Mappings." + mapper);
-
-            if (type == null)
-                throw new Exception(String.Format("The import mapping '{0}' couldn't be found or does not exist.", mapper));
-
-            return (IMapping)Activator.CreateInstance(type);
-        }
     }
 }

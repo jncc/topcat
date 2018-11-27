@@ -89,7 +89,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Web.Controllers.Publishing
             });
 
             Action a = () => GetSignOffPublishingResponse(record);
-            a.ShouldThrow<InvalidOperationException>().And.Message.Should().Be("Couldn't sign-off record for publication - assessment not completed or out of date");
+            a.Should().Throw<InvalidOperationException>().And.Message.Should().Be("Couldn't sign-off record for publication - assessment not completed or out of date");
         }
 
         [Test]
@@ -129,7 +129,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Web.Controllers.Publishing
             });
 
             Action a = () => GetSignOffPublishingResponse(record);
-            a.ShouldThrow<InvalidOperationException>().And.Message.Should().Be("The record has already been signed off");
+            a.Should().Throw<InvalidOperationException>().And.Message.Should().Be("The record has already been signed off");
         }
 
         [Test]
@@ -163,7 +163,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Web.Controllers.Publishing
             });
 
             Action a = () => GetSignOffPublishingResponse(record);
-            a.ShouldThrow<Exception>().And.Message.Should().Be("Error while saving sign off changes");
+            a.Should().Throw<Exception>().And.Message.Should().Be("Error while saving sign off changes");
         }
 
         [Test]
@@ -183,7 +183,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Web.Controllers.Publishing
             });
 
             Action a = () => GetSignOffPublishingResponse(record);
-            a.ShouldThrow<InvalidOperationException>().And.Message.Should().Be("Couldn't sign-off record for publication - assessment not completed or out of date");
+            a.Should().Throw<InvalidOperationException>().And.Message.Should().Be("Couldn't sign-off record for publication - assessment not completed or out of date");
         }
 
         [Test]
@@ -293,7 +293,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Web.Controllers.Publishing
             using (var db = ReusableDocumentStore.OpenSession())
             {
                 Action a = () => GetSignOffPublishingResponse(db, record);
-                a.ShouldThrow<InvalidOperationException>().And.Message.Should()
+                a.Should().Throw<InvalidOperationException>().And.Message.Should()
                     .Be("The record has already been signed off");
 
                 var resultRecord = db.Load<Record>(record.Id);
@@ -355,7 +355,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Web.Controllers.Publishing
             using (var db = ReusableDocumentStore.OpenSession())
             {
                 Action a = () => GetSignOffPublishingResponse(db, record);
-                a.ShouldThrow<InvalidOperationException>().And.Message.Should()
+                a.Should().Throw<InvalidOperationException>().And.Message.Should()
                     .Be("The record has already been signed off");
 
                 var resultRecord = db.Load<Record>(record.Id);
@@ -421,7 +421,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Web.Controllers.Publishing
             using (var db = ReusableDocumentStore.OpenSession())
             {
                 Action a = () => GetSignOffPublishingResponse(db, record);
-                a.ShouldThrow<InvalidOperationException>().And.Message.Should().Be(
+                a.Should().Throw<InvalidOperationException>().And.Message.Should().Be(
                     "Couldn't sign-off record for publication - assessment not completed or out of date");
 
                 var resultRecord = db.Load<Record>(record.Id);
@@ -721,7 +721,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Web.Controllers.Publishing
             });
 
             Action a = () => GetSignOffPublishingResponse(record);
-            a.ShouldThrow<Exception>().And.Message.Should().Be("Record must be publishable as Open Data");
+            a.Should().Throw<Exception>().And.Message.Should().Be("Record must be publishable as Open Data");
         }
 
         [Test]
@@ -752,7 +752,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Web.Controllers.Publishing
             });
 
             Action a = () => GetSignOffPublishingResponse(record);
-            a.ShouldThrow<Exception>().And.Message.Should().Be("Record must be publishable as Open Data");
+            a.Should().Throw<Exception>().And.Message.Should().Be("Record must be publishable as Open Data");
         }
 
         [Test]
@@ -800,7 +800,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Web.Controllers.Publishing
             });
 
             Action a = () => GetSignOffPublishingResponse(record);
-            a.ShouldThrow<Exception>().And.Message.Should().Be("Record must be publishable as Open Data");
+            a.Should().Throw<Exception>().And.Message.Should().Be("Record must be publishable as Open Data");
         }
 
         private static RecordServiceResult GetSignOffPublishingResponse(IDocumentSession db, Record record)

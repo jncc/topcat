@@ -58,7 +58,7 @@ Another abstract,Some more notes,file:///z/some/location";
 
     }
 
-    public class TestDataMapping : IMapping
+    public class TestDataMapping : IReaderMapping
     {
         public IEnumerable<Vocabulary> RequiredVocabularies { get; private set; }
 
@@ -67,7 +67,7 @@ Another abstract,Some more notes,file:///z/some/location";
             RequiredVocabularies = new List<Vocabulary>();
         }
 
-        public void Apply(CsvConfiguration config)
+        public void Apply(IReaderConfiguration config)
         {
             // see http://joshclose.github.io/CsvHelper/
 
@@ -75,7 +75,7 @@ Another abstract,Some more notes,file:///z/some/location";
             config.RegisterClassMap<MetadataMap>();
         }
 
-        public sealed class RecordMap : CsvClassMap<Record>
+        public sealed class RecordMap : ClassMap<Record>
         {
             public RecordMap()
             {
@@ -85,7 +85,7 @@ Another abstract,Some more notes,file:///z/some/location";
             }
         }
 
-        public sealed class MetadataMap : CsvClassMap<Metadata>
+        public sealed class MetadataMap : ClassMap<Metadata>
         {
             public MetadataMap()
             {

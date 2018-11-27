@@ -3,9 +3,6 @@
 // then moved, edited as intended, and edited further to work with asp.net web api v4
 
 
-using System.Web.Http;
-using System;
-using System.Web;
 using Catalogue.Web.Injection;
 using Microsoft.Web.Infrastructure.DynamicModuleHelper;
 using Ninject;

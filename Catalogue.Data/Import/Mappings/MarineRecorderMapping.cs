@@ -20,7 +20,7 @@ namespace Catalogue.Data.Import.Mappings
     /// <summary>
     /// Steps: unknown. Get CSV(?) from Graham.
     /// </summary>
-    public class MarineRecorderMapping : IMapping
+    public class MarineRecorderMapping : IReaderMapping
     {
         public IEnumerable<Vocabulary> RequiredVocabularies
         {
@@ -34,24 +34,24 @@ namespace Catalogue.Data.Import.Mappings
             }
         }
 
-        public void Apply(CsvConfiguration config)
+        public void Apply(IReaderConfiguration config)
         {
             config.RegisterClassMap<MarineRecorderMapping.RecordMap>();
             config.RegisterClassMap<MarineRecorderMapping.GeminiMap>();
 
-            config.WillThrowOnMissingField = false;
-            config.TrimFields = true;
+            config.MissingFieldFound = null;
+            config.TrimOptions = TrimOptions.Trim;
         }
 
         const string genericAbstract = @"This survey was carried out as part of the Marine Nature Conservation Review (MNCR). The MNCR was started in 1987 by the Nature Conservancy Council and subsequent to the Environment Protection Act 1990, was undertaken by JNCC on behalf of the conservation agencies up to its completion in 1998. The MNCR was initiated to provide a comprehensive baseline of information on marine habitats and species, to aid coastal zone and sea-use management and to contribute to the identification of areas of marine natural heritage importance throughout Great Britain. Data collected through the MNCR was stored in the Marine Recorder database, and has been extracted from Marine Recorder to produce this dataset. For more details, see http://jncc.defra.gov.uk/page-1596.";
  
-        public sealed class GeminiMap : CsvClassMap<Metadata>
+        public sealed class GeminiMap : ClassMap<Metadata>
         {
             public GeminiMap()
             {
-                Map(m => m.Title).Field("Gemini.Title");
-                Map(m => m.Abstract).Field("Gemini.Abstract", s => s.IsNotBlank() ? s : genericAbstract);
-                Map(m => m.TopicCategory).Field("Gemini.TopicCategory", value => value.FirstCharToLower());
+                Map(m => m.Title).Name("Gemini.Title");
+                Map(m => m.Abstract).Name("Gemini.Abstract").ConvertUsing(row => row.GetField("Gemini.Abstract").IsNotBlank() ? row.GetField("Gemini.Abstract") : genericAbstract);
+                Map(m => m.TopicCategory).Name("Gemini.TopicCategory").ConvertUsing(row => row.GetField("Gemini.TopicCategory").FirstCharToLower());
                 Map(m => m.Keywords).ConvertUsing(row =>
                 {
                     string surveyId = row.GetField("Gemini.Keywords.SurveyKey");
@@ -73,8 +73,8 @@ namespace Catalogue.Data.Import.Mappings
                     Begin = FixUpLynnDateTime(row.GetField("TemporalExtent.Begin")),
                     End = FixUpLynnDateTime(row.GetField("TemporalExtent.End"))
                 });
-                Map(m => m.DatasetReferenceDate).Field("Gemini.DatasetReferenceDate", FixUpLynnDateTime);
-                Map(m => m.Lineage).Field("Gemini.Lineage").Value("This survey was extracted from a Marine Recorder snapshot.");
+                Map(m => m.DatasetReferenceDate).Name("Gemini.DatasetReferenceDate").ConvertUsing(row => FixUpLynnDateTime(row.GetField("Gemini.DatasetReferenceDate")));
+                Map(m => m.Lineage).Field("Gemini.Lineage").Constant("This survey was extracted from a Marine Recorder snapshot.");
                 Map(m => m.ResourceLocator).Ignore();
                 Map(m => m.AdditionalInformationSource).Field("Gemini.AdditionalInformationSource");
                 Map(m => m.DataFormat).Field("Gemini.DataFormat");
@@ -87,10 +87,10 @@ namespace Catalogue.Data.Import.Mappings
                     return new ResponsibleParty { Name = name == "JNCC" ? "Joint Nature Conservation Committee (JNCC)" : name, Email = email, Role = role };
                 });
                 Map(m => m.LimitationsOnPublicAccess).Field("Gemini.LimitationsOnPublicAccess");
-                Map(m => m.UseConstraints).Value("Open Government Licence v3.0");
-                Map(m => m.SpatialReferenceSystem).Field("Gemini.SpatialReferenceSystem", value => value == "N/A" ? null : value);
+                Map(m => m.UseConstraints).Constant("Open Government Licence v3.0");
+                Map(m => m.SpatialReferenceSystem).Name("Gemini.SpatialReferenceSystem").ConvertUsing(row => row.GetField("Gemini.SpatialReferenceSystem") == "N/A" ? null : row.GetField("Gemini.SpatialReferenceSystem"));
                 Map(m => m.Extent).Ignore();
-                Map(m => m.MetadataDate).Value(DateTime.Now);
+                Map(m => m.MetadataDate).Constant(DateTime.Now);
                 Map(m => m.MetadataPointOfContact).ConvertUsing(row =>
                 {
                     string name = "Roweena Patel";
@@ -98,7 +98,7 @@ namespace Catalogue.Data.Import.Mappings
                     string role = "pointOfContact";
                     return new ResponsibleParty { Name = name, Email = email, Role = role };
                 });
-                Map(m => m.ResourceType).Field("Gemini.ResourceType", value => value.FirstCharToLower());
+                Map(m => m.ResourceType).Name("Gemini.ResourceType").ConvertUsing(row => row.GetField("Gemini.ResourceType").FirstCharToLower());
                 Map(m => m.BoundingBox).ConvertUsing(row =>
                 {
                     decimal north = Convert.ToDecimal(row.GetField("BoundingBox.North"));
@@ -116,19 +116,19 @@ namespace Catalogue.Data.Import.Mappings
             }
         }
 
-        public sealed class RecordMap : CsvClassMap<Record>
+        public sealed class RecordMap : ClassMap<Record>
         {
             public RecordMap()
             {
                 Map(m => m.Path);
                 Map(m => m.TopCopy);
-                Map(m => m.Validation).Value(Validation.Gemini);
+                Map(m => m.Validation).Constant(Validation.Gemini);
                 Map(m => m.Status).Ignore();
                 Map(m => m.Security).Ignore();
                 Map(m => m.Review).Ignore();
                 Map(m => m.Notes);
                 Map(m => m.SourceIdentifier);
-                Map(m => m.ReadOnly).Value(true);
+                Map(m => m.ReadOnly).Constant(true);
 
                 References<GeminiMap>(m => m.Gemini);
             }
@@ -140,7 +140,7 @@ namespace Catalogue.Data.Import.Mappings
     {
         List<Record> imported;
 
-        [TestFixtureSetUp]
+        [OneTimeSetUp]
         public void SetUp()
         {
             var paths = new { input = @"C:\work\marine-recorder-dump\MR_MNCR_1stTranche_INPUT_Final.csv", errors = @"C:\work\marine-recorder-dump\errors.txt" };

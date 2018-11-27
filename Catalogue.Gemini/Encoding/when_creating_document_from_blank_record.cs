@@ -12,9 +12,10 @@ namespace Catalogue.Gemini.Encoding
         public void should_have_correct_root_element()
         {
             var metadata = Library.Blank();
-            var xml = new XmlEncoder().Create(Guid.NewGuid().ToString(), metadata);
+            var id = Guid.NewGuid().ToString();
+            var xml = new XmlEncoder().Create(id, metadata);
 
-            string root = XName.Get("MD_Metadata", "http://www.isotc211.org/2005/gmd").ToString();
+            var root = XName.Get("MD_Metadata", "http://www.isotc211.org/2005/gmd");
             xml.Should().HaveRoot(root);
         }
     }

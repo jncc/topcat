@@ -4,8 +4,6 @@ using System.Collections.Generic;
 using System.Linq;
 using Catalogue.Gemini.Model;
 using Catalogue.Utilities.Text;
-using Moq;
-using NUnit.Framework;
 using Raven.Client.Documents.Session;
 
 namespace Catalogue.Data.Write

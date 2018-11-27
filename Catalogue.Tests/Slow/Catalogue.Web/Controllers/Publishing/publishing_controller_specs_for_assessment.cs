@@ -158,7 +158,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Web.Controllers.Publishing
             });
 
             Action a = () => TestAssessment(record);
-            a.ShouldThrow<InvalidOperationException>().And.Message.Should().Be("Assessment has already been completed and is up to date");
+            a.Should().Throw<InvalidOperationException>().And.Message.Should().Be("Assessment has already been completed and is up to date");
         }
 
         [Test]
@@ -199,7 +199,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Web.Controllers.Publishing
             });
 
             Action a = () => TestAssessment(record);
-            a.ShouldThrow<InvalidOperationException>().And.Message.Should().Be("Assessment has already been completed and is up to date");
+            a.Should().Throw<InvalidOperationException>().And.Message.Should().Be("Assessment has already been completed and is up to date");
         }
 
         [Test]
@@ -226,7 +226,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Web.Controllers.Publishing
             });
 
             Action a = () => TestAssessment(record);
-            a.ShouldThrow<InvalidOperationException>().And.Message.Should().Be("Validation level must be Gemini");
+            a.Should().Throw<InvalidOperationException>().And.Message.Should().Be("Validation level must be Gemini");
         }
 
         [Test]
@@ -343,7 +343,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Web.Controllers.Publishing
                 };
 
                 Action a = () => publishingController.Assess(request);
-                a.ShouldThrow<InvalidOperationException>().And.Message.Should().Be("Assessment has already been completed and is up to date");
+                a.Should().Throw<InvalidOperationException>().And.Message.Should().Be("Assessment has already been completed and is up to date");
 
                 var resultRecord = db.Load<Record>(record.Id);
                 resultRecord.Publication.Should().NotBeNull();
@@ -413,7 +413,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Web.Controllers.Publishing
                 };
 
                 Action a = () => publishingController.Assess(request);
-                a.ShouldThrow<InvalidOperationException>().And.Message.Should().Be("Assessment has already been completed and is up to date");
+                a.Should().Throw<InvalidOperationException>().And.Message.Should().Be("Assessment has already been completed and is up to date");
 
                 var resultRecord = db.Load<Record>(record.Id);
                 resultRecord.Publication.Should().NotBeNull();
@@ -549,7 +549,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Web.Controllers.Publishing
                 };
 
                 Action a = () => publishingController.Assess(request);
-                a.ShouldThrow<InvalidOperationException>().And.Message.Should().Be("Must have a file path for publishing");
+                a.Should().Throw<InvalidOperationException>().And.Message.Should().Be("Must have a file path for publishing");
 
                 var resultRecord = db.Load<Record>(record.Id);
                 resultRecord.Publication.OpenData.Assessment.Should().BeNull();
@@ -580,7 +580,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Web.Controllers.Publishing
             });
 
             Action a = () => TestAssessment(record);
-            a.ShouldThrow<InvalidOperationException>().And.Message.Should().Be("Record must be publishable as Open Data");
+            a.Should().Throw<InvalidOperationException>().And.Message.Should().Be("Record must be publishable as Open Data");
         }
 
         [Test]
@@ -626,7 +626,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Web.Controllers.Publishing
             });
 
             Action a = () => TestAssessment(record);
-            a.ShouldThrow<InvalidOperationException>().And.Message.Should().Be("Record must be publishable as Open Data");
+            a.Should().Throw<InvalidOperationException>().And.Message.Should().Be("Record must be publishable as Open Data");
         }
 
         [Test]
@@ -646,7 +646,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Web.Controllers.Publishing
             });
 
             Action a = () => TestAssessment(record);
-            a.ShouldThrow<InvalidOperationException>().And.Message.Should().Be("Record must be publishable as Open Data");
+            a.Should().Throw<InvalidOperationException>().And.Message.Should().Be("Record must be publishable as Open Data");
         }
 
         private Record TestAssessment(Record record)

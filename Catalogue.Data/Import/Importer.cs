@@ -16,7 +16,7 @@ namespace Catalogue.Data.Import
         /// <summary>
         /// Helper to conveniently create an importer instance.
         /// </summary>
-        public static Importer CreateImporter(IDocumentSession db, IMapping mapping)
+        public static Importer CreateImporter(IDocumentSession db, IReaderMapping mapping)
         {
             return new Importer(
                 mapping,
@@ -30,7 +30,7 @@ namespace Catalogue.Data.Import
                 });
         }
 
-        readonly IMapping mapping;
+        readonly IReaderMapping mapping;
         readonly IFileSystem fileSystem;
         readonly IRecordService recordService;
         readonly IVocabularyService vocabularyService;
@@ -40,7 +40,7 @@ namespace Catalogue.Data.Import
 
         public readonly List<RecordServiceResult> Results = new List<RecordServiceResult>();
 
-        public Importer(IMapping mapping, IFileSystem fileSystem, IRecordService recordService, IVocabularyService vocabularyService, UserInfo userInfo)
+        public Importer(IReaderMapping mapping, IFileSystem fileSystem, IRecordService recordService, IVocabularyService vocabularyService, UserInfo userInfo)
         {
             this.mapping = mapping;
             this.fileSystem = fileSystem;

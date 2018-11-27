@@ -25,7 +25,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Data.Write
             var record = new Record { ReadOnly = true };
 
             service.Invoking(s => s.Update(record, TestUser))
-                .ShouldThrow<InvalidOperationException>()
+                .Should().Throw<InvalidOperationException>()
                 .WithMessage("Cannot update a read-only record.");
         }
 

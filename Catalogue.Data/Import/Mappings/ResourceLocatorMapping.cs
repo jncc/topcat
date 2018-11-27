@@ -7,7 +7,7 @@ using System.Collections.Generic;
 namespace Catalogue.Data.Import.Mappings
 {
 
-    public class ResourceLocatorMapping : IMapping
+    public class ResourceLocatorMapping : IReaderMapping
     {
         public IEnumerable<Vocabulary> RequiredVocabularies
         {
@@ -21,28 +21,28 @@ namespace Catalogue.Data.Import.Mappings
             }
         }
 
-        public void Apply(CsvConfiguration config)
+        public void Apply(IReaderConfiguration config)
         {
             config.RegisterClassMap<RecordMap>();
             config.RegisterClassMap<GeminiMap>();
 
-            config.WillThrowOnMissingField = false;
-            config.TrimFields = true;
+            config.MissingFieldFound = null;
+            config.TrimOptions = TrimOptions.Trim;
         }
 
-        public sealed class GeminiMap : CsvClassMap<Metadata>
+        public sealed class GeminiMap : ClassMap<Metadata>
         {
             public GeminiMap()
             {
-                Map(m => m.ResourceLocator).Field("RESOURCE_URL");
+                Map(m => m.ResourceLocator).Name("RESOURCE_URL");
             }
         }
 
-        public sealed class RecordMap : CsvClassMap<Record>
+        public sealed class RecordMap : ClassMap<Record>
         {
             public RecordMap()
             {
-                Map(m => m.Id).Field("TOPCAT_ID");
+                Map(m => m.Id).Name("TOPCAT_ID");
                 References<GeminiMap>(m => m.Gemini);
             }
         }

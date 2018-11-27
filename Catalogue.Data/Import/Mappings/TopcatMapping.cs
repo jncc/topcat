@@ -14,7 +14,7 @@ namespace Catalogue.Data.Import.Mappings
     /// <summary>
     /// Supports a standard Topcat tab-separated record format (as created by the exporter).
     /// </summary>
-    public class TopcatMapping : IMapping
+    public class TopcatMapping : IReaderMapping
     {
         public IEnumerable<Vocabulary> RequiredVocabularies
         {
@@ -29,18 +29,28 @@ namespace Catalogue.Data.Import.Mappings
         }
 
         
-        public void Apply(CsvConfiguration config)
+        public void Apply(IReaderConfiguration config)
         {
             ApplyStandardTopcatConfiguration(config, "\t");
             // do nothing else! for this import mapping we're going to use defaults
         }
 
-        public static CsvConfiguration ApplyStandardTopcatConfiguration(CsvConfiguration config, string delimiter)
+        public static IReaderConfiguration ApplyStandardTopcatConfiguration(IReaderConfiguration config, string delimiter)
         {
             config.Delimiter = delimiter;
-            config.PrefixReferenceHeaders = true;
-            TypeConverterFactory.AddConverter<List<MetadataKeyword>>(new Exporter.MetadataKeywordConverter());
-            TypeConverterFactory.AddConverter<List<Extent>>(new Exporter.ExtentListConverter());
+            //config.PrefixReferenceHeaders = true;
+            config.TypeConverterCache.AddConverter<List<MetadataKeyword>>(new Exporter.MetadataKeywordConverter());
+            config.TypeConverterCache.AddConverter<List<Extent>>(new Exporter.ExtentListConverter());
+
+            return config;
+        }
+
+        public static IWriterConfiguration ApplyStandardTopcatConfiguration(IWriterConfiguration config, string delimiter)
+        {
+            config.Delimiter = delimiter;
+            //config.PrefixReferenceHeaders = true;
+            config.TypeConverterCache.AddConverter<List<MetadataKeyword>>(new Exporter.MetadataKeywordConverter());
+            config.TypeConverterCache.AddConverter<List<Extent>>(new Exporter.ExtentListConverter());
 
             return config;
         }

@@ -1,12 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using NUnit.Framework;
+using System;
 using System.IO;
 using System.Linq;
-using System.Text;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
-using FluentAssertions;
-using NUnit.Framework;
 
 namespace Catalogue.Utilities.Text
 {
@@ -46,15 +42,15 @@ namespace Catalogue.Utilities.Text
 
     class webification_utility_tests
     {
-        [TestCase("two little words", Result = "two-little-words")]
-        [TestCase("Combined_P_A_Matrix)data_sources.csv", Result = "Combined-P-A-Matrix-data-sources.csv")]
-        [TestCase("Three Little words! - v2.txt", Result = "Three-Little-words-v2.txt")]
-        [TestCase("New-York NEW-YORK!.txt", Result = "New-York-NEW-YORK.txt")]
-        [TestCase("my.file.txt", Result = "my.file.txt")]
-        [TestCase("myfile.txt", Result = "myfile.txt")]
-        [TestCase("Sound_Strait_WGS84.zip", Result = "Sound-Strait-WGS84.zip")]
-        [TestCase("", Result = "")]
-        [TestCase(null, Result = null)]
+        [TestCase("two little words", ExpectedResult = "two-little-words")]
+        [TestCase("Combined_P_A_Matrix)data_sources.csv", ExpectedResult = "Combined-P-A-Matrix-data-sources.csv")]
+        [TestCase("Three Little words! - v2.txt", ExpectedResult = "Three-Little-words-v2.txt")]
+        [TestCase("New-York NEW-YORK!.txt", ExpectedResult = "New-York-NEW-YORK.txt")]
+        [TestCase("my.file.txt", ExpectedResult = "my.file.txt")]
+        [TestCase("myfile.txt", ExpectedResult = "myfile.txt")]
+        [TestCase("Sound_Strait_WGS84.zip", ExpectedResult = "Sound-Strait-WGS84.zip")]
+        [TestCase("", ExpectedResult = "")]
+        [TestCase(null, ExpectedResult = null)]
         public string test_to_url_friendly_string(string s)
         {
             return WebificationUtility.ToUrlFriendlyString(s);
