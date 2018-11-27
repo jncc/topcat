@@ -36,7 +36,7 @@ namespace Catalogue.Web.Controllers.Roles
             var c = new RolesController();
             var result = c.Get("p");
 
-            result.Count.ShouldBeEquivalentTo(5);
+            result.Count.Should().Be(5);
         }
     }
 }

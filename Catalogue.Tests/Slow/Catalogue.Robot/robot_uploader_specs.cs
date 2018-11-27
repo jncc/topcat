@@ -1,5 +1,4 @@
 ﻿using Catalogue.Data.Model;
-using Catalogue.Data.Test;
 using Catalogue.Data.Write;
 using Catalogue.Gemini.Templates;
 using Catalogue.Robot.Publishing.OpenData;
@@ -9,18 +8,18 @@ using Moq;
 using NUnit.Framework;
 using System;
 using System.Collections.Generic;
-using System.Threading;
+using Catalogue.Data;
 
 namespace Catalogue.Tests.Slow.Catalogue.Robot
 {
-    class robot_uploader_specs
+    public class robot_uploader_specs : CleanDbTest
     {
         [Test]
         public void pending_upload_test_with_assessed_record()
         {
             var assessedRecord = new Record().With(r =>
             {
-                r.Id = new Guid("fc3a649f-0712-4175-9624-77555918ea79");
+                r.Id = Helpers.AddCollection("fc3a649f-0712-4175-9624-77555918ea79");
                 r.Path = @"X:\path\to\uploader\test";
                 r.Validation = Validation.Gemini;
                 r.Gemini = Library.Example().With(m =>
@@ -49,7 +48,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Robot
         {
             var nullPublicationRecord = new Record().With(r =>
             {
-                r.Id = new Guid("92efc007-e98e-4263-80f3-847c5f9c4e08");
+                r.Id = Helpers.AddCollection("92efc007-e98e-4263-80f3-847c5f9c4e08");
                 r.Path = @"X:\path\to\uploader\test";
                 r.Validation = Validation.Gemini;
                 r.Gemini = Library.Example();
@@ -65,7 +64,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Robot
         {
             var assessedAndSignedOffRecord = new Record().With(r =>
             {
-                r.Id = new Guid("09ed523e-a35f-4654-a337-64ee732e505f");
+                r.Id = Helpers.AddCollection("09ed523e-a35f-4654-a337-64ee732e505f");
                 r.Path = @"X:\path\to\uploader\test";
                 r.Validation = Validation.Gemini;
                 r.Gemini = Library.Example().With(m =>
@@ -99,7 +98,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Robot
         {
             var signedOffOnlyRecord = new Record().With(r =>
             {
-                r.Id = new Guid("cfefc2b9-bd6c-4005-a7a6-c0d66be4a8e0");
+                r.Id = Helpers.AddCollection("cfefc2b9-bd6c-4005-a7a6-c0d66be4a8e0");
                 r.Path = @"X:\path\to\uploader\test";
                 r.Validation = Validation.Gemini;
                 r.Gemini = Library.Example().With(m =>
@@ -131,7 +130,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Robot
         {
             var pausedRecord = new Record().With(r =>
             {
-                r.Id = new Guid("5775e234-56fb-4ef4-b932-95325fa88674");
+                r.Id = Helpers.AddCollection("5775e234-56fb-4ef4-b932-95325fa88674");
                 r.Path = @"X:\path\to\uploader\test";
                 r.Validation = Validation.Gemini;
                 r.Gemini = Library.Example().With(m =>
@@ -165,7 +164,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Robot
         {
             var attemptedButFailedRecord = new Record().With(r =>
             {
-                r.Id = new Guid("1a4fae84-465d-4823-9db5-494e0eee0de7");
+                r.Id = Helpers.AddCollection("1a4fae84-465d-4823-9db5-494e0eee0de7");
                 r.Path = @"X:\path\to\uploader\test";
                 r.Validation = Validation.Gemini;
                 r.Gemini = Library.Example().With(m =>
@@ -203,7 +202,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Robot
         {
             var alreadyUploadedRecord = new Record().With(r =>
             {
-                r.Id = new Guid("3df7c4ca-2be5-4455-b2e8-dc984d2c3fbe");
+                r.Id = Helpers.AddCollection("3df7c4ca-2be5-4455-b2e8-dc984d2c3fbe");
                 r.Path = @"X:\path\to\uploader\test";
                 r.Validation = Validation.Gemini;
                 r.Gemini = Library.Example().With(m =>
@@ -245,7 +244,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Robot
         {
             var publishedAndOutOfDateRecord = new Record().With(r =>
             {
-                r.Id = new Guid("98b55f61-964b-4186-8af8-e3d62a2aace4");
+                r.Id = Helpers.AddCollection("98b55f61-964b-4186-8af8-e3d62a2aace4");
                 r.Path = @"X:\path\to\uploader\test";
                 r.Validation = Validation.Gemini;
                 r.Gemini = Library.Example().With(m =>
@@ -287,7 +286,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Robot
         {
             var readyToRepublishRecord = new Record().With(r =>
             {
-                r.Id = new Guid("d41f3ffc-0b60-49b4-af15-94e0f3180f29");
+                r.Id = Helpers.AddCollection("d41f3ffc-0b60-49b4-af15-94e0f3180f29");
                 r.Path = @"X:\path\to\uploader\test";
                 r.Validation = Validation.Gemini;
                 r.Gemini = Library.Example().With(m =>
@@ -329,7 +328,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Robot
         {
             var publishedAndReassessedRecord = new Record().With(r =>
             {
-                r.Id = new Guid("b41a3f52-05de-4e52-abb6-18a6d835e39f");
+                r.Id = Helpers.AddCollection("b41a3f52-05de-4e52-abb6-18a6d835e39f");
                 r.Path = @"X:\path\to\uploader\test";
                 r.Validation = Validation.Gemini;
                 r.Gemini = Library.Example().With(m =>
@@ -370,7 +369,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Robot
         {
             var publishedAssessedSignedOffThenEditedRecord = new Record().With(r =>
             {
-                r.Id = new Guid("6e48d4c7-3174-409f-a4d4-00d6909b7c8f");
+                r.Id = Helpers.AddCollection("6e48d4c7-3174-409f-a4d4-00d6909b7c8f");
                 r.Path = @"X:\path\to\uploader\test";
                 r.Validation = Validation.Gemini;
                 r.Gemini = Library.Example().With(m =>
@@ -411,7 +410,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Robot
         {
             var unpublishableRecord = new Record().With(r =>
             {
-                r.Id = new Guid("7859f8b7-5d27-47f6-af4a-85f2c296beeb");
+                r.Id = Helpers.AddCollection("7859f8b7-5d27-47f6-af4a-85f2c296beeb");
                 r.Path = @"X:\path\to\uploader\test";
                 r.Validation = Validation.Gemini;
                 r.Gemini = Library.Example().With(m =>
@@ -445,7 +444,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Robot
         {
             var unpublishableRecord = new Record().With(r =>
             {
-                r.Id = new Guid("1e776af7-2c77-4017-b7e9-4d31ad560fd2");
+                r.Id = Helpers.AddCollection("1e776af7-2c77-4017-b7e9-4d31ad560fd2");
                 r.Path = @"X:\path\to\uploader\test";
                 r.Validation = Validation.Gemini;
                 r.Gemini = Library.Example().With(m =>
@@ -479,7 +478,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Robot
         {
             var unpublishableRecord = new Record().With(r =>
             {
-                r.Id = new Guid("f725ebb4-0ef5-4ef6-bded-68d77aee4ad4");
+                r.Id = Helpers.AddCollection("f725ebb4-0ef5-4ef6-bded-68d77aee4ad4");
                 r.Path = @"X:\path\to\uploader\test";
                 r.Validation = Validation.Gemini;
                 r.Gemini = Library.Example().With(m =>
@@ -531,17 +530,18 @@ namespace Catalogue.Tests.Slow.Catalogue.Robot
 
         private List<Record> PendingUploadTest(Record record)
         {
-            var store = new InMemoryDatabaseHelper().Create();
-            using (var db = store.OpenSession())
+            using (var db = ReusableDocumentStore.OpenSession())
             {
                 db.Store(record);
                 db.SaveChanges();
+                WaitForIndexing(ReusableDocumentStore);
 
                 var uploadServiceMock = new Mock<IOpenDataPublishingUploadRecordService>();
                 var uploadHelperMock = new Mock<IOpenDataUploadHelper>();
                 var robotUploader = new RobotUploader(db, uploadServiceMock.Object, uploadHelperMock.Object);
 
-                return robotUploader.GetRecordsPendingUpload();
+                var result = robotUploader.GetRecordsPendingUpload();
+                return result;
             }
         }
     }

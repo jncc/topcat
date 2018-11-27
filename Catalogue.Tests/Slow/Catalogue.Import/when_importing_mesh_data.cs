@@ -2,21 +2,22 @@
 using System.Collections.Generic;
 using System.Linq;
 using Catalogue.Data.Model;
+using Catalogue.Data.Seed;
 using Catalogue.Gemini.DataFormats;
 using Catalogue.Utilities.Text;
 using FluentAssertions;
 using NUnit.Framework;
+using Raven.Client.Documents.Indexes;
 
 namespace Catalogue.Tests.Slow.Catalogue.Import
 {
-    internal class when_importing_mesh_data : DatabaseTestFixture
+    public class when_importing_mesh_data : SeededDbTest
     {
         private List<Record> imported;
 
         [SetUp]
         public void SetUp()
         {
-            // the DatabaseTestFixture will already have done the import ..!
             // let's store everything in a list to allow standard linq-to-object queries
             // (all mesh records have a "GUI" field which seems to be unique and starts with 'GB')
             imported = Db.Query<Record>().Take(1000).ToList()

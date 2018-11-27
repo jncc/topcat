@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Specialized;
 using System.Configuration;
-using Catalogue.Utilities.Text;
 using Catalogue.Web.Code;
 using System.DirectoryServices.AccountManagement;
 using System.Linq;

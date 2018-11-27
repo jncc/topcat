@@ -11,9 +11,9 @@ using NUnit.Framework;
 
 namespace Catalogue.Tests.Slow.Catalogue.Web.Controllers.Export
 {
-    class export_controller_tests : DatabaseTestFixture
+    public class export_controller_tests : SeededDbTest
     {
-//        [Test]
+        [Test, Ignore("raven4 - async session not working")]
         public void export_sanity_check()
         {
             var controller = new ExportController(Db, new RecordQueryer(Db));
@@ -34,7 +34,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Web.Controllers.Export
             matches.Count.Should().Be(189);  // the number of mesh records
         }
 
-//        [Test]
+        [Test, Ignore("raven4")]
         public void export_as_csv_sanity_check()
         {
             var controller = new ExportController(Db, new RecordQueryer(Db));
@@ -55,7 +55,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Web.Controllers.Export
             matches.Count.Should().Be(189);  // the number of mesh records
         }
 
-//        [Test]
+        [Test, Ignore("raven4")]
         public void export_with_format_filter()
         {
             var controller = new ExportController(Db, new RecordQueryer(Db));

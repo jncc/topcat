@@ -18,7 +18,7 @@ using NUnit.Framework;
 
 namespace Catalogue.Data.Import.Mappings
 {
-    public class ActivitiesMapping : IMapping
+    public class ActivitiesMapping : IReaderMapping
     {
         public IEnumerable<Vocabulary> RequiredVocabularies
         {
@@ -131,19 +131,19 @@ namespace Catalogue.Data.Import.Mappings
             }
         }
 
-        public void Apply(CsvConfiguration config)
+        public void Apply(IReaderConfiguration config)
         {
             // see http://joshclose.github.io/CsvHelper/
 
             config.Delimiter = "\t";
-            config.QuoteAllFields = true;
-            config.TrimFields = true;
-            config.SkipEmptyRecords = true;
+            //config.QuoteAllFields = true;
+            config.TrimOptions = TrimOptions.Trim;
+            config.IgnoreBlankLines = true;
             config.RegisterClassMap<RecordMap>();
             config.RegisterClassMap<GeminiMap>();
         }
 
-        public sealed class RecordMap : CsvClassMap<Record>
+        public sealed class RecordMap : ClassMap<Record>
         {
             public RecordMap()
             {
@@ -167,7 +167,7 @@ namespace Catalogue.Data.Import.Mappings
             }
         }
 
-        public sealed class GeminiMap : CsvClassMap<Metadata>
+        public sealed class GeminiMap : ClassMap<Metadata>
         {
             public GeminiMap()
             {
@@ -253,7 +253,7 @@ namespace Catalogue.Data.Import.Mappings
                         return dt;
                     }
                 });
-                Map(m => m.ResourceType).ConvertUsing(row => "dataset"); // only use dataset atm
+                Map(m => m.ResourceType).Constant("dataset"); // only use dataset atm
                 Map(m => m.MetadataPointOfContact).ConvertUsing(row =>
                 {
                     string name = row.GetField("Metadata point of contact");
@@ -425,7 +425,7 @@ namespace Catalogue.Data.Import.Mappings
     {
         List<Record> imported;
 
-        [TestFixtureSetUp]
+        [OneTimeSetUp]
         public void SetUp()
         {
             var store = new InMemoryDatabaseHelper().Create();

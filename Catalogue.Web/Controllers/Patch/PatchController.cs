@@ -5,7 +5,6 @@ using Catalogue.Data.Write;
 using Catalogue.Gemini.BoundingBoxes;
 using Catalogue.Gemini.Model;
 using Catalogue.Gemini.Spatial;
-using Raven.Client;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -13,8 +12,7 @@ using System.Linq;
 using System.Net.Http;
 using System.Web.Http;
 using Catalogue.Data.Import.Mappings;
-using Catalogue.Utilities.Time;
-using CsvHelper;
+using Raven.Client.Documents.Session;
 
 namespace Catalogue.Web.Controllers.Patch
 {
@@ -227,132 +225,6 @@ namespace Catalogue.Web.Controllers.Patch
             db.SaveChanges();
 
             return new HttpResponseMessage { Content = new StringContent("Updated " + records.Count + " records.") };
-        }
-
-        [HttpPost, Route("api/patch/migrateopendatapublicationinfo")]
-        public HttpResponseMessage MigrateOpenDataPublicationInfo()
-        {
-            var records1 = db
-                .Query<RecordsWithOpenDataPublicationInfoIndex.Result, RecordsWithOpenDataPublicationInfoIndex>()
-                .As<Record>()
-                .Skip(0)
-                .Take(1024)
-                .ToList();
-
-            var records2 = db
-                .Query<RecordsWithOpenDataPublicationInfoIndex.Result, RecordsWithOpenDataPublicationInfoIndex>()
-                .As<Record>()
-                .Skip(1024)
-                .Take(1024)
-                .ToList();
-
-            var records = records1.Concat(records2).ToList();
-
-            foreach (var record in records)
-            {
-                var old = record.Publication.OpenData;
-
-                if (old.SignOff == null)
-                {
-                    record.Publication.OpenData = new OpenDataPublicationInfo
-                    {
-                        Assessment = new OpenDataAssessmentInfo { Completed = true, InitialAssessmentWasDoneOnSpreadsheet = true },
-                        SignOff = new OpenDataSignOffInfo(),
-                        LastAttempt = old.LastAttempt,
-                        LastSuccess = old.LastSuccess,
-                        Paused = old.Paused,
-                        Resources = old.Resources,
-                    };
-                }
-            }
-
-            db.SaveChanges();
-
-            return new HttpResponseMessage { Content = new StringContent("Updated " + records.Count + " records.") };
-
-        }
-
-        [HttpPost, Route("api/patch/bulkupdate")]
-        public HttpResponseMessage BulkUpdate()
-        {
-            var records1 = db
-                .Query<Record>()
-                .As<Record>()
-                .Skip(0)
-                .Take(1024)
-                .ToList();
-
-            var records2 = db
-                .Query<Record>()
-                .As<Record>()
-                .Skip(1024)
-                .Take(1024)
-                .ToList();
-
-            var records3 = db
-                .Query<Record>()
-                .As<Record>()
-                .Skip(2048)
-                .Take(1024)
-                .ToList();
-
-            var records4 = db
-                .Query<Record>()
-                .As<Record>()
-                .Skip(3072)
-                .Take(1024)
-                .ToList();
-
-            var records = records1.Concat(records2).Concat(records3).Concat(records4).ToList();
-
-            var resourceLocatorMapping = InstantiateMapping("ResourceLocatorMapping");
-            var pathMapping = InstantiateMapping("PathMapping");
-            using (var resourceLocatorReader = new StreamReader("C:\\temp\\TOPCAT_327.csv"))
-            using (var pathReader = new StreamReader("C:\\temp\\TOPCAT_298.csv"))
-            {
-                var resourceLocatorCsv = new CsvReader(resourceLocatorReader);
-                var pathCsv = new CsvReader(pathReader);
-
-                resourceLocatorMapping.Apply(resourceLocatorCsv.Configuration);
-                pathMapping.Apply(pathCsv.Configuration);
-
-                var resourceLocatorRecords = resourceLocatorCsv.GetRecords<Record>().ToList();
-                var pathRecords = pathCsv.GetRecords<Record>().ToList();
-
-                foreach (var record in records)
-                {
-                    foreach (var resourceLocatorRecord in resourceLocatorRecords)
-                    {
-                        if (record.Id.Equals(resourceLocatorRecord.Id))
-                        {
-                            record.Gemini.ResourceLocator = resourceLocatorRecord.Gemini.ResourceLocator;
-                            record.Gemini.MetadataDate = Clock.NowUtc;
-                        }
-                    }
-
-                    foreach (var pathRecord in pathRecords)
-                    {
-                        if (record.Id.Equals(pathRecord.Id))
-                        {
-                            record.Path = pathRecord.Path;
-                        }
-                    }
-                }
-            }
-
-            db.SaveChanges();
-
-            return new HttpResponseMessage { Content = new StringContent("Updated " + records.Count + " records.") };
-        }
-
-        IMapping InstantiateMapping(string mapper)
-        {
-            var type = typeof(IMapping).Assembly.GetType("Catalogue.Data.Import.Mappings." + mapper);
-
-            if (type == null)
-                throw new Exception(String.Format("The import mapping '{0}' couldn't be found or does not exist.", mapper));
-
-            return (IMapping)Activator.CreateInstance(type);
         }
     }
 }

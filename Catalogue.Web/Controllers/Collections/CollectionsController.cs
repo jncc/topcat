@@ -4,6 +4,7 @@ using System.Web.Http;
 using Catalogue.Data.Indexes;
 using Catalogue.Gemini.Model;
 using Raven.Client;
+using Raven.Client.Documents.Session;
 
 namespace Catalogue.Web.Controllers.Collections
 {

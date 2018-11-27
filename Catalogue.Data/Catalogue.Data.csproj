@@ -9,7 +9,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Catalogue.Data</RootNamespace>
     <AssemblyName>Catalogue.Data</AssemblyName>
-    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />
   </PropertyGroup>
@@ -32,49 +32,14 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="CsvHelper, Version=2.0.0.0, Culture=neutral, PublicKeyToken=8c4959082be5c823, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\CsvHelper.2.13.2.0\lib\net40-client\CsvHelper.dll</HintPath>
-    </Reference>
-    <Reference Include="FluentAssertions">
-      <HintPath>..\packages\FluentAssertions.2.0.1\lib\net45\FluentAssertions.dll</HintPath>
-    </Reference>
-    <Reference Include="ICSharpCode.SharpZipLib">
-      <HintPath>..\packages\SharpZipLib.0.86.0\lib\20\ICSharpCode.SharpZipLib.dll</HintPath>
-    </Reference>
-    <Reference Include="log4net, Version=2.0.8.0, Culture=neutral, PublicKeyToken=669e0ddf0bb1aa2a, processorArchitecture=MSIL">
-      <HintPath>..\packages\log4net.2.0.8\lib\net45-full\log4net.dll</HintPath>
-    </Reference>
-    <Reference Include="Lucene.Net">
-      <HintPath>..\packages\Lucene.Net.3.0.3\lib\NET40\Lucene.Net.dll</HintPath>
-    </Reference>
-    <Reference Include="Moq">
-      <HintPath>..\packages\Moq.4.1.1309.1617\lib\net40\Moq.dll</HintPath>
-    </Reference>
-    <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\Newtonsoft.Json.6.0.8\lib\net45\Newtonsoft.Json.dll</HintPath>
-    </Reference>
-    <Reference Include="nunit.framework">
-      <HintPath>..\packages\NUnit.2.6.2\lib\nunit.framework.dll</HintPath>
-    </Reference>
-    <Reference Include="Raven.Abstractions, Version=3.5.5.0, Culture=neutral, PublicKeyToken=37f41c7f99471593, processorArchitecture=MSIL">
-      <HintPath>..\packages\RavenDB.Database.3.5.5\lib\net45\Raven.Abstractions.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="Raven.Client.Lightweight, Version=3.5.5.0, Culture=neutral, PublicKeyToken=37f41c7f99471593, processorArchitecture=MSIL">
-      <HintPath>..\packages\RavenDB.Client.3.5.5\lib\net45\Raven.Client.Lightweight.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="Raven.Database, Version=3.5.5.0, Culture=neutral, PublicKeyToken=37f41c7f99471593, processorArchitecture=MSIL">
-      <HintPath>..\packages\RavenDB.Database.3.5.5\lib\net45\Raven.Database.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.Composition" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.Data.Services.Client" />
+    <Reference Include="System.IO.Compression.FileSystem" />
+    <Reference Include="System.Numerics" />
     <Reference Include="System.Web" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -87,37 +52,29 @@
     <Compile Include="DatabaseFactory.cs" />
     <Compile Include="Exchange\TopcatExchangeFormat.cs" />
     <Compile Include="Export\Exporter.cs" />
+    <Compile Include="Helpers.cs" />
     <Compile Include="Import\CsvHelperHelpers.cs" />
     <Compile Include="Import\FileSystem.cs" />
     <Compile Include="Import\ImportException.cs" />
     <Compile Include="Import\Mappings\ActivitiesMapping.cs" />
-    <Compile Include="Import\Mappings\DaveChambersMapping.cs" />
-    <Compile Include="Import\Mappings\EuropeanReportingMapping.cs" />
-    <Compile Include="Import\Mappings\LightWaveMapping.cs" />
     <Compile Include="Import\Mappings\MarineRecorderMapping.cs" />
-    <Compile Include="Import\Mappings\MeowMapping.cs" />
-    <Compile Include="Import\Mappings\MeshMapping.cs" />
     <Compile Include="Import\Importer.cs" />
     <Compile Include="Import\Mappings\IMapping.cs" />
+    <Compile Include="Import\Mappings\MeshMapping.cs" />
     <Compile Include="Import\Mappings\SeabedSurveyMapping.cs" />
-    <Compile Include="Import\Mappings\PubCatMapping.cs" />
     <Compile Include="Import\ImportUtility.cs" />
-    <Compile Include="Import\Mappings\PathMapping.cs" />
     <Compile Include="Import\Mappings\ResourceLocatorMapping.cs" />
     <Compile Include="Import\Mappings\SeabirdSurveyMapping.cs" />
-    <Compile Include="Import\Mappings\StandardishMapping.cs" />
     <Compile Include="Import\Mappings\TopcatMapping.cs" />
+    <Compile Include="Indexes\RecordSpatialIndex.cs" />
     <Compile Include="Indexes\RecordsWithNoFooterIndex.cs" />
-    <Compile Include="Indexes\FieldNames.cs" />
     <Compile Include="Indexes\RecordCountForKeywordIndex.cs" />
-    <Compile Include="Indexes\MyIndex.cs" />
     <Compile Include="Indexes\RecordsWithDuplicateTitleCheckerIndex.cs" />
     <Compile Include="Indexes\RecordsWithOpenDataPublicationInfoIndex.cs" />
     <Compile Include="Indexes\RecordStreamingIndex.cs" />
     <Compile Include="Indexes\VocabularyIndex.cs" />
     <Compile Include="Indexes\VocabularyKeywordIndex.cs" />
     <Compile Include="Indexes\RecordKeywordIndex.cs" />
-    <Compile Include="Indexes\RecordSpatialIndex.cs" />
     <Compile Include="Indexes\RecordIndex.cs" />
     <Compile Include="Model\Footer.cs" />
     <Compile Include="Model\OpenDataPublishingState.cs" />
@@ -155,14 +112,10 @@
     <Compile Include="Write\VocabularyValidator.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="..\packages\RavenDB.Database.3.5.5\tools\Raven.Studio.Html5.zip">
-      <Link>Raven.Studio.Html5.zip</Link>
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
+    <None Include="Analyzers\Analyzers.zip" />
     <None Include="app.config">
       <SubType>Designer</SubType>
     </None>
-    <None Include="packages.config" />
     <EmbeddedResource Include="Seed\mesh.csv" />
   </ItemGroup>
   <ItemGroup>
@@ -180,6 +133,65 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Exchange\topcat-export-20150514-112832.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="CsvHelper">
+      <Version>9.2.3</Version>
+    </PackageReference>
+    <PackageReference Include="FluentAssertions">
+      <Version>5.5.3</Version>
+    </PackageReference>
+    <PackageReference Include="log4net">
+      <Version>2.0.8</Version>
+    </PackageReference>
+    <PackageReference Include="Lucene.Net">
+      <Version>3.0.3</Version>
+    </PackageReference>
+    <PackageReference Include="NETStandard.Library">
+      <Version>2.0.3</Version>
+    </PackageReference>
+    <PackageReference Include="NUnit">
+      <Version>3.11.0</Version>
+    </PackageReference>
+    <PackageReference Include="RavenDB.Client">
+      <Version>4.1.1</Version>
+    </PackageReference>
+    <PackageReference Include="RavenDB.TestDriver">
+      <Version>4.1.1</Version>
+    </PackageReference>
+    <PackageReference Include="System.Diagnostics.Contracts">
+      <Version>4.3.0</Version>
+    </PackageReference>
+    <PackageReference Include="System.Diagnostics.Process">
+      <Version>4.3.0</Version>
+    </PackageReference>
+    <PackageReference Include="System.IO.FileSystem.DriveInfo">
+      <Version>4.3.1</Version>
+    </PackageReference>
+    <PackageReference Include="System.Linq.Queryable">
+      <Version>4.3.0</Version>
+    </PackageReference>
+    <PackageReference Include="System.Net.Security">
+      <Version>4.3.2</Version>
+    </PackageReference>
+    <PackageReference Include="System.Net.WebSockets.Client">
+      <Version>4.3.2</Version>
+    </PackageReference>
+    <PackageReference Include="System.Reflection.TypeExtensions">
+      <Version>4.5.1</Version>
+    </PackageReference>
+    <PackageReference Include="System.Threading">
+      <Version>4.3.0</Version>
+    </PackageReference>
+    <PackageReference Include="System.Threading.Tasks">
+      <Version>4.3.0</Version>
+    </PackageReference>
+    <PackageReference Include="System.ValueTuple">
+      <Version>4.5.0</Version>
+    </PackageReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="bin\Debug\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

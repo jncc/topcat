@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Linq;
 using Catalogue.Data.Model;
-using Raven.Client.Indexes;
+using Raven.Client.Documents.Indexes;
 
 namespace Catalogue.Data.Indexes
 {

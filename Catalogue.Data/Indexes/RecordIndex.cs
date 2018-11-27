@@ -1,12 +1,8 @@
 ﻿using System;
 using System.Linq;
-using Catalogue.Data.Analyzers;
 using Catalogue.Data.Model;
-using Catalogue.Gemini.DataFormats;
 using Lucene.Net.Analysis;
-using Lucene.Net.Analysis.Standard;
-using Raven.Abstractions.Indexing;
-using Raven.Client.Indexes;
+using Raven.Client.Documents.Indexes;
 
 namespace Catalogue.Data.Indexes
 {
@@ -51,28 +47,34 @@ namespace Catalogue.Data.Indexes
                              };
 
             // store and analyse the Title field
-            Analyze(x => x.Title, typeof(StemAnalyzer).AssemblyQualifiedName);
+            Analyze(x => x.Title, "Catalogue.Data.Analyzers.StemAnalyzer, Catalogue.Data.Analyzers");
+            Index(x => x.Title, FieldIndexing.Search);
             Stores.Add(x => x.Title, FieldStorage.Yes);
             TermVector(x => x.Title, FieldTermVector.WithPositionsAndOffsets);
-            Analyze(x => x.TitleN, typeof(NGramAnalyzer).AssemblyQualifiedName);
+            Analyze(x => x.TitleN, "Catalogue.Data.Analyzers.NGramAnalyzer, Catalogue.Data.Analyzers");
+            Index(x => x.TitleN, FieldIndexing.Search);
             Stores.Add(x => x.TitleN, FieldStorage.Yes);
             TermVector(x => x.TitleN, FieldTermVector.WithPositionsAndOffsets);
 
             // store and analyse the Abstract field
-            Analyze(x => x.Abstract, typeof(StemAnalyzer).AssemblyQualifiedName);
+            Analyze(x => x.Abstract, "Catalogue.Data.Analyzers.StemAnalyzer, Catalogue.Data.Analyzers");
+            Index(x => x.Abstract, FieldIndexing.Search);
             Stores.Add(x => x.Abstract, FieldStorage.Yes);
             TermVector(x => x.Abstract, FieldTermVector.WithPositionsAndOffsets);
-            Analyze(x => x.AbstractN, typeof(NGramAnalyzer).AssemblyQualifiedName);
+            Analyze(x => x.AbstractN, "Catalogue.Data.Analyzers.NGramAnalyzer, Catalogue.Data.Analyzers");
+            Index(x => x.AbstractN, FieldIndexing.Search);
             Stores.Add(x => x.AbstractN, FieldStorage.Yes);
             TermVector(x => x.AbstractN, FieldTermVector.WithPositionsAndOffsets);
 
             // store and analyse the Keywords field for full-text search
-            Analyze(x => x.KeywordsN, typeof(NGramAnalyzer).AssemblyQualifiedName);
+            Analyze(x => x.KeywordsN, "Catalogue.Data.Analyzers.NGramAnalyzer, Catalogue.Data.Analyzers");
+            Index(x => x.KeywordsN, FieldIndexing.Search);
             Stores.Add(x => x.KeywordsN, FieldStorage.Yes);
             TermVector(x => x.KeywordsN, FieldTermVector.WithPositionsAndOffsets);
 
             // store and analyse the Manager DisplayName field
             Analyze(x => x.Manager, typeof(SimpleAnalyzer).AssemblyQualifiedName);
+            Index(x => x.Manager, FieldIndexing.Search);
             Stores.Add(x => x.Manager, FieldStorage.Yes);
             TermVector(x => x.Manager, FieldTermVector.WithPositionsAndOffsets);
         }

@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Catalogue.Data.Indexes;
 using Catalogue.Data.Model;
-using Raven.Client;
+using Raven.Client.Documents.Session;
 
 namespace Catalogue.Robot.DeadLinks
 {
@@ -37,7 +37,7 @@ namespace Catalogue.Robot.DeadLinks
             return results;
         }
 
-        public LinkCheckResult CheckLink(Guid id, string link)
+        public LinkCheckResult CheckLink(string id, string link)
         {
             Uri uri;
 
@@ -58,7 +58,7 @@ namespace Catalogue.Robot.DeadLinks
     {
         public LinkCheckStatus Status  { get; set; }
         public string          Message { get; set; }
-        public Guid            Record  { get; set; }
+        public string            Record  { get; set; }
     }
 
     public enum LinkCheckStatus

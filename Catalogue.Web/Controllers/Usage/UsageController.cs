@@ -1,8 +1,8 @@
 ﻿using Catalogue.Data.Model;
-using Raven.Client;
-using Raven.Client.Linq;
 using System.Linq;
 using System.Web.Http;
+using Raven.Client.Documents.Session;
+using Catalogue.Data;
 
 namespace Catalogue.Web.Controllers.Usage
 {
@@ -27,7 +27,7 @@ namespace Catalogue.Web.Controllers.Usage
 
             var recentlyModifiedRecords = records.Select(record => new RecentlyModifiedRecord
                 {
-                    Id = record.Id,
+                    Id = Helpers.RemoveCollection(record.Id),
                     Title = record.Gemini.Title,
                     Date = record.Footer.ModifiedOnUtc,
                     User = record.Footer.ModifiedByUser.DisplayName,

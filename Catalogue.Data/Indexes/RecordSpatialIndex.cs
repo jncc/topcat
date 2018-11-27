@@ -1,7 +1,6 @@
-﻿using System.Linq;
-using Catalogue.Data.Model;
-using Raven.Abstractions.Indexing;
-using Raven.Client.Indexes;
+﻿using Catalogue.Data.Model;
+using Raven.Client.Documents.Indexes;
+using System.Linq;
 
 namespace Catalogue.Data.Indexes
 {
@@ -12,8 +11,10 @@ namespace Catalogue.Data.Indexes
             Map = records => from r in records
                              select new
                              {
-                                 __ = SpatialGenerate(FieldNames.Spatial, r.Wkt, SpatialSearchStrategy.QuadPrefixTree, 16)
+                                 Shape = CreateSpatialField(r.Wkt)
                              };
+
+            //Spatial(x => x.Shape, options => options.Geography.QuadPrefixTreeIndex(16));
         }
     }
 }

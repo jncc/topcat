@@ -4,6 +4,8 @@ using System.Web.Http;
 using Catalogue.Data.Indexes;
 using System.Linq;
 using Raven.Client;
+using Raven.Client.Documents;
+using Raven.Client.Documents.Session;
 
 namespace Catalogue.Web.Controllers.Search
 {
@@ -26,7 +28,7 @@ namespace Catalogue.Web.Controllers.Search
             var containsTerm = "*" + q.Trim().Replace("*", String.Empty) + "*";
 
             return _db.Query<VocabularyIndex.Result, VocabularyIndex>()
-                .Search(k => k.Vocab, containsTerm, escapeQueryOptions: EscapeQueryOptions.AllowAllWildcards)
+                .Search(k => k.Vocab, containsTerm)
                 .Select(k => k.Vocab)
                 .ToList();
         }

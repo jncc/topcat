@@ -9,8 +9,6 @@ Licensed under [Open Government Licence v2](http://www.nationalarchives.gov.uk/d
 Development
 -----------
 
-Since the recent upgrade to RavenDB 3.5 you need to **run Visual Studio as an Administrator**, unfortunatley, or the database throws errors at dev time. We're looking into why this is the case.
-
 To run the tests, you need to **run IIS Express in 64-bit mode**. https://ppolyzos.com/2015/12/01/enable-x64-bit-version-of-iis-express/
 
 ### Web Essentials
@@ -28,10 +26,20 @@ Currently best to disable Resharper > Options > Tools > Unit Testing > Javascrip
 * Enable Jasmine support
 
 ### RavenDB
-RavenDB studio can be accessed in development at http://localhost:8888
+RavenDB has been upgraded to 4.1.1
 
-To upgrade RavenDB, after updating the NuGet packages you currently need to update the Raven.Studio.Html5.zip file which can be got from the downloadable distribution.
-Hopefully this will be embedded in a forthcoming version, making this extra step unnecessary.
+There are a couple of workarounds required for the upgrade:
+* To run Topcat locally with the in memory RavenDB:
+  1. Build the solution
+  2. Copy the RavenDBServer folder from Catalogue.Data\bin\Debug to the root of Catalogue.Web (this shouldn't be needed in later versions)
+  3. Copy Catalogue.Tests\bin\Debug\RavenDBServer\Catalogue.Data.Analyzers.dll to the new RavenDBServer folder in Catalogue.Web
+  4. Copy Catalogue.Data\bin\Debug\Catalogue.Data.dll to the new RavenDBServer folder in Catalogue.Web
+  5. Run it!
+* To recreate the Catalogue.Data.Analyzers.dll:
+  1. Unzip and open the .NET Core project in Catalogue.Data\Analyzers\Analyzers.zip
+  2. Build as release and take the dll.
+
+RavenDB studio can be accessed in development at http://localhost:8090
 
 Deployment
 ----------
@@ -46,7 +54,7 @@ Run the `build/built.targets` MSBuild file (or use `build.bat`).
 ** You may need to fix up (copy) the `Microsoft.WebApplication.targets` into the necessary place in the MSBuild installation.
 E.g. I copied the WebApplications folder from `C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\MSBuild\Microsoft\VisualStudio\v15.0\WebApplications` to `C:\Program Files (x86)\MSBuild\Microsoft\VisualStudio\v15.0`
 * Make sure Git is available globally (e.g. install GitBash).
-* Install NUnit-console 2.6.3 from https://launchpad.net/nunitv2/trunk/2.6.3
+* Install NUnit3 Console 3.9.0 from http://nunit.org/download/
 
 ### Windows Authentication
 This is an corporate / intranet application and user account details and authentication rely on

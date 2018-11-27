@@ -141,13 +141,13 @@ File.WriteAllText(Path, content);
             />
 
   </Target>
- 
+
   <Target Name="Test">
-	
 		<Message Text="=== Running tests in Catalogue" Importance="High" />
 		<MSBuild Projects="..\Catalogue.Tests\Catalogue.Tests.csproj"/>
-		<NUnit Assemblies="Catalogue.Tests.dll" WorkingDirectory="..\Catalogue.Tests\bin\Release" 
-		  ToolPath="C:\Program Files (x86)\NUnit 2.6.3\bin"
+		<NUnit3 Assemblies="Catalogue.Tests.dll"
+          WorkingDirectory="..\Catalogue.Tests\bin\Release" 
+		  ToolPath="C:\Program Files (x86)\NUnit.org\nunit-console"
 		  OutputXmlFile="$(BuildOutputPath)\..\TestResults.xml"
 		  />
   </Target>

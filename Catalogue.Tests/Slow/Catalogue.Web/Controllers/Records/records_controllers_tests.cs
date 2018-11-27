@@ -9,6 +9,8 @@ using Moq;
 using NUnit.Framework;
 using Raven.Client;
 using System;
+using Catalogue.Data;
+using Raven.Client.Documents.Session;
 
 namespace Catalogue.Tests.Slow.Catalogue.Web.Controllers.Records
 {
@@ -18,10 +20,10 @@ namespace Catalogue.Tests.Slow.Catalogue.Web.Controllers.Records
         public void should_return_blank_record_for_empty_guid()
         {
             var controller = new RecordsController(Mock.Of<IRecordService>(), Mock.Of<IDocumentSession>(), new TestUserContext());
-            var recordResult = (RecordOutputModel) controller.Get(Guid.Empty);
+            var recordResult = (RecordOutputModel) controller.Get(String.Empty);
 
-            recordResult.Record.Gemini.Title.Should().BeBlank();
-            recordResult.Record.Path.Should().BeBlank();
+            recordResult.Record.Gemini.Title.Should().Be("");
+            recordResult.Record.Path.Should().BeNull();
         }
 
         [Test]
@@ -46,7 +48,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Web.Controllers.Records
         {
             var record = new Record
             {
-                Id = new Guid("736532c8-9b3d-4524-86ac-248e0476fa38"),
+                Id = Helpers.AddCollection("736532c8-9b3d-4524-86ac-248e0476fa38"),
                 Path = @"X:\some\path",
                 Gemini = Library.Blank().With(m => m.Title = "Some new record!"),
                 Publication = new PublicationInfo
@@ -61,12 +63,12 @@ namespace Catalogue.Tests.Slow.Catalogue.Web.Controllers.Records
                 }
             };
 
-            var db = Mock.Of<IDocumentSession>(d => d.Load<Record>(It.IsAny<Guid>()) == record);
+            var db = Mock.Of<IDocumentSession>(d => d.Load<Record>(It.IsAny<String>()) == record);
             var service = Mock.Of<IRecordService>();
             var controller = new RecordsController(service, db, new TestUserContext());
 
-            var result = (RecordOutputModel) controller.Get(record.Id, true);
-            result.Record.Id.Should().BeEmpty();
+            var result = (RecordOutputModel) controller.Get(Helpers.RemoveCollection(record.Id), true);
+            result.Record.Id.Should().Be(Guid.Empty.ToString());
             result.Record.Path.Should().BeEmpty();
             result.Record.Gemini.Title.Should().BeEmpty();
             result.Record.Publication.Should().BeNull();

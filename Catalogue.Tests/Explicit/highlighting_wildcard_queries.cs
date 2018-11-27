@@ -1,24 +1,21 @@
 ﻿using System;
 using System.Linq;
+using Catalogue.Data;
 using Catalogue.Data.Test;
 using FluentAssertions;
 using NUnit.Framework;
-using Raven.Abstractions.Indexing;
-using Raven.Client;
-using Raven.Client.Embedded;
-using Raven.Client.Indexes;
+using Raven.Client.Documents.Indexes;
+using Raven.Client.Documents.Queries.Highlighting;
+using Raven.Client.Documents.Session;
 
 namespace Catalogue.Tests.Explicit
 {
-    internal class highlighting_wildcard_queries
+    internal class highlighting_wildcard_queries : DatabaseTestFixture
     {
         [Explicit, Test]
         public void highlighting_should_work_with_wildcard_queries()
         {
-            var store = new EmbeddableDocumentStore {RunInMemory = true};
-            store.Initialize();
-
-            using (IDocumentSession db = store.OpenSession())
+            using (IDocumentSession db = ReusableDocumentStore.OpenSession())
             {
                 db.Store(new Item
                 {
@@ -38,16 +35,16 @@ namespace Catalogue.Tests.Explicit
                 db.SaveChanges();
             }
 
-            new SearchIndex().Execute(store);
-            RavenUtility.WaitForIndexing(store);
+            new SearchIndex().Execute(ReusableDocumentStore);
+            RavenUtility.WaitForIndexing(ReusableDocumentStore);
 
-            using (IDocumentSession db = store.OpenSession())
+            using (IDocumentSession db = ReusableDocumentStore.OpenSession())
             {
-                Func<string, FieldHighlightings> execute = q =>
+                Func<string, Highlightings> execute = q =>
                 {
-                    FieldHighlightings lites;
+                    Highlightings lites;
                     db.Advanced.DocumentQuery<Item>("SearchIndex")
-                        .WaitForNonStaleResultsAsOfNow()
+                        .WaitForNonStaleResults()
                         .Highlight("Title", 128, 2, out lites)
                         .Search("Title", q)
                         .ToList();
@@ -72,7 +69,7 @@ namespace Catalogue.Tests.Explicit
                     select new {doc.Title});
 
 
-                Index(x => x.Title, FieldIndexing.Analyzed);
+                Index(x => x.Title, FieldIndexing.Search);
                 Store(x => x.Title, FieldStorage.Yes);
                 TermVector(x => x.Title, FieldTermVector.WithPositionsAndOffsets);
             }

@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net;
@@ -9,12 +8,9 @@ using System.Text;
 using System.Web.Http;
 using System.Xml.Linq;
 using Catalogue.Data.Export;
-using Catalogue.Data.Model;
 using Catalogue.Data.Query;
 using Catalogue.Gemini.Encoding;
-using Catalogue.Utilities.Clone;
-using Newtonsoft.Json;
-using Raven.Client;
+using Raven.Client.Documents.Session;
 
 namespace Catalogue.Web.Controllers.Export
 {

@@ -3,9 +3,10 @@ using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Web.Http;
+using Catalogue.Data;
 using Catalogue.Data.Model;
 using Catalogue.Gemini.Encoding;
-using Raven.Client;
+using Raven.Client.Documents.Session;
 
 namespace Catalogue.Web.Controllers.Download
 {
@@ -18,9 +19,10 @@ namespace Catalogue.Web.Controllers.Download
             this.db = db;
         }
 
-        public HttpResponseMessage Get(Guid id)
+        public HttpResponseMessage Get(string id)
         {
-            var record = db.Load<Record>(id);
+            var record = db.Load<Record>(Helpers.AddCollection(id));
+            record = Helpers.RemoveCollectionFromId(record);
 
             var xml = new XmlEncoder().Create(record.Id, record.Gemini);
             var result = new HttpResponseMessage(HttpStatusCode.OK) { Content = new StringContent(xml.ToString()) };

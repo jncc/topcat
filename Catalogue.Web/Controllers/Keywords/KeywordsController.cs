@@ -3,7 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web.Http;
 using Catalogue.Data.Indexes;
-using Raven.Client;
+using Raven.Client.Documents;
+using Raven.Client.Documents.Session;
 
 namespace Catalogue.Web.Controllers.Keywords
 {

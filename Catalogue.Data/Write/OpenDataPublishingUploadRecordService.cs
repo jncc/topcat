@@ -3,7 +3,7 @@ using Catalogue.Data.Model;
 using System;
 using Catalogue.Utilities.Time;
 using log4net;
-using Raven.Client;
+using Raven.Client.Documents.Session;
 using static Catalogue.Data.Write.RecordServiceHelper;
 
 namespace Catalogue.Data.Write

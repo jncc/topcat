@@ -16,7 +16,7 @@ namespace Catalogue.Data.Import.Mappings
     /// <summary>
     /// The mappings for importing the Marine Habitat (MESH) data.
     /// </summary>
-    public class MeshMapping : IMapping
+    public class MeshMapping : IReaderMapping
     {
         public IEnumerable<Vocabulary> RequiredVocabularies { get; private set; }
 
@@ -25,11 +25,11 @@ namespace Catalogue.Data.Import.Mappings
             RequiredVocabularies = new List<Vocabulary>();
         }
 
-        public void Apply(CsvConfiguration config)
+        public void Apply(IReaderConfiguration config)
         {
             // see http://joshclose.github.io/CsvHelper/
 
-            config.TrimFields = true;
+            config.TrimOptions = TrimOptions.Trim;
             config.RegisterClassMap<RecordMap>();
             config.RegisterClassMap<GeminiMap>();
         }
@@ -103,7 +103,7 @@ namespace Catalogue.Data.Import.Mappings
             }
         }
 
-        public sealed class GeminiMap : CsvClassMap<Metadata>
+        public sealed class GeminiMap : ClassMap<Metadata>
         {
             public GeminiMap()
             {
@@ -178,7 +178,7 @@ namespace Catalogue.Data.Import.Mappings
             }
         }
 
-        public sealed class RecordMap : CsvClassMap<Record>
+        public sealed class RecordMap : ClassMap<Record>
         {
             public RecordMap()
             {

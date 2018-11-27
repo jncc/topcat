@@ -10,7 +10,7 @@ namespace Catalogue.Web.Controllers.Usage
 
     public class RecentlyModifiedRecord
     {
-        public Guid Id { get; set; }
+        public string Id { get; set; }
         public string Title { get; set; }
         public DateTime Date { get; set; }
         public string User { get; set; }

@@ -1,14 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Net;
-using System.Net.Http;
 using System.Web.Http;
 using Catalogue.Data.Indexes;
 using Catalogue.Data.Model;
 using Catalogue.Gemini.Model;
 using Catalogue.Utilities.Raven;
-using Raven.Client;
+using Raven.Client.Documents.Session;
+using Catalogue.Data;
 
 namespace Catalogue.Web.Controllers.Dumps
 {
@@ -47,7 +46,7 @@ namespace Catalogue.Web.Controllers.Dumps
 
             return results.Select(r => new RecordWithPublicationInfoResultShape
                 {
-                    Id = r.Id,
+                    Id = Helpers.RemoveCollection(r.Id),
                     Title = r.Gemini.Title,
                     MetadataDate = r.Gemini.MetadataDate,
                     PublicationInfo = r.Publication.OpenData,
@@ -82,7 +81,7 @@ namespace Catalogue.Web.Controllers.Dumps
 
         public class RecordWithPublicationInfoResultShape
         {
-            public Guid Id { get; set; }
+            public string Id { get; set; }
             public string Title { get; set; }
             public DateTime MetadataDate { get; set; }
             public OpenDataPublicationInfo PublicationInfo { get; set; }
@@ -113,7 +112,7 @@ namespace Catalogue.Web.Controllers.Dumps
 
             return results.Select(r => new RecordWithPublicationInfoResultShape
             {
-                Id = r.Id,
+                Id = Helpers.RemoveCollection(r.Id),
                 Title = r.Gemini.Title,
                 MetadataDate = r.Gemini.MetadataDate,
                 PublicationInfo = r.Publication.OpenData,

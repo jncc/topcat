@@ -1,41 +1,35 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Catalogue.Data;
-using Catalogue.Data.Indexes;
-using Catalogue.Data.Model;
+﻿using Catalogue.Data.Model;
 using Catalogue.Data.Query;
-using Catalogue.Data.Test;
 using Catalogue.Gemini.Model;
 using Catalogue.Utilities.Clone;
 using FluentAssertions;
 using NUnit.Framework;
-using Raven.Client;
-using Raven.Abstractions.Extensions;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace Catalogue.Tests.Explicit
 {
-    class reproduce_unexpected_query_result
+    class reproduce_unexpected_query_result : SeededDbTest
     {
-        [Test]
+        [Test, Explicit]
         public void ShouldGetRightResults()
         {
-            var documentStore = DatabaseFactory.InMemory(8889);
-
-            new RecordIndex().Execute(documentStore);
-
-            using (var db = documentStore.OpenSession())
+            using (var db = ReusableDocumentStore.OpenSession())
             {
-                new[] { "foo", "foo (bar)" }.Select(MakeRecord).ForEach(db.Store);
+                var records = new[] {"foo", "foo (bar)"}.Select(MakeRecord);
+
+                foreach (var record in records)
+                {
+                    db.Store(record);
+                }
 
                 db.SaveChanges();
             }
 
-            RavenUtility.WaitForIndexing(documentStore);
+            WaitForIndexing(ReusableDocumentStore);
 
-            using (var db = documentStore.OpenSession())
+            using (var db = ReusableDocumentStore.OpenSession())
             {
                 Action<string, int> testCase = (k, n) =>
                 {

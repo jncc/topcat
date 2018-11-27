@@ -7,6 +7,7 @@ using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using CsvHelper.Configuration;
 
 namespace Catalogue.Data.Export
 {
@@ -42,23 +43,13 @@ namespace Catalogue.Data.Export
 
         public class MetadataKeywordConverter : DefaultTypeConverter
         {
-            public override bool CanConvertTo(Type type)
-            {
-                return type == typeof(string);
-            }
-
-            public override bool CanConvertFrom(Type type)
-            {
-                return type == typeof(string);
-            }
-
-            public override string ConvertToString(TypeConverterOptions options, object value)
+            public override string ConvertToString(object value, IWriterRow row, MemberMapData memberMapData)
             {
                 var v = (List<MetadataKeyword>)value;
                 return JsonConvert.SerializeObject(v);
             }
 
-            public override object ConvertFromString(TypeConverterOptions options, string text)
+            public override object ConvertFromString(string text, IReaderRow row, MemberMapData memberMapData)
             {
                 return JsonConvert.DeserializeObject(text, typeof(List<MetadataKeyword>));
             }
@@ -66,12 +57,7 @@ namespace Catalogue.Data.Export
 
         public class ExtentListConverter : DefaultTypeConverter
         {
-            public override bool CanConvertTo(Type type)
-            {
-                return type == typeof(string);
-            }
-
-            public override string ConvertToString(TypeConverterOptions options, object value)
+            public override string ConvertToString(object value, IWriterRow row, MemberMapData memberMapData)
             {
                 var v = (List<Extent>)value;
                 return JsonConvert.SerializeObject(v);

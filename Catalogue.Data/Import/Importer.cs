@@ -4,10 +4,10 @@ using Catalogue.Data.Write;
 using Catalogue.Gemini.Model;
 using Catalogue.Utilities.Text;
 using CsvHelper;
-using Raven.Client;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using Raven.Client.Documents.Session;
 
 namespace Catalogue.Data.Import
 {
@@ -16,7 +16,7 @@ namespace Catalogue.Data.Import
         /// <summary>
         /// Helper to conveniently create an importer instance.
         /// </summary>
-        public static Importer CreateImporter(IDocumentSession db, IMapping mapping)
+        public static Importer CreateImporter(IDocumentSession db, IReaderMapping mapping)
         {
             return new Importer(
                 mapping,
@@ -30,7 +30,7 @@ namespace Catalogue.Data.Import
                 });
         }
 
-        readonly IMapping mapping;
+        readonly IReaderMapping mapping;
         readonly IFileSystem fileSystem;
         readonly IRecordService recordService;
         readonly IVocabularyService vocabularyService;
@@ -40,7 +40,7 @@ namespace Catalogue.Data.Import
 
         public readonly List<RecordServiceResult> Results = new List<RecordServiceResult>();
 
-        public Importer(IMapping mapping, IFileSystem fileSystem, IRecordService recordService, IVocabularyService vocabularyService, UserInfo userInfo)
+        public Importer(IReaderMapping mapping, IFileSystem fileSystem, IRecordService recordService, IVocabularyService vocabularyService, UserInfo userInfo)
         {
             this.mapping = mapping;
             this.fileSystem = fileSystem;
@@ -72,7 +72,7 @@ namespace Catalogue.Data.Import
             {
                 foreach (var record in records)
                 {
-                    var result = recordService.Insert(record, userInfo);
+                    var result = recordService.Insert(Helpers.AddCollectionToId(record), userInfo);
 
                     if (!result.Success)
                     {

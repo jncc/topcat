@@ -1,8 +1,6 @@
 ﻿using System.Linq;
-using Catalogue.Data.Analyzers;
 using Catalogue.Gemini.Model;
-using Raven.Abstractions.Indexing;
-using Raven.Client.Indexes;
+using Raven.Client.Documents.Indexes;
 
 namespace Catalogue.Data.Indexes
 {
@@ -38,8 +36,8 @@ namespace Catalogue.Data.Indexes
 
             Stores.Add(x => x.Vocab, FieldStorage.Yes);
             Stores.Add(x => x.Name, FieldStorage.Yes);
-            Analyze(x => x.VocabN, typeof(CustomKeywordAnalyzer).AssemblyQualifiedName); 
-          
+            Analyze(x => x.VocabN, "Catalogue.Data.Analyzers.CustomKeywordAnalyzer, Catalogue.Data.Analyzers");
+
         }
     }
 }

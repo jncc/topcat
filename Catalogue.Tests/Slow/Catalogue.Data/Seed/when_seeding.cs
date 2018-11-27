@@ -1,16 +1,16 @@
 ﻿using System.Linq;
 using Catalogue.Data.Model;
+using Catalogue.Data.Seed;
 using Catalogue.Gemini.Model;
+using Catalogue.Utilities.Text;
 using FluentAssertions;
 using NUnit.Framework;
+using Raven.Client.Documents.Indexes;
 
 namespace Catalogue.Tests.Slow.Catalogue.Data.Seed
 {
-    internal class when_seeding : DatabaseTestFixture
+    public class when_seeding : SeededDbTest
     {
-        // the DatabaseTestFixture will already have run the seeder via the import
-        // so cheat and do some sanity tests
-
         [Test]
         public void should_seed_example_readonly_record()
         {

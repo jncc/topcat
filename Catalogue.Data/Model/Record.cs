@@ -5,7 +5,7 @@ namespace Catalogue.Data.Model
 {
     public class Record
     {
-        public Guid Id { get; set; }
+        public string Id { get; set; }
 
         /// <summary>
         /// The UK Gemini metadata record. 

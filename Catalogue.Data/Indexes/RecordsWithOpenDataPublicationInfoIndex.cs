@@ -2,7 +2,7 @@
 using System.Linq;
 using System.Linq.Expressions;
 using Catalogue.Data.Model;
-using Raven.Client.Indexes;
+using Raven.Client.Documents.Indexes;
 
 namespace Catalogue.Data.Indexes
 {

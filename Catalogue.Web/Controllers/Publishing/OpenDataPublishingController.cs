@@ -2,13 +2,14 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web.Http;
+using Catalogue.Data;
 using Catalogue.Data.Indexes;
 using Catalogue.Data.Model;
 using Catalogue.Data.Write;
 using Catalogue.Utilities.Time;
 using Catalogue.Web.Account;
 using Catalogue.Web.Security;
-using Raven.Client;
+using Raven.Client.Documents.Session;
 
 namespace Catalogue.Web.Controllers.Publishing
 {
@@ -43,7 +44,7 @@ namespace Catalogue.Web.Controllers.Publishing
         [HttpPut, Route("api/publishing/opendata/assess")]
         public object Assess(AssessmentRequest assessmentRequest)
         {
-            var record = db.Load<Record>(assessmentRequest.Id);
+            var record = db.Load<Record>(Helpers.AddCollection(assessmentRequest.Id));
             var assessmentInfo = new OpenDataAssessmentInfo
             {
                 Completed = true,
@@ -60,13 +61,14 @@ namespace Catalogue.Web.Controllers.Publishing
 
             db.SaveChanges();
 
+            updatedRecord.Record = Helpers.RemoveCollectionFromId(updatedRecord.Record);
             return updatedRecord;
         }
 
         [HttpPut, Route("api/publishing/opendata/signoff"), AuthorizeOpenDataIao]
         public object SignOff(SignOffRequest signOffRequest)
         {
-            var record = db.Load<Record>(signOffRequest.Id);
+            var record = db.Load<Record>(Helpers.AddCollection(signOffRequest.Id));
             var signOffInfo = new OpenDataSignOffInfo
             {
                 User = new UserInfo
@@ -82,6 +84,7 @@ namespace Catalogue.Web.Controllers.Publishing
 
             db.SaveChanges();
 
+            updatedRecord.Record = Helpers.RemoveCollectionFromId(updatedRecord.Record);
             return updatedRecord;
         }
 
@@ -155,11 +158,13 @@ namespace Catalogue.Web.Controllers.Publishing
             var records = query
                 .Skip(skip)
                 .Take(take)
-                .As<Record>()
+                .OfType<Record>()
+// raven4
+//                .As<Record>()
                 .ToList()
                 .Select(r => new RecordRepresentation
                 {
-                    Id = r.Id,
+                    Id = Helpers.RemoveCollection(r.Id),
                     Title = r.Gemini.Title,
                     MetadataDate = r.Gemini.MetadataDate,
                     IsGeminiValid = r.Validation == Validation.Gemini,
@@ -173,7 +178,7 @@ namespace Catalogue.Web.Controllers.Publishing
 
     public class RecordRepresentation
     {
-        public Guid Id { get; set; }
+        public string Id { get; set; }
         public string Title { get; set; }
         public DateTime MetadataDate { get; set; }
         public bool IsGeminiValid { get; set; }

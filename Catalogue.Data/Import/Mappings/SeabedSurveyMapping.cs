@@ -20,7 +20,7 @@ namespace Catalogue.Data.Import.Mappings
     /// Get the spreadsheet from Mike
     /// Save as CSV (MS-DOS)
     /// </summary>
-    public class SeabedSurveyMapping : IMapping
+    public class SeabedSurveyMapping : IReaderMapping
     {
         public IEnumerable<Vocabulary> RequiredVocabularies
         {
@@ -81,22 +81,22 @@ namespace Catalogue.Data.Import.Mappings
             }
         }
 
-        public void Apply(CsvConfiguration config)
+        public void Apply(IReaderConfiguration config)
         {
             config.RegisterClassMap<RecordMap>();
             config.RegisterClassMap<GeminiMap>();
 
-            config.WillThrowOnMissingField = false;
-            config.TrimFields = true;
+            config.MissingFieldFound = null;
+            config.TrimOptions = TrimOptions.Trim;
         }
 
-        public sealed class GeminiMap : CsvClassMap<Metadata>
+        public sealed class GeminiMap : ClassMap<Metadata>
         {
             public GeminiMap()
             {
-                Map(m => m.Title).Field("Gemini.Title");
-                Map(m => m.Abstract).Field("Gemini.Abstract");
-                Map(m => m.TopicCategory).Field("Gemini.TopicCategory", value => value.FirstCharToLower());
+                Map(m => m.Title).Name("Gemini.Title");
+                Map(m => m.Abstract).Name("Gemini.Abstract");
+                Map(m => m.TopicCategory).Name("Gemini.TopicCategory").ConvertUsing(row => row.GetField("Gemini.TopicCategory").FirstCharToLower());
                 Map(m => m.Keywords).ConvertUsing(row =>
                 {
                     string surveyVessel = row.GetField("Gemini.Keywords.Survey vessel ");
@@ -137,11 +137,11 @@ namespace Catalogue.Data.Import.Mappings
                         Begin = row.GetField("TemporalExtent.Begin"),
                         End = row.GetField("TemporalExtent.End")
                     });
-                Map(m => m.DatasetReferenceDate).Value("2015-09-01");
-                Map(m => m.Lineage).Value("This dataset is an output of a collaborative offshore seabed survey undertaken with Joint Nature Conservation Committee (JNCC).");
+                Map(m => m.DatasetReferenceDate).Constant("2015-09-01");
+                Map(m => m.Lineage).Constant("This dataset is an output of a collaborative offshore seabed survey undertaken with Joint Nature Conservation Committee (JNCC).");
                 Map(m => m.ResourceLocator).Ignore();
                 Map(m => m.AdditionalInformationSource).Ignore();
-                Map(m => m.DataFormat).Field("Gemini.DataFormat");
+                Map(m => m.DataFormat).Name("Gemini.DataFormat");
                 Map(m => m.ResponsibleOrganisation).ConvertUsing(row =>
                     {
                         string name = row.GetField("ResponsibleOrganisation.Name").Trim();
@@ -150,12 +150,12 @@ namespace Catalogue.Data.Import.Mappings
 
                         return new ResponsibleParty { Name = name == "JNCC" ? "Joint Nature Conservation Committee (JNCC)" : name, Email = email, Role = role };
                     });
-                Map(m => m.LimitationsOnPublicAccess).Field("Gemini.LimitationsOnPublicAccess");
-                Map(m => m.UseConstraints).Field("Gemini.UseConstraints");
-                Map(m => m.Copyright).Field("Copyright");
-                Map(m => m.SpatialReferenceSystem).Field("Gemini.SpatialReferenceSystem", value => value == "N/A" ? null : value);
+                Map(m => m.LimitationsOnPublicAccess).Name("Gemini.LimitationsOnPublicAccess");
+                Map(m => m.UseConstraints).Name("Gemini.UseConstraints");
+                Map(m => m.Copyright).Name("Copyright");
+                Map(m => m.SpatialReferenceSystem).Name("Gemini.SpatialReferenceSystem").ConvertUsing(row => row.GetField("Gemini.SpatialReferenceSystem")  == "N/A" ? null : row.GetField("Gemini.SpatialReferenceSystem"));
                 Map(m => m.Extent).Ignore();
-                Map(m => m.MetadataDate).Value(DateTime.Now);
+                Map(m => m.MetadataDate).Constant(DateTime.Now);
                 Map(m => m.MetadataPointOfContact).ConvertUsing(row =>
                     {
                         string name = "Joint Nature Conservation Committee";
@@ -163,7 +163,7 @@ namespace Catalogue.Data.Import.Mappings
                         string role = "pointOfContact";
                         return new ResponsibleParty { Name = name, Email = email, Role = role };
                     });
-                Map(m => m.ResourceType).Field("Gemini.ResourceType", value => value.FirstCharToLower());
+                Map(m => m.ResourceType).Name("Gemini.ResourceType").ConvertUsing(row => row.GetField("Gemini.ResourceType").FirstCharToLower());
                 Map(m => m.ResourceType).ConvertUsing(row =>
                     {
                         // resource type isn't provided in this sheet, so work it out - it'll be dataset if there's a bbox
@@ -199,7 +199,7 @@ namespace Catalogue.Data.Import.Mappings
             return b.IsBlank() || b.ToLower().Trim() == "n/a";
         }
 
-        public sealed class RecordMap : CsvClassMap<Record>
+        public sealed class RecordMap : ClassMap<Record>
         {
             public RecordMap()
             {
@@ -208,19 +208,19 @@ namespace Catalogue.Data.Import.Mappings
                     var id = row.GetField("Id");
                     if (string.IsNullOrWhiteSpace(id))
                     {
-                        return new Guid();
+                        return new Guid().ToString();
                     }
-                    return new Guid(id.Trim());
+                    return new Guid(id.Trim()).ToString();
                 });
                 Map(m => m.Path);
-                Map(m => m.TopCopy).Value(true);
-                Map(m => m.Validation).Value(Validation.Gemini);
+                Map(m => m.TopCopy).Constant(true);
+                Map(m => m.Validation).Constant(Validation.Gemini);
                 Map(m => m.Status).Ignore();
-                Map(m => m.Security).Value(Security.Official);
+                Map(m => m.Security).Constant(Security.Official);
                 Map(m => m.Review);
                 Map(m => m.Notes);
                 Map(m => m.SourceIdentifier);
-                Map(m => m.ReadOnly).Value(false);
+                Map(m => m.ReadOnly).Constant(false);
 
                 References<GeminiMap>(m => m.Gemini);
             }
@@ -233,7 +233,7 @@ namespace Catalogue.Data.Import.Mappings
     {
         List<Record> imported;
 
-        [TestFixtureSetUp]
+        [OneTimeSetUp]
         public void SetUp()
         {
             var store = new InMemoryDatabaseHelper().Create();

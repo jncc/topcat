@@ -13,7 +13,7 @@ namespace Catalogue.Gemini.Encoding
         /// <summary>
         /// Creates an ISO XML metadata document using the given metadata.
         /// </summary>
-        XDocument Create(Guid id, Metadata metadata);
+        XDocument Create(string id, Metadata metadata);
     }
 
     public class XmlEncoder : IXmlEncoder
@@ -24,7 +24,7 @@ namespace Catalogue.Gemini.Encoding
         public static readonly XNamespace gml = "http://www.opengis.net/gml/3.2";
         public static readonly XNamespace xlink = "http://www.w3.org/1999/xlink";
 
-        public XDocument Create(Guid id, Metadata m)
+        public XDocument Create(string id, Metadata m)
         {
             // see http://data.gov.uk/sites/default/files/UK%20GEMINI%20Encoding%20Guidance%201.4.pdf
             
@@ -66,7 +66,7 @@ namespace Catalogue.Gemini.Encoding
 
         #region Elements
 
-        XElement MakeFileIdentifier(Guid id)
+        XElement MakeFileIdentifier(string id)
         {
             return new XElement(gmd + "fileIdentifier", new XElement(gco + "CharacterString", id));
         }
@@ -111,7 +111,7 @@ namespace Catalogue.Gemini.Encoding
                             metadata.DatasetReferenceDate))));
         }
 
-        XElement MakeUniqueResourceIdentifier(Guid id)
+        XElement MakeUniqueResourceIdentifier(string id)
         {
             return new XElement(gmd + "identifier",
                 new XElement(gmd + "MD_Identifier",
@@ -239,7 +239,7 @@ namespace Catalogue.Gemini.Encoding
             // not supporting versions for data format
         }
 
-        XElement MakeResourceLocator(Metadata metadata, Guid id)
+        XElement MakeResourceLocator(Metadata metadata, string id)
         {
             string fileName = WebificationUtility.ToUrlFriendlyString(Path.GetFileName(metadata.ResourceLocator));
             // but this doesn't work so well when the resource locator contains the guid like this

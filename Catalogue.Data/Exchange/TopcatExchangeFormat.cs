@@ -13,7 +13,6 @@ using Catalogue.Utilities.Clone;
 using Catalogue.Utilities.Text;
 using CsvHelper;
 using CsvHelper.Configuration;
-using CsvHelper.TypeConversion;
 using FluentAssertions;
 using NUnit.Framework;
 
@@ -22,25 +21,25 @@ namespace Catalogue.Data.Exchange
     /// <summary>
     /// TODO
     /// </summary>
-    public class TopcatExchangeFormat : IMapping
+    public class TopcatExchangeFormat : IWriterMapping
     {
         public IEnumerable<Vocabulary> RequiredVocabularies
         {
             get { throw new NotImplementedException(); }
         }
 
-        public void Apply(CsvConfiguration config)
+        public void Apply(IWriterConfiguration config)
         {
             config.Delimiter = "\t";
             config.RegisterClassMap<MyRecordMap>();
             config.RegisterClassMap<MyMetadataMap>();
-
-            TypeConverterFactory.AddConverter<List<MetadataKeyword>>(new Exporter.MetadataKeywordConverter());
-            TypeConverterFactory.AddConverter<List<Extent>>(new Exporter.ExtentListConverter());
+            
+            config.TypeConverterCache.AddConverter<List<MetadataKeyword>>(new Exporter.MetadataKeywordConverter());
+            config.TypeConverterCache.AddConverter<List<Extent>>(new Exporter.ExtentListConverter());
 
         }
 
-        public sealed class MyRecordMap : CsvClassMap<Record>
+        public sealed class MyRecordMap : ClassMap<Record>
         {
             public MyRecordMap()
             {
@@ -49,7 +48,7 @@ namespace Catalogue.Data.Exchange
             }
         }
 
-        public sealed class MyMetadataMap : CsvClassMap<Metadata>
+        public sealed class MyMetadataMap : ClassMap<Metadata>
         {
             readonly List<string> extentCols = new List<string> { "Extent1", "Extent2", "Extent3", "Extent4", "Extent5" }; 
 

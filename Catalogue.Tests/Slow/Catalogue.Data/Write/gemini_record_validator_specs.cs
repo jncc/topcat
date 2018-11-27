@@ -11,7 +11,7 @@ using System.Linq;
 
 namespace Catalogue.Tests.Slow.Catalogue.Data.Write
 {
-    class gemini_record_validator_specs
+    public class gemini_record_validator_specs
     {
         private Record GeminiRecord()
         {

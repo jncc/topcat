@@ -16,7 +16,7 @@ namespace Catalogue.Data.Query
 
     public class ResultOutputModel
     {
-        public Guid Id { get; set; }
+        public string Id { get; set; }
         public string Title { get; set; }
         public FormatOutputModel Format { get; set; }
         public string Snippet { get; set; }

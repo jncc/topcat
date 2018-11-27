@@ -9,7 +9,7 @@ using NUnit.Framework;
 
 namespace Catalogue.Tests.Explicit.Catalogue.Robot
 {
-    public class try_out_link_checker : DatabaseTestFixture
+    public class try_out_link_checker : SeededDbTest
     {
         [Test, Explicit]
         public void go()
@@ -24,7 +24,7 @@ namespace Catalogue.Tests.Explicit.Catalogue.Robot
         public void yep()
         {
             var checker = new Checker(Db, new FileLinkChecker());
-            var result = checker.CheckLink(Guid.NewGuid(), @"C:\work");
+            var result = checker.CheckLink("records/"+Guid.NewGuid(), @"C:\work");
 
             result.Status.Should().Be(LinkCheckStatus.Ok);
         }

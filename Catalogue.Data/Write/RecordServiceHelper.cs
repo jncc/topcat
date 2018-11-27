@@ -2,9 +2,9 @@
 using Catalogue.Gemini.Spatial;
 using Catalogue.Utilities.Text;
 using Catalogue.Web.Controllers.Records;
-using Raven.Client;
 using System.Linq;
 using Catalogue.Data.Extensions;
+using Raven.Client.Documents.Session;
 
 namespace Catalogue.Data.Write
 {

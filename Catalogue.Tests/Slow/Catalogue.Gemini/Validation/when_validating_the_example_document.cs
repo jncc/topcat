@@ -15,7 +15,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Gemini.Validation
     ///     This is an end-to-end style test that exercises several bits of the system
     ///     and depends on an external web service.
     /// </summary>
-    internal class when_validating_the_example_document
+    public class when_validating_the_example_document
     {
         [Test, Explicit]
         public void should_be_valid_gemini()
@@ -28,7 +28,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Gemini.Validation
             Metadata metadata = Library.Example();
 
             // ...encode it into xml
-            XDocument doc = new XmlEncoder().Create(new Guid("b97aac01-5e5d-4209-b626-514e40245bc1"), metadata);
+            XDocument doc = new XmlEncoder().Create("b97aac01-5e5d-4209-b626-514e40245bc1", metadata);
 
             // ...validate it with the CEH validator
             ValidationResultSet result = new Validator().Validate(doc);

@@ -10,19 +10,20 @@ using NUnit.Framework;
 using System;
 using System.Collections.Generic;
 using System.Net;
+using Catalogue.Data;
 using Catalogue.Robot.Publishing.OpenData;
 using Moq;
 
 namespace Catalogue.Tests.Slow.Catalogue.Data.Write
 {
-    class open_data_publishing_service_specs
+    public class open_data_publishing_service_specs : CleanDbTest
     {
         [Test]
         public void successful_upload()
         {
             var record = new Record().With(r =>
             {
-                r.Id = new Guid("eb189a2f-ebce-4232-8dc6-1ad486cacf21");
+                r.Id = Helpers.AddCollection("eb189a2f-ebce-4232-8dc6-1ad486cacf21");
                 r.Path = @"X:\path\to\upload\test";
                 r.Validation = Validation.Gemini;
                 r.Gemini = Library.Example().With(m =>
@@ -46,9 +47,8 @@ namespace Catalogue.Tests.Slow.Catalogue.Data.Write
                 };
                 r.Footer = new Footer();
             });
-
-            var store = new InMemoryDatabaseHelper().Create();
-            using (var db = store.OpenSession())
+            
+            using (var db = ReusableDocumentStore.OpenSession())
             {
                 db.Store(record);
                 db.SaveChanges();
@@ -72,7 +72,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Data.Write
                 updatedRecord.Publication.OpenData.LastSuccess.Message.Should().BeNull();
                 updatedRecord.Gemini.MetadataDate.Should().Be(testTime);
                 updatedRecord.Gemini.ResourceLocator.Should().Be("http://data.jncc.gov.uk/data/eb189a2f-ebce-4232-8dc6-1ad486cacf21-test");
-                uploadHelperMock.Verify(x => x.UploadDataFile(record.Id, record.Path), Times.Once);
+                uploadHelperMock.Verify(x => x.UploadDataFile(Helpers.RemoveCollection(record.Id), record.Path), Times.Once);
                 uploadHelperMock.Verify(x => x.UploadMetadataDocument(record), Times.Once);
                 uploadHelperMock.Verify(x => x.UploadWafIndexDocument(record), Times.Once);
 
@@ -85,7 +85,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Data.Write
         {
             var record = new Record().With(r =>
             {
-                r.Id = new Guid("eb189a2f-ebce-4232-8dc6-1ad486cacf21");
+                r.Id = Helpers.AddCollection("eb189a2f-ebce-4232-8dc6-1ad486cacf21");
                 r.Path = @"X:\path\to\upload\test";
                 r.Validation = Validation.Gemini;
                 r.Gemini = Library.Example().With(m =>
@@ -110,9 +110,8 @@ namespace Catalogue.Tests.Slow.Catalogue.Data.Write
                 };
                 r.Footer = new Footer();
             });
-
-            var store = new InMemoryDatabaseHelper().Create();
-            using (var db = store.OpenSession())
+            
+            using (var db = ReusableDocumentStore.OpenSession())
             {
                 db.Store(record);
                 db.SaveChanges();
@@ -136,7 +135,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Data.Write
                 updatedRecord.Publication.OpenData.LastSuccess.Message.Should().BeNull();
                 updatedRecord.Gemini.MetadataDate.Should().Be(testTime);
                 updatedRecord.Gemini.ResourceLocator.Should().Be("http://data.jncc.gov.uk/data/eb189a2f-ebce-4232-8dc6-1ad486cacf21-test");
-                uploadHelperMock.Verify(x => x.UploadDataFile(record.Id, record.Path), Times.Once);
+                uploadHelperMock.Verify(x => x.UploadDataFile(Helpers.RemoveCollection(record.Id), record.Path), Times.Once);
                 uploadHelperMock.Verify(x => x.UploadMetadataDocument(record), Times.Once);
                 uploadHelperMock.Verify(x => x.UploadWafIndexDocument(record), Times.Once);
 
@@ -149,7 +148,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Data.Write
         {
             var record = new Record().With(r =>
             {
-                r.Id = new Guid("8ad134fa-9045-40af-a0cb-02bc3e868f5a");
+                r.Id = Helpers.AddCollection("8ad134fa-9045-40af-a0cb-02bc3e868f5a");
                 r.Path = @"X:\path\to\upload\test";
                 r.Validation = Validation.Gemini;
                 r.Gemini = Library.Example().With(m =>
@@ -174,9 +173,8 @@ namespace Catalogue.Tests.Slow.Catalogue.Data.Write
                 };
                 r.Footer = new Footer();
             });
-
-            var store = new InMemoryDatabaseHelper().Create();
-            using (var db = store.OpenSession())
+            
+            using (var db = ReusableDocumentStore.OpenSession())
             {
                 db.Store(record);
                 db.SaveChanges();
@@ -189,7 +187,8 @@ namespace Catalogue.Tests.Slow.Catalogue.Data.Write
                 var uploadHelperMock = new Mock<IOpenDataUploadHelper>();
                 var uploader = new RobotUploader(db, uploadService, uploadHelperMock.Object);
 
-                uploadHelperMock.Setup(x => x.UploadMetadataDocument(record)).Throws(new WebException("test message"));
+                var recordWithoutCollection = Helpers.RemoveCollectionFromId(record);
+                uploadHelperMock.Setup(x => x.UploadMetadataDocument(recordWithoutCollection)).Throws(new WebException("test message"));
 
                 uploader.Upload(new List<Record> { record });
 
@@ -208,7 +207,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Data.Write
         {
             var record = new Record().With(r =>
             {
-                r.Id = new Guid("e9f1eb92-3fcb-441f-9fdf-520ff52bcf56");
+                r.Id = Helpers.AddCollection("e9f1eb92-3fcb-441f-9fdf-520ff52bcf56");
                 r.Path = @"X:\path\to\upload\test";
                 r.Validation = Validation.Gemini;
                 r.Gemini = Library.Example().With(m =>
@@ -237,9 +236,8 @@ namespace Catalogue.Tests.Slow.Catalogue.Data.Write
                 };
                 r.Footer = new Footer();
             });
-
-            var store = new InMemoryDatabaseHelper().Create();
-            using (var db = store.OpenSession())
+            
+            using (var db = ReusableDocumentStore.OpenSession())
             {
                 db.Store(record);
                 db.SaveChanges();
@@ -273,7 +271,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Data.Write
         {
             var record = new Record().With(r =>
             {
-                r.Id = new Guid("bd89e71a-07c4-4ce5-92f6-5121b104b8fe");
+                r.Id = Helpers.AddCollection("bd89e71a-07c4-4ce5-92f6-5121b104b8fe");
                 r.Path = @"X:\path\to\upload\test";
                 r.Validation = Validation.Gemini;
                 r.Gemini = Library.Example().With(m =>
@@ -302,9 +300,8 @@ namespace Catalogue.Tests.Slow.Catalogue.Data.Write
                 };
                 r.Footer = new Footer();
             });
-
-            var store = new InMemoryDatabaseHelper().Create();
-            using (var db = store.OpenSession())
+            
+            using (var db = ReusableDocumentStore.OpenSession())
             {
                 db.Store(record);
                 db.SaveChanges();
@@ -338,7 +335,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Data.Write
         {
             var record = new Record().With(r =>
             {
-                r.Id = new Guid("5bc8cd79-7d7f-4c71-9653-cbe82226e174");;
+                r.Id = Helpers.AddCollection("5bc8cd79-7d7f-4c71-9653-cbe82226e174");;
                 r.Path = @"X:\path\to\upload\test";
                 r.Validation = Validation.Gemini;
                 r.Gemini = Library.Example().With(m =>
@@ -367,9 +364,8 @@ namespace Catalogue.Tests.Slow.Catalogue.Data.Write
                 };
                 r.Footer = new Footer();
             });
-
-            var store = new InMemoryDatabaseHelper().Create();
-            using (var db = store.OpenSession())
+            
+            using (var db = ReusableDocumentStore.OpenSession())
             {
                 db.Store(record);
                 db.SaveChanges();
@@ -401,7 +397,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Data.Write
         [Test]
         public void record_not_corpulent_with_populated_resource_locator()
         {
-            var recordId = new Guid("88399fba-b6f5-4e0a-b1d1-fc0668ac7515");
+            var recordId = Helpers.AddCollection("88399fba-b6f5-4e0a-b1d1-fc0668ac7515");
             var record = new Record().With(r =>
             {
                 r.Id = recordId;
@@ -428,9 +424,8 @@ namespace Catalogue.Tests.Slow.Catalogue.Data.Write
                 };
                 r.Footer = new Footer();
             });
-
-            var store = new InMemoryDatabaseHelper().Create();
-            using (var db = store.OpenSession())
+            
+            using (var db = ReusableDocumentStore.OpenSession())
             {
                 db.Store(record);
                 db.SaveChanges();

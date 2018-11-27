@@ -1,5 +1,8 @@
-﻿using System.Threading;
-using Raven.Client;
+﻿using System;
+using System.Threading;
+using Raven.Client.Documents;
+using Raven.Client.Documents.Session;
+using Raven.Client.Documents.Operations;
 
 namespace Catalogue.Data.Test
 {
@@ -12,10 +15,11 @@ namespace Catalogue.Data.Test
 
         public static void WaitForIndexing(IDocumentStore store, string db = null)
         {
-            var databaseCommands = store.DatabaseCommands;
-            if (db != null)
-                databaseCommands = databaseCommands.ForDatabase(db);
-            SpinWait.SpinUntil(() => databaseCommands.GetStatistics().StaleIndexes.Length == 0);
+            // raven4
+            //var databaseCommands = store.Maintenance;
+            //if (db != null)
+            //    databaseCommands = databaseCommands.ForDatabase(db);
+            //SpinWait.SpinUntil(() => databaseCommands.Send(new GetStatisticsOperation()).StaleIndexes.Length == 0);
         }
     }
 }

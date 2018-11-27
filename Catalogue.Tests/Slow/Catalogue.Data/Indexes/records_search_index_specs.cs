@@ -2,12 +2,14 @@
 using System.Linq;
 using Catalogue.Data.Indexes;
 using Catalogue.Data.Model;
+using Catalogue.Data.Seed;
 using FluentAssertions;
 using NUnit.Framework;
+using Raven.Client.Documents.Indexes;
 
 namespace Catalogue.Tests.Slow.Catalogue.Data.Indexes
 {
-    internal class records_search_index_specs : DatabaseTestFixture
+    public class records_search_index_specs : SeededDbTest
     {
         [Test]
         public void can_search_partial_matches()

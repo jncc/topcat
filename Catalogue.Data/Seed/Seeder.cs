@@ -14,7 +14,8 @@ using Catalogue.Gemini.Templates;
 using Catalogue.Utilities.Clone;
 using Catalogue.Utilities.Collections;
 using Catalogue.Utilities.Time;
-using Raven.Client;
+using Raven.Client.Documents;
+using Raven.Client.Documents.Session;
 
 namespace Catalogue.Data.Seed
 {
@@ -105,7 +106,7 @@ namespace Catalogue.Data.Seed
         {
             var record = new Record().With(r =>
             {
-                r.Id = new Guid("d8b438dc-4cd3-4d4f-9fa7-1160ea2336fd");
+                r.Id = Helpers.AddCollection("d8b438dc-4cd3-4d4f-9fa7-1160ea2336fd");
                 r.Path = @"X:\path\to\human\activities\data";
                 r.Gemini = new Metadata().With(m =>
                 {
@@ -130,7 +131,7 @@ namespace Catalogue.Data.Seed
         {
             var record = new Record().With(r =>
             {
-                r.Id = new Guid("d836cd57-7c94-43b6-931b-3d63a58e3541");
+                r.Id = Helpers.AddCollection("d836cd57-7c94-43b6-931b-3d63a58e3541");
                 r.Path = @"X:\path\to\overseas\territories\data";
                 r.Gemini = new Metadata().With(m =>
                 {
@@ -155,7 +156,7 @@ namespace Catalogue.Data.Seed
         {
             var record = MakeExampleSeedRecord().With(r =>
             {
-                r.Id = new Guid("679434f5-baab-47b9-98e4-81c8e3a1a6f9");
+                r.Id = Helpers.AddCollection("679434f5-baab-47b9-98e4-81c8e3a1a6f9");
                 r.Path = @"X:\path\to\record\data";
                 r.TopCopy = true;
                 r.Validation = Validation.Gemini;
@@ -248,7 +249,7 @@ namespace Catalogue.Data.Seed
 
             var assessmentCompletedOnSpreadsheetRecord = record.With(r =>
             {
-                r.Id = new Guid("471da4f2-d9e2-4a5a-b72b-3ae8cc40ae57");
+                r.Id = Helpers.AddCollection("471da4f2-d9e2-4a5a-b72b-3ae8cc40ae57");
                 r.Gemini.Title = "A record with assessment completed on spreadsheet";
                 r.Gemini.MetadataDate = new DateTime(2015, 1, 1, 09, 59, 59);
                 r.Publication = new PublicationInfo
@@ -280,7 +281,7 @@ namespace Catalogue.Data.Seed
 
             var assessedButNotCompletelyRecord = record.With(r =>
             {
-                r.Id = new Guid("39f9442a-45e5-464f-8b20-876051560964");
+                r.Id = Helpers.AddCollection("39f9442a-45e5-464f-8b20-876051560964");
                 r.Gemini.Title = "A record with an incomplete risk-assessment";
                 r.Gemini.MetadataDate = new DateTime(2015, 05, 17, 0, 0, 0);
                 r.Publication = new PublicationInfo
@@ -299,7 +300,7 @@ namespace Catalogue.Data.Seed
 
             var assessedButNotSignedOffRecord= record.With(r =>
             {
-                r.Id = new Guid("46003050-66f3-4fb2-b2b0-f66b382c8d37");
+                r.Id = Helpers.AddCollection("46003050-66f3-4fb2-b2b0-f66b382c8d37");
                 r.Gemini.Title = "An assessed but not signed-off record";
                 r.Gemini.MetadataDate = new DateTime(2015, 1, 1, 12, 0, 0);
                 r.Publication = new PublicationInfo
@@ -325,7 +326,7 @@ namespace Catalogue.Data.Seed
 
             var signedOffRecord = record.With(r =>
             {
-                r.Id = new Guid("82ee6baf-26dc-438d-a579-dc7bcbdd1688");
+                r.Id = Helpers.AddCollection("82ee6baf-26dc-438d-a579-dc7bcbdd1688");
                 r.Gemini.Title = "A signed-off record for publication";
                 r.Gemini.MetadataDate = new DateTime(2015, 1, 1, 12, 0, 0);
                 r.Publication = new PublicationInfo
@@ -356,7 +357,7 @@ namespace Catalogue.Data.Seed
 
             var neverPublishedRecord = record.With(r =>
             {
-                r.Id = new Guid("bd4a2f8a-b548-4ce4-a70c-3f2fdb44005c");
+                r.Id = Helpers.AddCollection("bd4a2f8a-b548-4ce4-a70c-3f2fdb44005c");
                 r.Gemini.Title = "A never-published record";
                 r.Publication = null;
             });
@@ -364,7 +365,7 @@ namespace Catalogue.Data.Seed
 
             var earlierUnsuccessfullyPublishedRecord = record.With(r => 
             {
-                r.Id = new Guid("b2691fed-e421-4e48-9da9-99bd77e0b8ba");
+                r.Id = Helpers.AddCollection("b2691fed-e421-4e48-9da9-99bd77e0b8ba");
                 r.Gemini.Title = "An earlier unsuccessfully published record";
                 r.Gemini.MetadataDate = new DateTime(2015, 1, 1, 12, 0, 0);
                 r.Publication = new PublicationInfo
@@ -395,7 +396,7 @@ namespace Catalogue.Data.Seed
 
             var laterSuccessfullyPublishedRecord = record.With(r =>
             {
-                r.Id = new Guid("d9c14587-90d8-4eba-b670-4cf36e45196d");
+                r.Id = Helpers.AddCollection("d9c14587-90d8-4eba-b670-4cf36e45196d");
                 r.Gemini.Title = "A later successfully published record";
                 r.Gemini.MetadataDate = new DateTime(2015, 1, 1, 12, 0, 0);
                 r.Publication = new PublicationInfo
@@ -424,7 +425,7 @@ namespace Catalogue.Data.Seed
             // so we need to set the publish date to earlier than this
             var updatedSinceSuccessfullyPublishedRecordAndNowPaused = record.With(r =>
             {
-                r.Id = new Guid("19b8c7ab-5c33-4d55-bc1d-3762b8207a9f");
+                r.Id = Helpers.AddCollection("19b8c7ab-5c33-4d55-bc1d-3762b8207a9f");
                 r.Gemini.Title = "An updated since successfully published record, now paused";
                 r.Gemini.MetadataDate = new DateTime(2015, 1, 1, 12, 0, 0);
                 r.Publication = new PublicationInfo
@@ -451,7 +452,7 @@ namespace Catalogue.Data.Seed
 
             var recordWithAlternativeResources = record.With(r =>
             {
-                r.Id = new Guid("90fe83ac-d3e4-4342-8eeb-5919b38bc670");
+                r.Id = Helpers.AddCollection("90fe83ac-d3e4-4342-8eeb-5919b38bc670");
                 r.Gemini.Title = "A record with alternative resources";
                 r.Gemini.MetadataDate = new DateTime(2014, 12, 31);
                 r.Gemini.ResourceLocator = "http://example.com/this/will/get/ignored/when/published";
@@ -479,7 +480,7 @@ namespace Catalogue.Data.Seed
 
             var unpublishableRecord = record.With(r =>
             {
-                r.Id = new Guid("fef1d883-b6ea-4ade-93ae-8bf0abd4e29b");
+                r.Id = Helpers.AddCollection("fef1d883-b6ea-4ade-93ae-8bf0abd4e29b");
                 r.Gemini.Title = "A record which is unpublishable";
                 r.Gemini.MetadataDate = new DateTime(2014, 12, 31);
                 r.Gemini.ResourceLocator = "http://example.com/this/will/get/ignored/when/published";
@@ -512,7 +513,7 @@ namespace Catalogue.Data.Seed
         {
             var record = MakeExampleSeedRecord().With(r =>
             {
-                r.Id = new Guid("58fbee5e-58e6-4119-82cb-587ec383cb62");
+                r.Id = Helpers.AddCollection("58fbee5e-58e6-4119-82cb-587ec383cb62");
                 r.Path = @"X:\blah\blah";
                 r.Gemini = r.Gemini.With(m =>
                 {
@@ -532,7 +533,7 @@ namespace Catalogue.Data.Seed
         {
             var recordA = MakeExampleSeedRecord().With(r =>
             {
-                r.Id = new Guid("b51a21de-b2ac-4a99-9b7e-5c5222d280c1");
+                r.Id = Helpers.AddCollection("b51a21de-b2ac-4a99-9b7e-5c5222d280c1");
                 r.Path = @"X:\butterflies\a";
                 r.Gemini = r.Gemini.With(m =>
                 {
@@ -544,7 +545,7 @@ namespace Catalogue.Data.Seed
 
             var recordB = MakeExampleSeedRecord().With(r =>
             {
-                r.Id = new Guid("4a3e084b-666b-4c85-ae44-c2c7a266a455");
+                r.Id = Helpers.AddCollection("4a3e084b-666b-4c85-ae44-c2c7a266a455");
                 r.Path = @"X:\butterflies\b";
                 r.Gemini = r.Gemini.With(m =>
                 {
@@ -562,7 +563,7 @@ namespace Catalogue.Data.Seed
         {
             var record = MakeExampleSeedRecord().With(r =>
                 {
-                    r.Id = new Guid("b65d2914-cbac-4230-a7f3-08d13eea1e92");
+                    r.Id = Helpers.AddCollection("b65d2914-cbac-4230-a7f3-08d13eea1e92");
                     r.Path = @"X:\path\to\read\only\record\data";
                     r.ReadOnly = true;
                     r.Gemini = r.Gemini.With(m =>
@@ -579,7 +580,7 @@ namespace Catalogue.Data.Seed
         {
             var record = MakeExampleSeedRecord().With(r =>
             {
-                r.Id = new Guid("397a03d6-2770-445f-9900-fdb18850b5f8");
+                r.Id = Helpers.AddCollection("397a03d6-2770-445f-9900-fdb18850b5f8");
                 r.Path = @"X:\path\to\nongeographic\data";
                 r.Gemini = r.Gemini.With(m =>
                 {
@@ -596,7 +597,7 @@ namespace Catalogue.Data.Seed
         {
             var record = this.MakeExampleSeedRecord().With(r =>
                 {
-                    r.Id = new Guid("89136d54-d383-4d4d-a385-ac9687596b01");
+                    r.Id = Helpers.AddCollection("89136d54-d383-4d4d-a385-ac9687596b01");
                     r.Path = @"X:\path\to\restricted\record\data";
                     r.Security = Security.OfficialSensitive;
                     r.Gemini = r.Gemini.With(m =>
@@ -613,7 +614,7 @@ namespace Catalogue.Data.Seed
         {
             var record = MakeExampleSeedRecord().With(r =>
                 {
-                    r.Id = new Guid("94f2c217-2e45-42be-8b48-c5075401e508");
+                    r.Id = Helpers.AddCollection("94f2c217-2e45-42be-8b48-c5075401e508");
                     r.Path = @"X:\path\to\non\top\copy\record\data";
                     r.TopCopy = false;
                     r.Gemini = r.Gemini.With(m =>
@@ -655,7 +656,7 @@ namespace Catalogue.Data.Seed
         {
             var record = MakeExampleSeedRecord().With(r =>
             {
-                r.Id = new Guid("1b875458-2c17-44f8-aae0-f6ed9902e70b");
+                r.Id = Helpers.AddCollection("1b875458-2c17-44f8-aae0-f6ed9902e70b");
                 r.Path = @"X:\path\for\record\with\unusual\characters\in\keywords";
                 r.Gemini = r.Gemini.With(m =>
                 {
@@ -675,7 +676,7 @@ namespace Catalogue.Data.Seed
 
             var record1 = MakeExampleSeedRecord().With(r =>
             {
-                r.Id = new Guid("50749e9a-4df5-4641-81a7-1fea04346be5");
+                r.Id = Helpers.AddCollection("50749e9a-4df5-4641-81a7-1fea04346be5");
                 r.Path = @"X:\path\for\record\with\same\bounding\box\as\another\1";
                 r.Gemini = r.Gemini.With(m =>
                 {
@@ -687,7 +688,7 @@ namespace Catalogue.Data.Seed
 
             var record2 = MakeExampleSeedRecord().With(r =>
             {
-                r.Id = new Guid("6a969b7f-18e8-4e96-b0ea-371d8e2ba774");
+                r.Id = Helpers.AddCollection("6a969b7f-18e8-4e96-b0ea-371d8e2ba774");
                 r.Path = @"X:\path\for\record\with\same\bounding\box\as\another\2";
                 r.Gemini = r.Gemini.With(m =>
                 {
@@ -705,7 +706,7 @@ namespace Catalogue.Data.Seed
         {
             var smallBox = MakeExampleSeedRecord().With(r =>
                 {
-                    r.Id = new Guid("764dcdea-1231-4494-bc18-6931cc8adcee");
+                    r.Id = Helpers.AddCollection("764dcdea-1231-4494-bc18-6931cc8adcee");
                     r.Path = @"Z:\path\to\small\box";
                     r.Gemini = r.Gemini.With(m =>
                         {
@@ -860,7 +861,7 @@ namespace Catalogue.Data.Seed
             Clock.CurrentUtcDateTimeGetter = () => DateTime.Now;
             var timelineTest1 = MakeExampleSeedRecord().With(r =>
             {
-                r.Id = new Guid("3671d004-a476-42e6-be1f-ef270784382e");
+                r.Id = Helpers.AddCollection("3671d004-a476-42e6-be1f-ef270784382e");
                 r.Path = @"Z:\path\to\timeline\test1";
                 r.Gemini = r.Gemini.With(m =>
                 {
@@ -880,7 +881,7 @@ namespace Catalogue.Data.Seed
             Clock.CurrentUtcDateTimeGetter = () => DateTime.Now.AddHours(-5);
             var timelineTest2 = MakeExampleSeedRecord().With(r =>
             {
-                r.Id = new Guid("e26e1c00-7e2b-47c6-9ca7-bf0fedcfc72c");
+                r.Id = Helpers.AddCollection("e26e1c00-7e2b-47c6-9ca7-bf0fedcfc72c");
                 r.Path = @"Z:\path\to\timeline\test2";
                 r.Gemini = r.Gemini.With(m =>
                 {
@@ -900,7 +901,7 @@ namespace Catalogue.Data.Seed
             Clock.CurrentUtcDateTimeGetter = () => DateTime.Now.AddDays(-2);
             var timelineTest3 = MakeExampleSeedRecord().With(r =>
             {
-                r.Id = new Guid("71c4e034-0c6b-4fa7-9b4d-ac328d34dabf");
+                r.Id = Helpers.AddCollection("71c4e034-0c6b-4fa7-9b4d-ac328d34dabf");
                 r.Path = @"Z:\path\to\timeline\test3";
                 r.Gemini = r.Gemini.With(m =>
                 {
@@ -920,7 +921,7 @@ namespace Catalogue.Data.Seed
             Clock.CurrentUtcDateTimeGetter = () => DateTime.Now.AddMonths(-4);
             var timelineTest4 = MakeExampleSeedRecord().With(r =>
             {
-                r.Id = new Guid("7c0055d1-8076-42f3-a004-ceaf2ad8ae9e");
+                r.Id = Helpers.AddCollection("7c0055d1-8076-42f3-a004-ceaf2ad8ae9e");
                 r.Path = @"Z:\path\to\timeline\test4";
                 r.Gemini = r.Gemini.With(m =>
                 {
