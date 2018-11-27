@@ -1,1 +1,1 @@
-{"Topology":{"TopologyId":"2ae9fd1f-544b-4794-9ea6-5e6caeff8636","Members":{"A":"http://localhost:8080"},"Promotables":{},"Watchers":{},"LastNodeId":"A"},"Leader":"A","NodeTag":"A","PersistedAt":"2018-11-16T17:18:43.6768307+00:00"}
+{"Topology":{"TopologyId":"6ddd3755-63c8-41c3-a51c-3de0a985ea0d","Members":{"A":"http://localhost:8080"},"Promotables":{},"Watchers":{},"LastNodeId":"A"},"Leader":"A","NodeTag":"A","PersistedAt":"2018-11-27T16:28:45.6561269+00:00"}
