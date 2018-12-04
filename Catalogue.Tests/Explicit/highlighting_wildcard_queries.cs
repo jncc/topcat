@@ -36,7 +36,7 @@ namespace Catalogue.Tests.Explicit
             }
 
             new SearchIndex().Execute(ReusableDocumentStore);
-            RavenUtility.WaitForIndexing(ReusableDocumentStore);
+            WaitForIndexing(ReusableDocumentStore);
 
             using (IDocumentSession db = ReusableDocumentStore.OpenSession())
             {

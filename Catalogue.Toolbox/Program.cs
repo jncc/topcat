@@ -67,8 +67,7 @@ namespace Catalogue.Toolbox
         static int RunDelete(DeleteOptions options)
         {
             InitDatabase();
-
-            // raven4
+            
             string luceneQuery = "Keywords:\"http://vocab.jncc.gov.uk/metadata-admin/Delete\"";
             
             using (var db = DocumentStore.OpenSession())

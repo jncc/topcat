@@ -2,11 +2,9 @@
 using Catalogue.Data.Seed;
 using Catalogue.Data.Test;
 using System.Configuration;
-//using Raven.Client.Document;
 using Raven.Client.Documents;
 using Raven.Client.Documents.Indexes;
-//using Raven.Client.Indexes;
-//using Raven.Database.Server;
+using Raven.TestDriver;
 
 namespace Catalogue.Data
 {
@@ -14,37 +12,26 @@ namespace Catalogue.Data
     {
         public static IDocumentStore Production()
         {
-            //            var store = new DocumentStore { ConnectionStringName = "Data" };
-            //            store.Conventions.MaxNumberOfRequestsPerSession = 1000;
-            //            store.Initialize();
-            //            IndexCreation.CreateIndexes(typeof(Record).Assembly, store);
-            //            return store;
-
             var store = new DocumentStore
             {
                 Urls = new[] { ConfigurationManager.AppSettings["RavenDbUrls"] },
                 Database = ConfigurationManager.AppSettings["RavenDbDatabase"]
             };
+            store.Conventions.MaxNumberOfRequestsPerSession = 1000; // needed for some patching jobs
             store.Initialize();
             IndexCreation.CreateIndexes(typeof(Record).Assembly, store);
 
             return store;
         }
 
-        public static IDocumentStore InMemory(int port = 8888)
+        public static IDocumentStore InMemory()
         {
-            return new InMemoryDatabaseHelper
+            var helper = new InMemoryDatabaseHelper(new TestServerOptions
             {
-                PreInitializationAction = store =>
-                {
-                    //raven4
-                    //store.GetConfiguration.Port = port;
-                    //NonAdminHttp.EnsureCanListenToWhenInNonAdminContext(port);
-                    //store.UseEmbeddedHttpServer = true;
-                    //store.Configuration.Storage.Voron.AllowOn32Bits = true;
-                },
-                PostInitializationAction = Seeder.Seed
-            }.Create();
+                FrameworkVersion = ConfigurationManager.AppSettings["RavenDbFrameworkVersion"],
+                ServerUrl = ConfigurationManager.AppSettings["RavenDbUrls"]
+            });
+            return helper.Create(Seeder.Seed);
         }
     }
 }

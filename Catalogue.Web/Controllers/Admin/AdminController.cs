@@ -51,50 +51,6 @@ namespace Catalogue.Web.Controllers.Admin
             return new HttpResponseMessage { Content = new StringContent("Done") };
         }
 
-        /// <summary>
-        /// Deletes all the records tagged with the special 'Delete' tag. This has been added to the Robot so could be deleted.
-        /// </summary>
-        [HttpPost, Route("api/admin/delete")]
-        public HttpResponseMessage Delete()
-        {
-
-// raven4
-//            string luceneQuery = "Keywords:\"http://vocab.jncc.gov.uk/metadata-admin/Delete\"";
-//            int recordsToDelete = db.Advanced.DocumentQuery<Record>("RecordIndex").Where(luceneQuery).ToList().Count;
-//
-//            WebApiApplication.DocumentStore.DatabaseCommands.DeleteByIndex("RecordIndex",
-//                new IndexQuery
-//                {
-//                    Query = "Keywords:\"http://vocab.jncc.gov.uk/metadata-admin/Delete\""
-//                });
-//
-//            return new HttpResponseMessage { Content = new StringContent("Asked to delete "  + recordsToDelete + " records") };
-
-// something like:
-//            WebApiApplication.DocumentStore.Operations.Send(new DeleteByQueryOperation<Record, Person_ByAge>(x => x.Age < 35));
-
-            return null;
-        }
-
-        /// <summary>
-        /// Deletes all the records in the given category.
-        /// May need to use the querystring, e.g http://topcat-beta/api/admin/deletejncccategory?category=Marine+Recorder
-        /// </summary>
-        [HttpPost, Route("api/admin/deletejncccategory")]
-        public HttpResponseMessage DeleteJnccCategory(string category)
-        {
-            ThrowIfLiveEnvironment();
-
-// raven4
-//            WebApiApplication.DocumentStore.DatabaseCommands.DeleteByIndex("RecordIndex",
-//                new IndexQuery
-//                {
-//                    Query = String.Format("Keywords:\"http://vocab.jncc.gov.uk/jncc-category/{0}\"", category)
-//                });
-
-            return new HttpResponseMessage { Content = new StringContent("Done") };
-        }
-
         [HttpPost, Route("api/admin/renamekeyword")]
         public string RenameKeyword(string keyword, string newValue)
         {
@@ -121,18 +77,6 @@ namespace Catalogue.Web.Controllers.Admin
             db.SaveChanges();
 
             return String.Format("{0} records updated.", count);
-        }
-
-        [HttpGet, Route("api/admin/temptest")]
-        public bool TempTest()
-        {
-            return true;
-        }
-		
-        [HttpGet, Route("api/admin/seepath")]
-        public bool SeePath()
-        {
-            return Directory.Exists(@"C:\topcat");
         }
 
     }

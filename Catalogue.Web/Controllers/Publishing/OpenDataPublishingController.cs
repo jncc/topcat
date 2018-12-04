@@ -159,8 +159,6 @@ namespace Catalogue.Web.Controllers.Publishing
                 .Skip(skip)
                 .Take(take)
                 .OfType<Record>()
-// raven4
-//                .As<Record>()
                 .ToList()
                 .Select(r => new RecordRepresentation
                 {

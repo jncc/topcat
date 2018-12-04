@@ -17,16 +17,10 @@ namespace Catalogue.Tests
     /// </summary>
     public class CleanDbTest : DatabaseTestFixture
     {
-        public static IDocumentStore ReusableDocumentStore { get; set; }
-
         [SetUp]
         public void SetUp()
         {
-            var store = GetDocumentStore();
-            store.Initialize();
-            IndexCreation.CreateIndexes(typeof(Record).Assembly, store);
-            WaitForIndexing(store);
-            ReusableDocumentStore = store;
+            ReusableDocumentStore = DbHelper.Create();
         }
 
         [TearDown]
