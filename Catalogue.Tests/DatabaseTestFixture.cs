@@ -23,12 +23,6 @@ namespace Catalogue.Tests
             Clock.CurrentUtcDateTimeGetter = () => new DateTime(2015, 1, 1, 12, 0, 0);
 
             // configure the server once, in this static constructor
-            //ConfigureServer(new TestServerOptions
-            //{
-            //    FrameworkVersion = "2.1.5",
-            //    ServerUrl = "http://localhost:8888"
-            //});
-
             DbHelper = new InMemoryDatabaseHelper(new TestServerOptions
             {
                 FrameworkVersion = "2.1.5",
