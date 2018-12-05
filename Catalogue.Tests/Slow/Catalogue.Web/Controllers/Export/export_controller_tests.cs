@@ -3,38 +3,42 @@ using System.Linq;
 using System.Net.Http;
 using System.Text.RegularExpressions;
 using Catalogue.Data.Query;
+using Catalogue.Data.Seed;
+using Catalogue.Data.Test;
 using Catalogue.Web.Code;
 using Catalogue.Web.Controllers;
 using Catalogue.Web.Controllers.Export;
 using FluentAssertions;
 using NUnit.Framework;
+using Raven.Client.Documents.Session;
+using Raven.TestDriver;
 
 namespace Catalogue.Tests.Slow.Catalogue.Web.Controllers.Export
 {
     public class export_controller_tests : SeededDbTest
     {
-        [Test, Ignore("raven4 - async session not working")]
+        [Test]
         public void export_sanity_check()
         {
             var controller = new ExportController(Db, new RecordQueryer(Db));
             var input = new RecordQueryInputModel
             {
                 Q = "",
-                F = new FilterOptions{Keywords = new[] { "vocab.jncc.gov.uk/jncc-category/Seabed Habitat Maps" }},
+                F = new FilterOptions { Keywords = new[] { "vocab.jncc.gov.uk/jncc-category/Seabed Habitat Maps" } },
                 P = 0,
                 N = -1
             };
 
             var result = controller.Get(input, "tsv");
 
-            var task = (PushStreamContent) result.Content;
+            var task = (PushStreamContent)result.Content;
             string content = task.ReadAsStringAsync().Result;
 
             var matches = Regex.Matches(content, @"""""Value"""":""""GB\d{6}"""""); // match a mesh identifier e.g. GB000272
             matches.Count.Should().Be(189);  // the number of mesh records
         }
 
-        [Test, Ignore("raven4")]
+        [Test]
         public void export_as_csv_sanity_check()
         {
             var controller = new ExportController(Db, new RecordQueryer(Db));
@@ -48,14 +52,17 @@ namespace Catalogue.Tests.Slow.Catalogue.Web.Controllers.Export
 
             var result = controller.Get(input, "CSV");
 
-            var task = (PushStreamContent)result.Content;
-            string content = task.ReadAsStringAsync().Result;
+            var task = result.Content;
 
-            var matches = Regex.Matches(content, @"""""Value"""":""""GB\d{6}"""""); // match a mesh identifier e.g. GB000272
-            matches.Count.Should().Be(189);  // the number of mesh records
+            var content = task.ReadAsStringAsync().Result;
+            content.Should().NotBeNullOrWhiteSpace();
+
+            var matches =
+                Regex.Matches(content, @"""""Value"""":""""GB\d{6}"""""); // match a mesh identifier e.g. GB000272
+            matches.Count.Should().Be(189); // the number of mesh records
         }
 
-        [Test, Ignore("raven4")]
+        [Test]
         public void export_with_format_filter()
         {
             var controller = new ExportController(Db, new RecordQueryer(Db));

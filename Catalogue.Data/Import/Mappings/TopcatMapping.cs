@@ -38,7 +38,7 @@ namespace Catalogue.Data.Import.Mappings
         public static IReaderConfiguration ApplyStandardTopcatConfiguration(IReaderConfiguration config, string delimiter)
         {
             config.Delimiter = delimiter;
-            //config.PrefixReferenceHeaders = true;
+            config.ReferenceHeaderPrefix = (memberType, memberName) => $"{memberName}.";
             config.TypeConverterCache.AddConverter<List<MetadataKeyword>>(new Exporter.MetadataKeywordConverter());
             config.TypeConverterCache.AddConverter<List<Extent>>(new Exporter.ExtentListConverter());
 
@@ -48,7 +48,7 @@ namespace Catalogue.Data.Import.Mappings
         public static IWriterConfiguration ApplyStandardTopcatConfiguration(IWriterConfiguration config, string delimiter)
         {
             config.Delimiter = delimiter;
-            //config.PrefixReferenceHeaders = true;
+            config.ReferenceHeaderPrefix = (memberType, memberName) => $"{memberName}.";
             config.TypeConverterCache.AddConverter<List<MetadataKeyword>>(new Exporter.MetadataKeywordConverter());
             config.TypeConverterCache.AddConverter<List<Extent>>(new Exporter.ExtentListConverter());
 
