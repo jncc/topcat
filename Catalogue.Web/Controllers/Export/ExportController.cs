@@ -11,18 +11,15 @@ using Catalogue.Data;
 using Catalogue.Data.Export;
 using Catalogue.Data.Query;
 using Catalogue.Gemini.Encoding;
-using Raven.Client.Documents.Session;
 
 namespace Catalogue.Web.Controllers.Export
 {
     public class ExportController : ApiController
     {
-        IDocumentSession db;
         IRecordQueryer recordQueryer;
 
-        public ExportController(IDocumentSession db, IRecordQueryer recordQueryer)
+        public ExportController(IRecordQueryer recordQueryer)
         {
-            this.db = db;
             this.recordQueryer = recordQueryer;
         }
 
