@@ -1,17 +1,9 @@
-﻿using System;
-using System.Linq;
-using System.Net.Http;
-using System.Text.RegularExpressions;
-using Catalogue.Data.Query;
-using Catalogue.Data.Seed;
-using Catalogue.Data.Test;
-using Catalogue.Web.Code;
-using Catalogue.Web.Controllers;
+﻿using Catalogue.Data.Query;
 using Catalogue.Web.Controllers.Export;
 using FluentAssertions;
 using NUnit.Framework;
-using Raven.Client.Documents.Session;
-using Raven.TestDriver;
+using System.Net.Http;
+using System.Text.RegularExpressions;
 
 namespace Catalogue.Tests.Slow.Catalogue.Web.Controllers.Export
 {
