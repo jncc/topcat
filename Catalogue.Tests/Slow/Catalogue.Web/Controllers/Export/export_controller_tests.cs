@@ -9,7 +9,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Web.Controllers.Export
 {
     public class export_controller_tests : SeededDbTest
     {
-        [Test, Ignore("Jenkins issue")]
+        [Test]
         public void export_sanity_check()
         {
             var controller = new ExportController(new RecordQueryer(Db));
@@ -30,7 +30,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Web.Controllers.Export
             matches.Count.Should().Be(189);  // the number of mesh records
         }
 
-        [Test, Ignore("Jenkins issue")]
+        [Test]
         public void export_as_csv_sanity_check()
         {
             var controller = new ExportController(new RecordQueryer(Db));
@@ -54,7 +54,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Web.Controllers.Export
             matches.Count.Should().Be(189); // the number of mesh records
         }
 
-        [Test, Ignore("Jenkins issue")]
+        [Test]
         public void export_with_format_filter()
         {
             var controller = new ExportController(new RecordQueryer(Db));
