@@ -86,7 +86,7 @@ namespace Catalogue.Web.Controllers.Export
             RemovePagingParametersFromRecordQuery(input);
  
             var responseContent = new PushStreamContent(
-                async (stream, content, context) =>
+                async (Stream stream, HttpContent content, TransportContext context) =>
                 {
                     using (stream)
                     {
