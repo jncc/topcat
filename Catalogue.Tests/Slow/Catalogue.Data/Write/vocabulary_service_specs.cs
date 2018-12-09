@@ -32,9 +32,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Data.Write
         [SetUp]
         public void Init()
         {
-            // raven4
             database = new Mock<IDocumentSession>();
-            //mock existing vocab test
             database.Setup(x => x.Load<Vocabulary>("")).Returns<Vocabulary>(null);
 
             validator = new Mock<IVocabularyValidator>();

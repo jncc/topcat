@@ -30,6 +30,7 @@ namespace Catalogue.Data.Export
             TopcatMapping.ApplyStandardTopcatConfiguration(csv.Configuration, delimiter);
 
             csv.WriteHeader<Record>();
+            csv.NextRecord();
         }
 
         public void ExportRecord(Record record, TextWriter writer, string delimiter)
@@ -39,6 +40,7 @@ namespace Catalogue.Data.Export
             TopcatMapping.ApplyStandardTopcatConfiguration(csv.Configuration, delimiter);
 
             csv.WriteRecord(record);
+            csv.NextRecord();
         }
 
         public class MetadataKeywordConverter : DefaultTypeConverter

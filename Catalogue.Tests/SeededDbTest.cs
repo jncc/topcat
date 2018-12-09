@@ -1,13 +1,6 @@
-using System;
-using Catalogue.Data;
-using Catalogue.Data.Model;
 using Catalogue.Data.Seed;
-using Catalogue.Utilities.Time;
 using NUnit.Framework;
-using Raven.Client.Documents;
-using Raven.Client.Documents.Indexes;
 using Raven.Client.Documents.Session;
-using Raven.TestDriver;
 
 namespace Catalogue.Tests
 {
@@ -17,8 +10,6 @@ namespace Catalogue.Tests
     /// </summary>
     public class SeededDbTest : DatabaseTestFixture
     {
-        public static IDocumentStore ReusableDocumentStore { get; set; }
-
         /// <summary>
         /// A document session open for the lifetime of the test fixture.
         /// </summary>
@@ -27,12 +18,7 @@ namespace Catalogue.Tests
         [OneTimeSetUp]
         public void OneTimeSetUp()
         {
-            var store = GetDocumentStore();
-            store.Initialize();
-            Seeder.Seed(store);
-            IndexCreation.CreateIndexes(typeof(Record).Assembly, store);
-            WaitForIndexing(store);
-            ReusableDocumentStore = store;
+            ReusableDocumentStore = DbHelper.Create(Seeder.Seed);
             Db = ReusableDocumentStore.OpenSession();
         }
 

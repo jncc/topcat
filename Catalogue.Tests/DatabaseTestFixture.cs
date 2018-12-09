@@ -1,12 +1,11 @@
-using System;
 using Catalogue.Data;
-using Catalogue.Data.Model;
 using Catalogue.Utilities.Time;
 using NUnit.Framework;
 using Raven.Client.Documents;
-using Raven.Client.Documents.Indexes;
 using Raven.Client.Documents.Session;
 using Raven.TestDriver;
+using System;
+using Catalogue.Data.Test;
 
 namespace Catalogue.Tests
 {
@@ -15,7 +14,8 @@ namespace Catalogue.Tests
     /// </summary>
     public class DatabaseTestFixture : RavenTestDriver
     {
-        public static IDocumentStore ReusableDocumentStore { get; set; }
+        protected static InMemoryDatabaseHelper DbHelper { get; set; }
+        protected static IDocumentStore ReusableDocumentStore { get; set; }
 
         static DatabaseTestFixture()
         {
@@ -23,14 +23,13 @@ namespace Catalogue.Tests
             Clock.CurrentUtcDateTimeGetter = () => new DateTime(2015, 1, 1, 12, 0, 0);
 
             // configure the server once, in this static constructor
-            ConfigureServer(new TestServerOptions
+            DbHelper = new InMemoryDatabaseHelper(new TestServerOptions
             {
                 FrameworkVersion = "2.1.5",
                 ServerUrl = "http://localhost:8888"
             });
         }
     }
-
 
     public class AsyncDatabaseTestFixture
     {
