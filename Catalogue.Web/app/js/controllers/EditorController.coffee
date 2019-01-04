@@ -34,6 +34,7 @@
         $scope.getOpenDataButtonText = getOpenDataButtonText
         $scope.getOpenDataButtonToolTip = getOpenDataButtonToolTip
         $scope.addOpenDataResource = addOpenDataResource
+        $scope.removeOpenDataResource = removeOpenDataResource
 
         
         $scope.cancel = ->
@@ -195,6 +196,9 @@ addOpenDataResource = (record) ->
         record.publication.openData.resources = []
     record.publication.openData.resources.push { path: "" }
     console.log record.publication.openData.resources.length
+removeOpenDataResource = (record, resource) ->
+    record.publication.openData.resources.splice ($.inArray resource, record.publication.openData.resources), 1
+
 
 
 getOpenDataButtonToolTip = (record, publishingState) ->
