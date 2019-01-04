@@ -33,6 +33,8 @@
         $scope.getPendingSignOff = getPendingSignOff
         $scope.getOpenDataButtonText = getOpenDataButtonText
         $scope.getOpenDataButtonToolTip = getOpenDataButtonToolTip
+        $scope.addOpenDataResource = addOpenDataResource
+
         
         $scope.cancel = ->
             $scope.reset()
@@ -187,6 +189,13 @@
 
 
 isFilePath = (path) -> path and path.match /^([a-z]:|\\\\jncc-corpfile\\)/i
+
+addOpenDataResource = (record) ->
+    if record.publication.openData.resources == null
+        record.publication.openData.resources = []
+    record.publication.openData.resources.push { path: "" }
+    console.log record.publication.openData.resources.length
+
 
 getOpenDataButtonToolTip = (record, publishingState) ->
     if !isFilePath(record.path)

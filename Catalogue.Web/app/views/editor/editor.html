@@ -521,6 +521,55 @@
 
     </div>
 
+
+    
+    <div tab ng-if="form.publication.openData.publishable">
+        <tab-heading>
+            <span class="glyphicon glyphicon-gift"></span> Publishing
+        </tab-heading>
+
+
+
+        <div class="well well-lg">
+            
+            <div ng-if="form.publication.openData.resources.length">
+                This resource has a publication package - a set of files that will be published instead of the working copy.
+            </div>
+            <div ng-if="!form.publication.openData.resources.length">
+                This resource has <b>no publication package</b> defined.
+                <br />
+                <br />
+                Topcat will try to publish the working copy at the path defined in the <b>Working copy location</b> field, above.
+                <br />
+                <br />
+                <button class="btn btn-primary" ng-click="addOpenDataResource(form)">
+                    Add publication package
+                </button>
+            </div>
+
+            <div ng-repeat="resource in form.publication.openData.resources">
+
+                <input type="text" class="form-control"
+                       ng-model="resource.path"
+                       placeholder="Path to the file, e.g. Z:\path\to\the\file.docx"
+                       tc-focus-tip
+                       title="Paste the path to the file on the fileshare here" />
+
+            </div>
+
+        </div>
+
+        <br />
+
+        <br />
+
+    </div>
+    
+    
+    
+    
+    
+    
     </div>
 
     </div>
