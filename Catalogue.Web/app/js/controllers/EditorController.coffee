@@ -192,7 +192,11 @@
 isFilePath = (path) -> path and path.match /^([a-z]:|\\\\jncc-corpfile\\)/i
 
 addOpenDataResource = (record) ->
-    if record.publication.openData.resources == null
+    if !record.publication
+        record.publication = {}    
+    if !record.publication.openData
+        record.publication.openData = {}    
+    if !record.publication.openData.resources
         record.publication.openData.resources = []
     record.publication.openData.resources.push { path: "" }
     console.log record.publication.openData.resources.length

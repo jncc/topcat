@@ -250,7 +250,13 @@
   };
 
   addOpenDataResource = function(record) {
-    if (record.publication.openData.resources === null) {
+    if (!record.publication) {
+      record.publication = {};
+    }
+    if (!record.publication.openData) {
+      record.publication.openData = {};
+    }
+    if (!record.publication.openData.resources) {
       record.publication.openData.resources = [];
     }
     record.publication.openData.resources.push({
