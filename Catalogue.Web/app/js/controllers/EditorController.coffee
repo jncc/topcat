@@ -35,6 +35,7 @@
         $scope.getOpenDataButtonToolTip = getOpenDataButtonToolTip
         $scope.addOpenDataResource = addOpenDataResource
         $scope.removeOpenDataResource = removeOpenDataResource
+        $scope.trimDoubleQuotes = trimDoubleQuotes
 
         
         $scope.cancel = ->
@@ -202,8 +203,8 @@ addOpenDataResource = (record) ->
     console.log record.publication.openData.resources.length
 removeOpenDataResource = (record, resource) ->
     record.publication.openData.resources.splice ($.inArray resource, record.publication.openData.resources), 1
-
-
+trimDoubleQuotes = (s) -> # removes double quotes surrounding a string
+    if s.match(/^(").*(")$/) then s.substring(1, s.length - 1) else s
 
 getOpenDataButtonToolTip = (record, publishingState) ->
     if !isFilePath(record.path)

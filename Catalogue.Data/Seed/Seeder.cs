@@ -465,8 +465,8 @@ namespace Catalogue.Data.Seed
                         LastSuccess = null,
                         Resources = new List<Resource>
                         {
-                            new Resource { Path = @"Z:\some\alternative\resource\1" },
-                            new Resource { Path = @"Z:\some\alternative\resource\2" },
+                            new Resource { Path = @"Z:\some\alternative\resource\1.xlsx", Url="https://data.example.com/resources/1.xlsx" },
+                            new Resource { Path = @"Z:\some\alternative\resource\2.pdf", Url="https://data.example.com/resources/2.pdf"  },
                         },
                         Assessment = new OpenDataAssessmentInfo
                         {

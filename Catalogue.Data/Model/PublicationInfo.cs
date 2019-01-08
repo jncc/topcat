@@ -65,6 +65,7 @@ namespace Catalogue.Data.Model
     public class Resource
     {
         public string Path { get; set; }
+        public string Url { get; set; }
     }
 
     public class PublicationAttempt
