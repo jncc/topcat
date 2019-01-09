@@ -63,14 +63,14 @@
                 <div class="well well-sm form-group">
                     <div class="editor-path input-group">
                         <span class="input-group-addon well-input-group-addon"
-                              tc-tip title="The file share path or URL of the resource">
+                              tc-tip title="The path on the fileshare of the working copy of this resource">
                             <span class="dark glyphicon glyphicon-th-large"></span>
                         </span>
 
                         <input id="form-path" name="path" ng-model="form.path"
                                type="text" class="form-control"
-                               placeholder="Location"
-                               tc-focus-tip title="The file share path or URL of the resource"
+                               placeholder="Working copy location"
+                               tc-focus-tip title="The path on the fileshare of the working copy of this resource"
                                spellcheck="false" />
                         
                         <a href="{{form.path}}" ng-if="isHttpPath(form.path)" target="_blank" class="input-group-addon pointable" ng-disabled="!form.path">
@@ -521,6 +521,76 @@
 
     </div>
 
+
+    
+    <div tab ng-if="form.publication.openData.publishable">
+        <tab-heading>
+            <span class="glyphicon glyphicon-gift"></span> Publishing
+            <small ng-show="true" class="little-warning-badge" tc-tip title="This resource has {{form.publication.openData.resources.length}} files in its publication package">
+                <span class="badge small">{{form.publication.openData.resources.length}}</span>
+            </small>
+        </tab-heading>
+
+        <div class="well well-lg">
+
+            <div ng-if="!form.publication.openData.resources.length">
+                This resource has <b>no publication package</b> defined.
+                <br/>
+                <br/>
+                Topcat will try to publish the working copy at the path defined in the <b>working copy location</b> field, above.
+                <br/>
+                <br/>
+                <button class="btn btn-primary" ng-click="addOpenDataResource(form)">
+                    Add publication package
+                </button>
+            </div>
+            <div ng-if="form.publication.openData.resources.length">
+                This resource has {{form.publication.openData.resources.length}} file<span ng-if="form.publication.openData.resources.length > 1">s</span> in its <b>publication package</b> which will be published instead of the working copy.
+                <br />
+                <br />
+                <div ng-repeat="resource in form.publication.openData.resources" style="margin-bottom: 0.3em;">
+                    <form class="form-inline" role="form">
+                        <div class="form-group">
+                            <div class="input-group">
+                                <div class="input-group-addon"><span class="glyphicon glyphicon-th-large"></span></div>
+
+                                <input type="text" class="form-control" size="90"
+                                       ng-model="resource.path"
+                                       placeholder="Path to the file, e.g. Z:\path\to\the\file.docx or https://data.example.com/file.docx"
+                                       tc-focus-tip
+                                       title="Paste the path to the file on the fileshare here"
+                                       ng-change="resource.path = trimDoubleQuotes(resource.path)"
+                                       />
+                            </div>
+                        </div>
+                        <button class="btn btn-primary" title="Remove from package" tc-tip ng-click="removeOpenDataResource(form, resource)">
+                            <span class="glyphicon glyphicon-remove-circle"></span>
+                        </button>
+                    </form>
+                    <!-- <div> -->
+                    <!--     {{resource.url}} -->
+                    <!-- </div> -->
+                </div>
+
+                <br />
+                <button class="btn btn-primary" ng-click="addOpenDataResource(form)">
+                    Add another file
+                </button>
+            </div>
+
+
+        </div>
+
+        <br />
+        <br />
+
+    </div>
+    
+    
+    
+    
+    
+    
     </div>
 
     </div>
