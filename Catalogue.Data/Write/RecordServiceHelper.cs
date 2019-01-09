@@ -15,6 +15,7 @@ namespace Catalogue.Data.Write
             CorrectlyOrderKeywords(record);
             StandardiseUnconditionalUseConstraints(record);
             SetMetadataPointOfContactRoleToOnlyAllowedValue(record);
+            TrimOpenDataResourcePaths(record);
 
             var validation = validator.Validate(record);
 
@@ -69,6 +70,17 @@ namespace Catalogue.Data.Write
 
             if (record.Gemini.UseConstraints.IsNotBlank() && record.Gemini.UseConstraints.ToLowerInvariant().Trim() == unconditional)
                 record.Gemini.UseConstraints = unconditional;
+        }
+
+        private static void TrimOpenDataResourcePaths(Record record)
+        {
+            var resources = record?.Publication?.OpenData?.Resources;
+
+            if (resources != null)
+            {
+                foreach (var r in resources)
+                    r.Path = r.Path.Trim();
+            }
         }
     }
 

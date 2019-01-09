@@ -10,7 +10,10 @@ using Moq;
 using NUnit.Framework;
 using Raven.Client;
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using Catalogue.Data;
+using Ninject.Infrastructure.Language;
 using Raven.Client.Documents.Session;
 using static Catalogue.Tests.TestUserInfo;
 
@@ -233,6 +236,39 @@ namespace Catalogue.Tests.Slow.Catalogue.Data.Write
             service.Update(record, TestUser);
 
             Mock.Get(database).Verify(db => db.Store(record));
+        }
+
+        [Test]
+        public void open_data_resource_paths_should_be_trimmed()
+        {
+            var database = Mock.Of<IDocumentSession>();
+            var service = new RecordService(database, ValidatorStub());
+
+            var record = BasicRecord().With(r => r.Publication = new PublicationInfo
+            {
+                OpenData = new OpenDataPublicationInfo
+                {
+                    Resources = new List<Resource>
+                    {
+                        new Resource { Path = "Z:\\does\\not\\need\\trimming.pdf" },
+                        new Resource { Path = " Z:\\needs\\trimming\\left.pdf" },
+                        new Resource { Path = "Z:\\needs\\trimming\\right.pdf " },
+                        new Resource { Path = " Z:\\needs\\trimming\\both.pdf "} ,
+                    }
+                }
+            });
+
+            var expected = new List<string>
+            {
+                "Z:\\does\\not\\need\\trimming.pdf",
+                "Z:\\needs\\trimming\\left.pdf",
+                "Z:\\needs\\trimming\\right.pdf",
+                "Z:\\needs\\trimming\\both.pdf",
+            };
+
+            var result = service.Update(record, TestUser);
+
+            result.Record.Publication.OpenData.Resources.Select(r => r.Path).Should().ContainInOrder(expected);
         }
 
         Record BasicRecord()

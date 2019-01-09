@@ -45,6 +45,7 @@ namespace Catalogue.Data.Write
             ValidatePublishableInvariants(record, result);
             ValidateBoundingBox(record, result);
             ValidateJnccSpecificRules(record, result);
+            ValidateOpenDataResources(record, result);
             ValidateDoi(record, result);
 
             if (record.Validation == Validation.Gemini)
@@ -291,6 +292,36 @@ namespace Catalogue.Data.Write
             else if (!record.Citation.IsNotBlank())
             {
                 result.Errors.Add("Citation must be provided for DOI record", r => r.Citation);
+            }
+        }
+        
+        void ValidateOpenDataResources(Record record, ValidationResult<Record> result)
+        {
+            var resources = record?.Publication?.OpenData?.Resources;
+
+            if (resources != null)
+            {
+                foreach (var resource in resources)
+                {
+                    if (resource.Path.IsBlank())
+                    {
+                        result.Errors.Add("Open data resource path must not be blank", r => r.Publication.OpenData.Resources);
+                    }
+                    else // (let's not add additional errors if it's just that it's blank)
+                    {
+                        if (Uri.TryCreate(resource.Path, UriKind.Absolute, out var uri))
+                        {
+                            if (uri.Scheme != Uri.UriSchemeFile && uri.Scheme != Uri.UriSchemeHttp && uri.Scheme != Uri.UriSchemeHttps)
+                            {
+                                result.Errors.Add("Open data resource path must be a file system path or URL", r => r.Publication.OpenData.Resources);
+                            }
+                        }
+                        else
+                        {
+                            result.Errors.Add("Open data resource path is invalid. Normally should be a file system path or URL", r => r.Publication.OpenData.Resources);
+                        }
+                    }
+                }
             }
         }
 

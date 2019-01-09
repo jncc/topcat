@@ -11,11 +11,14 @@ Development
 
 To run the tests, you need to **run IIS Express in 64-bit mode**. https://ppolyzos.com/2015/12/01/enable-x64-bit-version-of-iis-express/
 
-### Web Essentials
-Install the Visual Studio Web Essentials extensions pack (and now the "Web Compiler" extension) for design-time support for CoffeeScript (.coffee) and LESS (.less). These are essential if you want to edit the application's Javascript or CSS.
+### Web Compiler
+Install the "Web Compiler" extension.
+https://marketplace.visualstudio.com/items?itemName=MadsKristensen.WebCompiler
+This is for design-time support for CoffeeScript (.coffee) and LESS (.less). 
+These are essential if you want to edit the application's Javascript or CSS.
 
-There are no build-time or run-time steps used to compile Coffeescript and LESS - the Visual Studio extensions are simpler.
-The application will expect the correct .js and .css files to have been design-time generated.
+There are no build-time or run-time steps used to compile Coffeescript and LESS - when Topcat was designed, the Visual Studio extensions were simpler.
+The application just expects the correct .js and .css files to have been **design-time generated** and they're stored statically in source control alongside the source .coffee and .less files.
 
 ### AngularJS
 There is (allegedly) [Resharper support](http://blogs.jetbrains.com/dotnet/2013/02/angularjs-support-for-resharper/).
