@@ -45,8 +45,8 @@ namespace Catalogue.Data.Write
             ValidatePublishableInvariants(record, result);
             ValidateBoundingBox(record, result);
             ValidateJnccSpecificRules(record, result);
-            ValidateDoiFormat(record, result);
             ValidateOpenDataResources(record, result);
+            ValidateDoi(record, result);
 
             if (record.Validation == Validation.Gemini)
             {
@@ -276,7 +276,7 @@ namespace Catalogue.Data.Write
                 result.Errors.Add("MESH GUI not valid", r => r.Gemini.Keywords);
         }
 
-        void ValidateDoiFormat(Record record, ValidationResult<Record> result)
+        void ValidateDoi(Record record, ValidationResult<Record> result)
         {
             var doi = record.DigitalObjectIdentifier;
 
@@ -288,6 +288,10 @@ namespace Catalogue.Data.Write
             if (!regex.Match(doi).Success)
             {
                 result.Errors.Add("Digital Object Identifier is not in a valid format", r => r.DigitalObjectIdentifier);
+            }
+            else if (!record.Citation.IsNotBlank())
+            {
+                result.Errors.Add("Citation must be provided for DOI record", r => r.Citation);
             }
         }
         

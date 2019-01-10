@@ -262,7 +262,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Data.Write
         [Test]
         public void doi_with_invalid_formats([Values(" ", "a bad doi", "baddoi", "104124/ABC-123", "10./ABC-123", "10.4124/ABC-123?", "AB.1234/ABC-123")] string doi)
         {
-            var record = SimpleRecord().With(r => r.DigitalObjectIdentifier = doi);
+            var record = SimpleRecord().With(r => r.DigitalObjectIdentifier = doi).With(r => r.Citation = "Record has a citation");
             var result = new RecordValidator().Validate(record);
 
             result.Errors.Single().Message.Should().Contain("Digital Object Identifier is not in a valid format");
@@ -272,10 +272,20 @@ namespace Catalogue.Tests.Slow.Catalogue.Data.Write
         [Test]
         public void doi_with_valid_formats([Values(null, "", "12.3456/ABC123", "12.3456789/ABC123", "00.1234/long.string+which-is:still_valid/123")] string doi)
         {
-            var record = SimpleRecord().With(r => r.DigitalObjectIdentifier = doi);
+            var record = SimpleRecord().With(r => r.DigitalObjectIdentifier = doi).With(r => r.Citation = "Record has a citation");
             var result = new RecordValidator().Validate(record);
 
             result.Errors.Should().BeEmpty();
+        }
+
+        [Test]
+        public void doi_with_no_citation()
+        {
+            var record = SimpleRecord().With(r => r.DigitalObjectIdentifier = "12.3456789/ABC123");
+            var result = new RecordValidator().Validate(record);
+
+            result.Errors.Single().Message.Should().Contain("Citation must be provided for DOI record");
+            result.Errors.Single().Fields.Single().Should().Be("citation");
         }
     }
 }

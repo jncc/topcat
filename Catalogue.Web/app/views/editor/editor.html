@@ -153,177 +153,187 @@
     </div>
     <div class="editor-tabs" tabset>
 
-    <div tab>
-        <tab-heading>
-            <span class="glyphicon glyphicon-asterisk"></span> Identity
-        </tab-heading>
+        <div tab>
+            <tab-heading>
+                <span class="glyphicon glyphicon-asterisk"></span> Identity
+            </tab-heading>
 
 
-        <div class="row">
-            <div class="col-md-8">
+            <div class="row">
+                <div class="col-md-8">
 
-                <div class="row">
-                    <div class="col-md-5">
+                    <div class="row">
+                        <div class="col-md-5">
 
 
-                        <select data-ng-model="form.gemini.resourceType"
-                                class="form-control"
-                                title="The type of resource described by this metadata"
-                                value="Dataset"
-                                tc-focus-tip>
-                            <option value="dataset">Dataset</option>
-                            <!-- <option value="series">Dataset Series (Not Available)</option>-->
-                            <option value="publication">Publication</option>
-                            <option value="service">Service</option>
-                            <option value="nonGeographicDataset">Non-geographic dataset</option>
-                        </select>
-
-                    </div>
-
-                    <div class="col-md-7">
-                        <div class="form-inline">
-                            <div class="form-group">
-                                <label>Published / revised</label>
-
-                            </div>
-                            <div class="form-group">
-                                <!-- dateset reference date -->
-                                <div class="input-group date-container">
-                                    <span class="input-group-addon well-input-group-addon"
-                                                          tc-tip title="The dataset reference date (yyyy, yyyy-mm, or yyyy-mm-dd)">
-                                                        <span class="dark glyphicon glyphicon-calendar"></span>
-                                                    </span>
-                                    <input type="text" class="form-control"
-                                           name="gemini.datasetReferenceDate"
-                                           ng-model="form.gemini.datasetReferenceDate"
-                                           placeholder="yyyy-mm-dd"
-                                           tc-focus-tip
-                                           title="The dataset reference date"/>
-                                </div>
-                            </div>
+                            <select data-ng-model="form.gemini.resourceType"
+                                    class="form-control"
+                                    title="The type of resource described by this metadata"
+                                    value="Dataset"
+                                    tc-focus-tip>
+                                <option value="dataset">Dataset</option>
+                                <!-- <option value="series">Dataset Series (Not Available)</option>-->
+                                <option value="publication">Publication</option>
+                                <option value="service">Service</option>
+                                <option value="nonGeographicDataset">Non-geographic dataset</option>
+                            </select>
 
                         </div>
 
+                        <div class="col-md-7">
+                            <div class="form-inline">
+                                <div class="form-group">
+                                    <label>Published / revised</label>
+
+                                </div>
+                                <div class="form-group">
+                                    <!-- dateset reference date -->
+                                    <div class="input-group date-container">
+                                        <span class="input-group-addon well-input-group-addon"
+                                              tc-tip title="The dataset reference date (yyyy, yyyy-mm, or yyyy-mm-dd)">
+                                            <span class="dark glyphicon glyphicon-calendar"></span>
+                                        </span>
+                                        <input type="text" class="form-control"
+                                               name="gemini.datasetReferenceDate"
+                                               ng-model="form.gemini.datasetReferenceDate"
+                                               placeholder="yyyy-mm-dd"
+                                               tc-focus-tip
+                                               title="The dataset reference date" />
+                                    </div>
+                                </div>
+
+                            </div>
 
 
+
+                        </div>
                     </div>
+
+                    <br />
+
+
+                    <!-- resource locator -->
+                    <div class="editor-resource-locator form-group">
+                        <div class="input-group">
+                            <span class="input-group-addon well-input-group-addon"
+                                  tc-tip title="Published location for online access (URL)">
+                                <span class="dark glyphicon glyphicon-globe"></span>
+                            </span>
+
+                            <input name="gemini.resourceLocator" ng-model="form.gemini.resourceLocator"
+                                   type="text" class="form-control"
+                                   placeholder="Published Location (URL)"
+                                   tc-focus-tip title="Published location for online access (URL)"
+                                   spellcheck="false" />
+
+                            <a href="{{form.gemini.resourceLocator}}" target="_blank" class="input-group-addon pointable" ng-disabled="!form.gemini.resourceLocator">
+                                <span class="dark glyphicon glyphicon-new-window" title="Go to resource" tc-tip></span>
+                            </a>
+
+                        </div>
+                    </div>
+
+                </div>
+                <div class="col-md-4">
+
                 </div>
 
-                <br/>
-
-
-                <!-- resource locator -->
-                <div class="editor-resource-locator form-group">
-                    <div class="input-group">
-                        <span class="input-group-addon well-input-group-addon"
-                              tc-tip title="Published location for online access (URL)">
-                            <span class="dark glyphicon glyphicon-globe"></span>
-                        </span>
-
-                        <input name="gemini.resourceLocator" ng-model="form.gemini.resourceLocator"
-                               type="text" class="form-control"
-                               placeholder="Published Location (URL)"
-                               tc-focus-tip title="Published location for online access (URL)"
-                               spellcheck="false"/>
-
-                        <a href="{{form.gemini.resourceLocator}}" target="_blank" class="input-group-addon pointable" ng-disabled="!form.gemini.resourceLocator">
-                            <span class="dark glyphicon glyphicon-new-window" title="Go to resource" tc-tip></span>
-                        </a>
-
-                    </div>
-                </div>
-
-            </div>
-            <div class="col-md-4">
-
             </div>
 
-        </div>
-
-        <div class="form-group text-left selectContainer">
-            <select name="gemini.topicCategory"
-                    ng-model="form.gemini.topicCategory"
-                    ng-options="topic.name as topic.name|camelCaseFilter for topic in lookups.topics"
-                    class="form-control"
-                    title="The main theme of the data resource"
-                    tc-focus-tip>
-                <option value="" disabled selected style="display: none">Topic</option>
-            </select>
-        </div>
-
-        <ul class="dropdown-menu">
-            <li><input type="checkbox" id="ID" name="NAME" value="VALUE"><label for="ID">Label</label></li>
-            <!-- Other items -->
-        </ul>
-
-        <!-- lineage -->
-        <div ng-show="form.gemini.lineage">Lineage</div>
-        <textarea name="gemini.lineage" type="text" ng-model="form.gemini.lineage" class="form-control"
-                  rows="2"
-                  placeholder="Lineage"
-                  title="Information about the events or source data used in the construction of the data resource"
-                  tc-focus-tip tc-autosize></textarea>
-
-        <br/>
-
-        <div ng-show="form.gemini.additionalInformationSource">Additional information source</div>
-        <textarea type="text" name="gemini.additionalInformationSource" ng-model="form.gemini.additionalInformationSource" class="form-control"
-                  rows="2"
-                  placeholder="Additional information source"
-                  title="Other descriptive information about the data resource"
-                  tc-focus-tip tc-autosize></textarea>
-
-        <br/>
-
-        <!-- reponsible organisation -->
-        <div>
-            <div>Responsible Organisation / Author</div>
-            <div>
-                <input class="form-control" type="text" ng-model="form.gemini.responsibleOrganisation.name" placeholder="Name" title="The name of the organisation responsible for this resource" tc-focus-tip/>
-            </div>
-            <div>
-                <input class="form-control" type="text" ng-model="form.gemini.responsibleOrganisation.email" placeholder="Email" title="An email for the point of contact in this responsible organisation" tc-focus-tip/>
-            </div>
-
-            <div>
-                <select data-ng-model="form.gemini.responsibleOrganisation.role"
-                        data-ng-options="role as role|camelCaseFilter for role in lookups.roles"
+            <div class="form-group text-left selectContainer">
+                <select name="gemini.topicCategory"
+                        ng-model="form.gemini.topicCategory"
+                        ng-options="topic.name as topic.name|camelCaseFilter for topic in lookups.topics"
                         class="form-control"
-                        title="The role of the responsible organisation with this resource"
+                        title="The main theme of the data resource"
                         tc-focus-tip>
-                    <option value="" disabled selected style="display: none">Responsible Organisation Role</option>
+                    <option value="" disabled selected style="display: none">Topic</option>
                 </select>
             </div>
-        </div>
-        
-        <br />
 
-        <!-- digital object identifier (doi) -->
-        <div class="form-group">
-            <div class="input-group">
-                <span class="input-group-addon well-input-group-addon"
-                      tc-tip title="Digital Object Identifier (DOI) for global identification and reuse">
-                    <span class="dark glyphicon glyphicon-barcode"></span>
-                </span>
+            <ul class="dropdown-menu">
+                <li><input type="checkbox" id="ID" name="NAME" value="VALUE"><label for="ID">Label</label></li>
+                <!-- Other items -->
+            </ul>
 
-                <input type="text"
-                       maxlength="100"
-                       ng-model="form.digitalObjectIdentifier"
-                       name="digitalObjectIdentifier"
-                       placeholder="Digital Object Identifier (DOI)"
-                       class="form-control"
-                       title="The DataCite DOI assigned to this record, if any"
-                       tc-focus-tip />
+            <!-- lineage -->
+            <div ng-show="form.gemini.lineage">Lineage</div>
+            <textarea name="gemini.lineage" type="text" ng-model="form.gemini.lineage" class="form-control"
+                      rows="2"
+                      placeholder="Lineage"
+                      title="Information about the events or source data used in the construction of the data resource"
+                      tc-focus-tip tc-autosize></textarea>
 
-                <a href="http://dx.doi.org/{{form.digitalObjectIdentifier}}" target="_blank" class="input-group-addon pointable">
-                    <span class="dark glyphicon glyphicon-new-window" title="Go to DOI resource" tc-tip></span>
-                </a>
+            <br />
+
+            <div ng-show="form.gemini.additionalInformationSource">Additional information source</div>
+            <textarea type="text" name="gemini.additionalInformationSource" ng-model="form.gemini.additionalInformationSource" class="form-control"
+                      rows="2"
+                      placeholder="Additional information source"
+                      title="Other descriptive information about the data resource"
+                      tc-focus-tip tc-autosize></textarea>
+
+            <br />
+
+            <!-- reponsible organisation -->
+            <div>
+                <div>Responsible Organisation / Author</div>
+                <div>
+                    <input class="form-control" type="text" ng-model="form.gemini.responsibleOrganisation.name" placeholder="Name" title="The name of the organisation responsible for this resource" tc-focus-tip />
+                </div>
+                <div>
+                    <input class="form-control" type="text" ng-model="form.gemini.responsibleOrganisation.email" placeholder="Email" title="An email for the point of contact in this responsible organisation" tc-focus-tip />
+                </div>
+
+                <div>
+                    <select data-ng-model="form.gemini.responsibleOrganisation.role"
+                            data-ng-options="role as role|camelCaseFilter for role in lookups.roles"
+                            class="form-control"
+                            title="The role of the responsible organisation with this resource"
+                            tc-focus-tip>
+                        <option value="" disabled selected style="display: none">Responsible Organisation Role</option>
+                    </select>
+                </div>
             </div>
+
+            <br />
+
+            <!-- citation -->
+            <div ng-show="form.citation">Citation</div>
+            <textarea name="citation" type="text" ng-model="form.citation" class="form-control"
+                      rows="2"
+                      placeholder="Citation"
+                      title="Preferred citation to use when referencing this data resource"
+                      tc-focus-tip tc-autosize></textarea>
+
+            <br />
+
+            <!-- digital object identifier (doi) -->
+            <div class="form-group">
+                <div class="input-group">
+                    <span class="input-group-addon well-input-group-addon"
+                          tc-tip title="Digital Object Identifier (DOI) for global identification and reuse">
+                        <span class="dark glyphicon glyphicon-barcode"></span>
+                    </span>
+
+                    <input type="text"
+                           maxlength="100"
+                           ng-model="form.digitalObjectIdentifier"
+                           name="digitalObjectIdentifier"
+                           placeholder="Digital Object Identifier (DOI)"
+                           class="form-control"
+                           title="The DataCite DOI assigned to this record, if any"
+                           tc-focus-tip />
+
+                    <a href="http://dx.doi.org/{{form.digitalObjectIdentifier}}" target="_blank" class="input-group-addon pointable">
+                        <span class="dark glyphicon glyphicon-new-window" title="Go to DOI resource" tc-tip></span>
+                    </a>
+                </div>
+            </div>
+
+
+
         </div>
-        
-
-
-    </div>
 
     <div tab>
         <tab-heading>
