@@ -1,18 +1,10 @@
 ﻿using Catalogue.Data.Model;
-using Catalogue.Gemini.Helpers;
-using Catalogue.Gemini.Model;
 using Catalogue.Gemini.ResourceType;
 using Catalogue.Gemini.Roles;
 using Catalogue.Gemini.Spatial;
-using Catalogue.Gemini.Templates;
 using Catalogue.Gemini.Vocabs;
-using Catalogue.Utilities.Clone;
-using Catalogue.Utilities.Collections;
 using Catalogue.Utilities.Text;
-using FluentAssertions;
-using NUnit.Framework;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 
@@ -303,9 +295,9 @@ namespace Catalogue.Data.Write
             {
                 foreach (var resource in resources)
                 {
-                    if (resource.Path.IsBlank())
+                    if (resource.Path.IsBlank() || resource.Name.IsBlank())
                     {
-                        result.Errors.Add("Open data resource path must not be blank", r => r.Publication.OpenData.Resources);
+                        result.Errors.Add("Open data resource name and path must not be blank", r => r.Publication.OpenData.Resources);
                     }
                     else // (let's not add additional errors if it's just that it's blank)
                     {

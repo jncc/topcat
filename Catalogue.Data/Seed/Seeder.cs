@@ -450,10 +450,10 @@ namespace Catalogue.Data.Seed
                 };
             });
 
-            var recordWithAlternativeResources = record.With(r =>
+            var recordWithOpenDataResources = record.With(r =>
             {
                 r.Id = Helpers.AddCollection("90fe83ac-d3e4-4342-8eeb-5919b38bc670");
-                r.Gemini.Title = "A record with alternative resources";
+                r.Gemini.Title = "A record with multiple open data resources";
                 r.Gemini.MetadataDate = new DateTime(2014, 12, 31);
                 r.Gemini.ResourceLocator = "http://example.com/this/will/get/ignored/when/published";
                 r.Publication = new PublicationInfo
@@ -465,8 +465,21 @@ namespace Catalogue.Data.Seed
                         LastSuccess = null,
                         Resources = new List<Resource>
                         {
-                            new Resource { Path = @"Z:\some\alternative\resource\1.xlsx", Url="https://data.example.com/resources/1.xlsx" },
-                            new Resource { Path = @"Z:\some\alternative\resource\2.pdf", Url="https://data.example.com/resources/2.pdf"  },
+                            new Resource
+                            {
+                                Name = "File resource",
+                                Path = @"Z:\some\resource\1.xlsx" },
+                            new Resource
+                            {
+                                Name = "File resource with published URL",
+                                Path = @"Z:\some\resource\2.pdf",
+                                PublishedUrl ="https://data.example.com/resources/2.pdf"
+                            },
+                            new Resource
+                            {
+                                Name = "Web resource",
+                                Path = @"https://link.to.resource"
+                            }
                         },
                         Assessment = new OpenDataAssessmentInfo
                         {
@@ -505,7 +518,7 @@ namespace Catalogue.Data.Seed
             recordService.Insert(earlierUnsuccessfullyPublishedRecord, userInfo);
             recordService.Insert(laterSuccessfullyPublishedRecord, userInfo);
             recordService.Insert(updatedSinceSuccessfullyPublishedRecordAndNowPaused, userInfo);
-            recordService.Insert(recordWithAlternativeResources, userInfo);
+            recordService.Insert(recordWithOpenDataResources, userInfo);
             recordService.Insert(unpublishableRecord, userInfo);
         }
 

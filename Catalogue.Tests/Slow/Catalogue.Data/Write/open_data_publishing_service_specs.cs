@@ -105,7 +105,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Data.Write
                             DateUtc = new DateTime(2017, 08, 02),
                             User = TestUserInfo.TestUser
                         },
-                        Resources = new List<Resource>{ new Resource{ Path = "x:\\test\\path" } }
+                        Resources = new List<Resource>{ new Resource{ Name = "Some resource", Path = "x:\\test\\path" } }
                     }
                 };
                 r.Footer = new Footer();
@@ -168,7 +168,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Data.Write
                             DateUtc = new DateTime(2017, 08, 02),
                             User = TestUserInfo.TestUser
                         },
-                        Resources = new List<Resource> { new Resource{ Path = "x:\\test\\path" } }
+                        Resources = new List<Resource> { new Resource{ Name = "Some resource", Path = "x:\\test\\path" } }
                     }
                 };
                 r.Footer = new Footer();
