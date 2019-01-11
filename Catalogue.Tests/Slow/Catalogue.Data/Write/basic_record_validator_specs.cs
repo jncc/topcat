@@ -287,5 +287,45 @@ namespace Catalogue.Tests.Slow.Catalogue.Data.Write
             result.Errors.Single().Message.Should().Contain("Citation must be provided for DOI record");
             result.Errors.Single().Fields.Single().Should().Be("citation");
         }
+
+        [Test]
+        public void accepted_open_data_resource_paths([Values(
+            @"X:\some\path",
+            @"\\jncc-corpfile\jncc corporate data\my_dataset.xlsx",
+            @"http://www.example.com",
+            @"https://www.example.com"
+            )] string path)
+        {
+            var resource = new Resource
+            {
+                Name = "A resource",
+                Path = path
+            };
+            var record = SimpleRecord()
+                .With(r => r.Publication = new PublicationInfo { OpenData = new OpenDataPublicationInfo { Resources = new List<Resource>() } })
+                .With(r => r.Publication.OpenData.Resources.Add(resource));
+            var result = new RecordValidator().Validate(record);
+
+            result.Errors.Should().BeEmpty();
+        }
+
+        [Test]
+        public void unaccepted_open_data_resource_paths([Values(
+            "PG:\"host=spatial-store dbname=spatial layer=SSSI_England_Units\"",
+            "",
+            "this is a path"
+        )] string path)
+        {
+            var resource = new Resource
+            {
+                Name = "A resource",
+                Path = path
+            };
+            var record = SimpleRecord()
+                .With(r => r.Publication = new PublicationInfo { OpenData = new OpenDataPublicationInfo { Resources = new List<Resource>() } })
+                .With(r => r.Publication.OpenData.Resources.Add(resource));
+            var result = new RecordValidator().Validate(record);
+            result.Errors.Single().Fields.Single().Should().Be("publication.openData.resources");
+        }
     }
 }
