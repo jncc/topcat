@@ -60,6 +60,7 @@
     <Compile Include="Slow\Catalogue.Data\Indexes\records_with_duplicate_title_checker_index_tests.cs" />
     <Compile Include="Slow\Catalogue.Data\Indexes\records_with_open_data_publication_info_index_specs.cs" />
     <Compile Include="Slow\Catalogue.Data\Indexes\record_count_for_keyword_index_specs.cs" />
+    <Compile Include="Slow\Catalogue.Data\PublishingPolicy\publishing_policy_specs.cs" />
     <Compile Include="Slow\Catalogue.Data\Query\QueryTestHelper.cs" />
     <Compile Include="Slow\Catalogue.Data\Query\record_querier_filter_specs.cs" />
     <Compile Include="Slow\Catalogue.Data\Query\record_querier_filter_specs_using_seeder.cs" />
