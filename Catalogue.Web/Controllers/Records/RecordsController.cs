@@ -8,6 +8,7 @@ using System;
 using System.Web.Http;
 using Catalogue.Data;
 using Catalogue.Data.Extensions;
+using Catalogue.Data.Publishing;
 using Raven.Client.Documents.Session;
 
 namespace Catalogue.Web.Controllers.Records
@@ -52,7 +53,8 @@ namespace Catalogue.Web.Controllers.Records
                         SignedOffAndUpToDate = record.IsSignedOffAndUpToDate(),
                         UploadedAndUpToDate = record.IsUploadedAndUpToDate()
                     }
-                }
+                },
+                PublishingPolicy = PublishingPolicy.GetPublishingPolicyResult(record)
             };
         }
 

@@ -35,15 +35,14 @@ namespace Catalogue.Tests.Slow.Catalogue.Data.Publishing
                     }
                 }
             };
-            var publishingPolicy = new PublishingPolicy();
-            var result = publishingPolicy.GetPublishingPolicyResult(record);
+            var result = PublishingPolicy.GetPublishingPolicyResult(record);
 
             result.HubRecord.Should().BeTrue();
             result.HubResources.Count.Should().Be(1);
             result.HubResources.Should().BeEquivalentTo(new List<Resource> { resource });
             result.GovRecord.Should().BeTrue();
             result.GovResources.Should().BeNullOrEmpty();
-            result.Message.Should().Be("This is an Open Data record");
+            result.Message.Should().Be("This is an Open Data record.");
         }
 
         [Test]
@@ -65,14 +64,13 @@ namespace Catalogue.Tests.Slow.Catalogue.Data.Publishing
                     }
                 }
             };
-            var publishingPolicy = new PublishingPolicy();
-            var result = publishingPolicy.GetPublishingPolicyResult(record);
+            var result = PublishingPolicy.GetPublishingPolicyResult(record);
 
             result.HubRecord.Should().BeTrue();
             result.HubResources.Should().BeNullOrEmpty();
             result.GovRecord.Should().BeTrue();
             result.GovResources.Should().BeNullOrEmpty();
-            result.Message.Should().Be("This is an Open Data record");
+            result.Message.Should().Be("This is an Open Data record.");
         }
 
         [Test]
@@ -98,15 +96,14 @@ namespace Catalogue.Tests.Slow.Catalogue.Data.Publishing
                     }
                 }
             };
-            var publishingPolicy = new PublishingPolicy();
-            var result = publishingPolicy.GetPublishingPolicyResult(record);
+            var result = PublishingPolicy.GetPublishingPolicyResult(record);
 
             result.HubRecord.Should().BeTrue();
             result.HubResources.Count.Should().Be(3);
             result.HubResources.Should().BeEquivalentTo(new List<Resource> { fileResource, urlResource1, urlResource2 });
             result.GovRecord.Should().BeTrue();
             result.GovResources.Should().BeNullOrEmpty();
-            result.Message.Should().Be("This is an Open Data record");
+            result.Message.Should().Be("This is an Open Data record.");
         }
 
         [Test]
@@ -132,14 +129,13 @@ namespace Catalogue.Tests.Slow.Catalogue.Data.Publishing
                     }
                 }
             };
-            var publishingPolicy = new PublishingPolicy();
-            var result = publishingPolicy.GetPublishingPolicyResult(record);
+            var result = PublishingPolicy.GetPublishingPolicyResult(record);
 
             result.HubRecord.Should().BeFalse();
             result.HubResources.Should().BeNullOrEmpty();
             result.GovRecord.Should().BeFalse();
             result.GovResources.Should().BeNullOrEmpty();
-            result.Message.Should().Be("This record has not been marked as publishable");
+            result.Message.Should().Be("This record has not been marked as publishable.");
         }
 
         [Test]
@@ -165,15 +161,14 @@ namespace Catalogue.Tests.Slow.Catalogue.Data.Publishing
                     }
                 }
             };
-            var publishingPolicy = new PublishingPolicy();
-            var result = publishingPolicy.GetPublishingPolicyResult(record);
+            var result = PublishingPolicy.GetPublishingPolicyResult(record);
 
             result.HubRecord.Should().BeTrue();
             result.HubResources.Count.Should().Be(1);
             result.HubResources.Should().BeEquivalentTo(new List<Resource> { resource });
             result.GovRecord.Should().BeTrue();
             result.GovResources.Should().BeNullOrEmpty();
-            result.Message.Should().Be("This is an Open Data record");
+            result.Message.Should().Be("This is an Open Data record.");
         }
 
         [Test]
@@ -200,15 +195,14 @@ namespace Catalogue.Tests.Slow.Catalogue.Data.Publishing
                 Citation = "a citation reference",
                 DigitalObjectIdentifier = "10.25603/840424.1.0.0"
             };
-            var publishingPolicy = new PublishingPolicy();
-            var result = publishingPolicy.GetPublishingPolicyResult(record);
+            var result = PublishingPolicy.GetPublishingPolicyResult(record);
 
             result.HubRecord.Should().BeTrue();
             result.HubResources.Count.Should().Be(1);
             result.HubResources.Should().BeEquivalentTo(new List<Resource> { resource });
             result.GovRecord.Should().BeTrue();
             result.GovResources.Should().BeNullOrEmpty();
-            result.Message.Should().Be("This is an Open Data record");
+            result.Message.Should().Be("This is an Open Data record.");
         }
 
         [Test]
@@ -236,18 +230,112 @@ namespace Catalogue.Tests.Slow.Catalogue.Data.Publishing
                 Citation = "a citation reference",
                 DigitalObjectIdentifier = "10.25603/840424.1.0.0"
             };
-            var publishingPolicy = new PublishingPolicy();
-            var result = publishingPolicy.GetPublishingPolicyResult(record);
+            var result = PublishingPolicy.GetPublishingPolicyResult(record);
 
             result.HubRecord.Should().BeFalse();
             result.HubResources.Should().BeNullOrEmpty();
             result.GovRecord.Should().BeFalse();
             result.GovResources.Should().BeNullOrEmpty();
-            result.Message.Should().Be("This record has a DOI and cannot be republished");
+            result.Message.Should().Be("This record has a DOI and cannot be republished.");
         }
 
         [Test]
-        public void darwin_plus_record_should_not_go_to_datahub([Values("dataset", "nonGeographicDataset", "service", "publication")] string resourceType)
+        public void record_with_a_restrictive_licence(
+            [Values("dataset", "nonGeographicDataset", "service")] string resourceType,
+            [Values(@"z:\a\file\resource.txt", "http://a.url.resource")] string path)
+        {
+            var resource = new Resource { Name = "A named resource", Path = path };
+            var recordId = Helpers.AddCollection(Guid.NewGuid().ToString());
+            var record = new Record
+            {
+                Id = recordId,
+                Path = @"X:\some\path",
+                Gemini = Library.Example()
+                    .With(r => r.Keywords.Add(new MetadataKeyword { Value = "Restrictive Licence" }))
+                    .With(r => r.ResourceType = resourceType),
+                Publication = new PublicationInfo
+                {
+                    OpenData = new OpenDataPublicationInfo
+                    {
+                        Publishable = true,
+                        Resources = new List<Resource> { resource }
+                    }
+                }
+            };
+            var result = PublishingPolicy.GetPublishingPolicyResult(record);
+
+            result.HubRecord.Should().BeTrue();
+            result.HubResources.Count.Should().Be(1);
+            result.HubResources.Should().BeEquivalentTo(new List<Resource> { resource });
+            result.GovRecord.Should().BeFalse();
+            result.GovResources.Should().BeNullOrEmpty();
+            result.Message.Should().Be("This record is not fully Open Data as it has a restrictive licence.");
+        }
+
+        [Test]
+        public void record_with_unknown_ownership(
+            [Values("dataset", "nonGeographicDataset", "service")] string resourceType,
+            [Values(@"z:\a\file\resource.txt", "http://a.url.resource")] string path)
+        {
+            var resource = new Resource { Name = "A named resource", Path = path };
+            var recordId = Helpers.AddCollection(Guid.NewGuid().ToString());
+            var record = new Record
+            {
+                Id = recordId,
+                Path = @"X:\some\path",
+                Gemini = Library.Example()
+                    .With(r => r.Keywords.Add(new MetadataKeyword { Value = "Unknown Ownership" }))
+                    .With(r => r.ResourceType = resourceType),
+                Publication = new PublicationInfo
+                {
+                    OpenData = new OpenDataPublicationInfo
+                    {
+                        Publishable = true,
+                        Resources = new List<Resource> { resource }
+                    }
+                }
+            };
+            var result = PublishingPolicy.GetPublishingPolicyResult(record);
+
+            result.HubRecord.Should().BeTrue();
+            result.HubResources.Count.Should().Be(1);
+            result.HubResources.Should().BeEquivalentTo(new List<Resource> { resource });
+            result.GovRecord.Should().BeFalse();
+            result.GovResources.Should().BeNullOrEmpty();
+            result.Message.Should().Be("This record is not fully Open Data as it has unknown ownership.");
+        }
+
+        [Test]
+        public void darwin_plus_publication_still_goes_to_the_datahub()
+        {
+            var resource = new Resource { Name = "Data not yet available page", Path = "http://a.temporary.url" };
+            var record = new Record
+            {
+                Id = Helpers.AddCollection(Guid.NewGuid().ToString()),
+                Path = @"X:\some\path",
+                Gemini = Library.Example()
+                    .With(r => r.ResourceType = "publication")
+                    .With(r => r.Keywords.Add(new MetadataKeyword { Value = "Darwin Plus" })),
+                Publication = new PublicationInfo
+                {
+                    OpenData = new OpenDataPublicationInfo
+                    {
+                        Publishable = true,
+                        Resources = new List<Resource> { resource }
+                    }
+                }
+            };
+            var result = PublishingPolicy.GetPublishingPolicyResult(record);
+
+            result.HubRecord.Should().BeTrue();
+            result.HubResources.Should().BeEquivalentTo(new List<Resource> { resource });
+            result.GovRecord.Should().BeFalse();
+            result.GovResources.Should().BeNullOrEmpty();
+            result.Message.Should().Be("This is a JNCC publication.");
+        }
+
+        [Test]
+        public void darwin_plus_record_should_not_go_to_datahub([Values("dataset", "nonGeographicDataset", "service")] string resourceType)
         {
             var resource = new Resource { Name = "Data not yet available page", Path = "http://a.temporary.url" };
             var record = new Record
@@ -266,19 +354,18 @@ namespace Catalogue.Tests.Slow.Catalogue.Data.Publishing
                     }
                 }
             };
-            var publishingPolicy = new PublishingPolicy();
-            var result = publishingPolicy.GetPublishingPolicyResult(record);
+            var result = PublishingPolicy.GetPublishingPolicyResult(record);
 
             result.HubRecord.Should().BeFalse();
             result.HubResources.Should().BeNullOrEmpty();
             result.GovRecord.Should().BeTrue();
             result.GovResources.Count.Should().Be(1);
             result.GovResources[0].Should().Be(resource.Path);
-            result.Message.Should().Be("This is a Darwin Plus record");
+            result.Message.Should().Be("This is a Darwin Plus record.");
         }
 
         [Test]
-        public void darwin_plus_record_with_doi_should_not_be_republished([Values("dataset", "nonGeographicDataset", "service", "publication")] string resourceType)
+        public void darwin_plus_record_with_doi_should_not_be_republished([Values("dataset", "nonGeographicDataset", "service")] string resourceType)
         {
             var resource = new Resource { Name = "Data not yet available page", Path = "http://a.temporary.url" };
             var record = new Record
@@ -301,14 +388,13 @@ namespace Catalogue.Tests.Slow.Catalogue.Data.Publishing
                 Citation = "a citation reference",
                 DigitalObjectIdentifier = "10.25603/840424.1.0.0"
             };
-            var publishingPolicy = new PublishingPolicy();
-            var result = publishingPolicy.GetPublishingPolicyResult(record);
+            var result = PublishingPolicy.GetPublishingPolicyResult(record);
 
             result.HubRecord.Should().BeFalse();
             result.HubResources.Should().BeNullOrEmpty();
             result.GovRecord.Should().BeFalse();
             result.GovResources.Should().BeNullOrEmpty();
-            result.Message.Should().Be("This record has a DOI and cannot be republished");
+            result.Message.Should().Be("This record has a DOI and cannot be republished.");
         }
 
         [Test]
@@ -331,14 +417,13 @@ namespace Catalogue.Tests.Slow.Catalogue.Data.Publishing
                     }
                 }
             };
-            var publishingPolicy = new PublishingPolicy();
-            var result = publishingPolicy.GetPublishingPolicyResult(record);
+            var result = PublishingPolicy.GetPublishingPolicyResult(record);
 
             result.HubRecord.Should().BeTrue();
             result.HubResources.Should().BeEquivalentTo(new List<Resource> { resource });
             result.GovRecord.Should().BeFalse();
             result.GovResources.Should().BeNullOrEmpty();
-            result.Message.Should().Be("This is a JNCC publication");
+            result.Message.Should().Be("This is a JNCC publication.");
         }
 
         [Test]
@@ -364,14 +449,13 @@ namespace Catalogue.Tests.Slow.Catalogue.Data.Publishing
                     }
                 }
             };
-            var publishingPolicy = new PublishingPolicy();
-            var result = publishingPolicy.GetPublishingPolicyResult(record);
+            var result = PublishingPolicy.GetPublishingPolicyResult(record);
 
             result.HubRecord.Should().BeTrue();
             result.HubResources.Should().BeEquivalentTo(resources);
             result.GovRecord.Should().BeFalse();
             result.GovResources.Should().BeNullOrEmpty();
-            result.Message.Should().Be("This is a JNCC publication");
+            result.Message.Should().Be("This is a JNCC publication.");
         }
 
         [Test]
@@ -392,14 +476,13 @@ namespace Catalogue.Tests.Slow.Catalogue.Data.Publishing
                     }
                 }
             };
-            var publishingPolicy = new PublishingPolicy();
-            var result = publishingPolicy.GetPublishingPolicyResult(record);
+            var result = PublishingPolicy.GetPublishingPolicyResult(record);
 
             result.HubRecord.Should().BeTrue();
             result.HubResources.Should().BeNullOrEmpty();
             result.GovRecord.Should().BeFalse();
             result.GovResources.Should().BeNullOrEmpty();
-            result.Message.Should().Be("This is a JNCC publication");
+            result.Message.Should().Be("This is a JNCC publication.");
         }
     }
 }
