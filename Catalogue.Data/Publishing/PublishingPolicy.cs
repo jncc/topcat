@@ -96,9 +96,12 @@ namespace Catalogue.Data.Publishing
         private static List<string> GetCanonicalResourceStrings(List<Resource> resources)
         {
             var canonicalStrings = new List<string>();
-            foreach (var resource in resources)
+            if (resources != null)
             {
-                canonicalStrings.Add(resource.Path);
+                foreach (var resource in resources)
+                {
+                    canonicalStrings.Add(resource.Path);
+                }
             }
 
             return canonicalStrings;
