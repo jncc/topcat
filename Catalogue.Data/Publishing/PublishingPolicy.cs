@@ -18,46 +18,43 @@ namespace Catalogue.Data.Publishing
             {
                 var canonicalResources = record.Publication.OpenData.Resources;
 
-                if (record.Gemini.ResourceType.Equals("publication")) {
+                if (HasDoiAndPreviouslyPublished(record))
+                {
+                    result.Message = "This record has a DOI and cannot be republished.";
+                    result.HubRecord = false;
+                    result.GovRecord = false;
+                } else if (record.Gemini.ResourceType.Equals("publication")) {
                     result.Message = "This is a JNCC publication.";
                     result.HubRecord = true;
                     result.HubResources = canonicalResources;
                     result.GovRecord = false;
-                } else // datasets, non-geographic datasets, and services
+                }
+                else if (IsDarwinPlusRecord(record))
                 {
-                    if (HasDoiAndPreviouslyPublished(record))
-                    {
-                        result.Message = "This record has a DOI and cannot be republished.";
-                        result.HubRecord = false;
-                        result.GovRecord = false;
-                    }
-                    else if (IsDarwinPlusRecord(record))
-                    {
-                        result.Message = "This is a Darwin Plus record.";
-                        result.HubRecord = false;
-                        result.GovRecord = true;
-                        result.GovResources = GetCanonicalResourceStrings(canonicalResources);
-                    }
-                    else if (HasUnknownOwnership(record)) {
-                        result.Message = "This record is not fully Open Data as it has unknown ownership.";
-                        result.HubRecord = true;
-                        result.HubResources = canonicalResources;
-                        result.GovRecord = false;
-                    }
-                    else if (HasRestrictiveLicensing(record))
-                    {
-                        result.Message = "This record is not fully Open Data as it has a restrictive licence.";
-                        result.HubRecord = true;
-                        result.HubResources = canonicalResources;
-                        result.GovRecord = false;
-                    }
-                    else
-                    {
-                        result.Message = "This is an Open Data record.";
-                        result.HubRecord = true;
-                        result.HubResources = canonicalResources;
-                        result.GovRecord = true;
-                    }
+                    result.Message = "This is a Darwin Plus record.";
+                    result.HubRecord = false;
+                    result.GovRecord = true;
+                    result.GovResources = GetCanonicalResourceStrings(canonicalResources);
+                }
+                else if (HasUnknownOwnership(record)) {
+                    result.Message = "This record is not fully Open Data as it has unknown ownership.";
+                    result.HubRecord = true;
+                    result.HubResources = canonicalResources;
+                    result.GovRecord = false;
+                }
+                else if (HasRestrictiveLicensing(record))
+                {
+                    result.Message = "This record is not fully Open Data as it has a restrictive licence.";
+                    result.HubRecord = true;
+                    result.HubResources = canonicalResources;
+                    result.GovRecord = false;
+                }
+                else
+                {
+                    result.Message = "This is an Open Data record.";
+                    result.HubRecord = true;
+                    result.HubResources = canonicalResources;
+                    result.GovRecord = true;
                 }
             }
             else

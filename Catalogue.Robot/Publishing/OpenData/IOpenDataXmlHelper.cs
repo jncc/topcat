@@ -4,7 +4,7 @@ namespace Catalogue.Robot.Publishing.OpenData
 {
     interface IOpenDataXmlHelper
     {
-        byte[] GetMetadataDocument(Record record, string resourceUrl);
+        byte[] GetMetadataDocument(Record record);
         string UpdateWafIndexDocument(Record record, string indexDocHtml);
     }
 }

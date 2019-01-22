@@ -6,6 +6,6 @@ namespace Catalogue.Data.Write
     {
         RecordServiceResult Assess(Record record, OpenDataAssessmentInfo assessmentInfo);
         RecordServiceResult SignOff(Record record, OpenDataSignOffInfo signOffInfo);
-        IOpenDataPublishingUploadRecordService Upload();
+        IPublishingUploadRecordService Upload();
     }
 }

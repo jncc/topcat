@@ -6,6 +6,25 @@ namespace Catalogue.Data.Model
     public class PublicationInfo
     {
         public OpenDataPublicationInfo OpenData { get; set; }
+        public DatahubPublicationInfo Datahub { get; set; }
+    }
+
+    public class DatahubPublicationInfo
+    {
+        /// <summary>
+        /// Link to the Datahub page once successfully published
+        /// </summary>
+        public string Url { get; set; }
+
+        /// <summary>
+        /// Details of the last attempt to publish this record.
+        /// </summary>
+        public PublicationAttempt LastAttempt { get; set; }
+
+        /// <summary>
+        /// Details about the last successful attempt to publish this record.
+        /// </summary>
+        public PublicationAttempt LastSuccess { get; set; }
     }
 
     public class OpenDataPublicationInfo

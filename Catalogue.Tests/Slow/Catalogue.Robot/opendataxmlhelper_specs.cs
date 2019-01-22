@@ -21,7 +21,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Robot
             var expectedXmlDoc = GetInputFileAsXmlDoc(@"wafs.721643b8-7e42-40ca-87d9-23f19221238e.xml");
 
             var xmlHelper = new OpenDataXmlHelper();
-            var actualWaf = xmlHelper.GetMetadataDocument(record, "http://data.jncc.gov.uk/data/721643b8-7e42-40ca-87d9-23f19221238e-Scotia-Herring-Acoustic-Grab");
+            var actualWaf = xmlHelper.GetMetadataDocument(record);
             var actualXmlDoc = GetByteArrayAsXmlDoc(actualWaf);
 
             XmlDiff xmlDiff = new XmlDiff();
@@ -35,7 +35,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Robot
             var expectedXmlDoc = GetInputFileAsXmlDoc(@"wafs.c6f3632d-8789-460b-a09d-c132841a7190.xml");
 
             var xmlHelper = new OpenDataXmlHelper();
-            var actualWaf = xmlHelper.GetMetadataDocument(record, "");
+            var actualWaf = xmlHelper.GetMetadataDocument(record);
             var actualXmlDoc = GetByteArrayAsXmlDoc(actualWaf);
 
             XmlDiff xmlDiff = new XmlDiff();
@@ -49,7 +49,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Robot
             var expectedXmlDoc = GetInputFileAsXmlDoc(@"wafs.4cb2cca3-ec95-4962-9618-8556d88390fd.xml");
 
             var xmlHelper = new OpenDataXmlHelper();
-            var actualWaf = xmlHelper.GetMetadataDocument(record, "");
+            var actualWaf = xmlHelper.GetMetadataDocument(record);
             var actualXmlDoc = GetByteArrayAsXmlDoc(actualWaf);
 
             XmlDiff xmlDiff = new XmlDiff();
@@ -80,7 +80,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Robot
             record.Gemini.MetadataPointOfContact.Name = "Bob Flemming"; // this name should not be in the output xml
 
             var xmlHelper = new OpenDataXmlHelper();
-            var actualWaf = xmlHelper.GetMetadataDocument(record, "");
+            var actualWaf = xmlHelper.GetMetadataDocument(record);
             var actualXmlDoc = GetByteArrayAsXmlDoc(actualWaf);
 
             XmlDiff xmlDiff = new XmlDiff();

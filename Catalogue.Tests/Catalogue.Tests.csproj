@@ -69,7 +69,7 @@
     <Compile Include="Slow\Catalogue.Data\Seed\when_seeding.cs" />
     <Compile Include="Slow\Catalogue.Data\Write\basic_record_validator_specs.cs" />
     <Compile Include="Slow\Catalogue.Data\Write\gemini_record_validator_specs.cs" />
-    <Compile Include="Slow\Catalogue.Data\Write\open_data_publishing_service_specs.cs" />
+    <Compile Include="Slow\Catalogue.Data\Write\publishing_service_specs.cs" />
     <Compile Include="Slow\Catalogue.Data\Write\record_service_specs.cs" />
     <Compile Include="Slow\Catalogue.Data\Write\vocabulary_service_specs.cs" />
     <Compile Include="Slow\Catalogue.Gemini\Validation\when_validating_the_example_document.cs" />

@@ -41,8 +41,7 @@ namespace Catalogue.Robot.Publishing.OpenData
 
         public void UploadMetadataDocument(Record record)
         {
-            string resourceUrl = config.HttpRootUrl + "/" + WebificationUtility.GetUnrootedDataPath(record.Id, record.Path);
-            var metaXmlDoc = xmlHelper.GetMetadataDocument(record, resourceUrl);
+            var metaXmlDoc = xmlHelper.GetMetadataDocument(record);
             string metaPath = $"waf/{record.Id}.xml";
             string metaFtpPath = config.FtpRootUrl + "/" + metaPath;
 

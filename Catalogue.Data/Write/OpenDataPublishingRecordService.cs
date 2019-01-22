@@ -80,9 +80,9 @@ namespace Catalogue.Data.Write
             return recordServiceResult;
         }
 
-        public IOpenDataPublishingUploadRecordService Upload()
+        public IPublishingUploadRecordService Upload()
         {
-            return new OpenDataPublishingUploadRecordService(db, validator);
+            return new PublishingUploadRecordService(db, validator);
         }
 
         private void UpdateMetadataDate(Record record, DateTime metadataDate)

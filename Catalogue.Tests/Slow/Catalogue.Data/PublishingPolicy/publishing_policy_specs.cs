@@ -172,7 +172,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Data.Publishing
         }
 
         [Test]
-        public void publish_a_doi_record_for_the_first_time(
+        public void publish_a_doi_dataset_for_the_first_time(
             [Values("dataset", "nonGeographicDataset", "service")] string resourceType,
             [Values(@"z:\a\file\resource.txt", "http://a.url.resource")] string path)
         {
@@ -206,8 +206,42 @@ namespace Catalogue.Tests.Slow.Catalogue.Data.Publishing
         }
 
         [Test]
+        public void publish_a_doi_publication_for_the_first_time(
+            [Values("publication")] string resourceType,
+            [Values(@"z:\a\file\resource.txt", "http://a.url.resource")] string path)
+        {
+            var resource = new Resource { Name = "A named resource", Path = path };
+            var recordId = Helpers.AddCollection(Guid.NewGuid().ToString());
+            var record = new Record
+            {
+                Id = recordId,
+                Path = @"X:\some\path",
+                Gemini = Library.Example()
+                    .With(r => r.ResourceType = resourceType),
+                Publication = new PublicationInfo
+                {
+                    OpenData = new OpenDataPublicationInfo
+                    {
+                        Publishable = true,
+                        Resources = new List<Resource> { resource }
+                    }
+                },
+                Citation = "a citation reference",
+                DigitalObjectIdentifier = "10.25603/840424.1.0.0"
+            };
+            var result = PublishingPolicy.GetPublishingPolicyResult(record);
+
+            result.HubRecord.Should().BeTrue();
+            result.HubResources.Count.Should().Be(1);
+            result.HubResources.Should().BeEquivalentTo(new List<Resource> { resource });
+            result.GovRecord.Should().BeFalse();
+            result.GovResources.Should().BeNullOrEmpty();
+            result.Message.Should().Be("This is a JNCC publication.");
+        }
+
+        [Test]
         public void republish_a_doi_record(
-            [Values("dataset", "nonGeographicDataset", "service")] string resourceType,
+            [Values("publication", "dataset", "nonGeographicDataset", "service")] string resourceType,
             [Values(@"z:\a\file\resource.txt", "http://a.url.resource")] string path)
         {
             var resource = new Resource { Name = "A named resource", Path = path };

@@ -9,6 +9,7 @@ using Catalogue.Data;
 using Catalogue.Data.Export;
 using Catalogue.Data.Model;
 using Catalogue.Data.Write;
+using Catalogue.Gemini.Model;
 using Catalogue.Gemini.Templates;
 using FluentAssertions;
 using Moq;
@@ -49,7 +50,10 @@ namespace Catalogue.Tests.Explicit.Catalogue.Data.Export
             var validator = new RecordValidator();
             var result = validator.Validate(record);
 
-            var xml = new global::Catalogue.Gemini.Encoding.XmlEncoder().Create(Helpers.AddCollection("a92a3e00-2ff6-4270-b19e-377c7d542d7c"), Library.Example());
+            var xml = new global::Catalogue.Gemini.Encoding.XmlEncoder().Create(
+                Helpers.AddCollection("a92a3e00-2ff6-4270-b19e-377c7d542d7c"),
+                Library.Example(),
+                new List<OnlineResource>());
             var ceh = new global::Catalogue.Gemini.Validation.Validator().Validate(xml);
 
             xml.Save(@"c:\topcat-out.xml");

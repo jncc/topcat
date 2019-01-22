@@ -533,10 +533,10 @@
 
 
     
-    <div tab ng-if="form.publication.openData.publishable">
+    <div tab>
         <tab-heading>
             <span class="glyphicon glyphicon-gift"></span> Publishing
-            <small ng-show="true" class="little-warning-badge" tc-tip title="This resource has {{form.publication.openData.resources.length}} files in its publication package">
+            <small ng-show="true" class="little-warning-badge" tc-tip title="This resource has {{form.publication.openData.resources.length}} publishable resources">
                 <span class="badge small">{{form.publication.openData.resources.length}}</span>
             </small>
         </tab-heading>
@@ -687,7 +687,6 @@
                         <button type="button" class="btn"
                                 title="{{ getOpenDataButtonToolTip(form, recordOutput.recordState.openDataPublishingState) }}" tc-tip
                                 ng-click="openPublishingModal()"
-                                ng-disabled="!isPublishingModalButtonEnabled()"
                                 ng-show="isPublishingModalButtonVisible()"
                                 ng-class="{ 'btn-default': !form.publication.openData.assessment.completed,
                                 'btn-primary': recordOutput.recordState.openDataPublishingState.uploadedAndUpToDate,

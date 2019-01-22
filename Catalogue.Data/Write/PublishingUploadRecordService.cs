@@ -8,14 +8,14 @@ using static Catalogue.Data.Write.RecordServiceHelper;
 
 namespace Catalogue.Data.Write
 {
-    public class OpenDataPublishingUploadRecordService : IOpenDataPublishingUploadRecordService
+    public class PublishingUploadRecordService : IPublishingUploadRecordService
     {
-        private static readonly ILog Logger = LogManager.GetLogger(typeof(OpenDataPublishingUploadRecordService));
+        private static readonly ILog Logger = LogManager.GetLogger(typeof(PublishingUploadRecordService));
 
         private readonly IDocumentSession db;
         private readonly IRecordValidator validator;
 
-        public OpenDataPublishingUploadRecordService(IDocumentSession db, IRecordValidator validator)
+        public PublishingUploadRecordService(IDocumentSession db, IRecordValidator validator)
         {
             this.db = db;
             this.validator = validator;
@@ -46,20 +46,12 @@ namespace Catalogue.Data.Write
                 e.LogAndThrow(Logger);
             }
         }
-
-        public void UpdateTheResourceLocatorToBeTheOpenDataDownloadPage(Record record)
-        {
-            // this is a big dataset so just link to a webpage
-            string jnccWebDownloadPage = "http://jncc.defra.gov.uk/opendata";
-            record.Gemini.ResourceLocator = jnccWebDownloadPage;
-            Logger.Info("ResourceLocator updated to point to open data request webpage.");
-        }
-
-        public void UpdateResourceLocatorToMatchMainDataFile(Record record, string dataHttpPath)
+        
+        public void UpdatePublishedUrlForResource(Resource resource, string dataHttpPath)
         {
             // update the resource locator to be the data file
-            record.Gemini.ResourceLocator = dataHttpPath;
-            Logger.Info("ResourceLocator updated to point to the data file.");
+            resource.PublishedUrl = dataHttpPath;
+            Logger.Info(string.Format("PublishedUrl for resource {} updated to point to: {}", resource.Path, dataHttpPath));
         }
 
         private void UpdateMetadataDate(Record record, DateTime metadataDate)

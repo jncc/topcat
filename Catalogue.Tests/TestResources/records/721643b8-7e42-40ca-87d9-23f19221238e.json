@@ -98,9 +98,10 @@
         "Comment": null
         },
         "Resources": [
-        {
+          {
+            "Name": "Scotia Herring Acoustic Grab",
             "Path": "\\\\jncc-corpfile\\marine survey\\OffshoreSurvey\\SurveyData\\2010_06_RVScotia_NorthSea_HerringAcousticSurvey\\Groundtruthing\\Sampling\\Logs\\Scotia_Herring_Acoustic_Grab.zip"
-        }
+          }
         ],
         "Paused": false,
         "LastAttempt": {

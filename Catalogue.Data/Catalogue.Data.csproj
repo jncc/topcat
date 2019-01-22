@@ -95,9 +95,9 @@
     <Compile Include="Seed\Vocabularies.cs" />
     <Compile Include="Test\InMemoryDatabaseHelper.cs" />
     <Compile Include="Write\IOpenDataPublishingRecordService.cs" />
-    <Compile Include="Write\IOpenDataPublishingUploadRecordService.cs" />
+    <Compile Include="Write\IPublishingUploadRecordService.cs" />
     <Compile Include="Write\IRecordService.cs" />
-    <Compile Include="Write\OpenDataPublishingUploadRecordService.cs" />
+    <Compile Include="Write\PublishingUploadRecordService.cs" />
     <Compile Include="Write\OpenDataPublishingRecordService.cs" />
     <Compile Include="Write\RecordServiceHelper.cs" />
     <Compile Include="Model\RecordState.cs" />

@@ -4,6 +4,7 @@ using Catalogue.Utilities.Text;
 using Catalogue.Web.Controllers.Records;
 using System.Linq;
 using Catalogue.Data.Extensions;
+using Catalogue.Data.Publishing;
 using Raven.Client.Documents.Session;
 
 namespace Catalogue.Data.Write
@@ -36,7 +37,8 @@ namespace Catalogue.Data.Write
                             UploadedAndUpToDate = record.IsUploadedAndUpToDate()
                         }
                     },
-                    Validation = validation,
+                    PublishingPolicy = PublishingPolicy.GetPublishingPolicyResult(record),
+                    Validation = validation
                 };
         }
 
@@ -94,6 +96,7 @@ namespace Catalogue.Data.Write
         /// </summary>
         public Record Record { get; set; }
         public RecordState RecordState { get; set; }
+        public PublishingPolicyResult PublishingPolicy { get; set; }
 
         /// <summary>
         /// A convenience result for tests, etc.

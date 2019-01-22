@@ -19,10 +19,10 @@ namespace Catalogue.Robot.Publishing.OpenData
         private static readonly ILog Logger = LogManager.GetLogger(typeof(RobotUploader));
 
         private readonly IDocumentSession db;
-        private readonly IOpenDataPublishingUploadRecordService uploadRecordService;
+        private readonly IPublishingUploadRecordService uploadRecordService;
         private readonly IOpenDataUploadHelper uploadHelper;
 
-        public RobotUploader(IDocumentSession db, IOpenDataPublishingUploadRecordService uploadRecordService, IOpenDataUploadHelper uploadHelper)
+        public RobotUploader(IDocumentSession db, IPublishingUploadRecordService uploadRecordService, IOpenDataUploadHelper uploadHelper)
         {
             this.db = db;
             this.uploadRecordService = uploadRecordService;
@@ -64,34 +64,25 @@ namespace Catalogue.Robot.Publishing.OpenData
             uploadRecordService.UpdateLastAttempt(record, attempt);
             db.SaveChanges();
 
-            bool corpulent = record.Gemini.Keywords.Any(k => k.Vocab == "http://vocab.jncc.gov.uk/metadata-admin" && k.Value == "Corpulent");
-
             try
             {
                 if (!metadataOnly)
                 {
-                    if (corpulent)
+                    foreach (var resource in record.Publication.OpenData.Resources)
                     {
-                        // set the resource locator to the download request page; don't upload any resources
-                        if (record.Gemini.ResourceLocator.IsBlank()) // arguably should always do it actually
-                            uploadRecordService.UpdateTheResourceLocatorToBeTheOpenDataDownloadPage(record);
+                        if (IsFileResource(resource))
+                        {
+                            uploadHelper.UploadDataFile(Helpers.RemoveCollection(record.Id), resource.Path);
+                            string dataHttpPath = uploadHelper.GetHttpRootUrl() + "/" +
+                                                  GetUnrootedDataPath(Helpers.RemoveCollection(record.Id), resource.Path);
+                            uploadRecordService.UpdatePublishedUrlForResource(resource, dataHttpPath);
+                        }
+                        else
+                        {
+                            // do nothing
+                            Logger.Info("The resource is a URL - no file to upload");
+                        }
                     }
-                    else if (record.Gemini.ResourceLocator.IsBlank() ||
-                                record.Gemini.ResourceLocator.Contains(uploadHelper.GetHttpRootUrl()))
-                    {
-                        // "normal" case - if the resource locator is blank or already data.jncc.gov.uk
-                        // upload the resource pointed at by record.Path, and update the resource locator to match
-                        uploadHelper.UploadDataFile(Helpers.RemoveCollection(record.Id), record.Path);
-                        string dataHttpPath = uploadHelper.GetHttpRootUrl() + "/" +
-                                                GetUnrootedDataPath(Helpers.RemoveCollection(record.Id), record.Path);
-                        uploadRecordService.UpdateResourceLocatorToMatchMainDataFile(record, dataHttpPath);
-                    }
-                    else
-                    {
-                        // do nothing - don't change the resource locator, don't upload anything
-                        Logger.Info("Deferring to existing resource locator - not uploading.");
-                    }
-                    
                 }
 
                 uploadHelper.UploadMetadataDocument(Helpers.RemoveCollectionFromId(record));
@@ -104,6 +95,20 @@ namespace Catalogue.Robot.Publishing.OpenData
                 attempt.Message = ex.Message + (ex.InnerException != null ? ex.InnerException.Message : "");
                 Logger.Error($"Upload failed for record with GUID={record.Id}", ex);
             }
+        }
+
+        private bool IsFileResource(Resource resource)
+        {
+            var isFilePath = false;
+            if (Uri.TryCreate(resource.Path, UriKind.Absolute, out var uri))
+            {
+                if (uri.Scheme == Uri.UriSchemeFile)
+                {
+                    isFilePath = true;
+                }
+            }
+
+            return isFilePath;
         }
     }
 }
