@@ -190,24 +190,6 @@ namespace Catalogue.Tests.Slow.Catalogue.Data.Write
         }
 
         [Test]
-        public void resource_locator_must_be_a_well_formed_http_url(
-            [Values(@"Z:\some\path", "utter rubbish")] string nonHttpUrl)
-        {
-            var record = SimpleRecord().With(r => r.Gemini.ResourceLocator = nonHttpUrl);
-            var result = new RecordValidator().Validate(record);
-            result.Errors.Single().Fields.Should().Contain("gemini.resourceLocator");
-        }
-
-        [Test]
-        public void resource_locator_may_be_set(
-            [Values(@"http://www.example.org/resource/locator", @"https://www.example.org/resource/locator")] string httpUrl)
-        {
-            var record = SimpleRecord().With(r => r.Gemini.ResourceLocator = httpUrl);
-            var result = new RecordValidator().Validate(record);
-            result.Errors.Should().BeEmpty();
-        }
-
-        [Test]
         public void responsible_organisation_role_must_be_an_allowed_role()
         {
             var record = SimpleRecord().With(r => r.Gemini.ResponsibleOrganisation = new ResponsibleParty

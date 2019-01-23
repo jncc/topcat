@@ -41,8 +41,6 @@
     "DatasetReferenceDate": "2015-09-01",
     "Lineage":
       "This dataset is an output of a collaborative offshore seabed survey undertaken with Joint Nature Conservation Committee (JNCC).",
-    "ResourceLocator":
-      "http://s3-eu-west-1.amazonaws.com/data.defra.gov.uk/Marine/JNCC2008_04DoggerBankGeophysSidescanRawData.zip",
     "AdditionalInformationSource": null,
     "DataFormat": "Other",
     "ResponsibleOrganisation": {
@@ -80,6 +78,7 @@
   "ReadOnly": false,
   "Publication": {
     "OpenData": {
+      "Publishable": true,
       "Assessment": {
         "Completed": true,
         "CompletedByUser": null,

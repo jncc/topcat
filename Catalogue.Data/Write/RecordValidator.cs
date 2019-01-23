@@ -29,7 +29,6 @@ namespace Catalogue.Data.Write
             ValidateDatasetReferenceDate(record, result);
             ValidateTemporalExtent(record, result);
             ValidateTopicCategory(record, result);
-            ValidateResourceLocator(record, result);
             ValidateResponsibleOrganisation(record, result);
             ValidateMetadataPointOfContact(record, result);
             ValidateResourceType(record, result);
@@ -156,28 +155,6 @@ namespace Catalogue.Data.Write
             }
 
             // todo ensure End is after Begin
-        }
-
-        void ValidateResourceLocator(Record record, ValidationResult<Record> result)
-        {
-            // resource_locator_must_be_a_well_formed_http_url
-            if (record.Gemini.ResourceLocator.IsNotBlank())
-            {
-                Uri url;
-                if (Uri.TryCreate(record.Gemini.ResourceLocator, UriKind.Absolute, out url))
-                {
-                    if (url.Scheme != Uri.UriSchemeHttp && url.Scheme != Uri.UriSchemeHttps)
-                    {
-                        result.Errors.Add("Resource locator must be an http url",
-                            r => r.Gemini.ResourceLocator);
-                    }
-                }
-                else
-                {
-                    result.Errors.Add("Resource locator must be a valid url",
-                        r => r.Gemini.ResourceLocator);
-                }
-            }
         }
 
         void ValidateTopicCategory(Record record, ValidationResult<Record> result)

@@ -130,7 +130,6 @@ namespace Catalogue.Data.Import.Mappings
                         return row.GetField("DatasetReferenceDate");
                     });
                 Map(m => m.Lineage);
-                Map(m => m.ResourceLocator);
                 Map(m => m.AdditionalInformationSource);
                 Map(m => m.DataFormat);
                 Map(m => m.ResponsibleOrganisation).ConvertUsing(row =>

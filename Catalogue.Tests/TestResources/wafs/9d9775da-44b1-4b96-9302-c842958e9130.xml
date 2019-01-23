@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <gmd:MD_Metadata xmlns:gmd="http://www.isotc211.org/2005/gmd" xmlns:gco="http://www.isotc211.org/2005/gco" xmlns:gml="http://www.opengis.net/gml/3.2">
   <gmd:fileIdentifier>
-    <gco:CharacterString>c6f3632d-8789-460b-a09d-c132841a7190</gco:CharacterString>
+    <gco:CharacterString>9d9775da-44b1-4b96-9302-c842958e9130</gco:CharacterString>
   </gmd:fileIdentifier>
   <gmd:language>
     <gmd:LanguageCode codeList="http://www.loc.gov/standards/iso639-2/php/code_list.php" codeListValue="eng">eng</gmd:LanguageCode>
@@ -34,11 +34,11 @@
     <gco:Date>2016-07-07</gco:Date>
   </gmd:dateStamp>
   <gmd:identificationInfo>
-    <gmd:MD_DataIdentification id="_c6f3632d-8789-460b-a09d-c132841a7190">
+    <gmd:MD_DataIdentification id="_9d9775da-44b1-4b96-9302-c842958e9130">
       <gmd:citation>
         <gmd:CI_Citation>
           <gmd:title>
-            <gco:CharacterString>Raw sidescan sonar data from Dogger Bank SCI</gco:CharacterString>
+            <gco:CharacterString>GIS grab Log data from North Sea Acoustic Herring survey 2010</gco:CharacterString>
           </gmd:title>
           <gmd:date>
             <gmd:CI_Date>
@@ -53,14 +53,14 @@
           <gmd:identifier>
             <gmd:MD_Identifier>
               <gmd:code>
-                <gco:CharacterString>c6f3632d-8789-460b-a09d-c132841a7190</gco:CharacterString>
+                <gco:CharacterString>9d9775da-44b1-4b96-9302-c842958e9130</gco:CharacterString>
               </gmd:code>
             </gmd:MD_Identifier>
           </gmd:identifier>
         </gmd:CI_Citation>
       </gmd:citation>
       <gmd:abstract>
-        <gco:CharacterString>Raw sidescan sonar data from Dogger Bank SCI (CEND 07/08). This survey was carried out at Dogger Bank SAC  on the Cefas Endeavour research vessel to better define the extent of the Annex 1 shallow sandbank habitat and to conduct habitat mapping.</gco:CharacterString>
+        <gco:CharacterString>GIS grab log data from the North Sea Acoustic Herring survey during 2010 on the research vessel Scotia. The aim of the survey was obtain information on seabed habitats in the North Sea.</gco:CharacterString>
       </gmd:abstract>
       <gmd:pointOfContact>
         <gmd:CI_ResponsibleParty>
@@ -92,26 +92,32 @@
             <gco:CharacterString>Offshore Seabed Survey</gco:CharacterString>
           </gmd:keyword>
           <gmd:keyword>
-            <gco:CharacterString>Dogger Bank SCI</gco:CharacterString>
+            <gco:CharacterString>North East Scotland</gco:CharacterString>
           </gmd:keyword>
           <gmd:keyword>
-            <gco:CharacterString>CEND0708</gco:CharacterString>
+            <gco:CharacterString>North Sea</gco:CharacterString>
           </gmd:keyword>
           <gmd:keyword>
-            <gco:CharacterString>Raw</gco:CharacterString>
+            <gco:CharacterString>0810S</gco:CharacterString>
           </gmd:keyword>
           <gmd:keyword>
-            <gco:CharacterString>Dogger Bank SCI</gco:CharacterString>
+            <gco:CharacterString>Processed</gco:CharacterString>
           </gmd:keyword>
           <gmd:keyword>
-            <gco:CharacterString>RV Cefas Endeavour</gco:CharacterString>
+            <gco:CharacterString>North East Scotland</gco:CharacterString>
+          </gmd:keyword>
+          <gmd:keyword>
+            <gco:CharacterString>North Sea</gco:CharacterString>
+          </gmd:keyword>
+          <gmd:keyword>
+            <gco:CharacterString>MRV Scotia</gco:CharacterString>
           </gmd:keyword>
         </gmd:MD_Keywords>
       </gmd:descriptiveKeywords>
       <gmd:resourceConstraints>
         <gmd:MD_LegalConstraints>
           <gmd:useLimitation>
-            <gco:CharacterString>Released under the Open Government Licence v2.0</gco:CharacterString>
+            <gco:CharacterString>This resource is made available under the Open Government Licence (OGL) v2.0 http://www.nationalarchives.gov.uk/doc/open-government-licence/version/2/</gco:CharacterString>
           </gmd:useLimitation>
           <gmd:accessConstraints>
             <gmd:MD_RestrictionCode codeList="http://standards.iso.org/ittf/PubliclyAvailableStandards/ISO_19139_Schemas/resources/codelist/gmxCodelists.xml#MD_RestrictionCode" codeListValue="otherRestrictions">otherRestrictions</gmd:MD_RestrictionCode>
@@ -132,16 +138,16 @@
           <gmd:geographicElement>
             <gmd:EX_GeographicBoundingBox>
               <gmd:westBoundLongitude>
-                <gco:Decimal>1.571</gco:Decimal>
+                <gco:Decimal>-2.297</gco:Decimal>
               </gmd:westBoundLongitude>
               <gmd:eastBoundLongitude>
-                <gco:Decimal>4.39</gco:Decimal>
+                <gco:Decimal>1.724</gco:Decimal>
               </gmd:eastBoundLongitude>
               <gmd:southBoundLatitude>
-                <gco:Decimal>47.207</gco:Decimal>
+                <gco:Decimal>58.066</gco:Decimal>
               </gmd:southBoundLatitude>
               <gmd:northBoundLatitude>
-                <gco:Decimal>49.242</gco:Decimal>
+                <gco:Decimal>61.283</gco:Decimal>
               </gmd:northBoundLatitude>
             </gmd:EX_GeographicBoundingBox>
           </gmd:geographicElement>
@@ -149,8 +155,8 @@
             <gmd:EX_TemporalExtent>
               <gmd:extent>
                 <gml:TimePeriod gml:id="t1">
-                  <gml:beginPosition>2008-04-01</gml:beginPosition>
-                  <gml:endPosition>2008-04-20</gml:endPosition>
+                  <gml:beginPosition>2010-06-28</gml:beginPosition>
+                  <gml:endPosition>2010-07-18</gml:endPosition>
                 </gml:TimePeriod>
               </gmd:extent>
             </gmd:EX_TemporalExtent>
@@ -164,7 +170,7 @@
       <gmd:distributionFormat>
         <gmd:MD_Format>
           <gmd:name>
-            <gco:CharacterString>Other</gco:CharacterString>
+            <gco:CharacterString>Geospatial (Vector point)</gco:CharacterString>
           </gmd:name>
           <gmd:version>
             <gco:CharacterString>Unknown</gco:CharacterString>
@@ -173,6 +179,16 @@
       </gmd:distributionFormat>
       <gmd:transferOptions>
         <gmd:MD_DigitalTransferOptions>
+          <gmd:onLine>
+            <gmd:CI_OnlineResource>
+              <gmd:linkage>
+                <gmd:URL>http://url.to.resource</gmd:URL>
+              </gmd:linkage>
+              <gmd:name>
+                <gco:CharacterString>Scotia Herring Acoustic Grab</gco:CharacterString>
+              </gmd:name>
+            </gmd:CI_OnlineResource>
+          </gmd:onLine>
         </gmd:MD_DigitalTransferOptions>
       </gmd:transferOptions>
     </gmd:MD_Distribution>

@@ -168,7 +168,6 @@ namespace Catalogue.Data.Seed
                         m.TemporalExtent = new TemporalExtent { Begin = "1998", End = "2005" };
                         m.DatasetReferenceDate = "2015-04-14";
                         m.Lineage = "This dataset was imagined by a developer.";
-                        m.ResourceLocator = "http://data.jncc.gov.uk/679434f5-baab-47b9-98e4-81c8e3a1a6f9";
                         m.DataFormat = "Geospatial (raster)";
                         m.ResponsibleOrganisation = new ResponsibleParty
                         {
@@ -218,7 +217,6 @@ namespace Catalogue.Data.Seed
                     m.TemporalExtent = new TemporalExtent { Begin = "1998", End = "2005" };
                     m.DatasetReferenceDate = "2015-04-14";
                     m.Lineage = "This dataset was imagined by a developer.";
-                    m.ResourceLocator = "";
                     m.DataFormat = "Comma Separated Values";
                     m.ResponsibleOrganisation = new ResponsibleParty
                     {
@@ -257,6 +255,11 @@ namespace Catalogue.Data.Seed
                     OpenData = new OpenDataPublicationInfo
                     {
                         Publishable = true,
+                        Resources = new List<Resource> { new Resource
+                        {
+                            Name = "File resource",
+                            Path = @"C:\work\test-data.csv"
+                        } },
                         Assessment = new OpenDataAssessmentInfo
                         {
                             Completed = true,
@@ -289,6 +292,11 @@ namespace Catalogue.Data.Seed
                     OpenData = new OpenDataPublicationInfo
                     {
                         Publishable = true,
+                        Resources = new List<Resource> { new Resource
+                        {
+                            Name = "File resource",
+                            Path = @"C:\work\test-data.csv"
+                        } },
                         Assessment = new OpenDataAssessmentInfo
                         {
                             // todo add more assessment fields
@@ -308,6 +316,11 @@ namespace Catalogue.Data.Seed
                     OpenData = new OpenDataPublicationInfo
                     {
                         Publishable = true,
+                        Resources = new List<Resource> { new Resource
+                        {
+                            Name = "File resource",
+                            Path = @"C:\work\test-data.csv"
+                        } },
                         Assessment = new OpenDataAssessmentInfo
                         {
                             // todo add more assessment fields
@@ -334,6 +347,11 @@ namespace Catalogue.Data.Seed
                     OpenData = new OpenDataPublicationInfo
                     {
                         Publishable = true,
+                        Resources = new List<Resource> { new Resource
+                        {
+                            Name = "File resource",
+                            Path = @"C:\work\test-data.csv"
+                        } },
                         Assessment = new OpenDataAssessmentInfo
                         {
                             // todo add more assessment fields
@@ -373,6 +391,11 @@ namespace Catalogue.Data.Seed
                     OpenData = new OpenDataPublicationInfo
                     {
                         Publishable = true,
+                        Resources = new List<Resource> { new Resource
+                        {
+                            Name = "File resource",
+                            Path = @"C:\work\test-data.csv"
+                        } },
                         LastAttempt = new PublicationAttempt { DateUtc = new DateTime(2015, 1, 1, 12, 0, 0), Message = "Failed with a terrible error in Sector 7G"},
                         LastSuccess = null,
                         Assessment = new OpenDataAssessmentInfo
@@ -404,6 +427,11 @@ namespace Catalogue.Data.Seed
                     OpenData = new OpenDataPublicationInfo
                     {
                         Publishable = true,
+                        Resources = new List<Resource> { new Resource
+                        {
+                            Name = "File resource",
+                            Path = @"C:\work\test-data.csv"
+                        } },
                         LastAttempt = new PublicationAttempt { DateUtc = new DateTime(2015, 1, 1, 12, 0, 0) },
                         LastSuccess = new PublicationAttempt { DateUtc = new DateTime(2015, 1, 1, 12, 0, 0) },
                         Assessment = new OpenDataAssessmentInfo
@@ -433,6 +461,11 @@ namespace Catalogue.Data.Seed
                     OpenData = new OpenDataPublicationInfo
                     {
                         Publishable = true,
+                        Resources = new List<Resource> { new Resource
+                        {
+                            Name = "File resource",
+                            Path = @"C:\work\test-data.csv"
+                        } },
                         LastAttempt = new PublicationAttempt { DateUtc = new DateTime(2014, 12, 31) },
                         LastSuccess = new PublicationAttempt { DateUtc = new DateTime(2014, 12, 31) },
                         Paused = true,
@@ -455,7 +488,6 @@ namespace Catalogue.Data.Seed
                 r.Id = Helpers.AddCollection("90fe83ac-d3e4-4342-8eeb-5919b38bc670");
                 r.Gemini.Title = "A record with multiple open data resources";
                 r.Gemini.MetadataDate = new DateTime(2014, 12, 31);
-                r.Gemini.ResourceLocator = "http://example.com/this/will/get/ignored/when/published";
                 r.Publication = new PublicationInfo
                 {
                     OpenData = new OpenDataPublicationInfo
@@ -496,7 +528,6 @@ namespace Catalogue.Data.Seed
                 r.Id = Helpers.AddCollection("fef1d883-b6ea-4ade-93ae-8bf0abd4e29b");
                 r.Gemini.Title = "A record which is unpublishable";
                 r.Gemini.MetadataDate = new DateTime(2014, 12, 31);
-                r.Gemini.ResourceLocator = "http://example.com/this/will/get/ignored/when/published";
                 r.Publication = new PublicationInfo
                 {
                     OpenData = new OpenDataPublicationInfo

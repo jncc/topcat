@@ -60,7 +60,6 @@
     <Compile Include="Import\Mappings\IMapping.cs" />
     <Compile Include="Import\Mappings\MeshMapping.cs" />
     <Compile Include="Import\ImportUtility.cs" />
-    <Compile Include="Import\Mappings\ResourceLocatorMapping.cs" />
     <Compile Include="Import\Mappings\TopcatMapping.cs" />
     <Compile Include="Indexes\RecordSpatialIndex.cs" />
     <Compile Include="Indexes\RecordsWithNoFooterIndex.cs" />

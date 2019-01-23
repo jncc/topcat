@@ -3,7 +3,6 @@ using System.IO;
 using System.Reflection;
 using System.Text;
 using System.Xml;
-using Catalogue.Data;
 using Catalogue.Data.Model;
 using Catalogue.Robot.Publishing.OpenData;
 using Microsoft.XmlDiffPatch;
@@ -15,10 +14,38 @@ namespace Catalogue.Tests.Slow.Catalogue.Robot
     public class opendataxmlhelper_specs
     {
         [Test]
-        public void metadata_document_generated_correctly_for_record_with_resources()
+        public void metadata_document_generated_correctly_for_record_with_file_resource()
         {
             var record = GetRecordFromFile("721643b8-7e42-40ca-87d9-23f19221238e", @"records.721643b8-7e42-40ca-87d9-23f19221238e.json");
             var expectedXmlDoc = GetInputFileAsXmlDoc(@"wafs.721643b8-7e42-40ca-87d9-23f19221238e.xml");
+
+            var xmlHelper = new OpenDataXmlHelper();
+            var actualWaf = xmlHelper.GetMetadataDocument(record);
+            var actualXmlDoc = GetByteArrayAsXmlDoc(actualWaf);
+
+            XmlDiff xmlDiff = new XmlDiff();
+            Assert.True(xmlDiff.Compare(expectedXmlDoc, actualXmlDoc));
+        }
+
+        [Test]
+        public void metadata_document_generated_correctly_for_record_with_multiple_resources()
+        {
+            var record = GetRecordFromFile("00b0b44c-a062-4a25-b344-2be12b03a6b5", @"records.00b0b44c-a062-4a25-b344-2be12b03a6b5.json");
+            var expectedXmlDoc = GetInputFileAsXmlDoc(@"wafs.00b0b44c-a062-4a25-b344-2be12b03a6b5.xml");
+
+            var xmlHelper = new OpenDataXmlHelper();
+            var actualWaf = xmlHelper.GetMetadataDocument(record);
+            var actualXmlDoc = GetByteArrayAsXmlDoc(actualWaf);
+
+            XmlDiff xmlDiff = new XmlDiff();
+            Assert.True(xmlDiff.Compare(expectedXmlDoc, actualXmlDoc));
+        }
+
+        [Test]
+        public void metadata_document_generated_correctly_for_record_with_url_resource()
+        {
+            var record = GetRecordFromFile("9d9775da-44b1-4b96-9302-c842958e9130", @"records.9d9775da-44b1-4b96-9302-c842958e9130.json");
+            var expectedXmlDoc = GetInputFileAsXmlDoc(@"wafs.9d9775da-44b1-4b96-9302-c842958e9130.xml");
 
             var xmlHelper = new OpenDataXmlHelper();
             var actualWaf = xmlHelper.GetMetadataDocument(record);

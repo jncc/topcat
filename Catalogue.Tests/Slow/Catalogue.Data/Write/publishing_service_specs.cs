@@ -19,6 +19,8 @@ namespace Catalogue.Tests.Slow.Catalogue.Data.Write
 {
     public class publishing_service_specs : CleanDbTest
     {
+        private static string DATAHUB_ROOT = "http://datahub.jncc.gov.uk/";
+
         [Test]
         public void successful_publish_of_open_data_record()
         {
@@ -73,7 +75,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Data.Write
                 updatedRecord.Publication.OpenData.Resources.First(r => r.Name.Equals("File resource")).PublishedUrl.Should().Be("http://data.jncc.gov.uk/data/eb189a2f-ebce-4232-8dc6-1ad486cacf21-test.txt");
                 updatedRecord.Publication.OpenData.Resources.First(r => r.Name.Equals("File resource")).Path.Should().Be(@"X:\path\to\upload\test.txt");
                 updatedRecord.Gemini.MetadataDate.Should().Be(testTime);
-                uploadHelperMock.Verify(x => x.UploadDataFile(Helpers.RemoveCollection(record.Id), record.Path), Times.Once);
+                uploadHelperMock.Verify(x => x.UploadDataFile(Helpers.RemoveCollection(record.Id), @"X:\path\to\upload\test.txt"), Times.Once);
                 uploadHelperMock.Verify(x => x.UploadMetadataDocument(record), Times.Once);
                 uploadHelperMock.Verify(x => x.UploadWafIndexDocument(record), Times.Once);
 
@@ -82,21 +84,22 @@ namespace Catalogue.Tests.Slow.Catalogue.Data.Write
         }
 
         [Test]
-        public void successful_upload_with_additional_resources()
+        public void open_data_record_with_one_file_resource(
+            [Values("dataset", "nonGeographicDataset", "service")] string resourceType)
         {
+            var recordId = "eb189a2f-ebce-4232-8dc6-1ad486cacf21";
             var record = new Record().With(r =>
             {
-                r.Id = Helpers.AddCollection("eb189a2f-ebce-4232-8dc6-1ad486cacf21");
+                r.Id = Helpers.AddCollection(recordId);
                 r.Path = @"X:\path\to\upload\test";
                 r.Validation = Validation.Gemini;
-                r.Gemini = Library.Example().With(m =>
-                {
-                    m.ResourceLocator = null;
-                });
+                r.Gemini = Library.Example()
+                    .With(m => m.ResourceType = resourceType);
                 r.Publication = new PublicationInfo
                 {
                     OpenData = new OpenDataPublicationInfo
                     {
+                        Publishable = true,
                         Assessment = new OpenDataAssessmentInfo
                         {
                             Completed = true
@@ -106,7 +109,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Data.Write
                             DateUtc = new DateTime(2017, 08, 02),
                             User = TestUserInfo.TestUser
                         },
-                        Resources = new List<Resource>{ new Resource{ Name = "Some resource", Path = "x:\\test\\path" } }
+                        Resources = new List<Resource>{ new Resource{ Name = "Some resource", Path = "x:\\test\\path.txt" } }
                     }
                 };
                 r.Footer = new Footer();
@@ -130,12 +133,19 @@ namespace Catalogue.Tests.Slow.Catalogue.Data.Write
                 uploader.Upload(new List<Record> { record });
 
                 var updatedRecord = db.Load<Record>(record.Id);
-                updatedRecord.Publication.OpenData.LastAttempt.DateUtc.Should().Be(testTime);
-                updatedRecord.Publication.OpenData.LastAttempt.Message.Should().BeNull();
-                updatedRecord.Publication.OpenData.LastSuccess.DateUtc.Should().Be(testTime);
-                updatedRecord.Publication.OpenData.LastSuccess.Message.Should().BeNull();
+                var openData = updatedRecord.Publication.OpenData;
+                var datahub = updatedRecord.Publication.Datahub;
+                openData.LastAttempt.DateUtc.Should().Be(testTime);
+                openData.LastAttempt.Message.Should().BeNull();
+                openData.LastSuccess.DateUtc.Should().Be(testTime);
+                openData.LastSuccess.Message.Should().BeNull();
+                openData.Resources.First().PublishedUrl.Should().Be("http://data.jncc.gov.uk/data/"+ recordId + "-path.txt");
+                datahub.Url.Should().Be(DATAHUB_ROOT + recordId);
+                datahub.LastAttempt.DateUtc.Should().Be(testTime);
+                datahub.LastAttempt.Message.Should().BeNull();
+                datahub.LastSuccess.DateUtc.Should().Be(testTime);
+                datahub.LastSuccess.Message.Should().BeNull();
                 updatedRecord.Gemini.MetadataDate.Should().Be(testTime);
-                updatedRecord.Gemini.ResourceLocator.Should().Be("http://data.jncc.gov.uk/data/eb189a2f-ebce-4232-8dc6-1ad486cacf21-test");
                 uploadHelperMock.Verify(x => x.UploadDataFile(Helpers.RemoveCollection(record.Id), record.Path), Times.Once);
                 uploadHelperMock.Verify(x => x.UploadMetadataDocument(record), Times.Once);
                 uploadHelperMock.Verify(x => x.UploadWafIndexDocument(record), Times.Once);
@@ -152,10 +162,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Data.Write
                 r.Id = Helpers.AddCollection("8ad134fa-9045-40af-a0cb-02bc3e868f5a");
                 r.Path = @"X:\path\to\upload\test";
                 r.Validation = Validation.Gemini;
-                r.Gemini = Library.Example().With(m =>
-                {
-                    m.ResourceLocator = null;
-                });
+                r.Gemini = Library.Example();
                 r.Publication = new PublicationInfo
                 {
                     OpenData = new OpenDataPublicationInfo
@@ -214,12 +221,18 @@ namespace Catalogue.Tests.Slow.Catalogue.Data.Write
                 r.Validation = Validation.Gemini;
                 r.Gemini = Library.Example().With(m =>
                 {
-                    m.ResourceLocator = "http://www.someexternallinkhere.com";
+                    m.ResourceType = "dataset";
                 });
                 r.Publication = new PublicationInfo
                 {
                     OpenData = new OpenDataPublicationInfo
                     {
+                        Publishable = true,
+                        Resources = new List<Resource> { new Resource
+                        {
+                            Name = "External link",
+                            Path = "http://www.someexternallinkhere.com"
+                        } },
                         Assessment = new OpenDataAssessmentInfo
                         {
                             Completed = true
@@ -257,7 +270,8 @@ namespace Catalogue.Tests.Slow.Catalogue.Data.Write
                 updatedRecord.Publication.OpenData.LastSuccess.DateUtc.Should().Be(testTime);
                 updatedRecord.Publication.OpenData.LastSuccess.Message.Should().BeNull();
                 updatedRecord.Gemini.MetadataDate.Should().Be(testTime);
-                updatedRecord.Gemini.ResourceLocator.Should().Be("http://www.someexternallinkhere.com");
+                updatedRecord.Publication.OpenData.Resources.First().Path.Should().Be("http://www.someexternallinkhere.com");
+                updatedRecord.Publication.OpenData.Resources.First().PublishedUrl.Should().BeNullOrEmpty();
                 uploadHelperMock.Verify(x => x.UploadDataFile(record.Id, record.Path), Times.Never);
                 uploadHelperMock.Verify(x => x.UploadMetadataDocument(record), Times.Once);
                 uploadHelperMock.Verify(x => x.UploadWafIndexDocument(record), Times.Once);

@@ -93,6 +93,8 @@
     <EmbeddedResource Include="TestResources\records\4cb2cca3-ec95-4962-9618-8556d88390fd.json" />
     <EmbeddedResource Include="TestResources\records\721643b8-7e42-40ca-87d9-23f19221238e.json" />
     <EmbeddedResource Include="TestResources\records\c6f3632d-8789-460b-a09d-c132841a7190.json" />
+    <EmbeddedResource Include="TestResources\records\9d9775da-44b1-4b96-9302-c842958e9130.json" />
+    <EmbeddedResource Include="TestResources\records\00b0b44c-a062-4a25-b344-2be12b03a6b5.json" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="CsvHelper">
@@ -155,6 +157,8 @@
   <ItemGroup>
     <Content Include="bin\Debug\RavenDBServer\Catalogue.Data.Analyzers.dll" />
     <Content Include="bin\Release\RavenDBServer\Catalogue.Data.Analyzers.dll" />
+    <EmbeddedResource Include="TestResources\wafs\00b0b44c-a062-4a25-b344-2be12b03a6b5.xml" />
+    <EmbeddedResource Include="TestResources\wafs\9d9775da-44b1-4b96-9302-c842958e9130.xml" />
   </ItemGroup>
   <Import Project="$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets" Condition="Exists('$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets')" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

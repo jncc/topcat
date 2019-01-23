@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Xml.Linq;
+using Castle.Core.Internal;
 
 namespace Catalogue.Robot.Publishing.OpenData
 {
@@ -65,14 +66,17 @@ namespace Catalogue.Robot.Publishing.OpenData
         public static List<OnlineResource> GetOnlineResources(Record record)
         {
             var resources = new List<OnlineResource>();
-            foreach (var resource in record.Publication.OpenData.Resources)
+            if (!record.Publication.OpenData.Resources.IsNullOrEmpty())
             {
-                var url = IsFileResource(resource) ? resource.PublishedUrl : resource.Path;
-                resources.Add(new OnlineResource
+                foreach (var resource in record.Publication.OpenData.Resources)
                 {
-                    Name = resource.Name,
-                    Url = url
-                });
+                    var url = IsFileResource(resource) ? resource.PublishedUrl : resource.Path;
+                    resources.Add(new OnlineResource
+                    {
+                        Name = resource.Name,
+                        Url = url
+                    });
+                }
             }
 
             return resources;
