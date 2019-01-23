@@ -66,12 +66,14 @@ namespace Catalogue.Robot.Publishing.OpenData
 
             try
             {
-                if (!metadataOnly)
+                if (!metadataOnly && record.Publication.OpenData.Resources != null)
                 {
+                    Logger.Info($"Found {record.Publication.OpenData.Resources.Count} publishable resources");
                     foreach (var resource in record.Publication.OpenData.Resources)
                     {
                         if (IsFileResource(resource))
                         {
+                            Logger.Info($"Resource {resource.Path} is a file - starting upload process");
                             uploadHelper.UploadDataFile(Helpers.RemoveCollection(record.Id), resource.Path);
                             string dataHttpPath = uploadHelper.GetHttpRootUrl() + "/" +
                                                   GetUnrootedDataPath(Helpers.RemoveCollection(record.Id), resource.Path);
@@ -79,8 +81,7 @@ namespace Catalogue.Robot.Publishing.OpenData
                         }
                         else
                         {
-                            // do nothing
-                            Logger.Info("The resource is a URL - no file to upload");
+                            Logger.Info($"Resource {resource.Path} is a URL - nothing to do");
                         }
                     }
                 }

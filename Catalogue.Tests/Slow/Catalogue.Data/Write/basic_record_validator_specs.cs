@@ -271,7 +271,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Data.Write
         }
 
         [Test]
-        public void accepted_open_data_resource_paths([Values(
+        public void accepted_publishable_resource_paths([Values(
             @"X:\some\path",
             @"\\jncc-corpfile\jncc corporate data\my_dataset.xlsx",
             @"http://www.example.com",
@@ -292,9 +292,8 @@ namespace Catalogue.Tests.Slow.Catalogue.Data.Write
         }
 
         [Test]
-        public void unaccepted_open_data_resource_paths([Values(
+        public void unaccepted_publishable_resource_paths([Values(
             "PG:\"host=spatial-store dbname=spatial layer=SSSI_England_Units\"",
-            "",
             "this is a path"
         )] string path)
         {
@@ -307,6 +306,68 @@ namespace Catalogue.Tests.Slow.Catalogue.Data.Write
                 .With(r => r.Publication = new PublicationInfo { OpenData = new OpenDataPublicationInfo { Resources = new List<Resource>() } })
                 .With(r => r.Publication.OpenData.Resources.Add(resource));
             var result = new RecordValidator().Validate(record);
+            result.Errors.Single().Message.Should().Contain("Publishable resource path must be a file system path or URL");
+            result.Errors.Single().Fields.Single().Should().Be("publication.openData.resources");
+        }
+
+        [Test]
+        public void empty_publishable_resource_paths_not_accepted()
+        {
+            var resource = new Resource
+            {
+                Name = "A resource",
+                Path = ""
+            };
+            var resources = new List<Resource> { resource };
+            var record = SimpleRecord()
+                .With(r => r.Publication = new PublicationInfo
+                    { OpenData = new OpenDataPublicationInfo { Resources = resources } });
+            var result = new RecordValidator().Validate(record);
+            result.Errors.Single().Message.Should().Contain("Publishable resource name and path must not be blank");
+            result.Errors.Single().Fields.Single().Should().Be("publication.openData.resources");
+        }
+
+        [Test]
+        public void duplicate_publishable_resource_paths_not_accepted()
+        {
+            var resource1 = new Resource
+            {
+                Name = "A resource",
+                Path = @"X:\some\path"
+            };
+            var resource2 = new Resource
+            {
+                Name = "Another resource",
+                Path = @"X:\some\path"
+            };
+            var resources = new List<Resource>{ resource1, resource2};
+            var record = SimpleRecord()
+                .With(r => r.Publication = new PublicationInfo
+                    {OpenData = new OpenDataPublicationInfo {Resources = resources}});
+            var result = new RecordValidator().Validate(record);
+            result.Errors.Single().Message.Should().Contain("Publishable resources must be unique - no duplicates");
+            result.Errors.Single().Fields.Single().Should().Be("publication.openData.resources");
+        }
+
+        [Test]
+        public void duplicate_publishable_resource_names_not_accepted()
+        {
+            var resource1 = new Resource
+            {
+                Name = "A resource",
+                Path = @"X:\some\path"
+            };
+            var resource2 = new Resource
+            {
+                Name = "A resource",
+                Path = @"X:\another\path"
+            };
+            var resources = new List<Resource> { resource1, resource2 };
+            var record = SimpleRecord()
+                .With(r => r.Publication = new PublicationInfo
+                    { OpenData = new OpenDataPublicationInfo { Resources = resources } });
+            var result = new RecordValidator().Validate(record);
+            result.Errors.Single().Message.Should().Contain("Publishable resource names must be unique - no duplicates");
             result.Errors.Single().Fields.Single().Should().Be("publication.openData.resources");
         }
     }

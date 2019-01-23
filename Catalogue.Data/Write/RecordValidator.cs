@@ -36,7 +36,7 @@ namespace Catalogue.Data.Write
             ValidatePublishableInvariants(record, result);
             ValidateBoundingBox(record, result);
             ValidateJnccSpecificRules(record, result);
-            ValidateOpenDataResources(record, result);
+            ValidatePublishableResources(record, result);
             ValidateDoi(record, result);
 
             if (record.Validation == Validation.Gemini)
@@ -264,17 +264,20 @@ namespace Catalogue.Data.Write
             }
         }
         
-        void ValidateOpenDataResources(Record record, ValidationResult<Record> result)
+        void ValidatePublishableResources(Record record, ValidationResult<Record> result)
         {
             var resources = record?.Publication?.OpenData?.Resources;
 
             if (resources != null)
             {
+                var containsDuplicatePaths = false;
+                var containsDuplicateNames = false;
+
                 foreach (var resource in resources)
                 {
                     if (resource.Path.IsBlank() || resource.Name.IsBlank())
                     {
-                        result.Errors.Add("Open data resource name and path must not be blank", r => r.Publication.OpenData.Resources);
+                        result.Errors.Add("Publishable resource name and path must not be blank", r => r.Publication.OpenData.Resources);
                     }
                     else // (let's not add additional errors if it's just that it's blank)
                     {
@@ -282,14 +285,30 @@ namespace Catalogue.Data.Write
                         {
                             if (uri.Scheme != Uri.UriSchemeFile && uri.Scheme != Uri.UriSchemeHttp && uri.Scheme != Uri.UriSchemeHttps)
                             {
-                                result.Errors.Add("Open data resource path must be a file system path or URL", r => r.Publication.OpenData.Resources);
+                                result.Errors.Add("Publishable resource path must be a file system path or URL", r => r.Publication.OpenData.Resources);
                             }
                         }
                         else
                         {
-                            result.Errors.Add("Open data resource path is invalid. Normally should be a file system path or URL", r => r.Publication.OpenData.Resources);
+                            result.Errors.Add("Publishable resource path must be a file system path or URL", r => r.Publication.OpenData.Resources);
                         }
                     }
+
+                    if (resources.Count(r => r.Path.Equals(resource.Path)) > 1)
+                        containsDuplicatePaths = true;
+
+                    if (resources.Count(r => r.Name.Equals(resource.Name)) > 1)
+                        containsDuplicateNames = true;
+                }
+
+                if (containsDuplicatePaths)
+                {
+                    result.Errors.Add("Publishable resources must be unique - no duplicates", r => r.Publication.OpenData.Resources);
+                }
+
+                if (containsDuplicateNames)
+                {
+                    result.Errors.Add("Publishable resource names must be unique - no duplicates", r => r.Publication.OpenData.Resources);
                 }
             }
         }

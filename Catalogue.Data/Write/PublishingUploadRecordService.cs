@@ -51,7 +51,7 @@ namespace Catalogue.Data.Write
         {
             // update the resource locator to be the data file
             resource.PublishedUrl = dataHttpPath;
-            Logger.Info(string.Format("PublishedUrl for resource {0} updated to point to: {1}", resource.Path, dataHttpPath));
+            Logger.Info($"PublishedUrl for resource {resource.Path} updated to point to: {dataHttpPath}");
         }
 
         private void UpdateMetadataDate(Record record, DateTime metadataDate)
