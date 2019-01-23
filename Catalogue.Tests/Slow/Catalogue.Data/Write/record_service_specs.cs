@@ -1,4 +1,5 @@
-﻿using Catalogue.Data.Model;
+﻿using Catalogue.Data;
+using Catalogue.Data.Model;
 using Catalogue.Data.Write;
 using Catalogue.Gemini.Helpers;
 using Catalogue.Gemini.Spatial;
@@ -8,13 +9,11 @@ using Catalogue.Utilities.Collections;
 using FluentAssertions;
 using Moq;
 using NUnit.Framework;
-using Raven.Client;
+using Raven.Client.Documents.Session;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Catalogue.Data;
-using Ninject.Infrastructure.Language;
-using Raven.Client.Documents.Session;
+using Catalogue.Utilities.Time;
 using static Catalogue.Tests.TestUserInfo;
 
 namespace Catalogue.Tests.Slow.Catalogue.Data.Write
@@ -189,6 +188,9 @@ namespace Catalogue.Tests.Slow.Catalogue.Data.Write
         [Test]
         public void should_update_footer_for_existing_record()
         {
+            var timeGetter = Clock.CurrentUtcDateTimeGetter;
+            Clock.CurrentUtcDateTimeGetter = () => new DateTime(2015, 1, 1, 12, 0, 0);
+
             var recordId = Helpers.AddCollection("4d909f48-4547-4129-a663-bfab64ae97e9");
             var record = new Record
             {
@@ -216,6 +218,9 @@ namespace Catalogue.Tests.Slow.Catalogue.Data.Write
             var service = new RecordService(database, ValidatorStub());
 
             var result = service.Update(record, TestUser);
+
+            Clock.CurrentUtcDateTimeGetter = timeGetter;
+
             var footer = result.Record.Footer;
             footer.Should().NotBeNull();
             footer.CreatedOnUtc.Should().Be(new DateTime(2015, 1, 1, 10, 0, 0));
