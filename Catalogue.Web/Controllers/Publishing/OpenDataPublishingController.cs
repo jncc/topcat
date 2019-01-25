@@ -54,7 +54,7 @@ namespace Catalogue.Web.Controllers.Publishing
                     Email = user.User.Email
                 },
                 CompletedOnUtc = Clock.NowUtc,
-                InitialAssessmentWasDoneOnSpreadsheet = record.Publication?.OpenData?.Assessment?.InitialAssessmentWasDoneOnSpreadsheet == true
+                InitialAssessmentWasDoneOnSpreadsheet = record.Publication?.Gov?.Assessment?.InitialAssessmentWasDoneOnSpreadsheet == true
             };
 
             var updatedRecord = openDataPublishingRecordService.Assess(record, assessmentInfo);
@@ -166,7 +166,7 @@ namespace Catalogue.Web.Controllers.Publishing
                     Title = r.Gemini.Title,
                     MetadataDate = r.Gemini.MetadataDate,
                     IsGeminiValid = r.Validation == Validation.Gemini,
-                    OpenData = r.Publication.OpenData,
+                    Gov = r.Publication.Gov,
                 })
                 .ToList();
 
@@ -180,7 +180,7 @@ namespace Catalogue.Web.Controllers.Publishing
         public string Title { get; set; }
         public DateTime MetadataDate { get; set; }
         public bool IsGeminiValid { get; set; }
-        public OpenDataPublicationInfo OpenData { get; set; }
+        public GovPublicationInfo Gov { get; set; }
     }
 
     public class SummaryRepresentation

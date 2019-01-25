@@ -278,14 +278,22 @@ namespace Catalogue.Tests.Slow.Catalogue.Data.Write
             @"https://www.example.com"
             )] string path)
         {
-            var resource = new Resource
+            var resources = new List<Resource>
             {
-                Name = "A resource",
-                Path = path
+                new Resource
+                {
+                    Name = "A resource",
+                    Path = path
+                }
             };
             var record = SimpleRecord()
-                .With(r => r.Publication = new PublicationInfo { OpenData = new OpenDataPublicationInfo { Resources = new List<Resource>() } })
-                .With(r => r.Publication.OpenData.Resources.Add(resource));
+                .With(r => r.Publication = new PublicationInfo
+                {
+                    Data = new DataPublicationInfo
+                    {
+                        Resources = resources
+                    }
+                });
             var result = new RecordValidator().Validate(record);
 
             result.Errors.Should().BeEmpty();
@@ -297,34 +305,49 @@ namespace Catalogue.Tests.Slow.Catalogue.Data.Write
             "this is a path"
         )] string path)
         {
-            var resource = new Resource
+            var resources = new List<Resource>
             {
-                Name = "A resource",
-                Path = path
+                new Resource
+                {
+                    Name = "A resource",
+                    Path = path
+                }
             };
             var record = SimpleRecord()
-                .With(r => r.Publication = new PublicationInfo { OpenData = new OpenDataPublicationInfo { Resources = new List<Resource>() } })
-                .With(r => r.Publication.OpenData.Resources.Add(resource));
+                .With(r => r.Publication = new PublicationInfo
+                {
+                    Data = new DataPublicationInfo
+                    {
+                        Resources = resources
+                    }
+                });
             var result = new RecordValidator().Validate(record);
             result.Errors.Single().Message.Should().Contain("Publishable resource path must be a file system path or URL");
-            result.Errors.Single().Fields.Single().Should().Be("publication.openData.resources");
+            result.Errors.Single().Fields.Single().Should().Be("publication.data.resources");
         }
 
         [Test]
         public void empty_publishable_resource_paths_not_accepted()
         {
-            var resource = new Resource
+            var resources = new List<Resource>
             {
-                Name = "A resource",
-                Path = ""
+                new Resource
+                {
+                    Name = "A resource",
+                    Path = ""
+                }
             };
-            var resources = new List<Resource> { resource };
             var record = SimpleRecord()
                 .With(r => r.Publication = new PublicationInfo
-                    { OpenData = new OpenDataPublicationInfo { Resources = resources } });
+                {
+                    Data = new DataPublicationInfo
+                    {
+                        Resources = resources
+                    }
+                });
             var result = new RecordValidator().Validate(record);
             result.Errors.Single().Message.Should().Contain("Publishable resource name and path must not be blank");
-            result.Errors.Single().Fields.Single().Should().Be("publication.openData.resources");
+            result.Errors.Single().Fields.Single().Should().Be("publication.data.resources");
         }
 
         [Test]
@@ -343,10 +366,15 @@ namespace Catalogue.Tests.Slow.Catalogue.Data.Write
             var resources = new List<Resource>{ resource1, resource2};
             var record = SimpleRecord()
                 .With(r => r.Publication = new PublicationInfo
-                    {OpenData = new OpenDataPublicationInfo {Resources = resources}});
+                {
+                    Data = new DataPublicationInfo
+                    {
+                        Resources = resources
+                    }
+                });
             var result = new RecordValidator().Validate(record);
             result.Errors.Single().Message.Should().Contain("Publishable resources must be unique - no duplicates");
-            result.Errors.Single().Fields.Single().Should().Be("publication.openData.resources");
+            result.Errors.Single().Fields.Single().Should().Be("publication.data.resources");
         }
 
         [Test]
@@ -365,10 +393,15 @@ namespace Catalogue.Tests.Slow.Catalogue.Data.Write
             var resources = new List<Resource> { resource1, resource2 };
             var record = SimpleRecord()
                 .With(r => r.Publication = new PublicationInfo
-                    { OpenData = new OpenDataPublicationInfo { Resources = resources } });
+                {
+                    Data = new DataPublicationInfo
+                    {
+                        Resources = resources
+                    }
+                });
             var result = new RecordValidator().Validate(record);
             result.Errors.Single().Message.Should().Contain("Publishable resource names must be unique - no duplicates");
-            result.Errors.Single().Fields.Single().Should().Be("publication.openData.resources");
+            result.Errors.Single().Fields.Single().Should().Be("publication.data.resources");
         }
     }
 }

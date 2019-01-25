@@ -28,26 +28,26 @@ namespace Catalogue.Data.Indexes
             // note that these calculations rely on the trick of using
             // DateTime.MinValue to avoid nulls and enable simple value comparisions which can be done on the RavenDB server
             Map = records => records
-                            .Where(r => r.Publication != null && r.Publication.OpenData != null)
+                            .Where(r => r.Publication != null && r.Publication.Gov != null)
                             .Select(r => new Result
                             {
                                 RecordLastUpdatedDate = r.Gemini.MetadataDate,
-                                LastPublicationAttemptDate = r.Publication.OpenData.LastAttempt == null ? DateTime.MinValue : r.Publication.OpenData.LastAttempt.DateUtc,
-                                LastSuccessfulPublicationAttemptDate = r.Publication.OpenData.LastSuccess == null ? DateTime.MinValue : r.Publication.OpenData.LastSuccess.DateUtc,
+                                LastPublicationAttemptDate = r.Publication.Gov.LastAttempt == null ? DateTime.MinValue : r.Publication.Gov.LastAttempt.DateUtc,
+                                LastSuccessfulPublicationAttemptDate = r.Publication.Gov.LastSuccess == null ? DateTime.MinValue : r.Publication.Gov.LastSuccess.DateUtc,
                                 GeminiValidated = r.Validation == Validation.Gemini,
-                                Publishable = r.Publication.OpenData.Publishable,
-                                Assessed = r.Publication.OpenData.Assessment.Completed
-                                           && (r.Publication.OpenData.Assessment.CompletedOnUtc == r.Gemini.MetadataDate
-                                               || r.Publication.OpenData.SignOff.DateUtc == r.Gemini.MetadataDate
-                                               || r.Publication.OpenData.LastAttempt.DateUtc == r.Gemini.MetadataDate),
-                                SignedOff = r.Publication.OpenData.SignOff.DateUtc == r.Gemini.MetadataDate
-                                            || r.Publication.OpenData.LastAttempt.DateUtc == r.Gemini.MetadataDate,
-                                PublicationNeverAttempted = r.Publication.OpenData.LastAttempt == null && r.Publication.OpenData.SignOff.DateUtc == r.Gemini.MetadataDate,
-                                LastPublicationAttemptWasUnsuccessful = (r.Publication.OpenData.LastAttempt != null && r.Publication.OpenData.LastSuccess == null)
-                                                                        || r.Publication.OpenData.LastAttempt != null && r.Publication.OpenData.LastSuccess != null
-                                                                        && r.Publication.OpenData.LastAttempt.DateUtc > r.Publication.OpenData.LastSuccess.DateUtc,
-                                PublishedSinceLastUpdated = r.Publication.OpenData.LastSuccess.DateUtc >= r.Gemini.MetadataDate,
-                                PublishingIsPaused = r.Publication.OpenData.Paused
+                                Publishable = r.Publication.Gov.Publishable,
+                                Assessed = r.Publication.Gov.Assessment.Completed
+                                           && (r.Publication.Gov.Assessment.CompletedOnUtc == r.Gemini.MetadataDate
+                                               || r.Publication.Gov.SignOff.DateUtc == r.Gemini.MetadataDate
+                                               || r.Publication.Gov.LastAttempt.DateUtc == r.Gemini.MetadataDate),
+                                SignedOff = r.Publication.Gov.SignOff.DateUtc == r.Gemini.MetadataDate
+                                            || r.Publication.Gov.LastAttempt.DateUtc == r.Gemini.MetadataDate,
+                                PublicationNeverAttempted = r.Publication.Gov.LastAttempt == null && r.Publication.Gov.SignOff.DateUtc == r.Gemini.MetadataDate,
+                                LastPublicationAttemptWasUnsuccessful = (r.Publication.Gov.LastAttempt != null && r.Publication.Gov.LastSuccess == null)
+                                                                        || r.Publication.Gov.LastAttempt != null && r.Publication.Gov.LastSuccess != null
+                                                                        && r.Publication.Gov.LastAttempt.DateUtc > r.Publication.Gov.LastSuccess.DateUtc,
+                                PublishedSinceLastUpdated = r.Publication.Gov.LastSuccess.DateUtc >= r.Gemini.MetadataDate,
+                                PublishingIsPaused = r.Publication.Gov.Paused
                             });
         }
     }

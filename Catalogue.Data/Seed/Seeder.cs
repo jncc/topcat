@@ -252,14 +252,17 @@ namespace Catalogue.Data.Seed
                 r.Gemini.MetadataDate = new DateTime(2015, 1, 1, 09, 59, 59);
                 r.Publication = new PublicationInfo
                 {
-                    OpenData = new OpenDataPublicationInfo
+                    Data = new DataPublicationInfo
                     {
-                        Publishable = true,
                         Resources = new List<Resource> { new Resource
                         {
                             Name = "File resource",
                             Path = @"C:\work\test-data.csv"
-                        } },
+                        } }
+                    },
+                    Gov = new GovPublicationInfo
+                    {
+                        Publishable = true,
                         Assessment = new OpenDataAssessmentInfo
                         {
                             Completed = true,
@@ -289,14 +292,20 @@ namespace Catalogue.Data.Seed
                 r.Gemini.MetadataDate = new DateTime(2015, 05, 17, 0, 0, 0);
                 r.Publication = new PublicationInfo
                 {
-                    OpenData = new OpenDataPublicationInfo
+                    Data = new DataPublicationInfo
+                    {
+                        Resources = new List < Resource >
+                        {
+                            new Resource
+                            {
+                                Name = "File resource",
+                                Path = @"C:\work\test-data.csv"
+                            }
+                        }
+                    },
+                    Gov = new GovPublicationInfo
                     {
                         Publishable = true,
-                        Resources = new List<Resource> { new Resource
-                        {
-                            Name = "File resource",
-                            Path = @"C:\work\test-data.csv"
-                        } },
                         Assessment = new OpenDataAssessmentInfo
                         {
                             // todo add more assessment fields
@@ -313,14 +322,17 @@ namespace Catalogue.Data.Seed
                 r.Gemini.MetadataDate = new DateTime(2015, 1, 1, 12, 0, 0);
                 r.Publication = new PublicationInfo
                 {
-                    OpenData = new OpenDataPublicationInfo
+                    Data = new DataPublicationInfo
                     {
-                        Publishable = true,
                         Resources = new List<Resource> { new Resource
                         {
                             Name = "File resource",
                             Path = @"C:\work\test-data.csv"
-                        } },
+                        } }
+                    },
+                    Gov = new GovPublicationInfo
+                    {
+                        Publishable = true,
                         Assessment = new OpenDataAssessmentInfo
                         {
                             // todo add more assessment fields
@@ -344,14 +356,17 @@ namespace Catalogue.Data.Seed
                 r.Gemini.MetadataDate = new DateTime(2015, 1, 1, 12, 0, 0);
                 r.Publication = new PublicationInfo
                 {
-                    OpenData = new OpenDataPublicationInfo
+                    Data = new DataPublicationInfo
                     {
-                        Publishable = true,
                         Resources = new List<Resource> { new Resource
                         {
                             Name = "File resource",
                             Path = @"C:\work\test-data.csv"
-                        } },
+                        } }
+                    },
+                    Gov = new GovPublicationInfo
+                    {
+                        Publishable = true,
                         Assessment = new OpenDataAssessmentInfo
                         {
                             // todo add more assessment fields
@@ -388,14 +403,17 @@ namespace Catalogue.Data.Seed
                 r.Gemini.MetadataDate = new DateTime(2015, 1, 1, 12, 0, 0);
                 r.Publication = new PublicationInfo
                 {
-                    OpenData = new OpenDataPublicationInfo
+                    Data = new DataPublicationInfo
                     {
-                        Publishable = true,
                         Resources = new List<Resource> { new Resource
                         {
                             Name = "File resource",
                             Path = @"C:\work\test-data.csv"
                         } },
+                    },
+                    Gov = new GovPublicationInfo
+                    {
+                        Publishable = true,
                         LastAttempt = new PublicationAttempt { DateUtc = new DateTime(2015, 1, 1, 12, 0, 0), Message = "Failed with a terrible error in Sector 7G"},
                         LastSuccess = null,
                         Assessment = new OpenDataAssessmentInfo
@@ -424,14 +442,17 @@ namespace Catalogue.Data.Seed
                 r.Gemini.MetadataDate = new DateTime(2015, 1, 1, 12, 0, 0);
                 r.Publication = new PublicationInfo
                 {
-                    OpenData = new OpenDataPublicationInfo
+                    Data = new DataPublicationInfo
                     {
-                        Publishable = true,
                         Resources = new List<Resource> { new Resource
                         {
                             Name = "File resource",
                             Path = @"C:\work\test-data.csv"
-                        } },
+                        } }
+                    },
+                    Gov = new GovPublicationInfo
+                    {
+                        Publishable = true,
                         LastAttempt = new PublicationAttempt { DateUtc = new DateTime(2015, 1, 1, 12, 0, 0) },
                         LastSuccess = new PublicationAttempt { DateUtc = new DateTime(2015, 1, 1, 12, 0, 0) },
                         Assessment = new OpenDataAssessmentInfo
@@ -458,14 +479,17 @@ namespace Catalogue.Data.Seed
                 r.Gemini.MetadataDate = new DateTime(2015, 1, 1, 12, 0, 0);
                 r.Publication = new PublicationInfo
                 {
-                    OpenData = new OpenDataPublicationInfo
+                    Data = new DataPublicationInfo
                     {
-                        Publishable = true,
                         Resources = new List<Resource> { new Resource
                         {
                             Name = "File resource",
                             Path = @"C:\work\test-data.csv"
-                        } },
+                        } }
+                    },
+                    Gov = new GovPublicationInfo
+                    {
+                        Publishable = true,
                         LastAttempt = new PublicationAttempt { DateUtc = new DateTime(2014, 12, 31) },
                         LastSuccess = new PublicationAttempt { DateUtc = new DateTime(2014, 12, 31) },
                         Paused = true,
@@ -490,11 +514,8 @@ namespace Catalogue.Data.Seed
                 r.Gemini.MetadataDate = new DateTime(2014, 12, 31);
                 r.Publication = new PublicationInfo
                 {
-                    OpenData = new OpenDataPublicationInfo
+                    Data = new DataPublicationInfo
                     {
-                        Publishable = true,
-                        LastAttempt = null,
-                        LastSuccess = null,
                         Resources = new List<Resource>
                         {
                             new Resource
@@ -513,6 +534,14 @@ namespace Catalogue.Data.Seed
                                 Path = @"https://link.to.resource"
                             }
                         },
+                        LastAttempt = null,
+                        LastSuccess = null,
+                    },
+                    Gov = new GovPublicationInfo
+                    {
+                        Publishable = true,
+                        LastAttempt = null,
+                        LastSuccess = null,
                         Assessment = new OpenDataAssessmentInfo
                         {
                             Completed = true,
@@ -530,7 +559,7 @@ namespace Catalogue.Data.Seed
                 r.Gemini.MetadataDate = new DateTime(2014, 12, 31);
                 r.Publication = new PublicationInfo
                 {
-                    OpenData = new OpenDataPublicationInfo
+                    Gov = new GovPublicationInfo
                     {
                         Publishable = false
                     }

@@ -49,7 +49,7 @@ namespace Catalogue.Web.Controllers.Dumps
                     Id = Helpers.RemoveCollection(r.Id),
                     Title = r.Gemini.Title,
                     MetadataDate = r.Gemini.MetadataDate,
-                    PublicationInfo = r.Publication.OpenData,
+                    PublicationInfo = r.Publication.Gov,
                 }).ToList();
         }
 
@@ -84,7 +84,7 @@ namespace Catalogue.Web.Controllers.Dumps
             public string Id { get; set; }
             public string Title { get; set; }
             public DateTime MetadataDate { get; set; }
-            public OpenDataPublicationInfo PublicationInfo { get; set; }
+            public GovPublicationInfo PublicationInfo { get; set; }
 
         }
 
@@ -115,7 +115,7 @@ namespace Catalogue.Web.Controllers.Dumps
                 Id = Helpers.RemoveCollection(r.Id),
                 Title = r.Gemini.Title,
                 MetadataDate = r.Gemini.MetadataDate,
-                PublicationInfo = r.Publication.OpenData,
+                PublicationInfo = r.Publication.Gov,
             }).ToList();
         }
 

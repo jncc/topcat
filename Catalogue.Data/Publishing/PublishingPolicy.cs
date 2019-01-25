@@ -14,9 +14,13 @@ namespace Catalogue.Data.Publishing
         {
             var result = new PublishingPolicyResult();
             
-            if (record.Publication?.OpenData?.Publishable == true)
+            if (record.Publication?.Gov?.Publishable == true)
             {
-                var canonicalResources = record.Publication.OpenData.Resources;
+                var canonicalResources = new List<Resource>();
+                if (record.Publication.Data?.Resources?.Count > 0)
+                {
+                    canonicalResources = record.Publication.Data.Resources;
+                }
 
                 if (HasDoiAndPreviouslyPublished(record))
                 {
@@ -75,7 +79,7 @@ namespace Catalogue.Data.Publishing
 
         private static bool HasDoiAndPreviouslyPublished(Record record)
         {
-            return record.DigitalObjectIdentifier.IsNotBlank() && record.Publication.OpenData.LastSuccess != null;
+            return record.DigitalObjectIdentifier.IsNotBlank() && record.Publication.Gov.LastSuccess != null;
         }
 
         private static bool HasRestrictiveLicensing(Record record)

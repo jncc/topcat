@@ -66,9 +66,9 @@ namespace Catalogue.Robot.Publishing.OpenData
         public static List<OnlineResource> GetOnlineResources(Record record)
         {
             var resources = new List<OnlineResource>();
-            if (!record.Publication.OpenData.Resources.IsNullOrEmpty())
+            if (record.Publication?.Data?.Resources?.Count > 0)
             {
-                foreach (var resource in record.Publication.OpenData.Resources)
+                foreach (var resource in record.Publication.Data.Resources)
                 {
                     var url = IsFileResource(resource) ? resource.PublishedUrl : resource.Path;
                     resources.Add(new OnlineResource

@@ -1,9 +1,10 @@
-﻿using Catalogue.Utilities.Logging;
-using Catalogue.Data.Model;
-using System;
-using Catalogue.Utilities.Time;
+﻿using Catalogue.Data.Model;
+using Catalogue.Utilities.Logging;
 using log4net;
 using Raven.Client.Documents.Session;
+using System;
+using System.Collections.Generic;
+using Catalogue.Utilities.Text;
 using static Catalogue.Data.Write.RecordServiceHelper;
 
 namespace Catalogue.Data.Write
@@ -21,9 +22,9 @@ namespace Catalogue.Data.Write
             this.validator = validator;
         }
 
-        public void UpdateLastAttempt(Record record, PublicationAttempt attempt)
+        public void UpdateDataPublishAttempt(Record record, PublicationAttempt attempt)
         {
-            record.Publication.OpenData.LastAttempt = attempt;
+            record.Publication.Data.LastAttempt = attempt;
             UpdateMetadataDate(record, attempt.DateUtc);
 
             var recordServiceResult = Upsert(record, db, validator);
@@ -34,9 +35,10 @@ namespace Catalogue.Data.Write
             }
         }
 
-        public void UpdateLastSuccess(Record record, PublicationAttempt attempt)
+        public void UpdateDataPublishSuccess(Record record, List<Resource> resources, PublicationAttempt attempt)
         {
-            record.Publication.OpenData.LastSuccess = attempt;
+            record.Publication.Data.LastSuccess = attempt;
+            record.Publication.Data.Resources = resources;
             UpdateMetadataDate(record, attempt.DateUtc);
 
             var recordServiceResult = Upsert(record, db, validator);
@@ -46,12 +48,58 @@ namespace Catalogue.Data.Write
                 e.LogAndThrow(Logger);
             }
         }
-        
-        public void UpdatePublishedUrlForResource(Resource resource, string dataHttpPath)
+
+        public void UpdateGovPublishAttempt(Record record, PublicationAttempt attempt)
         {
-            // update the resource locator to be the data file
-            resource.PublishedUrl = dataHttpPath;
-            Logger.Info($"PublishedUrl for resource {resource.Path} updated to point to: {dataHttpPath}");
+            record.Publication.Gov.LastAttempt = attempt;
+            UpdateMetadataDate(record, attempt.DateUtc);
+
+            var recordServiceResult = Upsert(record, db, validator);
+            if (!recordServiceResult.Success)
+            {
+                var e = new Exception("Error while saving upload changes.");
+                e.LogAndThrow(Logger);
+            }
+        }
+
+        public void UpdateGovPublishSuccess(Record record, PublicationAttempt attempt)
+        {
+            record.Publication.Gov.LastSuccess = attempt;
+            UpdateMetadataDate(record, attempt.DateUtc);
+
+            var recordServiceResult = Upsert(record, db, validator);
+            if (!recordServiceResult.Success)
+            {
+                var e = new Exception("Error while saving upload changes.");
+                e.LogAndThrow(Logger);
+            }
+        }
+
+        public void UpdateHubPublishAttempt(Record record, PublicationAttempt attempt)
+        {
+            record.Publication.Hub.LastAttempt = attempt;
+            UpdateMetadataDate(record, attempt.DateUtc);
+
+            var recordServiceResult = Upsert(record, db, validator);
+            if (!recordServiceResult.Success)
+            {
+                var e = new Exception("Error while saving upload changes.");
+                e.LogAndThrow(Logger);
+            }
+        }
+
+        public void UpdateHubPublishSuccess(Record record, string hubUrl, PublicationAttempt attempt)
+        {
+            record.Publication.Hub.LastSuccess = attempt;
+            record.Publication.Hub.Url = hubUrl;
+            UpdateMetadataDate(record, attempt.DateUtc);
+
+            var recordServiceResult = Upsert(record, db, validator);
+            if (!recordServiceResult.Success)
+            {
+                var e = new Exception("Error while saving upload changes.");
+                e.LogAndThrow(Logger);
+            }
         }
 
         private void UpdateMetadataDate(Record record, DateTime metadataDate)

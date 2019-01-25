@@ -76,7 +76,7 @@ namespace Catalogue.Data.Write
 
         private static void TrimOpenDataResourcePaths(Record record)
         {
-            var resources = record?.Publication?.OpenData?.Resources;
+            var resources = record?.Publication?.Data?.Resources;
 
             if (resources != null)
             {

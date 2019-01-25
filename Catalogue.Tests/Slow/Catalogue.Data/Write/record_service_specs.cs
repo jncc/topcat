@@ -251,7 +251,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Data.Write
 
             var record = BasicRecord().With(r => r.Publication = new PublicationInfo
             {
-                OpenData = new OpenDataPublicationInfo
+                Data = new DataPublicationInfo
                 {
                     Resources = new List<Resource>
                     {
@@ -260,7 +260,8 @@ namespace Catalogue.Tests.Slow.Catalogue.Data.Write
                         new Resource { Path = "Z:\\needs\\trimming\\right.pdf " },
                         new Resource { Path = " Z:\\needs\\trimming\\both.pdf "} ,
                     }
-                }
+                },
+                Gov = new GovPublicationInfo()
             });
 
             var expected = new List<string>
@@ -273,7 +274,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Data.Write
 
             var result = service.Update(record, TestUser);
 
-            result.Record.Publication.OpenData.Resources.Select(r => r.Path).Should().ContainInOrder(expected);
+            result.Record.Publication.Data.Resources.Select(r => r.Path).Should().ContainInOrder(expected);
         }
 
         Record BasicRecord()

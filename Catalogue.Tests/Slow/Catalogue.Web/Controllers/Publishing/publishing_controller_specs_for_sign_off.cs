@@ -33,7 +33,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Web.Controllers.Publishing
                 });
                 r.Publication = new PublicationInfo
                 {
-                    OpenData = new OpenDataPublicationInfo
+                    Gov = new GovPublicationInfo
                     {
                         Publishable = true,
                         Assessment = new OpenDataAssessmentInfo
@@ -49,11 +49,11 @@ namespace Catalogue.Tests.Slow.Catalogue.Web.Controllers.Publishing
             var resultRecord = GetSignOffPublishingResponse(record).Record;
             resultRecord.Publication.Should().NotBeNull();
 
-            var openDataInfo = resultRecord.Publication.OpenData;
+            var openDataInfo = resultRecord.Publication.Gov;
             openDataInfo.Should().NotBeNull();
             openDataInfo.LastAttempt.Should().BeNull();
             openDataInfo.LastSuccess.Should().BeNull();
-            openDataInfo.Resources.Should().BeNull();
+            resultRecord.Publication.Data.Should().BeNull();
             openDataInfo.Paused.Should().BeFalse();
             openDataInfo.SignOff.User.DisplayName.Should().Be("Test User");
             openDataInfo.SignOff.User.Email.Should().Be("tester@example.com");
@@ -76,7 +76,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Web.Controllers.Publishing
                 });
                 r.Publication = new PublicationInfo
                 {
-                    OpenData = new OpenDataPublicationInfo
+                    Gov = new GovPublicationInfo
                     {
                         Publishable = true,
                         Assessment = new OpenDataAssessmentInfo
@@ -106,7 +106,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Web.Controllers.Publishing
                 });
                 r.Publication = new PublicationInfo
                 {
-                    OpenData = new OpenDataPublicationInfo
+                    Gov = new GovPublicationInfo
                     {
                         Publishable = true,
                         Assessment = new OpenDataAssessmentInfo
@@ -149,7 +149,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Web.Controllers.Publishing
                 });
                 r.Publication = new PublicationInfo
                 {
-                    OpenData = new OpenDataPublicationInfo
+                    Gov = new GovPublicationInfo
                     {
                         Publishable = true,
                         Assessment = new OpenDataAssessmentInfo
@@ -178,7 +178,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Web.Controllers.Publishing
                 {
                     m.MetadataDate = new DateTime(2017, 09, 27);
                 });
-                r.Publication = new PublicationInfo {OpenData = new OpenDataPublicationInfo {Publishable = true}};
+                r.Publication = new PublicationInfo {Gov = new GovPublicationInfo {Publishable = true}};
                 r.Footer = new Footer();
             });
 
@@ -200,7 +200,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Web.Controllers.Publishing
                 });
                 r.Publication = new PublicationInfo
                 {
-                    OpenData = new OpenDataPublicationInfo
+                    Gov = new GovPublicationInfo
                     {
                         Publishable = true,
                         Assessment = new OpenDataAssessmentInfo
@@ -234,11 +234,11 @@ namespace Catalogue.Tests.Slow.Catalogue.Web.Controllers.Publishing
                 .Record;
             resultRecord.Publication.Should().NotBeNull();
 
-            var openDataInfo = resultRecord.Publication.OpenData;
+            var openDataInfo = resultRecord.Publication.Gov;
             openDataInfo.Should().NotBeNull();
             openDataInfo.LastAttempt.DateUtc.Should().Be(DateTime.Parse("2017-07-11T00:00:00.0000000Z"));
             openDataInfo.LastSuccess.DateUtc.Should().Be(DateTime.Parse("2017-07-11T00:00:00.0000000Z"));
-            openDataInfo.Resources.Should().BeNull();
+            resultRecord.Publication.Data.Should().BeNull();
             openDataInfo.Paused.Should().BeFalse();
             openDataInfo.SignOff.User.DisplayName.Should().Be("Test User");
             openDataInfo.SignOff.User.Email.Should().Be("tester@example.com");
@@ -260,7 +260,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Web.Controllers.Publishing
                 });
                 r.Publication = new PublicationInfo
                 {
-                    OpenData = new OpenDataPublicationInfo
+                    Gov = new GovPublicationInfo
                     {
                         Publishable = true,
                         Assessment = new OpenDataAssessmentInfo
@@ -299,11 +299,11 @@ namespace Catalogue.Tests.Slow.Catalogue.Web.Controllers.Publishing
                 var resultRecord = db.Load<Record>(record.Id);
                 resultRecord.Publication.Should().NotBeNull();
 
-                var openDataInfo = resultRecord.Publication.OpenData;
+                var openDataInfo = resultRecord.Publication.Gov;
                 openDataInfo.Should().NotBeNull();
                 openDataInfo.LastAttempt.DateUtc.Should().Be(new DateTime(2017, 07, 12));
                 openDataInfo.LastSuccess.DateUtc.Should().Be(new DateTime(2017, 07, 12));
-                openDataInfo.Resources.Should().BeNull();
+                resultRecord.Publication.Data.Should().BeNull();
                 openDataInfo.Paused.Should().BeFalse();
                 openDataInfo.SignOff.User.DisplayName.Should().Be("Cathy");
                 openDataInfo.SignOff.User.Email.Should().Be("cathy@example.com");
@@ -326,7 +326,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Web.Controllers.Publishing
                 });
                 r.Publication = new PublicationInfo
                 {
-                    OpenData = new OpenDataPublicationInfo
+                    Gov = new GovPublicationInfo
                     {
                         Publishable = true,
                         Assessment = new OpenDataAssessmentInfo
@@ -361,11 +361,11 @@ namespace Catalogue.Tests.Slow.Catalogue.Web.Controllers.Publishing
                 var resultRecord = db.Load<Record>(record.Id);
                 resultRecord.Publication.Should().NotBeNull();
 
-                var openDataInfo = resultRecord.Publication.OpenData;
+                var openDataInfo = resultRecord.Publication.Gov;
                 openDataInfo.Should().NotBeNull();
                 openDataInfo.LastAttempt.DateUtc.Should().Be(new DateTime(2017, 07, 12));
                 openDataInfo.LastSuccess.Should().BeNull();
-                openDataInfo.Resources.Should().BeNull();
+                resultRecord.Publication.Data.Should().BeNull();
                 openDataInfo.Paused.Should().BeFalse();
                 openDataInfo.SignOff.User.DisplayName.Should().Be("Cathy");
                 openDataInfo.SignOff.User.Email.Should().Be("cathy@example.com");
@@ -388,7 +388,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Web.Controllers.Publishing
                 });
                 r.Publication = new PublicationInfo
                 {
-                    OpenData = new OpenDataPublicationInfo
+                    Gov = new GovPublicationInfo
                     {
                         Publishable = true,
                         Assessment = new OpenDataAssessmentInfo
@@ -427,11 +427,11 @@ namespace Catalogue.Tests.Slow.Catalogue.Web.Controllers.Publishing
                 var resultRecord = db.Load<Record>(record.Id);
                 resultRecord.Publication.Should().NotBeNull();
 
-                var openDataInfo = resultRecord.Publication.OpenData;
+                var openDataInfo = resultRecord.Publication.Gov;
                 openDataInfo.Should().NotBeNull();
                 openDataInfo.LastAttempt.DateUtc.Should().Be(new DateTime(2017, 07, 11));
                 openDataInfo.LastSuccess.DateUtc.Should().Be(new DateTime(2017, 07, 11));
-                openDataInfo.Resources.Should().BeNull();
+                resultRecord.Publication.Data.Should().BeNull();
                 openDataInfo.Paused.Should().BeFalse();
                 openDataInfo.SignOff.User.DisplayName.Should().Be("Cathy");
                 openDataInfo.SignOff.User.Email.Should().Be("cathy@example.com");
@@ -455,7 +455,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Web.Controllers.Publishing
                 });
                 r.Publication = new PublicationInfo
                 {
-                    OpenData = new OpenDataPublicationInfo
+                    Gov = new GovPublicationInfo
                     {
                         Assessment = new OpenDataAssessmentInfo
                         {
@@ -494,7 +494,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Web.Controllers.Publishing
                 });
                 r.Publication = new PublicationInfo
                 {
-                    OpenData = new OpenDataPublicationInfo
+                    Gov = new GovPublicationInfo
                     {
                         Assessment = new OpenDataAssessmentInfo
                         {
@@ -523,7 +523,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Web.Controllers.Publishing
                 });
                 r.Publication = new PublicationInfo
                 {
-                    OpenData = new OpenDataPublicationInfo
+                    Gov = new GovPublicationInfo
                     {
                         Assessment = new OpenDataAssessmentInfo
                         {
@@ -551,7 +551,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Web.Controllers.Publishing
                 });
                 r.Publication = new PublicationInfo
                 {
-                    OpenData = new OpenDataPublicationInfo
+                    Gov = new GovPublicationInfo
                     {
                         Assessment = new OpenDataAssessmentInfo
                         {
@@ -584,7 +584,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Web.Controllers.Publishing
                 });
                 r.Publication = new PublicationInfo
                 {
-                    OpenData = new OpenDataPublicationInfo
+                    Gov = new GovPublicationInfo
                     {
                         Assessment = new OpenDataAssessmentInfo
                         {
@@ -617,7 +617,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Web.Controllers.Publishing
                 });
                 r.Publication = new PublicationInfo
                 {
-                    OpenData = new OpenDataPublicationInfo
+                    Gov = new GovPublicationInfo
                     {
                         Assessment = new OpenDataAssessmentInfo
                         {
@@ -650,7 +650,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Web.Controllers.Publishing
                 });
                 r.Publication = new PublicationInfo
                 {
-                    OpenData = new OpenDataPublicationInfo
+                    Gov = new GovPublicationInfo
                     {
                         Assessment = new OpenDataAssessmentInfo
                         {
@@ -707,7 +707,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Web.Controllers.Publishing
                 });
                 r.Publication = new PublicationInfo
                 {
-                    OpenData = new OpenDataPublicationInfo
+                    Gov = new GovPublicationInfo
                     {
                         Publishable = false,
                         Assessment = new OpenDataAssessmentInfo
@@ -738,7 +738,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Web.Controllers.Publishing
                 });
                 r.Publication = new PublicationInfo
                 {
-                    OpenData = new OpenDataPublicationInfo
+                    Gov = new GovPublicationInfo
                     {
                         Publishable = null,
                         Assessment = new OpenDataAssessmentInfo
@@ -769,7 +769,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Web.Controllers.Publishing
                 });
                 r.Publication = new PublicationInfo
                 {
-                    OpenData = new OpenDataPublicationInfo
+                    Gov = new GovPublicationInfo
                     {
                         Publishable = false,
                         Assessment = new OpenDataAssessmentInfo

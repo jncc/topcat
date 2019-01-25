@@ -28,10 +28,13 @@ namespace Catalogue.Tests.Slow.Catalogue.Data.Publishing
                     .With(r => r.ResourceType = resourceType),
                 Publication = new PublicationInfo
                 {
-                    OpenData = new OpenDataPublicationInfo
+                    Data = new DataPublicationInfo
                     {
-                        Publishable = true,
                         Resources = new List<Resource> { resource }
+                    },
+                    Gov = new GovPublicationInfo
+                    {
+                        Publishable = true
                     }
                 }
             };
@@ -57,10 +60,13 @@ namespace Catalogue.Tests.Slow.Catalogue.Data.Publishing
                     .With(r => r.ResourceType = resourceType),
                 Publication = new PublicationInfo
                 {
-                    OpenData = new OpenDataPublicationInfo
+                    Data = new DataPublicationInfo
                     {
-                        Publishable = true,
                         Resources = null
+                    },
+                    Gov = new GovPublicationInfo
+                    {
+                        Publishable = true
                     }
                 }
             };
@@ -89,10 +95,13 @@ namespace Catalogue.Tests.Slow.Catalogue.Data.Publishing
                     .With(r => r.ResourceType = resourceType),
                 Publication = new PublicationInfo
                 {
-                    OpenData = new OpenDataPublicationInfo
+                    Data = new DataPublicationInfo
                     {
-                        Publishable = true,
                         Resources = new List<Resource> { fileResource, urlResource1, urlResource2 }
+                    },
+                    Gov = new GovPublicationInfo
+                    {
+                        Publishable = true
                     }
                 }
             };
@@ -122,10 +131,13 @@ namespace Catalogue.Tests.Slow.Catalogue.Data.Publishing
                     .With(r => r.ResourceType = resourceType),
                 Publication = new PublicationInfo
                 {
-                    OpenData = new OpenDataPublicationInfo
+                    Data = new DataPublicationInfo
                     {
-                        Publishable = publishable,
                         Resources = new List<Resource> { resource }
+                    },
+                    Gov = new GovPublicationInfo
+                    {
+                        Publishable = publishable
                     }
                 }
             };
@@ -153,10 +165,13 @@ namespace Catalogue.Tests.Slow.Catalogue.Data.Publishing
                     .With(r => r.ResourceType = resourceType),
                 Publication = new PublicationInfo
                 {
-                    OpenData = new OpenDataPublicationInfo
+                    Data = new DataPublicationInfo
+                    {
+                        Resources = new List<Resource> { resource }
+                    },
+                    Gov = new GovPublicationInfo
                     {
                         Publishable = true,
-                        Resources = new List<Resource> { resource },
                         LastSuccess = new PublicationAttempt { DateUtc = DateTime.Today }
                     }
                 }
@@ -186,10 +201,13 @@ namespace Catalogue.Tests.Slow.Catalogue.Data.Publishing
                     .With(r => r.ResourceType = resourceType),
                 Publication = new PublicationInfo
                 {
-                    OpenData = new OpenDataPublicationInfo
+                    Data = new DataPublicationInfo
                     {
-                        Publishable = true,
                         Resources = new List<Resource> { resource }
+                    },
+                    Gov = new GovPublicationInfo
+                    {
+                        Publishable = true
                     }
                 },
                 Citation = "a citation reference",
@@ -220,10 +238,13 @@ namespace Catalogue.Tests.Slow.Catalogue.Data.Publishing
                     .With(r => r.ResourceType = resourceType),
                 Publication = new PublicationInfo
                 {
-                    OpenData = new OpenDataPublicationInfo
+                    Data = new DataPublicationInfo
                     {
-                        Publishable = true,
                         Resources = new List<Resource> { resource }
+                    },
+                    Gov = new GovPublicationInfo
+                    {
+                        Publishable = true
                     }
                 },
                 Citation = "a citation reference",
@@ -254,10 +275,13 @@ namespace Catalogue.Tests.Slow.Catalogue.Data.Publishing
                     .With(r => r.ResourceType = resourceType),
                 Publication = new PublicationInfo
                 {
-                    OpenData = new OpenDataPublicationInfo
+                    Data = new DataPublicationInfo
+                    {
+                        Resources = new List<Resource> { resource }
+                    },
+                    Gov = new GovPublicationInfo
                     {
                         Publishable = true,
-                        Resources = new List<Resource> { resource },
                         LastSuccess = new PublicationAttempt { DateUtc = DateTime.Today }
                     }
                 },
@@ -289,10 +313,13 @@ namespace Catalogue.Tests.Slow.Catalogue.Data.Publishing
                     .With(r => r.ResourceType = resourceType),
                 Publication = new PublicationInfo
                 {
-                    OpenData = new OpenDataPublicationInfo
+                    Data = new DataPublicationInfo
                     {
-                        Publishable = true,
                         Resources = new List<Resource> { resource }
+                    },
+                    Gov = new GovPublicationInfo
+                    {
+                        Publishable = true
                     }
                 }
             };
@@ -322,10 +349,13 @@ namespace Catalogue.Tests.Slow.Catalogue.Data.Publishing
                     .With(r => r.ResourceType = resourceType),
                 Publication = new PublicationInfo
                 {
-                    OpenData = new OpenDataPublicationInfo
+                    Data = new DataPublicationInfo
                     {
-                        Publishable = true,
                         Resources = new List<Resource> { resource }
+                    },
+                    Gov = new GovPublicationInfo
+                    {
+                        Publishable = true
                     }
                 }
             };
@@ -352,10 +382,13 @@ namespace Catalogue.Tests.Slow.Catalogue.Data.Publishing
                     .With(r => r.Keywords.Add(new MetadataKeyword { Value = "Darwin Plus" })),
                 Publication = new PublicationInfo
                 {
-                    OpenData = new OpenDataPublicationInfo
+                    Data = new DataPublicationInfo
                     {
-                        Publishable = true,
                         Resources = new List<Resource> { resource }
+                    },
+                    Gov = new GovPublicationInfo
+                    {
+                        Publishable = true
                     }
                 }
             };
@@ -381,10 +414,13 @@ namespace Catalogue.Tests.Slow.Catalogue.Data.Publishing
                     .With(r => r.Keywords.Add(new MetadataKeyword { Value = "Darwin Plus" })),
                 Publication = new PublicationInfo
                 {
-                    OpenData = new OpenDataPublicationInfo
+                    Data = new DataPublicationInfo
                     {
-                        Publishable = true,
                         Resources = new List<Resource> { resource }
+                    },
+                    Gov = new GovPublicationInfo
+                    {
+                        Publishable = true
                     }
                 }
             };
@@ -412,10 +448,13 @@ namespace Catalogue.Tests.Slow.Catalogue.Data.Publishing
                     .With(r => r.MetadataDate = DateTime.Today),
                 Publication = new PublicationInfo
                 {
-                    OpenData = new OpenDataPublicationInfo
+                    Data = new DataPublicationInfo
+                    {
+                        Resources = new List<Resource> { resource }
+                    },
+                    Gov = new GovPublicationInfo
                     {
                         Publishable = true,
-                        Resources = new List<Resource> { resource },
                         LastSuccess = new PublicationAttempt { DateUtc = DateTime.Today }
                     }
                 },
@@ -444,10 +483,13 @@ namespace Catalogue.Tests.Slow.Catalogue.Data.Publishing
                     .With(r => r.ResourceType = "publication"),
                 Publication = new PublicationInfo
                 {
-                    OpenData = new OpenDataPublicationInfo
+                    Data = new DataPublicationInfo
                     {
-                        Publishable = true,
                         Resources = new List<Resource> { resource }
+                    },
+                    Gov = new GovPublicationInfo
+                    {
+                        Publishable = true
                     }
                 }
             };
@@ -476,10 +518,13 @@ namespace Catalogue.Tests.Slow.Catalogue.Data.Publishing
                     .With(r => r.ResourceType = "publication"),
                 Publication = new PublicationInfo
                 {
-                    OpenData = new OpenDataPublicationInfo
+                    Data = new DataPublicationInfo
                     {
-                        Publishable = true,
                         Resources = resources
+                    },
+                    Gov = new GovPublicationInfo
+                    {
+                        Publishable = true
                     }
                 }
             };
@@ -503,10 +548,13 @@ namespace Catalogue.Tests.Slow.Catalogue.Data.Publishing
                     .With(r => r.ResourceType = "publication"),
                 Publication = new PublicationInfo
                 {
-                    OpenData = new OpenDataPublicationInfo
+                    Data = new DataPublicationInfo
                     {
-                        Publishable = true,
                         Resources = null
+                    },
+                    Gov = new GovPublicationInfo
+                    {
+                        Publishable = true
                     }
                 }
             };

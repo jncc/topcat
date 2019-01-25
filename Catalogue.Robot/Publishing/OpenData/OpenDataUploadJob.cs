@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using Catalogue.Data.Write;
+using Catalogue.Robot.Publishing.Hub;
 using Catalogue.Utilities.Logging;
 using Catalogue.Utilities.Text;
 using log4net;
@@ -36,13 +37,14 @@ namespace Catalogue.Robot.Publishing.OpenData
                 var publishingService = new OpenDataPublishingRecordService(db, new RecordValidator());
                 var uploadService = publishingService.Upload();
                 var uploadHelper = new OpenDataUploadHelper(config);
+                var hubService = new HubService();
 
-                var robotUploader = new RobotUploader(db, uploadService, uploadHelper);
+                var robotUploader = new RobotPublisher(db, uploadService, uploadHelper, hubService);
 
                 var records = robotUploader.GetRecordsPendingUpload();
                 Logger.Info("Number of records to upload: " + records.Count);
 
-                robotUploader.Upload(records, metadataOnly);
+                robotUploader.PublishRecords(records, metadataOnly);
             }
         }
 

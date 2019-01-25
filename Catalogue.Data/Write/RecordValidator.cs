@@ -266,7 +266,7 @@ namespace Catalogue.Data.Write
         
         void ValidatePublishableResources(Record record, ValidationResult<Record> result)
         {
-            var resources = record?.Publication?.OpenData?.Resources;
+            var resources = record?.Publication?.Data?.Resources;
 
             if (resources != null)
             {
@@ -277,7 +277,7 @@ namespace Catalogue.Data.Write
                 {
                     if (resource.Path.IsBlank() || resource.Name.IsBlank())
                     {
-                        result.Errors.Add("Publishable resource name and path must not be blank", r => r.Publication.OpenData.Resources);
+                        result.Errors.Add("Publishable resource name and path must not be blank", r => r.Publication.Data.Resources);
                     }
                     else // (let's not add additional errors if it's just that it's blank)
                     {
@@ -285,12 +285,12 @@ namespace Catalogue.Data.Write
                         {
                             if (uri.Scheme != Uri.UriSchemeFile && uri.Scheme != Uri.UriSchemeHttp && uri.Scheme != Uri.UriSchemeHttps)
                             {
-                                result.Errors.Add("Publishable resource path must be a file system path or URL", r => r.Publication.OpenData.Resources);
+                                result.Errors.Add("Publishable resource path must be a file system path or URL", r => r.Publication.Data.Resources);
                             }
                         }
                         else
                         {
-                            result.Errors.Add("Publishable resource path must be a file system path or URL", r => r.Publication.OpenData.Resources);
+                            result.Errors.Add("Publishable resource path must be a file system path or URL", r => r.Publication.Data.Resources);
                         }
                     }
 
@@ -303,12 +303,12 @@ namespace Catalogue.Data.Write
 
                 if (containsDuplicatePaths)
                 {
-                    result.Errors.Add("Publishable resources must be unique - no duplicates", r => r.Publication.OpenData.Resources);
+                    result.Errors.Add("Publishable resources must be unique - no duplicates", r => r.Publication.Data.Resources);
                 }
 
                 if (containsDuplicateNames)
                 {
-                    result.Errors.Add("Publishable resource names must be unique - no duplicates", r => r.Publication.OpenData.Resources);
+                    result.Errors.Add("Publishable resource names must be unique - no duplicates", r => r.Publication.Data.Resources);
                 }
             }
         }

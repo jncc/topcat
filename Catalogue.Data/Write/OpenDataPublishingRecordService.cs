@@ -20,7 +20,7 @@ namespace Catalogue.Data.Write
 
         public RecordServiceResult Assess(Record record, OpenDataAssessmentInfo assessmentInfo)
         {
-            if (record.Publication?.OpenData?.Publishable != true)
+            if (record.Publication?.Gov?.Publishable != true)
                 throw new InvalidOperationException("Record must be publishable as Open Data");
 
             if (!record.IsEligibleForOpenDataPublishing())
@@ -37,15 +37,15 @@ namespace Catalogue.Data.Write
                 record.Publication = new PublicationInfo();
             }
 
-            if (record.Publication.OpenData == null)
+            if (record.Publication.Gov == null)
             {
-                record.Publication.OpenData = new OpenDataPublicationInfo
+                record.Publication.Gov = new GovPublicationInfo
                 {
                     Assessment = new OpenDataAssessmentInfo()
                 };
             }
 
-            record.Publication.OpenData.Assessment = assessmentInfo;
+            record.Publication.Gov.Assessment = assessmentInfo;
             UpdateMetadataDate(record, assessmentInfo.CompletedOnUtc);
             SetFooterForUpdatedRecord(record, assessmentInfo.CompletedByUser);
 
@@ -60,7 +60,7 @@ namespace Catalogue.Data.Write
 
         public RecordServiceResult SignOff(Record record, OpenDataSignOffInfo signOffInfo)
         {
-            if (record.Publication?.OpenData?.Publishable != true)
+            if (record.Publication?.Gov?.Publishable != true)
                 throw new InvalidOperationException("Record must be publishable as Open Data");
 
             if (!record.IsAssessedAndUpToDate())
@@ -69,7 +69,7 @@ namespace Catalogue.Data.Write
             if (record.IsSignedOffAndUpToDate())
                 throw new InvalidOperationException("The record has already been signed off");
 
-            record.Publication.OpenData.SignOff = signOffInfo;
+            record.Publication.Gov.SignOff = signOffInfo;
             UpdateMetadataDate(record, signOffInfo.DateUtc);
             SetFooterForUpdatedRecord(record, signOffInfo.User);
 

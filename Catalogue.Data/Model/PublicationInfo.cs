@@ -5,11 +5,30 @@ namespace Catalogue.Data.Model
 {
     public class PublicationInfo
     {
-        public OpenDataPublicationInfo OpenData { get; set; }
-        public DatahubPublicationInfo Datahub { get; set; }
+        public DataPublicationInfo Data { get; set; }
+        public HubPublicationInfo Hub { get; set; }
+        public GovPublicationInfo Gov { get; set; }
     }
 
-    public class DatahubPublicationInfo
+    public class DataPublicationInfo
+    {
+        /// <summary>
+        /// List of publishable resources
+        /// </summary>
+        public List<Resource> Resources { get; set; }
+
+        /// <summary>
+        /// Details of the last attempt to publish these resources.
+        /// </summary>
+        public PublicationAttempt LastAttempt { get; set; }
+
+        /// <summary>
+        /// Details about the last successful attempt to publish these resources.
+        /// </summary>
+        public PublicationAttempt LastSuccess { get; set; }
+    }
+
+    public class HubPublicationInfo
     {
         /// <summary>
         /// Link to the Datahub page once successfully published
@@ -27,7 +46,7 @@ namespace Catalogue.Data.Model
         public PublicationAttempt LastSuccess { get; set; }
     }
 
-    public class OpenDataPublicationInfo
+    public class GovPublicationInfo
     {
         /// <summary>
         /// Captures whether the record should be published as Open Data. 
@@ -43,11 +62,6 @@ namespace Catalogue.Data.Model
         /// Is the record signed-off by the SIRO? (Null means no.)
         /// </summary>
         public OpenDataSignOffInfo SignOff { get; set; }
-
-        /// <summary>
-        /// The files to actually publish, if different to the record's path.
-        /// </summary>
-        public List<Resource> Resources { get; set; }
 
         /// <summary>
         /// Don't publish this record, for the time being.

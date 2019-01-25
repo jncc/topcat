@@ -9,6 +9,7 @@ using NUnit.Framework;
 using System;
 using System.Collections.Generic;
 using Catalogue.Data;
+using Catalogue.Robot.Publishing.Hub;
 
 namespace Catalogue.Tests.Slow.Catalogue.Robot
 {
@@ -28,10 +29,13 @@ namespace Catalogue.Tests.Slow.Catalogue.Robot
                 });
                 r.Publication = new PublicationInfo
                 {
-                    OpenData = new OpenDataPublicationInfo
+                    Data = new DataPublicationInfo
+                    {
+                        Resources = new List<Resource> { new Resource { Name = "File resource", Path = @"X:\path\to\uploader\test.txt" } }
+                    },
+                    Gov = new GovPublicationInfo
                     {
                         Publishable = true,
-                        Resources = new List<Resource> { new Resource { Name = "File resource", Path = @"X:\path\to\uploader\test.txt" } },
                         Assessment = new OpenDataAssessmentInfo
                         {
                             Completed = true,
@@ -75,10 +79,13 @@ namespace Catalogue.Tests.Slow.Catalogue.Robot
                 });
                 r.Publication = new PublicationInfo
                 {
-                    OpenData = new OpenDataPublicationInfo
+                    Data = new DataPublicationInfo
+                    {
+                        Resources = new List<Resource> { new Resource { Name = "File resource", Path = @"X:\path\to\uploader\test.txt" } }
+                    },
+                    Gov = new GovPublicationInfo
                     {
                         Publishable = true,
-                        Resources = new List<Resource> { new Resource { Name = "File resource", Path = @"X:\path\to\uploader\test.txt" } },
                         Assessment = new OpenDataAssessmentInfo
                         {
                             Completed = true,
@@ -110,10 +117,13 @@ namespace Catalogue.Tests.Slow.Catalogue.Robot
                 });
                 r.Publication = new PublicationInfo
                 {
-                    OpenData = new OpenDataPublicationInfo
+                    Data = new DataPublicationInfo
+                    {
+                        Resources = new List<Resource> { new Resource { Name = "File resource", Path = @"X:\path\to\uploader\test.txt" } }
+                    },
+                    Gov = new GovPublicationInfo
                     {
                         Publishable = true,
-                        Resources = new List<Resource> { new Resource { Name = "File resource", Path = @"X:\path\to\uploader\test.txt" } },
                         Assessment = new OpenDataAssessmentInfo
                         {
                             Completed = false
@@ -144,10 +154,13 @@ namespace Catalogue.Tests.Slow.Catalogue.Robot
                 });
                 r.Publication = new PublicationInfo
                 {
-                    OpenData = new OpenDataPublicationInfo
+                    Data = new DataPublicationInfo
+                    {
+                        Resources = new List<Resource> { new Resource { Name = "File resource", Path = @"X:\path\to\uploader\test.txt" } }
+                    },
+                    Gov = new GovPublicationInfo
                     {
                         Publishable = true,
-                        Resources = new List<Resource> { new Resource { Name = "File resource", Path = @"X:\path\to\uploader\test.txt" } },
                         Assessment = new OpenDataAssessmentInfo
                         {
                             Completed = true,
@@ -180,10 +193,13 @@ namespace Catalogue.Tests.Slow.Catalogue.Robot
                 });
                 r.Publication = new PublicationInfo
                 {
-                    OpenData = new OpenDataPublicationInfo
+                    Data = new DataPublicationInfo
+                    {
+                        Resources = new List<Resource> { new Resource { Name = "File resource", Path = @"X:\path\to\uploader\test.txt" } }
+                    },
+                    Gov = new GovPublicationInfo
                     {
                         Publishable = true,
-                        Resources = new List<Resource> { new Resource { Name = "File resource", Path = @"X:\path\to\uploader\test.txt" } },
                         Assessment = new OpenDataAssessmentInfo
                         {
                             Completed = true,
@@ -219,10 +235,13 @@ namespace Catalogue.Tests.Slow.Catalogue.Robot
                 });
                 r.Publication = new PublicationInfo
                 {
-                    OpenData = new OpenDataPublicationInfo
+                    Data = new DataPublicationInfo
+                    {
+                        Resources = new List<Resource> { new Resource { Name = "File resource", Path = @"X:\path\to\uploader\test.txt" } }
+                    },
+                    Gov = new GovPublicationInfo
                     {
                         Publishable = true,
-                        Resources = new List<Resource> { new Resource { Name = "File resource", Path = @"X:\path\to\uploader\test.txt" } },
                         Assessment = new OpenDataAssessmentInfo
                         {
                             Completed = true,
@@ -263,10 +282,13 @@ namespace Catalogue.Tests.Slow.Catalogue.Robot
                 });
                 r.Publication = new PublicationInfo
                 {
-                    OpenData = new OpenDataPublicationInfo
+                    Data = new DataPublicationInfo
+                    {
+                        Resources = new List<Resource> { new Resource { Name = "File resource", Path = @"X:\path\to\uploader\test.txt" } }
+                    },
+                    Gov = new GovPublicationInfo
                     {
                         Publishable = true,
-                        Resources = new List<Resource> { new Resource { Name = "File resource", Path = @"X:\path\to\uploader\test.txt" } },
                         Assessment = new OpenDataAssessmentInfo
                         {
                             Completed = true,
@@ -307,10 +329,13 @@ namespace Catalogue.Tests.Slow.Catalogue.Robot
                 });
                 r.Publication = new PublicationInfo
                 {
-                    OpenData = new OpenDataPublicationInfo
+                    Data = new DataPublicationInfo
+                    {
+                        Resources = new List<Resource> { new Resource { Name = "File resource", Path = @"X:\path\to\uploader\test.txt" } }
+                    },
+                    Gov = new GovPublicationInfo
                     {
                         Publishable = true,
-                        Resources = new List<Resource> { new Resource { Name = "File resource", Path = @"X:\path\to\uploader\test.txt" } },
                         Assessment = new OpenDataAssessmentInfo
                         {
                             Completed = true,
@@ -350,10 +375,13 @@ namespace Catalogue.Tests.Slow.Catalogue.Robot
                 });
                 r.Publication = new PublicationInfo
                 {
-                    OpenData = new OpenDataPublicationInfo
+                    Data = new DataPublicationInfo
+                    {
+                        Resources = new List<Resource> { new Resource { Name = "File resource", Path = @"X:\path\to\uploader\test.txt" } }
+                    },
+                    Gov = new GovPublicationInfo
                     {
                         Publishable = true,
-                        Resources = new List<Resource> { new Resource { Name = "File resource", Path = @"X:\path\to\uploader\test.txt" } },
                         Assessment = new OpenDataAssessmentInfo
                         {
                             Completed = true,
@@ -393,10 +421,13 @@ namespace Catalogue.Tests.Slow.Catalogue.Robot
                 });
                 r.Publication = new PublicationInfo
                 {
-                    OpenData = new OpenDataPublicationInfo
+                    Data = new DataPublicationInfo
+                    {
+                        Resources = new List<Resource> { new Resource { Name = "File resource", Path = @"X:\path\to\uploader\test.txt" } }
+                    },
+                    Gov = new GovPublicationInfo
                     {
                         Publishable = true,
-                        Resources = new List<Resource> { new Resource { Name = "File resource", Path = @"X:\path\to\uploader\test.txt" } },
                         Assessment = new OpenDataAssessmentInfo
                         {
                             Completed = true,
@@ -436,10 +467,13 @@ namespace Catalogue.Tests.Slow.Catalogue.Robot
                 });
                 r.Publication = new PublicationInfo
                 {
-                    OpenData = new OpenDataPublicationInfo
+                    Data = new DataPublicationInfo
+                    {
+                        Resources = new List<Resource> { new Resource { Name = "File resource", Path = @"X:\path\to\uploader\test.txt" } }
+                    },
+                    Gov = new GovPublicationInfo
                     {
                         Publishable = false,
-                        Resources = new List<Resource> { new Resource { Name = "File resource", Path = @"X:\path\to\uploader\test.txt" } },
                         Assessment = new OpenDataAssessmentInfo
                         {
                             Completed = true,
@@ -471,10 +505,13 @@ namespace Catalogue.Tests.Slow.Catalogue.Robot
                 });
                 r.Publication = new PublicationInfo
                 {
-                    OpenData = new OpenDataPublicationInfo
+                    Data = new DataPublicationInfo
+                    {
+                        Resources = new List<Resource> { new Resource { Name = "File resource", Path = @"X:\path\to\uploader\test.txt" } }
+                    },
+                    Gov = new GovPublicationInfo
                     {
                         Publishable = null,
-                        Resources = new List<Resource> { new Resource { Name = "File resource", Path = @"X:\path\to\uploader\test.txt" } },
                         Assessment = new OpenDataAssessmentInfo
                         {
                             Completed = true,
@@ -506,10 +543,13 @@ namespace Catalogue.Tests.Slow.Catalogue.Robot
                 });
                 r.Publication = new PublicationInfo
                 {
-                    OpenData = new OpenDataPublicationInfo
+                    Data = new DataPublicationInfo
+                    {
+                        Resources = new List<Resource> { new Resource { Name = "File resource", Path = @"X:\path\to\uploader\test.txt" } }
+                    },
+                    Gov = new GovPublicationInfo
                     {
                         Publishable = false,
-                        Resources = new List<Resource> { new Resource { Name = "File resource", Path = @"X:\path\to\uploader\test.txt" } },
                         Assessment = new OpenDataAssessmentInfo
                         {
                             Completed = true,
@@ -558,7 +598,8 @@ namespace Catalogue.Tests.Slow.Catalogue.Robot
 
                 var uploadServiceMock = new Mock<IPublishingUploadRecordService>();
                 var uploadHelperMock = new Mock<IOpenDataUploadHelper>();
-                var robotUploader = new RobotUploader(db, uploadServiceMock.Object, uploadHelperMock.Object);
+                var hubServiceMock = new Mock<IHubService>();
+                var robotUploader = new RobotPublisher(db, uploadServiceMock.Object, uploadHelperMock.Object, hubServiceMock.Object);
 
                 var result = robotUploader.GetRecordsPendingUpload();
                 return result;

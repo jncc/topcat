@@ -21,24 +21,24 @@ namespace Catalogue.Data.Extensions
 
         public static bool IsAssessedAndUpToDate(this Record record)
         {
-            return record.Publication?.OpenData.Assessment != null
-                && record.Publication.OpenData.Assessment.Completed
-                && (record.Publication.OpenData.Assessment.CompletedOnUtc.Equals(record.Gemini.MetadataDate)
+            return record.Publication?.Gov.Assessment != null
+                && record.Publication.Gov.Assessment.Completed
+                && (record.Publication.Gov.Assessment.CompletedOnUtc.Equals(record.Gemini.MetadataDate)
                 || IsSignedOffAndUpToDate(record));
         }
 
         public static bool IsSignedOffAndUpToDate(this Record record)
         {
-            return record.Publication?.OpenData?.SignOff != null
-                && (record.Publication.OpenData.SignOff.DateUtc.Equals(record.Gemini.MetadataDate)
-                || record.Publication.OpenData.LastAttempt != null
-                && record.Publication.OpenData.LastAttempt.DateUtc.Equals(record.Gemini.MetadataDate));
+            return record.Publication?.Gov?.SignOff != null
+                && (record.Publication.Gov.SignOff.DateUtc.Equals(record.Gemini.MetadataDate)
+                || record.Publication.Gov.LastAttempt != null
+                && record.Publication.Gov.LastAttempt.DateUtc.Equals(record.Gemini.MetadataDate));
         }
 
         public static bool IsUploadedAndUpToDate(this Record record)
         {
-            return record.Publication?.OpenData?.LastSuccess != null
-                && record.Publication.OpenData.LastSuccess.DateUtc.Equals(record.Gemini.MetadataDate);
+            return record.Publication?.Gov?.LastSuccess != null
+                && record.Publication.Gov.LastSuccess.DateUtc.Equals(record.Gemini.MetadataDate);
         }
     }
 }

@@ -77,7 +77,10 @@
   "SourceIdentifier": "",
   "ReadOnly": false,
   "Publication": {
-    "OpenData": {
+    "Data": {
+      "Resources": null
+    },
+    "Gov": {
       "Publishable": true,
       "Assessment": {
         "Completed": true,
@@ -91,7 +94,6 @@
         "User": null,
         "Comment": null
       },
-      "Resources": null,
       "Paused": false,
       "LastAttempt": {
         "DateUtc": "2016-07-07T21:51:35.4446864Z",
