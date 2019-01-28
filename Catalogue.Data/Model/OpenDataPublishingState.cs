@@ -4,6 +4,7 @@
     {
         public bool AssessedAndUpToDate { get; set; }
         public bool SignedOffAndUpToDate { get; set; }
-        public bool UploadedAndUpToDate { get; set; }
+        public bool PublishedToHubAndUpToDate { get; set; }
+        public bool PublishedToGovAndUpToDate { get; set; }
     }
 }

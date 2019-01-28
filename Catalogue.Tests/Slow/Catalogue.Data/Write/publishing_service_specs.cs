@@ -109,7 +109,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Data.Write
                 GovPublishedSuccessfully(record, testTime);
                 ResourcesUpdatedCorrectly(recordId, record.Publication.Data.Resources, updatedRecord.Publication.Data.Resources);
 
-                updatedRecord.Gemini.MetadataDate.Should().Be(record.Gemini.MetadataDate);
+                updatedRecord.Gemini.MetadataDate.Should().Be(testTime);
                 CheckMethodInvocations(record, uploadHelperMock, hubServiceMock);
 
                 Clock.CurrentUtcDateTimeGetter = currentTime;
@@ -176,7 +176,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Data.Write
                 updatedRecord.Publication.Hub.LastSuccess.Should().BeNull();
                 updatedRecord.Publication.Gov.LastAttempt.Should().BeNull();
                 updatedRecord.Publication.Gov.LastSuccess.Should().BeNull();
-                updatedRecord.Gemini.MetadataDate.Should().Be(record.Gemini.MetadataDate);
+                updatedRecord.Gemini.MetadataDate.Should().Be(testTime);
 
                 Clock.CurrentUtcDateTimeGetter = currentTime;
             }
@@ -251,7 +251,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Data.Write
                 updatedRecord.Publication.Hub.LastSuccess.Should().BeNull();
                 updatedRecord.Publication.Gov.LastAttempt.Should().BeNull();
                 updatedRecord.Publication.Gov.LastSuccess.Should().BeNull();
-                updatedRecord.Gemini.MetadataDate.Should().Be(record.Gemini.MetadataDate);
+                updatedRecord.Gemini.MetadataDate.Should().Be(testTime);
 
                 Clock.CurrentUtcDateTimeGetter = currentTime;
             }
@@ -316,7 +316,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Data.Write
                 updatedRecord.Publication.Hub.LastSuccess.Should().BeNull();
                 updatedRecord.Publication.Gov.LastAttempt.Should().BeNull();
                 updatedRecord.Publication.Gov.LastSuccess.Should().BeNull();
-                updatedRecord.Gemini.MetadataDate.Should().Be(record.Gemini.MetadataDate);
+                updatedRecord.Gemini.MetadataDate.Should().Be(testTime);
 
                 Clock.CurrentUtcDateTimeGetter = currentTime;
             }
@@ -384,7 +384,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Data.Write
                 updatedRecord.Publication.Gov.LastAttempt.DateUtc.Should().Be(testTime);
                 updatedRecord.Publication.Gov.LastAttempt.Message.Should().Be("test message");
                 updatedRecord.Publication.Gov.LastSuccess.Should().BeNull();
-                updatedRecord.Gemini.MetadataDate.Should().Be(record.Gemini.MetadataDate);
+                updatedRecord.Gemini.MetadataDate.Should().Be(testTime);
 
                 Clock.CurrentUtcDateTimeGetter = currentTime;
             }

@@ -14,7 +14,6 @@ namespace Catalogue.Data.Indexes
             public DateTime LastPublicationAttemptDate { get; set; }
             public DateTime LastSuccessfulPublicationAttemptDate { get; set; }
             public bool GeminiValidated { get; set; }
-            public bool? Publishable { get; set; }
             public bool Assessed { get; set; }
             public bool SignedOff { get; set; }
             public bool PublicationNeverAttempted { get; set; }

@@ -34,7 +34,8 @@ namespace Catalogue.Data.Write
                         OpenDataPublishingState = new OpenDataPublishingState {
                             AssessedAndUpToDate = record.IsAssessedAndUpToDate(),
                             SignedOffAndUpToDate = record.IsSignedOffAndUpToDate(),
-                            UploadedAndUpToDate = record.IsUploadedAndUpToDate()
+                            PublishedToHubAndUpToDate = record.IsPublishedToHubAndUpToDate(),
+                            PublishedToGovAndUpToDate = record.IsPublishedToGovAndUpToDate()
                         }
                     },
                     PublishingPolicy = PublishingPolicy.GetPublishingPolicyResult(record),

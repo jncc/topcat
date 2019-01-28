@@ -712,29 +712,6 @@ namespace Catalogue.Tests.Slow.Catalogue.Web.Controllers.Publishing
             })
         };
 
-        [Test, TestCaseSource(nameof(NotEligibleForAssessmentRecords))]
-        public void not_eligible_for_assessment_when_path_is_not_file_path(Record record)
-        {
-            using (var db = ReusableDocumentStore.OpenSession())
-            {
-                db.Store(record);
-                db.SaveChanges();
-
-                var publishingController = GetTestOpenDataPublishingController(db);
-
-                var request = new AssessmentRequest
-                {
-                    Id = Helpers.RemoveCollection(record.Id)
-                };
-
-                Action a = () => publishingController.Assess(request);
-                a.Should().Throw<InvalidOperationException>().And.Message.Should().Be("Must have a file path for publishing");
-
-                var resultRecord = db.Load<Record>(record.Id);
-                resultRecord.Publication.Gov.Assessment.Should().BeNull();
-            }
-        }
-
         private Record TestAssessment(Record record)
         {
             using (var db = ReusableDocumentStore.OpenSession())

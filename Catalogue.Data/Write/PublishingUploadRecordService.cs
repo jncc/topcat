@@ -25,6 +25,7 @@ namespace Catalogue.Data.Write
         public void UpdateDataPublishAttempt(Record record, PublicationAttempt attempt)
         {
             record.Publication.Data.LastAttempt = attempt;
+            UpdateMetadataDate(record, attempt.DateUtc);
 
             var recordServiceResult = Upsert(record, db, validator);
             if (!recordServiceResult.Success)
@@ -38,6 +39,7 @@ namespace Catalogue.Data.Write
         {
             record.Publication.Data.LastSuccess = attempt;
             record.Publication.Data.Resources = resources;
+            UpdateMetadataDate(record, attempt.DateUtc);
 
             var recordServiceResult = Upsert(record, db, validator);
             if (!recordServiceResult.Success)
@@ -50,6 +52,7 @@ namespace Catalogue.Data.Write
         public void UpdateGovPublishAttempt(Record record, PublicationAttempt attempt)
         {
             record.Publication.Gov.LastAttempt = attempt;
+            UpdateMetadataDate(record, attempt.DateUtc);
 
             var recordServiceResult = Upsert(record, db, validator);
             if (!recordServiceResult.Success)
@@ -62,6 +65,7 @@ namespace Catalogue.Data.Write
         public void UpdateGovPublishSuccess(Record record, PublicationAttempt attempt)
         {
             record.Publication.Gov.LastSuccess = attempt;
+            UpdateMetadataDate(record, attempt.DateUtc);
 
             var recordServiceResult = Upsert(record, db, validator);
             if (!recordServiceResult.Success)
@@ -74,6 +78,7 @@ namespace Catalogue.Data.Write
         public void UpdateHubPublishAttempt(Record record, PublicationAttempt attempt)
         {
             record.Publication.Hub.LastAttempt = attempt;
+            UpdateMetadataDate(record, attempt.DateUtc);
 
             var recordServiceResult = Upsert(record, db, validator);
             if (!recordServiceResult.Success)
@@ -87,6 +92,7 @@ namespace Catalogue.Data.Write
         {
             record.Publication.Hub.LastSuccess = attempt;
             record.Publication.Hub.Url = hubUrl;
+            UpdateMetadataDate(record, attempt.DateUtc);
 
             var recordServiceResult = Upsert(record, db, validator);
             if (!recordServiceResult.Success)
@@ -94,6 +100,11 @@ namespace Catalogue.Data.Write
                 var e = new Exception("Error while saving upload changes.");
                 e.LogAndThrow(Logger);
             }
+        }
+
+        private void UpdateMetadataDate(Record record, DateTime metadataDate)
+        {
+            record.Gemini.MetadataDate = metadataDate;
         }
     }
 }

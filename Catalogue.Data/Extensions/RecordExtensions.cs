@@ -5,19 +5,6 @@ namespace Catalogue.Data.Extensions
 {
     public static class RecordExtensions
     {
-        public static bool IsEligibleForOpenDataPublishing(this Record record)
-        {
-            var eligible = false;
-
-            Uri uri;
-
-            if (Uri.TryCreate(record.Path, UriKind.Absolute, out uri))
-            {
-                eligible = uri.IsFile;
-            }
-
-            return eligible;
-        }
 
         public static bool IsAssessedAndUpToDate(this Record record)
         {
@@ -35,10 +22,16 @@ namespace Catalogue.Data.Extensions
                 && record.Publication.Gov.LastAttempt.DateUtc.Equals(record.Gemini.MetadataDate));
         }
 
-        public static bool IsUploadedAndUpToDate(this Record record)
+        public static bool IsPublishedToGovAndUpToDate(this Record record)
         {
             return record.Publication?.Gov?.LastSuccess != null
                 && record.Publication.Gov.LastSuccess.DateUtc.Equals(record.Gemini.MetadataDate);
+        }
+
+        public static bool IsPublishedToHubAndUpToDate(this Record record)
+        {
+            return record.Publication?.Hub?.LastSuccess != null
+                   && record.Publication.Hub.LastSuccess.DateUtc.Equals(record.Gemini.MetadataDate);
         }
     }
 }

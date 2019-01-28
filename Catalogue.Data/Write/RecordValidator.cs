@@ -33,7 +33,6 @@ namespace Catalogue.Data.Write
             ValidateMetadataPointOfContact(record, result);
             ValidateResourceType(record, result);
             ValidateSecurityInvariants(record, result);
-            ValidatePublishableInvariants(record, result);
             ValidateBoundingBox(record, result);
             ValidateJnccSpecificRules(record, result);
             ValidatePublishableResources(record, result);
@@ -212,17 +211,6 @@ namespace Catalogue.Data.Write
                     r => r.Security,
                     r => r.Gemini.LimitationsOnPublicAccess);
             }
-        }
-
-        void ValidatePublishableInvariants(Record record, ValidationResult<Record> result)
-        {
-            // disabled until publishing mechanism created
-            // publishable_records_must_have_a_resource_locator
-//            if (record.Status == Status.Publishable && record.Gemini.ResourceLocator.IsBlank())
-//            {
-//                result.Errors.Add("Publishable records must have a resource locator",
-//                    r => r.Status, r => r.Gemini.ResourceLocator);
-//            }
         }
 
         void ValidateBoundingBox(Record record, ValidationResult<Record> result)

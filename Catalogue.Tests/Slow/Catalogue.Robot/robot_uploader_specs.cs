@@ -217,6 +217,92 @@ namespace Catalogue.Tests.Slow.Catalogue.Robot
         }
 
         [Test]
+        public void pending_upload_test_with_previous_data_transfer_failure()
+        {
+            var assessedAndSignedOffRecord = new Record().With(r =>
+            {
+                r.Id = Helpers.AddCollection(Guid.NewGuid().ToString());
+                r.Path = @"X:\path\to\uploader\test";
+                r.Validation = Validation.Gemini;
+                r.Gemini = Library.Example().With(m =>
+                {
+                    m.MetadataDate = new DateTime(2017, 09, 26);
+                });
+                r.Publication = new PublicationInfo
+                {
+                    Data = new DataPublicationInfo
+                    {
+                        Resources = new List<Resource> { new Resource { Name = "File resource", Path = @"X:\path\to\uploader\test.txt" } },
+                        LastAttempt = new PublicationAttempt
+                        {
+                            DateUtc = new DateTime(2017, 09, 20)
+                        }
+                    },
+                    Gov = new GovPublicationInfo
+                    {
+                        Publishable = true,
+                        Assessment = new OpenDataAssessmentInfo
+                        {
+                            Completed = true,
+                            CompletedOnUtc = new DateTime(2017, 09, 25)
+                        },
+                        SignOff = new OpenDataSignOffInfo
+                        {
+                            DateUtc = new DateTime(2017, 09, 26)
+                        }
+                    }
+                };
+                r.Footer = new Footer();
+            });
+
+            TestRecordReturned(assessedAndSignedOffRecord);
+        }
+
+        [Test]
+        public void pending_upload_test_with_previous_hub_transfer_failure()
+        {
+            var assessedAndSignedOffRecord = new Record().With(r =>
+            {
+                r.Id = Helpers.AddCollection(Guid.NewGuid().ToString());
+                r.Path = @"X:\path\to\uploader\test";
+                r.Validation = Validation.Gemini;
+                r.Gemini = Library.Example().With(m =>
+                {
+                    m.MetadataDate = new DateTime(2017, 09, 26);
+                });
+                r.Publication = new PublicationInfo
+                {
+                    Data = new DataPublicationInfo
+                    {
+                        Resources = new List<Resource> { new Resource { Name = "File resource", Path = @"X:\path\to\uploader\test.txt" } },
+                        LastAttempt = new PublicationAttempt { DateUtc = new DateTime(2017, 09, 23) },
+                        LastSuccess = new PublicationAttempt { DateUtc = new DateTime(2017, 09, 23) }
+                    },
+                    Hub = new HubPublicationInfo
+                    {
+                        LastAttempt = new PublicationAttempt { DateUtc = new DateTime(2017, 09, 24) }
+                    },
+                    Gov = new GovPublicationInfo
+                    {
+                        Publishable = true,
+                        Assessment = new OpenDataAssessmentInfo
+                        {
+                            Completed = true,
+                            CompletedOnUtc = new DateTime(2017, 09, 25)
+                        },
+                        SignOff = new OpenDataSignOffInfo
+                        {
+                            DateUtc = new DateTime(2017, 09, 26)
+                        }
+                    }
+                };
+                r.Footer = new Footer();
+            });
+
+            TestRecordReturned(assessedAndSignedOffRecord);
+        }
+
+        [Test]
         public void pending_upload_test_with_paused_record()
         {
             var pausedRecord = new Record().With(r =>
@@ -256,7 +342,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Robot
         }
 
         [Test]
-        public void pending_upload_test_with_failed_attempt_record()
+        public void pending_upload_test_with_failed_gov_publish_attempt_record()
         {
             var attemptedButFailedRecord = new Record().With(r =>
             {
@@ -265,13 +351,20 @@ namespace Catalogue.Tests.Slow.Catalogue.Robot
                 r.Validation = Validation.Gemini;
                 r.Gemini = Library.Example().With(m =>
                 {
-                    m.MetadataDate = new DateTime(2017, 09, 27);
+                    m.MetadataDate = new DateTime(2017, 09, 29);
                 });
                 r.Publication = new PublicationInfo
                 {
                     Data = new DataPublicationInfo
                     {
-                        Resources = new List<Resource> { new Resource { Name = "File resource", Path = @"X:\path\to\uploader\test.txt" } }
+                        Resources = new List<Resource> { new Resource { Name = "File resource", Path = @"X:\path\to\uploader\test.txt" } },
+                        LastAttempt = new PublicationAttempt{DateUtc = new DateTime(2017, 09, 27)},
+                        LastSuccess = new PublicationAttempt { DateUtc = new DateTime(2017, 09, 27) }
+                    },
+                    Hub = new HubPublicationInfo
+                    {
+                        LastAttempt = new PublicationAttempt { DateUtc = new DateTime(2017, 09, 28) },
+                        LastSuccess = new PublicationAttempt { DateUtc = new DateTime(2017, 09, 28) }
                     },
                     Gov = new GovPublicationInfo
                     {
@@ -287,7 +380,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Robot
                         },
                         LastAttempt = new PublicationAttempt
                         {
-                            DateUtc = new DateTime(2017, 09, 27)
+                            DateUtc = new DateTime(2017, 09, 29)
                         }
                     }
                 };
@@ -307,13 +400,20 @@ namespace Catalogue.Tests.Slow.Catalogue.Robot
                 r.Validation = Validation.Gemini;
                 r.Gemini = Library.Example().With(m =>
                 {
-                    m.MetadataDate = new DateTime(2017, 09, 27);
+                    m.MetadataDate = new DateTime(2017, 09, 29);
                 });
                 r.Publication = new PublicationInfo
                 {
                     Data = new DataPublicationInfo
                     {
-                        Resources = new List<Resource> { new Resource { Name = "File resource", Path = @"X:\path\to\uploader\test.txt" } }
+                        Resources = new List<Resource> { new Resource { Name = "File resource", Path = @"X:\path\to\uploader\test.txt" } },
+                        LastAttempt = new PublicationAttempt { DateUtc = new DateTime(2017, 09, 27) },
+                        LastSuccess = new PublicationAttempt { DateUtc = new DateTime(2017, 09, 27) }
+                    },
+                    Hub = new HubPublicationInfo
+                    {
+                        LastAttempt = new PublicationAttempt { DateUtc = new DateTime(2017, 09, 28) },
+                        LastSuccess = new PublicationAttempt { DateUtc = new DateTime(2017, 09, 28) }
                     },
                     Gov = new GovPublicationInfo
                     {
@@ -330,11 +430,11 @@ namespace Catalogue.Tests.Slow.Catalogue.Robot
                         Paused = false,
                         LastAttempt = new PublicationAttempt
                         {
-                            DateUtc = new DateTime(2017, 09, 27)
+                            DateUtc = new DateTime(2017, 09, 29)
                         },
                         LastSuccess = new PublicationAttempt
                         {
-                            DateUtc = new DateTime(2017, 09, 27)
+                            DateUtc = new DateTime(2017, 09, 29)
                         }
                     }
                 };
@@ -354,13 +454,20 @@ namespace Catalogue.Tests.Slow.Catalogue.Robot
                 r.Validation = Validation.Gemini;
                 r.Gemini = Library.Example().With(m =>
                 {
-                    m.MetadataDate = new DateTime(2017, 09, 28);
+                    m.MetadataDate = new DateTime(2017, 09, 30);
                 });
                 r.Publication = new PublicationInfo
                 {
                     Data = new DataPublicationInfo
                     {
-                        Resources = new List<Resource> { new Resource { Name = "File resource", Path = @"X:\path\to\uploader\test.txt" } }
+                        Resources = new List<Resource> { new Resource { Name = "File resource", Path = @"X:\path\to\uploader\test.txt" } },
+                        LastAttempt = new PublicationAttempt { DateUtc = new DateTime(2017, 09, 27) },
+                        LastSuccess = new PublicationAttempt { DateUtc = new DateTime(2017, 09, 27) }
+                    },
+                    Hub = new HubPublicationInfo
+                    {
+                        LastAttempt = new PublicationAttempt { DateUtc = new DateTime(2017, 09, 28) },
+                        LastSuccess = new PublicationAttempt { DateUtc = new DateTime(2017, 09, 28) }
                     },
                     Gov = new GovPublicationInfo
                     {
@@ -377,11 +484,11 @@ namespace Catalogue.Tests.Slow.Catalogue.Robot
                         Paused = false,
                         LastAttempt = new PublicationAttempt
                         {
-                            DateUtc = new DateTime(2017, 09, 27)
+                            DateUtc = new DateTime(2017, 09, 29)
                         },
                         LastSuccess = new PublicationAttempt
                         {
-                            DateUtc = new DateTime(2017, 09, 27)
+                            DateUtc = new DateTime(2017, 09, 29)
                         }
                     }
                 };
@@ -407,7 +514,14 @@ namespace Catalogue.Tests.Slow.Catalogue.Robot
                 {
                     Data = new DataPublicationInfo
                     {
-                        Resources = new List<Resource> { new Resource { Name = "File resource", Path = @"X:\path\to\uploader\test.txt" } }
+                        Resources = new List<Resource> { new Resource { Name = "File resource", Path = @"X:\path\to\uploader\test.txt" } },
+                        LastAttempt = new PublicationAttempt { DateUtc = new DateTime(2017, 09, 25) },
+                        LastSuccess = new PublicationAttempt { DateUtc = new DateTime(2017, 09, 25) }
+                    },
+                    Hub = new HubPublicationInfo
+                    {
+                        LastAttempt = new PublicationAttempt { DateUtc = new DateTime(2017, 09, 26) },
+                        LastSuccess = new PublicationAttempt { DateUtc = new DateTime(2017, 09, 26) }
                     },
                     Gov = new GovPublicationInfo
                     {
@@ -453,7 +567,14 @@ namespace Catalogue.Tests.Slow.Catalogue.Robot
                 {
                     Data = new DataPublicationInfo
                     {
-                        Resources = new List<Resource> { new Resource { Name = "File resource", Path = @"X:\path\to\uploader\test.txt" } }
+                        Resources = new List<Resource> { new Resource { Name = "File resource", Path = @"X:\path\to\uploader\test.txt" } },
+                        LastAttempt = new PublicationAttempt { DateUtc = new DateTime(2017, 09, 25) },
+                        LastSuccess = new PublicationAttempt { DateUtc = new DateTime(2017, 09, 25) }
+                    },
+                    Hub = new HubPublicationInfo
+                    {
+                        LastAttempt = new PublicationAttempt { DateUtc = new DateTime(2017, 09, 26) },
+                        LastSuccess = new PublicationAttempt { DateUtc = new DateTime(2017, 09, 26) }
                     },
                     Gov = new GovPublicationInfo
                     {
@@ -499,7 +620,14 @@ namespace Catalogue.Tests.Slow.Catalogue.Robot
                 {
                     Data = new DataPublicationInfo
                     {
-                        Resources = new List<Resource> { new Resource { Name = "File resource", Path = @"X:\path\to\uploader\test.txt" } }
+                        Resources = new List<Resource> { new Resource { Name = "File resource", Path = @"X:\path\to\uploader\test.txt" } },
+                        LastAttempt = new PublicationAttempt { DateUtc = new DateTime(2017, 09, 25) },
+                        LastSuccess = new PublicationAttempt { DateUtc = new DateTime(2017, 09, 25) }
+                    },
+                    Hub = new HubPublicationInfo
+                    {
+                        LastAttempt = new PublicationAttempt { DateUtc = new DateTime(2017, 09, 26) },
+                        LastSuccess = new PublicationAttempt { DateUtc = new DateTime(2017, 09, 26) }
                     },
                     Gov = new GovPublicationInfo
                     {
@@ -545,7 +673,14 @@ namespace Catalogue.Tests.Slow.Catalogue.Robot
                 {
                     Data = new DataPublicationInfo
                     {
-                        Resources = new List<Resource> { new Resource { Name = "File resource", Path = @"X:\path\to\uploader\test.txt" } }
+                        Resources = new List<Resource> { new Resource { Name = "File resource", Path = @"X:\path\to\uploader\test.txt" } },
+                        LastAttempt = new PublicationAttempt { DateUtc = new DateTime(2017, 09, 25) },
+                        LastSuccess = new PublicationAttempt { DateUtc = new DateTime(2017, 09, 25) }
+                    },
+                    Hub = new HubPublicationInfo
+                    {
+                        LastAttempt = new PublicationAttempt { DateUtc = new DateTime(2017, 09, 26) },
+                        LastSuccess = new PublicationAttempt { DateUtc = new DateTime(2017, 09, 26) }
                     },
                     Gov = new GovPublicationInfo
                     {
@@ -591,7 +726,14 @@ namespace Catalogue.Tests.Slow.Catalogue.Robot
                 {
                     Data = new DataPublicationInfo
                     {
-                        Resources = new List<Resource> { new Resource { Name = "File resource", Path = @"X:\path\to\uploader\test.txt" } }
+                        Resources = new List<Resource> { new Resource { Name = "File resource", Path = @"X:\path\to\uploader\test.txt" } },
+                        LastAttempt = new PublicationAttempt { DateUtc = new DateTime(2017, 09, 25) },
+                        LastSuccess = new PublicationAttempt { DateUtc = new DateTime(2017, 09, 25) }
+                    },
+                    Hub = new HubPublicationInfo
+                    {
+                        LastAttempt = new PublicationAttempt { DateUtc = new DateTime(2017, 09, 26) },
+                        LastSuccess = new PublicationAttempt { DateUtc = new DateTime(2017, 09, 26) }
                     },
                     Gov = new GovPublicationInfo
                     {

@@ -1,11 +1,9 @@
-﻿using Catalogue.Data.Indexes;
+﻿using Catalogue.Data;
+using Catalogue.Data.Indexes;
 using Catalogue.Data.Model;
 using FluentAssertions;
 using NUnit.Framework;
 using System.Linq;
-using Catalogue.Data;
-using Catalogue.Data.Seed;
-using Raven.Client.Documents.Indexes;
 
 namespace Catalogue.Tests.Slow.Catalogue.Data.Indexes
 {
