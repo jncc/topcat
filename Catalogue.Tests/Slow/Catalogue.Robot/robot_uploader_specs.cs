@@ -104,6 +104,82 @@ namespace Catalogue.Tests.Slow.Catalogue.Robot
         }
 
         [Test]
+        public void pending_upload_test_with_unpublishable_record()
+        {
+            var assessedAndSignedOffRecord = new Record().With(r =>
+            {
+                r.Id = Helpers.AddCollection(Guid.NewGuid().ToString());
+                r.Path = @"X:\path\to\uploader\test";
+                r.Validation = Validation.Gemini;
+                r.Gemini = Library.Example().With(m =>
+                {
+                    m.MetadataDate = new DateTime(2017, 09, 26);
+                });
+                r.Publication = new PublicationInfo
+                {
+                    Data = new DataPublicationInfo
+                    {
+                        Resources = new List<Resource> { new Resource { Name = "File resource", Path = @"X:\path\to\uploader\test.txt" } }
+                    },
+                    Gov = new GovPublicationInfo
+                    {
+                        Publishable = false,
+                        Assessment = new OpenDataAssessmentInfo
+                        {
+                            Completed = true,
+                            CompletedOnUtc = new DateTime(2017, 09, 25)
+                        },
+                        SignOff = new OpenDataSignOffInfo
+                        {
+                            DateUtc = new DateTime(2017, 09, 26)
+                        }
+                    }
+                };
+                r.Footer = new Footer();
+            });
+
+            TestRecordReturned(assessedAndSignedOffRecord);
+        }
+
+        [Test]
+        public void pending_upload_test_with_publishable_unknown_record()
+        {
+            var assessedAndSignedOffRecord = new Record().With(r =>
+            {
+                r.Id = Helpers.AddCollection(Guid.NewGuid().ToString());
+                r.Path = @"X:\path\to\uploader\test";
+                r.Validation = Validation.Gemini;
+                r.Gemini = Library.Example().With(m =>
+                {
+                    m.MetadataDate = new DateTime(2017, 09, 26);
+                });
+                r.Publication = new PublicationInfo
+                {
+                    Data = new DataPublicationInfo
+                    {
+                        Resources = new List<Resource> { new Resource { Name = "File resource", Path = @"X:\path\to\uploader\test.txt" } }
+                    },
+                    Gov = new GovPublicationInfo
+                    {
+                        Publishable = null,
+                        Assessment = new OpenDataAssessmentInfo
+                        {
+                            Completed = true,
+                            CompletedOnUtc = new DateTime(2017, 09, 25)
+                        },
+                        SignOff = new OpenDataSignOffInfo
+                        {
+                            DateUtc = new DateTime(2017, 09, 26)
+                        }
+                    }
+                };
+                r.Footer = new Footer();
+            });
+
+            TestRecordReturned(assessedAndSignedOffRecord);
+        }
+
+        [Test]
         public void pending_upload_test_with_signed_off_only_record()
         {
             var signedOffOnlyRecord = new Record().With(r =>
@@ -362,6 +438,98 @@ namespace Catalogue.Tests.Slow.Catalogue.Robot
         }
 
         [Test]
+        public void pending_reupload_test_with_unpublishable_record()
+        {
+            var readyToRepublishRecord = new Record().With(r =>
+            {
+                r.Id = Helpers.AddCollection(Guid.NewGuid().ToString());
+                r.Path = @"X:\path\to\uploader\test";
+                r.Validation = Validation.Gemini;
+                r.Gemini = Library.Example().With(m =>
+                {
+                    m.MetadataDate = new DateTime(2017, 09, 29);
+                });
+                r.Publication = new PublicationInfo
+                {
+                    Data = new DataPublicationInfo
+                    {
+                        Resources = new List<Resource> { new Resource { Name = "File resource", Path = @"X:\path\to\uploader\test.txt" } }
+                    },
+                    Gov = new GovPublicationInfo
+                    {
+                        Publishable = false,
+                        Assessment = new OpenDataAssessmentInfo
+                        {
+                            Completed = true,
+                            CompletedOnUtc = new DateTime(2017, 09, 28)
+                        },
+                        SignOff = new OpenDataSignOffInfo
+                        {
+                            DateUtc = new DateTime(2017, 09, 29)
+                        },
+                        LastAttempt = new PublicationAttempt
+                        {
+                            DateUtc = new DateTime(2017, 09, 27)
+                        },
+                        LastSuccess = new PublicationAttempt
+                        {
+                            DateUtc = new DateTime(2017, 09, 27)
+                        }
+                    }
+                };
+                r.Footer = new Footer();
+            });
+
+            TestRecordReturned(readyToRepublishRecord);
+        }
+
+        [Test]
+        public void pending_reupload_test_with_publishable_unknown_record()
+        {
+            var readyToRepublishRecord = new Record().With(r =>
+            {
+                r.Id = Helpers.AddCollection(Guid.NewGuid().ToString());
+                r.Path = @"X:\path\to\uploader\test";
+                r.Validation = Validation.Gemini;
+                r.Gemini = Library.Example().With(m =>
+                {
+                    m.MetadataDate = new DateTime(2017, 09, 29);
+                });
+                r.Publication = new PublicationInfo
+                {
+                    Data = new DataPublicationInfo
+                    {
+                        Resources = new List<Resource> { new Resource { Name = "File resource", Path = @"X:\path\to\uploader\test.txt" } }
+                    },
+                    Gov = new GovPublicationInfo
+                    {
+                        Publishable = null,
+                        Assessment = new OpenDataAssessmentInfo
+                        {
+                            Completed = true,
+                            CompletedOnUtc = new DateTime(2017, 09, 28)
+                        },
+                        SignOff = new OpenDataSignOffInfo
+                        {
+                            DateUtc = new DateTime(2017, 09, 29)
+                        },
+                        LastAttempt = new PublicationAttempt
+                        {
+                            DateUtc = new DateTime(2017, 09, 27)
+                        },
+                        LastSuccess = new PublicationAttempt
+                        {
+                            DateUtc = new DateTime(2017, 09, 27)
+                        }
+                    }
+                };
+                r.Footer = new Footer();
+            });
+
+            TestRecordReturned(readyToRepublishRecord);
+        }
+
+        [Test]
         public void pending_upload_test_with_published_and_reassessed_record()
         {
             var publishedAndReassessedRecord = new Record().With(r =>
@@ -451,128 +619,6 @@ namespace Catalogue.Tests.Slow.Catalogue.Robot
             });
 
             TestRecordNotReturned(publishedAssessedSignedOffThenEditedRecord);
-        }
-
-        [Test]
-        public void pending_upload_test_with_unpublishable_record()
-        {
-            var unpublishableRecord = new Record().With(r =>
-            {
-                r.Id = Helpers.AddCollection(Guid.NewGuid().ToString());
-                r.Path = @"X:\path\to\uploader\test";
-                r.Validation = Validation.Gemini;
-                r.Gemini = Library.Example().With(m =>
-                {
-                    m.MetadataDate = new DateTime(2017, 09, 26);
-                });
-                r.Publication = new PublicationInfo
-                {
-                    Data = new DataPublicationInfo
-                    {
-                        Resources = new List<Resource> { new Resource { Name = "File resource", Path = @"X:\path\to\uploader\test.txt" } }
-                    },
-                    Gov = new GovPublicationInfo
-                    {
-                        Publishable = false,
-                        Assessment = new OpenDataAssessmentInfo
-                        {
-                            Completed = true,
-                            CompletedOnUtc = new DateTime(2017, 09, 25)
-                        },
-                        SignOff = new OpenDataSignOffInfo
-                        {
-                            DateUtc = new DateTime(2017, 09, 26)
-                        }
-                    }
-                };
-                r.Footer = new Footer();
-            });
-
-            TestRecordNotReturned(unpublishableRecord);
-        }
-
-        [Test]
-        public void pending_upload_test_with_null_publishable_record()
-        {
-            var unpublishableRecord = new Record().With(r =>
-            {
-                r.Id = Helpers.AddCollection(Guid.NewGuid().ToString());
-                r.Path = @"X:\path\to\uploader\test";
-                r.Validation = Validation.Gemini;
-                r.Gemini = Library.Example().With(m =>
-                {
-                    m.MetadataDate = new DateTime(2017, 09, 26);
-                });
-                r.Publication = new PublicationInfo
-                {
-                    Data = new DataPublicationInfo
-                    {
-                        Resources = new List<Resource> { new Resource { Name = "File resource", Path = @"X:\path\to\uploader\test.txt" } }
-                    },
-                    Gov = new GovPublicationInfo
-                    {
-                        Publishable = null,
-                        Assessment = new OpenDataAssessmentInfo
-                        {
-                            Completed = true,
-                            CompletedOnUtc = new DateTime(2017, 09, 25)
-                        },
-                        SignOff = new OpenDataSignOffInfo
-                        {
-                            DateUtc = new DateTime(2017, 09, 26)
-                        }
-                    }
-                };
-                r.Footer = new Footer();
-            });
-
-            TestRecordNotReturned(unpublishableRecord);
-        }
-
-        [Test]
-        public void pending_reupload_test_with_unpublishable_record()
-        {
-            var unpublishableRecord = new Record().With(r =>
-            {
-                r.Id = Helpers.AddCollection(Guid.NewGuid().ToString());
-                r.Path = @"X:\path\to\uploader\test";
-                r.Validation = Validation.Gemini;
-                r.Gemini = Library.Example().With(m =>
-                {
-                    m.MetadataDate = new DateTime(2017, 09, 29);
-                });
-                r.Publication = new PublicationInfo
-                {
-                    Data = new DataPublicationInfo
-                    {
-                        Resources = new List<Resource> { new Resource { Name = "File resource", Path = @"X:\path\to\uploader\test.txt" } }
-                    },
-                    Gov = new GovPublicationInfo
-                    {
-                        Publishable = false,
-                        Assessment = new OpenDataAssessmentInfo
-                        {
-                            Completed = true,
-                            CompletedOnUtc = new DateTime(2017, 09, 28)
-                        },
-                        SignOff = new OpenDataSignOffInfo
-                        {
-                            DateUtc = new DateTime(2017, 09, 29)
-                        },
-                        LastAttempt = new PublicationAttempt
-                        {
-                            DateUtc = new DateTime(2017, 09, 27)
-                        },
-                        LastSuccess = new PublicationAttempt
-                        {
-                            DateUtc = new DateTime(2017, 09, 27)
-                        }
-                    }
-                };
-                r.Footer = new Footer();
-            });
-
-            TestRecordNotReturned(unpublishableRecord);
         }
 
         private void TestRecordNotReturned(Record record)

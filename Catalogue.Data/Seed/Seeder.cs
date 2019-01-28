@@ -339,8 +339,82 @@ namespace Catalogue.Data.Seed
                             Completed = true,
                             CompletedByUser = new UserInfo
                             {
-                                DisplayName = "Cathy",
-                                Email = "cathy@example.com"
+                                DisplayName = "Test User",
+                                Email = "Test.user@jncc.gov.uk"
+                            },
+                            CompletedOnUtc = new DateTime(2015, 1, 1, 12, 0, 0)
+                        },
+                        SignOff = null
+                    }
+                };
+            });
+
+            var assessedRecordWithUrlResource = record.With(r =>
+            {
+                r.Id = Helpers.AddCollection("d869ae04-a3eb-477e-b8aa-66bea3e84730");
+                r.Gemini.Title = "An assessed record with url resource";
+                r.Gemini.MetadataDate = new DateTime(2015, 1, 1, 12, 0, 0);
+                r.Publication = new PublicationInfo
+                {
+                    Data = new DataPublicationInfo
+                    {
+                        Resources = new List<Resource> { new Resource
+                        {
+                            Name = "Web resource",
+                            Path = @"http://a.web.resource"
+                        } }
+                    },
+                    Gov = new GovPublicationInfo
+                    {
+                        Publishable = true,
+                        Assessment = new OpenDataAssessmentInfo
+                        {
+                            // todo add more assessment fields
+                            Completed = true,
+                            CompletedByUser = new UserInfo
+                            {
+                                DisplayName = "Test User",
+                                Email = "Test.user@jncc.gov.uk"
+                            },
+                            CompletedOnUtc = new DateTime(2015, 1, 1, 12, 0, 0)
+                        },
+                        SignOff = null
+                    }
+                };
+            });
+
+            var assessedRecordWithMixedResources = record.With(r =>
+            {
+                r.Id = Helpers.AddCollection("2d6ab878-844d-4759-91a1-3796f92667ab");
+                r.Gemini.Title = "An assessed record with file and url resources";
+                r.Gemini.MetadataDate = new DateTime(2015, 1, 1, 12, 0, 0);
+                r.Publication = new PublicationInfo
+                {
+                    Data = new DataPublicationInfo
+                    {
+                        Resources = new List<Resource> { new Resource
+                            {
+                                Name = "Web resource",
+                                Path = @"http://a.web.resource"
+                            },
+                            new Resource
+                            {
+                                Name = "File resource",
+                                Path = @"C:\work\test-data.csv"
+                            }
+                        }
+                    },
+                    Gov = new GovPublicationInfo
+                    {
+                        Publishable = false,
+                        Assessment = new OpenDataAssessmentInfo
+                        {
+                            // todo add more assessment fields
+                            Completed = true,
+                            CompletedByUser = new UserInfo
+                            {
+                                DisplayName = "Test User",
+                                Email = "Test.user@jncc.gov.uk"
                             },
                             CompletedOnUtc = new DateTime(2015, 1, 1, 12, 0, 0)
                         },
@@ -377,11 +451,83 @@ namespace Catalogue.Data.Seed
                         {
                             User = new UserInfo
                             {
-                                DisplayName = "Pete Montgomery",
-                                Email = "pete.montgomery@jncc.gov.uk"
+                                DisplayName = "Test User",
+                                Email = "Test.user@jncc.gov.uk"
                             },
                             DateUtc = new DateTime(2015, 1, 1, 12, 0, 0),
                             Comment = "All OK now."
+                        }
+                    },
+                };
+            });
+
+            var signedOffUnpublishableRecord = record.With(r =>
+            {
+                r.Id = Helpers.AddCollection("d2885b03-8efd-472d-8a55-3e9c41a68bd7");
+                r.Gemini.Title = "An unpublishable record ready for publication";
+                r.Gemini.MetadataDate = new DateTime(2015, 1, 1, 12, 0, 0);
+                r.Publication = new PublicationInfo
+                {
+                    Data = new DataPublicationInfo
+                    {
+                        Resources = new List<Resource> { new Resource
+                        {
+                            Name = "File resource",
+                            Path = @"C:\work\test-data.csv"
+                        } }
+                    },
+                    Gov = new GovPublicationInfo
+                    {
+                        Publishable = false,
+                        Assessment = new OpenDataAssessmentInfo
+                        {
+                            Completed = true,
+                            CompletedOnUtc = new DateTime(2014, 12, 06)
+                        },
+                        SignOff = new OpenDataSignOffInfo
+                        {
+                            User = new UserInfo
+                            {
+                                DisplayName = "Test User",
+                                Email = "Test.user@jncc.gov.uk"
+                            },
+                            DateUtc = new DateTime(2015, 1, 1, 12, 0, 0)
+                        }
+                    },
+                };
+            });
+
+            var signedOffPublishableUnknownRecord = record.With(r =>
+            {
+                r.Id = Helpers.AddCollection("bcbc2a46-cf2e-4389-8294-15e01111ebda");
+                r.Gemini.Title = "A publishable status unknown record ready for publication";
+                r.Gemini.MetadataDate = new DateTime(2015, 1, 1, 12, 0, 0);
+                r.Publication = new PublicationInfo
+                {
+                    Data = new DataPublicationInfo
+                    {
+                        Resources = new List<Resource> { new Resource
+                        {
+                            Name = "File resource",
+                            Path = @"C:\work\test-data.csv"
+                        } }
+                    },
+                    Gov = new GovPublicationInfo
+                    {
+                        Publishable = null,
+                        Assessment = new OpenDataAssessmentInfo
+                        {
+                            Completed = true,
+                            CompletedOnUtc = new DateTime(2014, 12, 06)
+                        },
+                        SignOff = new OpenDataSignOffInfo
+                        {
+                            User = new UserInfo
+                            {
+                                DisplayName = "Test User",
+                                Email = "Test.user@jncc.gov.uk"
+                            },
+                            DateUtc = new DateTime(2015, 1, 1, 12, 0, 0)
                         }
                     },
                 };
@@ -421,8 +567,8 @@ namespace Catalogue.Data.Seed
                             Completed = true,
                             CompletedByUser = new UserInfo
                             {
-                                DisplayName = "Cathy",
-                                Email = "cathy@example.com"
+                                DisplayName = "Test User",
+                                Email = "Test.user@jncc.gov.uk"
                             },
                             CompletedOnUtc = new DateTime(2014, 01, 01)
                         },
@@ -580,6 +726,10 @@ namespace Catalogue.Data.Seed
             recordService.Insert(updatedSinceSuccessfullyPublishedRecordAndNowPaused, userInfo);
             recordService.Insert(recordWithOpenDataResources, userInfo);
             recordService.Insert(unpublishableRecord, userInfo);
+            recordService.Insert(assessedRecordWithUrlResource, userInfo);
+            recordService.Insert(assessedRecordWithMixedResources, userInfo);
+            recordService.Insert(signedOffUnpublishableRecord, userInfo);
+            recordService.Insert(signedOffPublishableUnknownRecord, userInfo);
         }
 
         void AddRecordWithLotsOfVocablessTags()

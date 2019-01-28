@@ -17,7 +17,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Data.Indexes
         [Test]
         public void should_be_able_to_get_all_records_with_publishing_info()
         {
-            Db.Query<Record, RecordsWithOpenDataPublicationInfoIndex>().Count().Should().Be(9);
+            Db.Query<Record, RecordsWithOpenDataPublicationInfoIndex>().Count().Should().Be(13);
         }
         
         [Test]
@@ -25,7 +25,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Data.Indexes
         {
             Db.Query<RecordsWithOpenDataPublicationInfoIndex.Result, RecordsWithOpenDataPublicationInfoIndex>()
                 .Where(x => x.PublicationNeverAttempted)
-                .Count().Should().Be(1);
+                .Count().Should().Be(3);
         }
 
         [Test]
@@ -64,7 +64,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Data.Indexes
                 .OfType<Record>()
                 .ToList();
 
-            results.Count.Should().Be(7);
+            results.Count.Should().Be(11);
             results.Should().Contain(r => r.Id.ToString() == Helpers.AddCollection("19b8c7ab-5c33-4d55-bc1d-3762b8207a9f"));
         }
 
@@ -76,7 +76,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Data.Indexes
                 .OfType<Record>()
                 .ToList();
 
-            results.Count.Should().Be(8);
+            results.Count.Should().Be(12);
         }
 
         [Test]

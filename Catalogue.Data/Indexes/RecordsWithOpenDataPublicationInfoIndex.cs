@@ -35,7 +35,6 @@ namespace Catalogue.Data.Indexes
                                 LastPublicationAttemptDate = r.Publication.Gov.LastAttempt == null ? DateTime.MinValue : r.Publication.Gov.LastAttempt.DateUtc,
                                 LastSuccessfulPublicationAttemptDate = r.Publication.Gov.LastSuccess == null ? DateTime.MinValue : r.Publication.Gov.LastSuccess.DateUtc,
                                 GeminiValidated = r.Validation == Validation.Gemini,
-                                Publishable = r.Publication.Gov.Publishable,
                                 Assessed = r.Publication.Gov.Assessment.Completed
                                            && (r.Publication.Gov.Assessment.CompletedOnUtc == r.Gemini.MetadataDate
                                                || r.Publication.Gov.SignOff.DateUtc == r.Gemini.MetadataDate

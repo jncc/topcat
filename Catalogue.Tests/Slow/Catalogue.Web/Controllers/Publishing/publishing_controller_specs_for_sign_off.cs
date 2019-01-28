@@ -63,6 +63,92 @@ namespace Catalogue.Tests.Slow.Catalogue.Web.Controllers.Publishing
         }
 
         [Test]
+        public void successful_sign_off_with_unpublishable_record()
+        {
+            var record = new Record().With(r =>
+            {
+                r.Id = Helpers.AddCollection(Guid.NewGuid().ToString());
+                r.Path = @"X:\path\to\signoff\test";
+                r.Validation = Validation.Gemini;
+                r.Gemini = Library.Example().With(m =>
+                {
+                    m.MetadataDate = new DateTime(2017, 09, 27);
+                });
+                r.Publication = new PublicationInfo
+                {
+                    Gov = new GovPublicationInfo
+                    {
+                        Publishable = false,
+                        Assessment = new OpenDataAssessmentInfo
+                        {
+                            Completed = true,
+                            CompletedOnUtc = new DateTime(2017, 09, 27)
+                        }
+                    }
+                };
+                r.Footer = new Footer();
+            });
+
+            var resultRecord = GetSignOffPublishingResponse(record).Record;
+            resultRecord.Publication.Should().NotBeNull();
+
+            var openDataInfo = resultRecord.Publication.Gov;
+            openDataInfo.Should().NotBeNull();
+            openDataInfo.LastAttempt.Should().BeNull();
+            openDataInfo.LastSuccess.Should().BeNull();
+            resultRecord.Publication.Data.Should().BeNull();
+            openDataInfo.Paused.Should().BeFalse();
+            openDataInfo.SignOff.User.DisplayName.Should().Be("Test User");
+            openDataInfo.SignOff.User.Email.Should().Be("tester@example.com");
+            openDataInfo.SignOff.DateUtc.Should().NotBe(DateTime.MinValue);
+            openDataInfo.SignOff.Comment.Should().Be("Sign off test");
+            resultRecord.Gemini.MetadataDate.Should().Be(openDataInfo.SignOff.DateUtc);
+        }
+
+        [Test]
+        public void successful_sign_off_with_unpublishable_unknown_record()
+        {
+            var record = new Record().With(r =>
+            {
+                r.Id = Helpers.AddCollection(Guid.NewGuid().ToString());
+                r.Path = @"X:\path\to\signoff\test";
+                r.Validation = Validation.Gemini;
+                r.Gemini = Library.Example().With(m =>
+                {
+                    m.MetadataDate = new DateTime(2017, 09, 27);
+                });
+                r.Publication = new PublicationInfo
+                {
+                    Gov = new GovPublicationInfo
+                    {
+                        Publishable = null,
+                        Assessment = new OpenDataAssessmentInfo
+                        {
+                            Completed = true,
+                            CompletedOnUtc = new DateTime(2017, 09, 27)
+                        }
+                    }
+                };
+                r.Footer = new Footer();
+            });
+
+            var resultRecord = GetSignOffPublishingResponse(record).Record;
+            resultRecord.Publication.Should().NotBeNull();
+
+            var openDataInfo = resultRecord.Publication.Gov;
+            openDataInfo.Should().NotBeNull();
+            openDataInfo.LastAttempt.Should().BeNull();
+            openDataInfo.LastSuccess.Should().BeNull();
+            resultRecord.Publication.Data.Should().BeNull();
+            openDataInfo.Paused.Should().BeFalse();
+            openDataInfo.SignOff.User.DisplayName.Should().Be("Test User");
+            openDataInfo.SignOff.User.Email.Should().Be("tester@example.com");
+            openDataInfo.SignOff.DateUtc.Should().NotBe(DateTime.MinValue);
+            openDataInfo.SignOff.Comment.Should().Be("Sign off test");
+            resultRecord.Gemini.MetadataDate.Should().Be(openDataInfo.SignOff.DateUtc);
+        }
+
+        [Test]
         public void sign_off_with_incomplete_risk_assessment_test()
         {
             var record = new Record().With(r =>
@@ -691,116 +777,6 @@ namespace Catalogue.Tests.Slow.Catalogue.Web.Controllers.Publishing
                 result.Count(r => string.Equals(r.Title, "Retrieve Sign Off Test 1", StringComparison.CurrentCulture)).Should().Be(1);
                 result.Count(r => string.Equals(r.Title, "Retrieve Sign Off Test 5", StringComparison.CurrentCulture)).Should().Be(1);
             }
-        }
-
-        [Test]
-        public void failure_when_signing_off_unpublishable_record_test()
-        {
-            var record = new Record().With(r =>
-            {
-                r.Id = Helpers.AddCollection("10fc0e18-1250-46fe-825a-2003b7dbcfc5");
-                r.Path = @"X:\path\to\signoff\test";
-                r.Validation = Validation.Gemini;
-                r.Gemini = Library.Example().With(m =>
-                {
-                    m.MetadataDate = new DateTime(2017, 09, 27);
-                });
-                r.Publication = new PublicationInfo
-                {
-                    Gov = new GovPublicationInfo
-                    {
-                        Publishable = false,
-                        Assessment = new OpenDataAssessmentInfo
-                        {
-                            Completed = true,
-                            CompletedOnUtc = new DateTime(2017, 09, 27)
-                        }
-                    }
-                };
-                r.Footer = new Footer();
-            });
-
-            Action a = () => GetSignOffPublishingResponse(record);
-            a.Should().Throw<Exception>().And.Message.Should().Be("Record must be publishable as Open Data");
-        }
-
-        [Test]
-        public void failure_when_signing_off_record_with_no_publishable_value_test()
-        {
-            var record = new Record().With(r =>
-            {
-                r.Id = Helpers.AddCollection("3ef3b040-30b4-4399-b223-e8b3599e415a");
-                r.Path = @"X:\path\to\signoff\test";
-                r.Validation = Validation.Gemini;
-                r.Gemini = Library.Example().With(m =>
-                {
-                    m.MetadataDate = new DateTime(2017, 09, 27);
-                });
-                r.Publication = new PublicationInfo
-                {
-                    Gov = new GovPublicationInfo
-                    {
-                        Publishable = null,
-                        Assessment = new OpenDataAssessmentInfo
-                        {
-                            Completed = true,
-                            CompletedOnUtc = new DateTime(2017, 09, 27)
-                        }
-                    }
-                };
-                r.Footer = new Footer();
-            });
-
-            Action a = () => GetSignOffPublishingResponse(record);
-            a.Should().Throw<Exception>().And.Message.Should().Be("Record must be publishable as Open Data");
-        }
-
-        [Test]
-        public void failure_when_resigning_off_unpublishable_record_test()
-        {
-            var record = new Record().With(r =>
-            {
-                r.Id = Helpers.AddCollection("10e31ac3-0066-47b8-8121-18059e9c3ca0");
-                r.Path = @"X:\path\to\signoff\test";
-                r.Validation = Validation.Gemini;
-                r.Gemini = Library.Example().With(m =>
-                {
-                    m.MetadataDate = DateTime.Parse("2017-07-12T00:00:00.0000000Z");
-                });
-                r.Publication = new PublicationInfo
-                {
-                    Gov = new GovPublicationInfo
-                    {
-                        Publishable = false,
-                        Assessment = new OpenDataAssessmentInfo
-                        {
-                            Completed = true,
-                            CompletedOnUtc = DateTime.Parse("2017-07-12T00:00:00.0000000Z")
-                        },
-                        SignOff = new OpenDataSignOffInfo
-                        {
-                            User = new UserInfo
-                            {
-                                DisplayName = "Cathy",
-                                Email = "cathy@example.com"
-                            },
-                            DateUtc = DateTime.Parse("2017-07-10T00:00:00.0000000Z")
-                        },
-                        LastAttempt = new PublicationAttempt
-                        {
-                            DateUtc = DateTime.Parse("2017-07-11T00:00:00.0000000Z")
-                        },
-                        LastSuccess = new PublicationAttempt
-                        {
-                            DateUtc = DateTime.Parse("2017-07-11T00:00:00.0000000Z")
-                        }
-                    }
-                };
-                r.Footer = new Footer();
-            });
-
-            Action a = () => GetSignOffPublishingResponse(record);
-            a.Should().Throw<Exception>().And.Message.Should().Be("Record must be publishable as Open Data");
         }
 
         private static RecordServiceResult GetSignOffPublishingResponse(IDocumentSession db, Record record)
