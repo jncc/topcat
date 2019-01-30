@@ -36,7 +36,7 @@
         $scope.addOpenDataResource = addOpenDataResource
         $scope.removeOpenDataResource = removeOpenDataResource
         $scope.trimDoubleQuotes = trimDoubleQuotes
-
+        $scope.getResourceUrl = getResourceUrl
         
         $scope.cancel = ->
             $scope.reset()
@@ -100,8 +100,9 @@
         $scope.isSaveDisabled = -> $scope.isClean() # || $scope.theForm.$invalid 
         $scope.isCloneHidden = -> $scope.isNew()
         $scope.isCloneDisabled = -> !$scope.isClean()
+        $scope.isPublishDisabled = -> !$scope.isSaveHidden()
         $scope.isHttpPath = (path) -> path and path.toLowerCase().startsWith "http"
-        $scope.isPublishingModalButtonVisible = -> $scope.form.publication && $scope.form.publication.openData && $scope.form.publication.openData.publishable == true
+        $scope.isPublishingModalButtonVisible = -> $scope.form.publication && $scope.form.publication.gov && $scope.form.publication.gov.publishable == true
         $scope.hasUsageConstraints = () -> (!!$scope.form.gemini.limitationsOnPublicAccess and $scope.form.gemini.limitationsOnPublicAccess isnt 'no limitations') or (!!$scope.form.gemini.useConstraints and $scope.form.gemini.useConstraints isnt 'no conditions apply')
 
         # keywords # update arg name and use cs in
@@ -165,28 +166,28 @@
             if !$scope.form.publication
                 $scope.form.publication = {}
 
-            if !$scope.form.publication.openData
-                $scope.form.publication.openData = {}
+            if !$scope.form.publication.gov
+                $scope.form.publication.gov = {}
 
-            if (value == true && $scope.form.publication.openData.publishable == true) or (value == false && $scope.form.publication.openData.publishable == false)
-                $scope.form.publication.openData.publishable = null
+            if (value == true && $scope.form.publication.gov.publishable == true) or (value == false && $scope.form.publication.gov.publishable == false)
+                $scope.form.publication.gov.publishable = null
             else
-                $scope.form.publication.openData.publishable = value
+                $scope.form.publication.gov.publishable = value
 
         $scope.togglePublishable = () ->
             if !$scope.form.publication
                 $scope.form.publication = {}
 
-            if !$scope.form.publication.openData
-                $scope.form.publication.openData = {}
-                $scope.form.publication.openData.publishable = null
+            if !$scope.form.publication.gov
+                $scope.form.publication.gov = {}
+                $scope.form.publication.gov.publishable = null
 
-            if $scope.form.publication.openData.publishable == null
-                $scope.form.publication.openData.publishable = true
-            else if $scope.form.publication.openData.publishable == true
-                $scope.form.publication.openData.publishable = false
+            if $scope.form.publication.gov.publishable == null
+                $scope.form.publication.gov.publishable = true
+            else if $scope.form.publication.gov.publishable == true
+                $scope.form.publication.gov.publishable = false
             else
-                $scope.form.publication.openData.publishable = null
+                $scope.form.publication.gov.publishable = null
 
 
 
@@ -195,31 +196,41 @@ isFilePath = (path) -> path and path.match /^([a-z]:|\\\\jncc-corpfile\\)/i
 addOpenDataResource = (record) ->
     if !record.publication
         record.publication = {}    
-    if !record.publication.openData
-        record.publication.openData = {}    
-    if !record.publication.openData.resources
-        record.publication.openData.resources = []
-    record.publication.openData.resources.push { path: "" }
-    console.log record.publication.openData.resources.length
+    if !record.publication.data
+        record.publication.data = {}    
+    if !record.publication.data.resources
+        record.publication.data.resources = []
+    record.publication.data.resources.push { path: "" }
+    console.log record.publication.data.resources.length
+
+getResourceUrl = (resource) ->
+    if resource.path.startsWith("http://") || resource.path.startsWith("https://")
+        return resource.path
+    else if resource.publishedUrl != null
+        return resource.publishedUrl
+    else
+        return null
+
 removeOpenDataResource = (record, resource) ->
-    record.publication.openData.resources.splice ($.inArray resource, record.publication.openData.resources), 1
+    record.publication.data.resources.splice ($.inArray resource, record.publication.data.resources), 1
+
 trimDoubleQuotes = (s) -> # removes double quotes surrounding a string
     if s.match(/^(").*(")$/) then s.substring(1, s.length - 1) else s
 
 getOpenDataButtonToolTip = (record, publishingState) ->
     if !isFilePath(record.path)
         return "Open data publishing not available for non-file resources"
-    else if record.publication == null or record.publication.openData == null or record.publication.openData.publishable != true
+    else if record.publication == null or record.publication.gov == null or record.publication.gov.publishable != true
         return "The open data publication status of the record, editing the record may affect the status."
-    else if record.publication.openData.lastSuccess != null && record.publication.openData.lastSuccess != undefined && !publishingState.assessedAndUpToDate
+    else if record.publication.gov.lastSuccess != null && record.publication.gov.lastSuccess != undefined && !publishingState.assessedAndUpToDate
         return "This record has been changed since it was last published, it may need republishing."
     else
         return "The open data publication status of the record, editing the record may affect the status."
 
 getOpenDataButtonText = (record, publishingState) ->
-    if record.publication == null || record.publication.openData == null || record.publication.openData.publishable != true
+    if record.publication == null || record.publication.gov == null || record.publication.gov.publishable != true
         return "Publishable"
-    else if record.publication.openData.lastSuccess != null && record.publication.openData.lastSuccess != undefined && !publishingState.assessedAndUpToDate
+    else if record.publication.gov.lastSuccess != null && record.publication.gov.lastSuccess != undefined && !publishingState.assessedAndUpToDate
         return "Republish"
     else if publishingState.uploadedAndUpToDate
         return "Published"
@@ -231,7 +242,7 @@ getOpenDataButtonText = (record, publishingState) ->
         return "Publishable"
 
 getPendingSignOff = (publication) ->
-    if (publication != null && publication.openData.assessment.completed && publication.openData.signOff == null)
+    if (publication != null && publication.gov.assessment.completed && publication.gov.signOff == null)
         return true
     else
         return false

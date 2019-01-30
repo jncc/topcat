@@ -29,6 +29,9 @@
                         <button ng-click="cancel()" ng-hide="isCancelHidden()" class="btn btn-primary">CANCEL</button>
                         <button ng-click="save()" ng-hide="isSaveHidden()" ng-disabled="isSaveDisabled()" class="btn btn-danger">SAVE</button>
                     </span>
+                    <span>
+                        <button ng-click="openPublishingModal()" ng-disabled="isPublishDisabled()" class="btn btn-danger">PUBLISH</button>
+                    </span>
                 </div>
             </div>
 
@@ -209,36 +212,13 @@
                         </div>
                     </div>
 
-                    <br />
-
-
-                    <!-- resource locator -->
-                    <div class="editor-resource-locator form-group">
-                        <div class="input-group">
-                            <span class="input-group-addon well-input-group-addon"
-                                  tc-tip title="Published location for online access (URL)">
-                                <span class="dark glyphicon glyphicon-globe"></span>
-                            </span>
-
-                            <input name="gemini.resourceLocator" ng-model="form.gemini.resourceLocator"
-                                   type="text" class="form-control"
-                                   placeholder="Published Location (URL)"
-                                   tc-focus-tip title="Published location for online access (URL)"
-                                   spellcheck="false" />
-
-                            <a href="{{form.gemini.resourceLocator}}" target="_blank" class="input-group-addon pointable" ng-disabled="!form.gemini.resourceLocator">
-                                <span class="dark glyphicon glyphicon-new-window" title="Go to resource" tc-tip></span>
-                            </a>
-
-                        </div>
-                    </div>
-
                 </div>
                 <div class="col-md-4">
 
                 </div>
-
             </div>
+
+            <br />
 
             <div class="form-group text-left selectContainer">
                 <select name="gemini.topicCategory"
@@ -536,8 +516,8 @@
     <div tab>
         <tab-heading>
             <span class="glyphicon glyphicon-gift"></span> Publishing
-            <small ng-show="true" class="little-warning-badge" tc-tip title="This resource has {{form.publication.openData.resources.length}} publishable resources">
-                <span class="badge small">{{form.publication.openData.resources.length}}</span>
+            <small ng-show="true" class="little-warning-badge" tc-tip title="This resource has {{form.publication.data.resources.length}} publishable resources">
+                <span class="badge small">{{form.publication.data.resources.length}}</span>
             </small>
         </tab-heading>
 
@@ -555,8 +535,26 @@
                 <br />
                 <br />
                 <br />
+                <div class="form-group">
+                    <div class="input-group">
+                        <span class="input-group-addon well-input-group-addon"
+                              tc-tip title="Published location for online access (URL)">
+                            ResourceHub
+                        </span>
+
+                        <label tc-focus-tip title="The URL of the created ResourceHub page">
+                            <span ng-if="!form.publication.hub.url">Page not yet created</span>
+                            {{form.publication.hub.url}}
+                        </label>
+
+                        <a href="{{form.gemini.resourceLocator}}" target="_blank" class="input-group-addon pointable" ng-disabled="!form.gemini.resourceLocator">
+                            <span class="dark glyphicon glyphicon-new-window" title="Go to resource" tc-tip></span>
+                        </a>
+
+                    </div>
+                </div>
             </div>
-            <div ng-if="!form.publication.openData.resources.length">
+            <div ng-if="!form.publication.data.resources.length">
                 This record currently has <b>no publishable resources</b> defined.
                 <br />
                 <br />
@@ -564,55 +562,36 @@
                     Add publishable resources
                 </button>
             </div>
-            <div ng-if="form.publication.openData.resources.length">
-                This record has {{form.publication.openData.resources.length}} publishable resource<span ng-if="form.publication.openData.resources.length > 1">s</span>.
+            <br />
+            <div ng-if="form.publication.data.resources.length">
+                This record has {{form.publication.data.resources.length}} publishable resource<span ng-if="form.publication.data.resources.length > 1">s</span>.
                 <br />
                 <br />
-                <div ng-repeat="resource in form.publication.openData.resources" style="margin-bottom: .4em;">
-                    <!--<div style="margin-bottom: 0.2em;">
-                <form class="form-inline" role="form">
-                    <div class="form-group">
-                        <input class="form-control" type="text" size="50"
-                               ng-model="resource.name"
-                               placeholder="Resource name"
-                               title="Name of the resource"
-                               tc-focus-tip />
-                    </div>
-                    <button class="btn btn-primary" title="Remove from package" tc-tip ng-click="removeOpenDataResource(form, resource)">
-                        <span class="glyphicon glyphicon-remove-circle"></span>
-                    </button>
-                </form>
-            </div>
-            <div class="input-group">
-                <div class="input-group-addon"><span class="glyphicon glyphicon-th-large"></span></div>
-
-                <input type="text" class="form-control" size="90"
-                       ng-model="resource.path"
-                       placeholder="Filepath or URL, e.g. Z:\path\to\file.docx or https://data.example.com"
-                       tc-focus-tip
-                       title="Paste the path to the file on the fileshare here"
-                       ng-change="resource.path = trimDoubleQuotes(resource.path)" />
-            </div>-->
+                <div ng-repeat="resource in form.publication.data.resources" style="margin-bottom: .4em;">
                     <form class="form-inline" role="form">
                         <div class="form-group">
-
                             <div class="input-group">
-                                <div class="input-group-addon"><span class="glyphicon glyphicon-th-large"></span></div>
+                                <div ng-if="getResourceUrl(resource) == null" class="input-group-addon">
+                                    <span class="glyphicon glyphicon-th-large"></span>
+                                </div>
+                                <a href="{{getResourceUrl(resource)}}" target="_blank" class="input-group-addon pointable" ng-if="getResourceUrl(resource) != null">
+                                    <span class="dark glyphicon glyphicon-globe" title="Go to resource" tc-tip></span>
+                                </a>
 
-                                <input type="text" class="form-control" size="60"
+                                <input type="text" class="form-control" size="55"
                                        ng-model="resource.path"
                                        placeholder="Filepath or URL, e.g. Z:\path\to\file.docx or https://data.example.com"
                                        tc-focus-tip
                                        title="Paste the path to the file on the fileshare here"
                                        ng-change="resource.path = trimDoubleQuotes(resource.path)" />
                             </div>
-                            <div class="form-group">
-                                <input class="form-control" type="text" size="25"
-                                       ng-model="resource.name"
-                                       placeholder="Resource name"
-                                       title="Name of the resource"
-                                       tc-focus-tip />
-                            </div>
+
+                            <input class="form-control" type="text" size="25"
+                                   ng-model="resource.name"
+                                   placeholder="Resource name"
+                                   title="Name of the resource"
+                                   tc-focus-tip />
+
                             <button class="btn btn-primary" title="Remove from package" tc-tip ng-click="removeOpenDataResource(form, resource)">
                                 <span class="glyphicon glyphicon-remove-circle"></span>
                             </button>
@@ -677,21 +656,13 @@
                     </div>
                     <div class="layout-col pull-right">
                     
-                        <button ng-click="togglePublishable()" ng-class="{ 'btn-primary': form.publication.openData.publishable != null, 'btn-default': form.publication.openData.publishable == null }" class="btn"
+                        <button ng-click="togglePublishable()" ng-class="{ 'btn-primary': form.publication.gov.publishable != null, 'btn-default': form.publication.gov.publishable == null }" class="btn"
                                 title="Could this record be published as Open Data?"
                                 tc-tip>
                             <span class="glyphicon glyphicon-repeat"></span>
-                            <span ng-if="form.publication.openData.publishable == false">Unpublishable</span>
-                            <span ng-if="form.publication.openData.publishable == null">Undecided</span>
-                        </button>
-                        <button type="button" class="btn"
-                                title="{{ getOpenDataButtonToolTip(form, recordOutput.recordState.openDataPublishingState) }}" tc-tip
-                                ng-click="openPublishingModal()"
-                                ng-show="isPublishingModalButtonVisible()"
-                                ng-class="{ 'btn-default': !form.publication.openData.assessment.completed,
-                                'btn-primary': recordOutput.recordState.openDataPublishingState.uploadedAndUpToDate,
-                                'btn-danger': form.publication.openData.assessment.completed && !recordOutput.recordState.openDataPublishingState.uploadedAndUpToDate}">
-                            {{ getOpenDataButtonText(form, recordOutput.recordState.openDataPublishingState) }}
+                            <span ng-if="form.publication.gov.publishable == true">Publishable</span>
+                            <span ng-if="form.publication.gov.publishable == false">Unpublishable</span>
+                            <span ng-if="form.publication.gov.publishable == null">Undecided</span>
                         </button>
                     </div>
                 </div>

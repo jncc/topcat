@@ -642,7 +642,8 @@ namespace Catalogue.Data.Seed
                         Assessment = new OpenDataAssessmentInfo
                         {
                             Completed = true,
-                            CompletedOnUtc = new DateTime(2014, 12, 28)
+                            CompletedOnUtc = new DateTime(2014, 12, 28),
+                            InitialAssessmentWasDoneOnSpreadsheet = true
                         },
                         SignOff = new OpenDataSignOffInfo
                         {

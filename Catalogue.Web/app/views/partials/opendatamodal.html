@@ -23,7 +23,7 @@
                     </li>
                     <li ng-class="publishingStatus.upload.currentClass">
                         <a ng-click="publishingStatus.currentActiveView = 'upload'">
-                            3. Data upload <span ng-if="recordOutput.recordState.openDataPublishingState.uploadedAndUpToDate" class="glyphicon glyphicon-ok"></span>
+                            3. Publishing <span ng-if="recordOutput.recordState.openDataPublishingState.uploadedAndUpToDate" class="glyphicon glyphicon-ok"></span>
                         </a>
                     </li>
                 </ol>
@@ -57,7 +57,7 @@
                         </ol>
                         <br/>
                         <span class="publishing-extra-info"
-                              ng-if="form.publication.openData.assessment.completed">
+                              ng-if="form.publication.gov.assessment.completed">
                             <p>
                                 {{assessmentCompletedInfo}}
                             </p>
@@ -75,7 +75,7 @@
                         <p>Alternatively, sign off can be provided on the <a ng-click="$dismiss()" href="#opendatapublishing/signoff">Final Approval</a> page.</p>
                         <br />
                         <span class="publishing-extra-info"
-                              ng-if="form.publication.openData.signOff != null">
+                              ng-if="form.publication.gov.signOff != null">
                             <p>
                                 {{signOffCompletedInfo}}
                             </p>
@@ -90,26 +90,25 @@
                         </span>
                     </div>
                     <div ng-show="publishingStatus.currentActiveView == 'upload'" class="quick-fade-in">
-                        <h3>Data upload</h3>
-                        <p>The record is now waiting to be automatically uploaded to data.gov.uk. The upload process may take a day so please check back later.</p>
+                        <h3>Publishing</h3>
+                        <p>The record is now waiting to be published to
+                            <span ng-if="recordOutput.publishingPolicy.hubRecord">the <a href="">JNCC ResourceHub</a></span>
+                            <span ng-if="recordOutput.publishingPolicy.hubRecord && recordOutput.publishingPolicy.govRecord">and</span>
+                            <span ng-if="recordOutput.publishingPolicy.govRecord"><a href="https://data.gov.uk/">DATA.GOV.UK</a></span>.
+                            This process may take a day so please check back later.
+                        </p>
                         <br />
                         <span class="publishing-extra-info">
                             <p>
-                                <span ng-if="form.publication.openData.lastAttempt != null">
-                                    Upload last attempted on {{uploadLastAttempted}}<br/>
-                                </span>
-                                <span ng-if="form.publication.openData.lastAttempt.message != null">
-                                    Attempt message: {{form.publication.openData.lastAttempt.message}}
-                                </span>
-                                <span ng-if="form.publication.openData.lastSuccess != null">
-                                    Upload last succeeded on {{uploadLastSucceeded}}
-                                </span>
-                                <span ng-if="form.publication.openData.lastSuccess.message != null">
-                                    Success message: {{uploadLastSucceeded}}
-                                </span>
+                                {{uploadStatus}}
                             </p>
                             <p>
-                                Current status: {{uploadStatus}}
+                                <span ng-if="recordOutput.publishingPolicy.hubRecord">
+                                    ResourceHub upload: {{ hubPublishingStatus() }}<br />
+                                </span>
+                                <span ng-if="recordOutput.publishingPolicy.govRecord">
+                                    DATA.GOV.UK upload: {{ govPublishingStatus() }}<br />
+                                </span>
                             </p>
                         </span>
                     </div>

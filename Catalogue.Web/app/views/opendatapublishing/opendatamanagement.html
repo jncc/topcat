@@ -41,16 +41,16 @@
                 <td><a ng-href="#/editor/{{r.id}}" target="_blank" ng-bind-html="r.title"></a></td>
                 <td><span tc-tip title="{{r.metadataDate | date:'yyyy-MM-dd HH:mm:ss'}}">{{r.metadataDate | date}}</span></td>
                 <td ng-if="m.tab != 5">{{r.isGeminiValid}}</td>
-                <td ng-if="m.tab == 5">{{r.openData.assessment.completedByUser.displayName}}</td>
-                <td ng-if="m.tab != 5">{{r.openData.signOff.user.displayName}}</td>
+                <td ng-if="m.tab == 5">{{r.gov.assessment.completedByUser.displayName}}</td>
+                <td ng-if="m.tab != 5">{{r.gov.signOff.user.displayName}}</td>
                 <td ng-if="m.tab == 5">
-                    <span ng-if="r.openData.lastSuccess != null" tc-tip title="{{r.openData.lastSuccess.dateUtc | date:'yyyy-MM-dd HH:mm:ss'}}">{{r.openData.lastSuccess.dateUtc | date}}</span>
-                    <span ng-if="r.openData.lastSuccess == null">Never</span>
+                    <span ng-if="r.gov.lastSuccess != null" tc-tip title="{{r.gov.lastSuccess.dateUtc | date:'yyyy-MM-dd HH:mm:ss'}}">{{r.gov.lastSuccess.dateUtc | date}}</span>
+                    <span ng-if="r.gov.lastSuccess == null">Never</span>
                 </td>
-                <td ng-if="m.tab != 5"><span ng-if="r.openData.lastAttempt.dateUtc" tc-tip title="{{r.openData.lastAttempt.dateUtc | date:'yyyy-MM-dd HH:mm:ss'}}">{{r.openData.lastAttempt.dateUtc | date}}</span></td>
-                <td ng-if="m.tab != 5"><span ng-if="r.openData.lastSuccess.dateUtc" tc-tip title="{{r.openData.lastSuccess.dateUtc | date:'yyyy-MM-dd HH:mm:ss'}}">{{r.openData.lastSuccess.dateUtc | date}}</span></td>
-                <td ng-if="m.tab != 5"><span ng-show="r.openData.paused" class="glyphicon glyphicon-pause" tc-tip title="Publishing of this record is currently paused"></span></td>
-                <td ng-if="m.tab != 5"><span ng-show="r.openData.lastAttempt.message" class="glyphicon glyphicon-warning-sign" tc-tip title="{{r.openData.lastAttempt.message}}"></span></td>
+                <td ng-if="m.tab != 5"><span ng-if="r.gov.lastAttempt.dateUtc" tc-tip title="{{r.gov.lastAttempt.dateUtc | date:'yyyy-MM-dd HH:mm:ss'}}">{{r.gov.lastAttempt.dateUtc | date}}</span></td>
+                <td ng-if="m.tab != 5"><span ng-if="r.gov.lastSuccess.dateUtc" tc-tip title="{{r.gov.lastSuccess.dateUtc | date:'yyyy-MM-dd HH:mm:ss'}}">{{r.gov.lastSuccess.dateUtc | date}}</span></td>
+                <td ng-if="m.tab != 5"><span ng-show="r.gov.paused" class="glyphicon glyphicon-pause" tc-tip title="Publishing of this record is currently paused"></span></td>
+                <td ng-if="m.tab != 5"><span ng-show="r.gov.lastAttempt.message" class="glyphicon glyphicon-warning-sign" tc-tip title="{{r.gov.lastAttempt.message}}"></span></td>
             </tr>
         </tbody>
     </table>
