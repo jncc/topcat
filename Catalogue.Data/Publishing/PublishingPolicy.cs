@@ -66,7 +66,7 @@ namespace Catalogue.Data.Publishing
 
         private static bool HasDoiAndPreviouslyPublished(Record record)
         {
-            return record.DigitalObjectIdentifier.IsNotBlank() && record.Publication.Gov.LastSuccess != null;
+            return record.DigitalObjectIdentifier.IsNotBlank() && record.Publication?.Gov?.LastSuccess != null;
         }
 
         private static bool HasRestrictiveLicensing(Record record)

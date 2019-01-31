@@ -29,18 +29,18 @@ namespace Catalogue.Tests.Slow.Catalogue.Robot
                 });
                 r.Publication = new PublicationInfo
                 {
+                    Assessment = new OpenDataAssessmentInfo
+                    {
+                        Completed = true,
+                        CompletedOnUtc = new DateTime(2017, 09, 25)
+                    },
                     Data = new DataPublicationInfo
                     {
                         Resources = new List<Resource> { new Resource { Name = "File resource", Path = @"X:\path\to\uploader\test.txt" } }
                     },
                     Gov = new GovPublicationInfo
                     {
-                        Publishable = true,
-                        Assessment = new OpenDataAssessmentInfo
-                        {
-                            Completed = true,
-                            CompletedOnUtc = new DateTime(2017, 09, 25)
-                        }
+                        Publishable = true
                     }
                 };
                 r.Footer = new Footer();
@@ -79,22 +79,22 @@ namespace Catalogue.Tests.Slow.Catalogue.Robot
                 });
                 r.Publication = new PublicationInfo
                 {
+                    Assessment = new OpenDataAssessmentInfo
+                    {
+                        Completed = true,
+                        CompletedOnUtc = new DateTime(2017, 09, 25)
+                    },
+                    SignOff = new OpenDataSignOffInfo
+                    {
+                        DateUtc = new DateTime(2017, 09, 26)
+                    },
                     Data = new DataPublicationInfo
                     {
                         Resources = new List<Resource> { new Resource { Name = "File resource", Path = @"X:\path\to\uploader\test.txt" } }
                     },
                     Gov = new GovPublicationInfo
                     {
-                        Publishable = true,
-                        Assessment = new OpenDataAssessmentInfo
-                        {
-                            Completed = true,
-                            CompletedOnUtc = new DateTime(2017, 09, 25)
-                        },
-                        SignOff = new OpenDataSignOffInfo
-                        {
-                            DateUtc = new DateTime(2017, 09, 26)
-                        }
+                        Publishable = true
                     }
                 };
                 r.Footer = new Footer();
@@ -117,22 +117,22 @@ namespace Catalogue.Tests.Slow.Catalogue.Robot
                 });
                 r.Publication = new PublicationInfo
                 {
+                    Assessment = new OpenDataAssessmentInfo
+                    {
+                        Completed = true,
+                        CompletedOnUtc = new DateTime(2017, 09, 25)
+                    },
+                    SignOff = new OpenDataSignOffInfo
+                    {
+                        DateUtc = new DateTime(2017, 09, 26)
+                    },
                     Data = new DataPublicationInfo
                     {
                         Resources = new List<Resource> { new Resource { Name = "File resource", Path = @"X:\path\to\uploader\test.txt" } }
                     },
                     Gov = new GovPublicationInfo
                     {
-                        Publishable = false,
-                        Assessment = new OpenDataAssessmentInfo
-                        {
-                            Completed = true,
-                            CompletedOnUtc = new DateTime(2017, 09, 25)
-                        },
-                        SignOff = new OpenDataSignOffInfo
-                        {
-                            DateUtc = new DateTime(2017, 09, 26)
-                        }
+                        Publishable = false
                     }
                 };
                 r.Footer = new Footer();
@@ -155,22 +155,22 @@ namespace Catalogue.Tests.Slow.Catalogue.Robot
                 });
                 r.Publication = new PublicationInfo
                 {
+                    Assessment = new OpenDataAssessmentInfo
+                    {
+                        Completed = true,
+                        CompletedOnUtc = new DateTime(2017, 09, 25)
+                    },
+                    SignOff = new OpenDataSignOffInfo
+                    {
+                        DateUtc = new DateTime(2017, 09, 26)
+                    },
                     Data = new DataPublicationInfo
                     {
                         Resources = new List<Resource> { new Resource { Name = "File resource", Path = @"X:\path\to\uploader\test.txt" } }
                     },
                     Gov = new GovPublicationInfo
                     {
-                        Publishable = null,
-                        Assessment = new OpenDataAssessmentInfo
-                        {
-                            Completed = true,
-                            CompletedOnUtc = new DateTime(2017, 09, 25)
-                        },
-                        SignOff = new OpenDataSignOffInfo
-                        {
-                            DateUtc = new DateTime(2017, 09, 26)
-                        }
+                        Publishable = null
                     }
                 };
                 r.Footer = new Footer();
@@ -193,21 +193,21 @@ namespace Catalogue.Tests.Slow.Catalogue.Robot
                 });
                 r.Publication = new PublicationInfo
                 {
+                    Assessment = new OpenDataAssessmentInfo
+                    {
+                        Completed = false
+                    },
+                    SignOff = new OpenDataSignOffInfo
+                    {
+                        DateUtc = new DateTime(2017, 09, 25)
+                    },
                     Data = new DataPublicationInfo
                     {
                         Resources = new List<Resource> { new Resource { Name = "File resource", Path = @"X:\path\to\uploader\test.txt" } }
                     },
                     Gov = new GovPublicationInfo
                     {
-                        Publishable = true,
-                        Assessment = new OpenDataAssessmentInfo
-                        {
-                            Completed = false
-                        },
-                        SignOff = new OpenDataSignOffInfo
-                        {
-                            DateUtc = new DateTime(2017, 09, 25)
-                        }
+                        Publishable = true
                     }
                 };
                 r.Footer = new Footer();
@@ -230,6 +230,15 @@ namespace Catalogue.Tests.Slow.Catalogue.Robot
                 });
                 r.Publication = new PublicationInfo
                 {
+                    Assessment = new OpenDataAssessmentInfo
+                    {
+                        Completed = true,
+                        CompletedOnUtc = new DateTime(2017, 09, 25)
+                    },
+                    SignOff = new OpenDataSignOffInfo
+                    {
+                        DateUtc = new DateTime(2017, 09, 26)
+                    },
                     Data = new DataPublicationInfo
                     {
                         Resources = new List<Resource> { new Resource { Name = "File resource", Path = @"X:\path\to\uploader\test.txt" } },
@@ -240,16 +249,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Robot
                     },
                     Gov = new GovPublicationInfo
                     {
-                        Publishable = true,
-                        Assessment = new OpenDataAssessmentInfo
-                        {
-                            Completed = true,
-                            CompletedOnUtc = new DateTime(2017, 09, 25)
-                        },
-                        SignOff = new OpenDataSignOffInfo
-                        {
-                            DateUtc = new DateTime(2017, 09, 26)
-                        }
+                        Publishable = true
                     }
                 };
                 r.Footer = new Footer();
@@ -272,6 +272,15 @@ namespace Catalogue.Tests.Slow.Catalogue.Robot
                 });
                 r.Publication = new PublicationInfo
                 {
+                    Assessment = new OpenDataAssessmentInfo
+                    {
+                        Completed = true,
+                        CompletedOnUtc = new DateTime(2017, 09, 25)
+                    },
+                    SignOff = new OpenDataSignOffInfo
+                    {
+                        DateUtc = new DateTime(2017, 09, 26)
+                    },
                     Data = new DataPublicationInfo
                     {
                         Resources = new List<Resource> { new Resource { Name = "File resource", Path = @"X:\path\to\uploader\test.txt" } },
@@ -284,16 +293,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Robot
                     },
                     Gov = new GovPublicationInfo
                     {
-                        Publishable = true,
-                        Assessment = new OpenDataAssessmentInfo
-                        {
-                            Completed = true,
-                            CompletedOnUtc = new DateTime(2017, 09, 25)
-                        },
-                        SignOff = new OpenDataSignOffInfo
-                        {
-                            DateUtc = new DateTime(2017, 09, 26)
-                        }
+                        Publishable = true
                     }
                 };
                 r.Footer = new Footer();
@@ -316,6 +316,15 @@ namespace Catalogue.Tests.Slow.Catalogue.Robot
                 });
                 r.Publication = new PublicationInfo
                 {
+                    Assessment = new OpenDataAssessmentInfo
+                    {
+                        Completed = true,
+                        CompletedOnUtc = new DateTime(2017, 09, 25)
+                    },
+                    SignOff = new OpenDataSignOffInfo
+                    {
+                        DateUtc = new DateTime(2017, 09, 26)
+                    },
                     Data = new DataPublicationInfo
                     {
                         Resources = new List<Resource> { new Resource { Name = "File resource", Path = @"X:\path\to\uploader\test.txt" } }
@@ -323,15 +332,6 @@ namespace Catalogue.Tests.Slow.Catalogue.Robot
                     Gov = new GovPublicationInfo
                     {
                         Publishable = true,
-                        Assessment = new OpenDataAssessmentInfo
-                        {
-                            Completed = true,
-                            CompletedOnUtc = new DateTime(2017, 09, 25)
-                        },
-                        SignOff = new OpenDataSignOffInfo
-                        {
-                            DateUtc = new DateTime(2017, 09, 26)
-                        },
                         Paused = true
                     }
                 };
@@ -355,6 +355,15 @@ namespace Catalogue.Tests.Slow.Catalogue.Robot
                 });
                 r.Publication = new PublicationInfo
                 {
+                    Assessment = new OpenDataAssessmentInfo
+                    {
+                        Completed = true,
+                        CompletedOnUtc = new DateTime(2017, 09, 25)
+                    },
+                    SignOff = new OpenDataSignOffInfo
+                    {
+                        DateUtc = new DateTime(2017, 09, 26)
+                    },
                     Data = new DataPublicationInfo
                     {
                         Resources = new List<Resource> { new Resource { Name = "File resource", Path = @"X:\path\to\uploader\test.txt" } },
@@ -369,15 +378,6 @@ namespace Catalogue.Tests.Slow.Catalogue.Robot
                     Gov = new GovPublicationInfo
                     {
                         Publishable = true,
-                        Assessment = new OpenDataAssessmentInfo
-                        {
-                            Completed = true,
-                            CompletedOnUtc = new DateTime(2017, 09, 25)
-                        },
-                        SignOff = new OpenDataSignOffInfo
-                        {
-                            DateUtc = new DateTime(2017, 09, 26)
-                        },
                         LastAttempt = new PublicationAttempt
                         {
                             DateUtc = new DateTime(2017, 09, 29)
@@ -404,6 +404,15 @@ namespace Catalogue.Tests.Slow.Catalogue.Robot
                 });
                 r.Publication = new PublicationInfo
                 {
+                    Assessment = new OpenDataAssessmentInfo
+                    {
+                        Completed = true,
+                        CompletedOnUtc = new DateTime(2017, 09, 25)
+                    },
+                    SignOff = new OpenDataSignOffInfo
+                    {
+                        DateUtc = new DateTime(2017, 09, 26)
+                    },
                     Data = new DataPublicationInfo
                     {
                         Resources = new List<Resource> { new Resource { Name = "File resource", Path = @"X:\path\to\uploader\test.txt" } },
@@ -418,15 +427,6 @@ namespace Catalogue.Tests.Slow.Catalogue.Robot
                     Gov = new GovPublicationInfo
                     {
                         Publishable = true,
-                        Assessment = new OpenDataAssessmentInfo
-                        {
-                            Completed = true,
-                            CompletedOnUtc = new DateTime(2017, 09, 25)
-                        },
-                        SignOff = new OpenDataSignOffInfo
-                        {
-                            DateUtc = new DateTime(2017, 09, 26)
-                        },
                         Paused = false,
                         LastAttempt = new PublicationAttempt
                         {
@@ -458,6 +458,15 @@ namespace Catalogue.Tests.Slow.Catalogue.Robot
                 });
                 r.Publication = new PublicationInfo
                 {
+                    Assessment = new OpenDataAssessmentInfo
+                    {
+                        Completed = true,
+                        CompletedOnUtc = new DateTime(2017, 09, 25)
+                    },
+                    SignOff = new OpenDataSignOffInfo
+                    {
+                        DateUtc = new DateTime(2017, 09, 26)
+                    },
                     Data = new DataPublicationInfo
                     {
                         Resources = new List<Resource> { new Resource { Name = "File resource", Path = @"X:\path\to\uploader\test.txt" } },
@@ -472,15 +481,6 @@ namespace Catalogue.Tests.Slow.Catalogue.Robot
                     Gov = new GovPublicationInfo
                     {
                         Publishable = true,
-                        Assessment = new OpenDataAssessmentInfo
-                        {
-                            Completed = true,
-                            CompletedOnUtc = new DateTime(2017, 09, 25)
-                        },
-                        SignOff = new OpenDataSignOffInfo
-                        {
-                            DateUtc = new DateTime(2017, 09, 26)
-                        },
                         Paused = false,
                         LastAttempt = new PublicationAttempt
                         {
@@ -512,6 +512,15 @@ namespace Catalogue.Tests.Slow.Catalogue.Robot
                 });
                 r.Publication = new PublicationInfo
                 {
+                    Assessment = new OpenDataAssessmentInfo
+                    {
+                        Completed = true,
+                        CompletedOnUtc = new DateTime(2017, 09, 28)
+                    },
+                    SignOff = new OpenDataSignOffInfo
+                    {
+                        DateUtc = new DateTime(2017, 09, 29)
+                    },
                     Data = new DataPublicationInfo
                     {
                         Resources = new List<Resource> { new Resource { Name = "File resource", Path = @"X:\path\to\uploader\test.txt" } },
@@ -526,15 +535,6 @@ namespace Catalogue.Tests.Slow.Catalogue.Robot
                     Gov = new GovPublicationInfo
                     {
                         Publishable = true,
-                        Assessment = new OpenDataAssessmentInfo
-                        {
-                            Completed = true,
-                            CompletedOnUtc = new DateTime(2017, 09, 28)
-                        },
-                        SignOff = new OpenDataSignOffInfo
-                        {
-                            DateUtc = new DateTime(2017, 09, 29)
-                        },
                         LastAttempt = new PublicationAttempt
                         {
                             DateUtc = new DateTime(2017, 09, 27)
@@ -565,6 +565,15 @@ namespace Catalogue.Tests.Slow.Catalogue.Robot
                 });
                 r.Publication = new PublicationInfo
                 {
+                    Assessment = new OpenDataAssessmentInfo
+                    {
+                        Completed = true,
+                        CompletedOnUtc = new DateTime(2017, 09, 28)
+                    },
+                    SignOff = new OpenDataSignOffInfo
+                    {
+                        DateUtc = new DateTime(2017, 09, 29)
+                    },
                     Data = new DataPublicationInfo
                     {
                         Resources = new List<Resource> { new Resource { Name = "File resource", Path = @"X:\path\to\uploader\test.txt" } },
@@ -579,15 +588,6 @@ namespace Catalogue.Tests.Slow.Catalogue.Robot
                     Gov = new GovPublicationInfo
                     {
                         Publishable = false,
-                        Assessment = new OpenDataAssessmentInfo
-                        {
-                            Completed = true,
-                            CompletedOnUtc = new DateTime(2017, 09, 28)
-                        },
-                        SignOff = new OpenDataSignOffInfo
-                        {
-                            DateUtc = new DateTime(2017, 09, 29)
-                        },
                         LastAttempt = new PublicationAttempt
                         {
                             DateUtc = new DateTime(2017, 09, 27)
@@ -618,6 +618,15 @@ namespace Catalogue.Tests.Slow.Catalogue.Robot
                 });
                 r.Publication = new PublicationInfo
                 {
+                    Assessment = new OpenDataAssessmentInfo
+                    {
+                        Completed = true,
+                        CompletedOnUtc = new DateTime(2017, 09, 28)
+                    },
+                    SignOff = new OpenDataSignOffInfo
+                    {
+                        DateUtc = new DateTime(2017, 09, 29)
+                    },
                     Data = new DataPublicationInfo
                     {
                         Resources = new List<Resource> { new Resource { Name = "File resource", Path = @"X:\path\to\uploader\test.txt" } },
@@ -632,15 +641,6 @@ namespace Catalogue.Tests.Slow.Catalogue.Robot
                     Gov = new GovPublicationInfo
                     {
                         Publishable = null,
-                        Assessment = new OpenDataAssessmentInfo
-                        {
-                            Completed = true,
-                            CompletedOnUtc = new DateTime(2017, 09, 28)
-                        },
-                        SignOff = new OpenDataSignOffInfo
-                        {
-                            DateUtc = new DateTime(2017, 09, 29)
-                        },
                         LastAttempt = new PublicationAttempt
                         {
                             DateUtc = new DateTime(2017, 09, 27)
@@ -671,6 +671,15 @@ namespace Catalogue.Tests.Slow.Catalogue.Robot
                 });
                 r.Publication = new PublicationInfo
                 {
+                    Assessment = new OpenDataAssessmentInfo
+                    {
+                        Completed = true,
+                        CompletedOnUtc = new DateTime(2017, 09, 28)
+                    },
+                    SignOff = new OpenDataSignOffInfo
+                    {
+                        DateUtc = new DateTime(2017, 09, 26)
+                    },
                     Data = new DataPublicationInfo
                     {
                         Resources = new List<Resource> { new Resource { Name = "File resource", Path = @"X:\path\to\uploader\test.txt" } },
@@ -685,15 +694,6 @@ namespace Catalogue.Tests.Slow.Catalogue.Robot
                     Gov = new GovPublicationInfo
                     {
                         Publishable = true,
-                        Assessment = new OpenDataAssessmentInfo
-                        {
-                            Completed = true,
-                            CompletedOnUtc = new DateTime(2017, 09, 28)
-                        },
-                        SignOff = new OpenDataSignOffInfo
-                        {
-                            DateUtc = new DateTime(2017, 09, 26)
-                        },
                         LastAttempt = new PublicationAttempt
                         {
                             DateUtc = new DateTime(2017, 09, 27)
@@ -724,6 +724,15 @@ namespace Catalogue.Tests.Slow.Catalogue.Robot
                 });
                 r.Publication = new PublicationInfo
                 {
+                    Assessment = new OpenDataAssessmentInfo
+                    {
+                        Completed = true,
+                        CompletedOnUtc = new DateTime(2017, 09, 28)
+                    },
+                    SignOff = new OpenDataSignOffInfo
+                    {
+                        DateUtc = new DateTime(2017, 09, 29)
+                    },
                     Data = new DataPublicationInfo
                     {
                         Resources = new List<Resource> { new Resource { Name = "File resource", Path = @"X:\path\to\uploader\test.txt" } },
@@ -738,15 +747,6 @@ namespace Catalogue.Tests.Slow.Catalogue.Robot
                     Gov = new GovPublicationInfo
                     {
                         Publishable = true,
-                        Assessment = new OpenDataAssessmentInfo
-                        {
-                            Completed = true,
-                            CompletedOnUtc = new DateTime(2017, 09, 28)
-                        },
-                        SignOff = new OpenDataSignOffInfo
-                        {
-                            DateUtc = new DateTime(2017, 09, 29)
-                        },
                         LastAttempt = new PublicationAttempt
                         {
                             DateUtc = new DateTime(2017, 09, 27)

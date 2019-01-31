@@ -16,108 +16,6 @@ namespace Catalogue.Tests.Slow.Catalogue.Data.Publishing
         [Test]
         public void open_data_record_with_a_single_resource(
             [Values("dataset", "nonGeographicDataset", "service")] string resourceType,
-            [Values(@"z:\a\file\resource.txt", "http://a.url.resource")] string path)
-        {
-            var resource = new Resource { Name = "A named resource", Path = path };
-            var recordId = Helpers.AddCollection(Guid.NewGuid().ToString());
-            var record = new Record
-            {
-                Id = recordId,
-                Path = @"X:\some\path",
-                Gemini = Library.Example()
-                    .With(r => r.ResourceType = resourceType),
-                Publication = new PublicationInfo
-                {
-                    Data = new DataPublicationInfo
-                    {
-                        Resources = new List<Resource> { resource }
-                    },
-                    Gov = new GovPublicationInfo
-                    {
-                        Publishable = true
-                    }
-                }
-            };
-            var result = PublishingPolicy.GetPublishingPolicyResult(record);
-
-            result.HubRecord.Should().BeTrue();
-            result.HubResources.Count.Should().Be(1);
-            result.HubResources.Should().BeEquivalentTo(new List<Resource> { resource });
-            result.GovRecord.Should().BeTrue();
-            result.GovResources.Should().BeNullOrEmpty();
-            result.Message.Should().Be("This is an Open Data record.");
-        }
-
-        [Test]
-        public void open_data_record_with_no_resources(
-            [Values("dataset", "nonGeographicDataset", "service")] string resourceType)
-        {
-            var record = new Record
-            {
-                Id = Helpers.AddCollection(Guid.NewGuid().ToString()),
-                Path = @"X:\some\path",
-                Gemini = Library.Example()
-                    .With(r => r.ResourceType = resourceType),
-                Publication = new PublicationInfo
-                {
-                    Data = new DataPublicationInfo
-                    {
-                        Resources = null
-                    },
-                    Gov = new GovPublicationInfo
-                    {
-                        Publishable = true
-                    }
-                }
-            };
-            var result = PublishingPolicy.GetPublishingPolicyResult(record);
-
-            result.HubRecord.Should().BeTrue();
-            result.HubResources.Should().BeNullOrEmpty();
-            result.GovRecord.Should().BeTrue();
-            result.GovResources.Should().BeNullOrEmpty();
-            result.Message.Should().Be("This is an Open Data record.");
-        }
-
-        [Test]
-        public void open_data_record_with_multiple_resources(
-            [Values("dataset", "nonGeographicDataset", "service")] string resourceType)
-        {
-            var fileResource = new Resource { Name = "A file resource", Path = @"z:\a\file\resource.txt" };
-            var urlResource1 = new Resource { Name = "A URL resource", Path = "http://a.url.resource" };
-            var urlResource2 = new Resource { Name = "Another URL resource", Path = "http://another.url.resource" };
-            var recordId = Helpers.AddCollection(Guid.NewGuid().ToString());
-            var record = new Record
-            {
-                Id = recordId,
-                Path = @"X:\some\path",
-                Gemini = Library.Example()
-                    .With(r => r.ResourceType = resourceType),
-                Publication = new PublicationInfo
-                {
-                    Data = new DataPublicationInfo
-                    {
-                        Resources = new List<Resource> { fileResource, urlResource1, urlResource2 }
-                    },
-                    Gov = new GovPublicationInfo
-                    {
-                        Publishable = true
-                    }
-                }
-            };
-            var result = PublishingPolicy.GetPublishingPolicyResult(record);
-
-            result.HubRecord.Should().BeTrue();
-            result.HubResources.Count.Should().Be(3);
-            result.HubResources.Should().BeEquivalentTo(new List<Resource> { fileResource, urlResource1, urlResource2 });
-            result.GovRecord.Should().BeTrue();
-            result.GovResources.Should().BeNullOrEmpty();
-            result.Message.Should().Be("This is an Open Data record.");
-        }
-
-        [Test]
-        public void unpublishable_record(
-            [Values("dataset", "nonGeographicDataset", "service", "publication")] string resourceType,
             [Values(@"z:\a\file\resource.txt", "http://a.url.resource")] string path,
             [Values(null, false)] bool? publishable)
         {
@@ -143,17 +41,88 @@ namespace Catalogue.Tests.Slow.Catalogue.Data.Publishing
             };
             var result = PublishingPolicy.GetPublishingPolicyResult(record);
 
-            result.HubRecord.Should().BeFalse();
-            result.HubResources.Should().BeNullOrEmpty();
-            result.GovRecord.Should().BeFalse();
+            result.HubRecord.Should().BeTrue();
+            result.HubResources.Count.Should().Be(1);
+            result.HubResources.Should().BeEquivalentTo(new List<Resource> { resource });
+            result.GovRecord.Should().BeTrue();
             result.GovResources.Should().BeNullOrEmpty();
-            result.Message.Should().Be("This record has not been marked as publishable.");
+            result.Message.Should().Be("This is an Open Data record.");
+        }
+
+        [Test]
+        public void open_data_record_with_no_resources(
+            [Values("dataset", "nonGeographicDataset", "service")] string resourceType,
+            [Values(null, false)] bool? publishable)
+        {
+            var record = new Record
+            {
+                Id = Helpers.AddCollection(Guid.NewGuid().ToString()),
+                Path = @"X:\some\path",
+                Gemini = Library.Example()
+                    .With(r => r.ResourceType = resourceType),
+                Publication = new PublicationInfo
+                {
+                    Data = new DataPublicationInfo
+                    {
+                        Resources = null
+                    },
+                    Gov = new GovPublicationInfo
+                    {
+                        Publishable = publishable
+                    }
+                }
+            };
+            var result = PublishingPolicy.GetPublishingPolicyResult(record);
+
+            result.HubRecord.Should().BeTrue();
+            result.HubResources.Should().BeNullOrEmpty();
+            result.GovRecord.Should().BeTrue();
+            result.GovResources.Should().BeNullOrEmpty();
+            result.Message.Should().Be("This is an Open Data record.");
+        }
+
+        [Test]
+        public void open_data_record_with_multiple_resources(
+            [Values("dataset", "nonGeographicDataset", "service")] string resourceType,
+            [Values(null, false)] bool? publishable)
+        {
+            var fileResource = new Resource { Name = "A file resource", Path = @"z:\a\file\resource.txt" };
+            var urlResource1 = new Resource { Name = "A URL resource", Path = "http://a.url.resource" };
+            var urlResource2 = new Resource { Name = "Another URL resource", Path = "http://another.url.resource" };
+            var recordId = Helpers.AddCollection(Guid.NewGuid().ToString());
+            var record = new Record
+            {
+                Id = recordId,
+                Path = @"X:\some\path",
+                Gemini = Library.Example()
+                    .With(r => r.ResourceType = resourceType),
+                Publication = new PublicationInfo
+                {
+                    Data = new DataPublicationInfo
+                    {
+                        Resources = new List<Resource> { fileResource, urlResource1, urlResource2 }
+                    },
+                    Gov = new GovPublicationInfo
+                    {
+                        Publishable = publishable
+                    }
+                }
+            };
+            var result = PublishingPolicy.GetPublishingPolicyResult(record);
+
+            result.HubRecord.Should().BeTrue();
+            result.HubResources.Count.Should().Be(3);
+            result.HubResources.Should().BeEquivalentTo(new List<Resource> { fileResource, urlResource1, urlResource2 });
+            result.GovRecord.Should().BeTrue();
+            result.GovResources.Should().BeNullOrEmpty();
+            result.Message.Should().Be("This is an Open Data record.");
         }
 
         [Test]
         public void republish_an_open_data_record(
             [Values("dataset", "nonGeographicDataset", "service")] string resourceType,
-            [Values(@"z:\a\file\resource.txt", "http://a.url.resource")] string path)
+            [Values(@"z:\a\file\resource.txt", "http://a.url.resource")] string path,
+            [Values(null, false)] bool? publishable)
         {
             var resource = new Resource { Name = "A named resource", Path = path };
             var recordId = Helpers.AddCollection(Guid.NewGuid().ToString());
@@ -171,7 +140,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Data.Publishing
                     },
                     Gov = new GovPublicationInfo
                     {
-                        Publishable = true,
+                        Publishable = publishable,
                         LastSuccess = new PublicationAttempt { DateUtc = DateTime.Today }
                     }
                 }

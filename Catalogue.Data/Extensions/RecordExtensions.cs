@@ -8,17 +8,21 @@ namespace Catalogue.Data.Extensions
 
         public static bool IsAssessedAndUpToDate(this Record record)
         {
-            return record.Publication?.Gov.Assessment != null
-                && record.Publication.Gov.Assessment.Completed
-                && (record.Publication.Gov.Assessment.CompletedOnUtc.Equals(record.Gemini.MetadataDate)
+            return record.Publication?.Assessment != null
+                && record.Publication.Assessment.Completed
+                && (record.Publication.Assessment.CompletedOnUtc.Equals(record.Gemini.MetadataDate)
                 || IsSignedOffAndUpToDate(record));
         }
 
         public static bool IsSignedOffAndUpToDate(this Record record)
         {
-            return record.Publication?.Gov?.SignOff != null
-                && (record.Publication.Gov.SignOff.DateUtc.Equals(record.Gemini.MetadataDate)
-                || record.Publication.Gov.LastAttempt != null
+            return record.Publication?.SignOff != null
+                && (record.Publication.SignOff.DateUtc.Equals(record.Gemini.MetadataDate)
+                || record.Publication.Data?.LastAttempt != null
+                && record.Publication.Data.LastAttempt.DateUtc.Equals(record.Gemini.MetadataDate)
+                || record.Publication.Hub?.LastAttempt != null
+                && record.Publication.Hub.LastAttempt.DateUtc.Equals(record.Gemini.MetadataDate)
+                || record.Publication.Gov?.LastAttempt != null
                 && record.Publication.Gov.LastAttempt.DateUtc.Equals(record.Gemini.MetadataDate));
         }
 

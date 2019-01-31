@@ -34,13 +34,13 @@ namespace Catalogue.Data.Indexes
                                 LastPublicationAttemptDate = r.Publication.Gov.LastAttempt == null ? DateTime.MinValue : r.Publication.Gov.LastAttempt.DateUtc,
                                 LastSuccessfulPublicationAttemptDate = r.Publication.Gov.LastSuccess == null ? DateTime.MinValue : r.Publication.Gov.LastSuccess.DateUtc,
                                 GeminiValidated = r.Validation == Validation.Gemini,
-                                Assessed = r.Publication.Gov.Assessment.Completed
-                                           && (r.Publication.Gov.Assessment.CompletedOnUtc == r.Gemini.MetadataDate
-                                               || r.Publication.Gov.SignOff.DateUtc == r.Gemini.MetadataDate
+                                Assessed = r.Publication.Assessment.Completed
+                                           && (r.Publication.Assessment.CompletedOnUtc == r.Gemini.MetadataDate
+                                               || r.Publication.SignOff.DateUtc == r.Gemini.MetadataDate
                                                || r.Publication.Gov.LastAttempt.DateUtc == r.Gemini.MetadataDate),
-                                SignedOff = r.Publication.Gov.SignOff.DateUtc == r.Gemini.MetadataDate
+                                SignedOff = r.Publication.SignOff.DateUtc == r.Gemini.MetadataDate
                                             || r.Publication.Gov.LastAttempt.DateUtc == r.Gemini.MetadataDate,
-                                PublicationNeverAttempted = r.Publication.Gov.LastAttempt == null && r.Publication.Gov.SignOff.DateUtc == r.Gemini.MetadataDate,
+                                PublicationNeverAttempted = r.Publication.Gov.LastAttempt == null && r.Publication.SignOff.DateUtc == r.Gemini.MetadataDate,
                                 LastPublicationAttemptWasUnsuccessful = (r.Publication.Gov.LastAttempt != null && r.Publication.Gov.LastSuccess == null)
                                                                         || r.Publication.Gov.LastAttempt != null && r.Publication.Gov.LastSuccess != null
                                                                         && r.Publication.Gov.LastAttempt.DateUtc > r.Publication.Gov.LastSuccess.DateUtc,

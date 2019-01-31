@@ -5,8 +5,29 @@ namespace Catalogue.Data.Model
 {
     public class PublicationInfo
     {
+        /// <summary>
+        /// Captures the record's "risk assessment" information. 
+        /// </summary>
+        public OpenDataAssessmentInfo Assessment { get; set; }
+
+        /// <summary>
+        /// Is the record signed-off by the SIRO? (Null means no.)
+        /// </summary>
+        public OpenDataSignOffInfo SignOff { get; set; }
+
+        /// <summary>
+        /// Info related to data transfer to data.jncc.gov.uk
+        /// </summary>
         public DataPublicationInfo Data { get; set; }
+
+        /// <summary>
+        /// Info related to publishing to hub.jncc.gov.uk
+        /// </summary>
         public HubPublicationInfo Hub { get; set; }
+
+        /// <summary>
+        /// Info related to publishing to data.gov.uk
+        /// </summary>
         public GovPublicationInfo Gov { get; set; }
     }
 
@@ -52,16 +73,6 @@ namespace Catalogue.Data.Model
         /// Captures whether the record should be published as Open Data. 
         /// </summary>
         public bool? Publishable { get; set; }
-
-        /// <summary>
-        /// Captures the record's "risk assessment" information. 
-        /// </summary>
-        public OpenDataAssessmentInfo Assessment { get; set; }
-
-        /// <summary>
-        /// Is the record signed-off by the SIRO? (Null means no.)
-        /// </summary>
-        public OpenDataSignOffInfo SignOff { get; set; }
 
         /// <summary>
         /// Don't publish this record, for the time being.

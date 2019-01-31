@@ -4,7 +4,6 @@ using log4net;
 using Raven.Client.Documents.Session;
 using System;
 using System.Collections.Generic;
-using Catalogue.Utilities.Text;
 using static Catalogue.Data.Write.RecordServiceHelper;
 
 namespace Catalogue.Data.Write
@@ -24,6 +23,10 @@ namespace Catalogue.Data.Write
 
         public void UpdateDataPublishAttempt(Record record, PublicationAttempt attempt)
         {
+            if (record.Publication.Data == null)
+            {
+                record.Publication.Data = new DataPublicationInfo();
+            }
             record.Publication.Data.LastAttempt = attempt;
             UpdateMetadataDate(record, attempt.DateUtc);
 
@@ -51,6 +54,10 @@ namespace Catalogue.Data.Write
 
         public void UpdateGovPublishAttempt(Record record, PublicationAttempt attempt)
         {
+            if (record.Publication.Gov == null)
+            {
+                record.Publication.Gov = new GovPublicationInfo();
+            }
             record.Publication.Gov.LastAttempt = attempt;
             UpdateMetadataDate(record, attempt.DateUtc);
 
@@ -77,6 +84,10 @@ namespace Catalogue.Data.Write
 
         public void UpdateHubPublishAttempt(Record record, PublicationAttempt attempt)
         {
+            if (record.Publication.Hub == null)
+            {
+                record.Publication.Hub = new HubPublicationInfo();
+            }
             record.Publication.Hub.LastAttempt = attempt;
             UpdateMetadataDate(record, attempt.DateUtc);
 

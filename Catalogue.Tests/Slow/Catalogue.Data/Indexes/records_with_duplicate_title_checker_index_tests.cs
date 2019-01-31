@@ -33,6 +33,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Data.Indexes
                             {Vocab = "http://vocab.jncc.gov.uk/jncc-domain", Value = "Marine"});
                         m.Keywords.Add(new MetadataKeyword
                             {Vocab = "http://vocab.jncc.gov.uk/jncc-category", Value = "Example"});
+                        m.ResourceType = "dataset";
                     });
                 });
                 var record2 = new Record().With(r =>
@@ -46,6 +47,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Data.Indexes
                             {Vocab = "http://vocab.jncc.gov.uk/jncc-domain", Value = "Marine"});
                         m.Keywords.Add(new MetadataKeyword
                             {Vocab = "http://vocab.jncc.gov.uk/jncc-category", Value = "Example"});
+                        m.ResourceType = "dataset";
                     });
                 });
 

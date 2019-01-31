@@ -242,7 +242,7 @@ getOpenDataButtonText = (record, publishingState) ->
         return "Publishable"
 
 getPendingSignOff = (publication) ->
-    if (publication != null && publication.gov.assessment.completed && publication.gov.signOff == null)
+    if (publication != null && publication.assessment.completed && publication.signOff == null)
         return true
     else
         return false

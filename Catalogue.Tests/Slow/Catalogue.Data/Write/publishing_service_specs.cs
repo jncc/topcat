@@ -70,18 +70,13 @@ namespace Catalogue.Tests.Slow.Catalogue.Data.Write
                 r.Gemini = Library.Example().With(m => m.ResourceType = resourceType);
                 r.Publication = new PublicationInfo
                 {
-                    Data = new DataPublicationInfo { Resources = resources },
-                    Hub = new HubPublicationInfo(),
-                    Gov = new GovPublicationInfo
+                    Assessment = new OpenDataAssessmentInfo { Completed = true },
+                    SignOff = new OpenDataSignOffInfo
                     {
-                        Publishable = true,
-                        Assessment = new OpenDataAssessmentInfo { Completed = true },
-                        SignOff = new OpenDataSignOffInfo
-                        {
-                            DateUtc = new DateTime(2017, 08, 02),
-                            User = TestUserInfo.TestUser
-                        }
-                    }
+                        DateUtc = new DateTime(2017, 08, 02),
+                        User = TestUserInfo.TestUser
+                    },
+                    Data = new DataPublicationInfo { Resources = resources }
                 };
                 r.Footer = new Footer();
             });
@@ -129,22 +124,18 @@ namespace Catalogue.Tests.Slow.Catalogue.Data.Write
                 r.Gemini = Library.Example().With(m => m.ResourceType = resourceType);
                 r.Publication = new PublicationInfo
                 {
+                    Assessment = new OpenDataAssessmentInfo
+                    {
+                        Completed = true
+                    },
+                    SignOff = new OpenDataSignOffInfo
+                    {
+                        DateUtc = new DateTime(2017, 08, 02),
+                        User = TestUserInfo.TestUser
+                    },
                     Data = new DataPublicationInfo
                     {
                         Resources = new List<Resource> { new Resource { Name = "Some resource", Path = "x:\\test\\path.txt" } }
-                    },
-                    Hub = new HubPublicationInfo(),
-                    Gov = new GovPublicationInfo
-                    {
-                        Assessment = new OpenDataAssessmentInfo
-                        {
-                            Completed = true
-                        },
-                        SignOff = new OpenDataSignOffInfo
-                        {
-                            DateUtc = new DateTime(2017, 08, 02),
-                            User = TestUserInfo.TestUser
-                        }
                     }
                 };
                 r.Footer = new Footer();
@@ -172,10 +163,8 @@ namespace Catalogue.Tests.Slow.Catalogue.Data.Write
                 updatedRecord.Publication.Data.LastAttempt.DateUtc.Should().Be(testTime);
                 updatedRecord.Publication.Data.LastAttempt.Message.Should().Be("test message");
                 updatedRecord.Publication.Data.LastSuccess.Should().BeNull();
-                updatedRecord.Publication.Hub.LastAttempt.Should().BeNull();
-                updatedRecord.Publication.Hub.LastSuccess.Should().BeNull();
-                updatedRecord.Publication.Gov.LastAttempt.Should().BeNull();
-                updatedRecord.Publication.Gov.LastSuccess.Should().BeNull();
+                updatedRecord.Publication.Hub.Should().BeNull();
+                updatedRecord.Publication.Gov.Should().BeNull();
                 updatedRecord.Gemini.MetadataDate.Should().Be(testTime);
 
                 Clock.CurrentUtcDateTimeGetter = currentTime;
@@ -195,6 +184,15 @@ namespace Catalogue.Tests.Slow.Catalogue.Data.Write
                 r.Gemini = Library.Example().With(m => m.ResourceType = resourceType);
                 r.Publication = new PublicationInfo
                 {
+                    Assessment = new OpenDataAssessmentInfo
+                    {
+                        Completed = true
+                    },
+                    SignOff = new OpenDataSignOffInfo
+                    {
+                        DateUtc = new DateTime(2017, 08, 02),
+                        User = TestUserInfo.TestUser
+                    },
                     Data = new DataPublicationInfo
                     {
                         Resources = new List<Resource>
@@ -202,19 +200,6 @@ namespace Catalogue.Tests.Slow.Catalogue.Data.Write
                             new Resource { Name = "File resource", Path = "x:\\a\\test\\path.txt" },
                             new Resource { Name = "Another file resource", Path = "x:\\another\\test\\path.txt" },
                             new Resource { Name = "Web resource", Path = "http://a.web.resource" }
-                        }
-                    },
-                    Hub = new HubPublicationInfo(),
-                    Gov = new GovPublicationInfo
-                    {
-                        Assessment = new OpenDataAssessmentInfo
-                        {
-                            Completed = true
-                        },
-                        SignOff = new OpenDataSignOffInfo
-                        {
-                            DateUtc = new DateTime(2017, 08, 02),
-                            User = TestUserInfo.TestUser
                         }
                     }
                 };
@@ -247,10 +232,8 @@ namespace Catalogue.Tests.Slow.Catalogue.Data.Write
                 {
                     resource.PublishedUrl.Should().BeNullOrEmpty();
                 }
-                updatedRecord.Publication.Hub.LastAttempt.Should().BeNull();
-                updatedRecord.Publication.Hub.LastSuccess.Should().BeNull();
-                updatedRecord.Publication.Gov.LastAttempt.Should().BeNull();
-                updatedRecord.Publication.Gov.LastSuccess.Should().BeNull();
+                updatedRecord.Publication.Hub.Should().BeNull();
+                updatedRecord.Publication.Gov.Should().BeNull();
                 updatedRecord.Gemini.MetadataDate.Should().Be(testTime);
 
                 Clock.CurrentUtcDateTimeGetter = currentTime;
@@ -270,22 +253,19 @@ namespace Catalogue.Tests.Slow.Catalogue.Data.Write
                 r.Gemini = Library.Example().With(m => m.ResourceType = resourceType);
                 r.Publication = new PublicationInfo
                 {
+                    Assessment = new OpenDataAssessmentInfo
+                    {
+                        Completed = true,
+                        CompletedByUser = TestUserInfo.TestUser
+                    },
+                    SignOff = new OpenDataSignOffInfo
+                    {
+                        DateUtc = new DateTime(2017, 08, 02),
+                        User = TestUserInfo.TestUser
+                    },
                     Data = new DataPublicationInfo
                     {
                         Resources = new List<Resource> { new Resource { Name = "Some resource", Path = "x:\\test\\path" } }
-                    },
-                    Hub = new HubPublicationInfo(),
-                    Gov = new GovPublicationInfo
-                    {
-                        Assessment = new OpenDataAssessmentInfo
-                        {
-                            Completed = true
-                        },
-                        SignOff = new OpenDataSignOffInfo
-                        {
-                            DateUtc = new DateTime(2017, 08, 02),
-                            User = TestUserInfo.TestUser
-                        }
                     }
                 };
                 r.Footer = new Footer();
@@ -314,8 +294,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Data.Write
                 updatedRecord.Publication.Hub.LastAttempt.DateUtc.Should().Be(testTime);
                 updatedRecord.Publication.Hub.LastAttempt.Message.Should().Be("test message");
                 updatedRecord.Publication.Hub.LastSuccess.Should().BeNull();
-                updatedRecord.Publication.Gov.LastAttempt.Should().BeNull();
-                updatedRecord.Publication.Gov.LastSuccess.Should().BeNull();
+                updatedRecord.Publication.Gov.Should().BeNull();
                 updatedRecord.Gemini.MetadataDate.Should().Be(testTime);
 
                 Clock.CurrentUtcDateTimeGetter = currentTime;
@@ -335,22 +314,18 @@ namespace Catalogue.Tests.Slow.Catalogue.Data.Write
                 r.Gemini = Library.Example().With(m => m.ResourceType = resourceType);
                 r.Publication = new PublicationInfo
                 {
+                    Assessment = new OpenDataAssessmentInfo
+                    {
+                        Completed = true
+                    },
+                    SignOff = new OpenDataSignOffInfo
+                    {
+                        DateUtc = new DateTime(2017, 08, 02),
+                        User = TestUserInfo.TestUser
+                    },
                     Data = new DataPublicationInfo
                     {
                         Resources = new List<Resource> { new Resource { Name = "Some resource", Path = "x:\\test\\path" } }
-                    },
-                    Hub = new HubPublicationInfo(),
-                    Gov = new GovPublicationInfo
-                    {
-                        Assessment = new OpenDataAssessmentInfo
-                        {
-                            Completed = true
-                        },
-                        SignOff = new OpenDataSignOffInfo
-                        {
-                            DateUtc = new DateTime(2017, 08, 02),
-                            User = TestUserInfo.TestUser
-                        }
                     }
                 };
                 r.Footer = new Footer();

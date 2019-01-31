@@ -252,6 +252,16 @@ namespace Catalogue.Data.Seed
                 r.Gemini.MetadataDate = new DateTime(2015, 1, 1, 09, 59, 59);
                 r.Publication = new PublicationInfo
                 {
+                    Assessment = new OpenDataAssessmentInfo
+                    {
+                        Completed = true,
+                        CompletedOnUtc = DateTime.MinValue,
+                        InitialAssessmentWasDoneOnSpreadsheet = true
+                    },
+                    SignOff = new OpenDataSignOffInfo
+                    {
+                        DateUtc = DateTime.MinValue
+                    },
                     Data = new DataPublicationInfo
                     {
                         Resources = new List<Resource> { new Resource
@@ -263,16 +273,6 @@ namespace Catalogue.Data.Seed
                     Gov = new GovPublicationInfo
                     {
                         Publishable = true,
-                        Assessment = new OpenDataAssessmentInfo
-                        {
-                            Completed = true,
-                            CompletedOnUtc = DateTime.MinValue,
-                            InitialAssessmentWasDoneOnSpreadsheet = true
-                        },
-                        SignOff = new OpenDataSignOffInfo
-                        {
-                            DateUtc = DateTime.MinValue
-                        },
                         LastAttempt = new PublicationAttempt
                         {
                             DateUtc = new DateTime(2015, 1, 1, 10, 0, 0)
@@ -292,6 +292,11 @@ namespace Catalogue.Data.Seed
                 r.Gemini.MetadataDate = new DateTime(2015, 05, 17, 0, 0, 0);
                 r.Publication = new PublicationInfo
                 {
+                    Assessment = new OpenDataAssessmentInfo
+                    {
+                        // todo add more assessment fields
+                        Completed = false
+                    },
                     Data = new DataPublicationInfo
                     {
                         Resources = new List < Resource >
@@ -305,12 +310,7 @@ namespace Catalogue.Data.Seed
                     },
                     Gov = new GovPublicationInfo
                     {
-                        Publishable = true,
-                        Assessment = new OpenDataAssessmentInfo
-                        {
-                            // todo add more assessment fields
-                            Completed = false
-                        }
+                        Publishable = true
                     }
                 };
             });
@@ -322,6 +322,18 @@ namespace Catalogue.Data.Seed
                 r.Gemini.MetadataDate = new DateTime(2015, 1, 1, 12, 0, 0);
                 r.Publication = new PublicationInfo
                 {
+                    Assessment = new OpenDataAssessmentInfo
+                    {
+                        // todo add more assessment fields
+                        Completed = true,
+                        CompletedByUser = new UserInfo
+                        {
+                            DisplayName = "Test User",
+                            Email = "Test.user@jncc.gov.uk"
+                        },
+                        CompletedOnUtc = new DateTime(2015, 1, 1, 12, 0, 0)
+                    },
+                    SignOff = null,
                     Data = new DataPublicationInfo
                     {
                         Resources = new List<Resource> { new Resource
@@ -332,19 +344,7 @@ namespace Catalogue.Data.Seed
                     },
                     Gov = new GovPublicationInfo
                     {
-                        Publishable = true,
-                        Assessment = new OpenDataAssessmentInfo
-                        {
-                            // todo add more assessment fields
-                            Completed = true,
-                            CompletedByUser = new UserInfo
-                            {
-                                DisplayName = "Test User",
-                                Email = "Test.user@jncc.gov.uk"
-                            },
-                            CompletedOnUtc = new DateTime(2015, 1, 1, 12, 0, 0)
-                        },
-                        SignOff = null
+                        Publishable = true
                     }
                 };
             });
@@ -356,6 +356,18 @@ namespace Catalogue.Data.Seed
                 r.Gemini.MetadataDate = new DateTime(2015, 1, 1, 12, 0, 0);
                 r.Publication = new PublicationInfo
                 {
+                    Assessment = new OpenDataAssessmentInfo
+                    {
+                        // todo add more assessment fields
+                        Completed = true,
+                        CompletedByUser = new UserInfo
+                        {
+                            DisplayName = "Test User",
+                            Email = "Test.user@jncc.gov.uk"
+                        },
+                        CompletedOnUtc = new DateTime(2015, 1, 1, 12, 0, 0)
+                    },
+                    SignOff = null,
                     Data = new DataPublicationInfo
                     {
                         Resources = new List<Resource> { new Resource
@@ -366,19 +378,7 @@ namespace Catalogue.Data.Seed
                     },
                     Gov = new GovPublicationInfo
                     {
-                        Publishable = true,
-                        Assessment = new OpenDataAssessmentInfo
-                        {
-                            // todo add more assessment fields
-                            Completed = true,
-                            CompletedByUser = new UserInfo
-                            {
-                                DisplayName = "Test User",
-                                Email = "Test.user@jncc.gov.uk"
-                            },
-                            CompletedOnUtc = new DateTime(2015, 1, 1, 12, 0, 0)
-                        },
-                        SignOff = null
+                        Publishable = true
                     }
                 };
             });
@@ -390,6 +390,18 @@ namespace Catalogue.Data.Seed
                 r.Gemini.MetadataDate = new DateTime(2015, 1, 1, 12, 0, 0);
                 r.Publication = new PublicationInfo
                 {
+                    Assessment = new OpenDataAssessmentInfo
+                    {
+                        // todo add more assessment fields
+                        Completed = true,
+                        CompletedByUser = new UserInfo
+                        {
+                            DisplayName = "Test User",
+                            Email = "Test.user@jncc.gov.uk"
+                        },
+                        CompletedOnUtc = new DateTime(2015, 1, 1, 12, 0, 0)
+                    },
+                    SignOff = null,
                     Data = new DataPublicationInfo
                     {
                         Resources = new List<Resource> { new Resource
@@ -406,19 +418,7 @@ namespace Catalogue.Data.Seed
                     },
                     Gov = new GovPublicationInfo
                     {
-                        Publishable = false,
-                        Assessment = new OpenDataAssessmentInfo
-                        {
-                            // todo add more assessment fields
-                            Completed = true,
-                            CompletedByUser = new UserInfo
-                            {
-                                DisplayName = "Test User",
-                                Email = "Test.user@jncc.gov.uk"
-                            },
-                            CompletedOnUtc = new DateTime(2015, 1, 1, 12, 0, 0)
-                        },
-                        SignOff = null
+                        Publishable = false
                     }
                 };
             });
@@ -430,6 +430,23 @@ namespace Catalogue.Data.Seed
                 r.Gemini.MetadataDate = new DateTime(2015, 1, 1, 12, 0, 0);
                 r.Publication = new PublicationInfo
                 {
+                    Assessment = new OpenDataAssessmentInfo
+                    {
+                        // todo add more assessment fields
+                        Completed = true,
+                        CompletedByUser = userInfo,
+                        CompletedOnUtc = new DateTime(2014, 12, 06)
+                    },
+                    SignOff = new OpenDataSignOffInfo
+                    {
+                        User = new UserInfo
+                        {
+                            DisplayName = "Test User",
+                            Email = "Test.user@jncc.gov.uk"
+                        },
+                        DateUtc = new DateTime(2015, 1, 1, 12, 0, 0),
+                        Comment = "All OK now."
+                    },
                     Data = new DataPublicationInfo
                     {
                         Resources = new List<Resource> { new Resource
@@ -440,25 +457,8 @@ namespace Catalogue.Data.Seed
                     },
                     Gov = new GovPublicationInfo
                     {
-                        Publishable = true,
-                        Assessment = new OpenDataAssessmentInfo
-                        {
-                            // todo add more assessment fields
-                            Completed = true,
-                            CompletedByUser = userInfo,
-                            CompletedOnUtc = new DateTime(2014, 12, 06)
-                        },
-                        SignOff = new OpenDataSignOffInfo
-                        {
-                            User = new UserInfo
-                            {
-                                DisplayName = "Test User",
-                                Email = "Test.user@jncc.gov.uk"
-                            },
-                            DateUtc = new DateTime(2015, 1, 1, 12, 0, 0),
-                            Comment = "All OK now."
-                        }
-                    },
+                        Publishable = true
+                    }
                 };
             });
 
@@ -469,6 +469,21 @@ namespace Catalogue.Data.Seed
                 r.Gemini.MetadataDate = new DateTime(2015, 1, 1, 12, 0, 0);
                 r.Publication = new PublicationInfo
                 {
+                    Assessment = new OpenDataAssessmentInfo
+                    {
+                        Completed = true,
+                        CompletedByUser = userInfo,
+                        CompletedOnUtc = new DateTime(2014, 12, 06)
+                    },
+                    SignOff = new OpenDataSignOffInfo
+                    {
+                        User = new UserInfo
+                        {
+                            DisplayName = "Test User",
+                            Email = "Test.user@jncc.gov.uk"
+                        },
+                        DateUtc = new DateTime(2015, 1, 1, 12, 0, 0)
+                    },
                     Data = new DataPublicationInfo
                     {
                         Resources = new List<Resource> { new Resource
@@ -479,23 +494,8 @@ namespace Catalogue.Data.Seed
                     },
                     Gov = new GovPublicationInfo
                     {
-                        Publishable = false,
-                        Assessment = new OpenDataAssessmentInfo
-                        {
-                            Completed = true,
-                            CompletedByUser = userInfo,
-                            CompletedOnUtc = new DateTime(2014, 12, 06)
-                        },
-                        SignOff = new OpenDataSignOffInfo
-                        {
-                            User = new UserInfo
-                            {
-                                DisplayName = "Test User",
-                                Email = "Test.user@jncc.gov.uk"
-                            },
-                            DateUtc = new DateTime(2015, 1, 1, 12, 0, 0)
-                        }
-                    },
+                        Publishable = false
+                    }
                 };
             });
 
@@ -506,6 +506,21 @@ namespace Catalogue.Data.Seed
                 r.Gemini.MetadataDate = new DateTime(2015, 1, 1, 12, 0, 0);
                 r.Publication = new PublicationInfo
                 {
+                    Assessment = new OpenDataAssessmentInfo
+                    {
+                        Completed = true,
+                        CompletedByUser = userInfo,
+                        CompletedOnUtc = new DateTime(2014, 12, 06)
+                    },
+                    SignOff = new OpenDataSignOffInfo
+                    {
+                        User = new UserInfo
+                        {
+                            DisplayName = "Test User",
+                            Email = "Test.user@jncc.gov.uk"
+                        },
+                        DateUtc = new DateTime(2015, 1, 1, 12, 0, 0)
+                    },
                     Data = new DataPublicationInfo
                     {
                         Resources = new List<Resource> { new Resource
@@ -516,23 +531,8 @@ namespace Catalogue.Data.Seed
                     },
                     Gov = new GovPublicationInfo
                     {
-                        Publishable = null,
-                        Assessment = new OpenDataAssessmentInfo
-                        {
-                            Completed = true,
-                            CompletedByUser = userInfo,
-                            CompletedOnUtc = new DateTime(2014, 12, 06)
-                        },
-                        SignOff = new OpenDataSignOffInfo
-                        {
-                            User = new UserInfo
-                            {
-                                DisplayName = "Test User",
-                                Email = "Test.user@jncc.gov.uk"
-                            },
-                            DateUtc = new DateTime(2015, 1, 1, 12, 0, 0)
-                        }
-                    },
+                        Publishable = null
+                    }
                 };
             });
 
@@ -552,6 +552,17 @@ namespace Catalogue.Data.Seed
                 r.Gemini.MetadataDate = new DateTime(2015, 1, 1, 12, 0, 0);
                 r.Publication = new PublicationInfo
                 {
+                    Assessment = new OpenDataAssessmentInfo
+                    {
+                        Completed = true,
+                        CompletedByUser = userInfo,
+                        CompletedOnUtc = new DateTime(2014, 01, 01)
+                    },
+                    SignOff = new OpenDataSignOffInfo
+                    {
+                        DateUtc = new DateTime(2014, 02, 01),
+                        User = userInfo
+                    },
                     Data = new DataPublicationInfo
                     {
                         Resources = new List<Resource> { new Resource
@@ -573,18 +584,7 @@ namespace Catalogue.Data.Seed
                     {
                         Publishable = true,
                         LastAttempt = new PublicationAttempt { DateUtc = new DateTime(2015, 1, 1, 12, 0, 0), Message = "Failed with a terrible error in Sector 7G"},
-                        LastSuccess = null,
-                        Assessment = new OpenDataAssessmentInfo
-                        {
-                            Completed = true,
-                            CompletedByUser = userInfo,
-                            CompletedOnUtc = new DateTime(2014, 01, 01)
-                        },
-                        SignOff = new OpenDataSignOffInfo
-                        {
-                            DateUtc = new DateTime(2014, 02, 01),
-                            User = userInfo
-                        }
+                        LastSuccess = null
                     }
                 };
             });
@@ -596,6 +596,17 @@ namespace Catalogue.Data.Seed
                 r.Gemini.MetadataDate = new DateTime(2015, 1, 1, 12, 0, 0);
                 r.Publication = new PublicationInfo
                 {
+                    Assessment = new OpenDataAssessmentInfo
+                    {
+                        Completed = true,
+                        CompletedByUser = userInfo,
+                        CompletedOnUtc = new DateTime(2014, 01, 01)
+                    },
+                    SignOff = new OpenDataSignOffInfo
+                    {
+                        DateUtc = new DateTime(2014, 01, 02),
+                        User = userInfo
+                    },
                     Data = new DataPublicationInfo
                     {
                         Resources = new List<Resource> { new Resource
@@ -617,18 +628,7 @@ namespace Catalogue.Data.Seed
                     {
                         Publishable = true,
                         LastAttempt = new PublicationAttempt { DateUtc = new DateTime(2015, 1, 1, 12, 0, 0) },
-                        LastSuccess = new PublicationAttempt { DateUtc = new DateTime(2015, 1, 1, 12, 0, 0) },
-                        Assessment = new OpenDataAssessmentInfo
-                        {
-                            Completed = true,
-                            CompletedByUser = userInfo,
-                            CompletedOnUtc = new DateTime(2014, 01, 01)
-                        },
-                        SignOff = new OpenDataSignOffInfo
-                        {
-                            DateUtc = new DateTime(2014, 01, 02),
-                            User = userInfo
-                        }
+                        LastSuccess = new PublicationAttempt { DateUtc = new DateTime(2015, 1, 1, 12, 0, 0) }
                     }
                 };
             });
@@ -642,6 +642,17 @@ namespace Catalogue.Data.Seed
                 r.Gemini.MetadataDate = new DateTime(2015, 1, 1, 12, 0, 0);
                 r.Publication = new PublicationInfo
                 {
+                    Assessment = new OpenDataAssessmentInfo
+                    {
+                        Completed = true,
+                        CompletedOnUtc = new DateTime(2014, 12, 28),
+                        InitialAssessmentWasDoneOnSpreadsheet = true
+                    },
+                    SignOff = new OpenDataSignOffInfo
+                    {
+                        DateUtc = new DateTime(2014, 12, 29),
+                        User = userInfo
+                    },
                     Data = new DataPublicationInfo
                     {
                         Resources = new List<Resource> { new Resource
@@ -656,18 +667,7 @@ namespace Catalogue.Data.Seed
                         Publishable = true,
                         LastAttempt = new PublicationAttempt { DateUtc = new DateTime(2014, 12, 31) },
                         LastSuccess = new PublicationAttempt { DateUtc = new DateTime(2014, 12, 31) },
-                        Paused = true,
-                        Assessment = new OpenDataAssessmentInfo
-                        {
-                            Completed = true,
-                            CompletedOnUtc = new DateTime(2014, 12, 28),
-                            InitialAssessmentWasDoneOnSpreadsheet = true
-                        },
-                        SignOff = new OpenDataSignOffInfo
-                        {
-                            DateUtc = new DateTime(2014, 12, 29),
-                            User = userInfo
-                        }
+                        Paused = true
                     }
                 };
             });
@@ -679,6 +679,12 @@ namespace Catalogue.Data.Seed
                 r.Gemini.MetadataDate = new DateTime(2014, 12, 31);
                 r.Publication = new PublicationInfo
                 {
+                    Assessment = new OpenDataAssessmentInfo
+                    {
+                        Completed = true,
+                        CompletedByUser = userInfo,
+                        CompletedOnUtc = new DateTime(2014, 12, 31)
+                    },
                     Data = new DataPublicationInfo
                     {
                         Resources = new List<Resource>
@@ -706,13 +712,7 @@ namespace Catalogue.Data.Seed
                     {
                         Publishable = true,
                         LastAttempt = null,
-                        LastSuccess = null,
-                        Assessment = new OpenDataAssessmentInfo
-                        {
-                            Completed = true,
-                            CompletedByUser = userInfo,
-                            CompletedOnUtc = new DateTime(2014, 12, 31)
-                        }
+                        LastSuccess = null
                     }
                 };
             });

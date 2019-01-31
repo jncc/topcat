@@ -53,12 +53,9 @@ namespace Catalogue.Tests.Slow.Catalogue.Web.Controllers.Records
                 Gemini = Library.Blank().With(m => m.Title = "Some new record!"),
                 Publication = new PublicationInfo
                 {
-                    Gov = new GovPublicationInfo
+                    Assessment = new OpenDataAssessmentInfo
                     {
-                        Assessment = new OpenDataAssessmentInfo
-                        {
-                            Completed = true
-                        }
+                        Completed = true
                     }
                 }
             };

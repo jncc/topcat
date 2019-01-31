@@ -28,18 +28,13 @@ namespace Catalogue.Data.Write
 
             if (record.Publication == null)
             {
-                record.Publication = new PublicationInfo();
-            }
-
-            if (record.Publication.Gov == null)
-            {
-                record.Publication.Gov = new GovPublicationInfo
+                record.Publication = new PublicationInfo
                 {
                     Assessment = new OpenDataAssessmentInfo()
                 };
             }
 
-            record.Publication.Gov.Assessment = assessmentInfo;
+            record.Publication.Assessment = assessmentInfo;
             UpdateMetadataDate(record, assessmentInfo.CompletedOnUtc);
             SetFooterForUpdatedRecord(record, assessmentInfo.CompletedByUser);
 
@@ -60,7 +55,7 @@ namespace Catalogue.Data.Write
             if (record.IsSignedOffAndUpToDate())
                 throw new InvalidOperationException("The record has already been signed off");
 
-            record.Publication.Gov.SignOff = signOffInfo;
+            record.Publication.SignOff = signOffInfo;
             UpdateMetadataDate(record, signOffInfo.DateUtc);
             SetFooterForUpdatedRecord(record, signOffInfo.User);
 

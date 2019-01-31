@@ -39,8 +39,8 @@
     publishingStatus.signOff.timeout = -1;
     $scope.refreshPublishingStatus = function() {
       if ($scope.form.publication !== null && $scope.form.publication.gov !== null) {
-        publishingStatus.riskAssessment.completed = $scope.form.publication.gov.assessment !== null && $scope.form.publication.gov.assessment.completed;
-        publishingStatus.signOff.completed = $scope.form.publication.gov.signOff !== null;
+        publishingStatus.riskAssessment.completed = $scope.form.publication.assessment !== null && $scope.form.publication.assessment.completed;
+        publishingStatus.signOff.completed = $scope.form.publication.signOff !== null;
         publishingStatus.upload.completed = $scope.form.publication.gov.lastSuccess !== null;
       }
       if ($scope.recordOutput.recordState.openDataPublishingState.assessedAndUpToDate) {
@@ -74,25 +74,25 @@
       publishingStatus.currentActiveView = "risk assessment";
     }
     refreshAssessmentInfo = function() {
-      if ($scope.form.publication !== null && $scope.form.publication.gov !== null && $scope.form.publication.gov.assessment !== null && $scope.form.publication.gov.assessment.completed) {
-        if ($scope.form.publication.gov.assessment.completedByUser === null && $scope.form.publication.gov.assessment.initialAssessmentWasDoneOnSpreadsheet) {
+      if ($scope.form.publication !== null && $scope.form.publication.assessment !== null && $scope.form.publication.assessment.completed) {
+        if ($scope.form.publication.assessment.completedByUser === null && $scope.form.publication.assessment.initialAssessmentWasDoneOnSpreadsheet) {
           return $scope.assessmentCompletedInfo = "Initial assessment completed on spreadsheet";
         } else if ($scope.recordOutput.recordState.openDataPublishingState.assessedAndUpToDate) {
-          return $scope.assessmentCompletedInfo = "Completed by " + $scope.form.publication.gov.assessment.completedByUser.displayName + " on " + moment(new Date($scope.form.publication.gov.assessment.completedOnUtc)).format('DD MMM YYYY h:mm a');
+          return $scope.assessmentCompletedInfo = "Completed by " + $scope.form.publication.assessment.completedByUser.displayName + " on " + moment(new Date($scope.form.publication.assessment.completedOnUtc)).format('DD MMM YYYY h:mm a');
         } else {
-          return $scope.assessmentCompletedInfo = "Last completed by " + $scope.form.publication.gov.assessment.completedByUser.displayName + " on " + moment(new Date($scope.form.publication.gov.assessment.completedOnUtc)).format('DD MMM YYYY h:mm a');
+          return $scope.assessmentCompletedInfo = "Last completed by " + $scope.form.publication.assessment.completedByUser.displayName + " on " + moment(new Date($scope.form.publication.assessment.completedOnUtc)).format('DD MMM YYYY h:mm a');
         }
       }
     };
     refreshSignOffInfo = function() {
       publishingStatus.signOff.showButton = $scope.user.isIaoUser && !$scope.recordOutput.recordState.openDataPublishingState.signedOffAndUpToDate;
-      if ($scope.form.publication !== null && $scope.form.publication.gov.signOff !== null) {
-        if ($scope.form.publication.gov.signOff.user === null) {
+      if ($scope.form.publication !== null && $scope.form.publication.signOff !== null) {
+        if ($scope.form.publication.signOff.user === null) {
           $scope.signOffCompletedInfo = "Initial sign off completed on spreadsheet";
         } else if ($scope.recordOutput.recordState.openDataPublishingState.signedOffAndUpToDate) {
-          $scope.signOffCompletedInfo = "Signed off by " + $scope.form.publication.gov.signOff.user.displayName + " on " + moment(new Date($scope.form.publication.gov.signOff.dateUtc)).format('DD MMM YYYY h:mm a');
+          $scope.signOffCompletedInfo = "Signed off by " + $scope.form.publication.signOff.user.displayName + " on " + moment(new Date($scope.form.publication.signOff.dateUtc)).format('DD MMM YYYY h:mm a');
         } else {
-          $scope.signOffCompletedInfo = "Last signed off by " + $scope.form.publication.gov.signOff.user.displayName + " on " + moment(new Date($scope.form.publication.gov.signOff.dateUtc)).format('DD MMM YYYY h:mm a');
+          $scope.signOffCompletedInfo = "Last signed off by " + $scope.form.publication.signOff.user.displayName + " on " + moment(new Date($scope.form.publication.signOff.dateUtc)).format('DD MMM YYYY h:mm a');
         }
       }
       if ($scope.user.isIaoUser) {
