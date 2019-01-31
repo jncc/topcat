@@ -445,6 +445,7 @@ namespace Catalogue.Data.Seed
                         {
                             // todo add more assessment fields
                             Completed = true,
+                            CompletedByUser = userInfo,
                             CompletedOnUtc = new DateTime(2014, 12, 06)
                         },
                         SignOff = new OpenDataSignOffInfo
@@ -482,6 +483,7 @@ namespace Catalogue.Data.Seed
                         Assessment = new OpenDataAssessmentInfo
                         {
                             Completed = true,
+                            CompletedByUser = userInfo,
                             CompletedOnUtc = new DateTime(2014, 12, 06)
                         },
                         SignOff = new OpenDataSignOffInfo
@@ -518,6 +520,7 @@ namespace Catalogue.Data.Seed
                         Assessment = new OpenDataAssessmentInfo
                         {
                             Completed = true,
+                            CompletedByUser = userInfo,
                             CompletedOnUtc = new DateTime(2014, 12, 06)
                         },
                         SignOff = new OpenDataSignOffInfo
@@ -554,8 +557,17 @@ namespace Catalogue.Data.Seed
                         Resources = new List<Resource> { new Resource
                         {
                             Name = "File resource",
-                            Path = @"C:\work\test-data.csv"
+                            Path = @"C:\work\test-data.csv",
+                            PublishedUrl = "https://the.hosted.location"
                         } },
+                        LastAttempt = new PublicationAttempt { DateUtc = new DateTime(2015, 1, 1, 11, 58, 0) },
+                        LastSuccess = new PublicationAttempt { DateUtc = new DateTime(2015, 1, 1, 11, 58, 0) }
+                    },
+                    Hub = new HubPublicationInfo
+                    {
+                        Url = "https://hub.jncc.gov.uk/assets/b2691fed-e421-4e48-9da9-99bd77e0b8ba",
+                        LastAttempt = new PublicationAttempt { DateUtc = new DateTime(2015, 1, 1, 11, 59, 0) },
+                        LastSuccess = new PublicationAttempt { DateUtc = new DateTime(2015, 1, 1, 11, 59, 0) }
                     },
                     Gov = new GovPublicationInfo
                     {
@@ -565,11 +577,7 @@ namespace Catalogue.Data.Seed
                         Assessment = new OpenDataAssessmentInfo
                         {
                             Completed = true,
-                            CompletedByUser = new UserInfo
-                            {
-                                DisplayName = "Test User",
-                                Email = "Test.user@jncc.gov.uk"
-                            },
+                            CompletedByUser = userInfo,
                             CompletedOnUtc = new DateTime(2014, 01, 01)
                         },
                         SignOff = new OpenDataSignOffInfo
@@ -593,8 +601,17 @@ namespace Catalogue.Data.Seed
                         Resources = new List<Resource> { new Resource
                         {
                             Name = "File resource",
-                            Path = @"C:\work\test-data.csv"
-                        } }
+                            Path = @"C:\work\test-data.csv",
+                            PublishedUrl = "https://the.hosted.location"
+                        } },
+                        LastAttempt = new PublicationAttempt { DateUtc = new DateTime(2015, 1, 1, 11, 58, 0) },
+                        LastSuccess = new PublicationAttempt { DateUtc = new DateTime(2015, 1, 1, 11, 58, 0) }
+                    },
+                    Hub = new HubPublicationInfo
+                    {
+                        Url = "https://hub.jncc.gov.uk/assets/d9c14587-90d8-4eba-b670-4cf36e45196d",
+                        LastAttempt = new PublicationAttempt { DateUtc = new DateTime(2015, 1, 1, 11, 59, 0) },
+                        LastSuccess = new PublicationAttempt { DateUtc = new DateTime(2015, 1, 1, 11, 59, 0) }
                     },
                     Gov = new GovPublicationInfo
                     {
@@ -630,7 +647,8 @@ namespace Catalogue.Data.Seed
                         Resources = new List<Resource> { new Resource
                         {
                             Name = "File resource",
-                            Path = @"C:\work\test-data.csv"
+                            Path = @"C:\work\test-data.csv",
+                            PublishedUrl = "https://the.hosted.location"
                         } }
                     },
                     Gov = new GovPublicationInfo

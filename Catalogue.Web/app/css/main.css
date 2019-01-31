@@ -218,7 +218,7 @@ label {
   margin-bottom: 2em;
 }
 .search-advanced .option {
-  margin-top: .5em;
+  margin-top: 0.5em;
 }
 .search-advanced .option .option-text {
   color: #444;
@@ -444,7 +444,7 @@ label {
   margin-bottom: -5px;
 }
 .vocabulator .vocabulator-vocab-list .vocab-item > div :first-child {
-  font-size: 16.7999992370605px;
+  font-size: 16.79999924px;
 }
 .vocabulator .vocabulator-vocab-list .vocab-item.active {
   background-color: #eee;
@@ -622,6 +622,9 @@ label {
   margin-top: 1.5em;
   margin-bottom: 1em;
 }
+.editor-resourcehub {
+  background-color: #fff;
+}
 .editor-validation-summary {
   margin-bottom: 20px;
   text-align: center;
@@ -774,7 +777,7 @@ form .ng-invalid {
   padding: 0.5em 1em;
   margin: 1em auto;
   background-color: #edeff0;
-  border-radius: .25em;
+  border-radius: 0.25em;
 }
 .cd-multi-steps:after {
   content: "";
@@ -790,7 +793,7 @@ form .ng-invalid {
   /* this is the separator between items */
   display: inline-block;
   content: '\00bb';
-  margin: 0 .6em;
+  margin: 0 0.6em;
   color: #959fa5;
 }
 .cd-multi-steps li:last-of-type::after {
@@ -891,8 +894,8 @@ form .ng-invalid {
   }
   .cd-multi-steps.text-center li > * {
     z-index: 1;
-    padding: .6em 1em;
-    border-radius: .25em;
+    padding: 0.6em 1em;
+    border-radius: 0.25em;
     background-color: #edeff0;
   }
   .no-touch .cd-multi-steps.text-center a:hover {

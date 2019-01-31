@@ -57,7 +57,7 @@
       } else {
         publishingStatus.signOff.currentClass = "disabled";
       }
-      if ($scope.recordOutput.recordState.openDataPublishingState.uploadedAndUpToDate) {
+      if ($scope.recordOutput.recordState.openDataPublishingState.publishedToGovAndUpToDate) {
         return publishingStatus.upload.currentClass = "visited";
       } else if ($scope.recordOutput.recordState.openDataPublishingState.signedOffAndUpToDate) {
         return publishingStatus.upload.currentClass = "current";
@@ -105,7 +105,7 @@
       $scope.hubPublishingStatus = function() {
         if ($scope.form.publication.hub === null) {
           return "Pending";
-        } else if ($scope.form.publication.hub.lastSuccess !== null && $scope.form.gemini.metadataDate <= $scope.form.publication.hub.lastSuccess) {
+        } else if ($scope.form.publication.hub.lastSuccess !== null && ($scope.recordOutput.recordState.openDataPublishingState.publishedToHubAndUpToDate || $scope.recordOutput.recordState.openDataPublishingState.publishedToGovAndUpToDate)) {
           return "Completed on " + moment(new Date($scope.form.publication.hub.lastSuccess.dateUtc)).format('DD MMM YYYY h:mm a');
         } else if ($scope.form.publication.hub.lastSuccess !== null) {
           return "Pending - last completed on " + moment(new Date($scope.form.publication.hub.lastSuccess.dateUtc)).format('DD MMM YYYY h:mm a');
@@ -118,8 +118,7 @@
       $scope.govPublishingStatus = function() {
         if ($scope.form.publication.gov === null) {
           return "Pending";
-        }
-        if ($scope.form.publication.gov.lastSuccess !== null && $scope.form.gemini.metadataDate <= $scope.form.publication.gov.lastSuccess) {
+        } else if ($scope.form.publication.gov.lastSuccess !== null && $scope.recordOutput.recordState.openDataPublishingState.publishedToGovAndUpToDate) {
           return "Completed on " + moment(new Date($scope.form.publication.gov.lastSuccess.dateUtc)).format('DD MMM YYYY h:mm a');
         } else if ($scope.form.publication.gov.lastSuccess !== null) {
           return "Pending - last completed on " + moment(new Date($scope.form.publication.gov.lastSuccess.dateUtc)).format('DD MMM YYYY h:mm a');
@@ -129,7 +128,7 @@
           return "Pending";
         }
       };
-      if ($scope.recordOutput.recordState.openDataPublishingState.uploadedAndUpToDate) {
+      if ($scope.recordOutput.recordState.openDataPublishingState.publishedToGovAndUpToDate) {
         return $scope.uploadStatus = "Publishing completed";
       } else {
         return $scope.uploadStatus = "Publishing in progress...";

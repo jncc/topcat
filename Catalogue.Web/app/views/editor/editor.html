@@ -527,33 +527,27 @@
                 <br />
                 <span ng-if="recordOutput.publishingPolicy.govRecord || recordOutput.publishingPolicy.hubRecord">
                     This record will be published to
-                    <span ng-if="recordOutput.publishingPolicy.hubRecord">the <a href="">JNCC Datahub</a></span>
+                    <span ng-if="recordOutput.publishingPolicy.hubRecord">the <a href="">JNCC ResourceHub</a></span>
                     <span ng-if="recordOutput.publishingPolicy.hubRecord && recordOutput.publishingPolicy.govRecord"> and</span>
                     <span ng-if="recordOutput.publishingPolicy.govRecord"> <a href="https://data.gov.uk/">DATA.GOV.UK</a></span>
                     once it has been assessed and signed off.
                 </span>
                 <br />
                 <br />
-                <br />
-                <div class="form-group">
-                    <div class="input-group">
-                        <span class="input-group-addon well-input-group-addon"
-                              tc-tip title="Published location for online access (URL)">
-                            ResourceHub
-                        </span>
-
-                        <label tc-focus-tip title="The URL of the created ResourceHub page">
-                            <span ng-if="!form.publication.hub.url">Page not yet created</span>
-                            {{form.publication.hub.url}}
-                        </label>
-
-                        <a href="{{form.gemini.resourceLocator}}" target="_blank" class="input-group-addon pointable" ng-disabled="!form.gemini.resourceLocator">
-                            <span class="dark glyphicon glyphicon-new-window" title="Go to resource" tc-tip></span>
-                        </a>
-
+                <div class="form-horizontal">
+                    <div class="form-group">
+                        <label class="col-md-4 control-label">Last published to ResourceHub</label>
+                        <div class="col-md-8 form-control-static">{{form.publication.hub.lastSuccess? form.publication.hub.lastSuccess.dateUtc : "Never"}}</div>
+                        <label class="col-md-4 control-label" ng-if="form.publication.hub.url">ResourceHub page</label>
+                        <div class="col-md-8 form-control-static" ng-if="form.publication.hub.url"><a href="{{form.publication.hub.url}}" target="_blank">{{form.publication.hub.url}}</a></div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-4 control-label">Last published to DATA.GOV.UK</label>
+                        <div class="col-md-8 form-control-static">{{form.publication.gov.lastSuccess? form.publication.gov.lastSuccess.dateUtc : "Never"}}</div>
                     </div>
                 </div>
             </div>
+            <hr />
             <div ng-if="!form.publication.data.resources.length">
                 This record currently has <b>no publishable resources</b> defined.
                 <br />
@@ -562,7 +556,6 @@
                     Add publishable resources
                 </button>
             </div>
-            <br />
             <div ng-if="form.publication.data.resources.length">
                 This record has {{form.publication.data.resources.length}} publishable resource<span ng-if="form.publication.data.resources.length > 1">s</span>.
                 <br />
