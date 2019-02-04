@@ -544,7 +544,12 @@ namespace Catalogue.Tests.Slow.Catalogue.Web.Controllers.Publishing
                     Assessment = new OpenDataAssessmentInfo
                     {
                         Completed = true,
-                        CompletedOnUtc = new DateTime(2017, 09, 25)
+                        CompletedOnUtc = new DateTime(2017, 09, 25),
+                        CompletedByUser = new UserInfo
+                        {
+                            DisplayName = "test",
+                            Email = "test@email.com"
+                        }
                     },
                     SignOff = null
                 };
@@ -637,6 +642,20 @@ namespace Catalogue.Tests.Slow.Catalogue.Web.Controllers.Publishing
                     {
                         DateUtc = new DateTime(2017, 09, 20),
                         User = TestUserInfo.TestUser
+                    },
+                    Data = new DataPublicationInfo
+                    {
+                        LastAttempt = new PublicationAttempt
+                        {
+                            DateUtc = new DateTime(2017, 09, 21)
+                        }
+                    },
+                    Hub = new HubPublicationInfo
+                    {
+                        LastAttempt = new PublicationAttempt
+                        {
+                            DateUtc = new DateTime(2017, 09, 21)
+                        }
                     },
                     Gov = new GovPublicationInfo
                     {

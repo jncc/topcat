@@ -11,6 +11,14 @@
                         <span ng-show="!isClean()"> This record is read-only and can't be saved</span>
                     </span>
                 </div>
+                <div ng-show="form.publication.hub.lastSuccess || form.publication.gov.lastSuccess" class="form-group">
+                    <a href="{{form.publication.hub.url}}" class="btn btn-default" target="_blank" ng-show="form.publication.hub.lastSuccess" tc-tip title="Published to JNCC ResourceHub">
+                        JNCC ResourceHub <span class="glyphicon glyphicon-new-window"></span>
+                    </a>
+                    <a href="https://data.gov.uk/" class="btn btn-default" target="_blank" ng-show="form.publication.gov.lastSuccess" tc-tip title="Published to data.gov.uk">
+                        data.gov.uk <span class="glyphicon glyphicon-new-window"></span>
+                    </a>
+                </div>
             </div>
             <div class="col-md-6">
                 <div class="form-group pull-right">
@@ -529,21 +537,39 @@
                     This record will be published to
                     <span ng-if="recordOutput.publishingPolicy.hubRecord">the <a href="">JNCC ResourceHub</a></span>
                     <span ng-if="recordOutput.publishingPolicy.hubRecord && recordOutput.publishingPolicy.govRecord"> and</span>
-                    <span ng-if="recordOutput.publishingPolicy.govRecord"> <a href="https://data.gov.uk/">DATA.GOV.UK</a></span>
+                    <span ng-if="recordOutput.publishingPolicy.govRecord"> <a href="https://data.gov.uk/">data.gov.uk</a></span>
                     once it has been assessed and signed off.
                 </span>
                 <br />
                 <br />
                 <div class="form-horizontal">
                     <div class="form-group">
-                        <label class="col-md-4 control-label">Last published to ResourceHub</label>
-                        <div class="col-md-8 form-control-static">{{form.publication.hub.lastSuccess? form.publication.hub.lastSuccess.dateUtc : "Never"}}</div>
-                        <label class="col-md-4 control-label" ng-if="form.publication.hub.url">ResourceHub page</label>
-                        <div class="col-md-8 form-control-static" ng-if="form.publication.hub.url"><a href="{{form.publication.hub.url}}" target="_blank">{{form.publication.hub.url}}</a></div>
+                        <label class="col-md-4 control-label">Publishing status</label>
+                        <div class="col-md-8 form-control-static">{{getPublishingText(form, recordOutput.recordState.openDataPublishingState)}}</div>
                     </div>
                     <div class="form-group">
-                        <label class="col-md-4 control-label">Last published to DATA.GOV.UK</label>
-                        <div class="col-md-8 form-control-static">{{form.publication.gov.lastSuccess? form.publication.gov.lastSuccess.dateUtc : "Never"}}</div>
+                        <label class="col-md-4 control-label">Last published to ResourceHub</label>
+                        <div class="col-md-8 form-control-static">
+                            {{form.publication.hub.lastSuccess? getFormattedDate(form.publication.hub.lastSuccess.dateUtc) : "Never"}}
+                            <span ng-if="form.publication.hub.lastSuccess.dateUtc && !recordOutput.publishingPolicy.hubRecord"
+                                  class="glyphicon glyphicon-warning-sign"
+                                  title="The record will no longer be updated at this destination, does it need to be removed?"
+                                  tc-tip></span>
+                        </div>
+                        <label class="col-md-4 control-label" ng-if="form.publication.hub.url">ResourceHub page</label>
+                        <div class="col-md-8 form-control-static" ng-if="form.publication.hub.url">
+                            <a href="{{form.publication.hub.url}}" target="_blank">{{form.publication.hub.url}}</a>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-4 control-label">Last published to data.gov.uk</label>
+                        <div class="col-md-8 form-control-static">
+                            {{form.publication.gov.lastSuccess? getFormattedDate(form.publication.gov.lastSuccess.dateUtc) : "Never"}}
+                            <span ng-if="form.publication.gov.lastSuccess.dateUtc && !recordOutput.publishingPolicy.govRecord"
+                                  class="glyphicon glyphicon-warning-sign"
+                                  title="The record will no longer be updated at this destination, does it need to be removed?"
+                                  tc-tip></span>
+                        </div>
                     </div>
                 </div>
             </div>

@@ -31,8 +31,9 @@
         $scope.getDataFormatObj = getDataFormatObj
         $scope.updateDataFormatObj = updateDataFormatObj
         $scope.getPendingSignOff = getPendingSignOff
-        $scope.getOpenDataButtonText = getOpenDataButtonText
+        $scope.getPublishingText = getPublishingText
         $scope.getOpenDataButtonToolTip = getOpenDataButtonToolTip
+        $scope.getFormattedDate = getFormattedDate
         $scope.addOpenDataResource = addOpenDataResource
         $scope.removeOpenDataResource = removeOpenDataResource
         $scope.trimDoubleQuotes = trimDoubleQuotes
@@ -227,19 +228,22 @@ getOpenDataButtonToolTip = (record, publishingState) ->
     else
         return "The open data publication status of the record, editing the record may affect the status."
 
-getOpenDataButtonText = (record, publishingState) ->
+getPublishingText = (record, publishingState) ->
     if record.publication == null || record.publication.gov == null || record.publication.gov.publishable != true
-        return "Publishable"
+        return "Never published"
     else if record.publication.gov.lastSuccess != null && record.publication.gov.lastSuccess != undefined && !publishingState.assessedAndUpToDate
-        return "Republish"
-    else if publishingState.uploadedAndUpToDate
+        return "Previously published"
+    else if publishingState.publishedToGovAndUpToDate
         return "Published"
     else if publishingState.signedOffAndUpToDate
         return "Signed Off"
     else if publishingState.assessedAndUpToDate
         return "Assessed"
     else
-        return "Publishable"
+        return "Never published"
+
+getFormattedDate = (date) ->
+    return moment(new Date(date)).format('DD MMM YYYY h:mm a')
 
 getPendingSignOff = (publication) ->
     if (publication != null && publication.assessment.completed && publication.signOff == null)

@@ -166,7 +166,7 @@ namespace Catalogue.Web.Controllers.Publishing
                     Title = r.Gemini.Title,
                     MetadataDate = r.Gemini.MetadataDate,
                     IsGeminiValid = r.Validation == Validation.Gemini,
-                    Gov = r.Publication.Gov,
+                    PublicationInfo = r.Publication
                 })
                 .ToList();
 
@@ -180,7 +180,7 @@ namespace Catalogue.Web.Controllers.Publishing
         public string Title { get; set; }
         public DateTime MetadataDate { get; set; }
         public bool IsGeminiValid { get; set; }
-        public GovPublicationInfo Gov { get; set; }
+        public PublicationInfo PublicationInfo { get; set; }
     }
 
     public class SummaryRepresentation
