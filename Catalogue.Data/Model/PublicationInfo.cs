@@ -8,12 +8,12 @@ namespace Catalogue.Data.Model
         /// <summary>
         /// Captures the record's "risk assessment" information. 
         /// </summary>
-        public OpenDataAssessmentInfo Assessment { get; set; }
+        public AssessmentInfo Assessment { get; set; }
 
         /// <summary>
         /// Is the record signed-off by the SIRO? (Null means no.)
         /// </summary>
-        public OpenDataSignOffInfo SignOff { get; set; }
+        public SignOffInfo SignOff { get; set; }
 
         /// <summary>
         /// Info related to data transfer to data.jncc.gov.uk
@@ -54,6 +54,11 @@ namespace Catalogue.Data.Model
         /// <summary>
         /// Link to the Datahub page once successfully published
         /// </summary>
+        public bool Publishable { get; set; }
+
+        /// <summary>
+        /// Link to the Datahub page once successfully published
+        /// </summary>
         public string Url { get; set; }
 
         /// <summary>
@@ -70,7 +75,7 @@ namespace Catalogue.Data.Model
     public class GovPublicationInfo
     {
         /// <summary>
-        /// Captures whether the record should be published as Open Data. 
+        /// Captures whether the record should be published to DGU. 
         /// </summary>
         public bool? Publishable { get; set; }
 
@@ -90,14 +95,14 @@ namespace Catalogue.Data.Model
         public PublicationAttempt LastSuccess { get; set; }
     }
 
-    public class OpenDataSignOffInfo
+    public class SignOffInfo
     {
         public DateTime DateUtc { get; set; }
         public UserInfo User { get; set; }
         public string Comment { get; set; }
     }
 
-    public class OpenDataAssessmentInfo
+    public class AssessmentInfo
     {
         public bool Completed { get; set; }
         public UserInfo CompletedByUser { get; set; }

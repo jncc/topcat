@@ -37,5 +37,12 @@ namespace Catalogue.Data.Extensions
             return record.Publication?.Hub?.LastSuccess != null
                    && record.Publication.Hub.LastSuccess.DateUtc.Equals(record.Gemini.MetadataDate);
         }
+
+        public static bool HasPublishingDestination(this Record record)
+        {
+            return record.Publication != null &&
+                   (record.Publication.Hub != null && record.Publication.Hub.Publishable ||
+                    record.Publication.Gov != null && record.Publication.Gov.Publishable == true);
+        }
     }
 }

@@ -1,15 +1,13 @@
-﻿using System;
+﻿using Catalogue.Gemini.Encoding;
+using Catalogue.Gemini.Model;
+using Catalogue.Gemini.Templates;
+using Catalogue.Gemini.Validation;
+using FluentAssertions;
+using NUnit.Framework;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Xml.Linq;
-using Catalogue.Gemini.Encoding;
-using Catalogue.Gemini.Model;
-using Catalogue.Gemini.Templates;
-using Catalogue.Gemini.Validation;
-using Catalogue.Robot.Publishing.OpenData;
-using FluentAssertions;
-using NUnit.Framework;
 
 namespace Catalogue.Tests.Slow.Catalogue.Gemini.Validation
 {

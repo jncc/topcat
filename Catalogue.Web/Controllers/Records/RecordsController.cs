@@ -8,7 +8,6 @@ using System;
 using System.Web.Http;
 using Catalogue.Data;
 using Catalogue.Data.Extensions;
-using Catalogue.Data.Publishing;
 using Raven.Client.Documents.Session;
 
 namespace Catalogue.Web.Controllers.Records
@@ -47,15 +46,14 @@ namespace Catalogue.Web.Controllers.Records
                 Record = record,
                 RecordState = new RecordState
                 {
-                    OpenDataPublishingState = new OpenDataPublishingState
+                    PublishingState = new PublishingState
                     {
                         AssessedAndUpToDate = record.IsAssessedAndUpToDate(),
                         SignedOffAndUpToDate = record.IsSignedOffAndUpToDate(),
                         PublishedToHubAndUpToDate = record.IsPublishedToHubAndUpToDate(),
                         PublishedToGovAndUpToDate = record.IsPublishedToGovAndUpToDate()
                     }
-                },
-                PublishingPolicy = PublishingPolicy.GetPublishingPolicyResult(record)
+                }
             };
         }
 

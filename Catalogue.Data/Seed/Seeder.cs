@@ -252,13 +252,13 @@ namespace Catalogue.Data.Seed
                 r.Gemini.MetadataDate = new DateTime(2015, 1, 1, 09, 59, 59);
                 r.Publication = new PublicationInfo
                 {
-                    Assessment = new OpenDataAssessmentInfo
+                    Assessment = new AssessmentInfo
                     {
                         Completed = true,
                         CompletedOnUtc = DateTime.MinValue,
                         InitialAssessmentWasDoneOnSpreadsheet = true
                     },
-                    SignOff = new OpenDataSignOffInfo
+                    SignOff = new SignOffInfo
                     {
                         DateUtc = DateTime.MinValue
                     },
@@ -292,7 +292,7 @@ namespace Catalogue.Data.Seed
                 r.Gemini.MetadataDate = new DateTime(2015, 05, 17, 0, 0, 0);
                 r.Publication = new PublicationInfo
                 {
-                    Assessment = new OpenDataAssessmentInfo
+                    Assessment = new AssessmentInfo
                     {
                         // todo add more assessment fields
                         Completed = false
@@ -322,7 +322,7 @@ namespace Catalogue.Data.Seed
                 r.Gemini.MetadataDate = new DateTime(2015, 1, 1, 12, 0, 0);
                 r.Publication = new PublicationInfo
                 {
-                    Assessment = new OpenDataAssessmentInfo
+                    Assessment = new AssessmentInfo
                     {
                         // todo add more assessment fields
                         Completed = true,
@@ -356,7 +356,7 @@ namespace Catalogue.Data.Seed
                 r.Gemini.MetadataDate = new DateTime(2015, 1, 1, 12, 0, 0);
                 r.Publication = new PublicationInfo
                 {
-                    Assessment = new OpenDataAssessmentInfo
+                    Assessment = new AssessmentInfo
                     {
                         // todo add more assessment fields
                         Completed = true,
@@ -390,7 +390,7 @@ namespace Catalogue.Data.Seed
                 r.Gemini.MetadataDate = new DateTime(2015, 1, 1, 12, 0, 0);
                 r.Publication = new PublicationInfo
                 {
-                    Assessment = new OpenDataAssessmentInfo
+                    Assessment = new AssessmentInfo
                     {
                         // todo add more assessment fields
                         Completed = true,
@@ -430,14 +430,14 @@ namespace Catalogue.Data.Seed
                 r.Gemini.MetadataDate = new DateTime(2015, 1, 1, 12, 0, 0);
                 r.Publication = new PublicationInfo
                 {
-                    Assessment = new OpenDataAssessmentInfo
+                    Assessment = new AssessmentInfo
                     {
                         // todo add more assessment fields
                         Completed = true,
                         CompletedByUser = userInfo,
                         CompletedOnUtc = new DateTime(2014, 12, 06)
                     },
-                    SignOff = new OpenDataSignOffInfo
+                    SignOff = new SignOffInfo
                     {
                         User = new UserInfo
                         {
@@ -469,13 +469,13 @@ namespace Catalogue.Data.Seed
                 r.Gemini.MetadataDate = new DateTime(2015, 1, 1, 12, 0, 0);
                 r.Publication = new PublicationInfo
                 {
-                    Assessment = new OpenDataAssessmentInfo
+                    Assessment = new AssessmentInfo
                     {
                         Completed = true,
                         CompletedByUser = userInfo,
                         CompletedOnUtc = new DateTime(2014, 12, 06)
                     },
-                    SignOff = new OpenDataSignOffInfo
+                    SignOff = new SignOffInfo
                     {
                         User = new UserInfo
                         {
@@ -506,13 +506,13 @@ namespace Catalogue.Data.Seed
                 r.Gemini.MetadataDate = new DateTime(2015, 1, 1, 12, 0, 0);
                 r.Publication = new PublicationInfo
                 {
-                    Assessment = new OpenDataAssessmentInfo
+                    Assessment = new AssessmentInfo
                     {
                         Completed = true,
                         CompletedByUser = userInfo,
                         CompletedOnUtc = new DateTime(2014, 12, 06)
                     },
-                    SignOff = new OpenDataSignOffInfo
+                    SignOff = new SignOffInfo
                     {
                         User = new UserInfo
                         {
@@ -552,13 +552,13 @@ namespace Catalogue.Data.Seed
                 r.Gemini.MetadataDate = new DateTime(2015, 1, 1, 12, 0, 0);
                 r.Publication = new PublicationInfo
                 {
-                    Assessment = new OpenDataAssessmentInfo
+                    Assessment = new AssessmentInfo
                     {
                         Completed = true,
                         CompletedByUser = userInfo,
                         CompletedOnUtc = new DateTime(2014, 01, 01)
                     },
-                    SignOff = new OpenDataSignOffInfo
+                    SignOff = new SignOffInfo
                     {
                         DateUtc = new DateTime(2014, 02, 01),
                         User = userInfo
@@ -596,13 +596,13 @@ namespace Catalogue.Data.Seed
                 r.Gemini.MetadataDate = new DateTime(2015, 1, 1, 12, 0, 0);
                 r.Publication = new PublicationInfo
                 {
-                    Assessment = new OpenDataAssessmentInfo
+                    Assessment = new AssessmentInfo
                     {
                         Completed = true,
                         CompletedByUser = userInfo,
                         CompletedOnUtc = new DateTime(2014, 01, 01)
                     },
-                    SignOff = new OpenDataSignOffInfo
+                    SignOff = new SignOffInfo
                     {
                         DateUtc = new DateTime(2014, 01, 02),
                         User = userInfo
@@ -642,13 +642,13 @@ namespace Catalogue.Data.Seed
                 r.Gemini.MetadataDate = new DateTime(2015, 1, 1, 12, 0, 0);
                 r.Publication = new PublicationInfo
                 {
-                    Assessment = new OpenDataAssessmentInfo
+                    Assessment = new AssessmentInfo
                     {
                         Completed = true,
                         CompletedOnUtc = new DateTime(2014, 12, 28),
                         InitialAssessmentWasDoneOnSpreadsheet = true
                     },
-                    SignOff = new OpenDataSignOffInfo
+                    SignOff = new SignOffInfo
                     {
                         DateUtc = new DateTime(2014, 12, 29),
                         User = userInfo
@@ -679,7 +679,7 @@ namespace Catalogue.Data.Seed
                 r.Gemini.MetadataDate = new DateTime(2014, 12, 31);
                 r.Publication = new PublicationInfo
                 {
-                    Assessment = new OpenDataAssessmentInfo
+                    Assessment = new AssessmentInfo
                     {
                         Completed = true,
                         CompletedByUser = userInfo,

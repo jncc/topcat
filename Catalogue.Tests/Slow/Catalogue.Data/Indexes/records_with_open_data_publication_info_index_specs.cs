@@ -15,13 +15,13 @@ namespace Catalogue.Tests.Slow.Catalogue.Data.Indexes
         [Test]
         public void should_be_able_to_get_all_records_with_publishing_info()
         {
-            Db.Query<Record, RecordsWithOpenDataPublicationInfoIndex>().Count().Should().Be(13);
+            Db.Query<Record, RecordsWithPublicationInfoIndex>().Count().Should().Be(13);
         }
         
         [Test]
         public void should_be_able_to_get_never_attempted_records()
         {
-            Db.Query<RecordsWithOpenDataPublicationInfoIndex.Result, RecordsWithOpenDataPublicationInfoIndex>()
+            Db.Query<RecordsWithPublicationInfoIndex.Result, RecordsWithPublicationInfoIndex>()
                 .Where(x => x.PublicationNeverAttempted)
                 .Count().Should().Be(3);
         }
@@ -29,7 +29,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Data.Indexes
         [Test]
         public void should_be_able_to_get_the_unsuccessful_attempt_record()
         {
-            var results = Db.Query<RecordsWithOpenDataPublicationInfoIndex.Result, RecordsWithOpenDataPublicationInfoIndex>()
+            var results = Db.Query<RecordsWithPublicationInfoIndex.Result, RecordsWithPublicationInfoIndex>()
                 .Where(x => x.LastPublicationAttemptWasUnsuccessful)
                 .OfType<Record>()
                 .ToList();
@@ -43,7 +43,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Data.Indexes
         {
             // in other words, the last publication was successful and the record hasn't been updated since!
 
-            var results = Db.Query<RecordsWithOpenDataPublicationInfoIndex.Result, RecordsWithOpenDataPublicationInfoIndex>()
+            var results = Db.Query<RecordsWithPublicationInfoIndex.Result, RecordsWithPublicationInfoIndex>()
                 .Where(x => x.PublishedSinceLastUpdated)
                 .OfType<Record>()
                 .ToList();
@@ -57,7 +57,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Data.Indexes
         public void should_be_able_to_get_updated_since_last_published_record()
         {
             // in other words, all the records that should be published on the next run
-            var results = Db.Query<RecordsWithOpenDataPublicationInfoIndex.Result, RecordsWithOpenDataPublicationInfoIndex>()
+            var results = Db.Query<RecordsWithPublicationInfoIndex.Result, RecordsWithPublicationInfoIndex>()
                 .Where(x => !x.PublishedSinceLastUpdated)
                 .OfType<Record>()
                 .ToList();
@@ -69,7 +69,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Data.Indexes
         [Test]
         public void should_be_able_to_get_non_paused_records()
         {
-            var results = Db.Query<RecordsWithOpenDataPublicationInfoIndex.Result, RecordsWithOpenDataPublicationInfoIndex>()
+            var results = Db.Query<RecordsWithPublicationInfoIndex.Result, RecordsWithPublicationInfoIndex>()
                 .Where(x => !x.PublishingIsPaused)
                 .OfType<Record>()
                 .ToList();
@@ -80,7 +80,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Data.Indexes
         [Test]
         public void should_be_able_to_get_published_since_last_updated()
         {
-            var results = Db.Query<RecordsWithOpenDataPublicationInfoIndex.Result, RecordsWithOpenDataPublicationInfoIndex>()
+            var results = Db.Query<RecordsWithPublicationInfoIndex.Result, RecordsWithPublicationInfoIndex>()
                 .Where(x => x.PublishedSinceLastUpdated)
                 .OfType<Record>()
                 .ToList();

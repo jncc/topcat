@@ -1,15 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Net;
-using System.Text;
-using System.Threading.Tasks;
-using System.Xml.Linq;
-using Catalogue.Data.Write;
-using Catalogue.Robot.Publishing.OpenData;
+﻿using Catalogue.Data.Write;
 using FluentAssertions;
 using NUnit.Framework;
+using System;
+using System.IO;
 
 namespace Catalogue.Tests.Explicit.Catalogue.Robot
 {

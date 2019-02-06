@@ -1,6 +1,6 @@
-﻿namespace Catalogue.Robot.Publishing.OpenData
+﻿namespace Catalogue.Robot.Publishing
 {
-    public class OpenDataUploadConfig
+    public class UploaderConfig
     {
         public string HttpRootUrl { get; set; }
         public string FtpRootUrl { get; set; }

@@ -7,18 +7,18 @@ using static Catalogue.Data.Write.RecordServiceHelper;
 
 namespace Catalogue.Data.Write
 {
-    public class OpenDataPublishingRecordService : IOpenDataPublishingRecordService
+    public class RecordPublishingService : IRecordPublishingService
     {
         private readonly IDocumentSession db;
         private readonly IRecordValidator validator;
 
-        public OpenDataPublishingRecordService(IDocumentSession db, IRecordValidator validator)
+        public RecordPublishingService(IDocumentSession db, IRecordValidator validator)
         {
             this.db = db;
             this.validator = validator;
         }
 
-        public RecordServiceResult Assess(Record record, OpenDataAssessmentInfo assessmentInfo)
+        public RecordServiceResult Assess(Record record, AssessmentInfo assessmentInfo)
         {
             if (record.IsAssessedAndUpToDate())
                 throw new InvalidOperationException("Assessment has already been completed and is up to date");
@@ -26,12 +26,9 @@ namespace Catalogue.Data.Write
             if (!record.Validation.Equals(Validation.Gemini))
                 throw new InvalidOperationException("Validation level must be Gemini");
 
-            if (record.Publication == null)
+            if (!record.HasPublishingDestination())
             {
-                record.Publication = new PublicationInfo
-                {
-                    Assessment = new OpenDataAssessmentInfo()
-                };
+                throw new InvalidOperationException("Must select at least one publishing destination");
             }
 
             record.Publication.Assessment = assessmentInfo;
@@ -47,7 +44,7 @@ namespace Catalogue.Data.Write
             return recordServiceResult;
         }
 
-        public RecordServiceResult SignOff(Record record, OpenDataSignOffInfo signOffInfo)
+        public RecordServiceResult SignOff(Record record, SignOffInfo signOffInfo)
         {
             if (!record.IsAssessedAndUpToDate())
                 throw new InvalidOperationException("Couldn't sign-off record for publication - assessment not completed or out of date");

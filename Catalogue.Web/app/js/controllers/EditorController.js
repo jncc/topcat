@@ -52,8 +52,7 @@
     $scope.reloadRecord = function(response) {
       $scope.recordOutput = {
         record: response.record,
-        recordState: response.recordState,
-        publishingPolicy: response.publishingPolicy
+        recordState: response.recordState
       };
       $scope.validation = {};
       $scope.reset();

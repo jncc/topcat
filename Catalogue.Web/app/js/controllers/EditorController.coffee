@@ -59,7 +59,6 @@
             $scope.recordOutput =
                 record: response.record
                 recordState: response.recordState
-                publishingPolicy: response.publishingPolicy
             $scope.validation = {}
             $scope.reset()
             $scope.status.refresh()

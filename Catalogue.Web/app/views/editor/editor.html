@@ -12,8 +12,8 @@
                     </span>
                 </div>
                 <div ng-show="form.publication.hub.lastSuccess || form.publication.gov.lastSuccess" class="form-group">
-                    <a href="{{form.publication.hub.url}}" class="btn btn-default" target="_blank" ng-show="form.publication.hub.lastSuccess" tc-tip title="Published to JNCC ResourceHub">
-                        JNCC ResourceHub <span class="glyphicon glyphicon-new-window"></span>
+                    <a href="{{form.publication.hub.url}}" class="btn btn-default" target="_blank" ng-show="form.publication.hub.lastSuccess" tc-tip title="Published to the ResourceHub">
+                        ResourceHub <span class="glyphicon glyphicon-new-window"></span>
                     </a>
                     <a href="https://data.gov.uk/" class="btn btn-default" target="_blank" ng-show="form.publication.gov.lastSuccess" tc-tip title="Published to data.gov.uk">
                         data.gov.uk <span class="glyphicon glyphicon-new-window"></span>
@@ -530,48 +530,64 @@
         </tab-heading>
 
         <div class="well well-lg">
-            <div ng-if="recordOutput.publishingPolicy">
-                {{recordOutput.publishingPolicy.message}}
-                <br />
-                <span ng-if="recordOutput.publishingPolicy.govRecord || recordOutput.publishingPolicy.hubRecord">
-                    This record will be published to
-                    <span ng-if="recordOutput.publishingPolicy.hubRecord">the <a href="">JNCC ResourceHub</a></span>
-                    <span ng-if="recordOutput.publishingPolicy.hubRecord && recordOutput.publishingPolicy.govRecord"> and</span>
-                    <span ng-if="recordOutput.publishingPolicy.govRecord"> <a href="https://data.gov.uk/">data.gov.uk</a></span>
-                    once it has been assessed and signed off.
-                </span>
-                <br />
-                <br />
-                <div class="form-horizontal">
-                    <div class="form-group">
-                        <label class="col-md-4 control-label">Publishing status</label>
-                        <div class="col-md-8 form-control-static">{{getPublishingText(form, recordOutput.recordState.openDataPublishingState)}}</div>
+            <div class="form-group">
+                <div class="row">
+                    <div class="col-md-3">
+                        <span>Publishing status</span>
                     </div>
-                    <div class="form-group">
-                        <label class="col-md-4 control-label">Last published to ResourceHub</label>
-                        <div class="col-md-8 form-control-static">
-                            {{form.publication.hub.lastSuccess? getFormattedDate(form.publication.hub.lastSuccess.dateUtc) : "Never"}}
-                            <span ng-if="form.publication.hub.lastSuccess.dateUtc && !recordOutput.publishingPolicy.hubRecord"
-                                  class="glyphicon glyphicon-warning-sign"
-                                  title="The record will no longer be updated at this destination, does it need to be removed?"
-                                  tc-tip></span>
-                        </div>
-                        <label class="col-md-4 control-label" ng-if="form.publication.hub.url">ResourceHub page</label>
-                        <div class="col-md-8 form-control-static" ng-if="form.publication.hub.url">
-                            <a href="{{form.publication.hub.url}}" target="_blank">{{form.publication.hub.url}}</a>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label class="col-md-4 control-label">Last published to data.gov.uk</label>
-                        <div class="col-md-8 form-control-static">
-                            {{form.publication.gov.lastSuccess? getFormattedDate(form.publication.gov.lastSuccess.dateUtc) : "Never"}}
-                            <span ng-if="form.publication.gov.lastSuccess.dateUtc && !recordOutput.publishingPolicy.govRecord"
-                                  class="glyphicon glyphicon-warning-sign"
-                                  title="The record will no longer be updated at this destination, does it need to be removed?"
-                                  tc-tip></span>
-                        </div>
+                    <div class="col-md-3">
+                        {{getPublishingText(form, recordOutput.recordState.openDataPublishingState)}}
                     </div>
                 </div>
+                <div class="row">
+                    <div class="col-md-3">
+                        <span>Publish to ResourceHub</span>
+                    </div>
+                    <div class="col-md-2">
+                        <div class="btn-group">
+                            <button ng-click="form.topCopy = true" ng-class="{ 'btn-primary': form.topCopy, 'btn-default': !form.topCopy }" class="btn"
+                                    title="Is this the 'top copy' of this resource?"
+                                    tc-tip>
+                                <span class="glyphicon glyphicon-leaf"></span>Yes
+                            </button>
+                            <button ng-click="form.topCopy = false" ng-class="{ 'btn-primary': !form.topCopy, 'btn-default': form.topCopy  }" class="btn">
+                                No
+                            </button>
+                        </div>
+                    </div>
+                    <div class="col-md-7">
+                        Last published: {{form.publication.hub.lastSuccess? getFormattedDate(form.publication.hub.lastSuccess.dateUtc) : "Never"}}
+                        <span ng-if="form.publication.hub.lastSuccess.dateUtc"
+                              class="glyphicon glyphicon-warning-sign"
+                              title="The record will no longer be updated at this destination, does it need to be removed?"
+                              tc-tip></span>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-3">
+                        <span>Publish to data.gov.uk</span>
+                    </div>
+                    <div class="col-md-2">
+                        <div class="btn-group">
+                            <button ng-click="form.topCopy = true" ng-class="{ 'btn-primary': form.topCopy, 'btn-default': !form.topCopy }" class="btn"
+                                    title="Is this the 'top copy' of this resource?"
+                                    tc-tip>
+                                <span class="glyphicon glyphicon-leaf"></span>Yes
+                            </button>
+                            <button ng-click="form.topCopy = false" ng-class="{ 'btn-primary': !form.topCopy, 'btn-default': form.topCopy  }" class="btn">
+                                No
+                            </button>
+                        </div>
+                    </div>
+                    <div class="col-md-7">
+                        Last published: {{form.publication.gov.lastSuccess? getFormattedDate(form.publication.gov.lastSuccess.dateUtc) : "Never"}}
+                        <span ng-if="form.publication.gov.lastSuccess.dateUtc"
+                              class="glyphicon glyphicon-warning-sign"
+                              title="The record will no longer be updated at this destination, does it need to be removed?"
+                              tc-tip></span>
+                    </div>
+                </div>
+                <br/>
             </div>
             <hr />
             <div ng-if="!form.publication.data.resources.length">

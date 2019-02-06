@@ -10,11 +10,12 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
+using Catalogue.Robot.Publishing.Data;
+using Catalogue.Robot.Publishing.Gov;
 using Catalogue.Utilities.Clone;
-using Quartz.Util;
 using static Catalogue.Utilities.Text.WebificationUtility;
 
-namespace Catalogue.Robot.Publishing.OpenData
+namespace Catalogue.Robot.Publishing
 {
     public class RobotPublisher
     {
@@ -22,20 +23,22 @@ namespace Catalogue.Robot.Publishing.OpenData
 
         private readonly IDocumentSession db;
         private readonly IPublishingUploadRecordService uploadRecordService;
-        private readonly IOpenDataUploadHelper uploadHelper;
+        private readonly IDataUploader dataUploader;
+        private readonly IMetadataUploader metadataUploader;
         private readonly IHubService hubService;
 
-        public RobotPublisher(IDocumentSession db, IPublishingUploadRecordService uploadRecordService, IOpenDataUploadHelper uploadHelper, IHubService hubService)
+        public RobotPublisher(IDocumentSession db, IPublishingUploadRecordService uploadRecordService, IDataUploader dataUploader, IMetadataUploader metadataUploader, IHubService hubService)
         {
             this.db = db;
             this.uploadRecordService = uploadRecordService;
-            this.uploadHelper = uploadHelper;
+            this.dataUploader = dataUploader;
+            this.metadataUploader = metadataUploader;
             this.hubService = hubService;
         }
 
         public List<Record> GetRecordsPendingUpload()
         {
-            var records = db.Query<RecordsWithOpenDataPublicationInfoIndex.Result, RecordsWithOpenDataPublicationInfoIndex>()
+            var records = db.Query<RecordsWithPublicationInfoIndex.Result, RecordsWithPublicationInfoIndex>()
                 .Customize(x => x.WaitForNonStaleResults())
                 .Where(x => x.Assessed)
                 .Where(x => x.SignedOff)
@@ -55,6 +58,13 @@ namespace Catalogue.Robot.Publishing.OpenData
             foreach (Record record in records)
             {
                 Logger.Info($"Starting publishing process for record {record.Id} {record.Gemini.Title}");
+                if (record.Publication == null || record.Publication.Hub == null && record.Publication.Gov == null ||
+                    record.Publication.Hub?.Publishable != true && record.Publication?.Gov?.Publishable != true)
+                {
+                    Logger.Info("No publishing targets defined, aborting publishing");
+                    return;
+                }
+
                 if (!metadataOnly)
                 {
                     try
@@ -91,8 +101,8 @@ namespace Catalogue.Robot.Publishing.OpenData
                         if (IsFileResource(resource))
                         {
                             Logger.Info($"Resource {resource.Path} is a file - starting upload process");
-                            uploadHelper.UploadDataFile(Helpers.RemoveCollection(record.Id), resource.Path);
-                            string dataHttpPath = uploadHelper.GetHttpRootUrl() + "/" +
+                            dataUploader.UploadDataFile(Helpers.RemoveCollection(record.Id), resource.Path);
+                            string dataHttpPath = dataUploader.GetHttpRootUrl() + "/" +
                                                   GetUnrootedDataPath(Helpers.RemoveCollection(record.Id),
                                                       resource.Path);
                             resource.PublishedUrl = dataHttpPath;
@@ -116,45 +126,58 @@ namespace Catalogue.Robot.Publishing.OpenData
 
         public void PublishHubMetadata(Record record)
         {
-            var attempt = new PublicationAttempt { DateUtc = Clock.NowUtc };
-            uploadRecordService.UpdateHubPublishAttempt(record, attempt);
-            db.SaveChanges();
-
-            try
+            if (record.Publication.Hub.Publishable)
             {
-                hubService.Upsert(record);
+                var attempt = new PublicationAttempt {DateUtc = Clock.NowUtc};
+                uploadRecordService.UpdateHubPublishAttempt(record, attempt);
+                db.SaveChanges();
 
-                var url = "http://hub.jncc.gov.uk/asset/" + Helpers.RemoveCollection(record.Id);
-                uploadRecordService.UpdateHubPublishSuccess(record, url, attempt);
+                try
+                {
+                    hubService.Upsert(record);
 
-                hubService.Index(record);
+                    var url = "http://hub.jncc.gov.uk/asset/" + Helpers.RemoveCollection(record.Id);
+                    uploadRecordService.UpdateHubPublishSuccess(record, url, attempt);
+
+                    hubService.Index(record);
+                }
+                catch (WebException ex)
+                {
+                    attempt.Message = ex.Message + (ex.InnerException != null ? ex.InnerException.Message : "");
+                    Logger.Error($"Could not save record to hub database, GUID={record.Id}", ex);
+                    throw;
+                }
             }
-            catch (WebException ex)
+            else
             {
-                attempt.Message = ex.Message + (ex.InnerException != null ? ex.InnerException.Message : "");
-                Logger.Error($"Could not save record to hub database, GUID={record.Id}", ex);
-                throw;
+                Logger.Info("Hub not defined as a target publishing destination");
             }
         }
 
         public void PublishGovMetadata(Record record)
         {
-            var attempt = new PublicationAttempt { DateUtc = Clock.NowUtc };
-            uploadRecordService.UpdateGovPublishAttempt(record, attempt);
-            db.SaveChanges();
+            if (record.Publication.Gov.Publishable == true) {
+                var attempt = new PublicationAttempt { DateUtc = Clock.NowUtc };
+                uploadRecordService.UpdateGovPublishAttempt(record, attempt);
+                db.SaveChanges();
 
-            try
-            {
-                uploadHelper.UploadMetadataDocument(Helpers.RemoveCollectionFromId(record));
-                uploadHelper.UploadWafIndexDocument(Helpers.RemoveCollectionFromId(record));
+                try
+                {
+                    metadataUploader.UploadMetadataDocument(Helpers.RemoveCollectionFromId(record));
+                    metadataUploader.UploadWafIndexDocument(Helpers.RemoveCollectionFromId(record));
 
-                uploadRecordService.UpdateGovPublishSuccess(record, attempt);
+                    uploadRecordService.UpdateGovPublishSuccess(record, attempt);
+                }
+                catch (WebException ex)
+                {
+                    attempt.Message = ex.Message + (ex.InnerException != null ? ex.InnerException.Message : "");
+                    Logger.Error($"DGU metadata transfer failed for record with GUID={record.Id}", ex);
+                    throw;
+                }
             }
-            catch (WebException ex)
+            else
             {
-                attempt.Message = ex.Message + (ex.InnerException != null ? ex.InnerException.Message : "");
-                Logger.Error($"DGU metadata transfer failed for record with GUID={record.Id}", ex);
-                throw;
+                Logger.Info("Gov not defined as a target publishing destination");
             }
         }
 

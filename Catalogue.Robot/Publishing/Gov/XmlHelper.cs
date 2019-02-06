@@ -6,11 +6,10 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Xml.Linq;
-using Castle.Core.Internal;
 
-namespace Catalogue.Robot.Publishing.OpenData
+namespace Catalogue.Robot.Publishing.Gov
 {
-    public class OpenDataXmlHelper : IOpenDataXmlHelper
+    public class XmlHelper : IXmlHelper
     {
         public byte[] GetMetadataDocument(Record record)
         {

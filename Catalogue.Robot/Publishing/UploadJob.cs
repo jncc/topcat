@@ -1,6 +1,8 @@
 ﻿using System;
 using System.IO;
 using Catalogue.Data.Write;
+using Catalogue.Robot.Publishing.Data;
+using Catalogue.Robot.Publishing.Gov;
 using Catalogue.Robot.Publishing.Hub;
 using Catalogue.Utilities.Logging;
 using Catalogue.Utilities.Text;
@@ -9,15 +11,15 @@ using Newtonsoft.Json;
 using Quartz;
 using Raven.Client.Documents;
 
-namespace Catalogue.Robot.Publishing.OpenData
+namespace Catalogue.Robot.Publishing
 {
-    public class OpenDataUploadJob : IJob
+    public class UploadJob : IJob
     {
-        private static readonly ILog Logger = LogManager.GetLogger(typeof(OpenDataUploadJob));
+        private static readonly ILog Logger = LogManager.GetLogger(typeof(UploadJob));
 
         readonly IDocumentStore store;
 
-        public OpenDataUploadJob(IDocumentStore store)
+        public UploadJob(IDocumentStore store)
         {
             this.store = store;
         }
@@ -34,12 +36,13 @@ namespace Catalogue.Robot.Publishing.OpenData
             using (var db = store.OpenSession())
             {
                 var config = GetConfigFile();
-                var publishingService = new OpenDataPublishingRecordService(db, new RecordValidator());
+                var publishingService = new RecordPublishingService(db, new RecordValidator());
                 var uploadService = publishingService.Upload();
-                var uploadHelper = new OpenDataUploadHelper(config);
+                var dataUploader = new DataUploader(config);
+                var metadataUploader = new MetadataUploader(config);
                 var hubService = new HubService();
 
-                var robotUploader = new RobotPublisher(db, uploadService, uploadHelper, hubService);
+                var robotUploader = new RobotPublisher(db, uploadService, dataUploader, metadataUploader, hubService);
 
                 var records = robotUploader.GetRecordsPendingUpload();
                 Logger.Info("Number of records to upload: " + records.Count);
@@ -48,7 +51,7 @@ namespace Catalogue.Robot.Publishing.OpenData
             }
         }
 
-        private OpenDataUploadConfig GetConfigFile()
+        private UploaderConfig GetConfigFile()
         {
             var configPath = Path.Combine(Environment.CurrentDirectory, "data-gov-uk-publisher-config.json");
             if (!File.Exists(configPath))
@@ -57,7 +60,7 @@ namespace Catalogue.Robot.Publishing.OpenData
                 e.LogAndThrow(Logger);
             }
             string configJson = File.ReadAllText(configPath);
-            var config = JsonConvert.DeserializeObject<OpenDataUploadConfig>(configJson);
+            var config = JsonConvert.DeserializeObject<UploaderConfig>(configJson);
             if (config.FtpRootUrl.IsBlank())
             {
                 var e = new Exception("No FtpRootUrl specified in data-gov-uk-publisher-config.json file.");

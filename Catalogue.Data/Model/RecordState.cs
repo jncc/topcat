@@ -4,6 +4,6 @@ namespace Catalogue.Data.Model
 {
     public class RecordState
     {
-        public OpenDataPublishingState OpenDataPublishingState { get; set; }
+        public PublishingState PublishingState { get; set; }
     }
 }

@@ -1,7 +1,6 @@
 ﻿using Catalogue.Data.Model;
 using Catalogue.Data.Write;
 using Catalogue.Gemini.Templates;
-using Catalogue.Robot.Publishing.OpenData;
 using Catalogue.Utilities.Clone;
 using FluentAssertions;
 using Moq;
@@ -9,6 +8,9 @@ using NUnit.Framework;
 using System;
 using System.Collections.Generic;
 using Catalogue.Data;
+using Catalogue.Robot.Publishing;
+using Catalogue.Robot.Publishing.Data;
+using Catalogue.Robot.Publishing.Gov;
 using Catalogue.Robot.Publishing.Hub;
 
 namespace Catalogue.Tests.Slow.Catalogue.Robot
@@ -29,7 +31,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Robot
                 });
                 r.Publication = new PublicationInfo
                 {
-                    Assessment = new OpenDataAssessmentInfo
+                    Assessment = new AssessmentInfo
                     {
                         Completed = true,
                         CompletedOnUtc = new DateTime(2017, 09, 25)
@@ -79,12 +81,12 @@ namespace Catalogue.Tests.Slow.Catalogue.Robot
                 });
                 r.Publication = new PublicationInfo
                 {
-                    Assessment = new OpenDataAssessmentInfo
+                    Assessment = new AssessmentInfo
                     {
                         Completed = true,
                         CompletedOnUtc = new DateTime(2017, 09, 25)
                     },
-                    SignOff = new OpenDataSignOffInfo
+                    SignOff = new SignOffInfo
                     {
                         DateUtc = new DateTime(2017, 09, 26)
                     },
@@ -117,12 +119,12 @@ namespace Catalogue.Tests.Slow.Catalogue.Robot
                 });
                 r.Publication = new PublicationInfo
                 {
-                    Assessment = new OpenDataAssessmentInfo
+                    Assessment = new AssessmentInfo
                     {
                         Completed = true,
                         CompletedOnUtc = new DateTime(2017, 09, 25)
                     },
-                    SignOff = new OpenDataSignOffInfo
+                    SignOff = new SignOffInfo
                     {
                         DateUtc = new DateTime(2017, 09, 26)
                     },
@@ -155,12 +157,12 @@ namespace Catalogue.Tests.Slow.Catalogue.Robot
                 });
                 r.Publication = new PublicationInfo
                 {
-                    Assessment = new OpenDataAssessmentInfo
+                    Assessment = new AssessmentInfo
                     {
                         Completed = true,
                         CompletedOnUtc = new DateTime(2017, 09, 25)
                     },
-                    SignOff = new OpenDataSignOffInfo
+                    SignOff = new SignOffInfo
                     {
                         DateUtc = new DateTime(2017, 09, 26)
                     },
@@ -193,11 +195,11 @@ namespace Catalogue.Tests.Slow.Catalogue.Robot
                 });
                 r.Publication = new PublicationInfo
                 {
-                    Assessment = new OpenDataAssessmentInfo
+                    Assessment = new AssessmentInfo
                     {
                         Completed = false
                     },
-                    SignOff = new OpenDataSignOffInfo
+                    SignOff = new SignOffInfo
                     {
                         DateUtc = new DateTime(2017, 09, 25)
                     },
@@ -230,12 +232,12 @@ namespace Catalogue.Tests.Slow.Catalogue.Robot
                 });
                 r.Publication = new PublicationInfo
                 {
-                    Assessment = new OpenDataAssessmentInfo
+                    Assessment = new AssessmentInfo
                     {
                         Completed = true,
                         CompletedOnUtc = new DateTime(2017, 09, 25)
                     },
-                    SignOff = new OpenDataSignOffInfo
+                    SignOff = new SignOffInfo
                     {
                         DateUtc = new DateTime(2017, 09, 26)
                     },
@@ -272,12 +274,12 @@ namespace Catalogue.Tests.Slow.Catalogue.Robot
                 });
                 r.Publication = new PublicationInfo
                 {
-                    Assessment = new OpenDataAssessmentInfo
+                    Assessment = new AssessmentInfo
                     {
                         Completed = true,
                         CompletedOnUtc = new DateTime(2017, 09, 25)
                     },
-                    SignOff = new OpenDataSignOffInfo
+                    SignOff = new SignOffInfo
                     {
                         DateUtc = new DateTime(2017, 09, 26)
                     },
@@ -316,12 +318,12 @@ namespace Catalogue.Tests.Slow.Catalogue.Robot
                 });
                 r.Publication = new PublicationInfo
                 {
-                    Assessment = new OpenDataAssessmentInfo
+                    Assessment = new AssessmentInfo
                     {
                         Completed = true,
                         CompletedOnUtc = new DateTime(2017, 09, 25)
                     },
-                    SignOff = new OpenDataSignOffInfo
+                    SignOff = new SignOffInfo
                     {
                         DateUtc = new DateTime(2017, 09, 26)
                     },
@@ -355,12 +357,12 @@ namespace Catalogue.Tests.Slow.Catalogue.Robot
                 });
                 r.Publication = new PublicationInfo
                 {
-                    Assessment = new OpenDataAssessmentInfo
+                    Assessment = new AssessmentInfo
                     {
                         Completed = true,
                         CompletedOnUtc = new DateTime(2017, 09, 25)
                     },
-                    SignOff = new OpenDataSignOffInfo
+                    SignOff = new SignOffInfo
                     {
                         DateUtc = new DateTime(2017, 09, 26)
                     },
@@ -404,12 +406,12 @@ namespace Catalogue.Tests.Slow.Catalogue.Robot
                 });
                 r.Publication = new PublicationInfo
                 {
-                    Assessment = new OpenDataAssessmentInfo
+                    Assessment = new AssessmentInfo
                     {
                         Completed = true,
                         CompletedOnUtc = new DateTime(2017, 09, 25)
                     },
-                    SignOff = new OpenDataSignOffInfo
+                    SignOff = new SignOffInfo
                     {
                         DateUtc = new DateTime(2017, 09, 26)
                     },
@@ -458,12 +460,12 @@ namespace Catalogue.Tests.Slow.Catalogue.Robot
                 });
                 r.Publication = new PublicationInfo
                 {
-                    Assessment = new OpenDataAssessmentInfo
+                    Assessment = new AssessmentInfo
                     {
                         Completed = true,
                         CompletedOnUtc = new DateTime(2017, 09, 25)
                     },
-                    SignOff = new OpenDataSignOffInfo
+                    SignOff = new SignOffInfo
                     {
                         DateUtc = new DateTime(2017, 09, 26)
                     },
@@ -512,12 +514,12 @@ namespace Catalogue.Tests.Slow.Catalogue.Robot
                 });
                 r.Publication = new PublicationInfo
                 {
-                    Assessment = new OpenDataAssessmentInfo
+                    Assessment = new AssessmentInfo
                     {
                         Completed = true,
                         CompletedOnUtc = new DateTime(2017, 09, 28)
                     },
-                    SignOff = new OpenDataSignOffInfo
+                    SignOff = new SignOffInfo
                     {
                         DateUtc = new DateTime(2017, 09, 29)
                     },
@@ -565,12 +567,12 @@ namespace Catalogue.Tests.Slow.Catalogue.Robot
                 });
                 r.Publication = new PublicationInfo
                 {
-                    Assessment = new OpenDataAssessmentInfo
+                    Assessment = new AssessmentInfo
                     {
                         Completed = true,
                         CompletedOnUtc = new DateTime(2017, 09, 28)
                     },
-                    SignOff = new OpenDataSignOffInfo
+                    SignOff = new SignOffInfo
                     {
                         DateUtc = new DateTime(2017, 09, 29)
                     },
@@ -618,12 +620,12 @@ namespace Catalogue.Tests.Slow.Catalogue.Robot
                 });
                 r.Publication = new PublicationInfo
                 {
-                    Assessment = new OpenDataAssessmentInfo
+                    Assessment = new AssessmentInfo
                     {
                         Completed = true,
                         CompletedOnUtc = new DateTime(2017, 09, 28)
                     },
-                    SignOff = new OpenDataSignOffInfo
+                    SignOff = new SignOffInfo
                     {
                         DateUtc = new DateTime(2017, 09, 29)
                     },
@@ -671,12 +673,12 @@ namespace Catalogue.Tests.Slow.Catalogue.Robot
                 });
                 r.Publication = new PublicationInfo
                 {
-                    Assessment = new OpenDataAssessmentInfo
+                    Assessment = new AssessmentInfo
                     {
                         Completed = true,
                         CompletedOnUtc = new DateTime(2017, 09, 28)
                     },
-                    SignOff = new OpenDataSignOffInfo
+                    SignOff = new SignOffInfo
                     {
                         DateUtc = new DateTime(2017, 09, 26)
                     },
@@ -724,12 +726,12 @@ namespace Catalogue.Tests.Slow.Catalogue.Robot
                 });
                 r.Publication = new PublicationInfo
                 {
-                    Assessment = new OpenDataAssessmentInfo
+                    Assessment = new AssessmentInfo
                     {
                         Completed = true,
                         CompletedOnUtc = new DateTime(2017, 09, 28)
                     },
-                    SignOff = new OpenDataSignOffInfo
+                    SignOff = new SignOffInfo
                     {
                         DateUtc = new DateTime(2017, 09, 29)
                     },
@@ -785,9 +787,10 @@ namespace Catalogue.Tests.Slow.Catalogue.Robot
                 WaitForIndexing(ReusableDocumentStore);
 
                 var uploadServiceMock = new Mock<IPublishingUploadRecordService>();
-                var uploadHelperMock = new Mock<IOpenDataUploadHelper>();
+                var dataUploaderMock = new Mock<IDataUploader>();
+                var metadataUploaderMock = new Mock<IMetadataUploader>();
                 var hubServiceMock = new Mock<IHubService>();
-                var robotUploader = new RobotPublisher(db, uploadServiceMock.Object, uploadHelperMock.Object, hubServiceMock.Object);
+                var robotUploader = new RobotPublisher(db, uploadServiceMock.Object, dataUploaderMock.Object, metadataUploaderMock.Object, hubServiceMock.Object);
 
                 var result = robotUploader.GetRecordsPendingUpload();
                 return result;

@@ -42,7 +42,7 @@ namespace Catalogue.Web.Controllers.Dumps
         [HttpGet, Route("api/dumps/recordswithpublishinginfo")]
         public List<RecordWithPublicationInfoResultShape> RecordsWithPublishingInfo()
         {
-            var results = db.Query<Record, RecordsWithOpenDataPublicationInfoIndex>().Fetch(1024);
+            var results = db.Query<Record, RecordsWithPublicationInfoIndex>().Fetch(1024);
 
             return results.Select(r => new RecordWithPublicationInfoResultShape
                 {
@@ -105,7 +105,7 @@ namespace Catalogue.Web.Controllers.Dumps
         [HttpGet, Route("api/dumps/recordsnotpublishedsincelastupdated")]
         public List<RecordWithPublicationInfoResultShape> RecordsNotPublishedSinceLastUpdated()
         {
-            var results = db.Query<RecordsWithOpenDataPublicationInfoIndex.Result, RecordsWithOpenDataPublicationInfoIndex>()
+            var results = db.Query<RecordsWithPublicationInfoIndex.Result, RecordsWithPublicationInfoIndex>()
                 .Where(r => !r.PublishedSinceLastUpdated)
                 .OfType<Record>()
                 .Fetch(1024);

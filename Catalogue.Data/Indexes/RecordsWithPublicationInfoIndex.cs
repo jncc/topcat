@@ -6,7 +6,7 @@ using Raven.Client.Documents.Indexes;
 
 namespace Catalogue.Data.Indexes
 {
-    public class RecordsWithOpenDataPublicationInfoIndex : AbstractIndexCreationTask<Record, RecordsWithOpenDataPublicationInfoIndex.Result>
+    public class RecordsWithPublicationInfoIndex : AbstractIndexCreationTask<Record, RecordsWithPublicationInfoIndex.Result>
     {
         public class Result
         {
@@ -22,7 +22,7 @@ namespace Catalogue.Data.Indexes
             public bool PublishingIsPaused { get; set; }
         }
 
-        public RecordsWithOpenDataPublicationInfoIndex()
+        public RecordsWithPublicationInfoIndex()
         {
             // note that these calculations rely on the trick of using
             // DateTime.MinValue to avoid nulls and enable simple value comparisions which can be done on the RavenDB server

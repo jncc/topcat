@@ -8,9 +8,9 @@ using System.Web.Http.Controllers;
 namespace Catalogue.Web.Security
 {
     [AttributeUsage(AttributeTargets.Class | AttributeTargets.Method)]
-    public class AuthorizeOpenDataIaoAttribute : AuthorizeAttribute
+    public class AuthorizeIaoAttribute : AuthorizeAttribute
     {
-        public AuthorizeOpenDataIaoAttribute()
+        public AuthorizeIaoAttribute()
         {
             var allRoles = (NameValueCollection) ConfigurationManager.GetSection("roles");
             Roles = allRoles["OpenDataIaoRole"];

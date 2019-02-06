@@ -1,13 +1,12 @@
-﻿using System;
+﻿using Catalogue.Data.Model;
+using Microsoft.XmlDiffPatch;
+using Newtonsoft.Json;
+using NUnit.Framework;
 using System.IO;
 using System.Reflection;
 using System.Text;
 using System.Xml;
-using Catalogue.Data.Model;
-using Catalogue.Robot.Publishing.OpenData;
-using Microsoft.XmlDiffPatch;
-using NUnit.Framework;
-using Newtonsoft.Json;
+using Catalogue.Robot.Publishing.Gov;
 
 namespace Catalogue.Tests.Slow.Catalogue.Robot
 {
@@ -19,7 +18,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Robot
             var record = GetRecordFromFile("721643b8-7e42-40ca-87d9-23f19221238e", @"records.721643b8-7e42-40ca-87d9-23f19221238e.json");
             var expectedXmlDoc = GetInputFileAsXmlDoc(@"wafs.721643b8-7e42-40ca-87d9-23f19221238e.xml");
 
-            var xmlHelper = new OpenDataXmlHelper();
+            var xmlHelper = new XmlHelper();
             var actualWaf = xmlHelper.GetMetadataDocument(record);
             var actualXmlDoc = GetByteArrayAsXmlDoc(actualWaf);
 
@@ -33,7 +32,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Robot
             var record = GetRecordFromFile("00b0b44c-a062-4a25-b344-2be12b03a6b5", @"records.00b0b44c-a062-4a25-b344-2be12b03a6b5.json");
             var expectedXmlDoc = GetInputFileAsXmlDoc(@"wafs.00b0b44c-a062-4a25-b344-2be12b03a6b5.xml");
 
-            var xmlHelper = new OpenDataXmlHelper();
+            var xmlHelper = new XmlHelper();
             var actualWaf = xmlHelper.GetMetadataDocument(record);
             var actualXmlDoc = GetByteArrayAsXmlDoc(actualWaf);
 
@@ -47,7 +46,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Robot
             var record = GetRecordFromFile("9d9775da-44b1-4b96-9302-c842958e9130", @"records.9d9775da-44b1-4b96-9302-c842958e9130.json");
             var expectedXmlDoc = GetInputFileAsXmlDoc(@"wafs.9d9775da-44b1-4b96-9302-c842958e9130.xml");
 
-            var xmlHelper = new OpenDataXmlHelper();
+            var xmlHelper = new XmlHelper();
             var actualWaf = xmlHelper.GetMetadataDocument(record);
             var actualXmlDoc = GetByteArrayAsXmlDoc(actualWaf);
 
@@ -61,7 +60,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Robot
             var record = GetRecordFromFile("c6f3632d-8789-460b-a09d-c132841a7190", @"records.c6f3632d-8789-460b-a09d-c132841a7190.json");
             var expectedXmlDoc = GetInputFileAsXmlDoc(@"wafs.c6f3632d-8789-460b-a09d-c132841a7190.xml");
 
-            var xmlHelper = new OpenDataXmlHelper();
+            var xmlHelper = new XmlHelper();
             var actualWaf = xmlHelper.GetMetadataDocument(record);
             var actualXmlDoc = GetByteArrayAsXmlDoc(actualWaf);
 
@@ -75,7 +74,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Robot
             var record = GetRecordFromFile("4cb2cca3-ec95-4962-9618-8556d88390fd", @"records.4cb2cca3-ec95-4962-9618-8556d88390fd.json");
             var expectedXmlDoc = GetInputFileAsXmlDoc(@"wafs.4cb2cca3-ec95-4962-9618-8556d88390fd.xml");
 
-            var xmlHelper = new OpenDataXmlHelper();
+            var xmlHelper = new XmlHelper();
             var actualWaf = xmlHelper.GetMetadataDocument(record);
             var actualXmlDoc = GetByteArrayAsXmlDoc(actualWaf);
 
@@ -90,7 +89,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Robot
             var initialIndex = GetInputFileContents(@"wafs.index_initial.html");
             var expectedIndexDoc = GetInputFileAsXmlDoc(@"wafs.index_expected.html");
 
-            var xmlHelper = new OpenDataXmlHelper();
+            var xmlHelper = new XmlHelper();
             var actualWaf = xmlHelper.UpdateWafIndexDocument(record, initialIndex);
             var actualIndexDoc = GetStringAsXmlDoc(actualWaf);
 
@@ -106,7 +105,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Robot
 
             record.Gemini.MetadataPointOfContact.Name = "Bob Flemming"; // this name should not be in the output xml
 
-            var xmlHelper = new OpenDataXmlHelper();
+            var xmlHelper = new XmlHelper();
             var actualWaf = xmlHelper.GetMetadataDocument(record);
             var actualXmlDoc = GetByteArrayAsXmlDoc(actualWaf);
 

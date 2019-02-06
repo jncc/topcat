@@ -33,7 +33,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Web.Controllers.Publishing
                 });
                 r.Publication = new PublicationInfo
                 {
-                    Assessment = new OpenDataAssessmentInfo
+                    Assessment = new AssessmentInfo
                     {
                         Completed = true,
                         CompletedOnUtc = new DateTime(2017, 09, 27)
@@ -76,7 +76,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Web.Controllers.Publishing
                 });
                 r.Publication = new PublicationInfo
                 {
-                    Assessment = new OpenDataAssessmentInfo
+                    Assessment = new AssessmentInfo
                     {
                         Completed = true,
                         CompletedOnUtc = new DateTime(2017, 09, 27)
@@ -119,7 +119,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Web.Controllers.Publishing
                 });
                 r.Publication = new PublicationInfo
                 {
-                    Assessment = new OpenDataAssessmentInfo
+                    Assessment = new AssessmentInfo
                     {
                         Completed = true,
                         CompletedOnUtc = new DateTime(2017, 09, 27)
@@ -162,7 +162,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Web.Controllers.Publishing
                 });
                 r.Publication = new PublicationInfo
                 {
-                    Assessment = new OpenDataAssessmentInfo
+                    Assessment = new AssessmentInfo
                     {
                         Completed = false,
                     },
@@ -192,12 +192,12 @@ namespace Catalogue.Tests.Slow.Catalogue.Web.Controllers.Publishing
                 });
                 r.Publication = new PublicationInfo
                 {
-                    Assessment = new OpenDataAssessmentInfo
+                    Assessment = new AssessmentInfo
                     {
                         Completed = true,
                         CompletedOnUtc = new DateTime(2017, 07, 29)
                     },
-                    SignOff = new OpenDataSignOffInfo
+                    SignOff = new SignOffInfo
                     {
                         DateUtc = new DateTime(2017, 07, 20),
                         User = new UserInfo
@@ -235,7 +235,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Web.Controllers.Publishing
                 });
                 r.Publication = new PublicationInfo
                 {
-                    Assessment = new OpenDataAssessmentInfo
+                    Assessment = new AssessmentInfo
                     {
                         Completed = true,
                         CompletedOnUtc = new DateTime(2017, 09, 27)
@@ -286,12 +286,12 @@ namespace Catalogue.Tests.Slow.Catalogue.Web.Controllers.Publishing
                 });
                 r.Publication = new PublicationInfo
                 {
-                    Assessment = new OpenDataAssessmentInfo
+                    Assessment = new AssessmentInfo
                     {
                         Completed = true,
                         CompletedOnUtc = DateTime.Parse("2017-07-12T00:00:00.0000000Z")
                     },
-                    SignOff = new OpenDataSignOffInfo
+                    SignOff = new SignOffInfo
                     {
                         User = new UserInfo
                         {
@@ -346,12 +346,12 @@ namespace Catalogue.Tests.Slow.Catalogue.Web.Controllers.Publishing
                 });
                 r.Publication = new PublicationInfo
                 {
-                    Assessment = new OpenDataAssessmentInfo
+                    Assessment = new AssessmentInfo
                     {
                         Completed = true,
                         CompletedOnUtc = new DateTime(2017, 07, 09)
                     },
-                    SignOff = new OpenDataSignOffInfo
+                    SignOff = new SignOffInfo
                     {
                         User = new UserInfo
                         {
@@ -412,12 +412,12 @@ namespace Catalogue.Tests.Slow.Catalogue.Web.Controllers.Publishing
                 });
                 r.Publication = new PublicationInfo
                 {
-                    Assessment = new OpenDataAssessmentInfo
+                    Assessment = new AssessmentInfo
                     {
                         Completed = true,
                         CompletedOnUtc = new DateTime(2017, 07, 09)
                     },
-                    SignOff = new OpenDataSignOffInfo
+                    SignOff = new SignOffInfo
                     {
                         User = new UserInfo
                         {
@@ -474,12 +474,12 @@ namespace Catalogue.Tests.Slow.Catalogue.Web.Controllers.Publishing
                 });
                 r.Publication = new PublicationInfo
                 {
-                    Assessment = new OpenDataAssessmentInfo
+                    Assessment = new AssessmentInfo
                     {
                         Completed = true,
                         CompletedOnUtc = new DateTime(2017, 07, 09)
                     },
-                    SignOff = new OpenDataSignOffInfo
+                    SignOff = new SignOffInfo
                     {
                         User = new UserInfo
                         {
@@ -541,7 +541,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Web.Controllers.Publishing
                 });
                 r.Publication = new PublicationInfo
                 {
-                    Assessment = new OpenDataAssessmentInfo
+                    Assessment = new AssessmentInfo
                     {
                         Completed = true,
                         CompletedOnUtc = new DateTime(2017, 09, 25),
@@ -582,12 +582,12 @@ namespace Catalogue.Tests.Slow.Catalogue.Web.Controllers.Publishing
                 });
                 r.Publication = new PublicationInfo
                 {
-                    Assessment = new OpenDataAssessmentInfo
+                    Assessment = new AssessmentInfo
                     {
                         Completed = true,
                         CompletedOnUtc = new DateTime(2017, 09, 25)
                     },
-                    SignOff = new OpenDataSignOffInfo
+                    SignOff = new SignOffInfo
                     {
                         DateUtc = new DateTime(2017, 09, 26),
                         User = TestUserInfo.TestUser
@@ -608,11 +608,11 @@ namespace Catalogue.Tests.Slow.Catalogue.Web.Controllers.Publishing
                 });
                 r.Publication = new PublicationInfo
                 {
-                    Assessment = new OpenDataAssessmentInfo
+                    Assessment = new AssessmentInfo
                     {
                         Completed = false
                     },
-                    SignOff = new OpenDataSignOffInfo
+                    SignOff = new SignOffInfo
                     {
                         DateUtc = new DateTime(2017, 09, 25),
                         User = TestUserInfo.TestUser
@@ -633,12 +633,12 @@ namespace Catalogue.Tests.Slow.Catalogue.Web.Controllers.Publishing
                 });
                 r.Publication = new PublicationInfo
                 {
-                    Assessment = new OpenDataAssessmentInfo
+                    Assessment = new AssessmentInfo
                     {
                         Completed = true,
                         CompletedOnUtc = new DateTime(2017, 09, 25)
                     },
-                    SignOff = new OpenDataSignOffInfo
+                    SignOff = new SignOffInfo
                     {
                         DateUtc = new DateTime(2017, 09, 20),
                         User = TestUserInfo.TestUser
@@ -680,12 +680,12 @@ namespace Catalogue.Tests.Slow.Catalogue.Web.Controllers.Publishing
                 });
                 r.Publication = new PublicationInfo
                 {
-                    Assessment = new OpenDataAssessmentInfo
+                    Assessment = new AssessmentInfo
                     {
                         Completed = true,
                         CompletedOnUtc = new DateTime(2017, 09, 25)
                     },
-                    SignOff = new OpenDataSignOffInfo
+                    SignOff = new SignOffInfo
                     {
                         DateUtc = new DateTime(2017, 09, 28),
                         User = TestUserInfo.TestUser
@@ -713,12 +713,12 @@ namespace Catalogue.Tests.Slow.Catalogue.Web.Controllers.Publishing
                 });
                 r.Publication = new PublicationInfo
                 {
-                    Assessment = new OpenDataAssessmentInfo
+                    Assessment = new AssessmentInfo
                     {
                         Completed = false,
                         CompletedOnUtc = new DateTime(2017, 09, 25)
                     },
-                    SignOff = new OpenDataSignOffInfo
+                    SignOff = new SignOffInfo
                     {
                         DateUtc = new DateTime(2017, 09, 20),
                         User = TestUserInfo.TestUser
@@ -746,12 +746,12 @@ namespace Catalogue.Tests.Slow.Catalogue.Web.Controllers.Publishing
                 });
                 r.Publication = new PublicationInfo
                 {
-                    Assessment = new OpenDataAssessmentInfo
+                    Assessment = new AssessmentInfo
                     {
                         Completed = true,
                         CompletedOnUtc = new DateTime(2017, 09, 25)
                     },
-                    SignOff = new OpenDataSignOffInfo
+                    SignOff = new SignOffInfo
                     {
                         DateUtc = new DateTime(2017, 09, 26),
                         User = TestUserInfo.TestUser
@@ -813,15 +813,15 @@ namespace Catalogue.Tests.Slow.Catalogue.Web.Controllers.Publishing
             }
         }
 
-        private static OpenDataPublishingController GetTestOpenDataPublishingController(IDocumentSession db)
+        private static PublishingController GetTestOpenDataPublishingController(IDocumentSession db)
         {
             var testUserContext = new TestUserContext();
             var userContextMock = new Mock<IUserContext>();
             userContextMock.Setup(u => u.User).Returns(testUserContext.User);
 
-            var publishingService = new OpenDataPublishingRecordService(db, new RecordValidator());
+            var publishingService = new RecordPublishingService(db, new RecordValidator());
 
-            return new OpenDataPublishingController(db, publishingService, userContextMock.Object);
+            return new PublishingController(db, publishingService, userContextMock.Object);
         }
     }
 }

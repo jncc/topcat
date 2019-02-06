@@ -1,6 +1,5 @@
 ﻿using Catalogue.Data;
 using Catalogue.Robot.Injection;
-using Catalogue.Robot.Publishing.OpenData;
 using log4net;
 using log4net.Config;
 using Ninject;
@@ -8,6 +7,7 @@ using Quartz;
 using System;
 using System.Configuration;
 using System.Net.Http;
+using Catalogue.Robot.Publishing;
 using Raven.Client.Documents;
 using Topshelf;
 using Topshelf.Ninject;
@@ -73,7 +73,7 @@ namespace Catalogue.Robot
                         s.WhenStarted(p => p.Start());
                         s.WhenStopped(p => p.Stop());
                         s.ScheduleQuartzJob(q =>
-                            q.WithJob(() => JobBuilder.Create<OpenDataUploadJob>().Build())
+                            q.WithJob(() => JobBuilder.Create<UploadJob>().Build())
                                 .AddTrigger(() => TriggerBuilder.Create()
                                     .WithDailyTimeIntervalSchedule(b => b
                                         .WithIntervalInHours(interval)
@@ -94,14 +94,14 @@ namespace Catalogue.Robot
         /// <summary>
         /// Creates an instance with dependecies injected.
         /// </summary>
-        public static OpenDataUploadJob CreateUploadJob()
+        public static UploadJob CreateUploadJob()
         {
             var kernel = new StandardKernel();
 
             // register the type bindings we want for injection 
             kernel.Load<MainNinjectModule>();
 
-            return kernel.Get<OpenDataUploadJob>();
+            return kernel.Get<UploadJob>();
         }
     }
 }
