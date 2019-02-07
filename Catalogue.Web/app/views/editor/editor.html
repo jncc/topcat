@@ -533,7 +533,7 @@
 
 
     
-    <div tab ng-if="form.publication.openData.publishable">
+    <div tab>
         <tab-heading>
             <span class="glyphicon glyphicon-gift"></span> Publishing
             <small ng-show="true" class="little-warning-badge" tc-tip title="This resource has {{form.publication.openData.resources.length}} files in its publication package">
@@ -544,45 +544,18 @@
         <div class="well well-lg">
 
             <div ng-if="!form.publication.openData.resources.length">
-                This record has <b>no publishable resources</b> defined.
-                <br/>
-                <br/>
-                Topcat will try to publish the working copy at the path defined in the <b>working copy location</b> field, above.
-                <br/>
-                <br/>
+                This record currently has <b>no publishable resources</b> defined.
+                <br />
+                <br />
                 <button class="btn btn-primary" ng-click="addOpenDataResource(form)">
-                    Add publication package
+                    Add publishable resources
                 </button>
             </div>
             <div ng-if="form.publication.openData.resources.length">
-                This record has {{form.publication.openData.resources.length}} resource<span ng-if="form.publication.openData.resources.length > 1">s</span> which will be published instead of the working copy.
+                This record has {{form.publication.openData.resources.length}} publishable resource<span ng-if="form.publication.openData.resources.length > 1">s</span>.
                 <br />
                 <br />
                 <div ng-repeat="resource in form.publication.openData.resources" style="margin-bottom: .4em;">
-                    <!--<div style="margin-bottom: 0.2em;">
-                        <form class="form-inline" role="form">
-                            <div class="form-group">
-                                <input class="form-control" type="text" size="50"
-                                       ng-model="resource.name"
-                                       placeholder="Resource name"
-                                       title="Name of the resource"
-                                       tc-focus-tip />
-                            </div>
-                            <button class="btn btn-primary" title="Remove from package" tc-tip ng-click="removeOpenDataResource(form, resource)">
-                                <span class="glyphicon glyphicon-remove-circle"></span>
-                            </button>
-                        </form>
-                    </div>
-                    <div class="input-group">
-                        <div class="input-group-addon"><span class="glyphicon glyphicon-th-large"></span></div>
-
-                        <input type="text" class="form-control" size="90"
-                               ng-model="resource.path"
-                               placeholder="Filepath or URL, e.g. Z:\path\to\file.docx or https://data.example.com"
-                               tc-focus-tip
-                               title="Paste the path to the file on the fileshare here"
-                               ng-change="resource.path = trimDoubleQuotes(resource.path)" />
-                    </div>-->
                     <form class="form-inline" role="form">
                         <div class="form-group">
 
@@ -594,8 +567,7 @@
                                        placeholder="Filepath or URL, e.g. Z:\path\to\file.docx or https://data.example.com"
                                        tc-focus-tip
                                        title="Paste the path to the file on the fileshare here"
-                                       ng-change="resource.path = trimDoubleQuotes(resource.path)"
-                                       />
+                                       ng-change="resource.path = trimDoubleQuotes(resource.path)" />
                             </div>
                             <div class="form-group">
                                 <input class="form-control" type="text" size="25"
@@ -604,14 +576,11 @@
                                        title="Name of the resource"
                                        tc-focus-tip />
                             </div>
-                            <button class="btn btn-primary" title="Remove from package" tc-tip ng-click="removeOpenDataResource(form, resource)">
+                            <button class="btn btn-primary" title="Remove resource" tc-tip ng-click="removeOpenDataResource(form, resource)">
                                 <span class="glyphicon glyphicon-remove-circle"></span>
                             </button>
                         </div>
                     </form>
-                    <!-- <div> -->
-                    <!--     {{resource.url}} -->
-                    <!-- </div> -->
                 </div>
 
                 <br />
