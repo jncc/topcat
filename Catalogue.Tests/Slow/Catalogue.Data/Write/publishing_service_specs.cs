@@ -358,7 +358,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Data.Write
                     {
                         Publishable = false, // previously published here
                         LastSuccess = new PublicationAttempt
-                            {
+                        {
                             DateUtc = new DateTime(2017, 08, 17, 12, 0, 0)
                         }
                     }

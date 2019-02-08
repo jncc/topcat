@@ -12,7 +12,7 @@
     };
     $scope.m = m;
     loadData = function() {
-      return $http.get('../api/publishing/opendata/pendingsignoff').success(function(result) {
+      return $http.get('../api/publishing/pendingsignoff').success(function(result) {
         var r, _i, _len, _results;
         m.openData.list = result;
         _results = [];
@@ -29,7 +29,7 @@
         id: recordId,
         comment: ""
       };
-      return $http.put('../api/publishing/opendata/signoff', $scope.signOffRequest).success(function(result) {
+      return $http.put('../api/publishing/signoff', $scope.signOffRequest).success(function(result) {
         m.signOffStatus[recordId] = "Signed Off";
         $scope.status.refresh();
         return $scope.notifications.add("Successfully signed off");

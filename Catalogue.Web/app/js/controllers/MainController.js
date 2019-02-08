@@ -38,7 +38,7 @@
     $scope.status = {
       pendingSignOffCount: 0,
       refresh: function() {
-        return $http.get('../api/publishing/opendata/pendingsignoffcountforcurrentuser').success(function(result) {
+        return $http.get('../api/publishing/pendingsignoffcountforcurrentuser').success(function(result) {
           return $scope.status.pendingSignOffCount = result;
         });
       }

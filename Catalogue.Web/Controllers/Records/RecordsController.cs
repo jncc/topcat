@@ -41,7 +41,7 @@ namespace Catalogue.Web.Controllers.Records
                 record = Helpers.RemoveCollectionFromId(record);
             }
 
-            return new RecordOutputModel
+            var output = new RecordOutputModel
             {
                 Record = record,
                 RecordState = new RecordState
@@ -55,6 +55,8 @@ namespace Catalogue.Web.Controllers.Records
                     }
                 }
             };
+
+            return output;
         }
 
         private Record Clone(Record record)

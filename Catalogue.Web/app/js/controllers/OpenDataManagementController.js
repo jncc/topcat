@@ -11,32 +11,32 @@
     };
     $scope.m = m;
     loadSummary = function() {
-      return $http.get('../api/publishing/opendata/summary').success(function(result) {
+      return $http.get('../api/publishing/summary').success(function(result) {
         return m.openData.summary = result;
       });
     };
     loadTab1Data = function() {
-      return $http.get('../api/publishing/opendata/publishedsincelastupdated').success(function(result) {
+      return $http.get('../api/publishing/publishedsincelastupdated').success(function(result) {
         return m.openData.list = result;
       });
     };
     loadTab2Data = function() {
-      return $http.get('../api/publishing/opendata/notpublishedsincelastupdated').success(function(result) {
+      return $http.get('../api/publishing/notpublishedsincelastupdated').success(function(result) {
         return m.openData.list = result;
       });
     };
     loadTab3Data = function() {
-      return $http.get('../api/publishing/opendata/publicationneverattempted').success(function(result) {
+      return $http.get('../api/publishing/publicationneverattempted').success(function(result) {
         return m.openData.list = result;
       });
     };
     loadTab4Data = function() {
-      return $http.get('../api/publishing/opendata/lastpublicationattemptwasunsuccessful').success(function(result) {
+      return $http.get('../api/publishing/lastpublicationattemptwasunsuccessful').success(function(result) {
         return m.openData.list = result;
       });
     };
     loadTab5Data = function() {
-      return $http.get('../api/publishing/opendata/pendingsignoff').success(function(result) {
+      return $http.get('../api/publishing/pendingsignoff').success(function(result) {
         return m.openData.list = result;
       });
     };

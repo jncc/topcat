@@ -70,7 +70,7 @@ namespace Catalogue.Robot.Publishing
                     try
                     {
                         PublishDataFiles(record);
-                        //PublishHubMetadata(record);
+                        PublishHubMetadata(record);
                         PublishGovMetadata(record);
                     }
                     catch (WebException ex)

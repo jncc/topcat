@@ -182,7 +182,7 @@
           <gmd:onLine>
             <gmd:CI_OnlineResource>
               <gmd:linkage>
-                <gmd:URL>http://data.jncc.gov.uk/data/721643b8-7e42-40ca-87d9-23f19221238e/Scotia-Herring-Acoustic-Grab.zip</gmd:URL>
+                <gmd:URL>http://data.jncc.gov.uk/data/721643b8-7e42-40ca-87d9-23f19221238e-Scotia-Herring-Acoustic-Grab.zip</gmd:URL>
               </gmd:linkage>
               <gmd:name>
                 <gco:CharacterString>Scotia Herring Acoustic Grab</gco:CharacterString>

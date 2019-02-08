@@ -10,13 +10,13 @@
         
         $scope.m = m
 
-        loadSummary = -> $http.get('../api/publishing/opendata/summary').success (result) -> m.openData.summary = result
+        loadSummary = -> $http.get('../api/publishing/summary').success (result) -> m.openData.summary = result
         
-        loadTab1Data = -> $http.get('../api/publishing/opendata/publishedsincelastupdated').success (result) -> m.openData.list = result
-        loadTab2Data = -> $http.get('../api/publishing/opendata/notpublishedsincelastupdated').success (result) -> m.openData.list = result
-        loadTab3Data = -> $http.get('../api/publishing/opendata/publicationneverattempted').success (result) -> m.openData.list = result
-        loadTab4Data = -> $http.get('../api/publishing/opendata/lastpublicationattemptwasunsuccessful').success (result) -> m.openData.list = result
-        loadTab5Data = -> $http.get('../api/publishing/opendata/pendingsignoff').success (result) ->
+        loadTab1Data = -> $http.get('../api/publishing/publishedsincelastupdated').success (result) -> m.openData.list = result
+        loadTab2Data = -> $http.get('../api/publishing/notpublishedsincelastupdated').success (result) -> m.openData.list = result
+        loadTab3Data = -> $http.get('../api/publishing/publicationneverattempted').success (result) -> m.openData.list = result
+        loadTab4Data = -> $http.get('../api/publishing/lastpublicationattemptwasunsuccessful').success (result) -> m.openData.list = result
+        loadTab5Data = -> $http.get('../api/publishing/pendingsignoff').success (result) ->
             m.openData.list = result
         
         loadList = ->

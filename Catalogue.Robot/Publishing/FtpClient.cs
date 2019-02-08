@@ -20,8 +20,6 @@ namespace Catalogue.Robot.Publishing
         readonly string username;
         readonly string password;
 
-        private static readonly ILog Logger = LogManager.GetLogger(typeof(FtpClient));
-
         public FtpClient(string username, string password)
         {
             this.username = username;
@@ -30,10 +28,6 @@ namespace Catalogue.Robot.Publishing
 
         public void UploadFile(string ftpPath, string filepath)
         {
-            var folderPath = ftpPath.Replace(Path.GetFileName(ftpPath), "");
-            Logger.Info($"Folder path: {folderPath}");
-            CreateFolder(folderPath);
-
             using (var c = new WebClient { Credentials = new NetworkCredential(username, password), Proxy = null })
             {
                 c.UploadFile(ftpPath, "STOR", filepath);
@@ -61,28 +55,6 @@ namespace Catalogue.Robot.Publishing
             using (var c = new WebClient {Credentials = new NetworkCredential(username, password), Proxy = null})
             {
                 return c.DownloadString(ftpPath);
-            }
-        }
-
-        private void CreateFolder(string folderPath)
-        {
-            var credentials = new NetworkCredential(username, password);
-            WebRequest request = WebRequest.Create(folderPath);
-            request.Method = WebRequestMethods.Ftp.MakeDirectory;
-            request.Credentials = credentials;
-
-            // awkward handling of ftp folder creation
-            try
-            {
-                using (request.GetResponse())
-                {
-                    Logger.Info($"Created directory to store data files: {folderPath}");
-                }
-            }
-            catch (WebException we) when (we.Response is FtpWebResponse ftpWebResponse && ftpWebResponse.StatusDescription.Contains("File unavailable"))
-            {
-                // folder already exists, do nothing
-                Logger.Info($"Record directory already exists: {folderPath}");
             }
         }
     }

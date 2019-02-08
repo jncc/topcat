@@ -41,23 +41,23 @@ angular.module('app.controllers').controller 'OpenDataModalController',
                 publishingStatus.signOff.completed = $scope.form.publication.signOff != null
                 publishingStatus.upload.completed = $scope.form.publication.gov.lastSuccess != null
 
-            if $scope.recordOutput.recordState.openDataPublishingState.assessedAndUpToDate
+            if $scope.recordOutput.recordState.publishingState.assessedAndUpToDate
                 publishingStatus.riskAssessment.currentClass = "visited"
             else if publishingStatus.riskAssessment.completed 
                 publishingStatus.riskAssessment.currentClass = "current"
             else
                 publishingStatus.riskAssessment.currentClass = "current"
 
-            if $scope.recordOutput.recordState.openDataPublishingState.signedOffAndUpToDate
+            if $scope.recordOutput.recordState.publishingState.signedOffAndUpToDate
                 publishingStatus.signOff.currentClass = "visited"
-            else if $scope.recordOutput.recordState.openDataPublishingState.assessedAndUpToDate
+            else if $scope.recordOutput.recordState.publishingState.assessedAndUpToDate
                 publishingStatus.signOff.currentClass = "current"
             else
                 publishingStatus.signOff.currentClass = "disabled"
 
-            if $scope.recordOutput.recordState.openDataPublishingState.publishedToGovAndUpToDate
+            if $scope.recordOutput.recordState.publishingState.publishedToGovAndUpToDate
                 publishingStatus.upload.currentClass = "visited"
-            else if $scope.recordOutput.recordState.openDataPublishingState.signedOffAndUpToDate
+            else if $scope.recordOutput.recordState.publishingState.signedOffAndUpToDate
                 publishingStatus.upload.currentClass = "current"
             else
                 publishingStatus.upload.currentClass = "disabled"
@@ -65,9 +65,9 @@ angular.module('app.controllers').controller 'OpenDataModalController',
         $scope.refreshPublishingStatus()
 
         # load initial status screen
-        if $scope.recordOutput.recordState.openDataPublishingState.signedOffAndUpToDate
+        if $scope.recordOutput.recordState.publishingState.signedOffAndUpToDate
             publishingStatus.currentActiveView = "upload"
-        else if $scope.recordOutput.recordState.openDataPublishingState.assessedAndUpToDate
+        else if $scope.recordOutput.recordState.publishingState.assessedAndUpToDate
             publishingStatus.currentActiveView = "sign off"
         else
             publishingStatus.currentActiveView = "risk assessment"
@@ -77,18 +77,18 @@ angular.module('app.controllers').controller 'OpenDataModalController',
             if $scope.form.publication != null && $scope.form.publication.assessment != null && $scope.form.publication.assessment.completed
                 if $scope.form.publication.assessment.completedByUser == null && $scope.form.publication.assessment.initialAssessmentWasDoneOnSpreadsheet
                     $scope.assessmentCompletedInfo = "Initial assessment completed on spreadsheet"
-                else if $scope.recordOutput.recordState.openDataPublishingState.assessedAndUpToDate
+                else if $scope.recordOutput.recordState.publishingState.assessedAndUpToDate
                     $scope.assessmentCompletedInfo = "Completed by " + $scope.form.publication.assessment.completedByUser.displayName + " on " + moment(new Date($scope.form.publication.assessment.completedOnUtc)).format('DD MMM YYYY h:mm a')
                 else
                     $scope.assessmentCompletedInfo = "Last completed by " + $scope.form.publication.assessment.completedByUser.displayName + " on " + moment(new Date($scope.form.publication.assessment.completedOnUtc)).format('DD MMM YYYY h:mm a')
 
         refreshSignOffInfo = () -> 
-            publishingStatus.signOff.showButton = $scope.user.isIaoUser && !$scope.recordOutput.recordState.openDataPublishingState.signedOffAndUpToDate
+            publishingStatus.signOff.showButton = $scope.user.isIaoUser && !$scope.recordOutput.recordState.publishingState.signedOffAndUpToDate
 
             if $scope.form.publication != null && $scope.form.publication.signOff != null
                 if $scope.form.publication.signOff.user == null
                     $scope.signOffCompletedInfo = "Initial sign off completed on spreadsheet"
-                else if $scope.recordOutput.recordState.openDataPublishingState.signedOffAndUpToDate
+                else if $scope.recordOutput.recordState.publishingState.signedOffAndUpToDate
                     $scope.signOffCompletedInfo = "Signed off by " + $scope.form.publication.signOff.user.displayName + " on " + moment(new Date($scope.form.publication.signOff.dateUtc)).format('DD MMM YYYY h:mm a')
                 else
                     $scope.signOffCompletedInfo = "Last signed off by " + $scope.form.publication.signOff.user.displayName + " on " + moment(new Date($scope.form.publication.signOff.dateUtc)).format('DD MMM YYYY h:mm a')
@@ -103,7 +103,7 @@ angular.module('app.controllers').controller 'OpenDataModalController',
                 if $scope.form.publication.hub == null
                     # never attempted
                     return "Pending"
-                else if $scope.form.publication.hub.lastSuccess != null && ($scope.recordOutput.recordState.openDataPublishingState.publishedToHubAndUpToDate || $scope.recordOutput.recordState.openDataPublishingState.publishedToGovAndUpToDate)
+                else if $scope.form.publication.hub.lastSuccess != null && ($scope.recordOutput.recordState.publishingState.publishedToHubAndUpToDate || $scope.recordOutput.recordState.publishingState.publishedToGovAndUpToDate)
                     # published and up to date
                     return "Completed on " + moment(new Date($scope.form.publication.hub.lastSuccess.dateUtc)).format('DD MMM YYYY h:mm a')
                 else if $scope.form.publication.hub.lastSuccess != null
@@ -120,7 +120,7 @@ angular.module('app.controllers').controller 'OpenDataModalController',
                 if $scope.form.publication.gov == null
                     # never attempted
                     return "Pending"
-                else if $scope.form.publication.gov.lastSuccess != null && $scope.recordOutput.recordState.openDataPublishingState.publishedToGovAndUpToDate
+                else if $scope.form.publication.gov.lastSuccess != null && $scope.recordOutput.recordState.publishingState.publishedToGovAndUpToDate
                     # published and up to date
                     return "Completed on " + moment(new Date($scope.form.publication.gov.lastSuccess.dateUtc)).format('DD MMM YYYY h:mm a')
                 else if $scope.form.publication.gov.lastSuccess != null
@@ -134,7 +134,7 @@ angular.module('app.controllers').controller 'OpenDataModalController',
                     # anything else?
                     return "Pending"
 
-            if $scope.recordOutput.recordState.openDataPublishingState.publishedToGovAndUpToDate
+            if $scope.recordOutput.recordState.publishingState.publishedToGovAndUpToDate
                 $scope.uploadStatus = "Publishing completed"
             else
                 $scope.uploadStatus = "Publishing in progress..."
@@ -146,7 +146,7 @@ angular.module('app.controllers').controller 'OpenDataModalController',
 
         # Assess and sign off button clicks with timeout for sign off
         $scope.assessButtonClick = ->
-            $http.put('../api/publishing/opendata/assess', $scope.assessmentRequest)
+            $http.put('../api/publishing/assess', $scope.assessmentRequest)
             .success (result) ->
                 $scope.status.refresh()
                 $scope.form = result.record
@@ -170,7 +170,7 @@ angular.module('app.controllers').controller 'OpenDataModalController',
         $scope.submitSignOff = () ->
             $scope.signOffRequest = { id: $scope.form.id, comment: "" }
 
-            $http.put('../api/publishing/opendata/signoff', $scope.signOffRequest)
+            $http.put('../api/publishing/signoff', $scope.signOffRequest)
             .success (result) ->
                 $scope.form = result.record
                 $scope.recordOutput =

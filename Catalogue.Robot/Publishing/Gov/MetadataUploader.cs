@@ -1,5 +1,4 @@
 ﻿using Catalogue.Data.Model;
-using Catalogue.Data.Write;
 using log4net;
 
 namespace Catalogue.Robot.Publishing.Gov

@@ -11,7 +11,7 @@
         
         $scope.m = m
 
-        loadData = -> $http.get('../api/publishing/opendata/pendingsignoff').success (result) ->
+        loadData = -> $http.get('../api/publishing/pendingsignoff').success (result) ->
             m.openData.list = result
             m.signOffStatus[r.id] = "Sign Off" for r in result
                 
@@ -21,7 +21,7 @@
         $scope.submitSignOff = (recordId) ->
             $scope.signOffRequest = { id: recordId, comment: "" }
 
-            $http.put('../api/publishing/opendata/signoff', $scope.signOffRequest)
+            $http.put('../api/publishing/signoff', $scope.signOffRequest)
             .success (result) ->
                 m.signOffStatus[recordId] = "Signed Off"
                 $scope.status.refresh()

@@ -121,6 +121,9 @@
     $scope.isPublishDisabled = function() {
       return !$scope.isSaveHidden();
     };
+    $scope.isPublishHidden = function() {
+      return !($scope.form.publication && ($scope.form.publication.hub && $scope.form.publication.publishable === true) || ($scope.form.publication.gov && $scope.form.publication.gov.publishable === true));
+    };
     $scope.isHttpPath = function(path) {
       return path && path.toLowerCase().startsWith("http");
     };
@@ -303,23 +306,28 @@
   };
 
   getPublishingText = function(record, publishingState) {
-    if (record.publication === null || record.publication.gov === null || record.publication.gov.publishable !== true) {
-      return "Never published";
-    } else if (record.publication.gov.lastSuccess !== null && record.publication.gov.lastSuccess !== void 0 && !publishingState.assessedAndUpToDate) {
-      return "Previously published";
-    } else if (publishingState.publishedToGovAndUpToDate) {
-      return "Published";
+    var previouslyPublishedText, publishingStatusText;
+    previouslyPublishedText = "Never Published";
+    publishingStatusText = null;
+    if (record.publication && ((record.publication.gov && record.publication.gov.lastSuccess !== null) || (record.publication.hub && record.publication.hub.lastSuccess !== null))) {
+      previouslyPublishedText = "Published";
+    }
+    if (previouslyPublishedText === "Never Published" && !publishingState.assessedAndUpToDate) {
+      publishingStatusText = "Out Of Date";
     } else if (publishingState.signedOffAndUpToDate) {
-      return "Signed Off";
+      publishingStatusText = "Signed Off";
     } else if (publishingState.assessedAndUpToDate) {
-      return "Assessed";
+      publishingStatusText = "Assessed";
+    }
+    if (publishingStatusText !== null) {
+      return previouslyPublishedText + ", " + publishingStatusText;
     } else {
-      return "Never published";
+      return previouslyPublishedText;
     }
   };
 
   getFormattedDate = function(date) {
-    return moment(new Date(date)).format('DD MMM YYYY h:mm a');
+    return moment(new Date(date)).format('DD MMM YYYY');
   };
 
   getPendingSignOff = function(publication) {

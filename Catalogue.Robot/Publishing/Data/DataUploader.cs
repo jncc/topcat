@@ -1,5 +1,4 @@
-﻿using Catalogue.Data.Write;
-using Catalogue.Utilities.DriveMapping;
+﻿using Catalogue.Utilities.DriveMapping;
 using Catalogue.Utilities.Text;
 using log4net;
 

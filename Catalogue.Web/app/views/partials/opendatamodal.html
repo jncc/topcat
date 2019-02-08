@@ -13,17 +13,17 @@
                 <ol class="cd-multi-steps text-center">
                     <li ng-class="publishingStatus.riskAssessment.currentClass">
                         <a ng-click="publishingStatus.currentActiveView = 'risk assessment'">
-                            1. Risk assessment <span ng-if="recordOutput.recordState.openDataPublishingState.assessedAndUpToDate" class="glyphicon glyphicon-ok"></span>
+                            1. Risk assessment <span ng-if="recordOutput.recordState.publishingState.assessedAndUpToDate" class="glyphicon glyphicon-ok"></span>
                         </a>
                     </li>
                     <li ng-class="publishingStatus.signOff.currentClass">
                         <a ng-click="publishingStatus.currentActiveView = 'sign off'">
-                            2. Final approval <span ng-if="recordOutput.recordState.openDataPublishingState.signedOffAndUpToDate" class="glyphicon glyphicon-ok"></span>
+                            2. Final approval <span ng-if="recordOutput.recordState.publishingState.signedOffAndUpToDate" class="glyphicon glyphicon-ok"></span>
                         </a>
                     </li>
                     <li ng-class="publishingStatus.upload.currentClass">
                         <a ng-click="publishingStatus.currentActiveView = 'upload'">
-                            3. Data upload <span ng-if="recordOutput.recordState.openDataPublishingState.publishedToGovAndUpToDate" class="glyphicon glyphicon-ok"></span>
+                            3. Data upload <span ng-if="recordOutput.recordState.publishingState.publishedToGovAndUpToDate" class="glyphicon glyphicon-ok"></span>
                         </a>
                     </li>
                 </ol>
@@ -57,12 +57,12 @@
                         </ol>
                         <br/>
                         <span class="publishing-extra-info"
-                              ng-if="form.publication.gov.assessment.completed">
+                              ng-if="form.publication.assessment.completed">
                             <p>
                                 {{assessmentCompletedInfo}}
                             </p>
                         </span>
-                        <span class="pull-right" ng-if="!recordOutput.recordState.openDataPublishingState.assessedAndUpToDate">
+                        <span class="pull-right" ng-if="!recordOutput.recordState.publishingState.assessedAndUpToDate">
                             <button type="button" class="btn btn-primary"
                                     ng-click="assessButtonClick()">
                                 I AGREE
@@ -72,10 +72,10 @@
                     <div ng-show="publishingStatus.currentActiveView == 'sign off'" class="quick-fade-in">
                         <h3>Final approval</h3>
                         <p>Publication of the data must be approved by an Information Asset Owner. Please review the record with your Information Asset Owner and ask them to sign off by clicking the button below.</p>
-                        <p>Alternatively, sign off can be provided on the <a ng-click="$dismiss()" href="#opendatapublishing/signoff">Final Approval</a> page.</p>
+                        <p>Alternatively, sign off can be provided on the <a ng-click="$dismiss()" href="#publishing/signoff">Final Approval</a> page.</p>
                         <br />
                         <span class="publishing-extra-info"
-                              ng-if="form.publication.gov.signOff != null">
+                              ng-if="form.publication.signOff != null">
                             <p>
                                 {{signOffCompletedInfo}}
                             </p>
@@ -92,9 +92,9 @@
                     <div ng-show="publishingStatus.currentActiveView == 'upload'" class="quick-fade-in">
                         <h3>Data upload</h3>
                         <p>The record is now waiting to be published to
-                            <span ng-if="recordOutput.publishingPolicy.hubRecord">the JNCC ResourceHub</span>
-                            <span ng-if="recordOutput.publishingPolicy.hubRecord && recordOutput.publishingPolicy.govRecord">and</span>
-                            <span ng-if="recordOutput.publishingPolicy.govRecord">data.gov.uk</span>.
+                            <span ng-if="form.publication.hub.publishable == true">the JNCC ResourceHub</span>
+                            <span ng-if="form.publication.hub.publishable == true && form.publication.gov.publishable == true">and</span>
+                            <span ng-if="form.publication.gov.publishable == true">data.gov.uk</span>.
                             This process may take a day so please check back later.
                         </p>
                         <br />
@@ -103,10 +103,10 @@
                                 {{uploadStatus}}
                             </p>
                             <p>
-                                <span ng-if="recordOutput.publishingPolicy.hubRecord">
+                                <span ng-if="form.publication.hub.publishable == true">
                                     ResourceHub upload: {{ hubPublishingStatus() }}<br />
                                 </span>
-                                <span ng-if="recordOutput.publishingPolicy.govRecord">
+                                <span ng-if="form.publication.gov.publishable == true">
                                     data.gov.uk upload: {{ govPublishingStatus() }}<br />
                                 </span>
                             </p>
