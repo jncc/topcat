@@ -99,9 +99,22 @@
       "Resources": [
         {
           "Name": "Scotia Herring Acoustic Grab",
-          "Path": "http://url.to.resource"
+          "Path": "\\\\jncc-corpfile\\marine survey\\OffshoreSurvey\\SurveyData\\2010_06_RVScotia_NorthSea_HerringAcousticSurvey\\Groundtruthing\\Sampling\\Logs\\Scotia_Herring_Acoustic_Grab.zip",
+          "PublishedUrl": "http://data.jncc.gov.uk/data/85a9bbdc-2397-4f7c-a71e-0480b26b8807/Scotia-Herring-Acoustic-Grab.zip"
         }
       ]
+    },
+    "Hub": {
+      "Publishable": false,
+      "Url": "https://hub.jncc.gov.uk/assets/85a9bbdc-2397-4f7c-a71e-0480b26b8807",
+      "LastAttempt": {
+        "DateUtc": "2016-07-07T20:53:43.4319086Z",
+        "Message": null
+      },
+      "LastSuccess": {
+        "DateUtc": "2016-07-07T20:53:43.4319086Z",
+        "Message": null
+      }
     },
     "Gov": {
       "Publishable": true,
@@ -133,7 +146,7 @@
   "@metadata": {
     "Raven-Entity-Name": "Records",
     "Raven-Clr-Type": "Catalogue.Data.Model.Record, Catalogue.Data",
-    "@id": "records/9d9775da-44b1-4b96-9302-c842958e9130",
+    "@id": "records/85a9bbdc-2397-4f7c-a71e-0480b26b8807",
     "Temp-Index-Score": 8.390182,
     "Last-Modified": "2017-08-16T11:26:20.0555738Z",
     "Raven-Last-Modified": "2017-08-16T11:26:20.0555738",

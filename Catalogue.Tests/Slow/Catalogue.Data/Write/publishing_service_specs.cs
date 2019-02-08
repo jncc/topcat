@@ -21,11 +21,11 @@ namespace Catalogue.Tests.Slow.Catalogue.Data.Write
 {
     public class publishing_service_specs : CleanDbTest
     {
-        private static string HUB_URL_ROOT = "http://hub.jncc.gov.uk/asset/";
+        private static string HUB_URL_ROOT = "http://hub.jncc.gov.uk/assets/";
 
         [Test]
-        public void successful_open_data_publishing(
-            [Values("dataset", "nonGeographicDataset", "service")] string resourceType)
+        public void successful_publishing_with_various_resources(
+            [Values("publication", "dataset", "nonGeographicDataset", "service")] string resourceType)
         {
             var testResources = new List<List<Resource>>
             {
@@ -57,11 +57,13 @@ namespace Catalogue.Tests.Slow.Catalogue.Data.Write
 
             foreach (var resources in testResources)
             {
-                TestSuccessfulOpenDataPublishing(resourceType, resources);
+                TestSuccessfulHubAndGovPublishing(resourceType, resources);
+                TestSuccessfulHubPublishing(resourceType, resources);
+                TestSuccessfulGovPublishing(resourceType, resources);
             }
         }
 
-        private void TestSuccessfulOpenDataPublishing(string resourceType, List<Resource> resources)
+        private void TestSuccessfulHubAndGovPublishing(string resourceType, List<Resource> resources)
         {
             var recordId = Guid.NewGuid().ToString();
             var record = new Record().With(r =>
@@ -109,22 +111,302 @@ namespace Catalogue.Tests.Slow.Catalogue.Data.Write
 
                 uploader.PublishRecords(new List<Record> { record });
                 var updatedRecord = db.Load<Record>(record.Id);
-
-                DataPublishedSuccessfully(record, testTime);
-                HubPublishedSuccessfully(record, testTime);
-                GovPublishedSuccessfully(record, testTime);
+                
+                DataPublishedSuccessfully(updatedRecord, testTime);
+                HubPublishedSuccessfully(updatedRecord, testTime);
+                GovPublishedSuccessfully(updatedRecord, testTime);
                 ResourcesUpdatedCorrectly(recordId, record.Publication.Data.Resources, updatedRecord.Publication.Data.Resources);
 
                 updatedRecord.Gemini.MetadataDate.Should().Be(testTime);
-                CheckMethodInvocations(record, dataUploaderMock, metadataUploaderMock, hubServiceMock);
+
+                var fileCount = CountFileResources(record.Publication.Data.Resources);
+                dataUploaderMock.Verify(x => x.UploadDataFile(Helpers.RemoveCollection(record.Id), It.IsAny<string>()), Times.Exactly(fileCount));
+                hubServiceMock.Verify(x => x.Upsert(record), Times.Once);
+                hubServiceMock.Verify(x => x.Index(record), Times.Once);
+                metadataUploaderMock.Verify(x => x.UploadMetadataDocument(Helpers.RemoveCollectionFromId(record)), Times.Once);
+                metadataUploaderMock.Verify(x => x.UploadWafIndexDocument(Helpers.RemoveCollectionFromId(record)), Times.Once);
+
+                Clock.CurrentUtcDateTimeGetter = currentTime;
+            }
+        }
+
+        private void TestSuccessfulHubPublishing(string resourceType, List<Resource> resources)
+        {
+            var recordId = Guid.NewGuid().ToString();
+            var record = new Record().With(r =>
+            {
+                r.Id = Helpers.AddCollection(recordId);
+                r.Path = @"X:\path\to\working\folder";
+                r.Validation = Validation.Gemini;
+                r.Gemini = Library.Example().With(m => m.ResourceType = resourceType);
+                r.Publication = new PublicationInfo
+                {
+                    Assessment = new AssessmentInfo { Completed = true },
+                    SignOff = new SignOffInfo
+                    {
+                        DateUtc = new DateTime(2017, 08, 02),
+                        User = TestUserInfo.TestUser
+                    },
+                    Data = new DataPublicationInfo { Resources = resources },
+                    Hub = new HubPublicationInfo
+                    {
+                        Publishable = true
+                    }
+                };
+                r.Footer = new Footer();
+            });
+
+            using (var db = ReusableDocumentStore.OpenSession())
+            {
+                db.Store(record);
+                db.SaveChanges();
+
+                var currentTime = Clock.CurrentUtcDateTimeGetter;
+                var testTime = new DateTime(2017, 08, 18, 12, 0, 0);
+                Clock.CurrentUtcDateTimeGetter = () => testTime;
+
+                var uploadService = new PublishingUploadRecordService(db, new RecordValidator());
+                var dataUploaderMock = new Mock<IDataUploader>();
+                var metadataUploaderMock = new Mock<IMetadataUploader>();
+                var hubServiceMock = new Mock<IHubService>();
+                var uploader = new RobotPublisher(db, uploadService, dataUploaderMock.Object, metadataUploaderMock.Object, hubServiceMock.Object);
+                dataUploaderMock.Setup(x => x.GetHttpRootUrl()).Returns("http://data.jncc.gov.uk");
+
+                uploader.PublishRecords(new List<Record> { record });
+                var updatedRecord = db.Load<Record>(record.Id);
+
+                DataPublishedSuccessfully(updatedRecord, testTime);
+                HubPublishedSuccessfully(updatedRecord, testTime);
+                updatedRecord.Publication.Gov.Should().BeNull();
+                ResourcesUpdatedCorrectly(recordId, record.Publication.Data.Resources, updatedRecord.Publication.Data.Resources);
+
+                updatedRecord.Gemini.MetadataDate.Should().Be(testTime);
+                var fileCount = CountFileResources(record.Publication.Data.Resources);
+
+                dataUploaderMock.Verify(x => x.UploadDataFile(Helpers.RemoveCollection(record.Id), It.IsAny<string>()), Times.Exactly(fileCount));
+                hubServiceMock.Verify(x => x.Upsert(record), Times.Once);
+                hubServiceMock.Verify(x => x.Index(record), Times.Once);
+                metadataUploaderMock.Verify(x => x.UploadMetadataDocument(record), Times.Never);
+                metadataUploaderMock.Verify(x => x.UploadWafIndexDocument(record), Times.Never);
+
+                Clock.CurrentUtcDateTimeGetter = currentTime;
+            }
+        }
+
+        private void TestSuccessfulGovPublishing(string resourceType, List<Resource> resources)
+        {
+            var recordId = Guid.NewGuid().ToString();
+            var record = new Record().With(r =>
+            {
+                r.Id = Helpers.AddCollection(recordId);
+                r.Path = @"X:\path\to\working\folder";
+                r.Validation = Validation.Gemini;
+                r.Gemini = Library.Example().With(m => m.ResourceType = resourceType);
+                r.Publication = new PublicationInfo
+                {
+                    Assessment = new AssessmentInfo { Completed = true },
+                    SignOff = new SignOffInfo
+                    {
+                        DateUtc = new DateTime(2017, 08, 02),
+                        User = TestUserInfo.TestUser
+                    },
+                    Data = new DataPublicationInfo { Resources = resources },
+                    Gov = new GovPublicationInfo
+                    {
+                        Publishable = true
+                    }
+                };
+                r.Footer = new Footer();
+            });
+
+            using (var db = ReusableDocumentStore.OpenSession())
+            {
+                db.Store(record);
+                db.SaveChanges();
+
+                var currentTime = Clock.CurrentUtcDateTimeGetter;
+                var testTime = new DateTime(2017, 08, 18, 12, 0, 0);
+                Clock.CurrentUtcDateTimeGetter = () => testTime;
+
+                var uploadService = new PublishingUploadRecordService(db, new RecordValidator());
+                var dataUploaderMock = new Mock<IDataUploader>();
+                var metadataUploaderMock = new Mock<IMetadataUploader>();
+                var hubServiceMock = new Mock<IHubService>();
+                var uploader = new RobotPublisher(db, uploadService, dataUploaderMock.Object, metadataUploaderMock.Object, hubServiceMock.Object);
+                dataUploaderMock.Setup(x => x.GetHttpRootUrl()).Returns("http://data.jncc.gov.uk");
+
+                uploader.PublishRecords(new List<Record> { record });
+                var updatedRecord = db.Load<Record>(record.Id);
+
+                DataPublishedSuccessfully(updatedRecord, testTime);
+                updatedRecord.Publication.Hub.Should().BeNull();
+                GovPublishedSuccessfully(updatedRecord, testTime);
+                ResourcesUpdatedCorrectly(recordId, record.Publication.Data.Resources, updatedRecord.Publication.Data.Resources);
+
+                updatedRecord.Gemini.MetadataDate.Should().Be(testTime);
+                var fileCount = CountFileResources(record.Publication.Data.Resources);
+
+                dataUploaderMock.Verify(x => x.UploadDataFile(Helpers.RemoveCollection(record.Id), It.IsAny<string>()), Times.Exactly(fileCount));
+                hubServiceMock.Verify(x => x.Upsert(record), Times.Never);
+                hubServiceMock.Verify(x => x.Index(record), Times.Never);
+                metadataUploaderMock.Verify(x => x.UploadMetadataDocument(record), Times.Once);
+                metadataUploaderMock.Verify(x => x.UploadWafIndexDocument(record), Times.Once);
 
                 Clock.CurrentUtcDateTimeGetter = currentTime;
             }
         }
 
         [Test]
-        public void open_data_record_fails_at_only_data_upload(
-            [Values("dataset", "nonGeographicDataset", "service")] string resourceType)
+        public void previously_published_to_hub_and_now_to_gov()
+        {
+            var recordId = Guid.NewGuid().ToString();
+            var record = new Record().With(r =>
+            {
+                r.Id = Helpers.AddCollection(recordId);
+                r.Path = @"X:\path\to\working\folder";
+                r.Validation = Validation.Gemini;
+                r.Gemini = Library.Example();
+                r.Publication = new PublicationInfo
+                {
+                    Assessment = new AssessmentInfo { Completed = true },
+                    SignOff = new SignOffInfo
+                    {
+                        DateUtc = new DateTime(2017, 08, 02),
+                        User = TestUserInfo.TestUser
+                    },
+                    Data = new DataPublicationInfo { Resources = new List<Resource>{new Resource { Name = "File resource", Path = "x:\\test\\path.txt" }} },
+                    Hub = new HubPublicationInfo
+                    {
+                        Publishable = false, //previously published here
+                        Url = "http://hub.jncc.gov.uk/assets/record-guid",
+                        LastSuccess = new PublicationAttempt
+                        {
+                            DateUtc = new DateTime(2017, 08, 17, 12, 0, 0)
+                        }
+                    },
+                    Gov = new GovPublicationInfo
+                    {
+                        Publishable = true // now going to be published here
+                    }
+                };
+                r.Footer = new Footer();
+            });
+
+            using (var db = ReusableDocumentStore.OpenSession())
+            {
+                db.Store(record);
+                db.SaveChanges();
+
+                var currentTime = Clock.CurrentUtcDateTimeGetter;
+                var testTime = new DateTime(2017, 08, 18, 12, 0, 0);
+                Clock.CurrentUtcDateTimeGetter = () => testTime;
+
+                var uploadService = new PublishingUploadRecordService(db, new RecordValidator());
+                var dataUploaderMock = new Mock<IDataUploader>();
+                var metadataUploaderMock = new Mock<IMetadataUploader>();
+                var hubServiceMock = new Mock<IHubService>();
+                var uploader = new RobotPublisher(db, uploadService, dataUploaderMock.Object, metadataUploaderMock.Object, hubServiceMock.Object);
+                dataUploaderMock.Setup(x => x.GetHttpRootUrl()).Returns("http://data.jncc.gov.uk");
+
+                uploader.PublishRecords(new List<Record> { record });
+                var updatedRecord = db.Load<Record>(record.Id);
+
+                DataPublishedSuccessfully(updatedRecord, testTime);
+                updatedRecord.Publication.Data.Resources.Should().Contain(r => r.Name.Equals("File resource"));
+                updatedRecord.Publication.Hub.LastSuccess.DateUtc.Should().Be(new DateTime(2017, 08, 17, 12, 0, 0));
+                updatedRecord.Publication.Hub.Url.Should().Be("http://hub.jncc.gov.uk/assets/record-guid");
+                GovPublishedSuccessfully(updatedRecord, testTime);
+                ResourcesUpdatedCorrectly(recordId, record.Publication.Data.Resources, updatedRecord.Publication.Data.Resources);
+
+                updatedRecord.Gemini.MetadataDate.Should().Be(testTime);
+
+                var fileCount = CountFileResources(record.Publication.Data.Resources);
+                dataUploaderMock.Verify(x => x.UploadDataFile(Helpers.RemoveCollection(record.Id), It.IsAny<string>()), Times.Exactly(fileCount));
+                hubServiceMock.Verify(x => x.Upsert(record), Times.Never);
+                hubServiceMock.Verify(x => x.Index(record), Times.Never);
+                metadataUploaderMock.Verify(x => x.UploadMetadataDocument(record), Times.Once);
+                metadataUploaderMock.Verify(x => x.UploadWafIndexDocument(record), Times.Once);
+
+                Clock.CurrentUtcDateTimeGetter = currentTime;
+            }
+        }
+
+        [Test]
+        public void previously_published_to_gov_and_now_to_hub()
+        {
+            var recordId = Guid.NewGuid().ToString();
+            var record = new Record().With(r =>
+            {
+                r.Id = Helpers.AddCollection(recordId);
+                r.Path = @"X:\path\to\working\folder";
+                r.Validation = Validation.Gemini;
+                r.Gemini = Library.Example();
+                r.Publication = new PublicationInfo
+                {
+                    Assessment = new AssessmentInfo { Completed = true },
+                    SignOff = new SignOffInfo
+                    {
+                        DateUtc = new DateTime(2017, 08, 02),
+                        User = TestUserInfo.TestUser
+                    },
+                    Data = new DataPublicationInfo { Resources = new List<Resource> { new Resource { Name = "File resource", Path = "x:\\test\\path.txt" } } },
+                    Hub = new HubPublicationInfo
+                    {
+                        Publishable = true // now going to publish here
+                    },
+                    Gov = new GovPublicationInfo
+                    {
+                        Publishable = false, // previously published here
+                        LastSuccess = new PublicationAttempt
+                            {
+                            DateUtc = new DateTime(2017, 08, 17, 12, 0, 0)
+                        }
+                    }
+                };
+                r.Footer = new Footer();
+            });
+
+            using (var db = ReusableDocumentStore.OpenSession())
+            {
+                db.Store(record);
+                db.SaveChanges();
+
+                var currentTime = Clock.CurrentUtcDateTimeGetter;
+                var testTime = new DateTime(2017, 08, 18, 12, 0, 0);
+                Clock.CurrentUtcDateTimeGetter = () => testTime;
+
+                var uploadService = new PublishingUploadRecordService(db, new RecordValidator());
+                var dataUploaderMock = new Mock<IDataUploader>();
+                var metadataUploaderMock = new Mock<IMetadataUploader>();
+                var hubServiceMock = new Mock<IHubService>();
+                var uploader = new RobotPublisher(db, uploadService, dataUploaderMock.Object, metadataUploaderMock.Object, hubServiceMock.Object);
+                dataUploaderMock.Setup(x => x.GetHttpRootUrl()).Returns("http://data.jncc.gov.uk");
+
+                uploader.PublishRecords(new List<Record> { record });
+                var updatedRecord = db.Load<Record>(record.Id);
+
+                DataPublishedSuccessfully(updatedRecord, testTime);
+                updatedRecord.Publication.Data.Resources.Should().Contain(r => r.Name.Equals("File resource"));
+                HubPublishedSuccessfully(updatedRecord, testTime);
+                updatedRecord.Publication.Gov.LastSuccess.DateUtc.Should().Be(new DateTime(2017, 08, 17, 12, 0, 0));
+                ResourcesUpdatedCorrectly(recordId, record.Publication.Data.Resources, updatedRecord.Publication.Data.Resources);
+
+                updatedRecord.Gemini.MetadataDate.Should().Be(testTime);
+                
+                var fileCount = CountFileResources(record.Publication.Data.Resources);
+                dataUploaderMock.Verify(x => x.UploadDataFile(Helpers.RemoveCollection(record.Id), It.IsAny<string>()), Times.Exactly(fileCount));
+                hubServiceMock.Verify(x => x.Upsert(record), Times.Once);
+                hubServiceMock.Verify(x => x.Index(record), Times.Once);
+                metadataUploaderMock.Verify(x => x.UploadMetadataDocument(Helpers.RemoveCollectionFromId(record)), Times.Never);
+                metadataUploaderMock.Verify(x => x.UploadWafIndexDocument(Helpers.RemoveCollectionFromId(record)), Times.Never);
+
+                Clock.CurrentUtcDateTimeGetter = currentTime;
+            }
+        }
+
+        [Test]
+        public void publish_fails_at_data_upload(
+            [Values("publication", "dataset", "nonGeographicDataset", "service")] string resourceType)
         {
             var recordId = Guid.NewGuid().ToString();
             var record = new Record().With(r =>
@@ -194,8 +476,8 @@ namespace Catalogue.Tests.Slow.Catalogue.Data.Write
         }
 
         [Test]
-        public void open_data_record_fails_at_second_data_upload(
-            [Values("dataset", "nonGeographicDataset", "service")] string resourceType)
+        public void publish_fails_at_second_data_upload(
+            [Values("publication", "dataset", "nonGeographicDataset", "service")] string resourceType)
         {
             var recordId = Guid.NewGuid().ToString();
             var record = new Record().With(r =>
@@ -274,8 +556,8 @@ namespace Catalogue.Tests.Slow.Catalogue.Data.Write
         }
 
         [Test]
-        public void open_data_record_fails_at_datahub_upload(
-            [Values("dataset", "nonGeographicDataset", "service")] string resourceType)
+        public void publish_fails_at_hub_upload(
+            [Values("publication", "dataset", "nonGeographicDataset", "service")] string resourceType)
         {
             var recordId = Guid.NewGuid().ToString();
             var record = new Record().With(r =>
@@ -345,8 +627,8 @@ namespace Catalogue.Tests.Slow.Catalogue.Data.Write
         }
 
         [Test]
-        public void open_data_record_fails_at_dgu_upload(
-            [Values("dataset", "nonGeographicDataset", "service")] string resourceType)
+        public void publish_fails_at_dgu_upload(
+            [Values("publication", "dataset", "nonGeographicDataset", "service")] string resourceType)
         {
             var recordId = Guid.NewGuid().ToString();
             var record = new Record().With(r =>
@@ -462,17 +744,6 @@ namespace Catalogue.Tests.Slow.Catalogue.Data.Write
                     updatedResource.PublishedUrl.Should().BeNullOrEmpty();
                 }
             }
-        }
-
-        private void CheckMethodInvocations(Record record, Mock<IDataUploader> dataUploaderMock, Mock<IMetadataUploader> metadataUploaderMock, Mock<IHubService> hubServiceMock)
-        {
-            var fileCount = CountFileResources(record.Publication.Data.Resources);
-
-            dataUploaderMock.Verify(x => x.UploadDataFile(Helpers.RemoveCollection(record.Id), It.IsAny<string>()), Times.Exactly(fileCount));
-            hubServiceMock.Verify(x => x.Upsert(record), Times.Once);
-            hubServiceMock.Verify(x => x.Index(record), Times.Once);
-            metadataUploaderMock.Verify(x => x.UploadMetadataDocument(record), Times.Once);
-            metadataUploaderMock.Verify(x => x.UploadWafIndexDocument(record), Times.Once);
         }
 
         private int CountFileResources(List<Resource> resources)

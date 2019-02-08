@@ -82,41 +82,41 @@
     "Notes": "",
     "SourceIdentifier": "",
     "ReadOnly": false,
-    "Publication": {
-      "Data": {
-        "Resources": [
-          {
-            "Name": "Scotia Herring Acoustic Grab",
-            "Path": "\\\\jncc-corpfile\\marine survey\\OffshoreSurvey\\SurveyData\\2010_06_RVScotia_NorthSea_HerringAcousticSurvey\\Groundtruthing\\Sampling\\Logs\\Scotia_Herring_Acoustic_Grab.zip",
-            "PublishedUrl": "http://data.jncc.gov.uk/data/721643b8-7e42-40ca-87d9-23f19221238e-Scotia-Herring-Acoustic-Grab.zip"
-          }
-        ]
-      },
-      "Gov": {
-        "Publishable": true,
-        "Assessment": {
-          "Completed": true,
-          "CompletedByUser": null,
-          "CompletedOnUtc": "0001-01-01T00:00:00.0000000",
-          "InitialAssessmentWasDoneOnSpreadsheet": true,
-          "CompletedBy": null
-        },
-        "SignOff": {
-          "DateUtc": "0001-01-01T00:00:00.0000000",
-          "User": null,
-          "Comment": null
-        },
-        "Paused": false,
-        "LastAttempt": {
-          "DateUtc": "2016-07-07T21:53:43.4319086Z",
-          "Message": null
-        },
-        "LastSuccess": {
-          "DateUtc": "2016-07-07T21:53:43.4319086Z",
-          "Message": null
-        }
-      }
+  "Publication": {
+    "Assessment": {
+      "Completed": true,
+      "CompletedByUser": null,
+      "CompletedOnUtc": "0001-01-01T00:00:00.0000000",
+      "InitialAssessmentWasDoneOnSpreadsheet": true,
+      "CompletedBy": null
     },
+    "SignOff": {
+      "DateUtc": "0001-01-01T00:00:00.0000000",
+      "User": null,
+      "Comment": null
+    },
+    "Data": {
+      "Resources": [
+        {
+          "Name": "Scotia Herring Acoustic Grab",
+          "Path": "\\\\jncc-corpfile\\marine survey\\OffshoreSurvey\\SurveyData\\2010_06_RVScotia_NorthSea_HerringAcousticSurvey\\Groundtruthing\\Sampling\\Logs\\Scotia_Herring_Acoustic_Grab.zip",
+          "PublishedUrl": "http://data.jncc.gov.uk/data/721643b8-7e42-40ca-87d9-23f19221238e/Scotia-Herring-Acoustic-Grab.zip"
+        }
+      ]
+    },
+    "Gov": {
+      "Publishable": true,
+      "Paused": false,
+      "LastAttempt": {
+        "DateUtc": "2016-07-07T21:53:43.4319086Z",
+        "Message": null
+      },
+      "LastSuccess": {
+        "DateUtc": "2016-07-07T21:53:43.4319086Z",
+        "Message": null
+      }
+    }
+  },
     "Wkt": "POLYGON((-2.297 58.066,1.724 58.066,1.724 61.283,-2.297 61.283,-2.297 58.066))",
     "Revision": 0,
     "Footer": {

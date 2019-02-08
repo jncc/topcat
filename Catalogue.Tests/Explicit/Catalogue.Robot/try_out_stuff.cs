@@ -1,8 +1,8 @@
-﻿using Catalogue.Data.Write;
-using FluentAssertions;
+﻿using FluentAssertions;
 using NUnit.Framework;
 using System;
 using System.IO;
+using Catalogue.Robot.Publishing;
 
 namespace Catalogue.Tests.Explicit.Catalogue.Robot
 {

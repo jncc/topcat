@@ -94,6 +94,8 @@
     <EmbeddedResource Include="TestResources\records\c6f3632d-8789-460b-a09d-c132841a7190.json" />
     <EmbeddedResource Include="TestResources\records\9d9775da-44b1-4b96-9302-c842958e9130.json" />
     <EmbeddedResource Include="TestResources\records\00b0b44c-a062-4a25-b344-2be12b03a6b5.json" />
+    <EmbeddedResource Include="TestResources\records\64b5f778-c098-4474-a36e-7f4b2bdfd10b.json" />
+    <EmbeddedResource Include="TestResources\records\85a9bbdc-2397-4f7c-a71e-0480b26b8807.json" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="CsvHelper">
@@ -156,6 +158,8 @@
   <ItemGroup>
     <Content Include="bin\Debug\RavenDBServer\Catalogue.Data.Analyzers.dll" />
     <Content Include="bin\Release\RavenDBServer\Catalogue.Data.Analyzers.dll" />
+    <EmbeddedResource Include="TestResources\wafs\85a9bbdc-2397-4f7c-a71e-0480b26b8807.xml" />
+    <EmbeddedResource Include="TestResources\wafs\64b5f778-c098-4474-a36e-7f4b2bdfd10b.xml" />
     <EmbeddedResource Include="TestResources\wafs\00b0b44c-a062-4a25-b344-2be12b03a6b5.xml" />
     <EmbeddedResource Include="TestResources\wafs\9d9775da-44b1-4b96-9302-c842958e9130.xml" />
   </ItemGroup>

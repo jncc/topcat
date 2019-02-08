@@ -83,6 +83,34 @@ namespace Catalogue.Tests.Slow.Catalogue.Robot
         }
 
         [Test]
+        public void record_publishable_to_hub_and_gov()
+        {
+            var record = GetRecordFromFile("64b5f778-c098-4474-a36e-7f4b2bdfd10b", @"records.64b5f778-c098-4474-a36e-7f4b2bdfd10b.json");
+            var expectedXmlDoc = GetInputFileAsXmlDoc(@"wafs.64b5f778-c098-4474-a36e-7f4b2bdfd10b.xml");
+
+            var xmlHelper = new XmlHelper();
+            var actualWaf = xmlHelper.GetMetadataDocument(record);
+            var actualXmlDoc = GetByteArrayAsXmlDoc(actualWaf);
+
+            XmlDiff xmlDiff = new XmlDiff();
+            Assert.True(xmlDiff.Compare(expectedXmlDoc, actualXmlDoc));
+        }
+
+        [Test]
+        public void record_unpublishable_to_hub_and_publishable_to_gov()
+        {
+            var record = GetRecordFromFile("85a9bbdc-2397-4f7c-a71e-0480b26b8807", @"records.85a9bbdc-2397-4f7c-a71e-0480b26b8807.json");
+            var expectedXmlDoc = GetInputFileAsXmlDoc(@"wafs.85a9bbdc-2397-4f7c-a71e-0480b26b8807.xml");
+
+            var xmlHelper = new XmlHelper();
+            var actualWaf = xmlHelper.GetMetadataDocument(record);
+            var actualXmlDoc = GetByteArrayAsXmlDoc(actualWaf);
+
+            XmlDiff xmlDiff = new XmlDiff();
+            Assert.True(xmlDiff.Compare(expectedXmlDoc, actualXmlDoc));
+        }
+
+        [Test]
         public void waf_index_document_generated_correctly()
         {
             var record = GetRecordFromFile("721643b8-7e42-40ca-87d9-23f19221238e", @"records.721643b8-7e42-40ca-87d9-23f19221238e.json");

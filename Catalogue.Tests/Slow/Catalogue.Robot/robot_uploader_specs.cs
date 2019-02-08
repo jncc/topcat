@@ -56,7 +56,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Robot
         {
             var nullPublicationRecord = new Record().With(r =>
             {
-                r.Id = Helpers.AddCollection("92efc007-e98e-4263-80f3-847c5f9c4e08");
+                r.Id = Helpers.AddCollection(Guid.NewGuid().ToString());
                 r.Path = @"X:\path\to\uploader\test";
                 r.Validation = Validation.Gemini;
                 r.Gemini = Library.Example();

@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Xml.Linq;
+using Quartz.Util;
 
 namespace Catalogue.Robot.Publishing.Gov
 {
@@ -13,13 +14,14 @@ namespace Catalogue.Robot.Publishing.Gov
     {
         public byte[] GetMetadataDocument(Record record)
         {
-            var resources = GetOnlineResources(record);
+            // use either the resourcehub url or the direct data links
+            var onlineResources = GetOnlineResources(record);
 
             // redact the record for open data publishing (for GDPR etc.)
             var redacted = GetRedactedRecordToPublish(record);
 
             // generate the XML
-            var doc = new Gemini.Encoding.XmlEncoder().Create(redacted.Id, redacted.Gemini, resources);
+            var doc = new Gemini.Encoding.XmlEncoder().Create(redacted.Id, redacted.Gemini, onlineResources);
 
             var s = new MemoryStream();
             doc.Save(s);
@@ -63,6 +65,26 @@ namespace Catalogue.Robot.Publishing.Gov
         }
 
         public static List<OnlineResource> GetOnlineResources(Record record)
+        {
+            var onlineResources = new List<OnlineResource>();
+            if (record.Publication.Hub != null && record.Publication.Hub.Publishable &&
+                record.Publication.Hub.Url.IsNullOrWhiteSpace() != true)
+            {
+                onlineResources.Add(new OnlineResource
+                {
+                    Name = "JNCC ResourceHub Page",
+                    Url = record.Publication.Hub.Url
+                });
+            }
+            else
+            {
+                onlineResources = GetOnlineResourcesFromDataResources(record);
+            }
+
+            return onlineResources;
+        }
+
+        public static List<OnlineResource> GetOnlineResourcesFromDataResources(Record record)
         {
             var resources = new List<OnlineResource>();
             if (record.Publication?.Data?.Resources?.Count > 0)

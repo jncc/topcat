@@ -27,7 +27,7 @@ namespace Catalogue.Utilities.Text
         }
 
         /// <summary>
-        /// Gets a path like "data/3148e1e2-bd6b-4623-b72a-5408263b9056-Some-Data-File.csv"
+        /// Gets a path like "data/3148e1e2-bd6b-4623-b72a-5408263b9056/Some-Data-File.csv"
         /// </summary>
         public static string GetUnrootedDataPath(string recordId, string filePath)
         {
@@ -36,7 +36,7 @@ namespace Catalogue.Utilities.Text
             // make a file name suitable for the web
             string name = WebificationUtility.ToUrlFriendlyString(fileName);
 
-            return String.Format("data/{0}-{1}", recordId, name);
+            return String.Format("data/{0}/{1}", recordId, name);
         }
     }
 

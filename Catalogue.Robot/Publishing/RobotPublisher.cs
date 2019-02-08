@@ -70,7 +70,7 @@ namespace Catalogue.Robot.Publishing
                     try
                     {
                         PublishDataFiles(record);
-                        PublishHubMetadata(record);
+                        //PublishHubMetadata(record);
                         PublishGovMetadata(record);
                     }
                     catch (WebException ex)
@@ -126,7 +126,7 @@ namespace Catalogue.Robot.Publishing
 
         public void PublishHubMetadata(Record record)
         {
-            if (record.Publication.Hub.Publishable)
+            if (record.Publication.Hub?.Publishable == true)
             {
                 var attempt = new PublicationAttempt {DateUtc = Clock.NowUtc};
                 uploadRecordService.UpdateHubPublishAttempt(record, attempt);
@@ -136,7 +136,7 @@ namespace Catalogue.Robot.Publishing
                 {
                     hubService.Upsert(record);
 
-                    var url = "http://hub.jncc.gov.uk/asset/" + Helpers.RemoveCollection(record.Id);
+                    var url = "http://hub.jncc.gov.uk/assets/" + Helpers.RemoveCollection(record.Id);
                     uploadRecordService.UpdateHubPublishSuccess(record, url, attempt);
 
                     hubService.Index(record);
@@ -156,7 +156,7 @@ namespace Catalogue.Robot.Publishing
 
         public void PublishGovMetadata(Record record)
         {
-            if (record.Publication.Gov.Publishable == true) {
+            if (record.Publication.Gov?.Publishable == true) {
                 var attempt = new PublicationAttempt { DateUtc = Clock.NowUtc };
                 uploadRecordService.UpdateGovPublishAttempt(record, attempt);
                 db.SaveChanges();

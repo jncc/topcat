@@ -83,12 +83,24 @@
     "SourceIdentifier": "",
     "ReadOnly": false,
   "Publication": {
+    "Assessment": {
+      "Completed": true,
+      "CompletedByUser": null,
+      "CompletedOnUtc": "0001-01-01T00:00:00.0000000",
+      "InitialAssessmentWasDoneOnSpreadsheet": true,
+      "CompletedBy": null
+    },
+    "SignOff": {
+      "DateUtc": "0001-01-01T00:00:00.0000000",
+      "User": null,
+      "Comment": null
+    },
     "Data": {
       "Resources": [
         {
           "Name": "Scotia Herring Acoustic Grab File",
           "Path": "\\\\jncc-corpfile\\marine survey\\OffshoreSurvey\\SurveyData\\2010_06_RVScotia_NorthSea_HerringAcousticSurvey\\Groundtruthing\\Sampling\\Logs\\Scotia_Herring_Acoustic_Grab.zip",
-          "PublishedUrl": "http://data.jncc.gov.uk/data/00b0b44c-a062-4a25-b344-2be12b03a6b5-Scotia-Herring-Acoustic-Grab.zip"
+          "PublishedUrl": "http://data.jncc.gov.uk/data/00b0b44c-a062-4a25-b344-2be12b03a6b5/Scotia-Herring-Acoustic-Grab.zip"
         },
         {
           "Name": "Scotia Herring Acoustic Grab URL",
@@ -98,18 +110,6 @@
     },
     "Gov": {
       "Publishable": true,
-      "Assessment": {
-        "Completed": true,
-        "CompletedByUser": null,
-        "CompletedOnUtc": "0001-01-01T00:00:00.0000000",
-        "InitialAssessmentWasDoneOnSpreadsheet": true,
-        "CompletedBy": null
-      },
-      "SignOff": {
-        "DateUtc": "0001-01-01T00:00:00.0000000",
-        "User": null,
-        "Comment": null
-      },
       "Paused": false,
       "LastAttempt": {
         "DateUtc": "2016-07-07T21:53:43.4319086Z",
