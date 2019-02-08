@@ -298,12 +298,14 @@
     if (record.publication && ((record.publication.gov && record.publication.gov.lastSuccess !== null) || (record.publication.hub && record.publication.hub.lastSuccess !== null))) {
       previouslyPublishedText = "Published";
     }
-    if (previouslyPublishedText === "Never Published" && !publishingState.assessedAndUpToDate) {
-      publishingStatusText = "Out Of Date";
-    } else if (publishingState.signedOffAndUpToDate) {
-      publishingStatusText = "Signed Off";
-    } else if (publishingState.assessedAndUpToDate) {
-      publishingStatusText = "Assessed";
+    if (record.publication) {
+      if (previouslyPublishedText === "Never Published" && !publishingState.assessedAndUpToDate) {
+        publishingStatusText = "Out Of Date";
+      } else if (publishingState.signedOffAndUpToDate) {
+        publishingStatusText = "Signed Off";
+      } else if (publishingState.assessedAndUpToDate) {
+        publishingStatusText = "Assessed";
+      }
     }
     if (publishingStatusText !== null) {
       return previouslyPublishedText + ", " + publishingStatusText;
