@@ -547,7 +547,7 @@
                 <div class="col-md-9">
                     <div class="btn-group">
                         <button ng-click="form.publication.hub.publishable = true" ng-class="{ 'btn-primary': form.publication.hub.publishable, 'btn-default': !form.publication.hub.publishable }" class="btn"
-                                title="Is this the 'top copy' of this resource?"
+                                title="Can this record be published to the ResourceHub?"
                                 tc-tip>
                             <span class="glyphicon glyphicon-globe"></span> Publishable
                         </button>
@@ -563,7 +563,7 @@
         <span ng-if="!form.publication.gov.publishable">Unpublishable</span>
     </button>-->
                     <span ng-if="form.publication.hub.lastSuccess.dateUtc">&nbsp;Published on {{getFormattedDate(form.publication.hub.lastSuccess.dateUtc)}}</span>
-                    <span ng-if="form.publication.hub.lastSuccess.dateUtc"
+                    <span ng-if="form.publication.hub.lastSuccess.dateUtc && form.publication.hub.publishable != true"
                           class="glyphicon glyphicon-warning-sign"
                           title="The record will no longer be updated at this destination, does it need to be removed?"
                           tc-tip></span>
@@ -577,7 +577,7 @@
                 <div class="col-md-9">
                     <div class="btn-group">
                         <button ng-click="form.publication.gov.publishable = true" ng-class="{ 'btn-primary': form.publication.gov.publishable == true, 'btn-default': form.publication.gov.publishable != true }" class="btn"
-                                title="Is this the 'top copy' of this resource?"
+                                title="Can this record be published to Data.gov.uk?"
                                 tc-tip>
                             <span class="glyphicon glyphicon-globe"></span> Publishable
                         </button>
@@ -597,7 +597,7 @@
         <span ng-if="form.publication.gov.publishable == null">Undecided</span>
     </button>-->
                     <span ng-if="form.publication.gov.lastSuccess.dateUtc">&nbsp;Published on {{getFormattedDate(form.publication.gov.lastSuccess.dateUtc)}}</span>
-                    <span ng-if="form.publication.gov.lastSuccess.dateUtc"
+                    <span ng-if="form.publication.gov.lastSuccess.dateUtc && form.publication.gov.publishable != true"
                           class="glyphicon glyphicon-warning-sign"
                           title="The record will no longer be updated at this destination, does it need to be removed?"
                           tc-tip></span>
@@ -608,7 +608,7 @@
                 This record currently has <b>no publishable resources</b> defined.
                 <br />
                 <br />
-                <button class="btn btn-primary" ng-click="addOpenDataResource(form)">
+                <button class="btn btn-primary" ng-click="addPublishableResource(form)">
                     Add publishable resources
                 </button>
             </div>
@@ -641,7 +641,7 @@
                                    title="Name of the resource"
                                    tc-focus-tip />
 
-                            <button class="btn btn-primary" title="Remove resource" tc-tip ng-click="removeOpenDataResource(form, resource)">
+                            <button class="btn btn-primary" title="Remove resource" tc-tip ng-click="removePublishableResource(form, resource)">
                                 <span class="glyphicon glyphicon-remove-circle"></span>
                             </button>
                         </div>
@@ -649,7 +649,7 @@
                 </div>
 
                 <br />
-                <button class="btn btn-primary" ng-click="addOpenDataResource(form)">
+                <button class="btn btn-primary" ng-click="addPublishableResource(form)">
                     Add another resource
                 </button>
             </div>
@@ -694,27 +694,6 @@
             </div>
 
             <hr/>
-            
-            <div class="editor-publishing">
-                <div class="layout-row">
-                    <div class="layout-col">
-                        <span>Open Data</span>
-                    </div>
-                    <div class="layout-col pull-right">
-                    
-                        <button ng-click="togglePublishable()" ng-class="{ 'btn-primary': form.publication.gov.publishable != null, 'btn-default': form.publication.gov.publishable == null }" class="btn"
-                                title="Could this record be published as Open Data?"
-                                tc-tip>
-                            <span class="glyphicon glyphicon-repeat"></span>
-                            <span ng-if="form.publication.gov.publishable == true">Publishable</span>
-                            <span ng-if="form.publication.gov.publishable == false">Unpublishable</span>
-                            <span ng-if="form.publication.gov.publishable == null">Undecided</span>
-                        </button>
-                    </div>
-                </div>
-            </div>
-
-            <hr />
 
             <div class="editor-validation layout-row">
                 <div class="layout-col">

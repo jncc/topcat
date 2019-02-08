@@ -32,10 +32,9 @@
         $scope.updateDataFormatObj = updateDataFormatObj
         $scope.getPendingSignOff = getPendingSignOff
         $scope.getPublishingText = getPublishingText
-        $scope.getOpenDataButtonToolTip = getOpenDataButtonToolTip
         $scope.getFormattedDate = getFormattedDate
-        $scope.addOpenDataResource = addOpenDataResource
-        $scope.removeOpenDataResource = removeOpenDataResource
+        $scope.addPublishableResource = addPublishableResource
+        $scope.removePublishableResource = removePublishableResource
         $scope.trimDoubleQuotes = trimDoubleQuotes
         $scope.getResourceUrl = getResourceUrl
         
@@ -195,7 +194,7 @@
 
 isFilePath = (path) -> path and path.match /^([a-z]:|\\\\jncc-corpfile\\)/i
 
-addOpenDataResource = (record) ->
+addPublishableResource = (record) ->
     if !record.publication
         record.publication = {}    
     if !record.publication.data
@@ -203,7 +202,6 @@ addOpenDataResource = (record) ->
     if !record.publication.data.resources
         record.publication.data.resources = []
     record.publication.data.resources.push { path: "" }
-    console.log record.publication.data.resources.length
 
 getResourceUrl = (resource) ->
     if resource.path.startsWith("http://") || resource.path.startsWith("https://")
@@ -213,21 +211,11 @@ getResourceUrl = (resource) ->
     else
         return null
 
-removeOpenDataResource = (record, resource) ->
+removePublishableResource = (record, resource) ->
     record.publication.data.resources.splice ($.inArray resource, record.publication.data.resources), 1
 
 trimDoubleQuotes = (s) -> # removes double quotes surrounding a string
     if s.match(/^(").*(")$/) then s.substring(1, s.length - 1) else s
-
-getOpenDataButtonToolTip = (record, publishingState) ->
-    if !isFilePath(record.path)
-        return "Open data publishing not available for non-file resources"
-    else if record.publication == null or record.publication.gov == null or record.publication.gov.publishable != true
-        return "The open data publication status of the record, editing the record may affect the status."
-    else if record.publication.gov.lastSuccess != null && record.publication.gov.lastSuccess != undefined && !publishingState.assessedAndUpToDate
-        return "This record has been changed since it was last published, it may need republishing."
-    else
-        return "The open data publication status of the record, editing the record may affect the status."
 
 getPublishingText = (record, publishingState) ->
     previouslyPublishedText = "Never Published"
