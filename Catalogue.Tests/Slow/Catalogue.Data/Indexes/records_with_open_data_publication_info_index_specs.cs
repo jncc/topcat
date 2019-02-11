@@ -44,7 +44,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Data.Indexes
             // in other words, the last publication was successful and the record hasn't been updated since!
 
             var results = Db.Query<RecordsWithPublicationInfoIndex.Result, RecordsWithPublicationInfoIndex>()
-                .Where(x => x.PublishedSinceLastUpdated)
+                .Where(x => x.PublishedToGovSinceLastUpdated)
                 .OfType<Record>()
                 .ToList();
 
@@ -58,7 +58,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Data.Indexes
         {
             // in other words, all the records that should be published on the next run
             var results = Db.Query<RecordsWithPublicationInfoIndex.Result, RecordsWithPublicationInfoIndex>()
-                .Where(x => !x.PublishedSinceLastUpdated)
+                .Where(x => !x.PublishedToGovSinceLastUpdated)
                 .OfType<Record>()
                 .ToList();
 
@@ -70,7 +70,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Data.Indexes
         public void should_be_able_to_get_non_paused_records()
         {
             var results = Db.Query<RecordsWithPublicationInfoIndex.Result, RecordsWithPublicationInfoIndex>()
-                .Where(x => !x.PublishingIsPaused)
+                .Where(x => !x.GovPublishingIsPaused)
                 .OfType<Record>()
                 .ToList();
 
@@ -81,7 +81,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Data.Indexes
         public void should_be_able_to_get_published_since_last_updated()
         {
             var results = Db.Query<RecordsWithPublicationInfoIndex.Result, RecordsWithPublicationInfoIndex>()
-                .Where(x => x.PublishedSinceLastUpdated)
+                .Where(x => x.PublishedToGovSinceLastUpdated)
                 .OfType<Record>()
                 .ToList();
 

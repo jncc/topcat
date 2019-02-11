@@ -1,19 +1,17 @@
-﻿using Catalogue.Data.Model;
-using Catalogue.Data.Test;
+﻿using Catalogue.Data;
+using Catalogue.Data.Model;
+using Catalogue.Data.Write;
 using Catalogue.Gemini.Templates;
 using Catalogue.Utilities.Clone;
+using Catalogue.Web.Account;
 using Catalogue.Web.Controllers.Publishing;
 using FluentAssertions;
+using Moq;
 using NUnit.Framework;
-using Catalogue.Data;
+using Raven.Client.Documents.Session;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading;
-using Catalogue.Data.Write;
-using Catalogue.Web.Account;
-using Moq;
-using Raven.Client.Documents.Session;
 
 namespace Catalogue.Tests.Slow.Catalogue.Web.Controllers.Publishing
 {
@@ -38,9 +36,12 @@ namespace Catalogue.Tests.Slow.Catalogue.Web.Controllers.Publishing
                         Completed = true,
                         CompletedOnUtc = new DateTime(2017, 09, 27)
                     },
-                    Gov = new GovPublicationInfo
+                    Target = new TargetInfo
                     {
-                        Publishable = true
+                        Gov = new GovPublicationInfo
+                        {
+                            Publishable = true
+                        }
                     }
                 };
                 r.Footer = new Footer();
@@ -51,10 +52,10 @@ namespace Catalogue.Tests.Slow.Catalogue.Web.Controllers.Publishing
 
             var publicationInfo = resultRecord.Publication;
             publicationInfo.Should().NotBeNull();
-            publicationInfo.Gov.LastAttempt.Should().BeNull();
-            publicationInfo.Gov.LastSuccess.Should().BeNull();
+            publicationInfo.Target.Gov.LastAttempt.Should().BeNull();
+            publicationInfo.Target.Gov.LastSuccess.Should().BeNull();
             resultRecord.Publication.Data.Should().BeNull();
-            publicationInfo.Gov.Paused.Should().BeFalse();
+            publicationInfo.Target.Gov.Paused.Should().BeFalse();
             publicationInfo.SignOff.User.DisplayName.Should().Be("Test User");
             publicationInfo.SignOff.User.Email.Should().Be("tester@example.com");
             publicationInfo.SignOff.DateUtc.Should().NotBe(DateTime.MinValue);
@@ -81,9 +82,12 @@ namespace Catalogue.Tests.Slow.Catalogue.Web.Controllers.Publishing
                         Completed = true,
                         CompletedOnUtc = new DateTime(2017, 09, 27)
                     },
-                    Gov = new GovPublicationInfo
+                    Target = new TargetInfo
                     {
-                        Publishable = false
+                        Gov = new GovPublicationInfo
+                        {
+                            Publishable = false
+                        }
                     }
                 };
                 r.Footer = new Footer();
@@ -94,10 +98,10 @@ namespace Catalogue.Tests.Slow.Catalogue.Web.Controllers.Publishing
 
             var publicationInfo = resultRecord.Publication;
             publicationInfo.Should().NotBeNull();
-            publicationInfo.Gov.LastAttempt.Should().BeNull();
-            publicationInfo.Gov.LastSuccess.Should().BeNull();
+            publicationInfo.Target.Gov.LastAttempt.Should().BeNull();
+            publicationInfo.Target.Gov.LastSuccess.Should().BeNull();
             resultRecord.Publication.Data.Should().BeNull();
-            publicationInfo.Gov.Paused.Should().BeFalse();
+            publicationInfo.Target.Gov.Paused.Should().BeFalse();
             publicationInfo.SignOff.User.DisplayName.Should().Be("Test User");
             publicationInfo.SignOff.User.Email.Should().Be("tester@example.com");
             publicationInfo.SignOff.DateUtc.Should().NotBe(DateTime.MinValue);
@@ -124,9 +128,12 @@ namespace Catalogue.Tests.Slow.Catalogue.Web.Controllers.Publishing
                         Completed = true,
                         CompletedOnUtc = new DateTime(2017, 09, 27)
                     },
-                    Gov = new GovPublicationInfo
+                    Target = new TargetInfo
                     {
-                        Publishable = null
+                        Gov = new GovPublicationInfo
+                        {
+                            Publishable = null
+                        }
                     }
                 };
                 r.Footer = new Footer();
@@ -137,10 +144,10 @@ namespace Catalogue.Tests.Slow.Catalogue.Web.Controllers.Publishing
 
             var publicationInfo = resultRecord.Publication;
             publicationInfo.Should().NotBeNull();
-            publicationInfo.Gov.LastAttempt.Should().BeNull();
-            publicationInfo.Gov.LastSuccess.Should().BeNull();
+            publicationInfo.Target.Gov.LastAttempt.Should().BeNull();
+            publicationInfo.Target.Gov.LastSuccess.Should().BeNull();
             resultRecord.Publication.Data.Should().BeNull();
-            publicationInfo.Gov.Paused.Should().BeFalse();
+            publicationInfo.Target.Gov.Paused.Should().BeFalse();
             publicationInfo.SignOff.User.DisplayName.Should().Be("Test User");
             publicationInfo.SignOff.User.Email.Should().Be("tester@example.com");
             publicationInfo.SignOff.DateUtc.Should().NotBe(DateTime.MinValue);
@@ -166,9 +173,12 @@ namespace Catalogue.Tests.Slow.Catalogue.Web.Controllers.Publishing
                     {
                         Completed = false,
                     },
-                    Gov = new GovPublicationInfo
+                    Target = new TargetInfo
                     {
-                        Publishable = true
+                        Gov = new GovPublicationInfo
+                        {
+                            Publishable = true
+                        }
                     }
                 };
                 r.Footer = new Footer();
@@ -206,9 +216,12 @@ namespace Catalogue.Tests.Slow.Catalogue.Web.Controllers.Publishing
                             Email = "ulric@jncc.gov.uk"
                         }
                     },
-                    Gov = new GovPublicationInfo
+                    Target = new TargetInfo
                     {
-                        Publishable = true
+                        Gov = new GovPublicationInfo
+                        {
+                            Publishable = true
+                        }
                     }
                 };
                 r.Footer = new Footer();
@@ -240,9 +253,12 @@ namespace Catalogue.Tests.Slow.Catalogue.Web.Controllers.Publishing
                         Completed = true,
                         CompletedOnUtc = new DateTime(2017, 09, 27)
                     },
-                    Gov = new GovPublicationInfo
+                    Target = new TargetInfo
                     {
-                        Publishable = true
+                        Gov = new GovPublicationInfo
+                        {
+                            Publishable = true
+                        }
                     }
                 };
                 r.Footer = new Footer();
@@ -264,7 +280,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Web.Controllers.Publishing
                 {
                     m.MetadataDate = new DateTime(2017, 09, 27);
                 });
-                r.Publication = new PublicationInfo {Gov = new GovPublicationInfo {Publishable = true}};
+                r.Publication = new PublicationInfo {Target = new TargetInfo{Gov = new GovPublicationInfo {Publishable = true}}};
                 r.Footer = new Footer();
             });
 
@@ -300,16 +316,19 @@ namespace Catalogue.Tests.Slow.Catalogue.Web.Controllers.Publishing
                         },
                         DateUtc = DateTime.Parse("2017-07-10T00:00:00.0000000Z")
                     },
-                    Gov = new GovPublicationInfo
+                    Target = new TargetInfo
                     {
-                        Publishable = true,
-                        LastAttempt = new PublicationAttempt
+                        Gov = new GovPublicationInfo
                         {
-                            DateUtc = DateTime.Parse("2017-07-11T00:00:00.0000000Z")
-                        },
-                        LastSuccess = new PublicationAttempt
-                        {
-                            DateUtc = DateTime.Parse("2017-07-11T00:00:00.0000000Z")
+                            Publishable = true,
+                            LastAttempt = new PublicationAttempt
+                            {
+                                DateUtc = DateTime.Parse("2017-07-11T00:00:00.0000000Z")
+                            },
+                            LastSuccess = new PublicationAttempt
+                            {
+                                DateUtc = DateTime.Parse("2017-07-11T00:00:00.0000000Z")
+                            }
                         }
                     }
                 };
@@ -322,10 +341,10 @@ namespace Catalogue.Tests.Slow.Catalogue.Web.Controllers.Publishing
 
             var publicationInfo = resultRecord.Publication;
             publicationInfo.Should().NotBeNull();
-            publicationInfo.Gov.LastAttempt.DateUtc.Should().Be(DateTime.Parse("2017-07-11T00:00:00.0000000Z"));
-            publicationInfo.Gov.LastSuccess.DateUtc.Should().Be(DateTime.Parse("2017-07-11T00:00:00.0000000Z"));
+            publicationInfo.Target.Gov.LastAttempt.DateUtc.Should().Be(DateTime.Parse("2017-07-11T00:00:00.0000000Z"));
+            publicationInfo.Target.Gov.LastSuccess.DateUtc.Should().Be(DateTime.Parse("2017-07-11T00:00:00.0000000Z"));
             resultRecord.Publication.Data.Should().BeNull();
-            publicationInfo.Gov.Paused.Should().BeFalse();
+            publicationInfo.Target.Gov.Paused.Should().BeFalse();
             publicationInfo.SignOff.User.DisplayName.Should().Be("Test User");
             publicationInfo.SignOff.User.Email.Should().Be("tester@example.com");
             publicationInfo.SignOff.DateUtc.Should().NotBe(DateTime.MinValue);
@@ -360,16 +379,18 @@ namespace Catalogue.Tests.Slow.Catalogue.Web.Controllers.Publishing
                         },
                         DateUtc = new DateTime(2017, 07, 10)
                     },
-                    Gov = new GovPublicationInfo
-                    {
-                        Publishable = true,
-                        LastAttempt = new PublicationAttempt
-                        {
-                            DateUtc = new DateTime(2017, 07, 12)
-                        },
-                        LastSuccess = new PublicationAttempt
-                        {
-                            DateUtc = new DateTime(2017, 07, 12)
+                    Target = new TargetInfo {
+                        Gov = new GovPublicationInfo
+                            {
+                            Publishable = true,
+                            LastAttempt = new PublicationAttempt
+                            {
+                                DateUtc = new DateTime(2017, 07, 12)
+                            },
+                            LastSuccess = new PublicationAttempt
+                            {
+                                DateUtc = new DateTime(2017, 07, 12)
+                            }
                         }
                     }
                 };
@@ -387,10 +408,10 @@ namespace Catalogue.Tests.Slow.Catalogue.Web.Controllers.Publishing
 
                 var publicationInfo = resultRecord.Publication;
                 publicationInfo.Should().NotBeNull();
-                publicationInfo.Gov.LastAttempt.DateUtc.Should().Be(new DateTime(2017, 07, 12));
-                publicationInfo.Gov.LastSuccess.DateUtc.Should().Be(new DateTime(2017, 07, 12));
+                publicationInfo.Target.Gov.LastAttempt.DateUtc.Should().Be(new DateTime(2017, 07, 12));
+                publicationInfo.Target.Gov.LastSuccess.DateUtc.Should().Be(new DateTime(2017, 07, 12));
                 resultRecord.Publication.Data.Should().BeNull();
-                publicationInfo.Gov.Paused.Should().BeFalse();
+                publicationInfo.Target.Gov.Paused.Should().BeFalse();
                 publicationInfo.SignOff.User.DisplayName.Should().Be("Cathy");
                 publicationInfo.SignOff.User.Email.Should().Be("cathy@example.com");
                 publicationInfo.SignOff.DateUtc.Should().Be(new DateTime(2017, 07, 10));
@@ -426,12 +447,15 @@ namespace Catalogue.Tests.Slow.Catalogue.Web.Controllers.Publishing
                         },
                         DateUtc = new DateTime(2017, 07, 10)
                     },
-                    Gov = new GovPublicationInfo
+                    Target = new TargetInfo
                     {
-                        Publishable = true,
-                        LastAttempt = new PublicationAttempt
+                        Gov = new GovPublicationInfo
                         {
-                            DateUtc = new DateTime(2017, 07, 12)
+                            Publishable = true,
+                            LastAttempt = new PublicationAttempt
+                            {
+                                DateUtc = new DateTime(2017, 07, 12)
+                            }
                         }
                     }
                 };
@@ -449,10 +473,10 @@ namespace Catalogue.Tests.Slow.Catalogue.Web.Controllers.Publishing
 
                 var publicationInfo = resultRecord.Publication;
                 publicationInfo.Should().NotBeNull();
-                publicationInfo.Gov.LastAttempt.DateUtc.Should().Be(new DateTime(2017, 07, 12));
-                publicationInfo.Gov.LastSuccess.Should().BeNull();
+                publicationInfo.Target.Gov.LastAttempt.DateUtc.Should().Be(new DateTime(2017, 07, 12));
+                publicationInfo.Target.Gov.LastSuccess.Should().BeNull();
                 resultRecord.Publication.Data.Should().BeNull();
-                publicationInfo.Gov.Paused.Should().BeFalse();
+                publicationInfo.Target.Gov.Paused.Should().BeFalse();
                 publicationInfo.SignOff.User.DisplayName.Should().Be("Cathy");
                 publicationInfo.SignOff.User.Email.Should().Be("cathy@example.com");
                 publicationInfo.SignOff.DateUtc.Should().Be(new DateTime(2017, 07, 10));
@@ -488,16 +512,19 @@ namespace Catalogue.Tests.Slow.Catalogue.Web.Controllers.Publishing
                         },
                         DateUtc = new DateTime(2017, 07, 10)
                     },
-                    Gov = new GovPublicationInfo
+                    Target = new TargetInfo
                     {
-                        Publishable = true,
-                        LastAttempt = new PublicationAttempt
+                        Gov = new GovPublicationInfo
                         {
-                            DateUtc = new DateTime(2017, 07, 11)
-                        },
-                        LastSuccess = new PublicationAttempt
-                        {
-                            DateUtc = new DateTime(2017, 07, 11)
+                            Publishable = true,
+                            LastAttempt = new PublicationAttempt
+                            {
+                                DateUtc = new DateTime(2017, 07, 11)
+                            },
+                            LastSuccess = new PublicationAttempt
+                            {
+                                DateUtc = new DateTime(2017, 07, 11)
+                            }
                         }
                     }
                 };
@@ -515,10 +542,10 @@ namespace Catalogue.Tests.Slow.Catalogue.Web.Controllers.Publishing
 
                 var publicationInfo = resultRecord.Publication;
                 publicationInfo.Should().NotBeNull();
-                publicationInfo.Gov.LastAttempt.DateUtc.Should().Be(new DateTime(2017, 07, 11));
-                publicationInfo.Gov.LastSuccess.DateUtc.Should().Be(new DateTime(2017, 07, 11));
+                publicationInfo.Target.Gov.LastAttempt.DateUtc.Should().Be(new DateTime(2017, 07, 11));
+                publicationInfo.Target.Gov.LastSuccess.DateUtc.Should().Be(new DateTime(2017, 07, 11));
                 resultRecord.Publication.Data.Should().BeNull();
-                publicationInfo.Gov.Paused.Should().BeFalse();
+                publicationInfo.Target.Gov.Paused.Should().BeFalse();
                 publicationInfo.SignOff.User.DisplayName.Should().Be("Cathy");
                 publicationInfo.SignOff.User.Email.Should().Be("cathy@example.com");
                 publicationInfo.SignOff.DateUtc.Should().Be(new DateTime(2017, 07, 10));
@@ -551,7 +578,12 @@ namespace Catalogue.Tests.Slow.Catalogue.Web.Controllers.Publishing
                             Email = "test@email.com"
                         }
                     },
-                    SignOff = null
+                    SignOff = null,
+                    Target = new TargetInfo
+                    {
+                        Hub = new HubPublicationInfo { Publishable = true },
+                        Gov = new GovPublicationInfo { Publishable = true }
+                    }
                 };
                 r.Footer = new Footer();
             });
@@ -591,6 +623,11 @@ namespace Catalogue.Tests.Slow.Catalogue.Web.Controllers.Publishing
                     {
                         DateUtc = new DateTime(2017, 09, 26),
                         User = TestUserInfo.TestUser
+                    },
+                    Target = new TargetInfo
+                    {
+                        Hub = new HubPublicationInfo { Publishable = true },
+                        Gov = new GovPublicationInfo { Publishable = true }
                     }
                 };
                 r.Footer = new Footer();
@@ -616,6 +653,11 @@ namespace Catalogue.Tests.Slow.Catalogue.Web.Controllers.Publishing
                     {
                         DateUtc = new DateTime(2017, 09, 25),
                         User = TestUserInfo.TestUser
+                    },
+                    Target = new TargetInfo
+                    {
+                        Hub = new HubPublicationInfo { Publishable = true },
+                        Gov = new GovPublicationInfo { Publishable = true }
                     }
                 };
                 r.Footer = new Footer();
@@ -643,25 +685,30 @@ namespace Catalogue.Tests.Slow.Catalogue.Web.Controllers.Publishing
                         DateUtc = new DateTime(2017, 09, 20),
                         User = TestUserInfo.TestUser
                     },
-                    Data = new DataPublicationInfo
+                    Data = new DataInfo
                     {
                         LastAttempt = new PublicationAttempt
                         {
                             DateUtc = new DateTime(2017, 09, 21)
                         }
                     },
-                    Hub = new HubPublicationInfo
+                    Target = new TargetInfo
                     {
-                        LastAttempt = new PublicationAttempt
+                        Hub = new HubPublicationInfo
                         {
-                            DateUtc = new DateTime(2017, 09, 21)
-                        }
-                    },
-                    Gov = new GovPublicationInfo
-                    {
-                        LastAttempt = new PublicationAttempt
+                            Publishable = true,
+                            LastAttempt = new PublicationAttempt
+                            {
+                                DateUtc = new DateTime(2017, 09, 21)
+                            }
+                        },
+                        Gov = new GovPublicationInfo
                         {
-                            DateUtc = new DateTime(2017, 09, 21)
+                            Publishable = true,
+                            LastAttempt = new PublicationAttempt
+                            {
+                                DateUtc = new DateTime(2017, 09, 21)
+                            }
                         }
                     }
                 };
@@ -690,11 +737,15 @@ namespace Catalogue.Tests.Slow.Catalogue.Web.Controllers.Publishing
                         DateUtc = new DateTime(2017, 09, 28),
                         User = TestUserInfo.TestUser
                     },
-                    Gov = new GovPublicationInfo
+                    Target = new TargetInfo
                     {
-                        LastAttempt = new PublicationAttempt
+                        Gov = new GovPublicationInfo
                         {
-                            DateUtc = new DateTime(2017, 09, 28)
+                            Publishable = true,
+                            LastAttempt = new PublicationAttempt
+                            {
+                                DateUtc = new DateTime(2017, 09, 28)
+                            }
                         }
                     }
                 };
@@ -723,11 +774,15 @@ namespace Catalogue.Tests.Slow.Catalogue.Web.Controllers.Publishing
                         DateUtc = new DateTime(2017, 09, 20),
                         User = TestUserInfo.TestUser
                     },
-                    Gov = new GovPublicationInfo
+                    Target = new TargetInfo
                     {
-                        LastAttempt = new PublicationAttempt
+                        Gov = new GovPublicationInfo
                         {
-                            DateUtc = new DateTime(2017, 09, 21)
+                            Publishable = true,
+                            LastAttempt = new PublicationAttempt
+                            {
+                                DateUtc = new DateTime(2017, 09, 21)
+                            }
                         }
                     }
                 };
@@ -756,11 +811,15 @@ namespace Catalogue.Tests.Slow.Catalogue.Web.Controllers.Publishing
                         DateUtc = new DateTime(2017, 09, 26),
                         User = TestUserInfo.TestUser
                     },
-                    Gov = new GovPublicationInfo
+                    Target = new TargetInfo
                     {
-                        LastAttempt = new PublicationAttempt
+                        Gov = new GovPublicationInfo
                         {
-                            DateUtc = new DateTime(2017, 09, 30)
+                            Publishable = true,
+                            LastAttempt = new PublicationAttempt
+                            {
+                                DateUtc = new DateTime(2017, 09, 30)
+                            }
                         }
                     }
                 };

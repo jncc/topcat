@@ -18,20 +18,15 @@ namespace Catalogue.Data.Model
         /// <summary>
         /// Info related to data transfer to data.jncc.gov.uk
         /// </summary>
-        public DataPublicationInfo Data { get; set; }
+        public DataInfo Data { get; set; }
 
         /// <summary>
-        /// Info related to publishing to hub.jncc.gov.uk
+        /// Contains info on all publishing targets
         /// </summary>
-        public HubPublicationInfo Hub { get; set; }
-
-        /// <summary>
-        /// Info related to publishing to data.gov.uk
-        /// </summary>
-        public GovPublicationInfo Gov { get; set; }
+        public TargetInfo Target { get; set; }
     }
 
-    public class DataPublicationInfo
+    public class DataInfo
     {
         /// <summary>
         /// List of publishable resources
@@ -49,12 +44,25 @@ namespace Catalogue.Data.Model
         public PublicationAttempt LastSuccess { get; set; }
     }
 
+    public class TargetInfo
+    {
+        /// <summary>
+        /// Info related to publishing to hub.jncc.gov.uk
+        /// </summary>
+        public HubPublicationInfo Hub { get; set; }
+
+        /// <summary>
+        /// Info related to publishing to data.gov.uk
+        /// </summary>
+        public GovPublicationInfo Gov { get; set; }
+    }
+
     public class HubPublicationInfo
     {
         /// <summary>
         /// Link to the Datahub page once successfully published
         /// </summary>
-        public bool Publishable { get; set; }
+        public bool? Publishable { get; set; }
 
         /// <summary>
         /// Link to the Datahub page once successfully published

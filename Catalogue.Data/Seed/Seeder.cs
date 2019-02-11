@@ -262,7 +262,7 @@ namespace Catalogue.Data.Seed
                     {
                         DateUtc = DateTime.MinValue
                     },
-                    Data = new DataPublicationInfo
+                    Data = new DataInfo
                     {
                         Resources = new List<Resource> { new Resource
                         {
@@ -270,16 +270,19 @@ namespace Catalogue.Data.Seed
                             Path = @"C:\work\test-data.csv"
                         } }
                     },
-                    Gov = new GovPublicationInfo
+                    Target = new TargetInfo
                     {
-                        Publishable = true,
-                        LastAttempt = new PublicationAttempt
+                        Gov = new GovPublicationInfo
                         {
-                            DateUtc = new DateTime(2015, 1, 1, 10, 0, 0)
-                        },
-                        LastSuccess = new PublicationAttempt
-                        {
-                            DateUtc = new DateTime(2015, 1, 1, 10, 0, 0)
+                            Publishable = true,
+                            LastAttempt = new PublicationAttempt
+                            {
+                                DateUtc = new DateTime(2015, 1, 1, 10, 0, 0)
+                            },
+                            LastSuccess = new PublicationAttempt
+                            {
+                                DateUtc = new DateTime(2015, 1, 1, 10, 0, 0)
+                            }
                         }
                     }
                 };
@@ -297,7 +300,7 @@ namespace Catalogue.Data.Seed
                         // todo add more assessment fields
                         Completed = false
                     },
-                    Data = new DataPublicationInfo
+                    Data = new DataInfo
                     {
                         Resources = new List < Resource >
                         {
@@ -308,9 +311,12 @@ namespace Catalogue.Data.Seed
                             }
                         }
                     },
-                    Gov = new GovPublicationInfo
+                    Target = new TargetInfo
                     {
-                        Publishable = true
+                        Gov = new GovPublicationInfo
+                        {
+                            Publishable = true
+                        }
                     }
                 };
             });
@@ -334,7 +340,7 @@ namespace Catalogue.Data.Seed
                         CompletedOnUtc = new DateTime(2015, 1, 1, 12, 0, 0)
                     },
                     SignOff = null,
-                    Data = new DataPublicationInfo
+                    Data = new DataInfo
                     {
                         Resources = new List<Resource> { new Resource
                         {
@@ -342,9 +348,12 @@ namespace Catalogue.Data.Seed
                             Path = @"C:\work\test-data.csv"
                         } }
                     },
-                    Gov = new GovPublicationInfo
+                    Target = new TargetInfo
                     {
-                        Publishable = true
+                        Gov = new GovPublicationInfo
+                        {
+                            Publishable = true
+                        }
                     }
                 };
             });
@@ -368,7 +377,7 @@ namespace Catalogue.Data.Seed
                         CompletedOnUtc = new DateTime(2015, 1, 1, 12, 0, 0)
                     },
                     SignOff = null,
-                    Data = new DataPublicationInfo
+                    Data = new DataInfo
                     {
                         Resources = new List<Resource> { new Resource
                         {
@@ -376,9 +385,12 @@ namespace Catalogue.Data.Seed
                             Path = @"http://a.web.resource"
                         } }
                     },
-                    Gov = new GovPublicationInfo
+                    Target = new TargetInfo
                     {
-                        Publishable = true
+                        Gov = new GovPublicationInfo
+                        {
+                            Publishable = true
+                        }
                     }
                 };
             });
@@ -402,7 +414,7 @@ namespace Catalogue.Data.Seed
                         CompletedOnUtc = new DateTime(2015, 1, 1, 12, 0, 0)
                     },
                     SignOff = null,
-                    Data = new DataPublicationInfo
+                    Data = new DataInfo
                     {
                         Resources = new List<Resource> { new Resource
                             {
@@ -416,9 +428,12 @@ namespace Catalogue.Data.Seed
                             }
                         }
                     },
-                    Gov = new GovPublicationInfo
+                    Target = new TargetInfo
                     {
-                        Publishable = false
+                        Gov = new GovPublicationInfo
+                        {
+                            Publishable = false
+                        }
                     }
                 };
             });
@@ -447,7 +462,7 @@ namespace Catalogue.Data.Seed
                         DateUtc = new DateTime(2015, 1, 1, 12, 0, 0),
                         Comment = "All OK now."
                     },
-                    Data = new DataPublicationInfo
+                    Data = new DataInfo
                     {
                         Resources = new List<Resource> { new Resource
                         {
@@ -455,9 +470,12 @@ namespace Catalogue.Data.Seed
                             Path = @"C:\work\test-data.csv"
                         } }
                     },
-                    Gov = new GovPublicationInfo
+                    Target = new TargetInfo
                     {
-                        Publishable = true
+                        Gov = new GovPublicationInfo
+                        {
+                            Publishable = true
+                        }
                     }
                 };
             });
@@ -484,7 +502,7 @@ namespace Catalogue.Data.Seed
                         },
                         DateUtc = new DateTime(2015, 1, 1, 12, 0, 0)
                     },
-                    Data = new DataPublicationInfo
+                    Data = new DataInfo
                     {
                         Resources = new List<Resource> { new Resource
                         {
@@ -492,9 +510,12 @@ namespace Catalogue.Data.Seed
                             Path = @"C:\work\test-data.csv"
                         } }
                     },
-                    Gov = new GovPublicationInfo
+                    Target = new TargetInfo
                     {
-                        Publishable = false
+                        Gov = new GovPublicationInfo
+                        {
+                            Publishable = false
+                        }
                     }
                 };
             });
@@ -521,7 +542,7 @@ namespace Catalogue.Data.Seed
                         },
                         DateUtc = new DateTime(2015, 1, 1, 12, 0, 0)
                     },
-                    Data = new DataPublicationInfo
+                    Data = new DataInfo
                     {
                         Resources = new List<Resource> { new Resource
                         {
@@ -529,9 +550,12 @@ namespace Catalogue.Data.Seed
                             Path = @"C:\work\test-data.csv"
                         } }
                     },
-                    Gov = new GovPublicationInfo
+                    Target = new TargetInfo
                     {
-                        Publishable = null
+                        Gov = new GovPublicationInfo
+                        {
+                            Publishable = null
+                        }
                     }
                 };
             });
@@ -563,7 +587,7 @@ namespace Catalogue.Data.Seed
                         DateUtc = new DateTime(2014, 02, 01),
                         User = userInfo
                     },
-                    Data = new DataPublicationInfo
+                    Data = new DataInfo
                     {
                         Resources = new List<Resource> { new Resource
                         {
@@ -574,17 +598,20 @@ namespace Catalogue.Data.Seed
                         LastAttempt = new PublicationAttempt { DateUtc = new DateTime(2015, 1, 1, 11, 58, 0) },
                         LastSuccess = new PublicationAttempt { DateUtc = new DateTime(2015, 1, 1, 11, 58, 0) }
                     },
-                    Hub = new HubPublicationInfo
+                    Target = new TargetInfo
                     {
-                        Url = "https://hub.jncc.gov.uk/assets/b2691fed-e421-4e48-9da9-99bd77e0b8ba",
-                        LastAttempt = new PublicationAttempt { DateUtc = new DateTime(2015, 1, 1, 11, 59, 0) },
-                        LastSuccess = new PublicationAttempt { DateUtc = new DateTime(2015, 1, 1, 11, 59, 0) }
-                    },
-                    Gov = new GovPublicationInfo
-                    {
-                        Publishable = true,
-                        LastAttempt = new PublicationAttempt { DateUtc = new DateTime(2015, 1, 1, 12, 0, 0), Message = "Failed with a terrible error in Sector 7G"},
-                        LastSuccess = null
+                        Hub = new HubPublicationInfo
+                        {
+                            Url = "https://hub.jncc.gov.uk/assets/b2691fed-e421-4e48-9da9-99bd77e0b8ba",
+                            LastAttempt = new PublicationAttempt { DateUtc = new DateTime(2015, 1, 1, 11, 59, 0) },
+                            LastSuccess = new PublicationAttempt { DateUtc = new DateTime(2015, 1, 1, 11, 59, 0) }
+                        },
+                        Gov = new GovPublicationInfo
+                        {
+                            Publishable = true,
+                            LastAttempt = new PublicationAttempt { DateUtc = new DateTime(2015, 1, 1, 12, 0, 0), Message = "Failed with a terrible error in Sector 7G" },
+                            LastSuccess = null
+                        }
                     }
                 };
             });
@@ -607,7 +634,7 @@ namespace Catalogue.Data.Seed
                         DateUtc = new DateTime(2014, 01, 02),
                         User = userInfo
                     },
-                    Data = new DataPublicationInfo
+                    Data = new DataInfo
                     {
                         Resources = new List<Resource> { new Resource
                         {
@@ -618,17 +645,20 @@ namespace Catalogue.Data.Seed
                         LastAttempt = new PublicationAttempt { DateUtc = new DateTime(2015, 1, 1, 11, 58, 0) },
                         LastSuccess = new PublicationAttempt { DateUtc = new DateTime(2015, 1, 1, 11, 58, 0) }
                     },
-                    Hub = new HubPublicationInfo
+                    Target = new TargetInfo
                     {
-                        Url = "https://hub.jncc.gov.uk/assets/d9c14587-90d8-4eba-b670-4cf36e45196d",
-                        LastAttempt = new PublicationAttempt { DateUtc = new DateTime(2015, 1, 1, 11, 59, 0) },
-                        LastSuccess = new PublicationAttempt { DateUtc = new DateTime(2015, 1, 1, 11, 59, 0) }
-                    },
-                    Gov = new GovPublicationInfo
-                    {
-                        Publishable = true,
-                        LastAttempt = new PublicationAttempt { DateUtc = new DateTime(2015, 1, 1, 12, 0, 0) },
-                        LastSuccess = new PublicationAttempt { DateUtc = new DateTime(2015, 1, 1, 12, 0, 0) }
+                        Hub = new HubPublicationInfo
+                        {
+                            Url = "https://hub.jncc.gov.uk/assets/d9c14587-90d8-4eba-b670-4cf36e45196d",
+                            LastAttempt = new PublicationAttempt { DateUtc = new DateTime(2015, 1, 1, 11, 59, 0) },
+                            LastSuccess = new PublicationAttempt { DateUtc = new DateTime(2015, 1, 1, 11, 59, 0) }
+                        },
+                        Gov = new GovPublicationInfo
+                        {
+                            Publishable = true,
+                            LastAttempt = new PublicationAttempt { DateUtc = new DateTime(2015, 1, 1, 12, 0, 0) },
+                            LastSuccess = new PublicationAttempt { DateUtc = new DateTime(2015, 1, 1, 12, 0, 0) }
+                        }
                     }
                 };
             });
@@ -653,7 +683,7 @@ namespace Catalogue.Data.Seed
                         DateUtc = new DateTime(2014, 12, 29),
                         User = userInfo
                     },
-                    Data = new DataPublicationInfo
+                    Data = new DataInfo
                     {
                         Resources = new List<Resource> { new Resource
                         {
@@ -662,12 +692,15 @@ namespace Catalogue.Data.Seed
                             PublishedUrl = "https://the.hosted.location"
                         } }
                     },
-                    Gov = new GovPublicationInfo
+                    Target = new TargetInfo
                     {
-                        Publishable = true,
-                        LastAttempt = new PublicationAttempt { DateUtc = new DateTime(2014, 12, 31) },
-                        LastSuccess = new PublicationAttempt { DateUtc = new DateTime(2014, 12, 31) },
-                        Paused = true
+                        Gov = new GovPublicationInfo
+                        {
+                            Publishable = true,
+                            LastAttempt = new PublicationAttempt { DateUtc = new DateTime(2014, 12, 31) },
+                            LastSuccess = new PublicationAttempt { DateUtc = new DateTime(2014, 12, 31) },
+                            Paused = true
+                        }
                     }
                 };
             });
@@ -685,7 +718,7 @@ namespace Catalogue.Data.Seed
                         CompletedByUser = userInfo,
                         CompletedOnUtc = new DateTime(2014, 12, 31)
                     },
-                    Data = new DataPublicationInfo
+                    Data = new DataInfo
                     {
                         Resources = new List<Resource>
                         {
@@ -708,11 +741,14 @@ namespace Catalogue.Data.Seed
                         LastAttempt = null,
                         LastSuccess = null,
                     },
-                    Gov = new GovPublicationInfo
+                    Target = new TargetInfo
                     {
-                        Publishable = true,
-                        LastAttempt = null,
-                        LastSuccess = null
+                        Gov = new GovPublicationInfo
+                        {
+                            Publishable = true,
+                            LastAttempt = null,
+                            LastSuccess = null
+                        }
                     }
                 };
             });
@@ -724,9 +760,12 @@ namespace Catalogue.Data.Seed
                 r.Gemini.MetadataDate = new DateTime(2014, 12, 31);
                 r.Publication = new PublicationInfo
                 {
-                    Gov = new GovPublicationInfo
+                    Target = new TargetInfo
                     {
-                        Publishable = false
+                        Gov = new GovPublicationInfo
+                        {
+                            Publishable = false
+                        }
                     }
                 };
             });

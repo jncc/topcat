@@ -25,7 +25,7 @@ namespace Catalogue.Data.Write
         {
             if (record.Publication.Data == null)
             {
-                record.Publication.Data = new DataPublicationInfo();
+                record.Publication.Data = new DataInfo();
             }
             record.Publication.Data.LastAttempt = attempt;
             UpdateMetadataDate(record, attempt.DateUtc);
@@ -54,11 +54,11 @@ namespace Catalogue.Data.Write
 
         public void UpdateGovPublishAttempt(Record record, PublicationAttempt attempt)
         {
-            if (record.Publication.Gov == null)
+            if (record.Publication.Target.Gov == null)
             {
-                record.Publication.Gov = new GovPublicationInfo();
+                record.Publication.Target.Gov = new GovPublicationInfo();
             }
-            record.Publication.Gov.LastAttempt = attempt;
+            record.Publication.Target.Gov.LastAttempt = attempt;
             UpdateMetadataDate(record, attempt.DateUtc);
 
             var recordServiceResult = Upsert(record, db, validator);
@@ -71,7 +71,7 @@ namespace Catalogue.Data.Write
 
         public void UpdateGovPublishSuccess(Record record, PublicationAttempt attempt)
         {
-            record.Publication.Gov.LastSuccess = attempt;
+            record.Publication.Target.Gov.LastSuccess = attempt;
             UpdateMetadataDate(record, attempt.DateUtc);
 
             var recordServiceResult = Upsert(record, db, validator);
@@ -84,11 +84,11 @@ namespace Catalogue.Data.Write
 
         public void UpdateHubPublishAttempt(Record record, PublicationAttempt attempt)
         {
-            if (record.Publication.Hub == null)
+            if (record.Publication.Target.Hub == null)
             {
-                record.Publication.Hub = new HubPublicationInfo();
+                record.Publication.Target.Hub = new HubPublicationInfo();
             }
-            record.Publication.Hub.LastAttempt = attempt;
+            record.Publication.Target.Hub.LastAttempt = attempt;
             UpdateMetadataDate(record, attempt.DateUtc);
 
             var recordServiceResult = Upsert(record, db, validator);
@@ -101,8 +101,8 @@ namespace Catalogue.Data.Write
 
         public void UpdateHubPublishSuccess(Record record, string hubUrl, PublicationAttempt attempt)
         {
-            record.Publication.Hub.LastSuccess = attempt;
-            record.Publication.Hub.Url = hubUrl;
+            record.Publication.Target.Hub.LastSuccess = attempt;
+            record.Publication.Target.Hub.Url = hubUrl;
             UpdateMetadataDate(record, attempt.DateUtc);
 
             var recordServiceResult = Upsert(record, db, validator);

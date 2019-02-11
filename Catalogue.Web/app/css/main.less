@@ -760,22 +760,39 @@ form .ng-invalid {
 .publishing {
 
     .publishing-summary {
-        .hi { background-color: @pale; }
+        .hi {
+            background-color: @pale;
+        }
+
         .publishing-summary-item {
             display: inline-block;
-            padding:0 1em;
+            padding: 0 1em;
             cursor: pointer;
             border-radius: 6px;
-            >span { font-weight: bold; font-size: 4em; color: @dark; margin-right: 2px; }
+
+            > span {
+                font-weight: bold;
+                font-size: 4em;
+                color: @dark;
+                margin-right: 2px;
+            }
         }
+
         .publishing-summary-item-hoverable {
             .publishing-summary-item;
-            &:hover { background-color: @pale; }
+
+            &:hover {
+                background-color: @pale;
+            }
         }
+
         margin-bottom: 2em;
     }
+
     .publishing-list {
-        .first { width: 50%; }
+        .first {
+            width: 50%;
+        }
     }
 }
 

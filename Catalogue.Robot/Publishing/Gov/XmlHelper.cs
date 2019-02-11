@@ -67,13 +67,13 @@ namespace Catalogue.Robot.Publishing.Gov
         public static List<OnlineResource> GetOnlineResources(Record record)
         {
             var onlineResources = new List<OnlineResource>();
-            if (record.Publication.Hub != null && record.Publication.Hub.Publishable &&
-                record.Publication.Hub.Url.IsNullOrWhiteSpace() != true)
+            if (record.Publication.Target.Hub != null && record.Publication.Target.Hub.Publishable == true &&
+                record.Publication.Target.Hub.Url.IsNullOrWhiteSpace() != true)
             {
                 onlineResources.Add(new OnlineResource
                 {
                     Name = "JNCC ResourceHub Page",
-                    Url = record.Publication.Hub.Url
+                    Url = record.Publication.Target.Hub.Url
                 });
             }
             else

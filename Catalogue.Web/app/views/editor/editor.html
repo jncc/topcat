@@ -529,7 +529,7 @@
             </small>
         </tab-heading>
 
-        <div class="well well-lg">
+        <div class="well well-lg publishing">
             <div class="row">
                 <div class="col-md-3">
                     <span>Status</span>
@@ -540,19 +540,21 @@
             </div>
             <hr />
             <div class="row">
-
                 <div class="col-md-3">
                     <span>For ResourceHub</span> <span class="glyphicon glyphicon-info-sign" title="JNCC owned datasets and publications should be published to the ResourceHub" tc-tip></span>
                 </div>
                 <div class="col-md-9">
                     <div class="btn-group">
-                        <button ng-click="form.publication.hub.publishable = true" ng-class="{ 'btn-primary': form.publication.hub.publishable, 'btn-default': !form.publication.hub.publishable }" class="btn"
+                        <button ng-click="form.publication.hub.publishable = true" ng-class="{ 'btn-primary': form.publication.hub.publishable == true, 'btn-default': form.publication.hub.publishable != true }" class="btn"
                                 title="Can this record be published to the ResourceHub?"
                                 tc-tip>
                             <span class="glyphicon glyphicon-globe"></span> Publishable
                         </button>
-                        <button ng-click="form.publication.hub.publishable = false" ng-class="{ 'btn-primary': !form.publication.hub.publishable, 'btn-default': form.publication.hub.publishable }" class="btn">
+                        <button ng-click="form.publication.hub.publishable = false" ng-class="{ 'btn-primary': form.publication.hub.publishable == false, 'btn-default': form.publication.hub.publishable != false  }" class="btn">
                             Unpublishable
+                        </button>
+                        <button ng-click="form.publication.hub.publishable = null" ng-class="{ 'btn-primary': form.publication.hub.publishable == null, 'btn-default': form.publication.hub.publishable != null  }" class="btn">
+                            Undecided
                         </button>
                     </div>
                     <!--<button ng-click="togglePublishable()" ng-class="{ 'btn-primary': form.publication.hub.publishable, 'btn-default': !form.publication.hub.publishable }" class="btn"

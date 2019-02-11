@@ -92,18 +92,20 @@
       "User": null,
       "Comment": null
     },
-    "Gov": {
-      "Publishable": true,
-      "Paused": false,
-      "LastAttempt": {
-        "DateUtc": "2016-07-07T21:51:35.4446864Z",
-        "Message": null
-      },
-      "LastSuccess": {
-        "DateUtc": "2016-07-07T21:51:35.4446864Z",
-        "Message": null
+    "Target": {
+      "Gov": {
+        "Publishable": true,
+        "Paused": false,
+        "LastAttempt": {
+          "DateUtc": "2016-07-07T21:51:35.4446864Z",
+          "Message": null
+        },
+        "LastSuccess": {
+          "DateUtc": "2016-07-07T21:51:35.4446864Z",
+          "Message": null
+        }
       }
-    }
+    } 
   },
   "Wkt": "POLYGON((1.571 47.207,4.39 47.207,4.39 49.242,1.571 49.242,1.571 47.207))",
   "Revision": 0,

@@ -49,7 +49,7 @@ namespace Catalogue.Web.Controllers.Dumps
                     Id = Helpers.RemoveCollection(r.Id),
                     Title = r.Gemini.Title,
                     MetadataDate = r.Gemini.MetadataDate,
-                    PublicationInfo = r.Publication.Gov,
+                    PublicationInfo = r.Publication.Target.Gov,
                 }).ToList();
         }
 
@@ -106,7 +106,7 @@ namespace Catalogue.Web.Controllers.Dumps
         public List<RecordWithPublicationInfoResultShape> RecordsNotPublishedSinceLastUpdated()
         {
             var results = db.Query<RecordsWithPublicationInfoIndex.Result, RecordsWithPublicationInfoIndex>()
-                .Where(r => !r.PublishedSinceLastUpdated)
+                .Where(r => !r.PublishedToGovSinceLastUpdated)
                 .OfType<Record>()
                 .Fetch(1024);
 
@@ -115,7 +115,7 @@ namespace Catalogue.Web.Controllers.Dumps
                 Id = Helpers.RemoveCollection(r.Id),
                 Title = r.Gemini.Title,
                 MetadataDate = r.Gemini.MetadataDate,
-                PublicationInfo = r.Publication.Gov,
+                PublicationInfo = r.Publication.Target.Gov,
             }).ToList();
         }
 

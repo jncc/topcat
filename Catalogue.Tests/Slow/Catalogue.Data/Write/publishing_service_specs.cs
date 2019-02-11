@@ -16,6 +16,7 @@ using Catalogue.Robot.Publishing;
 using Catalogue.Robot.Publishing.Data;
 using Catalogue.Robot.Publishing.Gov;
 using Catalogue.Utilities.Text;
+using PublicationAttempt = Catalogue.Data.Model.PublicationAttempt;
 
 namespace Catalogue.Tests.Slow.Catalogue.Data.Write
 {
@@ -80,14 +81,17 @@ namespace Catalogue.Tests.Slow.Catalogue.Data.Write
                         DateUtc = new DateTime(2017, 08, 02),
                         User = TestUserInfo.TestUser
                     },
-                    Data = new DataPublicationInfo { Resources = resources },
-                    Hub = new HubPublicationInfo
+                    Data = new DataInfo { Resources = resources },
+                    Target = new TargetInfo
                     {
-                        Publishable = true
-                    },
-                    Gov = new GovPublicationInfo
-                    {
-                        Publishable = true
+                        Hub = new HubPublicationInfo
+                        {
+                            Publishable = true
+                        },
+                        Gov = new GovPublicationInfo
+                        {
+                            Publishable = true
+                        }
                     }
                 };
                 r.Footer = new Footer();
@@ -147,10 +151,13 @@ namespace Catalogue.Tests.Slow.Catalogue.Data.Write
                         DateUtc = new DateTime(2017, 08, 02),
                         User = TestUserInfo.TestUser
                     },
-                    Data = new DataPublicationInfo { Resources = resources },
-                    Hub = new HubPublicationInfo
+                    Data = new DataInfo { Resources = resources },
+                    Target = new TargetInfo
                     {
-                        Publishable = true
+                        Hub = new HubPublicationInfo
+                        {
+                            Publishable = true
+                        }
                     }
                 };
                 r.Footer = new Footer();
@@ -177,7 +184,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Data.Write
 
                 DataPublishedSuccessfully(updatedRecord, testTime);
                 HubPublishedSuccessfully(updatedRecord, testTime);
-                updatedRecord.Publication.Gov.Should().BeNull();
+                updatedRecord.Publication.Target.Gov.Should().BeNull();
                 ResourcesUpdatedCorrectly(recordId, record.Publication.Data.Resources, updatedRecord.Publication.Data.Resources);
 
                 updatedRecord.Gemini.MetadataDate.Should().Be(testTime);
@@ -210,10 +217,13 @@ namespace Catalogue.Tests.Slow.Catalogue.Data.Write
                         DateUtc = new DateTime(2017, 08, 02),
                         User = TestUserInfo.TestUser
                     },
-                    Data = new DataPublicationInfo { Resources = resources },
-                    Gov = new GovPublicationInfo
+                    Data = new DataInfo { Resources = resources },
+                    Target = new TargetInfo
                     {
-                        Publishable = true
+                        Gov = new GovPublicationInfo
+                        {
+                            Publishable = true
+                        }
                     }
                 };
                 r.Footer = new Footer();
@@ -239,7 +249,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Data.Write
                 var updatedRecord = db.Load<Record>(record.Id);
 
                 DataPublishedSuccessfully(updatedRecord, testTime);
-                updatedRecord.Publication.Hub.Should().BeNull();
+                updatedRecord.Publication.Target.Hub.Should().BeNull();
                 GovPublishedSuccessfully(updatedRecord, testTime);
                 ResourcesUpdatedCorrectly(recordId, record.Publication.Data.Resources, updatedRecord.Publication.Data.Resources);
 
@@ -274,19 +284,22 @@ namespace Catalogue.Tests.Slow.Catalogue.Data.Write
                         DateUtc = new DateTime(2017, 08, 02),
                         User = TestUserInfo.TestUser
                     },
-                    Data = new DataPublicationInfo { Resources = new List<Resource>{new Resource { Name = "File resource", Path = "x:\\test\\path.txt" }} },
-                    Hub = new HubPublicationInfo
+                    Data = new DataInfo { Resources = new List<Resource>{new Resource { Name = "File resource", Path = "x:\\test\\path.txt" }} },
+                    Target = new TargetInfo
                     {
-                        Publishable = false, //previously published here
-                        Url = "http://hub.jncc.gov.uk/assets/record-guid",
-                        LastSuccess = new PublicationAttempt
+                        Hub = new HubPublicationInfo
                         {
-                            DateUtc = new DateTime(2017, 08, 17, 12, 0, 0)
+                            Publishable = false, //previously published here
+                            Url = "http://hub.jncc.gov.uk/assets/record-guid",
+                            LastSuccess = new PublicationAttempt
+                            {
+                                DateUtc = new DateTime(2017, 08, 17, 12, 0, 0)
+                            }
+                        },
+                        Gov = new GovPublicationInfo
+                        {
+                            Publishable = true // now going to be published here
                         }
-                    },
-                    Gov = new GovPublicationInfo
-                    {
-                        Publishable = true // now going to be published here
                     }
                 };
                 r.Footer = new Footer();
@@ -313,8 +326,8 @@ namespace Catalogue.Tests.Slow.Catalogue.Data.Write
 
                 DataPublishedSuccessfully(updatedRecord, testTime);
                 updatedRecord.Publication.Data.Resources.Should().Contain(r => r.Name.Equals("File resource"));
-                updatedRecord.Publication.Hub.LastSuccess.DateUtc.Should().Be(new DateTime(2017, 08, 17, 12, 0, 0));
-                updatedRecord.Publication.Hub.Url.Should().Be("http://hub.jncc.gov.uk/assets/record-guid");
+                updatedRecord.Publication.Target.Hub.LastSuccess.DateUtc.Should().Be(new DateTime(2017, 08, 17, 12, 0, 0));
+                updatedRecord.Publication.Target.Hub.Url.Should().Be("http://hub.jncc.gov.uk/assets/record-guid");
                 GovPublishedSuccessfully(updatedRecord, testTime);
                 ResourcesUpdatedCorrectly(recordId, record.Publication.Data.Resources, updatedRecord.Publication.Data.Resources);
 
@@ -349,17 +362,20 @@ namespace Catalogue.Tests.Slow.Catalogue.Data.Write
                         DateUtc = new DateTime(2017, 08, 02),
                         User = TestUserInfo.TestUser
                     },
-                    Data = new DataPublicationInfo { Resources = new List<Resource> { new Resource { Name = "File resource", Path = "x:\\test\\path.txt" } } },
-                    Hub = new HubPublicationInfo
+                    Data = new DataInfo { Resources = new List<Resource> { new Resource { Name = "File resource", Path = "x:\\test\\path.txt" } } },
+                    Target = new TargetInfo
                     {
-                        Publishable = true // now going to publish here
-                    },
-                    Gov = new GovPublicationInfo
-                    {
-                        Publishable = false, // previously published here
-                        LastSuccess = new PublicationAttempt
+                        Hub = new HubPublicationInfo
                         {
-                            DateUtc = new DateTime(2017, 08, 17, 12, 0, 0)
+                            Publishable = true // now going to publish here
+                        },
+                        Gov = new GovPublicationInfo
+                        {
+                            Publishable = false, // previously published here
+                            LastSuccess = new PublicationAttempt
+                            {
+                                DateUtc = new DateTime(2017, 08, 17, 12, 0, 0)
+                            }
                         }
                     }
                 };
@@ -388,7 +404,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Data.Write
                 DataPublishedSuccessfully(updatedRecord, testTime);
                 updatedRecord.Publication.Data.Resources.Should().Contain(r => r.Name.Equals("File resource"));
                 HubPublishedSuccessfully(updatedRecord, testTime);
-                updatedRecord.Publication.Gov.LastSuccess.DateUtc.Should().Be(new DateTime(2017, 08, 17, 12, 0, 0));
+                updatedRecord.Publication.Target.Gov.LastSuccess.DateUtc.Should().Be(new DateTime(2017, 08, 17, 12, 0, 0));
                 ResourcesUpdatedCorrectly(recordId, record.Publication.Data.Resources, updatedRecord.Publication.Data.Resources);
 
                 updatedRecord.Gemini.MetadataDate.Should().Be(testTime);
@@ -426,17 +442,20 @@ namespace Catalogue.Tests.Slow.Catalogue.Data.Write
                         DateUtc = new DateTime(2017, 08, 02),
                         User = TestUserInfo.TestUser
                     },
-                    Data = new DataPublicationInfo
+                    Data = new DataInfo
                     {
                         Resources = new List<Resource> { new Resource { Name = "Some resource", Path = "x:\\test\\path.txt" } }
                     },
-                    Hub = new HubPublicationInfo
+                    Target = new TargetInfo
                     {
-                        Publishable = true
-                    },
-                    Gov = new GovPublicationInfo
-                    {
-                        Publishable = true
+                        Hub = new HubPublicationInfo
+                        {
+                            Publishable = true
+                        },
+                        Gov = new GovPublicationInfo
+                        {
+                            Publishable = true
+                        }
                     }
                 };
                 r.Footer = new Footer();
@@ -465,10 +484,10 @@ namespace Catalogue.Tests.Slow.Catalogue.Data.Write
                 updatedRecord.Publication.Data.LastAttempt.DateUtc.Should().Be(testTime);
                 updatedRecord.Publication.Data.LastAttempt.Message.Should().Be("test message");
                 updatedRecord.Publication.Data.LastSuccess.Should().BeNull();
-                updatedRecord.Publication.Hub.LastAttempt.Should().BeNull();
-                updatedRecord.Publication.Hub.LastSuccess.Should().BeNull();
-                updatedRecord.Publication.Gov.LastAttempt.Should().BeNull();
-                updatedRecord.Publication.Hub.LastSuccess.Should().BeNull();
+                updatedRecord.Publication.Target.Hub.LastAttempt.Should().BeNull();
+                updatedRecord.Publication.Target.Hub.LastSuccess.Should().BeNull();
+                updatedRecord.Publication.Target.Gov.LastAttempt.Should().BeNull();
+                updatedRecord.Publication.Target.Hub.LastSuccess.Should().BeNull();
                 updatedRecord.Gemini.MetadataDate.Should().Be(testTime);
 
                 Clock.CurrentUtcDateTimeGetter = currentTime;
@@ -497,7 +516,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Data.Write
                         DateUtc = new DateTime(2017, 08, 02),
                         User = TestUserInfo.TestUser
                     },
-                    Data = new DataPublicationInfo
+                    Data = new DataInfo
                     {
                         Resources = new List<Resource>
                         {
@@ -506,13 +525,16 @@ namespace Catalogue.Tests.Slow.Catalogue.Data.Write
                             new Resource { Name = "Web resource", Path = "http://a.web.resource" }
                         }
                     },
-                    Hub = new HubPublicationInfo
+                    Target = new TargetInfo
                     {
-                        Publishable = true
-                    },
-                    Gov = new GovPublicationInfo
-                    {
-                        Publishable = true
+                        Hub = new HubPublicationInfo
+                        {
+                            Publishable = true
+                        },
+                        Gov = new GovPublicationInfo
+                        {
+                            Publishable = true
+                        }
                     }
                 };
                 r.Footer = new Footer();
@@ -545,10 +567,10 @@ namespace Catalogue.Tests.Slow.Catalogue.Data.Write
                 {
                     resource.PublishedUrl.Should().BeNullOrEmpty();
                 }
-                updatedRecord.Publication.Hub.LastAttempt.Should().BeNull();
-                updatedRecord.Publication.Hub.LastSuccess.Should().BeNull();
-                updatedRecord.Publication.Gov.LastAttempt.Should().BeNull();
-                updatedRecord.Publication.Gov.LastSuccess.Should().BeNull();
+                updatedRecord.Publication.Target.Hub.LastAttempt.Should().BeNull();
+                updatedRecord.Publication.Target.Hub.LastSuccess.Should().BeNull();
+                updatedRecord.Publication.Target.Gov.LastAttempt.Should().BeNull();
+                updatedRecord.Publication.Target.Gov.LastSuccess.Should().BeNull();
                 updatedRecord.Gemini.MetadataDate.Should().Be(testTime);
 
                 Clock.CurrentUtcDateTimeGetter = currentTime;
@@ -578,17 +600,20 @@ namespace Catalogue.Tests.Slow.Catalogue.Data.Write
                         DateUtc = new DateTime(2017, 08, 02),
                         User = TestUserInfo.TestUser
                     },
-                    Data = new DataPublicationInfo
+                    Data = new DataInfo
                     {
                         Resources = new List<Resource> { new Resource { Name = "Some resource", Path = "x:\\test\\path" } }
                     },
-                    Hub = new HubPublicationInfo
+                    Target = new TargetInfo
                     {
-                        Publishable = true
-                    },
-                    Gov = new GovPublicationInfo
-                    {
-                        Publishable = true
+                        Hub = new HubPublicationInfo
+                        {
+                            Publishable = true
+                        },
+                        Gov = new GovPublicationInfo
+                        {
+                            Publishable = true
+                        }
                     }
                 };
                 r.Footer = new Footer();
@@ -615,11 +640,11 @@ namespace Catalogue.Tests.Slow.Catalogue.Data.Write
                 var updatedRecord = db.Load<Record>(record.Id);
                 updatedRecord.Publication.Data.LastAttempt.DateUtc.Should().Be(testTime);
                 updatedRecord.Publication.Data.LastSuccess.DateUtc.Should().Be(testTime);
-                updatedRecord.Publication.Hub.LastAttempt.DateUtc.Should().Be(testTime);
-                updatedRecord.Publication.Hub.LastAttempt.Message.Should().Be("test message");
-                updatedRecord.Publication.Hub.LastSuccess.Should().BeNull();
-                updatedRecord.Publication.Gov.LastAttempt.Should().BeNull();
-                updatedRecord.Publication.Gov.LastSuccess.Should().BeNull();
+                updatedRecord.Publication.Target.Hub.LastAttempt.DateUtc.Should().Be(testTime);
+                updatedRecord.Publication.Target.Hub.LastAttempt.Message.Should().Be("test message");
+                updatedRecord.Publication.Target.Hub.LastSuccess.Should().BeNull();
+                updatedRecord.Publication.Target.Gov.LastAttempt.Should().BeNull();
+                updatedRecord.Publication.Target.Gov.LastSuccess.Should().BeNull();
                 updatedRecord.Gemini.MetadataDate.Should().Be(testTime);
 
                 Clock.CurrentUtcDateTimeGetter = currentTime;
@@ -648,17 +673,20 @@ namespace Catalogue.Tests.Slow.Catalogue.Data.Write
                         DateUtc = new DateTime(2017, 08, 02),
                         User = TestUserInfo.TestUser
                     },
-                    Data = new DataPublicationInfo
+                    Data = new DataInfo
                     {
                         Resources = new List<Resource> { new Resource { Name = "Some resource", Path = "x:\\test\\path" } }
                     },
-                    Hub = new HubPublicationInfo
+                    Target = new TargetInfo
                     {
-                        Publishable = true
-                    },
-                    Gov = new GovPublicationInfo
-                    {
-                        Publishable = true
+                        Hub = new HubPublicationInfo
+                        {
+                            Publishable = true
+                        },
+                        Gov = new GovPublicationInfo
+                        {
+                            Publishable = true
+                        }
                     }
                 };
                 r.Footer = new Footer();
@@ -688,11 +716,11 @@ namespace Catalogue.Tests.Slow.Catalogue.Data.Write
                 var updatedRecord = db.Load<Record>(record.Id);
                 updatedRecord.Publication.Data.LastAttempt.DateUtc.Should().Be(testTime);
                 updatedRecord.Publication.Data.LastSuccess.DateUtc.Should().Be(testTime);
-                updatedRecord.Publication.Hub.LastAttempt.DateUtc.Should().Be(testTime);
-                updatedRecord.Publication.Hub.LastSuccess.DateUtc.Should().Be(testTime);
-                updatedRecord.Publication.Gov.LastAttempt.DateUtc.Should().Be(testTime);
-                updatedRecord.Publication.Gov.LastAttempt.Message.Should().Be("test message");
-                updatedRecord.Publication.Gov.LastSuccess.Should().BeNull();
+                updatedRecord.Publication.Target.Hub.LastAttempt.DateUtc.Should().Be(testTime);
+                updatedRecord.Publication.Target.Hub.LastSuccess.DateUtc.Should().Be(testTime);
+                updatedRecord.Publication.Target.Gov.LastAttempt.DateUtc.Should().Be(testTime);
+                updatedRecord.Publication.Target.Gov.LastAttempt.Message.Should().Be("test message");
+                updatedRecord.Publication.Target.Gov.LastSuccess.Should().BeNull();
                 updatedRecord.Gemini.MetadataDate.Should().Be(testTime);
 
                 Clock.CurrentUtcDateTimeGetter = currentTime;
@@ -710,7 +738,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Data.Write
 
         private void HubPublishedSuccessfully(Record record, DateTime timestamp)
         {
-            var hub = record.Publication.Hub;
+            var hub = record.Publication.Target.Hub;
             hub.LastAttempt.DateUtc.Should().Be(timestamp);
             hub.LastAttempt.Message.Should().BeNull();
             hub.LastSuccess.DateUtc.Should().Be(timestamp);
@@ -720,7 +748,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Data.Write
 
         private void GovPublishedSuccessfully(Record record, DateTime timestamp)
         {
-            var gov = record.Publication.Gov;
+            var gov = record.Publication.Target.Gov;
             gov.LastAttempt.DateUtc.Should().Be(timestamp);
             gov.LastAttempt.Message.Should().BeNull();
             gov.LastSuccess.DateUtc.Should().Be(timestamp);

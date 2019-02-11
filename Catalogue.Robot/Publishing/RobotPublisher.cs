@@ -43,11 +43,11 @@ namespace Catalogue.Robot.Publishing
                 .Where(x => x.Assessed)
                 .Where(x => x.SignedOff)
                 .Where(x => x.GeminiValidated) // all open data should be gemini-valid - this is a safety
-                .Where(x => !x.PublishedSinceLastUpdated)
+                .Where(x => !x.PublishedToHubSinceLastUpdated || !x.PublishedToGovSinceLastUpdated)
                 .OfType<Record>() //.Select(r => r.Id) // this doesn't work in RavenDB, and doesn't throw!
                 .Take(1000) // so take 1000 which is enough for one run
                 .ToList() // so materialize the record first
-                .Where(r => !r.Publication.Gov.Paused) //  .Where(x => !x.PublishingIsPaused) on the server doesn't work on live - thanks, ravenDB
+                .Where(r => !r.Publication.Target.Gov.Paused) //  .Where(x => !x.PublishingIsPaused) on the server doesn't work on live - thanks, ravenDB
                 .ToList();
 
             return records;
@@ -58,8 +58,8 @@ namespace Catalogue.Robot.Publishing
             foreach (Record record in records)
             {
                 Logger.Info($"Starting publishing process for record {record.Id} {record.Gemini.Title}");
-                if (record.Publication == null || record.Publication.Hub == null && record.Publication.Gov == null ||
-                    record.Publication.Hub?.Publishable != true && record.Publication?.Gov?.Publishable != true)
+                if (record.Publication == null || record.Publication.Target.Hub == null && record.Publication.Target.Gov == null ||
+                    record.Publication.Target.Hub?.Publishable != true && record.Publication?.Target?.Gov?.Publishable != true)
                 {
                     Logger.Info("No publishing targets defined, aborting publishing");
                     return;
@@ -126,7 +126,7 @@ namespace Catalogue.Robot.Publishing
 
         public void PublishHubMetadata(Record record)
         {
-            if (record.Publication.Hub?.Publishable == true)
+            if (record.Publication.Target?.Hub?.Publishable == true)
             {
                 var attempt = new PublicationAttempt {DateUtc = Clock.NowUtc};
                 uploadRecordService.UpdateHubPublishAttempt(record, attempt);
@@ -156,7 +156,7 @@ namespace Catalogue.Robot.Publishing
 
         public void PublishGovMetadata(Record record)
         {
-            if (record.Publication.Gov?.Publishable == true) {
+            if (record.Publication.Target?.Gov?.Publishable == true) {
                 var attempt = new PublicationAttempt { DateUtc = Clock.NowUtc };
                 uploadRecordService.UpdateGovPublishAttempt(record, attempt);
                 db.SaveChanges();

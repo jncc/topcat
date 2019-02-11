@@ -251,7 +251,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Data.Write
 
             var record = BasicRecord().With(r => r.Publication = new PublicationInfo
             {
-                Data = new DataPublicationInfo
+                Data = new DataInfo
                 {
                     Resources = new List<Resource>
                     {
@@ -260,8 +260,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Data.Write
                         new Resource { Path = "Z:\\needs\\trimming\\right.pdf " },
                         new Resource { Path = " Z:\\needs\\trimming\\both.pdf "} ,
                     }
-                },
-                Gov = new GovPublicationInfo()
+                }
             });
 
             var expected = new List<string>

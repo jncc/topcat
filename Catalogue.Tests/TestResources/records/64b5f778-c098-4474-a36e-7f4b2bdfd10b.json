@@ -104,28 +104,30 @@
         }
       ]
     },
-    "Hub": {
-      "Publishable": true,
-      "Url": "http://hub.jncc.gov.uk/assets/64b5f778-c098-4474-a36e-7f4b2bdfd10b",
-      "LastAttempt": {
-        "DateUtc": "2016-07-07T20:53:43.4319086Z",
-        "Message": null
+    "Target": {
+      "Hub": {
+        "Publishable": true,
+        "Url": "http://hub.jncc.gov.uk/assets/64b5f778-c098-4474-a36e-7f4b2bdfd10b",
+        "LastAttempt": {
+          "DateUtc": "2016-07-07T20:53:43.4319086Z",
+          "Message": null
+        },
+        "LastSuccess": {
+          "DateUtc": "2016-07-07T20:53:43.4319086Z",
+          "Message": null
+        }
       },
-      "LastSuccess": {
-        "DateUtc": "2016-07-07T20:53:43.4319086Z",
-        "Message": null
-      }
-    },
-    "Gov": {
-      "Publishable": true,
-      "Paused": false,
-      "LastAttempt": {
-        "DateUtc": "2016-07-07T21:53:43.4319086Z",
-        "Message": null
-      },
-      "LastSuccess": {
-        "DateUtc": "2016-07-07T21:53:43.4319086Z",
-        "Message": null
+      "Gov": {
+        "Publishable": true,
+        "Paused": false,
+        "LastAttempt": {
+          "DateUtc": "2016-07-07T21:53:43.4319086Z",
+          "Message": null
+        },
+        "LastSuccess": {
+          "DateUtc": "2016-07-07T21:53:43.4319086Z",
+          "Message": null
+        }
       }
     }
   },

@@ -97,16 +97,18 @@
         }
       ]
     },
-    "Gov": {
-      "Publishable": true,
-      "Paused": false,
-      "LastAttempt": {
-        "DateUtc": "2016-07-07T21:51:35.4446864Z",
-        "Message": null
-      },
-      "LastSuccess": {
-        "DateUtc": "2016-07-07T21:51:35.4446864Z",
-        "Message": null
+    "Target": {
+      "Gov": {
+        "Publishable": true,
+        "Paused": false,
+        "LastAttempt": {
+          "DateUtc": "2016-07-07T21:51:35.4446864Z",
+          "Message": null
+        },
+        "LastSuccess": {
+          "DateUtc": "2016-07-07T21:51:35.4446864Z",
+          "Message": null
+        }
       }
     }
   },

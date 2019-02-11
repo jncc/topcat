@@ -289,7 +289,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Data.Write
             var record = SimpleRecord()
                 .With(r => r.Publication = new PublicationInfo
                 {
-                    Data = new DataPublicationInfo
+                    Data = new DataInfo
                     {
                         Resources = resources
                     }
@@ -316,7 +316,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Data.Write
             var record = SimpleRecord()
                 .With(r => r.Publication = new PublicationInfo
                 {
-                    Data = new DataPublicationInfo
+                    Data = new DataInfo
                     {
                         Resources = resources
                     }
@@ -340,7 +340,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Data.Write
             var record = SimpleRecord()
                 .With(r => r.Publication = new PublicationInfo
                 {
-                    Data = new DataPublicationInfo
+                    Data = new DataInfo
                     {
                         Resources = resources
                     }
@@ -367,7 +367,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Data.Write
             var record = SimpleRecord()
                 .With(r => r.Publication = new PublicationInfo
                 {
-                    Data = new DataPublicationInfo
+                    Data = new DataInfo
                     {
                         Resources = resources
                     }
@@ -394,7 +394,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Data.Write
             var record = SimpleRecord()
                 .With(r => r.Publication = new PublicationInfo
                 {
-                    Data = new DataPublicationInfo
+                    Data = new DataInfo
                     {
                         Resources = resources
                     }

@@ -33,8 +33,8 @@ namespace Catalogue.Web.Controllers.Publishing
 
             return new SummaryRepresentation
                 {
-                    CountOfPublishedSinceLastUpdated = query.Count(x => x.PublishedSinceLastUpdated),
-                    CountOfNotYetPublishedSinceLastUpdated = query.Count(x => !x.PublishedSinceLastUpdated && x.SignedOff),
+                    CountOfPublishedSinceLastUpdated = query.Count(x => x.PublishedToGovSinceLastUpdated),
+                    CountOfNotYetPublishedSinceLastUpdated = query.Count(x => !x.PublishedToGovSinceLastUpdated && x.SignedOff),
                     CountOfPublicationNeverAttempted = query.Count(x => x.PublicationNeverAttempted),
                     CountOfLastPublicationAttemptWasUnsuccessful = query.Count(x => x.LastPublicationAttemptWasUnsuccessful),
                     CountOfPendingSignOff = query.Count(x => x.Assessed && !x.SignedOff)
@@ -115,7 +115,7 @@ namespace Catalogue.Web.Controllers.Publishing
         {
             var query = db
                 .Query<RecordsWithPublicationInfoIndex.Result, RecordsWithPublicationInfoIndex>()
-                .Where(x => x.PublishedSinceLastUpdated);
+                .Where(x => x.PublishedToGovSinceLastUpdated);
 
             return GetRecords(query, p);
         }
@@ -125,7 +125,7 @@ namespace Catalogue.Web.Controllers.Publishing
         {
             var query = db
                 .Query<RecordsWithPublicationInfoIndex.Result, RecordsWithPublicationInfoIndex>()
-                .Where(x => !x.PublishedSinceLastUpdated && x.SignedOff);
+                .Where(x => !x.PublishedToGovSinceLastUpdated && x.SignedOff);
 
             return GetRecords(query, p);
         }
