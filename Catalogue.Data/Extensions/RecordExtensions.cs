@@ -38,11 +38,11 @@ namespace Catalogue.Data.Extensions
                    && record.Publication.Target.Hub.LastSuccess.DateUtc.Equals(record.Gemini.MetadataDate);
         }
 
-        public static bool HasPublishingDestination(this Record record)
+        public static bool HasPublishingTarget(this Record record)
         {
-            return record.Publication != null &&
+            return record.Publication != null && record.Publication.Target != null &&
                    (record.Publication.Target.Hub != null && record.Publication.Target.Hub.Publishable == true ||
-                    record.Publication.Target.Gov != null && record.Publication.Target.Gov.Publishable == true);
+                   record.Publication.Target.Gov != null && record.Publication.Target.Gov.Publishable == true);
         }
     }
 }

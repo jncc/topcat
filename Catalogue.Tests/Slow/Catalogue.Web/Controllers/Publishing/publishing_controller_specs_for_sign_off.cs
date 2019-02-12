@@ -55,7 +55,6 @@ namespace Catalogue.Tests.Slow.Catalogue.Web.Controllers.Publishing
             publicationInfo.Target.Gov.LastAttempt.Should().BeNull();
             publicationInfo.Target.Gov.LastSuccess.Should().BeNull();
             resultRecord.Publication.Data.Should().BeNull();
-            publicationInfo.Target.Gov.Paused.Should().BeFalse();
             publicationInfo.SignOff.User.DisplayName.Should().Be("Test User");
             publicationInfo.SignOff.User.Email.Should().Be("tester@example.com");
             publicationInfo.SignOff.DateUtc.Should().NotBe(DateTime.MinValue);
@@ -101,7 +100,6 @@ namespace Catalogue.Tests.Slow.Catalogue.Web.Controllers.Publishing
             publicationInfo.Target.Gov.LastAttempt.Should().BeNull();
             publicationInfo.Target.Gov.LastSuccess.Should().BeNull();
             resultRecord.Publication.Data.Should().BeNull();
-            publicationInfo.Target.Gov.Paused.Should().BeFalse();
             publicationInfo.SignOff.User.DisplayName.Should().Be("Test User");
             publicationInfo.SignOff.User.Email.Should().Be("tester@example.com");
             publicationInfo.SignOff.DateUtc.Should().NotBe(DateTime.MinValue);
@@ -147,7 +145,6 @@ namespace Catalogue.Tests.Slow.Catalogue.Web.Controllers.Publishing
             publicationInfo.Target.Gov.LastAttempt.Should().BeNull();
             publicationInfo.Target.Gov.LastSuccess.Should().BeNull();
             resultRecord.Publication.Data.Should().BeNull();
-            publicationInfo.Target.Gov.Paused.Should().BeFalse();
             publicationInfo.SignOff.User.DisplayName.Should().Be("Test User");
             publicationInfo.SignOff.User.Email.Should().Be("tester@example.com");
             publicationInfo.SignOff.DateUtc.Should().NotBe(DateTime.MinValue);
@@ -344,7 +341,6 @@ namespace Catalogue.Tests.Slow.Catalogue.Web.Controllers.Publishing
             publicationInfo.Target.Gov.LastAttempt.DateUtc.Should().Be(DateTime.Parse("2017-07-11T00:00:00.0000000Z"));
             publicationInfo.Target.Gov.LastSuccess.DateUtc.Should().Be(DateTime.Parse("2017-07-11T00:00:00.0000000Z"));
             resultRecord.Publication.Data.Should().BeNull();
-            publicationInfo.Target.Gov.Paused.Should().BeFalse();
             publicationInfo.SignOff.User.DisplayName.Should().Be("Test User");
             publicationInfo.SignOff.User.Email.Should().Be("tester@example.com");
             publicationInfo.SignOff.DateUtc.Should().NotBe(DateTime.MinValue);
@@ -411,7 +407,6 @@ namespace Catalogue.Tests.Slow.Catalogue.Web.Controllers.Publishing
                 publicationInfo.Target.Gov.LastAttempt.DateUtc.Should().Be(new DateTime(2017, 07, 12));
                 publicationInfo.Target.Gov.LastSuccess.DateUtc.Should().Be(new DateTime(2017, 07, 12));
                 resultRecord.Publication.Data.Should().BeNull();
-                publicationInfo.Target.Gov.Paused.Should().BeFalse();
                 publicationInfo.SignOff.User.DisplayName.Should().Be("Cathy");
                 publicationInfo.SignOff.User.Email.Should().Be("cathy@example.com");
                 publicationInfo.SignOff.DateUtc.Should().Be(new DateTime(2017, 07, 10));
@@ -476,7 +471,6 @@ namespace Catalogue.Tests.Slow.Catalogue.Web.Controllers.Publishing
                 publicationInfo.Target.Gov.LastAttempt.DateUtc.Should().Be(new DateTime(2017, 07, 12));
                 publicationInfo.Target.Gov.LastSuccess.Should().BeNull();
                 resultRecord.Publication.Data.Should().BeNull();
-                publicationInfo.Target.Gov.Paused.Should().BeFalse();
                 publicationInfo.SignOff.User.DisplayName.Should().Be("Cathy");
                 publicationInfo.SignOff.User.Email.Should().Be("cathy@example.com");
                 publicationInfo.SignOff.DateUtc.Should().Be(new DateTime(2017, 07, 10));
@@ -545,7 +539,6 @@ namespace Catalogue.Tests.Slow.Catalogue.Web.Controllers.Publishing
                 publicationInfo.Target.Gov.LastAttempt.DateUtc.Should().Be(new DateTime(2017, 07, 11));
                 publicationInfo.Target.Gov.LastSuccess.DateUtc.Should().Be(new DateTime(2017, 07, 11));
                 resultRecord.Publication.Data.Should().BeNull();
-                publicationInfo.Target.Gov.Paused.Should().BeFalse();
                 publicationInfo.SignOff.User.DisplayName.Should().Be("Cathy");
                 publicationInfo.SignOff.User.Email.Should().Be("cathy@example.com");
                 publicationInfo.SignOff.DateUtc.Should().Be(new DateTime(2017, 07, 10));

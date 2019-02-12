@@ -297,49 +297,6 @@ namespace Catalogue.Tests.Slow.Catalogue.Robot
         }
 
         [Test]
-        public void paused_record_for_gov_publish()
-        {
-            var pausedRecord = new Record().With(r =>
-            {
-                r.Id = Helpers.AddCollection(Guid.NewGuid().ToString());
-                r.Path = @"X:\path\to\uploader\test";
-                r.Validation = Validation.Gemini;
-                r.Gemini = Library.Example().With(m =>
-                {
-                    m.MetadataDate = new DateTime(2017, 09, 26);
-                });
-                r.Publication = new PublicationInfo
-                {
-                    Assessment = new AssessmentInfo
-                    {
-                        Completed = true,
-                        CompletedOnUtc = new DateTime(2017, 09, 25)
-                    },
-                    SignOff = new SignOffInfo
-                    {
-                        DateUtc = new DateTime(2017, 09, 26)
-                    },
-                    Data = new DataInfo
-                    {
-                        Resources = new List<Resource> { new Resource { Name = "File resource", Path = @"X:\path\to\uploader\test.txt" } }
-                    },
-                    Target = new TargetInfo
-                    {
-                        Hub = null,
-                        Gov = new GovPublicationInfo
-                        {
-                            Publishable = true,
-                            Paused = true
-                        }
-                    }
-                };
-                r.Footer = new Footer();
-            });
-
-            TestRecordNotReturned(pausedRecord);
-        }
-
-        [Test]
         public void failed_gov_attempt_for_hub_and_gov_publish()
         {
             var attemptedButFailedRecord = readyToUploadRecord.With(r =>
@@ -425,7 +382,6 @@ namespace Catalogue.Tests.Slow.Catalogue.Robot
                         Gov = new GovPublicationInfo
                         {
                             Publishable = true,
-                            Paused = false,
                             LastAttempt = new PublicationAttempt
                             {
                                 DateUtc = new DateTime(2017, 09, 29)
@@ -895,7 +851,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Robot
                 r.Footer = new Footer();
             });
 
-            TestRecordReturned(readyToRepublishRecord);
+            TestRecordNotReturned(readyToRepublishRecord);
         }
 
         [Test]

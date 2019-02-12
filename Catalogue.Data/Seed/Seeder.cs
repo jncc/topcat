@@ -665,10 +665,10 @@ namespace Catalogue.Data.Seed
 
             // metadata date is set at dev/test-time seed to new DateTime(2015, 1, 1, 12, 0, 0)
             // so we need to set the publish date to earlier than this
-            var updatedSinceSuccessfullyPublishedRecordAndNowPaused = record.With(r =>
+            var updatedSinceSuccessfullyPublishedRecord = record.With(r =>
             {
                 r.Id = Helpers.AddCollection("19b8c7ab-5c33-4d55-bc1d-3762b8207a9f");
-                r.Gemini.Title = "An updated since successfully published record, now paused";
+                r.Gemini.Title = "An updated since successfully published record";
                 r.Gemini.MetadataDate = new DateTime(2015, 1, 1, 12, 0, 0);
                 r.Publication = new PublicationInfo
                 {
@@ -698,8 +698,7 @@ namespace Catalogue.Data.Seed
                         {
                             Publishable = true,
                             LastAttempt = new PublicationAttempt { DateUtc = new DateTime(2014, 12, 31) },
-                            LastSuccess = new PublicationAttempt { DateUtc = new DateTime(2014, 12, 31) },
-                            Paused = true
+                            LastSuccess = new PublicationAttempt { DateUtc = new DateTime(2014, 12, 31) }
                         }
                     }
                 };
@@ -781,7 +780,7 @@ namespace Catalogue.Data.Seed
             recordService.Insert(signedOffRecord, userInfo);
             recordService.Insert(earlierUnsuccessfullyPublishedRecord, userInfo);
             recordService.Insert(laterSuccessfullyPublishedRecord, userInfo);
-            recordService.Insert(updatedSinceSuccessfullyPublishedRecordAndNowPaused, userInfo);
+            recordService.Insert(updatedSinceSuccessfullyPublishedRecord, userInfo);
             recordService.Insert(recordWithOpenDataResources, userInfo);
             recordService.Insert(unpublishableRecord, userInfo);
             recordService.Insert(assessedRecordWithUrlResource, userInfo);

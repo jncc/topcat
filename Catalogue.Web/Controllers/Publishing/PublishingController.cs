@@ -115,7 +115,7 @@ namespace Catalogue.Web.Controllers.Publishing
         {
             var query = db
                 .Query<RecordsWithPublicationInfoIndex.Result, RecordsWithPublicationInfoIndex>()
-                .Where(x => x.PublishedToGovSinceLastUpdated);
+                .Where(x => x.PublishedToGovSinceLastUpdated || x.PublishedToHubSinceLastUpdated);
 
             return GetRecords(query, p);
         }
@@ -125,7 +125,7 @@ namespace Catalogue.Web.Controllers.Publishing
         {
             var query = db
                 .Query<RecordsWithPublicationInfoIndex.Result, RecordsWithPublicationInfoIndex>()
-                .Where(x => !x.PublishedToGovSinceLastUpdated && x.SignedOff);
+                .Where(x => !x.PublishedToGovSinceLastUpdated && !x.PublishedToHubSinceLastUpdated && x.SignedOff);
 
             return GetRecords(query, p);
         }

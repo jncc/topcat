@@ -52,7 +52,6 @@ namespace Catalogue.Tests.Slow.Catalogue.Web.Controllers.Publishing
             publicationInfo.Target.Gov.LastAttempt.Should().BeNull();
             publicationInfo.Target.Gov.LastSuccess.Should().BeNull();
             resultRecord.Publication.Data.Should().BeNull();
-            publicationInfo.Target.Gov.Paused.Should().BeFalse();
             publicationInfo.Assessment.Completed.Should().BeTrue();
             publicationInfo.Assessment.CompletedByUser.DisplayName.Should().Be("Test User");
             publicationInfo.Assessment.CompletedByUser.Email.Should().Be("tester@example.com");
@@ -175,7 +174,6 @@ namespace Catalogue.Tests.Slow.Catalogue.Web.Controllers.Publishing
             publicationInfo.Target.Gov.LastAttempt.Should().BeNull();
             publicationInfo.Target.Gov.LastSuccess.Should().BeNull();
             resultRecord.Publication.Data.Should().BeNull();
-            publicationInfo.Target.Gov.Paused.Should().BeFalse();
             publicationInfo.Assessment.Completed.Should().BeTrue();
             publicationInfo.Assessment.CompletedByUser.DisplayName.Should().Be("Test User");
             publicationInfo.Assessment.CompletedByUser.Email.Should().Be("tester@example.com");
@@ -530,7 +528,6 @@ namespace Catalogue.Tests.Slow.Catalogue.Web.Controllers.Publishing
             publicationInfo.Target.Gov.LastAttempt.DateUtc.Should().Be(new DateTime(2017, 07, 23));
             publicationInfo.Target.Gov.LastSuccess.Should().BeNull();
             resultRecord.Publication.Data.Should().BeNull();
-            publicationInfo.Target.Gov.Paused.Should().BeFalse();
             publicationInfo.Assessment.Completed.Should().BeTrue();
             publicationInfo.Assessment.CompletedByUser.DisplayName.Should().Be("Test User");
             publicationInfo.Assessment.CompletedByUser.Email.Should().Be("tester@example.com");

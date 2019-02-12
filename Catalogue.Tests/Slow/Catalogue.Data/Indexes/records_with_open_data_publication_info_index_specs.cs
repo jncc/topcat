@@ -67,17 +67,6 @@ namespace Catalogue.Tests.Slow.Catalogue.Data.Indexes
         }
 
         [Test]
-        public void should_be_able_to_get_non_paused_records()
-        {
-            var results = Db.Query<RecordsWithPublicationInfoIndex.Result, RecordsWithPublicationInfoIndex>()
-                .Where(x => !x.GovPublishingIsPaused)
-                .OfType<Record>()
-                .ToList();
-
-            results.Count.Should().Be(12);
-        }
-
-        [Test]
         public void should_be_able_to_get_published_since_last_updated()
         {
             var results = Db.Query<RecordsWithPublicationInfoIndex.Result, RecordsWithPublicationInfoIndex>()

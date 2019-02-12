@@ -26,7 +26,7 @@ namespace Catalogue.Data.Write
             if (!record.Validation.Equals(Validation.Gemini))
                 throw new InvalidOperationException("Validation level must be Gemini");
 
-            if (!record.HasPublishingDestination())
+            if (!record.HasPublishingTarget())
             {
                 throw new InvalidOperationException("Must select at least one publishing destination");
             }
