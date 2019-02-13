@@ -399,6 +399,114 @@ namespace Catalogue.Tests.Slow.Catalogue.Robot
         }
 
         [Test]
+        public void already_uploaded_for_hub_publish()
+        {
+            var alreadyUploadedRecord = readyToUploadRecord.With(r =>
+            {
+                r.Gemini = Library.Example().With(m =>
+                {
+                    m.MetadataDate = new DateTime(2017, 09, 29);
+                });
+                r.Publication = new PublicationInfo
+                {
+                    Assessment = new AssessmentInfo
+                    {
+                        Completed = true,
+                        CompletedOnUtc = new DateTime(2017, 09, 25)
+                    },
+                    SignOff = new SignOffInfo
+                    {
+                        DateUtc = new DateTime(2017, 09, 26)
+                    },
+                    Data = new DataInfo
+                    {
+                        Resources = new List<Resource> { new Resource { Name = "File resource", Path = @"X:\path\to\uploader\test.txt" } },
+                        LastAttempt = new PublicationAttempt { DateUtc = new DateTime(2017, 09, 27) },
+                        LastSuccess = new PublicationAttempt { DateUtc = new DateTime(2017, 09, 27) }
+                    },
+                    Target = new TargetInfo
+                    {
+                        Hub = new HubPublicationInfo
+                        {
+                            Publishable = true,
+                            Url = "http://hub.jncc.gov.uk/assets/guid-here",
+                            LastAttempt = new PublicationAttempt { DateUtc = new DateTime(2017, 09, 29) },
+                            LastSuccess = new PublicationAttempt { DateUtc = new DateTime(2017, 09, 29) }
+                        },
+                        Gov = new GovPublicationInfo
+                        {
+                            Publishable = false,
+                            LastAttempt = new PublicationAttempt
+                            {
+                                DateUtc = new DateTime(2017, 09, 24)
+                            },
+                            LastSuccess = new PublicationAttempt
+                            {
+                                DateUtc = new DateTime(2017, 09, 24)
+                            }
+                        }
+                    }
+                };
+            });
+
+            TestRecordNotReturned(alreadyUploadedRecord);
+        }
+
+        [Test]
+        public void already_uploaded_for_gov_publish()
+        {
+            var alreadyUploadedRecord = readyToUploadRecord.With(r =>
+            {
+                r.Gemini = Library.Example().With(m =>
+                {
+                    m.MetadataDate = new DateTime(2017, 09, 29);
+                });
+                r.Publication = new PublicationInfo
+                {
+                    Assessment = new AssessmentInfo
+                    {
+                        Completed = true,
+                        CompletedOnUtc = new DateTime(2017, 09, 25)
+                    },
+                    SignOff = new SignOffInfo
+                    {
+                        DateUtc = new DateTime(2017, 09, 26)
+                    },
+                    Data = new DataInfo
+                    {
+                        Resources = new List<Resource> { new Resource { Name = "File resource", Path = @"X:\path\to\uploader\test.txt" } },
+                        LastAttempt = new PublicationAttempt { DateUtc = new DateTime(2017, 09, 27) },
+                        LastSuccess = new PublicationAttempt { DateUtc = new DateTime(2017, 09, 27) }
+                    },
+                    Target = new TargetInfo
+                    {
+                        Hub = new HubPublicationInfo
+                        {
+                            Publishable = false,
+                            Url = "http://hub.jncc.gov.uk/assets/guid-here",
+                            LastAttempt = new PublicationAttempt { DateUtc = new DateTime(2017, 09, 24) },
+                            LastSuccess = new PublicationAttempt { DateUtc = new DateTime(2017, 09, 24) }
+                        },
+                        Gov = new GovPublicationInfo
+                        {
+                            Publishable = true,
+                            LastAttempt = new PublicationAttempt
+                            {
+                                DateUtc = new DateTime(2017, 09, 29)
+                            },
+                            LastSuccess = new PublicationAttempt
+                            {
+                                DateUtc = new DateTime(2017, 09, 29)
+                            }
+                        }
+                    }
+                };
+            });
+
+            TestRecordNotReturned(alreadyUploadedRecord);
+        }
+
+        [Test]
         public void hub_and_gov_published_and_out_of_date_record()
         {
             var publishedAndOutOfDateRecord = readyToUploadRecord.With(r =>

@@ -121,13 +121,13 @@
       return !$scope.isSaveHidden();
     };
     $scope.isPublishHidden = function() {
-      return !($scope.form.publication && ($scope.form.publication.hub && $scope.form.publication.publishable === true) || ($scope.form.publication.gov && $scope.form.publication.gov.publishable === true));
+      return !($scope.form.publication && $scope.form.publication.target && ($scope.form.publication.target.hub && $scope.form.publication.target.hub.publishable === true || $scope.form.publication.target.gov && $scope.form.publication.target.gov.publishable === true));
     };
     $scope.isHttpPath = function(path) {
       return path && path.toLowerCase().startsWith("http");
     };
     $scope.isPublishingModalButtonVisible = function() {
-      return $scope.form.publication && $scope.form.publication.gov && $scope.form.publication.gov.publishable === true;
+      return $scope.form.publication && $scope.form.publication.target.gov && $scope.form.publication.target.gov.publishable === true;
     };
     $scope.hasUsageConstraints = function() {
       return (!!$scope.form.gemini.limitationsOnPublicAccess && $scope.form.gemini.limitationsOnPublicAccess !== 'no limitations') || (!!$scope.form.gemini.useConstraints && $scope.form.gemini.useConstraints !== 'no conditions apply');
@@ -213,40 +213,11 @@
     $scope.setKeyword = function($item, keyword) {
       return keyword.vocab = $item.vocab;
     };
-    $scope.fillManagerDetails = function() {
+    return $scope.fillManagerDetails = function() {
       if (!$scope.form.manager) {
         $scope.form.manager = {};
       }
       return $scope.form.manager.displayName = $scope.user.displayName;
-    };
-    $scope.setPublishable = function(value) {
-      if (!$scope.form.publication) {
-        $scope.form.publication = {};
-      }
-      if (!$scope.form.publication.gov) {
-        $scope.form.publication.gov = {};
-      }
-      if ((value === true && $scope.form.publication.gov.publishable === true) || (value === false && $scope.form.publication.gov.publishable === false)) {
-        return $scope.form.publication.gov.publishable = null;
-      } else {
-        return $scope.form.publication.gov.publishable = value;
-      }
-    };
-    return $scope.togglePublishable = function() {
-      if (!$scope.form.publication) {
-        $scope.form.publication = {};
-      }
-      if (!$scope.form.publication.gov) {
-        $scope.form.publication.gov = {};
-        $scope.form.publication.gov.publishable = null;
-      }
-      if ($scope.form.publication.gov.publishable === null) {
-        return $scope.form.publication.gov.publishable = true;
-      } else if ($scope.form.publication.gov.publishable === true) {
-        return $scope.form.publication.gov.publishable = false;
-      } else {
-        return $scope.form.publication.gov.publishable = null;
-      }
     };
   });
 
@@ -295,11 +266,12 @@
     var previouslyPublishedText, publishingStatusText;
     previouslyPublishedText = "Never Published";
     publishingStatusText = null;
-    if (record.publication && ((record.publication.gov && record.publication.gov.lastSuccess !== null) || (record.publication.hub && record.publication.hub.lastSuccess !== null))) {
+    console.log(JSON.stringify(record));
+    if (record.publication && record.publication.target && (record.publication.target.gov && record.publication.target.gov.lastSuccess || record.publication.target.hub && record.publication.target.hub.lastSuccess)) {
       previouslyPublishedText = "Published";
     }
-    if (record.publication) {
-      if (previouslyPublishedText === "Never Published" && !publishingState.assessedAndUpToDate) {
+    if (record.publication && record.publication.target) {
+      if (previouslyPublishedText === "Published" && !publishingState.assessedAndUpToDate) {
         publishingStatusText = "Out Of Date";
       } else if (publishingState.signedOffAndUpToDate) {
         publishingStatusText = "Signed Off";

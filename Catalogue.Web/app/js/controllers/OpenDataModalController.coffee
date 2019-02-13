@@ -36,10 +36,10 @@ angular.module('app.controllers').controller 'OpenDataModalController',
 
         # change multistep status
         $scope.refreshPublishingStatus = () ->
-            if $scope.form.publication != null && $scope.form.publication.gov != null
+            if $scope.form.publication != null && $scope.form.publication.target.gov != null
                 publishingStatus.riskAssessment.completed = $scope.form.publication.assessment != null && $scope.form.publication.assessment.completed
                 publishingStatus.signOff.completed = $scope.form.publication.signOff != null
-                publishingStatus.upload.completed = $scope.form.publication.gov.lastSuccess != null
+                publishingStatus.upload.completed = $scope.form.publication.target.gov.lastSuccess != null
 
             if $scope.recordOutput.recordState.publishingState.assessedAndUpToDate
                 publishingStatus.riskAssessment.currentClass = "visited"
@@ -100,36 +100,36 @@ angular.module('app.controllers').controller 'OpenDataModalController',
 
         refreshUploadInfo = () ->
             $scope.hubPublishingStatus = () ->
-                if $scope.form.publication.hub == null
+                if $scope.form.publication.target.hub == null
                     # never attempted
                     return "Pending"
-                else if $scope.form.publication.hub.lastSuccess != null && ($scope.recordOutput.recordState.publishingState.publishedToHubAndUpToDate || $scope.recordOutput.recordState.publishingState.publishedToGovAndUpToDate)
+                else if $scope.form.publication.target.hub.lastSuccess != null && ($scope.recordOutput.recordState.publishingState.publishedToHubAndUpToDate || $scope.recordOutput.recordState.publishingState.publishedToGovAndUpToDate)
                     # published and up to date
-                    return "Completed on " + moment(new Date($scope.form.publication.hub.lastSuccess.dateUtc)).format('DD MMM YYYY h:mm a')
-                else if $scope.form.publication.hub.lastSuccess != null
+                    return "Completed on " + moment(new Date($scope.form.publication.target.hub.lastSuccess.dateUtc)).format('DD MMM YYYY h:mm a')
+                else if $scope.form.publication.target.hub.lastSuccess != null
                     # published but out of date
-                    return "Pending - last completed on " + moment(new Date($scope.form.publication.hub.lastSuccess.dateUtc)).format('DD MMM YYYY h:mm a')
-                else if $scope.form.publication.hub.lastAttempt != null
+                    return "Pending - last completed on " + moment(new Date($scope.form.publication.target.hub.lastSuccess.dateUtc)).format('DD MMM YYYY h:mm a')
+                else if $scope.form.publication.target.hub.lastAttempt != null
                     # attempted before
-                    return "Pending - last attempted on " + moment(new Date($scope.form.publication.hub.lastAttempt.dateUtc)).format('DD MMM YYYY h:mm a')
+                    return "Pending - last attempted on " + moment(new Date($scope.form.publication.target.hub.lastAttempt.dateUtc)).format('DD MMM YYYY h:mm a')
                 else
                     # anything else?
                     return "Pending"
 
             $scope.govPublishingStatus = () ->
-                if $scope.form.publication.gov == null
+                if $scope.form.publication.target.gov == null
                     # never attempted
                     return "Pending"
-                else if $scope.form.publication.gov.lastSuccess != null && $scope.recordOutput.recordState.publishingState.publishedToGovAndUpToDate
+                else if $scope.form.publication.target.gov.lastSuccess != null && $scope.recordOutput.recordState.publishingState.publishedToGovAndUpToDate
                     # published and up to date
-                    return "Completed on " + moment(new Date($scope.form.publication.gov.lastSuccess.dateUtc)).format('DD MMM YYYY h:mm a')
-                else if $scope.form.publication.gov.lastSuccess != null
+                    return "Completed on " + moment(new Date($scope.form.publication.target.gov.lastSuccess.dateUtc)).format('DD MMM YYYY h:mm a')
+                else if $scope.form.publication.target.gov.lastSuccess != null
                     # published but out of date
-                    return "Pending - last completed on " + moment(new Date($scope.form.publication.gov.lastSuccess.dateUtc)).format('DD MMM YYYY h:mm a')
-                else if $scope.form.publication.gov.lastAttempt != null
+                    return "Pending - last completed on " + moment(new Date($scope.form.publication.target.gov.lastSuccess.dateUtc)).format('DD MMM YYYY h:mm a')
+                else if $scope.form.publication.target.gov.lastAttempt != null
                     # attempted before
-                    return "Pending - last failed on " + moment(new Date($scope.form.publication.gov.lastAttempt.dateUtc)).format('DD MMM YYYY h:mm a') +
-                        " with error \"" + $scope.form.publication.gov.lastAttempt.message + "\""
+                    return "Pending - last failed on " + moment(new Date($scope.form.publication.target.gov.lastAttempt.dateUtc)).format('DD MMM YYYY h:mm a') +
+                        " with error \"" + $scope.form.publication.target.gov.lastAttempt.message + "\""
                 else
                     # anything else?
                     return "Pending"

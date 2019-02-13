@@ -100,10 +100,10 @@
         $scope.isCloneHidden = -> $scope.isNew()
         $scope.isCloneDisabled = -> !$scope.isClean()
         $scope.isPublishDisabled = -> !$scope.isSaveHidden()
-        $scope.isPublishHidden = -> !($scope.form.publication && ($scope.form.publication.hub && $scope.form.publication.publishable == true) ||
-            ($scope.form.publication.gov && $scope.form.publication.gov.publishable == true))
+        $scope.isPublishHidden = -> !($scope.form.publication && $scope.form.publication.target && ($scope.form.publication.target.hub && $scope.form.publication.target.hub.publishable == true ||
+            $scope.form.publication.target.gov && $scope.form.publication.target.gov.publishable == true))
         $scope.isHttpPath = (path) -> path and path.toLowerCase().startsWith "http"
-        $scope.isPublishingModalButtonVisible = -> $scope.form.publication && $scope.form.publication.gov && $scope.form.publication.gov.publishable == true
+        $scope.isPublishingModalButtonVisible = -> $scope.form.publication && $scope.form.publication.target.gov && $scope.form.publication.target.gov.publishable == true
         $scope.hasUsageConstraints = () -> (!!$scope.form.gemini.limitationsOnPublicAccess and $scope.form.gemini.limitationsOnPublicAccess isnt 'no limitations') or (!!$scope.form.gemini.useConstraints and $scope.form.gemini.useConstraints isnt 'no conditions apply')
 
         # keywords # update arg name and use cs in
@@ -163,33 +163,6 @@
             if not $scope.form.manager then $scope.form.manager = {}
             $scope.form.manager.displayName = $scope.user.displayName
 
-        $scope.setPublishable = (value) ->
-            if !$scope.form.publication
-                $scope.form.publication = {}
-
-            if !$scope.form.publication.gov
-                $scope.form.publication.gov = {}
-
-            if (value == true && $scope.form.publication.gov.publishable == true) or (value == false && $scope.form.publication.gov.publishable == false)
-                $scope.form.publication.gov.publishable = null
-            else
-                $scope.form.publication.gov.publishable = value
-
-        $scope.togglePublishable = () ->
-            if !$scope.form.publication
-                $scope.form.publication = {}
-
-            if !$scope.form.publication.gov
-                $scope.form.publication.gov = {}
-                $scope.form.publication.gov.publishable = null
-
-            if $scope.form.publication.gov.publishable == null
-                $scope.form.publication.gov.publishable = true
-            else if $scope.form.publication.gov.publishable == true
-                $scope.form.publication.gov.publishable = false
-            else
-                $scope.form.publication.gov.publishable = null
-
 
 
 isFilePath = (path) -> path and path.match /^([a-z]:|\\\\jncc-corpfile\\)/i
@@ -221,11 +194,13 @@ getPublishingText = (record, publishingState) ->
     previouslyPublishedText = "Never Published"
     publishingStatusText = null
 
-    if record.publication && ((record.publication.gov && record.publication.gov.lastSuccess != null) || (record.publication.hub && record.publication.hub.lastSuccess != null))
+    console.log JSON.stringify(record)
+
+    if record.publication && record.publication.target && (record.publication.target.gov && record.publication.target.gov.lastSuccess || record.publication.target.hub && record.publication.target.hub.lastSuccess)
         previouslyPublishedText = "Published"
 
-    if record.publication
-        if previouslyPublishedText == "Never Published" && !publishingState.assessedAndUpToDate
+    if record.publication && record.publication.target
+        if previouslyPublishedText == "Published" && !publishingState.assessedAndUpToDate
             publishingStatusText = "Out Of Date"
         else if publishingState.signedOffAndUpToDate
             publishingStatusText = "Signed Off"

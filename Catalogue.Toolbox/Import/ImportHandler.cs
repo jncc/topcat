@@ -1,16 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using Catalogue.Data.Import;
+﻿using Catalogue.Data.Import;
 using Catalogue.Data.Import.Mappings;
 using Catalogue.Data.Write;
 using log4net;
 using Newtonsoft.Json;
-using Raven.Client;
 using Raven.Client.Documents.Session;
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
 
-namespace Catalogue.Toolbox.Importing
+namespace Catalogue.Toolbox.Import
 {
     public class ImportHandler
     {

@@ -1,17 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Configuration;
-using System.Linq;
-using System.Net.Http;
-using Catalogue.Data;
+﻿using Catalogue.Data;
 using Catalogue.Data.Model;
-using Catalogue.Toolbox.Importing;
+using Catalogue.Toolbox.Import;
 using CommandLine;
 using log4net;
 using log4net.Config;
 using Raven.Client.Documents;
 using Raven.Client.Documents.Commands;
-using Raven.Client.Documents.Operations;
+using System;
+using System.Configuration;
+using System.Linq;
+using System.Net.Http;
+using Catalogue.Toolbox.Patch;
 
 namespace Catalogue.Toolbox
 {
@@ -35,6 +34,13 @@ namespace Catalogue.Toolbox
         public bool WhatIf { get; set; }
     }
 
+    [Verb("patch", HelpText = "Run a one off data patch")]
+    public class PatchOptions
+    {
+        [Option(Required = true, HelpText = "The name of the patch, e.g. 'PublishingPatch'.")]
+        public string Name { get; set; }
+    }
+
     class Program
     {
         private static readonly ILog Logger = LogManager.GetLogger(typeof(Program));
@@ -44,9 +50,10 @@ namespace Catalogue.Toolbox
             GlobalContext.Properties["LogFileName"] = ConfigurationManager.AppSettings["LogFilePath"];
             XmlConfigurator.Configure();
 
-            return Parser.Default.ParseArguments<ImportOptions, DeleteOptions>(args).MapResult(
+            return Parser.Default.ParseArguments<ImportOptions, DeleteOptions, PatchOptions>(args).MapResult(
                 (ImportOptions options) => RunImport(options),
                 (DeleteOptions options) => RunDelete(options),
+                (PatchOptions options) => RunPatch(options),
                 errs => 1);
         }
 
@@ -99,6 +106,15 @@ namespace Catalogue.Toolbox
             }
 
             return 1;
+        }
+
+        static int RunPatch(PatchOptions options)
+        {
+            InitDatabase();
+
+            new PatchHandler(DocumentStore).RunPatch(options);
+
+            return 0;
         }
 
         static void InitDatabase()

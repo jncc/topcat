@@ -38,10 +38,10 @@
     $scope.publishingStatus = publishingStatus;
     publishingStatus.signOff.timeout = -1;
     $scope.refreshPublishingStatus = function() {
-      if ($scope.form.publication !== null && $scope.form.publication.gov !== null) {
+      if ($scope.form.publication !== null && $scope.form.publication.target.gov !== null) {
         publishingStatus.riskAssessment.completed = $scope.form.publication.assessment !== null && $scope.form.publication.assessment.completed;
         publishingStatus.signOff.completed = $scope.form.publication.signOff !== null;
-        publishingStatus.upload.completed = $scope.form.publication.gov.lastSuccess !== null;
+        publishingStatus.upload.completed = $scope.form.publication.target.gov.lastSuccess !== null;
       }
       if ($scope.recordOutput.recordState.publishingState.assessedAndUpToDate) {
         publishingStatus.riskAssessment.currentClass = "visited";
@@ -103,27 +103,27 @@
     };
     refreshUploadInfo = function() {
       $scope.hubPublishingStatus = function() {
-        if ($scope.form.publication.hub === null) {
+        if ($scope.form.publication.target.hub === null) {
           return "Pending";
-        } else if ($scope.form.publication.hub.lastSuccess !== null && ($scope.recordOutput.recordState.publishingState.publishedToHubAndUpToDate || $scope.recordOutput.recordState.publishingState.publishedToGovAndUpToDate)) {
-          return "Completed on " + moment(new Date($scope.form.publication.hub.lastSuccess.dateUtc)).format('DD MMM YYYY h:mm a');
-        } else if ($scope.form.publication.hub.lastSuccess !== null) {
-          return "Pending - last completed on " + moment(new Date($scope.form.publication.hub.lastSuccess.dateUtc)).format('DD MMM YYYY h:mm a');
-        } else if ($scope.form.publication.hub.lastAttempt !== null) {
-          return "Pending - last attempted on " + moment(new Date($scope.form.publication.hub.lastAttempt.dateUtc)).format('DD MMM YYYY h:mm a');
+        } else if ($scope.form.publication.target.hub.lastSuccess !== null && ($scope.recordOutput.recordState.publishingState.publishedToHubAndUpToDate || $scope.recordOutput.recordState.publishingState.publishedToGovAndUpToDate)) {
+          return "Completed on " + moment(new Date($scope.form.publication.target.hub.lastSuccess.dateUtc)).format('DD MMM YYYY h:mm a');
+        } else if ($scope.form.publication.target.hub.lastSuccess !== null) {
+          return "Pending - last completed on " + moment(new Date($scope.form.publication.target.hub.lastSuccess.dateUtc)).format('DD MMM YYYY h:mm a');
+        } else if ($scope.form.publication.target.hub.lastAttempt !== null) {
+          return "Pending - last attempted on " + moment(new Date($scope.form.publication.target.hub.lastAttempt.dateUtc)).format('DD MMM YYYY h:mm a');
         } else {
           return "Pending";
         }
       };
       $scope.govPublishingStatus = function() {
-        if ($scope.form.publication.gov === null) {
+        if ($scope.form.publication.target.gov === null) {
           return "Pending";
-        } else if ($scope.form.publication.gov.lastSuccess !== null && $scope.recordOutput.recordState.publishingState.publishedToGovAndUpToDate) {
-          return "Completed on " + moment(new Date($scope.form.publication.gov.lastSuccess.dateUtc)).format('DD MMM YYYY h:mm a');
-        } else if ($scope.form.publication.gov.lastSuccess !== null) {
-          return "Pending - last completed on " + moment(new Date($scope.form.publication.gov.lastSuccess.dateUtc)).format('DD MMM YYYY h:mm a');
-        } else if ($scope.form.publication.gov.lastAttempt !== null) {
-          return "Pending - last failed on " + moment(new Date($scope.form.publication.gov.lastAttempt.dateUtc)).format('DD MMM YYYY h:mm a') + " with error \"" + $scope.form.publication.gov.lastAttempt.message + "\"";
+        } else if ($scope.form.publication.target.gov.lastSuccess !== null && $scope.recordOutput.recordState.publishingState.publishedToGovAndUpToDate) {
+          return "Completed on " + moment(new Date($scope.form.publication.target.gov.lastSuccess.dateUtc)).format('DD MMM YYYY h:mm a');
+        } else if ($scope.form.publication.target.gov.lastSuccess !== null) {
+          return "Pending - last completed on " + moment(new Date($scope.form.publication.target.gov.lastSuccess.dateUtc)).format('DD MMM YYYY h:mm a');
+        } else if ($scope.form.publication.target.gov.lastAttempt !== null) {
+          return "Pending - last failed on " + moment(new Date($scope.form.publication.target.gov.lastAttempt.dateUtc)).format('DD MMM YYYY h:mm a') + " with error \"" + $scope.form.publication.target.gov.lastAttempt.message + "\"";
         } else {
           return "Pending";
         }

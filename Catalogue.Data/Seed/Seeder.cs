@@ -272,6 +272,10 @@ namespace Catalogue.Data.Seed
                     },
                     Target = new TargetInfo
                     {
+                        Hub = new HubPublicationInfo
+                        {
+                            Publishable = true,
+                        },
                         Gov = new GovPublicationInfo
                         {
                             Publishable = true,
@@ -313,6 +317,10 @@ namespace Catalogue.Data.Seed
                     },
                     Target = new TargetInfo
                     {
+                        Hub = new HubPublicationInfo
+                        {
+                            Publishable = true,
+                        },
                         Gov = new GovPublicationInfo
                         {
                             Publishable = true
@@ -350,6 +358,10 @@ namespace Catalogue.Data.Seed
                     },
                     Target = new TargetInfo
                     {
+                        Hub = new HubPublicationInfo
+                        {
+                            Publishable = true,
+                        },
                         Gov = new GovPublicationInfo
                         {
                             Publishable = true
@@ -387,6 +399,10 @@ namespace Catalogue.Data.Seed
                     },
                     Target = new TargetInfo
                     {
+                        Hub = new HubPublicationInfo
+                        {
+                            Publishable = true,
+                        },
                         Gov = new GovPublicationInfo
                         {
                             Publishable = true
@@ -430,9 +446,13 @@ namespace Catalogue.Data.Seed
                     },
                     Target = new TargetInfo
                     {
+                        Hub = new HubPublicationInfo
+                        {
+                            Publishable = true,
+                        },
                         Gov = new GovPublicationInfo
                         {
-                            Publishable = false
+                            Publishable = true
                         }
                     }
                 };
@@ -472,6 +492,10 @@ namespace Catalogue.Data.Seed
                     },
                     Target = new TargetInfo
                     {
+                        Hub = new HubPublicationInfo
+                        {
+                            Publishable = true,
+                        },
                         Gov = new GovPublicationInfo
                         {
                             Publishable = true
@@ -602,6 +626,7 @@ namespace Catalogue.Data.Seed
                     {
                         Hub = new HubPublicationInfo
                         {
+                            Publishable = true,
                             Url = "https://hub.jncc.gov.uk/assets/b2691fed-e421-4e48-9da9-99bd77e0b8ba",
                             LastAttempt = new PublicationAttempt { DateUtc = new DateTime(2015, 1, 1, 11, 59, 0) },
                             LastSuccess = new PublicationAttempt { DateUtc = new DateTime(2015, 1, 1, 11, 59, 0) }

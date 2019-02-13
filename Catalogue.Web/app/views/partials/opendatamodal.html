@@ -92,9 +92,9 @@
                     <div ng-show="publishingStatus.currentActiveView == 'upload'" class="quick-fade-in">
                         <h3>Data upload</h3>
                         <p>The record is now waiting to be published to
-                            <span ng-if="form.publication.hub.publishable == true">the JNCC ResourceHub</span>
-                            <span ng-if="form.publication.hub.publishable == true && form.publication.gov.publishable == true">and</span>
-                            <span ng-if="form.publication.gov.publishable == true">data.gov.uk</span>.
+                            <span ng-if="form.publication.target.hub.publishable == true">the JNCC ResourceHub</span>
+                            <span ng-if="form.publication.target.hub.publishable == true && form.publication.target.gov.publishable == true">and</span>
+                            <span ng-if="form.publication.target.gov.publishable == true">Data.gov.uk</span>.
                             This process may take a day so please check back later.
                         </p>
                         <br />
@@ -103,11 +103,11 @@
                                 {{uploadStatus}}
                             </p>
                             <p>
-                                <span ng-if="form.publication.hub.publishable == true">
+                                <span ng-if="form.publication.target.hub.publishable == true">
                                     ResourceHub upload: {{ hubPublishingStatus() }}<br />
                                 </span>
-                                <span ng-if="form.publication.gov.publishable == true">
-                                    data.gov.uk upload: {{ govPublishingStatus() }}<br />
+                                <span ng-if="form.publication.target.gov.publishable == true">
+                                    Data.gov.uk upload: {{ govPublishingStatus() }}<br />
                                 </span>
                             </p>
                         </span>
