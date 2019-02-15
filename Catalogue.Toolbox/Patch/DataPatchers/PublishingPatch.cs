@@ -1,4 +1,5 @@
-﻿using Catalogue.Data.Model;
+﻿using System;
+using Catalogue.Data.Model;
 using log4net;
 using Raven.Client.Documents;
 using Raven.Client.Documents.Indexes;
@@ -89,7 +90,7 @@ namespace Catalogue.Toolbox.Patch.DataPatchers
 
         private static void MigrateLastSuccess(BlittableJsonReaderObject openDataObject, Record record)
         {
-            if (openDataObject.TryGet("LastSuccess", out PublicationAttempt lastSuccess))
+            if (openDataObject.TryGetMember("LastSuccess", out object lastSuccess))
             {
                 if (lastSuccess != null)
                 {
@@ -100,6 +101,11 @@ namespace Catalogue.Toolbox.Patch.DataPatchers
                         record.Publication.Data = new DataInfo();
                     }
 
+                    if (record.Publication.Data.LastSuccess == null)
+                    {
+                        record.Publication.Data.LastSuccess = new PublicationAttempt();
+                    }
+
                     if (record.Publication.Target == null)
                     {
                         record.Publication.Target = new TargetInfo();
@@ -110,15 +116,32 @@ namespace Catalogue.Toolbox.Patch.DataPatchers
                         record.Publication.Target.Gov = new GovPublicationInfo();
                     }
 
-                    record.Publication.Data.LastSuccess = lastSuccess;
-                    record.Publication.Target.Gov.LastSuccess = lastSuccess;
+                    if (record.Publication.Target.Gov.LastSuccess == null)
+                    {
+                        record.Publication.Target.Gov.LastSuccess = new PublicationAttempt();
+                    }
+
+                    if (lastSuccess is BlittableJsonReaderObject lastSuccessObject)
+                    {
+                        if (lastSuccessObject.TryGet("DateUtc", out DateTime datetime))
+                        {
+                            record.Publication.Data.LastSuccess.DateUtc = datetime;
+                            record.Publication.Target.Gov.LastSuccess.DateUtc = datetime;
+                        }
+
+                        if (lastSuccessObject.TryGet("Message", out string message))
+                        {
+                            record.Publication.Data.LastSuccess.Message = message;
+                            record.Publication.Target.Gov.LastSuccess.Message = message;
+                        }
+                    }
                 }
             }
         }
 
         private static void MigrateLastAttempt(BlittableJsonReaderObject openDataObject, Record record)
         {
-            if (openDataObject.TryGet("LastAttempt", out PublicationAttempt lastAttempt))
+            if (openDataObject.TryGetMember("LastAttempt", out object lastAttempt))
             {
                 if (lastAttempt != null)
                 {
@@ -129,6 +152,11 @@ namespace Catalogue.Toolbox.Patch.DataPatchers
                         record.Publication.Data = new DataInfo();
                     }
 
+                    if (record.Publication.Data.LastAttempt == null)
+                    {
+                        record.Publication.Data.LastAttempt = new PublicationAttempt();
+                    }
+
                     if (record.Publication.Target == null)
                     {
                         record.Publication.Target = new TargetInfo();
@@ -139,18 +167,72 @@ namespace Catalogue.Toolbox.Patch.DataPatchers
                         record.Publication.Target.Gov = new GovPublicationInfo();
                     }
 
-                    record.Publication.Data.LastAttempt = lastAttempt;
-                    record.Publication.Target.Gov.LastAttempt = lastAttempt;
+                    if (record.Publication.Target.Gov.LastAttempt == null)
+                    {
+                        record.Publication.Target.Gov.LastAttempt = new PublicationAttempt();
+                    }
+                    
+                    if (lastAttempt is BlittableJsonReaderObject lastAttemptObject)
+                    {
+                        if (lastAttemptObject.TryGet("DateUtc", out DateTime datetime))
+                        {
+                            record.Publication.Data.LastAttempt.DateUtc = datetime;
+                            record.Publication.Target.Gov.LastAttempt.DateUtc = datetime;
+                        }
+
+                        if (lastAttemptObject.TryGet("Message", out string message))
+                        {
+                            record.Publication.Data.LastAttempt.Message = message;
+                            record.Publication.Target.Gov.LastAttempt.Message = message;
+                        }
+                    }
                 }
             }
         }
 
         private static void MigrateSignOffInfo(BlittableJsonReaderObject openDataObject, Record record)
         {
-            if (openDataObject.TryGet("SignOff", out SignOffInfo signOff))
+            if (openDataObject.TryGetMember("SignOff", out object signOff))
             {
-                Logger.Info("Migrating sign off info");
-                record.Publication.SignOff = signOff;
+                if (signOff != null)
+                {
+                    Logger.Info("Migrating sign off info");
+                    if (signOff is BlittableJsonReaderObject signOffObject)
+                    {
+                        record.Publication.SignOff = new SignOffInfo();
+
+                        if (signOffObject.TryGetMember("User", out object user))
+                        {
+                            if (user != null)
+                            {
+                                if (user is BlittableJsonReaderObject userObject)
+                                {
+                                    record.Publication.SignOff.User = new UserInfo();
+
+                                    if (userObject.TryGet("DisplayName", out string name))
+                                    {
+                                        record.Publication.SignOff.User.DisplayName = name;
+                                    }
+
+                                    if (userObject.TryGet("Email", out string email))
+                                    {
+                                        record.Publication.SignOff.User.Email = email;
+                                    }
+                                }
+                            }
+                        }
+
+                        if (signOffObject.TryGet("DateUtc", out DateTime datetime))
+                        {
+                            record.Publication.SignOff.DateUtc = datetime;
+                        }
+
+                        if (signOffObject.TryGet("Comment", out string comment))
+                        {
+                            record.Publication.SignOff.Comment = comment;
+                        }
+                    }
+                }
             }
         }
 
@@ -169,6 +251,37 @@ namespace Catalogue.Toolbox.Patch.DataPatchers
                         {
                             record.Publication.Assessment.Completed = completed;
                         }
+
+                        if (assessmentObject.TryGetMember("CompletedByUser", out object user))
+                        {
+                            if (user != null)
+                            {
+                                if (user is BlittableJsonReaderObject userObject)
+                                {
+                                    record.Publication.Assessment.CompletedByUser = new UserInfo();
+
+                                    if (userObject.TryGet("DisplayName", out string name))
+                                    {
+                                        record.Publication.Assessment.CompletedByUser.DisplayName = name;
+                                    }
+
+                                    if (userObject.TryGet("Email", out string email))
+                                    {
+                                        record.Publication.Assessment.CompletedByUser.Email = email;
+                                    }
+                                }
+                            }
+                        }
+
+                        if (assessmentObject.TryGet("CompletedOnUtc", out DateTime datetime))
+                        {
+                            record.Publication.Assessment.CompletedOnUtc = datetime;
+                        }
+
+                        if (assessmentObject.TryGet("InitialAssessmentWasDoneOnSpreadsheet", out bool spreadsheetAssessment))
+                        {
+                            record.Publication.Assessment.InitialAssessmentWasDoneOnSpreadsheet = spreadsheetAssessment;
+                        }
                     }
                 }
             }
@@ -176,39 +289,53 @@ namespace Catalogue.Toolbox.Patch.DataPatchers
 
         private static void MigrateResources(BlittableJsonReaderObject openDataObject, Record record)
         {
-            if (openDataObject.TryGet("Resources", out List<Resource> resources))
+            if (openDataObject.TryGetMember("Resources", out object resources))
             {
                 if (resources != null)
                 {
-                    Logger.Info("Migrating resources");
-
-                    if (record.Publication.Data == null)
+                    if (resources is BlittableJsonReaderArray resourcesArray)
                     {
-                        record.Publication.Data = new DataInfo();
-                    }
+                        Logger.Info("Migrating resources");
 
-                    if (record.Publication.Data.Resources == null)
-                    {
-                        record.Publication.Data.Resources = new List<Resource>();
-                    }
-
-                    foreach (var resource in resources)
-                    {
-                        if (string.IsNullOrWhiteSpace(resource.Name))
+                        if (resourcesArray.Length > 0)
                         {
-                            record.Publication.Data.Resources.Add(new Resource
+                            if (record.Publication.Data == null)
                             {
-                                Name = resource.Path,
-                                Path = resource.Path
-                            });
-                        }
-                        else
-                        {
-                            record.Publication.Data.Resources.Add(new Resource
+                                record.Publication.Data = new DataInfo();
+                            }
+
+                            if (record.Publication.Data.Resources == null)
                             {
-                                Name = resource.Name,
-                                Path = resource.Path
-                            });
+                                record.Publication.Data.Resources = new List<Resource>();
+                            }
+
+                            foreach (var resource in resourcesArray)
+                            {
+                                if (resource is BlittableJsonReaderObject resourceObject)
+                                {
+                                    var newResource = new Resource();
+                                    if (resourceObject.TryGet("Path", out string path))
+                                    {
+                                        newResource.Path = path;
+                                    }
+
+                                    if (resourceObject.TryGet("Name", out string name))
+                                    {
+                                        newResource.Name = name;
+                                    }
+                                    else
+                                    {
+                                        newResource.Name = newResource.Path;
+                                    }
+
+                                    if (resourceObject.TryGet("PublishedUrl", out string publishedUrl))
+                                    {
+                                        newResource.PublishedUrl = publishedUrl;
+                                    }
+                                    
+                                    record.Publication.Data.Resources.Add(newResource);
+                                }
+                            }
                         }
                     }
                 }
