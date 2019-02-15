@@ -110,9 +110,7 @@ namespace Catalogue.Toolbox
 
         static int RunPatch(PatchOptions options)
         {
-            InitDatabase();
-
-            new PatchHandler(DocumentStore).RunPatch(options);
+            new PatchHandler().RunPatch(options);
 
             return 0;
         }
