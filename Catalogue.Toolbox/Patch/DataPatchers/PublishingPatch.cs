@@ -6,7 +6,9 @@ using Raven.Client.Documents.Indexes;
 using Sparrow.Json;
 using System.Collections.Generic;
 using System.Configuration;
+using System.IO;
 using System.Linq;
+using Catalogue.Data;
 
 namespace Catalogue.Toolbox.Patch.DataPatchers
 {
@@ -325,7 +327,7 @@ namespace Catalogue.Toolbox.Patch.DataPatchers
                                     }
                                     else
                                     {
-                                        newResource.Name = newResource.Path;
+                                        newResource.Name = Path.GetFileName(newResource.Path);
                                     }
 
                                     if (resourceObject.TryGet("PublishedUrl", out string publishedUrl))
@@ -395,11 +397,24 @@ namespace Catalogue.Toolbox.Patch.DataPatchers
                                 record.Publication.Data.Resources = new List<Resource>();
                             }
 
-                            record.Publication.Data.Resources.Add(new Resource
+                            if (resourceLocator.Contains("http://data.jncc.gov.uk/data/"))
                             {
-                                Name = resourceLocator,
-                                Path = resourceLocator
-                            });
+                                var friendlyFilename = resourceLocator.Replace("http://data.jncc.gov.uk/data/"+Helpers.RemoveCollection(record.Id)+"-", "");
+                                record.Publication.Data.Resources.Add(new Resource
+                                {
+                                    Name = friendlyFilename,
+                                    Path = resourceLocator,
+                                    PublishedUrl = resourceLocator
+                                });
+                            }
+                            else
+                            {
+                                record.Publication.Data.Resources.Add(new Resource
+                                {
+                                    Name = "Gemini ResourceLocator",
+                                    Path = resourceLocator
+                                });
+                            }
                         }
                     }
                 }
