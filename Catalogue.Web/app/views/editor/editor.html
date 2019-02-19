@@ -194,7 +194,7 @@
                         <div class="col-md-7">
                             <div class="form-inline">
                                 <div class="form-group">
-                                    <label>Published / revised</label>
+                                    <label>Reference date</label>
 
                                 </div>
                                 <div class="form-group">
@@ -545,16 +545,17 @@
                 </div>
                 <div class="col-md-9">
                     <div class="btn-group">
-                        <button ng-click="form.publication.target.hub.publishable = true" ng-class="{ 'btn-primary': form.publication.target.hub.publishable == true, 'btn-default': form.publication.target.hub.publishable != true }" class="btn"
-                                title="Can this record be published to the ResourceHub?"
-                                tc-tip>
-                            <span class="glyphicon glyphicon-globe"></span> Publishable
-                        </button>
+
                         <button ng-click="form.publication.target.hub.publishable = false" ng-class="{ 'btn-primary': form.publication.target.hub.publishable == false, 'btn-default': form.publication.target.hub.publishable != false  }" class="btn">
-                            Unpublishable
+                            Not publishable
                         </button>
                         <button ng-click="form.publication.target.hub.publishable = null" ng-class="{ 'btn-primary': form.publication.target.hub.publishable == null, 'btn-default': form.publication.target.hub.publishable != null  }" class="btn">
                             Undecided
+                        </button>
+                        <button ng-click="form.publication.target.hub.publishable = true" ng-class="{ 'btn-primary': form.publication.target.hub.publishable == true, 'btn-default': form.publication.target.hub.publishable != true }" class="btn"
+                                title="Can this record be published to the ResourceHub?"
+                                tc-tip>
+                            Publishable <span class="glyphicon glyphicon-globe"></span>
                         </button>
                     </div>
                     <span ng-if="form.publication.target.hub.lastSuccess.dateUtc">&nbsp;Published on {{getFormattedDate(form.publication.target.hub.lastSuccess.dateUtc)}}</span>
@@ -571,16 +572,16 @@
                 </div>
                 <div class="col-md-9">
                     <div class="btn-group">
-                        <button ng-click="form.publication.target.gov.publishable = true" ng-class="{ 'btn-primary': form.publication.target.gov.publishable == true, 'btn-default': form.publication.target.gov.publishable != true }" class="btn"
-                                title="Can this record be published to Data.gov.uk?"
-                                tc-tip>
-                            <span class="glyphicon glyphicon-globe"></span> Publishable
-                        </button>
                         <button ng-click="form.publication.target.gov.publishable = false" ng-class="{ 'btn-primary': form.publication.target.gov.publishable == false, 'btn-default': form.publication.target.gov.publishable != false  }" class="btn">
-                            Unpublishable
+                            Not publishable
                         </button>
                         <button ng-click="form.publication.target.gov.publishable = null" ng-class="{ 'btn-primary': form.publication.target.gov.publishable == null, 'btn-default': form.publication.target.gov.publishable != null  }" class="btn">
                             Undecided
+                        </button>
+                        <button ng-click="form.publication.target.gov.publishable = true" ng-class="{ 'btn-primary': form.publication.target.gov.publishable == true, 'btn-default': form.publication.target.gov.publishable != true }" class="btn"
+                                title="Can this record be published to Data.gov.uk?"
+                                tc-tip>
+                            Publishable <span class="glyphicon glyphicon-globe"></span>
                         </button>
                     </div>
                     <span ng-if="form.publication.target.gov.lastSuccess.dateUtc">&nbsp;Published on {{getFormattedDate(form.publication.target.gov.lastSuccess.dateUtc)}}</span>
@@ -616,7 +617,7 @@
 
                                 <input type="text" class="form-control" size="55"
                                        ng-model="resource.path"
-                                       placeholder="Filepath or URL, e.g. Z:\path\to\file.docx or https://data.example.com"
+                                       placeholder="Filepath or URL, e.g. Z:\path\to\file.docx or http://data.example.com"
                                        tc-focus-tip
                                        title="Paste the path to the file on the fileshare here"
                                        ng-change="resource.path = trimDoubleQuotes(resource.path)" />
@@ -624,8 +625,8 @@
 
                             <input class="form-control" type="text" size="25"
                                    ng-model="resource.name"
-                                   placeholder="Resource name"
-                                   title="Name of the resource"
+                                   placeholder="Resource title"
+                                   title="Title of the resource"
                                    tc-focus-tip />
 
                             <button class="btn btn-primary" title="Remove resource" tc-tip ng-click="removePublishableResource(form, resource)">

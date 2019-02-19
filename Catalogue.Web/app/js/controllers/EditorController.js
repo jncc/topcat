@@ -266,16 +266,15 @@
     var previouslyPublishedText, publishingStatusText;
     previouslyPublishedText = "Never Published";
     publishingStatusText = null;
-    console.log(JSON.stringify(record));
     if (record.publication && record.publication.target && (record.publication.target.gov && record.publication.target.gov.lastSuccess || record.publication.target.hub && record.publication.target.hub.lastSuccess)) {
       previouslyPublishedText = "Published";
     }
     if (record.publication && record.publication.target) {
       if (previouslyPublishedText === "Published" && !publishingState.assessedAndUpToDate) {
         publishingStatusText = "Out Of Date";
-      } else if (publishingState.signedOffAndUpToDate) {
+      } else if (publishingState.signedOffAndUpToDate && !publishingState.publishedToHubAndUpToDate && !publishingState.publishedToGovAndUpToDate) {
         publishingStatusText = "Signed Off";
-      } else if (publishingState.assessedAndUpToDate) {
+      } else if (publishingState.assessedAndUpToDate && !publishingState.publishedToHubAndUpToDate && !publishingState.publishedToGovAndUpToDate) {
         publishingStatusText = "Assessed";
       }
     }

@@ -674,6 +674,7 @@ namespace Catalogue.Data.Seed
                     {
                         Hub = new HubPublicationInfo
                         {
+                            Publishable = true,
                             Url = "https://hub.jncc.gov.uk/assets/d9c14587-90d8-4eba-b670-4cf36e45196d",
                             LastAttempt = new PublicationAttempt { DateUtc = new DateTime(2015, 1, 1, 11, 59, 0) },
                             LastSuccess = new PublicationAttempt { DateUtc = new DateTime(2015, 1, 1, 11, 59, 0) }

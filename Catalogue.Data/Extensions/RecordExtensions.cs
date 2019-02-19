@@ -28,14 +28,15 @@ namespace Catalogue.Data.Extensions
 
         public static bool IsPublishedToGovAndUpToDate(this Record record)
         {
-            return record.Publication?.Target?.Gov?.LastSuccess != null
-                && record.Publication.Target.Gov.LastSuccess.DateUtc.Equals(record.Gemini.MetadataDate);
+            return record.Publication?.Target?.Gov?.LastSuccess != null &&
+                   record.Publication.Target.Gov.LastSuccess.DateUtc.Equals(record.Gemini.MetadataDate);
         }
 
         public static bool IsPublishedToHubAndUpToDate(this Record record)
         {
-            return record.Publication?.Target?.Hub?.LastSuccess != null
-                   && record.Publication.Target.Hub.LastSuccess.DateUtc.Equals(record.Gemini.MetadataDate);
+            return record.Publication?.Target?.Hub?.LastSuccess != null &&
+                   (record.Publication.Target.Hub.LastSuccess.DateUtc.Equals(record.Gemini.MetadataDate) || record.IsPublishedToGovAndUpToDate() &&
+                   record.Publication.SignOff != null && record.Publication.Target.Hub.LastSuccess.DateUtc > record.Publication.SignOff.DateUtc);
         }
 
         public static bool HasPublishingTarget(this Record record)

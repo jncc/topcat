@@ -34,8 +34,8 @@ namespace Catalogue.Toolbox.Patch.DataPatchers
                 {
                     Logger.Info($"Checking fields for record {record.Id}");
 
-                    MigrateResourceLocator(doc, record);
                     MigrateOpenDataInfo(doc, record);
+                    MigrateResourceLocator(doc, record);
                 }
                 return entity;
             };
@@ -315,27 +315,30 @@ namespace Catalogue.Toolbox.Patch.DataPatchers
                             {
                                 if (resource is BlittableJsonReaderObject resourceObject)
                                 {
-                                    var newResource = new Resource();
                                     if (resourceObject.TryGet("Path", out string path))
                                     {
-                                        newResource.Path = path;
-                                    }
+                                        if (!record.Publication.Data.Resources.Any(r => r.Path.Equals(path)))
+                                        {
+                                            var newResource = new Resource();
+                                            newResource.Path = path;
 
-                                    if (resourceObject.TryGet("Name", out string name))
-                                    {
-                                        newResource.Name = name;
-                                    }
-                                    else
-                                    {
-                                        newResource.Name = Path.GetFileName(newResource.Path);
-                                    }
+                                            if (resourceObject.TryGet("Name", out string name))
+                                            {
+                                                newResource.Name = name;
+                                            }
+                                            else
+                                            {
+                                                newResource.Name = Path.GetFileName(path);
+                                            }
 
-                                    if (resourceObject.TryGet("PublishedUrl", out string publishedUrl))
-                                    {
-                                        newResource.PublishedUrl = publishedUrl;
+                                            if (resourceObject.TryGet("PublishedUrl", out string publishedUrl))
+                                            {
+                                                newResource.PublishedUrl = publishedUrl;
+                                            }
+
+                                            record.Publication.Data.Resources.Add(newResource);
+                                        }
                                     }
-                                    
-                                    record.Publication.Data.Resources.Add(newResource);
                                 }
                             }
                         }
@@ -391,23 +394,28 @@ namespace Catalogue.Toolbox.Patch.DataPatchers
                                 record.Publication.Data.Resources = new List<Resource>();
                             }
 
-                            if (resourceLocator.Contains("http://data.jncc.gov.uk/data/"))
+                            if (!record.Publication.Data.Resources.Any(r => r.Path.Equals(resourceLocator)))
                             {
-                                var friendlyFilename = resourceLocator.Replace("http://data.jncc.gov.uk/data/"+Helpers.RemoveCollection(record.Id)+"-", "");
-                                record.Publication.Data.Resources.Add(new Resource
+                                if (resourceLocator.Contains("http://data.jncc.gov.uk/data/"))
                                 {
-                                    Name = friendlyFilename,
-                                    Path = resourceLocator,
-                                    PublishedUrl = resourceLocator
-                                });
-                            }
-                            else
-                            {
-                                record.Publication.Data.Resources.Add(new Resource
+                                    var friendlyFilename = resourceLocator.Replace(
+                                        "http://data.jncc.gov.uk/data/" + Helpers.RemoveCollection(record.Id) + "-",
+                                        "");
+                                    record.Publication.Data.Resources.Add(new Resource
+                                    {
+                                        Name = friendlyFilename,
+                                        Path = resourceLocator,
+                                        PublishedUrl = resourceLocator
+                                    });
+                                }
+                                else
                                 {
-                                    Name = "Gemini ResourceLocator",
-                                    Path = resourceLocator
-                                });
+                                    record.Publication.Data.Resources.Add(new Resource
+                                    {
+                                        Name = "Published location for online access",
+                                        Path = resourceLocator
+                                    });
+                                }
                             }
                         }
                     }
