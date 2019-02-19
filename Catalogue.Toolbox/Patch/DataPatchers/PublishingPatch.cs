@@ -355,17 +355,11 @@ namespace Catalogue.Toolbox.Patch.DataPatchers
                     record.Publication.Target = new TargetInfo();
                 }
 
-                if (record.Publication.Target.Hub == null)
-                {
-                    record.Publication.Target.Hub = new HubPublicationInfo();
-                }
-
                 if (record.Publication.Target.Gov == null)
                 {
                     record.Publication.Target.Gov = new GovPublicationInfo();
                 }
 
-                record.Publication.Target.Hub.Publishable = publishable;
                 record.Publication.Target.Gov.Publishable = publishable;
             }
         }

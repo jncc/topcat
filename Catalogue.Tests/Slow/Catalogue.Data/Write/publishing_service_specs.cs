@@ -53,6 +53,14 @@ namespace Catalogue.Tests.Slow.Catalogue.Data.Write
                     new Resource {Name = "Web resource", Path = @"http://a.web.resource"},
                     new Resource {Name = "File resource", Path = "x:\\test\\path.txt"},
                     new Resource {Name = "Another file resource", Path = "x:\\another\\test\\path.txt"}
+                },
+                new List<Resource>
+                {
+                    new Resource {Name = "Migrated Resource Locator", Path = @"http://data.jncc.gov.uk/data/record-guid-here-filename.txt", PublishedUrl = @"http://data.jncc.gov.uk/data/record-guid-here-filename.txt"}
+                },
+                new List<Resource>
+                {
+                    new Resource {Name = "Updated file resource", Path = @"x:\test\file2.txt", PublishedUrl = @"http://data.jncc.gov.uk/data/record-guid-here-file.txt"}
                 }
             };
 
@@ -764,8 +772,8 @@ namespace Catalogue.Tests.Slow.Catalogue.Data.Write
                 var updatedResource = updatedResources.Find(x => x.Path.Equals(originalResource.Path));
                 if (IsFileResource(updatedResource))
                 {
-                    string filename = WebificationUtility.GetUnrootedDataPath(recordId, originalResource.Path);
-                    updatedResource.PublishedUrl.Should().Be("http://data.jncc.gov.uk/" + filename);
+                    string dataPath = WebificationUtility.GetUnrootedDataPath(recordId, originalResource.Path);
+                    updatedResource.PublishedUrl.Should().Be("http://data.jncc.gov.uk/" + dataPath);
                 }
                 else
                 {

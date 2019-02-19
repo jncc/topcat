@@ -109,7 +109,9 @@ namespace Catalogue.Robot.Publishing
                         }
                         else
                         {
-                            Logger.Info($"Resource {resource.Path} is a URL - nothing to do");
+                            Logger.Info($"Resource {resource.Path} is a URL - no file to upload");
+
+                            resource.PublishedUrl = null; // make sure this is "clean" if no data file was uploaded
                         }
                     }
                 }
