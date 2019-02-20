@@ -104,7 +104,7 @@ angular.module('app.controllers').controller 'PublishingModalController',
             if $scope.recordOutput.recordState.publishingState.previouslyPublishedWithDoi
                 # special handling for doi records
                 $scope.signOffCompletedInfo = "Signed off by " + $scope.form.publication.signOff.user.displayName + " on " + moment(new Date($scope.form.publication.signOff.dateUtc)).format('DD MMM YYYY h:mm a')
-            if $scope.form.publication != null && $scope.form.publication.signOff != null
+            else if $scope.form.publication != null && $scope.form.publication.signOff != null
                 if $scope.form.publication.signOff.user == null
                     $scope.signOffCompletedInfo = "Initial sign off completed on spreadsheet"
                 else if $scope.recordOutput.recordState.publishingState.signedOffAndUpToDate
@@ -119,7 +119,7 @@ angular.module('app.controllers').controller 'PublishingModalController',
 
         refreshUploadInfo = () ->
             $scope.hubPublishingStatus = () ->
-                if $scope.form.publication.target.hub != null && $scope.form.publication.target.hub.lastSuccess != null $scope.recordOutput.recordState.publishingState.previouslyPublishedWithDoi
+                if $scope.form.publication.target.hub != null && $scope.form.publication.target.hub.lastSuccess != null && $scope.recordOutput.recordState.publishingState.previouslyPublishedWithDoi
                     # special handling for doi records
                     return "Completed on " + moment(new Date($scope.form.publication.target.hub.lastSuccess.dateUtc)).format('DD MMM YYYY h:mm a')
                 else if $scope.form.publication.target.hub == null
