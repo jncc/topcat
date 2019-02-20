@@ -103,7 +103,6 @@
         $scope.isPublishHidden = -> !($scope.form.publication && $scope.form.publication.target && ($scope.form.publication.target.hub && $scope.form.publication.target.hub.publishable == true ||
             $scope.form.publication.target.gov && $scope.form.publication.target.gov.publishable == true))
         $scope.isHttpPath = (path) -> path and path.toLowerCase().startsWith "http"
-        $scope.isPublishingModalButtonVisible = -> $scope.form.publication && $scope.form.publication.target.gov && $scope.form.publication.target.gov.publishable == true
         $scope.hasUsageConstraints = () -> (!!$scope.form.gemini.limitationsOnPublicAccess and $scope.form.gemini.limitationsOnPublicAccess isnt 'no limitations') or (!!$scope.form.gemini.useConstraints and $scope.form.gemini.useConstraints isnt 'no conditions apply')
 
         # keywords # update arg name and use cs in
@@ -214,7 +213,7 @@ getFormattedDate = (date) ->
     return moment(new Date(date)).format('DD MMM YYYY')
 
 getPendingSignOff = (publication) ->
-    if (publication != null && publication.assessment.completed && publication.signOff == null)
+    if publication != null && publication.assessment.completed && publication.signOff == null
         return true
     else
         return false

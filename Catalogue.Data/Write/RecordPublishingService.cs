@@ -23,13 +23,14 @@ namespace Catalogue.Data.Write
             if (record.IsAssessedAndUpToDate())
                 throw new InvalidOperationException("Assessment has already been completed and is up to date");
 
+            if (record.HasPreviouslyBeenPublishedWithDoi())
+                throw new InvalidOperationException("Cannot republish a DOI minted record");
+
             if (!record.Validation.Equals(Validation.Gemini))
                 throw new InvalidOperationException("Validation level must be Gemini");
 
             if (!record.HasPublishingTarget())
-            {
                 throw new InvalidOperationException("Must select at least one publishing destination");
-            }
 
             record.Publication.Assessment = assessmentInfo;
             UpdateMetadataDate(record, assessmentInfo.CompletedOnUtc);

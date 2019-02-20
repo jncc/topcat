@@ -126,9 +126,6 @@
     $scope.isHttpPath = function(path) {
       return path && path.toLowerCase().startsWith("http");
     };
-    $scope.isPublishingModalButtonVisible = function() {
-      return $scope.form.publication && $scope.form.publication.target.gov && $scope.form.publication.target.gov.publishable === true;
-    };
     $scope.hasUsageConstraints = function() {
       return (!!$scope.form.gemini.limitationsOnPublicAccess && $scope.form.gemini.limitationsOnPublicAccess !== 'no limitations') || (!!$scope.form.gemini.useConstraints && $scope.form.gemini.useConstraints !== 'no conditions apply');
     };

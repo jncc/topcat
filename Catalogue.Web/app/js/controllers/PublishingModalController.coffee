@@ -21,6 +21,7 @@ angular.module('app.controllers').controller 'PublishingModalController',
             riskAssessment:
                 currentClass: {}
                 completed: {}
+                showButton: {}
             signOff:
                 currentClass: {}
                 completed: {}
@@ -36,6 +37,16 @@ angular.module('app.controllers').controller 'PublishingModalController',
 
         # change multistep status
         $scope.refreshPublishingStatus = () ->
+            if $scope.recordOutput.recordState.publishingState.previouslyPublishedWithDoi
+                # if it's previously been published and has a DOI then act as if it's published and up to date
+                publishingStatus.riskAssessment.completed = true
+                publishingStatus.signOff.completed = true
+                publishingStatus.upload.completed = true
+                publishingStatus.riskAssessment.currentClass = "visited"
+                publishingStatus.signOff.currentClass = "visited"
+                publishingStatus.upload.currentClass = "visited"
+                return
+
             if $scope.form.publication != null && $scope.form.publication.target.gov != null
                 publishingStatus.riskAssessment.completed = $scope.form.publication.assessment != null && $scope.form.publication.assessment.completed
                 publishingStatus.signOff.completed = $scope.form.publication.signOff != null
@@ -55,7 +66,7 @@ angular.module('app.controllers').controller 'PublishingModalController',
             else
                 publishingStatus.signOff.currentClass = "disabled"
 
-            if $scope.recordOutput.recordState.publishingState.publishedToGovAndUpToDate
+            if $scope.recordOutput.recordState.publishingState.publishedAndUpToDate
                 publishingStatus.upload.currentClass = "visited"
             else if $scope.recordOutput.recordState.publishingState.signedOffAndUpToDate
                 publishingStatus.upload.currentClass = "current"
@@ -65,7 +76,7 @@ angular.module('app.controllers').controller 'PublishingModalController',
         $scope.refreshPublishingStatus()
 
         # load initial status screen
-        if $scope.recordOutput.recordState.publishingState.signedOffAndUpToDate
+        if $scope.recordOutput.recordState.publishingState.signedOffAndUpToDate || $scope.recordOutput.recordState.publishingState.previouslyPublishedWithDoi
             publishingStatus.currentActiveView = "upload"
         else if $scope.recordOutput.recordState.publishingState.assessedAndUpToDate
             publishingStatus.currentActiveView = "sign off"
@@ -74,7 +85,12 @@ angular.module('app.controllers').controller 'PublishingModalController',
 
         # Refresh text on assess and sign off buttons
         refreshAssessmentInfo = () ->
-            if $scope.form.publication != null && $scope.form.publication.assessment != null && $scope.form.publication.assessment.completed
+            publishingStatus.riskAssessment.showButton = !recordOutput.recordState.publishingState.assessedAndUpToDate && !recordOutput.recordState.publishingState.previouslyPublishedWithDoi
+
+            if $scope.recordOutput.recordState.publishingState.previouslyPublishedWithDoi
+                # special handling for doi records
+                $scope.assessmentCompletedInfo = "Completed by " + $scope.form.publication.assessment.completedByUser.displayName + " on " + moment(new Date($scope.form.publication.assessment.completedOnUtc)).format('DD MMM YYYY h:mm a')
+            else if $scope.form.publication != null && $scope.form.publication.assessment != null && $scope.form.publication.assessment.completed
                 if $scope.form.publication.assessment.completedByUser == null && $scope.form.publication.assessment.initialAssessmentWasDoneOnSpreadsheet
                     $scope.assessmentCompletedInfo = "Initial assessment completed on spreadsheet"
                 else if $scope.recordOutput.recordState.publishingState.assessedAndUpToDate
@@ -83,8 +99,11 @@ angular.module('app.controllers').controller 'PublishingModalController',
                     $scope.assessmentCompletedInfo = "Last completed by " + $scope.form.publication.assessment.completedByUser.displayName + " on " + moment(new Date($scope.form.publication.assessment.completedOnUtc)).format('DD MMM YYYY h:mm a')
 
         refreshSignOffInfo = () -> 
-            publishingStatus.signOff.showButton = $scope.user.isIaoUser && !$scope.recordOutput.recordState.publishingState.signedOffAndUpToDate
+            publishingStatus.signOff.showButton = $scope.user.isIaoUser && !$scope.recordOutput.recordState.publishingState.signedOffAndUpToDate && !$scope.recordOutput.recordState.publishingState.previouslyPublishedWithDoi
 
+            if $scope.recordOutput.recordState.publishingState.previouslyPublishedWithDoi
+                # special handling for doi records
+                $scope.signOffCompletedInfo = "Signed off by " + $scope.form.publication.signOff.user.displayName + " on " + moment(new Date($scope.form.publication.signOff.dateUtc)).format('DD MMM YYYY h:mm a')
             if $scope.form.publication != null && $scope.form.publication.signOff != null
                 if $scope.form.publication.signOff.user == null
                     $scope.signOffCompletedInfo = "Initial sign off completed on spreadsheet"
@@ -100,7 +119,10 @@ angular.module('app.controllers').controller 'PublishingModalController',
 
         refreshUploadInfo = () ->
             $scope.hubPublishingStatus = () ->
-                if $scope.form.publication.target.hub == null
+                if $scope.form.publication.target.hub != null && $scope.form.publication.target.hub.lastSuccess != null $scope.recordOutput.recordState.publishingState.previouslyPublishedWithDoi
+                    # special handling for doi records
+                    return "Completed on " + moment(new Date($scope.form.publication.target.hub.lastSuccess.dateUtc)).format('DD MMM YYYY h:mm a')
+                else if $scope.form.publication.target.hub == null
                     # never attempted
                     return "Pending"
                 else if $scope.form.publication.target.hub.lastSuccess != null && ($scope.recordOutput.recordState.publishingState.publishedToHubAndUpToDate || $scope.recordOutput.recordState.publishingState.publishedToGovAndUpToDate)
@@ -117,7 +139,10 @@ angular.module('app.controllers').controller 'PublishingModalController',
                     return "Pending"
 
             $scope.govPublishingStatus = () ->
-                if $scope.form.publication.target.gov == null
+                if $scope.form.publication.target.gov != null && $scope.form.publication.target.gov.lastSuccess != null && $scope.recordOutput.recordState.publishingState.previouslyPublishedWithDoi
+                    # special handling for doi records
+                    return "Completed on " + moment(new Date($scope.form.publication.target.gov.lastSuccess.dateUtc)).format('DD MMM YYYY h:mm a')
+                else if $scope.form.publication.target.gov == null
                     # never attempted
                     return "Pending"
                 else if $scope.form.publication.target.gov.lastSuccess != null && $scope.recordOutput.recordState.publishingState.publishedToGovAndUpToDate
@@ -134,11 +159,11 @@ angular.module('app.controllers').controller 'PublishingModalController',
                     # anything else?
                     return "Pending"
 
-            if $scope.recordOutput.recordState.publishingState.publishedToGovAndUpToDate
+            if $scope.recordOutput.recordState.publishingState.publishedAndUpToDate || $scope.recordOutput.recordState.publishingState.previouslyPublishedWithDoi
                 $scope.uploadStatus = "Publishing completed"
             else
                 $scope.uploadStatus = "Publishing in progress..."
-
+                
 
         refreshAssessmentInfo()
         refreshSignOffInfo()

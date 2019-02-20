@@ -105,34 +105,6 @@ namespace Catalogue.Tests.Slow.Catalogue.Web.Controllers.Publishing
         }
 
         [Test]
-        public void assessment_completed_with_unc_path_test()
-        {
-            var recordId = Helpers.AddCollection("b69f47c1-4c17-42d0-a396-8209aa5568b1");
-            var record = new Record().With(r =>
-            {
-                r.Id = recordId;
-                r.Path = @"\\jncc-corpfile\testfile";
-                r.Validation = Validation.Gemini;
-                r.Gemini = Library.Example();
-                r.Publication = new PublicationInfo
-                {
-                    Target = new TargetInfo
-                    {
-                        Gov = new GovPublicationInfo
-                        {
-                            Publishable = true
-                        }
-                    }
-                };
-                r.Footer = new Footer();
-            });
-
-            var resultRecord = TestAssessment(record);
-            var publicationInfo = resultRecord.Publication;
-            publicationInfo.Assessment.Completed.Should().BeTrue();
-        }
-
-        [Test]
         public void assessment_started_then_completed_test()
         {
             var recordId = Helpers.AddCollection("ec0db5b3-8b9d-42c3-ac70-2fd50ff3bbca");
@@ -338,6 +310,57 @@ namespace Catalogue.Tests.Slow.Catalogue.Web.Controllers.Publishing
 
             Action a = () => TestAssessment(record);
             a.Should().Throw<InvalidOperationException>().And.Message.Should().Be("Validation level must be Gemini");
+        }
+
+        [Test]
+        public void assessment_for_previously_published_doi_record_should_fail()
+        {
+            var recordId = Helpers.AddCollection(Guid.NewGuid().ToString());
+            var record = new Record().With(r =>
+            {
+                r.Id = recordId;
+                r.Path = @"X:\path\to\assessment\test";
+                r.Validation = Validation.Gemini;
+                r.Gemini = Library.Example().With(m =>
+                {
+                    m.MetadataDate = new DateTime(2017, 07, 30);
+                });
+                r.Citation = "citation";
+                r.DigitalObjectIdentifier = "10.25603/000000.0.0.0";
+                r.Publication = new PublicationInfo
+                {
+                    Assessment = new AssessmentInfo
+                    {
+                        Completed = true,
+                        CompletedOnUtc = new DateTime(2017, 07, 21),
+                        CompletedByUser = new UserInfo
+                        {
+                            DisplayName = "Pete",
+                            Email = "pete@example.com"
+                        },
+                        InitialAssessmentWasDoneOnSpreadsheet = false
+                    },
+                    SignOff = new SignOffInfo
+                    {
+                        DateUtc = new DateTime(2017, 07, 22)
+                    },
+                    Target = new TargetInfo
+                    {
+                        Gov = new GovPublicationInfo
+                        {
+                            Publishable = true,
+                            LastSuccess = new PublicationAttempt
+                            {
+                                DateUtc = new DateTime(2017, 07, 23)
+                            }
+                        }
+                    }
+                };
+                r.Footer = new Footer();
+            });
+
+            Action a = () => TestAssessment(record);
+            a.Should().Throw<InvalidOperationException>().And.Message.Should().Be("Cannot republish a DOI minted record");
         }
 
         [Test]
@@ -740,64 +763,6 @@ namespace Catalogue.Tests.Slow.Catalogue.Web.Controllers.Publishing
             publicationInfo.Assessment.InitialAssessmentWasDoneOnSpreadsheet.Should().BeTrue();
             resultRecord.Gemini.MetadataDate.Should().Be(publicationInfo.Assessment.CompletedOnUtc);
         }
-
-        static readonly Record[] NotEligibleForAssessmentRecords =
-        {
-            new Record().With(r =>
-            {
-                r.Id = Helpers.AddCollection("dc370d41-c8b4-4eba-8e39-6e2d70c50c07");
-                r.Path = @"http://www.example.com";
-                r.Validation = Validation.Gemini;
-                r.Gemini = Library.Example();
-                r.Publication = new PublicationInfo
-                {
-                    Target = new TargetInfo
-                    {
-                        Gov = new GovPublicationInfo
-                        {
-                            Publishable = true
-                        }
-                    }
-                };
-                r.Footer = new Footer();
-            }),
-            new Record().With(r =>
-            {
-                r.Id = Helpers.AddCollection("60df47fc-d4df-48ce-9bdd-289c145f7de0");
-                r.Path = @"https://www.example.com";
-                r.Validation = Validation.Gemini;
-                r.Gemini = Library.Example();
-                r.Publication = new PublicationInfo
-                {
-                    Target = new TargetInfo
-                    {
-                        Gov = new GovPublicationInfo
-                        {
-                            Publishable = true
-                        }
-                    }
-                };
-                r.Footer = new Footer();
-            }),
-            new Record().With(r =>
-            {
-                r.Id = Helpers.AddCollection("d82afb6c-2699-4570-a72f-cdf2cf93fa4c");
-                r.Path = @"postgres://username@hostname/databasename";
-                r.Validation = Validation.Gemini;
-                r.Gemini = Library.Example();
-                r.Publication = new PublicationInfo
-                {
-                    Target = new TargetInfo
-                    {
-                        Gov = new GovPublicationInfo
-                        {
-                            Publishable = true
-                        }
-                    }
-                };
-                r.Footer = new Footer();
-            })
-        };
 
         private Record TestAssessment(Record record)
         {

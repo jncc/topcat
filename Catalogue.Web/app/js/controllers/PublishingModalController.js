@@ -21,7 +21,8 @@
     publishingStatus = {
       riskAssessment: {
         currentClass: {},
-        completed: {}
+        completed: {},
+        showButton: {}
       },
       signOff: {
         currentClass: {},
@@ -33,11 +34,23 @@
         currentClass: {},
         completed: {}
       },
-      currentActiveView: {}
+      currentActiveView: {},
+      publishedAndUpToDate: {}
     };
     $scope.publishingStatus = publishingStatus;
     publishingStatus.signOff.timeout = -1;
     $scope.refreshPublishingStatus = function() {
+      if ($scope.recordOutput.recordState.publishingState.previouslyPublishedWithDoi) {
+        publishingStatus.riskAssessment.completed = true;
+        publishingStatus.signOff.completed = true;
+        publishingStatus.upload.completed = true;
+        publishingStatus.riskAssessment.currentClass = "visited";
+        publishingStatus.signOff.currentClass = "visited";
+        publishingStatus.upload.currentClass = "visited";
+        publishingStatus.publishedAndUpToDate = true;
+        return;
+      }
+      publishingStatus.publishedAndUpToDate = !($scope.form.publication.target.hub && $scope.form.publication.target.hub.publishable === true && !$scope.recordOutput.recordState.publishingState.publishedToHubAndUpToDate || $scope.form.publication.target.gov && $scope.form.publication.target.gov.publishable === true && !$scope.recordOutput.recordState.publishingState.publishedToGovAndUpToDate);
       if ($scope.form.publication !== null && $scope.form.publication.target.gov !== null) {
         publishingStatus.riskAssessment.completed = $scope.form.publication.assessment !== null && $scope.form.publication.assessment.completed;
         publishingStatus.signOff.completed = $scope.form.publication.signOff !== null;
@@ -57,7 +70,7 @@
       } else {
         publishingStatus.signOff.currentClass = "disabled";
       }
-      if ($scope.recordOutput.recordState.publishingState.publishedToGovAndUpToDate) {
+      if (publishingStatus.publishedAndUpToDate) {
         return publishingStatus.upload.currentClass = "visited";
       } else if ($scope.recordOutput.recordState.publishingState.signedOffAndUpToDate) {
         return publishingStatus.upload.currentClass = "current";
@@ -66,7 +79,7 @@
       }
     };
     $scope.refreshPublishingStatus();
-    if ($scope.recordOutput.recordState.publishingState.signedOffAndUpToDate) {
+    if ($scope.recordOutput.recordState.publishingState.signedOffAndUpToDate || $scope.recordOutput.recordState.publishingState.previouslyPublishedWithDoi) {
       publishingStatus.currentActiveView = "upload";
     } else if ($scope.recordOutput.recordState.publishingState.assessedAndUpToDate) {
       publishingStatus.currentActiveView = "sign off";
@@ -74,7 +87,10 @@
       publishingStatus.currentActiveView = "risk assessment";
     }
     refreshAssessmentInfo = function() {
-      if ($scope.form.publication !== null && $scope.form.publication.assessment !== null && $scope.form.publication.assessment.completed) {
+      publishingStatus.riskAssessment.showButton = !recordOutput.recordState.publishingState.assessedAndUpToDate && !recordOutput.recordState.publishingState.previouslyPublishedWithDoi;
+      if ($scope.recordOutput.recordState.publishingState.previouslyPublishedWithDoi) {
+        return $scope.assessmentCompletedInfo = "Completed by " + $scope.form.publication.assessment.completedByUser.displayName + " on " + moment(new Date($scope.form.publication.assessment.completedOnUtc)).format('DD MMM YYYY h:mm a');
+      } else if ($scope.form.publication !== null && $scope.form.publication.assessment !== null && $scope.form.publication.assessment.completed) {
         if ($scope.form.publication.assessment.completedByUser === null && $scope.form.publication.assessment.initialAssessmentWasDoneOnSpreadsheet) {
           return $scope.assessmentCompletedInfo = "Initial assessment completed on spreadsheet";
         } else if ($scope.recordOutput.recordState.publishingState.assessedAndUpToDate) {
@@ -85,7 +101,10 @@
       }
     };
     refreshSignOffInfo = function() {
-      publishingStatus.signOff.showButton = $scope.user.isIaoUser && !$scope.recordOutput.recordState.publishingState.signedOffAndUpToDate;
+      publishingStatus.signOff.showButton = $scope.user.isIaoUser && !$scope.recordOutput.recordState.publishingState.signedOffAndUpToDate && !$scope.recordOutput.recordState.publishingState.previouslyPublishedWithDoi;
+      if ($scope.recordOutput.recordState.publishingState.previouslyPublishedWithDoi) {
+        $scope.signOffCompletedInfo = "Signed off by " + $scope.form.publication.signOff.user.displayName + " on " + moment(new Date($scope.form.publication.signOff.dateUtc)).format('DD MMM YYYY h:mm a');
+      }
       if ($scope.form.publication !== null && $scope.form.publication.signOff !== null) {
         if ($scope.form.publication.signOff.user === null) {
           $scope.signOffCompletedInfo = "Initial sign off completed on spreadsheet";
@@ -103,7 +122,9 @@
     };
     refreshUploadInfo = function() {
       $scope.hubPublishingStatus = function() {
-        if ($scope.form.publication.target.hub === null) {
+        if ($scope.recordOutput.recordState.publishingState.previouslyPublishedWithDoi) {
+          return "Completed on " + moment(new Date($scope.form.publication.target.hub.lastSuccess.dateUtc)).format('DD MMM YYYY h:mm a');
+        } else if ($scope.form.publication.target.hub === null) {
           return "Pending";
         } else if ($scope.form.publication.target.hub.lastSuccess !== null && ($scope.recordOutput.recordState.publishingState.publishedToHubAndUpToDate || $scope.recordOutput.recordState.publishingState.publishedToGovAndUpToDate)) {
           return "Completed on " + moment(new Date($scope.form.publication.target.hub.lastSuccess.dateUtc)).format('DD MMM YYYY h:mm a');
@@ -116,7 +137,9 @@
         }
       };
       $scope.govPublishingStatus = function() {
-        if ($scope.form.publication.target.gov === null) {
+        if ($scope.form.publication.target.gov !== null && $scope.form.publication.target.gov.lastSuccess !== null && $scope.recordOutput.recordState.publishingState.previouslyPublishedWithDoi) {
+          return "Completed on " + moment(new Date($scope.form.publication.target.gov.lastSuccess.dateUtc)).format('DD MMM YYYY h:mm a');
+        } else if ($scope.form.publication.target.gov === null) {
           return "Pending";
         } else if ($scope.form.publication.target.gov.lastSuccess !== null && $scope.recordOutput.recordState.publishingState.publishedToGovAndUpToDate) {
           return "Completed on " + moment(new Date($scope.form.publication.target.gov.lastSuccess.dateUtc)).format('DD MMM YYYY h:mm a');
@@ -128,7 +151,7 @@
           return "Pending";
         }
       };
-      if ($scope.recordOutput.recordState.publishingState.publishedToGovAndUpToDate) {
+      if ($scope.publishingStatus.publishedAndUpToDate || $scope.recordOutput.recordState.publishingState.previouslyPublishedWithDoi) {
         return $scope.uploadStatus = "Publishing completed";
       } else {
         return $scope.uploadStatus = "Publishing in progress...";

@@ -1,7 +1,6 @@
 ﻿using Catalogue.Data.Model;
 using Catalogue.Gemini.Spatial;
 using Catalogue.Utilities.Text;
-using Catalogue.Web.Controllers.Records;
 using System.Linq;
 using Catalogue.Data.Extensions;
 using Raven.Client.Documents.Session;
@@ -34,7 +33,9 @@ namespace Catalogue.Data.Write
                             AssessedAndUpToDate = record.IsAssessedAndUpToDate(),
                             SignedOffAndUpToDate = record.IsSignedOffAndUpToDate(),
                             PublishedToHubAndUpToDate = record.IsPublishedToHubAndUpToDate(),
-                            PublishedToGovAndUpToDate = record.IsPublishedToGovAndUpToDate()
+                            PublishedToGovAndUpToDate = record.IsPublishedToGovAndUpToDate(),
+                            PublishedAndUpToDate = record.IsPublishedAndUpToDate(),
+                            PreviouslyPublishedWithDoi = record.HasPreviouslyBeenPublishedWithDoi()
                         }
                     },
                     Validation = validation

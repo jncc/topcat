@@ -51,7 +51,9 @@ namespace Catalogue.Web.Controllers.Records
                         AssessedAndUpToDate = record.IsAssessedAndUpToDate(),
                         SignedOffAndUpToDate = record.IsSignedOffAndUpToDate(),
                         PublishedToHubAndUpToDate = record.IsPublishedToHubAndUpToDate(),
-                        PublishedToGovAndUpToDate = record.IsPublishedToGovAndUpToDate()
+                        PublishedToGovAndUpToDate = record.IsPublishedToGovAndUpToDate(),
+                        PublishedAndUpToDate = record.IsPublishedAndUpToDate(),
+                        PreviouslyPublishedWithDoi = record.HasPreviouslyBeenPublishedWithDoi()
                     }
                 }
             };

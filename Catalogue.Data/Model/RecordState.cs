@@ -1,6 +1,4 @@
-﻿using Catalogue.Web.Controllers.Records;
-
-namespace Catalogue.Data.Model
+﻿namespace Catalogue.Data.Model
 {
     public class RecordState
     {

@@ -1,4 +1,4 @@
-﻿namespace Catalogue.Web.Controllers.Records
+﻿namespace Catalogue.Data.Model
 {
     public class PublishingState
     {
@@ -6,5 +6,7 @@
         public bool SignedOffAndUpToDate { get; set; }
         public bool PublishedToHubAndUpToDate { get; set; }
         public bool PublishedToGovAndUpToDate { get; set; }
+        public bool PublishedAndUpToDate { get; set; }
+        public bool PreviouslyPublishedWithDoi { get; set; }
     }
 }

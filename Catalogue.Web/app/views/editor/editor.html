@@ -38,7 +38,11 @@
                         <button ng-click="save()" ng-hide="isSaveHidden()" ng-disabled="isSaveDisabled()" class="btn btn-danger">SAVE</button>
                     </span>
                     <span>
-                        <button ng-click="openPublishingModal()" ng-hide="isPublishHidden()" ng-disabled="isPublishDisabled()" class="btn btn-danger">PUBLISH</button>
+                        <button ng-click="openPublishingModal()"
+                                ng-hide="isPublishHidden()"
+                                ng-disabled="isPublishDisabled()"
+                                tc-tip title="View the publishing workflow"
+                                class="btn btn-danger">PUBLISH</button>
                     </span>
                 </div>
             </div>
