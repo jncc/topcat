@@ -6,7 +6,7 @@ namespace Catalogue.Web
     public interface ISettings
     {
         string Domain { get; }
-        string OpenDataIaoRole { get; }
+        string PublishingIaoRole { get; }
     }
 
     public class Settings : ISettings
@@ -16,7 +16,7 @@ namespace Catalogue.Web
             get { return "jncc-dc12.green.jncc.gov.uk"; }
         }
 
-        public string OpenDataIaoRole
+        public string PublishingIaoRole
         {
             get
             {

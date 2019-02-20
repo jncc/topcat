@@ -833,7 +833,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Web.Controllers.Publishing
 
                 WaitForIndexing(ReusableDocumentStore); // Allow time for indexing
 
-                var publishingController = GetTestOpenDataPublishingController(db);
+                var publishingController = GetTestPublishingController(db);
                 var result = publishingController.PendingSignOff();
                 result.Count.Should().Be(2);
                 result.Count(r => string.Equals(r.Title, "Retrieve Sign Off Test 1", StringComparison.CurrentCulture)).Should().Be(1);
@@ -846,7 +846,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Web.Controllers.Publishing
             db.Store(record);
             db.SaveChanges();
 
-            var publishingController = GetTestOpenDataPublishingController(db);
+            var publishingController = GetTestPublishingController(db);
 
             var request = new SignOffRequest
             {
@@ -865,7 +865,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Web.Controllers.Publishing
             }
         }
 
-        private static PublishingController GetTestOpenDataPublishingController(IDocumentSession db)
+        private static PublishingController GetTestPublishingController(IDocumentSession db)
         {
             var testUserContext = new TestUserContext();
             var userContextMock = new Mock<IUserContext>();

@@ -244,7 +244,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Data.Write
         }
 
         [Test]
-        public void open_data_resource_paths_should_be_trimmed()
+        public void publishing_resource_paths_should_be_trimmed()
         {
             var database = Mock.Of<IDocumentSession>();
             var service = new RecordService(database, ValidatorStub());

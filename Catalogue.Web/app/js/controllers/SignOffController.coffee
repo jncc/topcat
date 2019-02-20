@@ -3,7 +3,7 @@
     ($scope, $http, $location, $timeout, signOffGroup) ->
         
         m =
-            openData:
+            publishing:
                 summary: {}
                 list: []
             signOffStatus: {}
@@ -12,7 +12,7 @@
         $scope.m = m
 
         loadData = -> $http.get('../api/publishing/pendingsignoff').success (result) ->
-            m.openData.list = result
+            m.publishing.list = result
             m.signOffStatus[r.id] = "Sign Off" for r in result
                 
         loadData()

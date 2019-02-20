@@ -1,23 +1,23 @@
 ﻿
 
-<h1>Final approval for Open Data publishing</h1>
-<p>Records that appear on this page have already been risk assessed and require sign off by an Information Asset Owner (IAO) in order to be published to data.gov.uk. If you have been identified as an IAO, then you will be able to sign off a record by clicking on the sign off button next to it.</p>
+<h1>Final approval for publishing</h1>
+<p>Records that appear on this page have already been risk assessed and require sign off by an Information Asset Owner (IAO) in order to be published to the JNCC ResourceHub or Data.gov.uk. If you have been identified as an IAO, then you will be able to sign off a record by clicking on the sign off button next to it.</p>
 <br/>
 
 <div class="publishing">
     <table class="table publishing-list">
         <thead>
             <tr>
-                <th class="first">Records pending final approval ({{m.openData.list.length}})</th>
+                <th class="first">Records pending final approval ({{m.publishing.list.length}})</th>
                 <th>Metadata date</th>
                 <th>Assessed by</th>
-                <th>Last published to JNCC ResourceHub</th>
-                <th>Last published to data.gov.uk</th>
+                <th>Last published to ResourceHub</th>
+                <th>Last published to Data.gov.uk</th>
                 <th></th>
             </tr>
         </thead>
         <tbody>
-            <tr ng-repeat="r in m.openData.list">
+            <tr ng-repeat="r in m.publishing.list">
                 <td><a ng-href="#/editor/{{r.id}}" target="_blank" ng-bind-html="r.title"></a></td>
                 <td><span tc-tip title="{{r.metadataDate | date:'yyyy-MM-dd HH:mm:ss'}}">{{r.metadataDate | date}}</span></td>
                 <td>{{r.publicationInfo.assessment.completedByUser.displayName}}</td>

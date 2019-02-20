@@ -586,7 +586,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Web.Controllers.Publishing
                 db.Store(record);
                 db.SaveChanges();
 
-                var publishingController = GetTestOpenDataPublishingController(db);
+                var publishingController = GetTestPublishingController(db);
 
                 var request = new AssessmentRequest
                 {
@@ -659,7 +659,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Web.Controllers.Publishing
                 db.Store(record);
                 db.SaveChanges();
 
-                var publishingController = GetTestOpenDataPublishingController(db);
+                var publishingController = GetTestPublishingController(db);
 
                 var request = new AssessmentRequest
                 {
@@ -806,7 +806,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Web.Controllers.Publishing
                 db.Store(record);
                 db.SaveChanges();
 
-                var publishingController = GetTestOpenDataPublishingController(db);
+                var publishingController = GetTestPublishingController(db);
 
                 var request = new AssessmentRequest
                 {
@@ -817,7 +817,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Web.Controllers.Publishing
             }
         }
 
-        private static PublishingController GetTestOpenDataPublishingController(IDocumentSession db)
+        private static PublishingController GetTestPublishingController(IDocumentSession db)
         {
             var testUserContext = new TestUserContext();
             var userContextMock = new Mock<IUserContext>();

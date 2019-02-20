@@ -45,7 +45,7 @@ namespace Catalogue.Web.Account
 
                     var domainContext = new PrincipalContext(ContextType.Domain, settings.Domain);
                     var u = UserPrincipal.FindByIdentity(domainContext, principal.Identity.Name);
-                    var group = GroupPrincipal.FindByIdentity(domainContext, settings.OpenDataIaoRole);
+                    var group = GroupPrincipal.FindByIdentity(domainContext, settings.PublishingIaoRole);
 
                     bool inIaoGroup = group != null && group.GetMembers(true).Contains(u);
                     user = new User(u.DisplayName, u.GivenName, u.EmailAddress, inIaoGroup);

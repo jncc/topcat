@@ -3,7 +3,7 @@
   angular.module('app.controllers').controller('SignOffController', function($scope, $http, $location, $timeout, signOffGroup) {
     var loadData, m;
     m = {
-      openData: {
+      publishing: {
         summary: {},
         list: []
       },
@@ -14,7 +14,7 @@
     loadData = function() {
       return $http.get('../api/publishing/pendingsignoff').success(function(result) {
         var r, _i, _len, _results;
-        m.openData.list = result;
+        m.publishing.list = result;
         _results = [];
         for (_i = 0, _len = result.length; _i < _len; _i++) {
           r = result[_i];

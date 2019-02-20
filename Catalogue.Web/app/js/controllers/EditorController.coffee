@@ -134,8 +134,8 @@
 
         $scope.openPublishingModal = ->
             modal = $modal.open
-                controller:  'OpenDataModalController'
-                templateUrl: 'views/partials/opendatamodal.html?' + new Date().getTime() # stop iis express caching the html
+                controller:  'PublishingModalController'
+                templateUrl: 'views/partials/publishingmodal.html?' + new Date().getTime() # stop iis express caching the html
                 size:        'lg'
                 scope:       $scope
                 resolve:     'recordOutput': -> $scope.recordOutput

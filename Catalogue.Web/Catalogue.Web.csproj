@@ -158,23 +158,23 @@
     <Content Include="app\js\config.js.map">
       <DependentUpon>config.js</DependentUpon>
     </Content>
-    <Content Include="app\js\controllers\OpenDataManagementController.js">
-      <DependentUpon>OpenDataManagementController.coffee</DependentUpon>
+    <Content Include="app\js\controllers\PublishingManagementController.js">
+      <DependentUpon>PublishingManagementController.coffee</DependentUpon>
     </Content>
-    <Content Include="app\js\controllers\OpenDataManagementController.min.js">
-      <DependentUpon>OpenDataManagementController.js</DependentUpon>
+    <Content Include="app\js\controllers\PublishingManagementController.min.js">
+      <DependentUpon>PublishingManagementController.js</DependentUpon>
     </Content>
-    <Content Include="app\js\controllers\OpenDataModalController.js">
-      <DependentUpon>OpenDataModalController.coffee</DependentUpon>
+    <Content Include="app\js\controllers\PublishingModalController.js">
+      <DependentUpon>PublishingModalController.coffee</DependentUpon>
     </Content>
-    <Content Include="app\js\controllers\OpenDataModalController.min.js">
-      <DependentUpon>OpenDataModalController.js</DependentUpon>
+    <Content Include="app\js\controllers\PublishingModalController.min.js">
+      <DependentUpon>PublishingModalController.js</DependentUpon>
     </Content>
     <Content Include="app\js\controllers\SignOffController.coffee" />
     <None Include="app.config">
       <SubType>Designer</SubType>
     </None>
-    <None Include="app\js\controllers\OpenDataManagementController.coffee" />
+    <None Include="app\js\controllers\PublishingManagementController.coffee" />
     <Content Include="app\js\controllers\MainController.js">
       <DependentUpon>MainController.coffee</DependentUpon>
     </Content>
@@ -337,12 +337,11 @@
     <Content Include="app\views\partials\jncc-categories.html" />
     <Content Include="app\views\partials\markdown.html" />
     <Content Include="app\views\partials\presentation.html" />
-    <Content Include="app\views\partials\opendatamodal.html" />
+    <Content Include="app\views\partials\publishingmodal.html" />
     <Content Include="app\views\partials\vocabulator.html" />
     <Content Include="app\views\partials\what-is-data.html" />
     <Content Include="app\views\partials\why-topcat.html" />
-    <Content Include="app\views\opendatapublishing\opendatamanagement.html" />
-    <Content Include="app\views\publishing\publishing.html" />
+    <Content Include="app\views\publishing\publishingmanagement.html" />
     <Content Include="app\views\sandbox\colours.html" />
     <Content Include="app\views\sandbox\dropdown.html" />
     <Content Include="app\views\sandbox\glyphs.html" />
@@ -571,15 +570,15 @@
     <Content Include="app\js\controllers\ContentController.min.js.map">
       <DependentUpon>ContentController.min.js</DependentUpon>
     </Content>
-    <Content Include="app\js\controllers\OpenDataModalController.coffee" />
+    <Content Include="app\js\controllers\PublishingModalController.coffee" />
     <Content Include="app\js\controllers\SignOffController.js.map">
       <DependentUpon>SignOffController.js</DependentUpon>
     </Content>
-    <Content Include="app\js\controllers\OpenDataManagementController.js.map">
-      <DependentUpon>OpenDataManagementController.js</DependentUpon>
+    <Content Include="app\js\controllers\PublishingManagementController.js.map">
+      <DependentUpon>PublishingManagementController.js</DependentUpon>
     </Content>
-    <Content Include="app\js\controllers\OpenDataModalController.js.map">
-      <DependentUpon>OpenDataModalController.js</DependentUpon>
+    <Content Include="app\js\controllers\PublishingModalController.js.map">
+      <DependentUpon>PublishingModalController.js</DependentUpon>
     </Content>
     <None Include="app\js\controllers\VocabulatorController.coffee" />
     <Content Include="app\js\controllers\VocabulatorController.js.map">

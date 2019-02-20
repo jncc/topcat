@@ -48,8 +48,8 @@
     <script src="js/controllers/MarkdownController.js?#version"></script>
     <script src="js/controllers/VocabularyListController.js?#version"></script>
     <script src="js/controllers/VocabularyEditorController.js?#version"></script>
-    <script src="js/controllers/OpenDataManagementController.js?#version"></script>
-    <script src="js/controllers/OpenDataModalController.js?#version"></script>
+    <script src="js/controllers/PublishingManagementController.js?#version"></script>
+    <script src="js/controllers/PublishingModalController.js?#version"></script>
     <script src="js/controllers/SearchGridController.js?#version"></script>
     <script src="js/controllers/SignOffController.js?#version"></script>
 
@@ -82,12 +82,12 @@
 <!--                <li role="presentation" class="active"><a href="#">Home <span class="badge">42</span></a></li>-->
 <!--                <li role="presentation"><a href="#">Profile</a></li>-->
                     <li role="presentation">
-                        <a ng-if="status.pendingSignOffCount > 0" href="#opendatapublishing/signoff" tc-tip="bottom" title="There are records waiting to be signed-off">
-                            Open Data
+                        <a ng-if="status.pendingSignOffCount > 0" href="#publishing/signoff" tc-tip="bottom" title="There are records waiting to be signed off">
+                            Publishing Approval
                             <span class="label label-danger label-badge">{{status.pendingSignOffCount}}</span>
                         </a>
-                        <a ng-if="status.pendingSignOffCount == 0" href="#opendatapublishing/signoff">
-                            Open Data
+                        <a ng-if="status.pendingSignOffCount == 0" href="#publishing/signoff">
+                            Publishing Approval
                         </a>
                     </li>
                 </ul>

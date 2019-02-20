@@ -1,24 +1,24 @@
 ﻿
 
-<h1>Open data publishing</h1>
+<h1>Publishing Overview</h1>
 <br/>
 
 <div class="publishing">
     <div class="publishing-summary">
         <div class="publishing-summary-item">
-            <span>{{m.openData.summary.countOfPublishedSinceLastUpdated}}</span> published and up-to-date
+            <span>{{m.publishing.summary.countOfPublishedSinceLastUpdated}}</span> published and up-to-date
         </div>
         <div class="publishing-summary-item-hoverable" ng-class="{'hi': m.tab == 2}" ng-click="m.tab = 2">
-            <span>{{m.openData.summary.countOfNotYetPublishedSinceLastUpdated}}</span> pending publication
+            <span>{{m.publishing.summary.countOfNotYetPublishedSinceLastUpdated}}</span> pending publication
         </div>
         <div class="publishing-summary-item-hoverable " ng-class="{'hi': m.tab == 3}" ng-click="m.tab = 3">
-            <span>{{m.openData.summary.countOfPublicationNeverAttempted}}</span> not attempted yet
+            <span>{{m.publishing.summary.countOfPublicationNeverAttempted}}</span> not attempted yet
         </div>
         <div class="publishing-summary-item-hoverable" ng-class="{'hi': m.tab == 4}" ng-click="m.tab = 4">
-            <span>{{m.openData.summary.countOfLastPublicationAttemptWasUnsuccessful}}</span> failed last publication
+            <span>{{m.publishing.summary.countOfLastPublicationAttemptWasUnsuccessful}}</span> failed last publication
         </div>
         <div class="publishing-summary-item-hoverable" ng-class="{'hi': m.tab == 5}" ng-click="m.tab = 5">
-            <span>{{m.openData.summary.countOfPendingSignOff}}</span> pending sign off
+            <span>{{m.publishing.summary.countOfPendingSignOff}}</span> pending sign off
         </div>
     </div>
 
@@ -37,7 +37,7 @@
         </tr>
         </thead>
         <tbody>
-            <tr ng-repeat="r in m.openData.list">
+            <tr ng-repeat="r in m.publishing.list">
                 <td><a ng-href="#/editor/{{r.id}}" target="_blank" ng-bind-html="r.title"></a></td>
                 <td><span tc-tip title="{{r.metadataDate | date:'yyyy-MM-dd HH:mm:ss'}}">{{r.metadataDate | date}}</span></td>
                 <td ng-if="m.tab != 5">{{r.isGeminiValid}}</td>
@@ -49,7 +49,6 @@
                 </td>
                 <td ng-if="m.tab != 5"><span ng-if="r.gov.lastAttempt.dateUtc" tc-tip title="{{r.gov.lastAttempt.dateUtc | date:'yyyy-MM-dd HH:mm:ss'}}">{{r.gov.lastAttempt.dateUtc | date}}</span></td>
                 <td ng-if="m.tab != 5"><span ng-if="r.gov.lastSuccess.dateUtc" tc-tip title="{{r.gov.lastSuccess.dateUtc | date:'yyyy-MM-dd HH:mm:ss'}}">{{r.gov.lastSuccess.dateUtc | date}}</span></td>
-                <td ng-if="m.tab != 5"><span ng-show="r.gov.paused" class="glyphicon glyphicon-pause" tc-tip title="Publishing of this record is currently paused"></span></td>
                 <td ng-if="m.tab != 5"><span ng-show="r.gov.lastAttempt.message" class="glyphicon glyphicon-warning-sign" tc-tip title="{{r.gov.lastAttempt.message}}"></span></td>
             </tr>
         </tbody>

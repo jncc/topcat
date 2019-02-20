@@ -10,7 +10,7 @@ using Catalogue.Robot.Publishing.Gov;
 
 namespace Catalogue.Tests.Slow.Catalogue.Robot
 {
-    public class opendataxmlhelper_specs
+    public class publishingxmlhelper_specs
     {
         [Test]
         public void metadata_document_generated_correctly_for_record_with_file_resource()

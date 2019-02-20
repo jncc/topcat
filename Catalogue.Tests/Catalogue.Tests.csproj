@@ -58,7 +58,7 @@
     <Compile Include="Slow\Catalogue.Data\Import\when_importing_test_records.cs" />
     <Compile Include="Slow\Catalogue.Data\Indexes\records_search_index_specs.cs" />
     <Compile Include="Slow\Catalogue.Data\Indexes\records_with_duplicate_title_checker_index_tests.cs" />
-    <Compile Include="Slow\Catalogue.Data\Indexes\records_with_open_data_publication_info_index_specs.cs" />
+    <Compile Include="Slow\Catalogue.Data\Indexes\records_with_publication_info_index_specs.cs" />
     <Compile Include="Slow\Catalogue.Data\Indexes\record_count_for_keyword_index_specs.cs" />
     <Compile Include="Slow\Catalogue.Data\Query\QueryTestHelper.cs" />
     <Compile Include="Slow\Catalogue.Data\Query\record_querier_filter_specs.cs" />
@@ -73,7 +73,7 @@
     <Compile Include="Slow\Catalogue.Data\Write\vocabulary_service_specs.cs" />
     <Compile Include="Slow\Catalogue.Gemini\Validation\when_validating_the_example_document.cs" />
     <Compile Include="Slow\Catalogue.Import\when_importing_mesh_data.cs" />
-    <Compile Include="Slow\Catalogue.Robot\opendataxmlhelper_specs.cs" />
+    <Compile Include="Slow\Catalogue.Robot\publishingxmlhelper_specs.cs" />
     <Compile Include="Slow\Catalogue.Robot\robot_uploader_specs.cs" />
     <Compile Include="Slow\Catalogue.Utilities\jncc_drive_mappings_tests.cs" />
     <Compile Include="Slow\Catalogue.Web\Controllers\Account\account_controller_specs.cs" />

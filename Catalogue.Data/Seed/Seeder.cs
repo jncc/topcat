@@ -49,7 +49,7 @@ namespace Catalogue.Data.Seed
                 s.AddHumanActivitiesRecord();
                 s.AddOverseasTerritoriesRecord();
                 s.AddSimpleGeminiExampleRecord();
-                s.AddRecordsWithOpenDataPublishingInfo();
+                s.AddRecordsWithPublishingInfo();
                 s.AddRecordWithLotsOfVocablessTags();
                 s.AddRecordsWithSameKeywordsInDifferentVocabs();
                 s.AddReadOnlyRecord();
@@ -201,7 +201,7 @@ namespace Catalogue.Data.Seed
             recordService.Insert(record, userInfo);
         }
 
-        void AddRecordsWithOpenDataPublishingInfo()
+        void AddRecordsWithPublishingInfo()
         {
             var record = MakeExampleSeedRecord().With(r =>
             {

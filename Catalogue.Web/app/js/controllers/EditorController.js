@@ -177,8 +177,8 @@
     $scope.openPublishingModal = function() {
       var modal;
       modal = $modal.open({
-        controller: 'OpenDataModalController',
-        templateUrl: 'views/partials/opendatamodal.html?' + new Date().getTime(),
+        controller: 'PublishingModalController',
+        templateUrl: 'views/partials/publishingmodal.html?' + new Date().getTime(),
         size: 'lg',
         scope: $scope,
         resolve: {

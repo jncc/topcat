@@ -45,10 +45,10 @@
     }).when('/vocabularies', {
       controller: 'VocabularyListController',
       templateUrl: 'views/vocabularies/vocabularies.html'
-    }).when('/opendatapublishing', {
-      controller: 'OpenDataManagementController',
-      templateUrl: 'views/opendatapublishing/opendatamanagement.html'
-    }).when('/opendatapublishing/signoff', {
+    }).when('/publishing', {
+      controller: 'PublishingManagementController',
+      templateUrl: 'views/publishing/publishingmanagement.html'
+    }).when('/publishing/signoff', {
       controller: 'SignOffController',
       templateUrl: 'views/signoff/signoff.html'
     }).when('/vocabularies/editor/:vocabId*', {
@@ -82,9 +82,9 @@
           return '#test text';
         }
       }
-    }).when('/sandbox/opendatamodal', {
-      controller: 'OpenDataModalController',
-      templateUrl: 'views/partials/opendatamodal.html'
+    }).when('/sandbox/publishingmodal', {
+      controller: 'PublishingModalController',
+      templateUrl: 'views/partials/publishingmodal.html'
     }).when('/sandbox/assessment', {
       controller: 'AssessmentController',
       templateUrl: 'views/partials/assessment.html'
