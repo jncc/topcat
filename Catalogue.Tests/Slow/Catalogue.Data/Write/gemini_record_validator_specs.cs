@@ -43,20 +43,65 @@ namespace Catalogue.Tests.Slow.Catalogue.Data.Write
         }
 
         [Test]
-        public void should_validate_valid_nonspatial_record_with_no_bbox()
+        public void should_validate_valid_nondataset_record_with_no_bbox([Values("nonGeographicDataset", "publication", "service")] string resourceType)
         {
             // to keep things comceptually simple, let's try to keep one level of "good" validation - "gemini"
             // but use it for non-spatial metadata too
 
             var record = GeminiRecord().With(r =>
             {
-                r.Gemini.ResourceType = "nonGeographicDataset";
+                r.Gemini.ResourceType = resourceType;
                 r.Gemini.BoundingBox = null;
             });
 
             var result = new RecordValidator().Validate(record);
 
             result.Errors.Count.Should().Be(0);
+        }
+
+        [Test]
+        public void blank_bbox_for_datasets_is_not_allowed()
+        {
+            var record = GeminiRecord().With(r =>
+            {
+                r.Gemini.ResourceType = "dataset";
+                r.Gemini.BoundingBox = null;
+            });
+            var result = new RecordValidator().Validate(record);
+
+            result.Errors.Count.Should().Be(1);
+            result.Errors.Any(e => e.Fields.Contains("gemini.boundingBox")).Should().BeTrue();
+        }
+
+        [Test]
+        public void should_validate_valid_nondataset_record_with_temporal_extent([Values("nonGeographicDataset", "publication", "service")] string resourceType)
+        {
+            // to keep things comceptually simple, let's try to keep one level of "good" validation - "gemini"
+            // but use it for non-spatial metadata too
+
+            var record = GeminiRecord().With(r =>
+            {
+                r.Gemini.ResourceType = resourceType;
+                r.Gemini.TemporalExtent = new TemporalExtent();
+            });
+
+            var result = new RecordValidator().Validate(record);
+
+            result.Errors.Count.Should().Be(0);
+        }
+
+        [Test]
+        public void blank_temporal_extent_for_datasets_is_not_allowed()
+        {
+            var record = GeminiRecord().With(r =>
+            {
+                r.Gemini.ResourceType = "dataset";
+                r.Gemini.TemporalExtent = new TemporalExtent();
+            });
+            var result = new RecordValidator().Validate(record);
+
+            result.Errors.Count.Should().Be(1);
+            result.Errors.Any(e => e.Fields.Contains("gemini.temporalExtent.begin")).Should().BeTrue();
         }
 
         [Test]

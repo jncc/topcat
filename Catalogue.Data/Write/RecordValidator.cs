@@ -344,8 +344,8 @@ namespace Catalogue.Data.Write
                 result.Errors.Add("Keywords must be provided" + GeminiSuffix, r => r.Gemini.Keywords);
             }
 
-            // 7 temporal extent is mandatory - at least Begin must be provided
-            if (record.Gemini.TemporalExtent.Begin.IsBlank())
+            // 7 temporal extent is mandatory for datasets - at least Begin must be provided
+            if (record.Gemini.ResourceType == "dataset" && record.Gemini.TemporalExtent.Begin.IsBlank())
             {
                 result.Errors.Add("Temporal Extent must be provided" + GeminiSuffix,
                     r => r.Gemini.TemporalExtent.Begin);
@@ -457,7 +457,7 @@ namespace Catalogue.Data.Write
             // Equivalent scale, optional
 
             // we're going to try to squash gemini and non-geographic iso metadata together in the same validation
-            if (record.Gemini.ResourceType != "nonGeographicDataset")
+            if (record.Gemini.ResourceType == "dataset")
             {
                 // BoundingBox
                 // mandatory

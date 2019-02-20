@@ -23,7 +23,7 @@
                     </li>
                     <li ng-class="publishingStatus.upload.currentClass">
                         <a ng-click="publishingStatus.currentActiveView = 'upload'">
-                            3. Data upload <span ng-if="publishingStatus.publishedAndUpToDate || recordOutput.recordState.publishingState.previouslyPublishedWithDoi" class="glyphicon glyphicon-ok"></span>
+                            3. Data upload <span ng-if="recordOutput.recordState.publishingState.publishedAndUpToDate || recordOutput.recordState.publishingState.previouslyPublishedWithDoi" class="glyphicon glyphicon-ok"></span>
                         </a>
                     </li>
                 </ol>
