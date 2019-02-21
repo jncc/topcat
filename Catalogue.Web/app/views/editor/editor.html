@@ -37,11 +37,10 @@
                         <button ng-click="cancel()" ng-hide="isCancelHidden()" class="btn btn-primary">CANCEL</button>
                         <button ng-click="save()" ng-hide="isSaveHidden()" ng-disabled="isSaveDisabled()" class="btn btn-danger">SAVE</button>
                     </span>
-                    <span>
+                    <span tc-tip title="{{getPublishButtonTooltip(form)}}">
                         <button ng-click="openPublishingModal()"
                                 ng-hide="isPublishHidden()"
                                 ng-disabled="isPublishDisabled()"
-                                tc-tip title="View the publishing workflow"
                                 class="btn btn-danger">PUBLISH</button>
                     </span>
                 </div>
@@ -664,8 +663,17 @@
     </div>
 
     <div class="col-md-3">
+        <div class="editor-image">
+            <div class="layout-row">
+                <img src="http://217.168.21.93/media/1001/jncc_hero_image.jpg?anchor=center&mode=crop&width=260&height=210&rnd=131895321290000000" class="img-thumbnail">
+            </div>
+            <br />
+            <div class="layout-row">
+                <button ng-click="openImagePicker()" ng-class="{ 'btn-primary': true  }" class="btn btn-block"><span class="glyphicon glyphicon-picture"></span> Add Image</button>
+            </div>
+        </div>
+        <br />
         <div class="editor-internal well well-sm">
-
 
             <div class="editor-top-copy layout-row">
                 <div class="layout-col">
@@ -701,7 +709,7 @@
                         <span class="glyphicon glyphicon-repeat" ng-class="{ 'dark': form.validation == 0 }"></span>
                         {{form.validation == 1 ? 'Gemini':'Basic';}}
                     </button>
-                    
+
 
                 </div>
             </div>
@@ -749,8 +757,8 @@
                     </div>
                 </div>
             </div>
-            
-            <hr />
+
+            <hr/>
 
             <div class="editor-notes form-group">
                 <textarea ng-model="form.notes" type="text" rows="4"
@@ -760,9 +768,9 @@
                             title="Notes to keep separate from the Gemini record"
                             tc-focus-tip></textarea>
             </div>
-            
+
             <hr/>
-            
+
             <div class="editor-contact">
                 <div class="layout-row">
                     <div class="layout-col">
@@ -777,7 +785,7 @@
                            placeholder="Name / post / email"
                            tc-focus-tip
                            title="Dataset manager details for internal use only"
-                           ng-model="form.manager.displayName" />
+                           ng-model="form.manager.displayName"/>
                 </div>
             </div>
 

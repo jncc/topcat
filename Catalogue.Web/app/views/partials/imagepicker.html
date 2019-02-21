@@ -1,0 +1,64 @@
+﻿
+
+
+<div class="image-picker">
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close" ng-click="close()"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title"></h4>
+    </div>
+    <div class="modal-body">
+        <div class="row">
+            <div class="col-md-7 col-md-offset-2 ">
+                <input type="text" class="form-control"
+                       placeholder="Enter image URL, or select an image from the gallery"
+                       tc-focus
+                       title="Paste the URL to the image here" />
+            </div>
+            <div class="col-md-1">
+                <button class="btn btn-primary" title="Save image" tc-tip>
+                    OK
+                </button>
+            </div>
+        </div>
+        <br />
+        <br />
+        <div class="row">
+            <div class="col-md-10 col-md-offset-1">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="row" ng-repeat="x in [1,2,3,4]">
+                            <div ng-repeat="y in [1,2,3]">
+                                <div class="col-md-2">
+                                    <div class="thumbnail">
+                                        <img src="http://217.168.21.93/media/1001/jncc_hero_image.jpg?anchor=center&mode=crop&width=260&height=210&rnd=131895321290000000">
+                                    </div>
+                                </div>
+                                <div class="col-md-2">
+                                    <div class="row">
+                                        jncc_hero_image.jpg
+                                    </div>
+                                    <div class="row">
+                                        Admin
+                                    </div>
+                                    <div class="row">
+                                        2018-12-17T14:55:29
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <br />
+                <div class="row">
+                    Pager
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <span class="pull-left">
+            <button type="button" class="btn btn-default" data-dismiss="modal" ng-click="$dismiss()">CANCEL</button>
+        </span>
+    </div>
+</div>
+

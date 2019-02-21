@@ -1,0 +1,10 @@
+﻿{
+  "version": 3,
+  "file": "ImagePickerController.js",
+  "sourceRoot": "D:\\workspace\\topcat\\Catalogue.Web\\app\\js\\controllers",
+  "sources": [
+    "ImagePickerController.coffee"
+  ],
+  "names": [],
+  "mappings": ";AACA;AAAA,EAAA,OAAO,CAAC,MAAR,CAAe,iBAAf,CAAiC,CAAC,UAAlC,CAA6C,uBAA7C,EAEI,SAAC,MAAD,EAAS,KAAT,EAAgB,YAAhB,GAAA;AACI,IAAA,MAAM,CAAC,IAAP,GAAc,OAAd,CAAA;WAEA,MAAM,CAAC,KAAP,GAAe,SAAA,GAAA;aAAM,MAAM,CAAC,MAAP,CAAc,MAAM,CAAC,YAArB,EAAN;IAAA,EAHnB;EAAA,CAFJ,CAAA,CAAA;AAAA"
+}

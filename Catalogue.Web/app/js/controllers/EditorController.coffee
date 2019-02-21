@@ -32,6 +32,7 @@
         $scope.updateDataFormatObj = updateDataFormatObj
         $scope.getPendingSignOff = getPendingSignOff
         $scope.getPublishingText = getPublishingText
+        $scope.getPublishButtonTooltip = getPublishButtonTooltip
         $scope.getFormattedDate = getFormattedDate
         $scope.addPublishableResource = addPublishableResource
         $scope.removePublishableResource = removePublishableResource
@@ -99,7 +100,7 @@
         $scope.isSaveDisabled = -> $scope.isClean() # || $scope.theForm.$invalid 
         $scope.isCloneHidden = -> $scope.isNew()
         $scope.isCloneDisabled = -> !$scope.isClean()
-        $scope.isPublishDisabled = -> !$scope.isSaveHidden()
+        $scope.isPublishDisabled = -> !$scope.isSaveHidden() || $scope.form.validation != 1
         $scope.isPublishHidden = -> !($scope.form.publication && $scope.form.publication.target && ($scope.form.publication.target.hub && $scope.form.publication.target.hub.publishable == true ||
             $scope.form.publication.target.gov && $scope.form.publication.target.gov.publishable == true))
         $scope.isHttpPath = (path) -> path and path.toLowerCase().startsWith "http"
@@ -139,6 +140,16 @@
                 scope:       $scope
                 resolve:     'recordOutput': -> $scope.recordOutput
                 backdrop:  'static'
+            modal.result
+                .then (result) -> $scope.reloadRecord result
+
+        $scope.openImagePicker = ->
+            modal = $modal.open
+                controller:  'ImagePickerController'
+                templateUrl: 'views/partials/imagepicker.html?' + new Date().getTime() # stop iis express caching the html
+                size:        'lg'
+                scope:       $scope
+                resolve:     'recordOutput': -> $scope.recordOutput
             modal.result
                 .then (result) -> $scope.reloadRecord result
 
@@ -188,6 +199,12 @@ removePublishableResource = (record, resource) ->
 
 trimDoubleQuotes = (s) -> # removes double quotes surrounding a string
     if s.match(/^(").*(")$/) then s.substring(1, s.length - 1) else s
+
+getPublishButtonTooltip = (record) ->
+    if record.validation == 1
+        return "View the publishing workflow"
+    else
+        return "Validation level must be Gemini"
 
 getPublishingText = (record, publishingState) ->
     previouslyPublishedText = "Never Published"

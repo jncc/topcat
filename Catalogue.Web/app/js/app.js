@@ -85,6 +85,9 @@
     }).when('/sandbox/publishingmodal', {
       controller: 'PublishingModalController',
       templateUrl: 'views/partials/publishingmodal.html'
+    }).when('/sandbox/imagepicker', {
+      controller: 'ImagePickerController',
+      templateUrl: 'views/partials/imagepicker.html'
     }).when('/sandbox/assessment', {
       controller: 'AssessmentController',
       templateUrl: 'views/partials/assessment.html'

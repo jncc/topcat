@@ -398,6 +398,18 @@ label {
 .tag-tip {
   color: black;
 }
+.modal-content {
+  padding: 1em;
+}
+.modal-content h3 {
+  margin: 0.3em 0 0.8em 0;
+}
+.modal-content .close {
+  margin-top: -0.8em;
+}
+.modal-content .less-important {
+  color: #999;
+}
 @media (min-width: 992px) {
   .modal-lg {
     width: 900px;
@@ -407,18 +419,6 @@ label {
   .modal-lg {
     width: 1100px;
   }
-}
-.vocabulator {
-  padding: 1em;
-}
-.vocabulator h3 {
-  margin: 0.3em 0 0.8em 0;
-}
-.vocabulator .close {
-  margin-top: -0.8em;
-}
-.vocabulator .less-important {
-  color: #999;
 }
 .vocabulator .vocabulator-search {
   margin: 1em 0;

@@ -28,8 +28,8 @@
     "inputFile": "app/js/controllers/PublishingModalController.coffee"
   },
   {
-    "outputFile": "app/js/controllers/PublishingController.js",
-    "inputFile": "app/js/controllers/PublishingController.coffee"
+    "outputFile": "app/js/controllers/ImagePickerController.js",
+    "inputFile": "app/js/controllers/ImagePickerController.coffee"
   },
   {
     "outputFile": "app/js/controllers/SandboxController.js",

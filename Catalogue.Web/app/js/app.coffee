@@ -76,6 +76,9 @@ module.config ($routeProvider) ->
         .when '/sandbox/publishingmodal', # for developing the assessment modal more easily
             controller:     'PublishingModalController',
             templateUrl:    'views/partials/publishingmodal.html'
+        .when '/sandbox/imagepicker', # for developing the assessment modal more easily
+            controller:     'ImagePickerController',
+            templateUrl:    'views/partials/imagepicker.html'
         .when '/sandbox/assessment',
             controller:     'AssessmentController',
             templateUrl:    'views/partials/assessment.html'

@@ -158,6 +158,12 @@
     <Content Include="app\js\config.js.map">
       <DependentUpon>config.js</DependentUpon>
     </Content>
+    <Content Include="app\js\controllers\ImagePickerController.js">
+      <DependentUpon>ImagePickerController.coffee</DependentUpon>
+    </Content>
+    <Content Include="app\js\controllers\ImagePickerController.min.js">
+      <DependentUpon>ImagePickerController.js</DependentUpon>
+    </Content>
     <Content Include="app\js\controllers\PublishingManagementController.js">
       <DependentUpon>PublishingManagementController.coffee</DependentUpon>
     </Content>
@@ -174,6 +180,9 @@
     <None Include="app.config">
       <SubType>Designer</SubType>
     </None>
+    <Content Include="app\js\controllers\ImagePickerController.js.map">
+      <DependentUpon>ImagePickerController.js</DependentUpon>
+    </Content>
     <None Include="app\js\controllers\PublishingManagementController.coffee" />
     <Content Include="app\js\controllers\MainController.js">
       <DependentUpon>MainController.coffee</DependentUpon>
@@ -337,6 +346,7 @@
     <Content Include="app\views\partials\jncc-categories.html" />
     <Content Include="app\views\partials\markdown.html" />
     <Content Include="app\views\partials\presentation.html" />
+    <Content Include="app\views\partials\imagepicker.html" />
     <Content Include="app\views\partials\publishingmodal.html" />
     <Content Include="app\views\partials\vocabulator.html" />
     <Content Include="app\views\partials\what-is-data.html" />
@@ -349,7 +359,6 @@
     <Content Include="app\views\sandbox\tooltip.html" />
     <Content Include="app\views\search\search.html" />
     <Content Include="app\views\signoff\signoff.html" />
-    <Content Include="app\views\Vocabularies\editor.html" />
     <Content Include="app\views\Vocabularies\vocabularies.html" />
     <Content Include="favicon.ico" />
     <Content Include="Global.asax" />
@@ -580,6 +589,7 @@
     <Content Include="app\js\controllers\PublishingModalController.js.map">
       <DependentUpon>PublishingModalController.js</DependentUpon>
     </Content>
+    <Content Include="app\js\controllers\ImagePickerController.coffee" />
     <None Include="app\js\controllers\VocabulatorController.coffee" />
     <Content Include="app\js\controllers\VocabulatorController.js.map">
       <DependentUpon>VocabulatorController.js</DependentUpon>
