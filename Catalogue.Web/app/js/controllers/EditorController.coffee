@@ -149,9 +149,9 @@
                 templateUrl: 'views/partials/imagepicker.html?' + new Date().getTime() # stop iis express caching the html
                 size:        'lg'
                 scope:       $scope
-                resolve:     'recordOutput': -> $scope.recordOutput
+                resolve:     'recordImage': -> $scope.form.image
             modal.result
-                .then (result) -> $scope.reloadRecord result
+                .then (image) -> $scope.form.image = image
 
         $scope.removeExtent = (extent) ->
             $scope.form.gemini.extent.splice ($.inArray extent, $scope.form.gemini.extent), 1

@@ -21,6 +21,8 @@ namespace Catalogue.Data.Model
         public string     Notes           { get; set; }
         public UserInfo   Manager         { get; set; }
 
+        public Image Image { get; set; }
+
         /// <summary>
         /// DataCite digital object identifier (DOI) registered to the dataset, if any.
         /// </summary>

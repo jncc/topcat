@@ -72,6 +72,7 @@
     <Compile Include="Indexes\RecordKeywordIndex.cs" />
     <Compile Include="Indexes\RecordIndex.cs" />
     <Compile Include="Model\Footer.cs" />
+    <Compile Include="Model\Image.cs" />
     <Compile Include="Model\PublishingState.cs" />
     <Compile Include="Model\PublicationInfo.cs" />
     <Compile Include="Model\Record.cs" />

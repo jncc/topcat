@@ -198,13 +198,13 @@
         size: 'lg',
         scope: $scope,
         resolve: {
-          'recordOutput': function() {
-            return $scope.recordOutput;
+          'recordImage': function() {
+            return $scope.form.image;
           }
         }
       });
-      return modal.result.then(function(result) {
-        return $scope.reloadRecord(result);
+      return modal.result.then(function(image) {
+        return $scope.form.image = image;
       });
     };
     $scope.removeExtent = function(extent) {

@@ -664,12 +664,11 @@
 
     <div class="col-md-3">
         <div class="editor-image">
-            <div class="layout-row">
-                <img src="http://217.168.21.93/media/1001/jncc_hero_image.jpg?anchor=center&mode=crop&width=260&height=210&rnd=131895321290000000" class="img-thumbnail">
+            <div class="layout-row" ng-if="form.image && form.image.url">
+                <a ng-click="openImagePicker()"><img src="{{form.image.url}}" class="img-thumbnail" title="Change image" tc-tip></a>
             </div>
-            <br />
-            <div class="layout-row">
-                <button ng-click="openImagePicker()" ng-class="{ 'btn-primary': true  }" class="btn btn-block"><span class="glyphicon glyphicon-picture"></span> Add Image</button>
+            <div class="layout-row" ng-hide="form.image.url">
+                <button ng-click="openImagePicker()" class="btn btn-primary btn-block" title="Add a new image" tc-tip><span class="glyphicon glyphicon-picture"></span> Add Image</button>
             </div>
         </div>
         <br />

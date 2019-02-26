@@ -8,14 +8,15 @@
     </div>
     <div class="modal-body">
         <div class="row">
-            <div class="col-md-7 col-md-offset-2 ">
+            <div class="col-md-7 col-md-offset-2">
                 <input type="text" class="form-control"
+                       ng-model="recordImage.url"
                        placeholder="Enter image URL, or select an image from the gallery"
                        tc-focus
                        title="Paste the URL to the image here" />
             </div>
             <div class="col-md-1">
-                <button class="btn btn-primary" title="Save image" tc-tip>
+                <button class="btn btn-primary" title="Save image" tc-tip ng-click="ok()">
                     OK
                 </button>
             </div>
@@ -26,31 +27,40 @@
             <div class="col-md-10 col-md-offset-1">
                 <div class="row">
                     <div class="col-md-12">
-                        <div class="row" ng-repeat="x in [1,2,3,4]">
-                            <div ng-repeat="y in [1,2,3]">
+                        <div class="row" ng-repeat="row in page">
+                            <div ng-repeat="image in row">
                                 <div class="col-md-2">
                                     <div class="thumbnail">
-                                        <img src="http://217.168.21.93/media/1001/jncc_hero_image.jpg?anchor=center&mode=crop&width=260&height=210&rnd=131895321290000000">
+                                        <a href="" ng-click="saveImage(image)"><img src="{{image.Crops.Square}}"></a>
                                     </div>
                                 </div>
                                 <div class="col-md-2">
                                     <div class="row">
-                                        jncc_hero_image.jpg
+                                        Editor name
                                     </div>
                                     <div class="row">
-                                        Admin
+                                        {{image.EditorName}}
                                     </div>
+                                    <br />
                                     <div class="row">
-                                        2018-12-17T14:55:29
+                                        Last modified
                                     </div>
+                                    <div class="row">{{image.LastEdited}}</div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
-                <br />
-                <div class="row">
-                    Pager
+                <div class="row text-center">
+                    <ul class="pagination">
+                        <li style="cursor: pointer;">
+                            <span ng-click="setPage(currentPage-1)">&laquo;</span>
+                        </li>
+                        <li style="cursor: pointer;" ng-repeat="x in [].constructor(noOfPages) track by $index" ng-class="($index===currentPage) ? 'active' : ''"><a ng-click="setPage($index)">{{$index+1}}</a></li>
+                        <li style="cursor: pointer;">
+                            <span ng-click="setPage(currentPage+1)">&raquo;</span>
+                        </li>
+                    </ul>
                 </div>
             </div>
         </div>
