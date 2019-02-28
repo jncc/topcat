@@ -1,6 +1,6 @@
 ﻿angular.module('app.controllers').controller 'SignOffController',
 
-    ($scope, $http, $location, $timeout, signOffGroup) ->
+    ($scope, $http, $location, $timeout) ->
         
         m =
             publishing:

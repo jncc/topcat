@@ -3,20 +3,20 @@
 
 <div class="image-picker">
     <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close" ng-click="close()"><span aria-hidden="true">&times;</span></button>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close" ng-click="$dismiss()"><span aria-hidden="true">&times;</span></button>
         <h4 class="modal-title"></h4>
     </div>
     <div class="modal-body">
         <div class="row">
             <div class="col-md-7 col-md-offset-2">
                 <input type="text" class="form-control"
-                       ng-model="recordImage.url"
-                       placeholder="Enter image URL, or select an image from the gallery"
+                       ng-model="selectedImageUrl"
+                       placeholder="Paste an image URL here, or select an image from the JNCC Website gallery"
                        tc-focus
                        title="Paste the URL to the image here" />
             </div>
             <div class="col-md-1">
-                <button class="btn btn-primary" title="Save image" tc-tip ng-click="ok()">
+                <button class="btn btn-primary wide-button" title="Save image" tc-tip ng-click="saveImage(selectedImage)">
                     OK
                 </button>
             </div>
@@ -29,23 +29,15 @@
                     <div class="col-md-12">
                         <div class="row" ng-repeat="row in page">
                             <div ng-repeat="image in row">
-                                <div class="col-md-2">
-                                    <div class="thumbnail">
-                                        <a href="" ng-click="saveImage(image)"><img src="{{image.Crops.Square}}"></a>
+                                <div class="col-md-3">
+                                    <div class="editor-image">
+                                        <a href="" ng-click="setSelectedImage(image)">
+                                            <img class="img-thumbnail" ng-src="{{image.Crops.Square}}" title="{{image.Url}}" tc-tip>
+                                            <div ng-class="{ 'editor-image-selected': image.Url == selectedImageUrl, 'editor-image-edit': image.Url !== selectedImageUrl }">
+                                                <button class="btn btn-primary" title="Use this image" tc-tip><span class="glyphicon glyphicon-ok"></span></button>
+                                            </div>
+                                        </a>
                                     </div>
-                                </div>
-                                <div class="col-md-2">
-                                    <div class="row">
-                                        Editor name
-                                    </div>
-                                    <div class="row">
-                                        {{image.EditorName}}
-                                    </div>
-                                    <br />
-                                    <div class="row">
-                                        Last modified
-                                    </div>
-                                    <div class="row">{{image.LastEdited}}</div>
                                 </div>
                             </div>
                         </div>

@@ -1,6 +1,6 @@
 ﻿angular.module('app.controllers').controller 'PublishingManagementController',
 
-    ($scope, $http, $location, signOffGroup) ->
+    ($scope, $http, $location) ->
         
         m =
             tab: 2 # default to second UI tab

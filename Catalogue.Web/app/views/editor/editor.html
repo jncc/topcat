@@ -532,7 +532,7 @@
             </small>
         </tab-heading>
 
-        <div class="well well-lg publishing">
+        <div class="well well-lg editor-publishing">
             <div class="row">
                 <div class="col-md-3">
                     <span>Status</span>
@@ -544,54 +544,67 @@
             <hr />
             <div class="row">
                 <div class="col-md-3">
-                    <span>For ResourceHub</span> <span class="glyphicon glyphicon-info-sign" title="For all JNCC owned resources to be shared publicly" tc-tip></span>
+                    <div class="publishing-target">
+                        <span>For ResourceHub</span> <span class="glyphicon glyphicon-info-sign" title="For all JNCC owned resources to be shared publicly" tc-tip></span>
+                    </div>
                 </div>
                 <div class="col-md-9">
-                    <div class="btn-group">
-
-                        <button ng-click="form.publication.target.hub.publishable = false" ng-class="{ 'btn-primary': form.publication.target.hub.publishable == false, 'btn-default': form.publication.target.hub.publishable != false  }" class="btn">
-                            Not publishable
-                        </button>
-                        <button ng-click="form.publication.target.hub.publishable = null" ng-class="{ 'btn-primary': form.publication.target.hub.publishable == null, 'btn-default': form.publication.target.hub.publishable != null  }" class="btn">
-                            Undecided
-                        </button>
-                        <button ng-click="form.publication.target.hub.publishable = true" ng-class="{ 'btn-primary': form.publication.target.hub.publishable == true, 'btn-default': form.publication.target.hub.publishable != true }" class="btn"
-                                title="Can this record be published to the ResourceHub?"
-                                tc-tip>
-                            Publishable <span class="glyphicon glyphicon-globe"></span>
-                        </button>
+                    <div class="publishing-options">
+                        <div class="btn-group">
+                            <button ng-click="form.publication.target.hub.publishable = false"
+                                    ng-class="{ 'btn-primary': form.publication.target.hub.publishable == false, 'btn-default': form.publication.target.hub.publishable != false }"
+                                    class="btn">
+                                Not publishable
+                            </button>
+                            <button ng-click="form.publication.target.hub.publishable = null"
+                                    ng-class="{ 'btn-primary': form.publication.target.hub.publishable == null, 'btn-default': form.publication.target.hub.publishable != null }"
+                                    class="btn">
+                                Undecided
+                            </button>
+                            <button ng-click="form.publication.target.hub.publishable = true"
+                                    ng-class="{ 'btn-primary': form.publication.target.hub.publishable == true, 'btn-default': form.publication.target.hub.publishable != true }"
+                                    class="btn"
+                                    title="Can this record be published to the ResourceHub?"
+                                    tc-tip>
+                                Publishable <span class="glyphicon glyphicon-globe"></span>
+                            </button>
+                        </div>
+                        <span ng-if="form.publication.target.hub.lastSuccess.dateUtc">&nbsp;Published on {{getFormattedDate(form.publication.target.hub.lastSuccess.dateUtc)}}</span>
+                        <span ng-if="form.publication.target.hub.lastSuccess.dateUtc && form.publication.target.hub.publishable != true"
+                              class="glyphicon glyphicon-warning-sign"
+                              title="The record will no longer be updated at this destination, does it need to be removed?"
+                              tc-tip></span>
                     </div>
-                    <span ng-if="form.publication.target.hub.lastSuccess.dateUtc">&nbsp;Published on {{getFormattedDate(form.publication.target.hub.lastSuccess.dateUtc)}}</span>
-                    <span ng-if="form.publication.target.hub.lastSuccess.dateUtc && form.publication.target.hub.publishable != true"
-                          class="glyphicon glyphicon-warning-sign"
-                          title="The record will no longer be updated at this destination, does it need to be removed?"
-                          tc-tip></span>
                 </div>
             </div>
             <hr />
             <div class="row">
                 <div class="col-md-3">
-                    <span>For Data.gov.uk</span> <span class="glyphicon glyphicon-info-sign" title="Datasets with an open licence and open format should also be published to Data.gov.uk" tc-tip></span>
+                    <div class="publishing-target">
+                        <span>For Data.gov.uk</span> <span class="glyphicon glyphicon-info-sign" title="Datasets with an open licence and open format should also be published to Data.gov.uk" tc-tip></span>
+                    </div>
                 </div>
                 <div class="col-md-9">
-                    <div class="btn-group">
-                        <button ng-click="form.publication.target.gov.publishable = false" ng-class="{ 'btn-primary': form.publication.target.gov.publishable == false, 'btn-default': form.publication.target.gov.publishable != false  }" class="btn">
-                            Not publishable
-                        </button>
-                        <button ng-click="form.publication.target.gov.publishable = null" ng-class="{ 'btn-primary': form.publication.target.gov.publishable == null, 'btn-default': form.publication.target.gov.publishable != null  }" class="btn">
-                            Undecided
-                        </button>
-                        <button ng-click="form.publication.target.gov.publishable = true" ng-class="{ 'btn-primary': form.publication.target.gov.publishable == true, 'btn-default': form.publication.target.gov.publishable != true }" class="btn"
-                                title="Can this record be published to Data.gov.uk?"
-                                tc-tip>
-                            Publishable <span class="glyphicon glyphicon-globe"></span>
-                        </button>
+                    <div class="publishing-options">
+                        <div class="btn-group">
+                            <button ng-click="form.publication.target.gov.publishable = false" ng-class="{ 'btn-primary': form.publication.target.gov.publishable == false, 'btn-default': form.publication.target.gov.publishable != false  }" class="btn">
+                                Not publishable
+                            </button>
+                            <button ng-click="form.publication.target.gov.publishable = null" ng-class="{ 'btn-primary': form.publication.target.gov.publishable == null, 'btn-default': form.publication.target.gov.publishable != null  }" class="btn">
+                                Undecided
+                            </button>
+                            <button ng-click="form.publication.target.gov.publishable = true" ng-class="{ 'btn-primary': form.publication.target.gov.publishable == true, 'btn-default': form.publication.target.gov.publishable != true }" class="btn"
+                                    title="Can this record be published to Data.gov.uk?"
+                                    tc-tip>
+                                Publishable <span class="glyphicon glyphicon-globe"></span>
+                            </button>
+                        </div>
+                        <span ng-if="form.publication.target.gov.lastSuccess.dateUtc">&nbsp;Published on {{getFormattedDate(form.publication.target.gov.lastSuccess.dateUtc)}}</span>
+                        <span ng-if="form.publication.target.gov.lastSuccess.dateUtc && form.publication.target.gov.publishable != true"
+                              class="glyphicon glyphicon-warning-sign"
+                              title="The record will no longer be updated at this destination, does it need to be removed?"
+                              tc-tip></span>
                     </div>
-                    <span ng-if="form.publication.target.gov.lastSuccess.dateUtc">&nbsp;Published on {{getFormattedDate(form.publication.target.gov.lastSuccess.dateUtc)}}</span>
-                    <span ng-if="form.publication.target.gov.lastSuccess.dateUtc && form.publication.target.gov.publishable != true"
-                          class="glyphicon glyphicon-warning-sign"
-                          title="The record will no longer be updated at this destination, does it need to be removed?"
-                          tc-tip></span>
                 </div>
             </div>
             <hr />
@@ -663,16 +676,26 @@
     </div>
 
     <div class="col-md-3">
-        <div class="editor-image">
-            <div class="layout-row" ng-if="form.image && form.image.url">
-                <a ng-click="openImagePicker()"><img src="{{form.image.url}}" class="img-thumbnail" title="Change image" tc-tip></a>
-            </div>
-            <div class="layout-row" ng-hide="form.image.url">
-                <button ng-click="openImagePicker()" class="btn btn-primary btn-block" title="Add a new image" tc-tip><span class="glyphicon glyphicon-picture"></span> Add Image</button>
-            </div>
-        </div>
-        <br />
         <div class="editor-internal well well-sm">
+            <div class="layout-row">
+                <div class="layout-col" ng-if="form.image && form.image.url">
+                    <div class="layout-row">
+                        <div class="editor-image">
+                            <a ng-click="openImagePicker()">
+                                <img ng-src="{{form.image.url}}" class="img-thumbnail pointable">
+                                <div class="editor-image-edit">
+                                    <button class="btn btn-primary" title="Choose a different image" tc-tip><span class="glyphicon glyphicon-pencil"></span></button>
+                                </div>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <div class="layout-col" ng-hide="form.image.url">
+                    <button ng-click="openImagePicker()" class="btn btn-primary btn-block" title="Add a new image" tc-tip><span class="glyphicon glyphicon-picture"></span> Add Image</button>
+                </div>
+            </div>
+
+            <hr/>
 
             <div class="editor-top-copy layout-row">
                 <div class="layout-col">

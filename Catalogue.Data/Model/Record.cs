@@ -13,6 +13,7 @@ namespace Catalogue.Data.Model
         public Metadata Gemini  { get; set; }
 
         public string     Path            { get; set; }
+        public Image      Image           { get; set; }
         public bool       TopCopy         { get; set; }
         public Status     Status          { get; set; }
         public Validation Validation      { get; set; }
@@ -20,8 +21,6 @@ namespace Catalogue.Data.Model
         public DateTime?  Review          { get; set; }
         public string     Notes           { get; set; }
         public UserInfo   Manager         { get; set; }
-
-        public Image Image { get; set; }
 
         /// <summary>
         /// DataCite digital object identifier (DOI) registered to the dataset, if any.

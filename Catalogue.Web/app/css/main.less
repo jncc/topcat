@@ -731,12 +731,58 @@ label {
     margin-right: 4px;
 }
 
+.editor-image {
+    position: relative;
+    display: inline-block;
+
+    .btn .glyphicon {
+        margin-right: 0em;
+    }
+}
+
+.editor-image:hover .editor-image-edit {
+    display: block;
+}
+
+.editor-image-edit {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    display: none;
+}
+
+.editor-image-selected {
+    display: block;
+    position: absolute;
+    right: 0;
+    bottom: 0;
+}
+
+.editor-publishing {
+    .publishing-target {
+        // only need this because I'm failing at css
+        margin-top: 0.5em;
+    }
+
+    .publishing-options {
+        .btn-group {
+            margin-right: 1.5em;
+        }
+
+        span {
+            margin-left: 0.5em;
+            margin-right: 0em;
+        }
+    }
+}
+
 // angular also puts these classes on the form so ignore that
 //.ng-dirty.ng-valid { border:1px solid Green; }
 form .ng-invalid {
     border:1px solid @errorForeground;
     background-color: @errorBackground;
 }
+
 
 // -------------
 // notifications
@@ -818,6 +864,16 @@ form .ng-invalid {
 .publishing-extra-info {
     font-weight: bold;
     color: @dark;
+}
+
+// -------------
+// image picker
+// -------------
+.image-picker {
+    .wide-button {
+        padding-right: 1em;
+        padding-left: 1em;
+    }
 }
 
 

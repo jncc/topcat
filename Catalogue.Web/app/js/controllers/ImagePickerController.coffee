@@ -1,43 +1,59 @@
 ﻿
 angular.module('app.controllers').controller 'ImagePickerController',
 
-    ($scope, $http, recordImage) ->
+    ($scope, $http, imagePickerUrl, recordImage) ->
         $scope.recordImage = angular.copy(recordImage)
         $scope.images = []
-        $scope.rowsPerPage = 3
-        $scope.imagesPerRow = 3
+        $scope.rowsPerPage = 2
+        $scope.imagesPerRow = 4
         $scope.noOfPages = 0
         $scope.currentPage = 0
         $scope.page = []
+        $scope.selectedImageUrl = ""
+        $scope.selectedImage = {}
 
-        ###$scope.images = 
+        # examples
+        $scope.images = 
         [
             {
-                Url: "",
+                Url: "https://i.stack.imgur.com/ZPSrK.png",
                 Width: 2048,
                 Height: 1360,
                 FileType: "jpg",
-                EditorName: "1",
                 LastEdited: "2018-12-17T14:55:29",
                 SizeInKB: 351.013671875,
                 Crops: {
-                    ListingThumbnail: ""
+                    ListingThumbnail: "https://i.stack.imgur.com/ZPSrK.png",
+                    Square: "https://i.stack.imgur.com/ZPSrK.png"
+                }
+            },
+            {
+                Url: "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e5/Anim1754_-_Flickr_-_NOAA_Photo_Library_%281%29.jpg/220px-Anim1754_-_Flickr_-_NOAA_Photo_Library_%281%29.jpg",
+                Width: 2048,
+                Height: 1360,
+                FileType: "jpg",
+                LastEdited: "2018-12-17T14:55:29",
+                SizeInKB: 351.013671875,
+                Crops: {
+                    ListingThumbnail: "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e5/Anim1754_-_Flickr_-_NOAA_Photo_Library_%281%29.jpg/220px-Anim1754_-_Flickr_-_NOAA_Photo_Library_%281%29.jpg",
+                    Square: "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e5/Anim1754_-_Flickr_-_NOAA_Photo_Library_%281%29.jpg/220px-Anim1754_-_Flickr_-_NOAA_Photo_Library_%281%29.jpg"
                 }
             }
-        ]###
+        ]
 
 
         $scope.getImages = () ->
-            $http.get('')
+            $http.get(imagePickerUrl)
                 .then (response) ->
                     $scope.images = response.data
 
-                    # looks like they're already sorted, but just in case
-                    $scope.images = $scope.images.sort((first, second) -> new Date(second.LastEdited) - new Date(first.LastEdited))
-
-                    console.log $scope.images
-                    $scope.noOfPages = Math.ceil $scope.images.length/($scope.rowsPerPage*$scope.imagesPerRow)
-                    $scope.setPage($scope.currentPage)
+            # looks like they're already sorted, but just in case
+            $scope.images = $scope.images.sort((first, second) -> new Date(second.LastEdited) - new Date(first.LastEdited))
+            
+            if $scope.recordImage
+                $scope.selectedImageUrl = $scope.recordImage.url
+            $scope.noOfPages = Math.ceil $scope.images.length/($scope.rowsPerPage*$scope.imagesPerRow)
+            $scope.setPage($scope.currentPage)
         
 
         $scope.setPage = (pageNo) ->
@@ -67,24 +83,35 @@ angular.module('app.controllers').controller 'ImagePickerController',
             return newPage
 
         $scope.saveImage = (image) ->
+            $scope.setBlankImage()
+            if image.Url is $scope.selectedImageUrl
+                $scope.recordImage.url = image.Url
+                $scope.recordImage.width = image.Width
+                $scope.recordImage.height = image.Height
+                $scope.recordImage.crops.squareUrl = image.Crops.Square
+                $scope.recordImage.crops.thumbnailUrl = image.Crops.ListingThumbnail
+            else if $scope.selectedImageUrl
+                $scope.recordImage.url = $scope.selectedImageUrl
+            else
+                $scope.recordImage = null
 
-            if !$scope.recordImage
-                $scope.recordImage =
-                    url: null
-                    height: 0
-                    width: 0
-                    crops:
-                        squareUrl: null
-                        thumbnailUrl: null
-
-            $scope.recordImage.url = image.Url
-            $scope.recordImage.width = image.Width
-            $scope.recordImage.height = image.Height
-            $scope.recordImage.crops.squareUrl = image.Crops.Square
-            $scope.recordImage.crops.thumbnailUrl = image.Crops.ListingThumbnail
-
-        $scope.ok = () ->
             $scope.$close $scope.recordImage
+
+        $scope.setBlankImage = () ->
+            $scope.recordImage =
+                url: null
+                height: 0
+                width: 0
+                crops:
+                    squareUrl: null
+                    thumbnailUrl: null
+
+        $scope.setSelectedImage = (image) ->
+            $scope.selectedImage = image
+            $scope.selectedImageUrl = image.Url
+
+        $scope.getFilename = (url) ->
+            return url.substring(url.lastIndexOf('/')+1);
 
         $scope.getImages()
 
