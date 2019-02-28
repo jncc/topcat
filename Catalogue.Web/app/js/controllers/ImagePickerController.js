@@ -10,31 +10,6 @@
     $scope.page = [];
     $scope.selectedImageUrl = "";
     $scope.selectedImage = {};
-    $scope.images = [
-      {
-        Url: "https://i.stack.imgur.com/ZPSrK.png",
-        Width: 2048,
-        Height: 1360,
-        FileType: "jpg",
-        LastEdited: "2018-12-17T14:55:29",
-        SizeInKB: 351.013671875,
-        Crops: {
-          ListingThumbnail: "https://i.stack.imgur.com/ZPSrK.png",
-          Square: "https://i.stack.imgur.com/ZPSrK.png"
-        }
-      }, {
-        Url: "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e5/Anim1754_-_Flickr_-_NOAA_Photo_Library_%281%29.jpg/220px-Anim1754_-_Flickr_-_NOAA_Photo_Library_%281%29.jpg",
-        Width: 2048,
-        Height: 1360,
-        FileType: "jpg",
-        LastEdited: "2018-12-17T14:55:29",
-        SizeInKB: 351.013671875,
-        Crops: {
-          ListingThumbnail: "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e5/Anim1754_-_Flickr_-_NOAA_Photo_Library_%281%29.jpg/220px-Anim1754_-_Flickr_-_NOAA_Photo_Library_%281%29.jpg",
-          Square: "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e5/Anim1754_-_Flickr_-_NOAA_Photo_Library_%281%29.jpg/220px-Anim1754_-_Flickr_-_NOAA_Photo_Library_%281%29.jpg"
-        }
-      }
-    ];
     $scope.getImages = function() {
       $http.get(imagePickerUrl).then(function(response) {
         return $scope.images = response.data;
