@@ -11,9 +11,12 @@
     $scope.selectedImageUrl = "";
     $scope.selectedImage = {};
     $scope.getImages = function() {
-      $http.get(imagePickerUrl).then(function(response) {
-        return $scope.images = response.data;
+      return $http.get(imagePickerUrl).then(function(response) {
+        $scope.images = response.data;
+        return $scope.refreshPages();
       });
+    };
+    $scope.refreshPages = function() {
       $scope.images = $scope.images.sort(function(first, second) {
         return new Date(second.LastEdited) - new Date(first.LastEdited);
       });
@@ -79,9 +82,6 @@
     $scope.setSelectedImage = function(image) {
       $scope.selectedImage = image;
       return $scope.selectedImageUrl = image.Url;
-    };
-    $scope.getFilename = function(url) {
-      return url.substring(url.lastIndexOf('/') + 1);
     };
     return $scope.getImages();
   });

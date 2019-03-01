@@ -645,6 +645,9 @@ label {
 .editor-image .btn .glyphicon {
   margin-right: 0em;
 }
+.editor-image-row {
+  margin-bottom: 2em;
+}
 .editor-image:hover .editor-image-edit {
   display: block;
 }

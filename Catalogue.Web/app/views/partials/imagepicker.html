@@ -11,12 +11,12 @@
             <div class="col-md-7 col-md-offset-2">
                 <input type="text" class="form-control"
                        ng-model="selectedImageUrl"
-                       placeholder="Paste an image URL here, or select an image from the JNCC Website gallery"
+                       placeholder="Paste an image URL here, or select an image from the ResourceHub gallery"
                        tc-focus
                        title="Paste the URL to the image here" />
             </div>
             <div class="col-md-1">
-                <button class="btn btn-primary wide-button" title="Save image" tc-tip ng-click="saveImage(selectedImage)">
+                <button class="btn btn-primary wide-button" ng-click="saveImage(selectedImage)">
                     OK
                 </button>
             </div>
@@ -27,7 +27,10 @@
             <div class="col-md-10 col-md-offset-1">
                 <div class="row">
                     <div class="col-md-12">
-                        <div class="row" ng-repeat="row in page">
+                        <div ng-if="images.length < 1">
+                            <p>No images found in the ResourceHub gallery</p>
+                        </div>
+                        <div class="row editor-image-row" ng-repeat="row in page">
                             <div ng-repeat="image in row">
                                 <div class="col-md-3">
                                     <div class="editor-image">
@@ -43,7 +46,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="row text-center">
+                <div class="row text-center" ng-if="images.length > 0">
                     <ul class="pagination">
                         <li style="cursor: pointer;">
                             <span ng-click="setPage(currentPage-1)">&laquo;</span>

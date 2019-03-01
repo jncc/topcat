@@ -16,7 +16,9 @@ angular.module('app.controllers').controller 'ImagePickerController',
             $http.get(imagePickerUrl)
                 .then (response) ->
                     $scope.images = response.data
+                    $scope.refreshPages()
 
+        $scope.refreshPages = () ->
             # looks like they're already sorted, but just in case
             $scope.images = $scope.images.sort((first, second) -> new Date(second.LastEdited) - new Date(first.LastEdited))
             
@@ -80,9 +82,6 @@ angular.module('app.controllers').controller 'ImagePickerController',
         $scope.setSelectedImage = (image) ->
             $scope.selectedImage = image
             $scope.selectedImageUrl = image.Url
-
-        $scope.getFilename = (url) ->
-            return url.substring(url.lastIndexOf('/')+1);
 
         $scope.getImages()
 
