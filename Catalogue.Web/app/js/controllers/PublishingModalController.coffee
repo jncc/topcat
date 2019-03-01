@@ -85,7 +85,7 @@ angular.module('app.controllers').controller 'PublishingModalController',
 
         # Refresh text on assess and sign off buttons
         refreshAssessmentInfo = () ->
-            publishingStatus.riskAssessment.showButton = !recordOutput.recordState.publishingState.assessedAndUpToDate && !recordOutput.recordState.publishingState.previouslyPublishedWithDoi
+            publishingStatus.riskAssessment.showButton = !($scope.recordOutput.recordState.publishingState.assessedAndUpToDate || $scope.recordOutput.recordState.publishingState.previouslyPublishedWithDoi)
 
             if $scope.recordOutput.recordState.publishingState.previouslyPublishedWithDoi
                 # special handling for doi records

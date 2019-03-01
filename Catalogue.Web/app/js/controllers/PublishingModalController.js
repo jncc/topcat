@@ -84,7 +84,7 @@
       publishingStatus.currentActiveView = "risk assessment";
     }
     refreshAssessmentInfo = function() {
-      publishingStatus.riskAssessment.showButton = !recordOutput.recordState.publishingState.assessedAndUpToDate && !recordOutput.recordState.publishingState.previouslyPublishedWithDoi;
+      publishingStatus.riskAssessment.showButton = !($scope.recordOutput.recordState.publishingState.assessedAndUpToDate || $scope.recordOutput.recordState.publishingState.previouslyPublishedWithDoi);
       if ($scope.recordOutput.recordState.publishingState.previouslyPublishedWithDoi) {
         return $scope.assessmentCompletedInfo = "Completed by " + $scope.form.publication.assessment.completedByUser.displayName + " on " + moment(new Date($scope.form.publication.assessment.completedOnUtc)).format('DD MMM YYYY h:mm a');
       } else if ($scope.form.publication !== null && $scope.form.publication.assessment !== null && $scope.form.publication.assessment.completed) {
