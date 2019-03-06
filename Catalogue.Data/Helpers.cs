@@ -1,4 +1,5 @@
-﻿using Catalogue.Data.Model;
+﻿using System;
+using Catalogue.Data.Model;
 
 namespace Catalogue.Data
 {
@@ -24,6 +25,20 @@ namespace Catalogue.Data
         {
             record.Id = record.Id.Replace("records/", "");
             return record;
+        }
+
+        public static bool IsFileResource(Resource resource)
+        {
+            var isFilePath = false;
+            if (Uri.TryCreate(resource.Path, UriKind.Absolute, out var uri))
+            {
+                if (uri.Scheme == Uri.UriSchemeFile)
+                {
+                    isFilePath = true;
+                }
+            }
+
+            return isFilePath;
         }
     }
 }

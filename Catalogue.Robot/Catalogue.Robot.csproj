@@ -61,7 +61,8 @@
     <Compile Include="Injection\NinjectJobFactory.cs" />
     <Compile Include="Publishing\Gov\MetadataUploader.cs" />
     <Compile Include="Publishing\Gov\IMetadataUploader.cs" />
-    <Compile Include="Publishing\Hub\SearchIndexService.cs" />
+    <Compile Include="Publishing\Hub\FileHelper.cs" />
+    <Compile Include="Publishing\Hub\QueueClient.cs" />
     <Compile Include="Publishing\Hub\HubService.cs" />
     <Compile Include="Publishing\Hub\IHubService.cs" />
     <Compile Include="Publishing\Hub\MessageHelper.cs" />

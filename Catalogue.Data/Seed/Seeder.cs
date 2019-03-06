@@ -507,7 +507,7 @@ namespace Catalogue.Data.Seed
             var signedOffUnpublishableRecord = record.With(r =>
             {
                 r.Id = Helpers.AddCollection("d2885b03-8efd-472d-8a55-3e9c41a68bd7");
-                r.Gemini.Title = "An unpublishable record ready for publication";
+                r.Gemini.Title = "A DGU unpublishable record ready for publication";
                 r.Gemini.MetadataDate = new DateTime(2015, 1, 1, 12, 0, 0);
                 r.Publication = new PublicationInfo
                 {
@@ -536,6 +536,10 @@ namespace Catalogue.Data.Seed
                     },
                     Target = new TargetInfo
                     {
+                        Hub = new HubPublicationInfo
+                        {
+                            Publishable = true
+                        },
                         Gov = new GovPublicationInfo
                         {
                             Publishable = false
@@ -547,7 +551,7 @@ namespace Catalogue.Data.Seed
             var signedOffPublishableUnknownRecord = record.With(r =>
             {
                 r.Id = Helpers.AddCollection("bcbc2a46-cf2e-4389-8294-15e01111ebda");
-                r.Gemini.Title = "A publishable status unknown record ready for publication";
+                r.Gemini.Title = "A DGU publishable status unknown record ready for publication";
                 r.Gemini.MetadataDate = new DateTime(2015, 1, 1, 12, 0, 0);
                 r.Publication = new PublicationInfo
                 {
@@ -576,6 +580,10 @@ namespace Catalogue.Data.Seed
                     },
                     Target = new TargetInfo
                     {
+                        Hub = new HubPublicationInfo
+                        {
+                            Publishable = true
+                        },
                         Gov = new GovPublicationInfo
                         {
                             Publishable = null

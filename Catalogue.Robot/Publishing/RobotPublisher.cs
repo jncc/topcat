@@ -98,7 +98,7 @@ namespace Catalogue.Robot.Publishing
                     Logger.Info($"Found {record.Publication.Data.Resources.Count} publishable resources");
                     foreach (var resource in resources)
                     {
-                        if (IsFileResource(resource))
+                        if (Helpers.IsFileResource(resource))
                         {
                             Logger.Info($"Resource {resource.Path} is a file - starting upload process");
                             dataUploader.UploadDataFile(Helpers.RemoveCollection(record.Id), resource.Path);
@@ -181,20 +181,6 @@ namespace Catalogue.Robot.Publishing
             {
                 Logger.Info("Gov not defined as a target publishing destination");
             }
-        }
-
-        private bool IsFileResource(Resource resource)
-        {
-            var isFilePath = false;
-            if (Uri.TryCreate(resource.Path, UriKind.Absolute, out var uri))
-            {
-                if (uri.Scheme == Uri.UriSchemeFile)
-                {
-                    isFilePath = true;
-                }
-            }
-
-            return isFilePath;
         }
     }
 }
