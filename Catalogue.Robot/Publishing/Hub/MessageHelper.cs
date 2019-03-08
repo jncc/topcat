@@ -1,12 +1,76 @@
 ﻿using System.Collections.Generic;
+using System.Reflection;
 using Catalogue.Data;
 using Catalogue.Data.Model;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Serialization;
 
 namespace Catalogue.Robot.Publishing.Hub
 {
     public class MessageHelper
     {
+        public string ConvertRecordToHubAsset(Record record)
+        {
+            var asset = new
+            {
+                id = Helpers.RemoveCollection(record.Id),
+                digitalObjectIdentifier = record.DigitalObjectIdentifier,
+                citation = record.Citation,
+                image = record.Image,
+                metadata = new
+                {
+                    title = record.Gemini.Title,
+                    @abstract = record.Gemini.Abstract,
+                    topicCategory = record.Gemini.TopicCategory,
+                    keywords = record.Gemini.Keywords,
+                    temporalExtent = record.Gemini.TemporalExtent,
+                    datasetReferenceDate = record.Gemini.DatasetReferenceDate,
+                    lineage = record.Gemini.Lineage,
+                    responsibleOrganisation = record.Gemini.ResponsibleOrganisation,
+                    limitationsOnPublicAccess = record.Gemini.LimitationsOnPublicAccess,
+                    useConstraints = record.Gemini.UseConstraints,
+                    spatialReferenceSystem = record.Gemini.SpatialReferenceSystem,
+                    metadataDate = record.Gemini.MetadataDate,
+                    metadataPointOfContact = record.Gemini.MetadataPointOfContact,
+                    resourceType = record.Gemini.ResourceType,
+                    metadataLanguage = "English",
+                    boundingBox = record.Gemini.BoundingBox
+                },
+                data = GetData(record)
+            };
+
+            return JsonConvert.SerializeObject(asset, new JsonSerializerSettings
+            {
+                ContractResolver = new CamelCasePropertyNamesContractResolver()
+            });
+        }
+
+        private List<object> GetData(Record record)
+        {
+            List<object> data = null;
+
+            if (record.Publication.Data?.Resources?.Count > 0)
+            {
+                data = new List<object>();
+
+                foreach (var resource in record.Publication.Data.Resources)
+                {
+                    data.Add(new
+                    {
+                        title = resource.Name,
+                        http = new
+                        {
+                            url = resource.PublishedUrl,
+                            fileExtension = Helpers.IsFileResource(resource) ? FileHelper.GetFileExtensionWithoutDot(resource.Path) : null,
+                            fileBytes = Helpers.IsFileResource(resource) ? FileHelper.GetFileSizeInBytes(resource.Path) : 0
+                        }
+                    });
+                }
+            }
+
+            return data;
+        }
+
         public string ConvertRecordToQueueMessage(Record record)
         {
             var messageResources = new List<object>();
@@ -82,4 +146,5 @@ namespace Catalogue.Robot.Publishing.Hub
             return false;
         }
     }
+
 }

@@ -36,8 +36,12 @@ namespace Catalogue.Data.Indexes
                                 Assessed = r.Publication.Assessment != null && r.Publication.Assessment.Completed
                                            && (r.Publication.Assessment.CompletedOnUtc == r.Gemini.MetadataDate
                                                || r.Publication.SignOff != null && r.Publication.SignOff.DateUtc == r.Gemini.MetadataDate
+                                               || r.Publication.Data != null && r.Publication.Data.LastAttempt != null && r.Publication.Data.LastAttempt.DateUtc == r.Gemini.MetadataDate
+                                               || r.Publication.Target.Hub != null && r.Publication.Target.Hub.LastAttempt != null && r.Publication.Target.Hub.LastAttempt.DateUtc == r.Gemini.MetadataDate
                                                || r.Publication.Target.Gov != null && r.Publication.Target.Gov.LastAttempt != null && r.Publication.Target.Gov.LastAttempt.DateUtc == r.Gemini.MetadataDate),
                                 SignedOff = r.Publication.SignOff != null && r.Publication.SignOff.DateUtc == r.Gemini.MetadataDate
+                                            || r.Publication.Data != null && r.Publication.Data.LastAttempt != null && r.Publication.Data.LastAttempt.DateUtc == r.Gemini.MetadataDate
+                                            || r.Publication.Target.Hub != null && r.Publication.Target.Hub.LastAttempt != null && r.Publication.Target.Hub.LastAttempt.DateUtc == r.Gemini.MetadataDate
                                             || r.Publication.Target.Gov != null && r.Publication.Target.Gov.LastAttempt != null && r.Publication.Target.Gov.LastAttempt.DateUtc == r.Gemini.MetadataDate,
                                 PublicationNeverAttempted = r.Publication.Target.Hub == null && r.Publication.Target.Gov == null ||
                                                             r.Publication.Target.Hub.LastAttempt == null && r.Publication.Target.Gov.LastAttempt == null &&

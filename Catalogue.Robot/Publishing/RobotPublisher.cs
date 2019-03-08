@@ -27,6 +27,7 @@ namespace Catalogue.Robot.Publishing
         private readonly IDataUploader dataUploader;
         private readonly IMetadataUploader metadataUploader;
         private readonly IHubService hubService;
+        private readonly string hubAssetBaseUrl;
 
         public RobotPublisher(IDocumentSession db, IPublishingUploadRecordService uploadRecordService, IDataUploader dataUploader, IMetadataUploader metadataUploader, IHubService hubService)
         {
@@ -35,6 +36,7 @@ namespace Catalogue.Robot.Publishing
             this.dataUploader = dataUploader;
             this.metadataUploader = metadataUploader;
             this.hubService = hubService;
+            this.hubAssetBaseUrl = Environment.GetEnvironmentVariable("HUB_ASSETS_BASE_URL");
         }
 
         public List<Record> GetRecordsPendingUpload()
@@ -138,7 +140,7 @@ namespace Catalogue.Robot.Publishing
                 {
                     hubService.Upsert(record);
 
-                    var url = "http://hub.jncc.gov.uk/assets/" + Helpers.RemoveCollection(record.Id);
+                    var url = hubAssetBaseUrl + Helpers.RemoveCollection(record.Id);
                     uploadRecordService.UpdateHubPublishSuccess(record, url, attempt);
 
                     hubService.Index(record);

@@ -1,6 +1,5 @@
 ﻿using System;
 using System.IO;
-using Sparrow.Json;
 
 namespace Catalogue.Robot.Publishing.Hub
 {

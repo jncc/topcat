@@ -8,6 +8,7 @@ using System;
 using System.Configuration;
 using System.Net.Http;
 using Catalogue.Robot.Publishing;
+using dotenv.net;
 using Raven.Client.Documents;
 using Topshelf;
 using Topshelf.Ninject;
@@ -43,6 +44,7 @@ namespace Catalogue.Robot
         {
             GlobalContext.Properties["LogFileName"] = ConfigurationManager.AppSettings["LogFilePath"];
             XmlConfigurator.Configure();
+            DotEnv.Config();
 
             bool runOnce = args != null && args.Length > 0 && "runOnce".Equals(args[0]);
 

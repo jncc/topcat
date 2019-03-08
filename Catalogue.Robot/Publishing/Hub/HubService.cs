@@ -7,11 +7,13 @@ namespace Catalogue.Robot.Publishing.Hub
     {
         private static readonly ILog Logger = LogManager.GetLogger(typeof(HubService));
 
+        private readonly HubApiHelper apiHelper;
         private readonly QueueClient queueClient;
         private readonly MessageHelper messageHelper;
 
         public HubService()
         {
+            apiHelper = new HubApiHelper();
             queueClient = new QueueClient();
             messageHelper = new MessageHelper();
         }
@@ -19,7 +21,8 @@ namespace Catalogue.Robot.Publishing.Hub
         public void Upsert(Record record)
         {
             // attempt saving to datahub db
-            Logger.Info("Hub upsert operation not yet implemented");
+            Logger.Info("Saving record as an asset to the Hub database");
+            apiHelper.Save(record);
         }
 
         public void Index(Record record)
@@ -31,11 +34,9 @@ namespace Catalogue.Robot.Publishing.Hub
 
             Logger.Debug($"Message to send: {message}");
 
-            queueClient.Send(message);
+            //queueClient.Send(message);
 
             Logger.Info("Message successfully added to queue");
         }
-
-        
     }
 }

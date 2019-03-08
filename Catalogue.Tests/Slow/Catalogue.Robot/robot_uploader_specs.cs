@@ -206,7 +206,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Robot
         }
 
         [Test]
-        public void previous_data_transfer_failure_for_hub_and_gov_publish()
+        public void failed_data_transfer_attempt_for_hub_and_gov_publish()
         {
             var assessedAndSignedOffRecord = new Record().With(r =>
             {
@@ -249,7 +249,55 @@ namespace Catalogue.Tests.Slow.Catalogue.Robot
         }
 
         [Test]
-        public void previous_hub_transfer_failure_for_hub_and_gov_publish()
+        public void failed_data_transfer_attempt_for_hub_and_gov_republish()
+        {
+            var attemptedButFailedRecord = readyToUploadRecord.With(r =>
+            {
+                r.Gemini = Library.Example().With(m =>
+                {
+                    m.MetadataDate = new DateTime(2017, 09, 27);
+                });
+                r.Publication = new PublicationInfo
+                {
+                    Assessment = new AssessmentInfo
+                    {
+                        Completed = true,
+                        CompletedOnUtc = new DateTime(2017, 09, 25)
+                    },
+                    SignOff = new SignOffInfo
+                    {
+                        DateUtc = new DateTime(2017, 09, 26)
+                    },
+                    Data = new DataInfo
+                    {
+                        Resources = new List<Resource> { new Resource { Name = "File resource", Path = @"X:\path\to\uploader\test.txt" } },
+                        LastAttempt = new PublicationAttempt { DateUtc = new DateTime(2017, 09, 27) },
+                        LastSuccess = new PublicationAttempt { DateUtc = new DateTime(2017, 09, 22) }
+                    },
+                    Target = new TargetInfo
+                    {
+                        Hub = new HubPublicationInfo
+                        {
+                            Publishable = true,
+                            Url = "http://hub.jncc.gov.uk/assets/guid-here",
+                            LastAttempt = new PublicationAttempt { DateUtc = new DateTime(2017, 09, 23) },
+                            LastSuccess = new PublicationAttempt { DateUtc = new DateTime(2017, 09, 23) }
+                        },
+                        Gov = new GovPublicationInfo
+                        {
+                            Publishable = true,
+                            LastAttempt = new PublicationAttempt { DateUtc = new DateTime(2017, 09, 24) },
+                            LastSuccess = new PublicationAttempt { DateUtc = new DateTime(2017, 09, 24) }
+                        }
+                    }
+                };
+            });
+
+            TestRecordReturned(attemptedButFailedRecord);
+        }
+
+        [Test]
+        public void failed_hub_attempt_for_hub_and_gov_publish()
         {
             var hubFailure = new Record().With(r =>
             {
@@ -297,6 +345,54 @@ namespace Catalogue.Tests.Slow.Catalogue.Robot
         }
 
         [Test]
+        public void failed_hub_attempt_for_hub_and_gov_republish()
+        {
+            var attemptedButFailedRecord = readyToUploadRecord.With(r =>
+            {
+                r.Gemini = Library.Example().With(m =>
+                {
+                    m.MetadataDate = new DateTime(2017, 09, 28);
+                });
+                r.Publication = new PublicationInfo
+                {
+                    Assessment = new AssessmentInfo
+                    {
+                        Completed = true,
+                        CompletedOnUtc = new DateTime(2017, 09, 25)
+                    },
+                    SignOff = new SignOffInfo
+                    {
+                        DateUtc = new DateTime(2017, 09, 26)
+                    },
+                    Data = new DataInfo
+                    {
+                        Resources = new List<Resource> { new Resource { Name = "File resource", Path = @"X:\path\to\uploader\test.txt" } },
+                        LastAttempt = new PublicationAttempt { DateUtc = new DateTime(2017, 09, 27) },
+                        LastSuccess = new PublicationAttempt { DateUtc = new DateTime(2017, 09, 27) }
+                    },
+                    Target = new TargetInfo
+                    {
+                        Hub = new HubPublicationInfo
+                        {
+                            Publishable = true,
+                            Url = "http://hub.jncc.gov.uk/assets/guid-here",
+                            LastAttempt = new PublicationAttempt { DateUtc = new DateTime(2017, 09, 28) },
+                            LastSuccess = new PublicationAttempt { DateUtc = new DateTime(2017, 09, 24) }
+                        },
+                        Gov = new GovPublicationInfo
+                        {
+                            Publishable = true,
+                            LastAttempt = new PublicationAttempt { DateUtc = new DateTime(2017, 09, 24) },
+                            LastSuccess = new PublicationAttempt { DateUtc = new DateTime(2017, 09, 24) }
+                        }
+                    }
+                };
+            });
+
+            TestRecordReturned(attemptedButFailedRecord);
+        }
+
+        [Test]
         public void failed_gov_attempt_for_hub_and_gov_publish()
         {
             var attemptedButFailedRecord = readyToUploadRecord.With(r =>
@@ -337,6 +433,54 @@ namespace Catalogue.Tests.Slow.Catalogue.Robot
                             {
                                 DateUtc = new DateTime(2017, 09, 29)
                             }
+                        }
+                    }
+                };
+            });
+
+            TestRecordReturned(attemptedButFailedRecord);
+        }
+
+        [Test]
+        public void failed_gov_attempt_for_hub_and_gov_republish()
+        {
+            var attemptedButFailedRecord = readyToUploadRecord.With(r =>
+            {
+                r.Gemini = Library.Example().With(m =>
+                {
+                    m.MetadataDate = new DateTime(2017, 09, 29);
+                });
+                r.Publication = new PublicationInfo
+                {
+                    Assessment = new AssessmentInfo
+                    {
+                        Completed = true,
+                        CompletedOnUtc = new DateTime(2017, 09, 25)
+                    },
+                    SignOff = new SignOffInfo
+                    {
+                        DateUtc = new DateTime(2017, 09, 26)
+                    },
+                    Data = new DataInfo
+                    {
+                        Resources = new List<Resource> { new Resource { Name = "File resource", Path = @"X:\path\to\uploader\test.txt" } },
+                        LastAttempt = new PublicationAttempt { DateUtc = new DateTime(2017, 09, 27) },
+                        LastSuccess = new PublicationAttempt { DateUtc = new DateTime(2017, 09, 27) }
+                    },
+                    Target = new TargetInfo
+                    {
+                        Hub = new HubPublicationInfo
+                        {
+                            Publishable = true,
+                            Url = "http://hub.jncc.gov.uk/assets/guid-here",
+                            LastAttempt = new PublicationAttempt { DateUtc = new DateTime(2017, 09, 28) },
+                            LastSuccess = new PublicationAttempt { DateUtc = new DateTime(2017, 09, 28) }
+                        },
+                        Gov = new GovPublicationInfo
+                        {
+                            Publishable = true,
+                            LastAttempt = new PublicationAttempt { DateUtc = new DateTime(2017, 09, 29) },
+                            LastSuccess = new PublicationAttempt { DateUtc = new DateTime(2017, 09, 24) }
                         }
                     }
                 };
