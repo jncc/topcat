@@ -73,7 +73,9 @@
     <Compile Include="Slow\Catalogue.Data\Write\vocabulary_service_specs.cs" />
     <Compile Include="Slow\Catalogue.Gemini\Validation\when_validating_the_example_document.cs" />
     <Compile Include="Slow\Catalogue.Import\when_importing_mesh_data.cs" />
+    <Compile Include="Slow\Catalogue.Robot\hub_message_helper_specs.cs" />
     <Compile Include="Slow\Catalogue.Robot\publishingxmlhelper_specs.cs" />
+    <Compile Include="Slow\Catalogue.Robot\record_redactor_specs.cs" />
     <Compile Include="Slow\Catalogue.Robot\robot_uploader_specs.cs" />
     <Compile Include="Slow\Catalogue.Utilities\jncc_drive_mappings_tests.cs" />
     <Compile Include="Slow\Catalogue.Web\Controllers\Account\account_controller_specs.cs" />

@@ -13,16 +13,16 @@ namespace Catalogue.Robot.Publishing.Hub
         private static readonly ILog Logger = LogManager.GetLogger(typeof(HubApiHelper));
         private static Env env = new Env();
 
-        private readonly MessageHelper messageHelper;
+        private readonly HubMessageConverter hubMessageConverter;
 
         public HubApiHelper()
         {
-            this.messageHelper = new MessageHelper();
+            this.hubMessageConverter = new HubMessageConverter(new FileHelper());
         }
 
-        public void Save(Record record)
+        public void Upsert(Record record)
         {
-            var messageBody = messageHelper.ConvertRecordToHubAsset(record);
+            var messageBody = hubMessageConverter.ConvertRecordToHubAsset(record);
             Logger.Debug($"Converted record to hub asset: {messageBody}");
 
             var response = Post(messageBody).GetAwaiter().GetResult();

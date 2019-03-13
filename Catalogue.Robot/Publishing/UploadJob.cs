@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using Catalogue.Data.Query;
 using Catalogue.Data.Write;
 using Catalogue.Robot.Publishing.Data;
 using Catalogue.Robot.Publishing.Gov;
@@ -40,9 +41,10 @@ namespace Catalogue.Robot.Publishing
                 var uploadService = publishingService.Upload();
                 var dataUploader = new DataUploader(config);
                 var metadataUploader = new MetadataUploader(config);
-                var hubService = new HubService();
+                var recordRedactor = new RecordRedactor(new VocabQueryer(db));
+                var hubService = new HubService(recordRedactor);
 
-                var robotUploader = new RobotPublisher(db, uploadService, dataUploader, metadataUploader, hubService);
+                var robotUploader = new RobotPublisher(db, recordRedactor, uploadService, dataUploader, metadataUploader, hubService);
 
                 var records = robotUploader.GetRecordsPendingUpload();
                 Logger.Info("Number of records to upload: " + records.Count);

@@ -1,5 +1,9 @@
-﻿using Catalogue.Data.Model;
+﻿using System.Collections.Generic;
+using Catalogue.Data.Model;
+using Catalogue.Gemini.Model;
+using Catalogue.Utilities.Clone;
 using log4net;
+using Raven.Client.Documents.Session;
 
 namespace Catalogue.Robot.Publishing.Hub
 {
@@ -9,28 +13,32 @@ namespace Catalogue.Robot.Publishing.Hub
 
         private readonly HubApiHelper apiHelper;
         private readonly QueueClient queueClient;
-        private readonly MessageHelper messageHelper;
+        private readonly HubMessageConverter hubMessageConverter;
+        private readonly IRecordRedactor recordRedactor;
 
-        public HubService()
+        public HubService(IRecordRedactor recordRedactor)
         {
-            apiHelper = new HubApiHelper();
-            queueClient = new QueueClient();
-            messageHelper = new MessageHelper();
+            this.recordRedactor = recordRedactor;
+            this.apiHelper = new HubApiHelper();
+            this.queueClient = new QueueClient();
+            this.hubMessageConverter = new HubMessageConverter(new FileHelper());
         }
 
-        public void Upsert(Record record)
+        public void Save(Record record)
         {
-            // attempt saving to datahub db
+            var redactedRecord = recordRedactor.RedactRecord(record);
+
             Logger.Info("Saving record as an asset to the Hub database");
-            apiHelper.Save(record);
+            apiHelper.Upsert(redactedRecord);
         }
 
         public void Index(Record record)
         {
-            // attempt indexing in elasticsearch
             Logger.Info("Attempting to add the record to the queue for search indexing");
-            
-            var message = messageHelper.ConvertRecordToQueueMessage(record);
+
+            var redactedRecord = recordRedactor.RedactRecord(record);
+
+            var message = hubMessageConverter.ConvertRecordToQueueMessage(redactedRecord);
 
             Logger.Debug($"Message to send: {message}");
 

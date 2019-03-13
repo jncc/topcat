@@ -89,6 +89,7 @@
     <Compile Include="Query\RecordQueryer.cs" />
     <Compile Include="Query\RecordQueryInputModel.cs" />
     <Compile Include="Query\SearchOutputModel.cs" />
+    <Compile Include="Query\VocabQueryer.cs" />
     <Compile Include="Seed\Seeder.cs" />
     <Compile Include="Seed\Vocabularies.cs" />
     <Compile Include="Test\InMemoryDatabaseHelper.cs" />

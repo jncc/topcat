@@ -3,14 +3,14 @@ using System.IO;
 
 namespace Catalogue.Robot.Publishing.Hub
 {
-    public class FileHelper
+    public class FileHelper : IFileHelper
     {
-        public static long GetFileSizeInBytes(string filePath)
+        public long GetFileSizeInBytes(string filePath)
         {
             return new FileInfo(filePath).Length;
         }
 
-        public static string GetFileExtensionWithoutDot(string filePath)
+        public string GetFileExtensionWithoutDot(string filePath)
         {
             var fileExtension = Path.GetExtension(filePath);
 
@@ -22,7 +22,7 @@ namespace Catalogue.Robot.Publishing.Hub
             return null;
         }
 
-        public static string GetBase64String(string filePath)
+        public string GetBase64String(string filePath)
         {
             var bytes = File.ReadAllBytes(filePath);
 

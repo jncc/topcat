@@ -21,22 +21,30 @@ namespace Catalogue.Robot.Publishing
     public class RobotPublisher
     {
         private static readonly ILog Logger = LogManager.GetLogger(typeof(RobotPublisher));
+        private static Env env = new Env();
 
         private readonly IDocumentSession db;
+        private readonly IRecordRedactor recordRedactor;
         private readonly IPublishingUploadRecordService uploadRecordService;
         private readonly IDataUploader dataUploader;
         private readonly IMetadataUploader metadataUploader;
         private readonly IHubService hubService;
-        private readonly string hubAssetBaseUrl;
 
-        public RobotPublisher(IDocumentSession db, IPublishingUploadRecordService uploadRecordService, IDataUploader dataUploader, IMetadataUploader metadataUploader, IHubService hubService)
+        public RobotPublisher(
+            IDocumentSession db,
+            IRecordRedactor recordRedactor,
+            IPublishingUploadRecordService uploadRecordService,
+            IDataUploader dataUploader,
+            IMetadataUploader metadataUploader,
+            IHubService hubService
+            )
         {
             this.db = db;
+            this.recordRedactor = recordRedactor;
             this.uploadRecordService = uploadRecordService;
             this.dataUploader = dataUploader;
             this.metadataUploader = metadataUploader;
             this.hubService = hubService;
-            this.hubAssetBaseUrl = Environment.GetEnvironmentVariable("HUB_ASSETS_BASE_URL");
         }
 
         public List<Record> GetRecordsPendingUpload()
@@ -138,9 +146,9 @@ namespace Catalogue.Robot.Publishing
 
                 try
                 {
-                    hubService.Upsert(record);
+                    hubService.Save(record);
 
-                    var url = hubAssetBaseUrl + Helpers.RemoveCollection(record.Id);
+                    var url = env.HUB_ASSETS_BASE_URL + Helpers.RemoveCollection(record.Id);
                     uploadRecordService.UpdateHubPublishSuccess(record, url, attempt);
 
                     hubService.Index(record);
@@ -167,8 +175,9 @@ namespace Catalogue.Robot.Publishing
 
                 try
                 {
-                    metadataUploader.UploadMetadataDocument(Helpers.RemoveCollectionFromId(record));
-                    metadataUploader.UploadWafIndexDocument(Helpers.RemoveCollectionFromId(record));
+                    var redactedRecord = recordRedactor.RedactRecord(record); // this isn't saved back to the db
+                    metadataUploader.UploadMetadataDocument(Helpers.RemoveCollectionFromId(redactedRecord));
+                    metadataUploader.UploadWafIndexDocument(Helpers.RemoveCollectionFromId(redactedRecord));
 
                     uploadRecordService.UpdateGovPublishSuccess(record, attempt);
                 }

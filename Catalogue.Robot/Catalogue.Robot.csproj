@@ -64,10 +64,14 @@
     <Compile Include="Publishing\Gov\IMetadataUploader.cs" />
     <Compile Include="Publishing\Hub\FileHelper.cs" />
     <Compile Include="Publishing\Hub\HubApiHelper.cs" />
+    <Compile Include="Publishing\Hub\IFileHelper.cs" />
+    <Compile Include="Publishing\Hub\IHubMessageConverter.cs" />
     <Compile Include="Publishing\Hub\QueueClient.cs" />
     <Compile Include="Publishing\Hub\HubService.cs" />
     <Compile Include="Publishing\Hub\IHubService.cs" />
-    <Compile Include="Publishing\Hub\MessageHelper.cs" />
+    <Compile Include="Publishing\Hub\HubMessageConverter.cs" />
+    <Compile Include="Publishing\IRecordRedactor.cs" />
+    <Compile Include="Publishing\RecordRedactor.cs" />
     <Compile Include="Publishing\UploadJob.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Program.cs" />

@@ -17,31 +17,13 @@ namespace Catalogue.Robot.Publishing.Gov
             // use either the resourcehub url or the direct data links
             var onlineResources = GetOnlineResources(record);
 
-            // redact the record for open data publishing (for GDPR etc.)
-            var redacted = GetRedactedRecordToPublish(record);
-
             // generate the XML
-            var doc = new Gemini.Encoding.XmlEncoder().Create(redacted.Id, redacted.Gemini, onlineResources);
+            var doc = new Gemini.Encoding.XmlEncoder().Create(record.Id, record.Gemini, onlineResources);
 
             var s = new MemoryStream();
             doc.Save(s);
 
             return s.ToArray();
-        }
-
-        static Record GetRedactedRecordToPublish(Record record)
-        {
-            // create a *clone* of the record with redacted properties
-            // (because we don't want to accidentally save this back to the database)
-            var redacted = record.With(r =>
-            {
-                r.Gemini.ResponsibleOrganisation.Name = "Digital and Data Solutions, JNCC";
-                r.Gemini.ResponsibleOrganisation.Email = "data@jncc.gov.uk";
-                r.Gemini.MetadataPointOfContact.Name = "Digital and Data Solutions, JNCC";
-                r.Gemini.MetadataPointOfContact.Email = "data@jncc.gov.uk";
-            });
-
-            return redacted;
         }
 
         public string UpdateWafIndexDocument(Record record, string indexDocHtml)
