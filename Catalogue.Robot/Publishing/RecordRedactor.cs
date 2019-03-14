@@ -20,6 +20,7 @@ namespace Catalogue.Robot.Publishing
             var redactedRecord = RedactResponsibleOrganisation(record);
             redactedRecord = RedactMetadataContact(redactedRecord);
             redactedRecord = RedactKeywords(redactedRecord);
+            redactedRecord = RedactImage(redactedRecord);
 
             return redactedRecord;
         }
@@ -67,6 +68,18 @@ namespace Catalogue.Robot.Publishing
             {
                 r.Gemini.Keywords = redactedKeywords;
             });
+        }
+
+        private Record RedactImage(Record record)
+        {
+            // not technically a redaction, but we only want images for publications for now
+
+            if (!record.Gemini.ResourceType.Equals("publication"))
+            {
+                return record.With(r => r.Image = null);
+            }
+
+            return record;
         }
     }
 }

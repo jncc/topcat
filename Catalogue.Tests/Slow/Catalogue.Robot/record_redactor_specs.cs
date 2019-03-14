@@ -1,6 +1,4 @@
-﻿using System;
-using System.Linq;
-using Catalogue.Data;
+﻿using Catalogue.Data;
 using Catalogue.Data.Model;
 using Catalogue.Data.Query;
 using Catalogue.Gemini.Helpers;
@@ -12,7 +10,8 @@ using Catalogue.Utilities.Collections;
 using FluentAssertions;
 using Moq;
 using NUnit.Framework;
-using NUnit.Framework.Constraints;
+using System;
+using System.Linq;
 
 namespace Catalogue.Tests.Slow.Catalogue.Robot
 {
@@ -85,6 +84,44 @@ namespace Catalogue.Tests.Slow.Catalogue.Robot
             redactedRecord.Gemini.Keywords.Any(k => k.Value.Equals("A vocabless keyword")).Should().BeTrue();
             redactedRecord.Gemini.Keywords.Any(k => k.Value.Equals("Keyword with vocab")).Should().BeFalse();
             redactedRecord.Gemini.Keywords.Any(k => k.Value.Equals("Another keyword with vocab")).Should().BeTrue();
+        }
+
+        [Test]
+        public void remove_images_from_datasets_and_services([Values("dataset", "nonGeographicDataset", "service")] string resourceType)
+        {
+            var nonPublicationRecord = record.With(r =>
+            {
+                r.Image = new Image
+                {
+                    Url = "http://an.image.url"
+                };
+                r.Gemini.ResourceType = resourceType;
+            });
+            var queryerMock = new Mock<IVocabQueryer>();
+            var redactor = new RecordRedactor(queryerMock.Object);
+            queryerMock.Setup(x => x.GetVocab(It.IsAny<string>())).Returns(new Vocabulary { Publishable = true });
+
+            var redactedRecord = redactor.RedactRecord(nonPublicationRecord);
+            redactedRecord.Image.Should().BeNull();
+        }
+
+        [Test]
+        public void keep_images_for_publications()
+        {
+            var publicationRecord = record.With(r =>
+            {
+                r.Image = new Image
+                {
+                    Url = "http://an.image.url"
+                };
+                r.Gemini.ResourceType = "publication";
+            });
+            var queryerMock = new Mock<IVocabQueryer>();
+            var redactor = new RecordRedactor(queryerMock.Object);
+            queryerMock.Setup(x => x.GetVocab(It.IsAny<string>())).Returns(new Vocabulary { Publishable = true });
+
+            var redactedRecord = redactor.RedactRecord(publicationRecord);
+            redactedRecord.Image.Url.Should().Be("http://an.image.url");
         }
     }
 }
