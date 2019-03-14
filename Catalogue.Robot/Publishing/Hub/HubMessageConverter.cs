@@ -150,12 +150,10 @@ namespace Catalogue.Robot.Publishing.Hub
 
         private List<object> GetData(Record record)
         {
-            List<object> data = null;
+            List<object> data = new List<object>();
 
             if (record.Publication.Data?.Resources?.Count > 0)
             {
-                data = new List<object>();
-
                 foreach (var resource in record.Publication.Data.Resources)
                 {
                     if (Helpers.IsFileResource(resource) && !string.IsNullOrWhiteSpace(resource.PublishedUrl))

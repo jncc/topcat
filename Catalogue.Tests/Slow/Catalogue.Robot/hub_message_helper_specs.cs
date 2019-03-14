@@ -429,7 +429,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Robot
                             ""west"":-8.14
                         }
                     },
-                    ""data"":null
+                    ""data"":[]
                 }"
             );
 
@@ -627,6 +627,514 @@ namespace Catalogue.Tests.Slow.Catalogue.Robot
                     ""digitalObjectIdentifier"":null,
                     ""citation"":null,
                     ""image"":null,
+                    ""metadata"":{
+                        ""title"":""Test record"",
+                        ""abstract"":""This is a test record"",
+                        ""topicCategory"":""geoscientificInformation"",
+                        ""keywords"":[
+                            {""value"":""Vocabless record"",""vocab"":null},
+                            {""value"":""Terrestrial"",""vocab"":""http://vocab.jncc.gov.uk/jncc-domain""},
+                            {""value"":""Example Collection"",""vocab"":""http://vocab.jncc.gov.uk/jncc-category""}
+                        ],
+                        ""temporalExtent"":{
+                            ""begin"":""1998-01"",
+                            ""end"":null
+                        },
+                        ""datasetReferenceDate"":""2015-04-14"",
+                        ""lineage"":""This dataset was imagined by a developer."",
+                        ""responsibleOrganisation"":{
+                            ""name"":""Joint Nature Conservation Committee (JNCC)"",
+                            ""email"":""data@jncc.gov.uk"",
+                            ""role"":""owner""
+                        },
+                        ""limitationsOnPublicAccess"":""no limitations"",
+                        ""useConstraints"":""no conditions apply"",
+                        ""spatialReferenceSystem"":""http://www.opengis.net/def/crs/EPSG/0/4326"",
+                        ""metadataDate"":""2017-09-26T00:00:00"",
+                        ""metadataPointOfContact"":{
+                            ""name"":""Joint Nature Conservation Committee (JNCC)"",
+                            ""email"":""some.user@jncc.gov.uk"",
+                            ""role"":""pointOfContact""
+                        },
+                        ""resourceType"":""dataset"",
+                        ""metadataLanguage"":""English"",
+                        ""boundingBox"":{
+                            ""north"":60.77,
+                            ""south"":49.79,
+                            ""east"":2.96,
+                            ""west"":-8.14
+                        }
+                    },
+                    ""data"":[
+                        {
+                            ""title"":""A pdf resource"",
+                            ""http"":{
+                                ""url"":""http://data.jncc.gov.uk/data/0545c14b-e7fd-472d-8575-5bb75034945f-test.pdf"",
+                                ""fileExtension"":""pdf"",
+                                ""fileBytes"":5
+                            }
+                        },
+                        {
+                            ""title"":""A url resource"",
+                            ""http"":{
+                                ""url"":""http://example.url.resource.com""
+                            }
+                        }
+                    ]
+                }"
+            );
+
+            JToken.DeepEquals(expectedObject, actualObject).Should().BeTrue();
+        }
+
+        [Test]
+        public void asset_message_with_file_resource_but_no_published_url()
+        {
+            // this might happen if a publish is triggered with the metadata only flag for a record being published for the first time
+
+            var record = readyToUploadRecord.With(r => r.Publication.Data = new DataInfo
+            {
+                Resources = new List<Resource> {
+                    new Resource {
+                        Name = "A pdf resource",
+                        Path = "C:\\work\\test.pdf"
+                    }
+                }
+            });
+
+            var fileHelperMock = new Mock<IFileHelper>();
+            var hubMessageHelper = new HubMessageConverter(fileHelperMock.Object);
+
+            var assetMessage = hubMessageHelper.ConvertRecordToHubAsset(record);
+            var actualObject = JObject.Parse(assetMessage);
+
+            Console.Out.WriteLine(assetMessage);
+
+            var expectedObject = JObject.Parse(
+                @"{
+                    ""id"":""0545c14b-e7fd-472d-8575-5bb75034945f"",
+                    ""digitalObjectIdentifier"":null,
+                    ""citation"":null,
+                    ""image"":null,
+                    ""metadata"":{
+                        ""title"":""Test record"",
+                        ""abstract"":""This is a test record"",
+                        ""topicCategory"":""geoscientificInformation"",
+                        ""keywords"":[
+                            {""value"":""Vocabless record"",""vocab"":null},
+                            {""value"":""Terrestrial"",""vocab"":""http://vocab.jncc.gov.uk/jncc-domain""},
+                            {""value"":""Example Collection"",""vocab"":""http://vocab.jncc.gov.uk/jncc-category""}
+                        ],
+                        ""temporalExtent"":{
+                            ""begin"":""1998-01"",
+                            ""end"":null
+                        },
+                        ""datasetReferenceDate"":""2015-04-14"",
+                        ""lineage"":""This dataset was imagined by a developer."",
+                        ""responsibleOrganisation"":{
+                            ""name"":""Joint Nature Conservation Committee (JNCC)"",
+                            ""email"":""data@jncc.gov.uk"",
+                            ""role"":""owner""
+                        },
+                        ""limitationsOnPublicAccess"":""no limitations"",
+                        ""useConstraints"":""no conditions apply"",
+                        ""spatialReferenceSystem"":""http://www.opengis.net/def/crs/EPSG/0/4326"",
+                        ""metadataDate"":""2017-09-26T00:00:00"",
+                        ""metadataPointOfContact"":{
+                            ""name"":""Joint Nature Conservation Committee (JNCC)"",
+                            ""email"":""some.user@jncc.gov.uk"",
+                            ""role"":""pointOfContact""
+                        },
+                        ""resourceType"":""dataset"",
+                        ""metadataLanguage"":""English"",
+                        ""boundingBox"":{
+                            ""north"":60.77,
+                            ""south"":49.79,
+                            ""east"":2.96,
+                            ""west"":-8.14
+                        }
+                    },
+                    ""data"":[]
+                }"
+            );
+
+            JToken.DeepEquals(expectedObject, actualObject).Should().BeTrue();
+        }
+
+        [Test]
+        public void asset_message_with_doi_and_citation()
+        {
+            var record = readyToUploadRecord.With(r =>
+            {
+                r.DigitalObjectIdentifier = "10.25603/123456.0.0.0";
+                r.Citation = "a citation";
+                r.Publication.Data = new DataInfo
+                {
+                    Resources = new List<Resource>
+                    {
+                        new Resource
+                        {
+                            Name = "A pdf resource",
+                            Path = "C:\\work\\test.pdf",
+                            PublishedUrl = "http://data.jncc.gov.uk/data/0545c14b-e7fd-472d-8575-5bb75034945f-test.pdf"
+                        },
+                        new Resource
+                        {
+                            Name = "A url resource",
+                            Path = "http://example.url.resource.com"
+                        }
+                    }
+                };
+            });
+
+            var fileHelperMock = new Mock<IFileHelper>();
+            var hubMessageHelper = new HubMessageConverter(fileHelperMock.Object);
+            fileHelperMock.Setup(x => x.GetFileExtensionWithoutDot("C:\\work\\test.pdf")).Returns("pdf");
+            fileHelperMock.Setup(x => x.GetFileSizeInBytes(It.IsAny<string>())).Returns(5);
+
+            var assetMessage = hubMessageHelper.ConvertRecordToHubAsset(record);
+            var actualObject = JObject.Parse(assetMessage);
+
+            var expectedObject = JObject.Parse(
+                @"{
+                    ""id"":""0545c14b-e7fd-472d-8575-5bb75034945f"",
+                    ""digitalObjectIdentifier"":""10.25603/123456.0.0.0"",
+                    ""citation"":""a citation"",
+                    ""image"":null,
+                    ""metadata"":{
+                        ""title"":""Test record"",
+                        ""abstract"":""This is a test record"",
+                        ""topicCategory"":""geoscientificInformation"",
+                        ""keywords"":[
+                            {""value"":""Vocabless record"",""vocab"":null},
+                            {""value"":""Terrestrial"",""vocab"":""http://vocab.jncc.gov.uk/jncc-domain""},
+                            {""value"":""Example Collection"",""vocab"":""http://vocab.jncc.gov.uk/jncc-category""}
+                        ],
+                        ""temporalExtent"":{
+                            ""begin"":""1998-01"",
+                            ""end"":null
+                        },
+                        ""datasetReferenceDate"":""2015-04-14"",
+                        ""lineage"":""This dataset was imagined by a developer."",
+                        ""responsibleOrganisation"":{
+                            ""name"":""Joint Nature Conservation Committee (JNCC)"",
+                            ""email"":""data@jncc.gov.uk"",
+                            ""role"":""owner""
+                        },
+                        ""limitationsOnPublicAccess"":""no limitations"",
+                        ""useConstraints"":""no conditions apply"",
+                        ""spatialReferenceSystem"":""http://www.opengis.net/def/crs/EPSG/0/4326"",
+                        ""metadataDate"":""2017-09-26T00:00:00"",
+                        ""metadataPointOfContact"":{
+                            ""name"":""Joint Nature Conservation Committee (JNCC)"",
+                            ""email"":""some.user@jncc.gov.uk"",
+                            ""role"":""pointOfContact""
+                        },
+                        ""resourceType"":""dataset"",
+                        ""metadataLanguage"":""English"",
+                        ""boundingBox"":{
+                            ""north"":60.77,
+                            ""south"":49.79,
+                            ""east"":2.96,
+                            ""west"":-8.14
+                        }
+                    },
+                    ""data"":[
+                        {
+                            ""title"":""A pdf resource"",
+                            ""http"":{
+                                ""url"":""http://data.jncc.gov.uk/data/0545c14b-e7fd-472d-8575-5bb75034945f-test.pdf"",
+                                ""fileExtension"":""pdf"",
+                                ""fileBytes"":5
+                            }
+                        },
+                        {
+                            ""title"":""A url resource"",
+                            ""http"":{
+                                ""url"":""http://example.url.resource.com""
+                            }
+                        }
+                    ]
+                }"
+            );
+
+            JToken.DeepEquals(expectedObject, actualObject).Should().BeTrue();
+        }
+
+        [Test]
+        public void asset_message_with_empty_doi_and_citation_strings()
+        {
+            var record = readyToUploadRecord.With(r =>
+            {
+                r.DigitalObjectIdentifier = "";
+                r.Citation = "";
+                r.Publication.Data = new DataInfo
+                {
+                    Resources = new List<Resource>
+                    {
+                        new Resource
+                        {
+                            Name = "A pdf resource",
+                            Path = "C:\\work\\test.pdf",
+                            PublishedUrl = "http://data.jncc.gov.uk/data/0545c14b-e7fd-472d-8575-5bb75034945f-test.pdf"
+                        },
+                        new Resource
+                        {
+                            Name = "A url resource",
+                            Path = "http://example.url.resource.com"
+                        }
+                    }
+                };
+            });
+
+            var fileHelperMock = new Mock<IFileHelper>();
+            var hubMessageHelper = new HubMessageConverter(fileHelperMock.Object);
+            fileHelperMock.Setup(x => x.GetFileExtensionWithoutDot("C:\\work\\test.pdf")).Returns("pdf");
+            fileHelperMock.Setup(x => x.GetFileSizeInBytes(It.IsAny<string>())).Returns(5);
+
+            var assetMessage = hubMessageHelper.ConvertRecordToHubAsset(record);
+            var actualObject = JObject.Parse(assetMessage);
+
+            var expectedObject = JObject.Parse(
+                @"{
+                    ""id"":""0545c14b-e7fd-472d-8575-5bb75034945f"",
+                    ""digitalObjectIdentifier"":null,
+                    ""citation"":null,
+                    ""image"":null,
+                    ""metadata"":{
+                        ""title"":""Test record"",
+                        ""abstract"":""This is a test record"",
+                        ""topicCategory"":""geoscientificInformation"",
+                        ""keywords"":[
+                            {""value"":""Vocabless record"",""vocab"":null},
+                            {""value"":""Terrestrial"",""vocab"":""http://vocab.jncc.gov.uk/jncc-domain""},
+                            {""value"":""Example Collection"",""vocab"":""http://vocab.jncc.gov.uk/jncc-category""}
+                        ],
+                        ""temporalExtent"":{
+                            ""begin"":""1998-01"",
+                            ""end"":null
+                        },
+                        ""datasetReferenceDate"":""2015-04-14"",
+                        ""lineage"":""This dataset was imagined by a developer."",
+                        ""responsibleOrganisation"":{
+                            ""name"":""Joint Nature Conservation Committee (JNCC)"",
+                            ""email"":""data@jncc.gov.uk"",
+                            ""role"":""owner""
+                        },
+                        ""limitationsOnPublicAccess"":""no limitations"",
+                        ""useConstraints"":""no conditions apply"",
+                        ""spatialReferenceSystem"":""http://www.opengis.net/def/crs/EPSG/0/4326"",
+                        ""metadataDate"":""2017-09-26T00:00:00"",
+                        ""metadataPointOfContact"":{
+                            ""name"":""Joint Nature Conservation Committee (JNCC)"",
+                            ""email"":""some.user@jncc.gov.uk"",
+                            ""role"":""pointOfContact""
+                        },
+                        ""resourceType"":""dataset"",
+                        ""metadataLanguage"":""English"",
+                        ""boundingBox"":{
+                            ""north"":60.77,
+                            ""south"":49.79,
+                            ""east"":2.96,
+                            ""west"":-8.14
+                        }
+                    },
+                    ""data"":[
+                        {
+                            ""title"":""A pdf resource"",
+                            ""http"":{
+                                ""url"":""http://data.jncc.gov.uk/data/0545c14b-e7fd-472d-8575-5bb75034945f-test.pdf"",
+                                ""fileExtension"":""pdf"",
+                                ""fileBytes"":5
+                            }
+                        },
+                        {
+                            ""title"":""A url resource"",
+                            ""http"":{
+                                ""url"":""http://example.url.resource.com""
+                            }
+                        }
+                    ]
+                }"
+            );
+
+            JToken.DeepEquals(expectedObject, actualObject).Should().BeTrue();
+        }
+
+        [Test]
+        public void asset_message_with_website_image()
+        {
+            var record = readyToUploadRecord.With(r =>
+            {
+                r.Image = new Image
+                {
+                    Url = "http://jncc.defra.gov.uk/laf/JNCCLogo.png",
+                    Height = 72,
+                    Width = 199,
+                    Crops = new ImageCrops
+                    {
+                        SquareUrl = "http://jncc.defra.gov.uk/laf/JNCCLogo.png",
+                        ThumbnailUrl = "http://jncc.defra.gov.uk/laf/JNCCLogo.png"
+                    }
+                };
+                r.Publication.Data = new DataInfo
+                {
+                    Resources = new List<Resource>
+                    {
+                        new Resource
+                        {
+                            Name = "A pdf resource",
+                            Path = "C:\\work\\test.pdf",
+                            PublishedUrl = "http://data.jncc.gov.uk/data/0545c14b-e7fd-472d-8575-5bb75034945f-test.pdf"
+                        },
+                        new Resource
+                        {
+                            Name = "A url resource",
+                            Path = "http://example.url.resource.com"
+                        }
+                    }
+                };
+            });
+
+            var fileHelperMock = new Mock<IFileHelper>();
+            var hubMessageHelper = new HubMessageConverter(fileHelperMock.Object);
+            fileHelperMock.Setup(x => x.GetFileExtensionWithoutDot("C:\\work\\test.pdf")).Returns("pdf");
+            fileHelperMock.Setup(x => x.GetFileSizeInBytes(It.IsAny<string>())).Returns(5);
+
+            var assetMessage = hubMessageHelper.ConvertRecordToHubAsset(record);
+            var actualObject = JObject.Parse(assetMessage);
+
+            var expectedObject = JObject.Parse(
+                @"{
+                    ""id"":""0545c14b-e7fd-472d-8575-5bb75034945f"",
+                    ""digitalObjectIdentifier"":null,
+                    ""citation"":null,
+                    ""image"":{
+                        ""url"":""http://jncc.defra.gov.uk/laf/JNCCLogo.png"",
+                        ""height"":72,
+                        ""width"":199,
+                        ""crops"":{
+                            ""squareUrl"":""http://jncc.defra.gov.uk/laf/JNCCLogo.png"",
+                            ""thumbnailUrl"":""http://jncc.defra.gov.uk/laf/JNCCLogo.png""
+                        }
+                    },
+                    ""metadata"":{
+                        ""title"":""Test record"",
+                        ""abstract"":""This is a test record"",
+                        ""topicCategory"":""geoscientificInformation"",
+                        ""keywords"":[
+                            {""value"":""Vocabless record"",""vocab"":null},
+                            {""value"":""Terrestrial"",""vocab"":""http://vocab.jncc.gov.uk/jncc-domain""},
+                            {""value"":""Example Collection"",""vocab"":""http://vocab.jncc.gov.uk/jncc-category""}
+                        ],
+                        ""temporalExtent"":{
+                            ""begin"":""1998-01"",
+                            ""end"":null
+                        },
+                        ""datasetReferenceDate"":""2015-04-14"",
+                        ""lineage"":""This dataset was imagined by a developer."",
+                        ""responsibleOrganisation"":{
+                            ""name"":""Joint Nature Conservation Committee (JNCC)"",
+                            ""email"":""data@jncc.gov.uk"",
+                            ""role"":""owner""
+                        },
+                        ""limitationsOnPublicAccess"":""no limitations"",
+                        ""useConstraints"":""no conditions apply"",
+                        ""spatialReferenceSystem"":""http://www.opengis.net/def/crs/EPSG/0/4326"",
+                        ""metadataDate"":""2017-09-26T00:00:00"",
+                        ""metadataPointOfContact"":{
+                            ""name"":""Joint Nature Conservation Committee (JNCC)"",
+                            ""email"":""some.user@jncc.gov.uk"",
+                            ""role"":""pointOfContact""
+                        },
+                        ""resourceType"":""dataset"",
+                        ""metadataLanguage"":""English"",
+                        ""boundingBox"":{
+                            ""north"":60.77,
+                            ""south"":49.79,
+                            ""east"":2.96,
+                            ""west"":-8.14
+                        }
+                    },
+                    ""data"":[
+                        {
+                            ""title"":""A pdf resource"",
+                            ""http"":{
+                                ""url"":""http://data.jncc.gov.uk/data/0545c14b-e7fd-472d-8575-5bb75034945f-test.pdf"",
+                                ""fileExtension"":""pdf"",
+                                ""fileBytes"":5
+                            }
+                        },
+                        {
+                            ""title"":""A url resource"",
+                            ""http"":{
+                                ""url"":""http://example.url.resource.com""
+                            }
+                        }
+                    ]
+                }"
+            );
+
+            JToken.DeepEquals(expectedObject, actualObject).Should().BeTrue();
+        }
+
+        [Test]
+        public void asset_message_with_url_only_image()
+        {
+            var record = readyToUploadRecord.With(r =>
+            {
+                r.Image = new Image
+                {
+                    Url = "http://jncc.defra.gov.uk/laf/JNCCLogo.png",
+                    Height = 0,
+                    Width = 0,
+                    Crops = new ImageCrops
+                    {
+                        SquareUrl = null,
+                        ThumbnailUrl = null
+                    }
+                };
+                r.Publication.Data = new DataInfo
+                {
+                    Resources = new List<Resource>
+                    {
+                        new Resource
+                        {
+                            Name = "A pdf resource",
+                            Path = "C:\\work\\test.pdf",
+                            PublishedUrl = "http://data.jncc.gov.uk/data/0545c14b-e7fd-472d-8575-5bb75034945f-test.pdf"
+                        },
+                        new Resource
+                        {
+                            Name = "A url resource",
+                            Path = "http://example.url.resource.com"
+                        }
+                    }
+                };
+            });
+
+            var fileHelperMock = new Mock<IFileHelper>();
+            var hubMessageHelper = new HubMessageConverter(fileHelperMock.Object);
+            fileHelperMock.Setup(x => x.GetFileExtensionWithoutDot("C:\\work\\test.pdf")).Returns("pdf");
+            fileHelperMock.Setup(x => x.GetFileSizeInBytes(It.IsAny<string>())).Returns(5);
+
+            var assetMessage = hubMessageHelper.ConvertRecordToHubAsset(record);
+            var actualObject = JObject.Parse(assetMessage);
+
+            var expectedObject = JObject.Parse(
+                @"{
+                    ""id"":""0545c14b-e7fd-472d-8575-5bb75034945f"",
+                    ""digitalObjectIdentifier"":null,
+                    ""citation"":null,
+                    ""image"":{
+                        ""url"":""http://jncc.defra.gov.uk/laf/JNCCLogo.png"",
+                        ""height"":0,
+                        ""width"":0,
+                        ""crops"":{
+                            ""squareUrl"":null,
+                            ""thumbnailUrl"":null
+                        }
+                    },
                     ""metadata"":{
                         ""title"":""Test record"",
                         ""abstract"":""This is a test record"",

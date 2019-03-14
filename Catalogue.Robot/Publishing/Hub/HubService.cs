@@ -23,7 +23,7 @@ namespace Catalogue.Robot.Publishing.Hub
             Logger.Info("Saving record as an asset to the Hub database");
 
             var messageBody = hubMessageConverter.ConvertRecordToHubAsset(record);
-            Logger.Debug($"Hub asset to send: {messageBody}");
+            //Logger.Debug($"Hub asset to send: {messageBody}");
 
             apiHelper.SendMessage(messageBody);
 
@@ -35,7 +35,7 @@ namespace Catalogue.Robot.Publishing.Hub
             Logger.Info("Attempting to add the record to the queue for search indexing");
             
             var message = hubMessageConverter.ConvertRecordToQueueMessage(record);
-            Logger.Debug($"Queue message to send: {message}");
+            //Logger.Debug($"Queue message to send: {message}");
 
             queueClient.Send(message);
 
