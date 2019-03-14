@@ -8,13 +8,13 @@ namespace Catalogue.Robot.Publishing.Data
     {
         private static readonly ILog Logger = LogManager.GetLogger(typeof(DataUploader));
 
-        private readonly UploaderConfig config;
+        private readonly Env env;
         private readonly IFtpClient ftpClient;
 
-        public DataUploader(UploaderConfig config)
+        public DataUploader(Env env)
         {
-            this.config = config;
-            ftpClient = new FtpClient(config.FtpUsername, config.FtpPassword);
+            this.env = env;
+            ftpClient = new FtpClient(env.FTP_USERNAME, env.FTP_PASSWORD);
         }
 
         public void UploadDataFile(string recordId, string filePath)
@@ -23,7 +23,7 @@ namespace Catalogue.Robot.Publishing.Data
 
             string unrootedDataPath = WebificationUtility.GetUnrootedDataPath(recordId, filePath);
         
-            string dataFtpPath = config.FtpRootUrl + "/" + unrootedDataPath;
+            string dataFtpPath = env.FTP_ROOT_URL + "/" + unrootedDataPath;
             Logger.Info("Data file path: "+filePath);
             Logger.Info("Data FTP path: "+dataFtpPath);
         
@@ -33,7 +33,7 @@ namespace Catalogue.Robot.Publishing.Data
 
         public string GetHttpRootUrl()
         {
-            return config.HttpRootUrl;
+            return env.HTTP_ROOT_URL;
         }
     }
 }

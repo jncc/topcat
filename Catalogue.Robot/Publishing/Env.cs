@@ -5,6 +5,14 @@ namespace Catalogue.Robot.Publishing
 {
     public class Env
     {
+        // data file host
+        public string HTTP_ROOT_URL { get; private set; }
+
+        public string FTP_ROOT_URL { get; private set; }
+        public string FTP_USERNAME { get; private set; }
+        public string FTP_PASSWORD { get; private set; }
+
+        // resource hub
         public string HUB_ASSETS_BASE_URL { get; private set; }
 
         public string HUB_QUEUE_AWS_REGION { get; private set; }
@@ -18,9 +26,16 @@ namespace Catalogue.Robot.Publishing
         public string HUB_API_AWS_SECRETACCESSKEY { get; private set; }
         public string HUB_API_ENDPOINT { get; private set; }
 
-        public Env()
+        public Env(string filePath = ".env")
         {
-            DotEnv.Config();
+            DotEnv.Config(filePath: filePath);
+
+            this.HTTP_ROOT_URL = GetVariable("HTTP_ROOT_URL");
+
+            this.FTP_ROOT_URL = GetVariable("FTP_ROOT_URL");
+            this.FTP_USERNAME = GetVariable("FTP_USERNAME");
+            this.FTP_PASSWORD = GetVariable("FTP_PASSWORD");
+
 
             this.HUB_ASSETS_BASE_URL = GetVariable("HUB_ASSETS_BASE_URL");
 

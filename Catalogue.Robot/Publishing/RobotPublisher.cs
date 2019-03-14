@@ -21,8 +21,8 @@ namespace Catalogue.Robot.Publishing
     public class RobotPublisher
     {
         private static readonly ILog Logger = LogManager.GetLogger(typeof(RobotPublisher));
-        private static Env env = new Env();
 
+        private readonly Env env;
         private readonly IDocumentSession db;
         private readonly IRecordRedactor recordRedactor;
         private readonly IPublishingUploadRecordService uploadRecordService;
@@ -31,6 +31,7 @@ namespace Catalogue.Robot.Publishing
         private readonly IHubService hubService;
 
         public RobotPublisher(
+            Env env,
             IDocumentSession db,
             IRecordRedactor recordRedactor,
             IPublishingUploadRecordService uploadRecordService,
@@ -39,6 +40,7 @@ namespace Catalogue.Robot.Publishing
             IHubService hubService
             )
         {
+            this.env = env;
             this.db = db;
             this.recordRedactor = recordRedactor;
             this.uploadRecordService = uploadRecordService;
@@ -146,12 +148,14 @@ namespace Catalogue.Robot.Publishing
 
                 try
                 {
-                    hubService.Save(record);
+                    var redactedRecord = recordRedactor.RedactRecord(record); // this isn't saved back to the db
+
+                    hubService.Save(redactedRecord);
 
                     var url = env.HUB_ASSETS_BASE_URL + Helpers.RemoveCollection(record.Id);
                     uploadRecordService.UpdateHubPublishSuccess(record, url, attempt);
 
-                    hubService.Index(record);
+                    hubService.Index(redactedRecord);
                 }
                 catch (WebException ex)
                 {

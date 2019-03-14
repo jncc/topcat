@@ -54,7 +54,7 @@ namespace Catalogue.Robot
                 Logger.Info("Running upload in runOnce mode, metadataOnly=" + metadataOnly);
 
                 var uploadJob = CreateUploadJob();
-                uploadJob.RunUpload(metadataOnly);
+                uploadJob.Publish(metadataOnly);
                 Logger.Info("Finished run");
             }
             else
@@ -75,7 +75,7 @@ namespace Catalogue.Robot
                         s.WhenStarted(p => p.Start());
                         s.WhenStopped(p => p.Stop());
                         s.ScheduleQuartzJob(q =>
-                            q.WithJob(() => JobBuilder.Create<UploadJob>().Build())
+                            q.WithJob(() => JobBuilder.Create<PublishingJob>().Build())
                                 .AddTrigger(() => TriggerBuilder.Create()
                                     .WithDailyTimeIntervalSchedule(b => b
                                         .WithIntervalInHours(interval)
@@ -96,14 +96,14 @@ namespace Catalogue.Robot
         /// <summary>
         /// Creates an instance with dependecies injected.
         /// </summary>
-        public static UploadJob CreateUploadJob()
+        public static PublishingJob CreateUploadJob()
         {
             var kernel = new StandardKernel();
 
             // register the type bindings we want for injection 
             kernel.Load<MainNinjectModule>();
 
-            return kernel.Get<UploadJob>();
+            return kernel.Get<PublishingJob>();
         }
     }
 }

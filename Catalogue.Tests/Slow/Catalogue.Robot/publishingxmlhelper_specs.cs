@@ -125,22 +125,6 @@ namespace Catalogue.Tests.Slow.Catalogue.Robot
             Assert.True(xmlDiff.Compare(expectedIndexDoc, actualIndexDoc));
         }
 
-        [Test]
-        public void metadata_pointofcontact_should_be_redacted()
-        {
-            var record = GetRecordFromFile("c6f3632d-8789-460b-a09d-c132841a7190", @"records.c6f3632d-8789-460b-a09d-c132841a7190.json");
-            var expectedXmlDoc = GetInputFileAsXmlDoc(@"wafs.c6f3632d-8789-460b-a09d-c132841a7190.xml");
-
-            record.Gemini.MetadataPointOfContact.Name = "Bob Flemming"; // this name should not be in the output xml
-
-            var xmlHelper = new XmlHelper();
-            var actualWaf = xmlHelper.GetMetadataDocument(record);
-            var actualXmlDoc = GetByteArrayAsXmlDoc(actualWaf);
-
-            XmlDiff xmlDiff = new XmlDiff();
-            Assert.True(xmlDiff.Compare(expectedXmlDoc, actualXmlDoc));
-        }
-
         private string GetInputFileContents(string filename)
         {
             Assembly assembly = Assembly.GetExecutingAssembly();

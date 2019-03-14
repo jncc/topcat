@@ -1,22 +1,24 @@
-﻿using Catalogue.Data.Model;
+﻿using Catalogue.Data;
+using Catalogue.Data.Model;
 using Catalogue.Data.Write;
 using Catalogue.Gemini.Templates;
+using Catalogue.Robot.Publishing;
+using Catalogue.Robot.Publishing.Data;
+using Catalogue.Robot.Publishing.Gov;
+using Catalogue.Robot.Publishing.Hub;
 using Catalogue.Utilities.Clone;
 using FluentAssertions;
 using Moq;
 using NUnit.Framework;
 using System;
 using System.Collections.Generic;
-using Catalogue.Data;
-using Catalogue.Robot.Publishing;
-using Catalogue.Robot.Publishing.Data;
-using Catalogue.Robot.Publishing.Gov;
-using Catalogue.Robot.Publishing.Hub;
 
 namespace Catalogue.Tests.Slow.Catalogue.Robot
 {
     public class robot_uploader_specs : CleanDbTest
     {
+        private Env env;
+
         Record readyToUploadRecord = new Record().With(r =>
         {
             r.Id = Helpers.AddCollection(Guid.NewGuid().ToString());
@@ -55,6 +57,12 @@ namespace Catalogue.Tests.Slow.Catalogue.Robot
             };
             r.Footer = new Footer();
         });
+
+        [OneTimeSetUp]
+        public void Init()
+        {
+            env = new Env(AppDomain.CurrentDomain.SetupInformation.ApplicationBase + "TestResources\\.env.test");
+        }
 
         [Test]
         public void assessed_and_signed_off_ready_to_upload()
@@ -1240,7 +1248,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Robot
                 var metadataUploaderMock = new Mock<IMetadataUploader>();
                 var hubServiceMock = new Mock<IHubService>();
                 var recordRedactorMock = new Mock<IRecordRedactor>();
-                var robotUploader = new RobotPublisher(db, recordRedactorMock.Object, uploadServiceMock.Object, dataUploaderMock.Object, metadataUploaderMock.Object, hubServiceMock.Object);
+                var robotUploader = new RobotPublisher(env, db, recordRedactorMock.Object, uploadServiceMock.Object, dataUploaderMock.Object, metadataUploaderMock.Object, hubServiceMock.Object);
 
                 var result = robotUploader.GetRecordsPendingUpload();
                 return result;

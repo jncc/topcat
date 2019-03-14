@@ -44,7 +44,7 @@
     "AdditionalInformationSource": "Some additional information",
     "DataFormat": "Other",
     "ResponsibleOrganisation": {
-      "Name": "Joint Nature Conservation Committee (JNCC)",
+      "Name": "Digital and Data Solutions, JNCC",
       "Email": "data@jncc.gov.uk",
       "Role": "custodian"
     },
@@ -55,7 +55,7 @@
     "Extent": null,
     "MetadataDate": "2016-07-07T21:50:18.5043915Z",
     "MetadataPointOfContact": {
-      "Name": "Joint Nature Conservation Committee",
+      "Name": "Digital and Data Solutions, JNCC",
       "Email": "data@jncc.gov.uk",
       "Role": "pointOfContact"
     },

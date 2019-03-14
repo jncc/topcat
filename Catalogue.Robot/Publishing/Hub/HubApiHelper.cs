@@ -1,32 +1,26 @@
-﻿using System;
+﻿using Aws4RequestSigner;
+using log4net;
+using System;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
-using Aws4RequestSigner;
-using Catalogue.Data.Model;
-using log4net;
 
 namespace Catalogue.Robot.Publishing.Hub
 {
     public class HubApiHelper
     {
         private static readonly ILog Logger = LogManager.GetLogger(typeof(HubApiHelper));
-        private static Env env = new Env();
 
-        private readonly HubMessageConverter hubMessageConverter;
+        private readonly Env env;
 
-        public HubApiHelper()
+        public HubApiHelper(Env env)
         {
-            this.hubMessageConverter = new HubMessageConverter(new FileHelper());
+            this.env = env;
         }
 
-        public void Upsert(Record record)
+        public void SendMessage(string assetMessage)
         {
-            var messageBody = hubMessageConverter.ConvertRecordToHubAsset(record);
-            Logger.Debug($"Converted record to hub asset: {messageBody}");
-
-            var response = Post(messageBody).GetAwaiter().GetResult();
-
+            var response = Post(assetMessage).GetAwaiter().GetResult();
             Logger.Info($"Posted asset to Hub API endpoint {env.HUB_API_ENDPOINT}, response is {response}");
         }
 

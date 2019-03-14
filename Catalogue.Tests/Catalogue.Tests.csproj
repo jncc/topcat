@@ -98,6 +98,9 @@
     <EmbeddedResource Include="TestResources\records\00b0b44c-a062-4a25-b344-2be12b03a6b5.json" />
     <EmbeddedResource Include="TestResources\records\64b5f778-c098-4474-a36e-7f4b2bdfd10b.json" />
     <EmbeddedResource Include="TestResources\records\85a9bbdc-2397-4f7c-a71e-0480b26b8807.json" />
+    <None Include="TestResources\.env.test">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="CsvHelper">

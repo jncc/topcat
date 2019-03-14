@@ -12,12 +12,14 @@ namespace Catalogue.Robot.Publishing.Hub
     public class QueueClient
     {
         private static readonly ILog Logger = LogManager.GetLogger(typeof(QueueClient));
-        private static Env env = new Env();
 
+        private readonly Env env;
         private readonly AmazonSQSExtendedClient client;
 
-        public QueueClient()
+        public QueueClient(Env env)
         {
+            this.env = env;
+
             var credentials = new BasicAWSCredentials(env.HUB_QUEUE_AWS_ACCESSKEY, env.HUB_QUEUE_AWS_SECRETACCESSKEY);
             var region = RegionEndpoint.GetBySystemName(env.HUB_QUEUE_AWS_REGION);
             var s3 = new AmazonS3Client(credentials, region);
@@ -30,14 +32,14 @@ namespace Catalogue.Robot.Publishing.Hub
         public void Send(string message)
         {
             Logger.Info($"Attempting to send message to queue at endpoint {env.SQS_ENDPOINT}...");
-            var result = SendMessage(client, message).GetAwaiter().GetResult();
+            var result = SendMessage(client, env.SQS_ENDPOINT, message).GetAwaiter().GetResult();
 
             Logger.Info($"Successfully sent message to queue with ID {result.MessageId}");
         }
 
-        public static async Task<SendMessageResponse> SendMessage(AmazonSQSExtendedClient client, string message)
+        public static async Task<SendMessageResponse> SendMessage(AmazonSQSExtendedClient client, string endpoint, string message)
         {
-            return await client.SendMessageAsync(env.SQS_ENDPOINT, message);
+            return await client.SendMessageAsync(endpoint, message);
         }
     }
 }

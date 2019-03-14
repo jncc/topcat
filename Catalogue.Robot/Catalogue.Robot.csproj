@@ -72,7 +72,7 @@
     <Compile Include="Publishing\Hub\HubMessageConverter.cs" />
     <Compile Include="Publishing\IRecordRedactor.cs" />
     <Compile Include="Publishing\RecordRedactor.cs" />
-    <Compile Include="Publishing\UploadJob.cs" />
+    <Compile Include="Publishing\PublishingJob.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Publishing\FtpClient.cs" />
