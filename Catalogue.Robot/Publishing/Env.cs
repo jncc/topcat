@@ -15,6 +15,7 @@ namespace Catalogue.Robot.Publishing
         // resource hub
         public string HUB_ASSETS_BASE_URL { get; private set; }
 
+        public string HUB_QUEUE_INDEX { get; private set; }
         public string HUB_QUEUE_AWS_REGION { get; private set; }
         public string HUB_QUEUE_AWS_ACCESSKEY { get; private set; }
         public string HUB_QUEUE_AWS_SECRETACCESSKEY { get; private set; }
@@ -39,6 +40,7 @@ namespace Catalogue.Robot.Publishing
 
             this.HUB_ASSETS_BASE_URL = GetVariable("HUB_ASSETS_BASE_URL");
 
+            this.HUB_QUEUE_INDEX = GetVariable("HUB_QUEUE_INDEX");
             this.HUB_QUEUE_AWS_REGION = GetVariable("HUB_QUEUE_AWS_REGION");
             this.HUB_QUEUE_AWS_ACCESSKEY = GetVariable("HUB_QUEUE_AWS_ACCESSKEY");
             this.HUB_QUEUE_AWS_SECRETACCESSKEY = GetVariable("HUB_QUEUE_AWS_SECRETACCESSKEY");

@@ -8,10 +8,12 @@ namespace Catalogue.Robot.Publishing.Hub
 {
     public class HubMessageConverter : IHubMessageConverter
     {
+        private readonly Env env;
         private readonly IFileHelper fileHelper;
 
-        public HubMessageConverter(IFileHelper fileHelper)
+        public HubMessageConverter(Env env, IFileHelper fileHelper)
         {
+            this.env = env;
             this.fileHelper = fileHelper;
         }
 
@@ -99,14 +101,14 @@ namespace Catalogue.Robot.Publishing.Hub
             var message = new
             {
                 verb = "upsert",
-                index = "topcatdev",
+                index = env.HUB_QUEUE_INDEX,
                 document = new
                 {
                     id = Helpers.RemoveCollection(record.Id),
-                    site = "datahub", // as opposed to datahub|sac|mhc
+                    site = "datahub",
                     title = record.Gemini.Title,
                     content = record.Gemini.Abstract,
-                    url = record.Publication.Target.Hub.Url, // the URL of the page, for clicking through
+                    url = record.Publication.Target.Hub.Url,
                     keywords = record.Gemini.Keywords,
                     published_date = record.Gemini.DatasetReferenceDate
                 },

@@ -11,12 +11,20 @@ using Newtonsoft.Json.Linq;
 using NUnit.Framework;
 using System;
 using System.Collections.Generic;
-using Quartz.Util;
+using Catalogue.Robot.Publishing;
 
 namespace Catalogue.Tests.Slow.Catalogue.Robot
 {
     public class hub_message_helper_specs
     {
+        private Env env;
+
+        [OneTimeSetUp]
+        public void Init()
+        {
+            env = new Env(AppDomain.CurrentDomain.SetupInformation.ApplicationBase + "TestResources\\.env.test");
+        }
+
         private Record readyToUploadRecord = new Record().With(r =>
         {
             r.Id = Helpers.AddCollection("0545c14b-e7fd-472d-8575-5bb75034945f");
@@ -69,7 +77,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Robot
         {
             var record = readyToUploadRecord.With(r => r.Publication.Data = null);
             var fileHelperMock = new Mock<IFileHelper>();
-            var hubMessageHelper = new HubMessageConverter(fileHelperMock.Object);
+            var hubMessageHelper = new HubMessageConverter(env, fileHelperMock.Object);
 
             var queueMessage = hubMessageHelper.ConvertRecordToQueueMessage(record);
             var actualObject = JObject.Parse(queueMessage);
@@ -112,7 +120,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Robot
             });
 
             var fileHelperMock = new Mock<IFileHelper>();
-            var hubMessageHelper = new HubMessageConverter(fileHelperMock.Object);
+            var hubMessageHelper = new HubMessageConverter(env, fileHelperMock.Object);
             fileHelperMock.Setup(x => x.GetFileExtensionWithoutDot(It.IsAny<string>())).Returns("csv");
             fileHelperMock.Setup(x => x.GetFileSizeInBytes(It.IsAny<string>())).Returns(5);
 
@@ -165,7 +173,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Robot
             });
 
             var fileHelperMock = new Mock<IFileHelper>();
-            var hubMessageHelper = new HubMessageConverter(fileHelperMock.Object);
+            var hubMessageHelper = new HubMessageConverter(env, fileHelperMock.Object);
             fileHelperMock.Setup(x => x.GetBase64String(It.IsAny<string>())).Returns("encoded file contents");
             fileHelperMock.Setup(x => x.GetFileExtensionWithoutDot(It.IsAny<string>())).Returns("pdf");
             fileHelperMock.Setup(x => x.GetFileSizeInBytes(It.IsAny<string>())).Returns(5);
@@ -219,7 +227,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Robot
             });
 
             var fileHelperMock = new Mock<IFileHelper>();
-            var hubMessageHelper = new HubMessageConverter(fileHelperMock.Object);
+            var hubMessageHelper = new HubMessageConverter(env, fileHelperMock.Object);
 
             var queueMessage = hubMessageHelper.ConvertRecordToQueueMessage(record);
 
@@ -278,7 +286,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Robot
             });
 
             var fileHelperMock = new Mock<IFileHelper>();
-            var hubMessageHelper = new HubMessageConverter(fileHelperMock.Object);
+            var hubMessageHelper = new HubMessageConverter(env, fileHelperMock.Object);
             fileHelperMock.Setup(x => x.GetBase64String(It.IsAny<string>())).Returns("encoded file contents");
             fileHelperMock.Setup(x => x.GetFileExtensionWithoutDot("C:\\work\\test.csv")).Returns("csv");
             fileHelperMock.Setup(x => x.GetFileExtensionWithoutDot("C:\\work\\test.pdf")).Returns("pdf");
@@ -347,7 +355,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Robot
             });
 
             var fileHelperMock = new Mock<IFileHelper>();
-            var hubMessageHelper = new HubMessageConverter(fileHelperMock.Object);
+            var hubMessageHelper = new HubMessageConverter(env, fileHelperMock.Object);
 
             var queueMessage = hubMessageHelper.ConvertRecordToQueueMessage(record);
             var actualObject = JObject.Parse(queueMessage);
@@ -380,7 +388,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Robot
         {
             var record = readyToUploadRecord.With(r => r.Publication.Data = null);
             var fileHelperMock = new Mock<IFileHelper>();
-            var hubMessageHelper = new HubMessageConverter(fileHelperMock.Object);
+            var hubMessageHelper = new HubMessageConverter(env, fileHelperMock.Object);
 
             var assetMessage = hubMessageHelper.ConvertRecordToHubAsset(record);
             var actualObject = JObject.Parse(assetMessage);
@@ -450,7 +458,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Robot
             });
 
             var fileHelperMock = new Mock<IFileHelper>();
-            var hubMessageHelper = new HubMessageConverter(fileHelperMock.Object);
+            var hubMessageHelper = new HubMessageConverter(env, fileHelperMock.Object);
 
             var assetMessage = hubMessageHelper.ConvertRecordToHubAsset(record);
             var actualObject = JObject.Parse(assetMessage);
@@ -528,7 +536,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Robot
             });
 
             var fileHelperMock = new Mock<IFileHelper>();
-            var hubMessageHelper = new HubMessageConverter(fileHelperMock.Object);
+            var hubMessageHelper = new HubMessageConverter(env, fileHelperMock.Object);
             fileHelperMock.Setup(x => x.GetFileExtensionWithoutDot("C:\\work\\test.pdf")).Returns("pdf");
             fileHelperMock.Setup(x => x.GetFileSizeInBytes(It.IsAny<string>())).Returns(5);
 
@@ -614,7 +622,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Robot
             });
 
             var fileHelperMock = new Mock<IFileHelper>();
-            var hubMessageHelper = new HubMessageConverter(fileHelperMock.Object);
+            var hubMessageHelper = new HubMessageConverter(env, fileHelperMock.Object);
             fileHelperMock.Setup(x => x.GetFileExtensionWithoutDot("C:\\work\\test.pdf")).Returns("pdf");
             fileHelperMock.Setup(x => x.GetFileSizeInBytes(It.IsAny<string>())).Returns(5);
 
@@ -703,7 +711,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Robot
             });
 
             var fileHelperMock = new Mock<IFileHelper>();
-            var hubMessageHelper = new HubMessageConverter(fileHelperMock.Object);
+            var hubMessageHelper = new HubMessageConverter(env, fileHelperMock.Object);
 
             var assetMessage = hubMessageHelper.ConvertRecordToHubAsset(record);
             var actualObject = JObject.Parse(assetMessage);
@@ -788,7 +796,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Robot
             });
 
             var fileHelperMock = new Mock<IFileHelper>();
-            var hubMessageHelper = new HubMessageConverter(fileHelperMock.Object);
+            var hubMessageHelper = new HubMessageConverter(env, fileHelperMock.Object);
             fileHelperMock.Setup(x => x.GetFileExtensionWithoutDot("C:\\work\\test.pdf")).Returns("pdf");
             fileHelperMock.Setup(x => x.GetFileSizeInBytes(It.IsAny<string>())).Returns(5);
 
@@ -888,7 +896,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Robot
             });
 
             var fileHelperMock = new Mock<IFileHelper>();
-            var hubMessageHelper = new HubMessageConverter(fileHelperMock.Object);
+            var hubMessageHelper = new HubMessageConverter(env, fileHelperMock.Object);
             fileHelperMock.Setup(x => x.GetFileExtensionWithoutDot("C:\\work\\test.pdf")).Returns("pdf");
             fileHelperMock.Setup(x => x.GetFileSizeInBytes(It.IsAny<string>())).Returns(5);
 
@@ -997,7 +1005,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Robot
             });
 
             var fileHelperMock = new Mock<IFileHelper>();
-            var hubMessageHelper = new HubMessageConverter(fileHelperMock.Object);
+            var hubMessageHelper = new HubMessageConverter(env, fileHelperMock.Object);
             fileHelperMock.Setup(x => x.GetFileExtensionWithoutDot("C:\\work\\test.pdf")).Returns("pdf");
             fileHelperMock.Setup(x => x.GetFileSizeInBytes(It.IsAny<string>())).Returns(5);
 
@@ -1114,7 +1122,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Robot
             });
 
             var fileHelperMock = new Mock<IFileHelper>();
-            var hubMessageHelper = new HubMessageConverter(fileHelperMock.Object);
+            var hubMessageHelper = new HubMessageConverter(env, fileHelperMock.Object);
             fileHelperMock.Setup(x => x.GetFileExtensionWithoutDot("C:\\work\\test.pdf")).Returns("pdf");
             fileHelperMock.Setup(x => x.GetFileSizeInBytes(It.IsAny<string>())).Returns(5);
 

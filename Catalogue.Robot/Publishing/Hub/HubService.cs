@@ -15,7 +15,7 @@ namespace Catalogue.Robot.Publishing.Hub
         {
             this.apiHelper = new HubApiHelper(env);
             this.queueClient = new QueueClient(env);
-            this.hubMessageConverter = new HubMessageConverter(new FileHelper());
+            this.hubMessageConverter = new HubMessageConverter(env, new FileHelper());
         }
 
         public void Save(Record record)
