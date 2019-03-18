@@ -44,7 +44,6 @@ namespace Catalogue.Robot
         {
             GlobalContext.Properties["LogFileName"] = ConfigurationManager.AppSettings["LogFilePath"];
             XmlConfigurator.Configure();
-            DotEnv.Config();
 
             bool runOnce = args != null && args.Length > 0 && "runOnce".Equals(args[0]);
 

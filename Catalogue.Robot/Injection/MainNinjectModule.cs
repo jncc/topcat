@@ -1,4 +1,5 @@
-﻿using Ninject.Extensions.Conventions;
+﻿using Catalogue.Robot.Publishing;
+using Ninject.Extensions.Conventions;
 using Ninject.Modules;
 using Quartz.Spi;
 using Raven.Client.Documents;
@@ -19,6 +20,7 @@ namespace Catalogue.Robot.Injection
                 .BindDefaultInterface());
 
             Bind<IDocumentStore>().ToMethod(x => Program.DocumentStore);
+            Bind<Env>().ToMethod(x => new Env());
 //             may want to use the log4net logger
 //            Kernel.Bind<ILog>().ToMethod(x => LogManager.GetLogger(typeof(Program)));
 

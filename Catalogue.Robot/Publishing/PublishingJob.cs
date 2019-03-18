@@ -13,10 +13,12 @@ namespace Catalogue.Robot.Publishing
     {
         private static readonly ILog Logger = LogManager.GetLogger(typeof(PublishingJob));
 
-        readonly IDocumentStore store;
+        private readonly Env env;
+        private readonly IDocumentStore store;
 
-        public PublishingJob(IDocumentStore store)
+        public PublishingJob(Env env, IDocumentStore store)
         {
+            this.env = env;
             this.store = store;
         }
 
@@ -31,7 +33,6 @@ namespace Catalogue.Robot.Publishing
         {
             using (var db = store.OpenSession())
             {
-                var env = new Env();
                 var publishingService = new RecordPublishingService(db, new RecordValidator());
                 var publishingUploadService = publishingService.Upload();
                 var redactor = new RecordRedactor(new VocabQueryer(db));
