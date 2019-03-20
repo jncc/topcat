@@ -1,5 +1,6 @@
 ﻿using Catalogue.Data.Query;
 using Catalogue.Data.Write;
+using Catalogue.Robot.Publishing.Client;
 using Catalogue.Robot.Publishing.Data;
 using Catalogue.Robot.Publishing.Gov;
 using Catalogue.Robot.Publishing.Hub;
@@ -36,7 +37,8 @@ namespace Catalogue.Robot.Publishing
                 var publishingService = new RecordPublishingService(db, new RecordValidator());
                 var publishingUploadService = publishingService.Upload();
                 var redactor = new RecordRedactor(new VocabQueryer(db));
-                var dataUploader = new DataUploader(env);
+                var ftpClient = new FtpClient(env.FTP_USERNAME, env.FTP_PASSWORD);
+                var dataUploader = new DataUploader(env, ftpClient, new FileHelper());
                 var metadataUploader = new MetadataUploader(env);
                 var hubService = new HubService(env);
 

@@ -2,7 +2,7 @@
 using NUnit.Framework;
 using System;
 using System.IO;
-using Catalogue.Robot.Publishing;
+using Catalogue.Robot.Publishing.Client;
 
 namespace Catalogue.Tests.Explicit.Catalogue.Robot
 {

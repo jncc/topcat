@@ -2,7 +2,7 @@
 using System.Net;
 using log4net;
 
-namespace Catalogue.Robot.Publishing
+namespace Catalogue.Robot.Publishing.Client
 {
     /// <summary>
     /// Mockable FTP-focussed WebClient.

@@ -1,4 +1,5 @@
 ﻿using Catalogue.Data.Model;
+using Catalogue.Robot.Publishing.Client;
 using log4net;
 
 namespace Catalogue.Robot.Publishing.Hub
@@ -7,13 +8,13 @@ namespace Catalogue.Robot.Publishing.Hub
     {
         private static readonly ILog Logger = LogManager.GetLogger(typeof(HubService));
         
-        private readonly HubApiHelper apiHelper;
+        private readonly ApiClient apiClient;
         private readonly QueueClient queueClient;
         private readonly HubMessageConverter hubMessageConverter;
 
         public HubService(Env env)
         {
-            this.apiHelper = new HubApiHelper(env);
+            this.apiClient = new ApiClient(env);
             this.queueClient = new QueueClient(env);
             this.hubMessageConverter = new HubMessageConverter(env, new FileHelper());
         }
@@ -25,7 +26,7 @@ namespace Catalogue.Robot.Publishing.Hub
             var messageBody = hubMessageConverter.ConvertRecordToHubAsset(record);
             //Logger.Debug($"Hub asset to send: {messageBody}");
 
-            apiHelper.SendMessage(messageBody);
+            apiClient.SendToHub(messageBody);
 
             Logger.Info("Message posted to hub API endpoint");
         }

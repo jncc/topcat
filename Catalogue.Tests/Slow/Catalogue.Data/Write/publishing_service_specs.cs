@@ -128,7 +128,6 @@ namespace Catalogue.Tests.Slow.Catalogue.Data.Write
                 var hubServiceMock = new Mock<IHubService>();
                 var redactorMock = new Mock<IRecordRedactor>();
                 var uploader = new RobotPublisher(env, db, redactorMock.Object, uploadService, dataUploaderMock.Object, metadataUploaderMock.Object, hubServiceMock.Object);
-                dataUploaderMock.Setup(x => x.GetHttpRootUrl()).Returns("http://data.jncc.gov.uk");
                 redactorMock.Setup(x => x.RedactRecord(It.IsAny<Record>())).Returns(record);
 
                 uploader.PublishRecords(new List<Record> { record });
@@ -197,7 +196,6 @@ namespace Catalogue.Tests.Slow.Catalogue.Data.Write
                 var hubServiceMock = new Mock<IHubService>();
                 var redactorMock = new Mock<IRecordRedactor>();
                 var uploader = new RobotPublisher(env, db, redactorMock.Object, uploadService, dataUploaderMock.Object, metadataUploaderMock.Object, hubServiceMock.Object);
-                dataUploaderMock.Setup(x => x.GetHttpRootUrl()).Returns("http://data.jncc.gov.uk");
                 redactorMock.Setup(x => x.RedactRecord(It.IsAny<Record>())).Returns(record);
 
                 uploader.PublishRecords(new List<Record> { record });
@@ -266,7 +264,6 @@ namespace Catalogue.Tests.Slow.Catalogue.Data.Write
                 var hubServiceMock = new Mock<IHubService>();
                 var redactorMock = new Mock<IRecordRedactor>();
                 var uploader = new RobotPublisher(env, db, redactorMock.Object, uploadService, dataUploaderMock.Object, metadataUploaderMock.Object, hubServiceMock.Object);
-                dataUploaderMock.Setup(x => x.GetHttpRootUrl()).Returns("http://data.jncc.gov.uk");
                 redactorMock.Setup(x => x.RedactRecord(It.IsAny<Record>())).Returns(record);
 
                 uploader.PublishRecords(new List<Record> { record });
@@ -345,7 +342,6 @@ namespace Catalogue.Tests.Slow.Catalogue.Data.Write
                 var hubServiceMock = new Mock<IHubService>();
                 var redactorMock = new Mock<IRecordRedactor>();
                 var uploader = new RobotPublisher(env, db, redactorMock.Object, uploadService, dataUploaderMock.Object, metadataUploaderMock.Object, hubServiceMock.Object);
-                dataUploaderMock.Setup(x => x.GetHttpRootUrl()).Returns("http://data.jncc.gov.uk");
                 redactorMock.Setup(x => x.RedactRecord(It.IsAny<Record>())).Returns(record);
 
                 uploader.PublishRecords(new List<Record> { record });
@@ -425,7 +421,6 @@ namespace Catalogue.Tests.Slow.Catalogue.Data.Write
                 var hubServiceMock = new Mock<IHubService>();
                 var redactorMock = new Mock<IRecordRedactor>();
                 var uploader = new RobotPublisher(env, db, redactorMock.Object, uploadService, dataUploaderMock.Object, metadataUploaderMock.Object, hubServiceMock.Object);
-                dataUploaderMock.Setup(x => x.GetHttpRootUrl()).Returns("http://data.jncc.gov.uk");
                 redactorMock.Setup(x => x.RedactRecord(It.IsAny<Record>())).Returns(record);
 
                 uploader.PublishRecords(new List<Record> { record });

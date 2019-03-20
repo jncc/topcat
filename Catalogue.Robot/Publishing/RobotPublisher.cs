@@ -114,7 +114,7 @@ namespace Catalogue.Robot.Publishing
                         {
                             Logger.Info($"Resource {resource.Path} is a file - starting upload process");
                             dataUploader.UploadDataFile(Helpers.RemoveCollection(record.Id), resource.Path);
-                            string dataHttpPath = dataUploader.GetHttpRootUrl() + "/" +
+                            string dataHttpPath = env.HTTP_ROOT_URL + "/" +
                                                   GetUnrootedDataPath(Helpers.RemoveCollection(record.Id),
                                                       resource.Path);
                             resource.PublishedUrl = dataHttpPath;

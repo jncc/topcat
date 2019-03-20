@@ -7,7 +7,7 @@ using Amazon.SQS.Model;
 using log4net;
 using System.Threading.Tasks;
 
-namespace Catalogue.Robot.Publishing.Hub
+namespace Catalogue.Robot.Publishing.Client
 {
     public class QueueClient
     {
