@@ -33,27 +33,23 @@
                 <div class="publishing-status">
                     <div ng-show="publishingStatus.currentActiveView == 'risk assessment'" class="quick-fade-in">
                         <h3>Risk assessment</h3>
-                        <p>In order to be published as Open Data, the data must first be risk assessed. If an update is made to the data or metadata which requires republishing, the assessment must be completed again.</p>
+                        <p>Any resources and records published from Topcat must be risk assessed to ensure that the material is suitable for public access and use.</p>
+                        <p>Resources that will be published as Open Data must be risk assessed before publication. This risk assessment should also be reviewed and confirmed prior to publication of any update to the data or metadata.</p>
                         <p>
                             For more information on Open Data publishing, please read <a href="file:///Z:\Prog110-FutureData\0264 Information Management\Open Data\Guidance\Open Data Publication - Advice for Data Managers.pdf">Open Data Publication - Advice for Data Managers</a>.
-                            For more guidance on risk assessments, please read <a href="file:///Z:\Prog110-FutureData\0264 Information Management\Tools\Topcat\Guidance\Risk Assessment for Open Data Publication.pdf">Risk Assessment for Open Data Publication</a>.
-                            Note: you will need to copy and paste the links into Windows Explorer.
+                            For more guidance on risk assessment of Open Data, please read <a href="file:///Z:\Prog110-FutureData\0264 Information Management\Tools\Topcat\Guidance\Risk Assessment for Open Data Publication.pdf">Risk Assessment for Open Data Publication</a>.
+                            (Note: you will need to copy and paste the links into Windows Explorer.)
                         </p>
-                        <p>To proceed, you must agree to the below assessment criteria for Open Data publishing:</p>
+                        <p>In particular when you publish Open Data from Topcat you must agree that the dataset does not contain any of the following (except where a legal exception has been established that permits publication):</p>
                         <ol>
-                            <li>This dataset does not contain personal data.</li>
-                            <li>
-                                There are no third party licencing or IP restrictions or permissions to be resolved.
-                                <ol type="a">
-                                    <li>No Ordnance Survey data was used in the production of this output.</li>
-                                    <li>No UK Hydrographic Office data was used in the production of this output.</li>
-                                </ol>
-                            </li>
-                            <li>This dataset does not contain confidential information.</li>
-                            <li>This dataset does not contain information where there are national security concerns.</li>
-                            <li>This dataset does not contain sensitive or environmental policy information.</li>
-                            <li>This dataset does not contain free text fields or comments fields.</li>
+                            <li>personal data;</li>
+                            <li>confidential information;</li>
+                            <li>information where there are national security concerns;</li>
+                            <li>information that presents a risk of environmental harm; and</li>
+                            <li>third-party intellectual property that JNCC does not have permission to publish.</li>
                         </ol>
+                        <p>You also agree that any free-text or comment fields in the data have been checked to ensure they do not contain any such information.</p>
+                        <p>Reports and other types of resource listed in Topcat must also be risk assessed before publication, in line with any relevant JNCC policies and protocols including editorial guidelines and quality assurance processes.</p>
                         <br/>
                         <span class="publishing-extra-info"
                               ng-if="form.publication.assessment.completed">
@@ -100,6 +96,9 @@
                         <span class="publishing-extra-info">
                             <p>
                                 {{uploadStatus}}
+                            </p>
+                            <p ng-if="form.publication.data.lastAttempt.message">
+                                Whoops there was a problem while uploading your data files: {{form.publication.data.lastAttempt.message}}
                             </p>
                             <p>
                                 <span ng-if="form.publication.target.hub &&

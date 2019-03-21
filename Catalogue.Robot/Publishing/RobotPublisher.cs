@@ -85,7 +85,7 @@ namespace Catalogue.Robot.Publishing
                     PublishHubMetadata(record);
                     PublishGovMetadata(record);
                 }
-                catch (WebException ex)
+                catch (Exception ex)
                 {
                     Logger.Error($"Could not complete publishing process for record with GUID={record.Id}", ex);
                 }
@@ -114,9 +114,7 @@ namespace Catalogue.Robot.Publishing
                         {
                             Logger.Info($"Resource {resource.Path} is a file - starting upload process");
                             dataUploader.UploadDataFile(Helpers.RemoveCollection(record.Id), resource.Path);
-                            string dataHttpPath = env.HTTP_ROOT_URL + "/" +
-                                                  GetUnrootedDataPath(Helpers.RemoveCollection(record.Id),
-                                                      resource.Path);
+                            string dataHttpPath = env.HTTP_ROOT_URL + "/" + GetUnrootedDataPath(Helpers.RemoveCollection(record.Id), resource.Path);
                             resource.PublishedUrl = dataHttpPath;
                         }
                         else
@@ -130,7 +128,7 @@ namespace Catalogue.Robot.Publishing
 
                 uploadRecordService.UpdateDataPublishSuccess(record, resources, attempt);
             }
-            catch (WebException ex)
+            catch (Exception ex)
             {
                 attempt.Message = ex.Message + (ex.InnerException != null ? ex.InnerException.Message : "");
                 Logger.Error($"Data transfer failed for record with GUID={record.Id}", ex);
