@@ -33,23 +33,12 @@
                 <div class="publishing-status">
                     <div ng-show="publishingStatus.currentActiveView == 'risk assessment'" class="quick-fade-in">
                         <h3>Risk assessment</h3>
-                        <p>Any resources and records published from Topcat must be risk assessed to ensure that the material is suitable for public access and use.</p>
-                        <p>Resources that will be published as Open Data must be risk assessed before publication. This risk assessment should also be reviewed and confirmed prior to publication of any update to the data or metadata.</p>
+                        <p>Resources and records published from Topcat must be risk assessed to ensure that the information is suitable for public access and use in line with relevant JNCC policies and protocols, including data protection requirements, editorial guidelines and quality assurance processes. The risk assessment should also be reviewed and confirmed prior to publication of any updated resources or metadata.</p>
                         <p>
-                            For more information on Open Data publishing, please read <a href="file:///Z:\Prog110-FutureData\0264 Information Management\Open Data\Guidance\Open Data Publication - Advice for Data Managers.pdf">Open Data Publication - Advice for Data Managers</a>.
-                            For more guidance on risk assessment of Open Data, please read <a href="file:///Z:\Prog110-FutureData\0264 Information Management\Tools\Topcat\Guidance\Risk Assessment for Open Data Publication.pdf">Risk Assessment for Open Data Publication</a>.
-                            (Note: you will need to copy and paste the links into Windows Explorer.)
+                            Advice on <a href="file:///Z:\Prog110-FutureData\0264 Information Management\Open Data\Guidance\Open Data Publication - Advice for Data Managers.pdf">publication</a> and <a href="file:///Z:\Prog110-FutureData\0264 Information Management\Tools\Topcat\Guidance\Risk Assessment for Open Data Publication.pdf">risk assessment</a> is available for open data resources, and may also be relevant as a source of guidance for publication of other datasets.
                         </p>
-                        <p>In particular when you publish Open Data from Topcat you must agree that the dataset does not contain any of the following (except where a legal exception has been established that permits publication):</p>
-                        <ol>
-                            <li>personal data;</li>
-                            <li>confidential information;</li>
-                            <li>information where there are national security concerns;</li>
-                            <li>information that presents a risk of environmental harm; and</li>
-                            <li>third-party intellectual property that JNCC does not have permission to publish.</li>
-                        </ol>
-                        <p>You also agree that any free-text or comment fields in the data have been checked to ensure they do not contain any such information.</p>
-                        <p>Reports and other types of resource listed in Topcat must also be risk assessed before publication, in line with any relevant JNCC policies and protocols including editorial guidelines and quality assurance processes.</p>
+                        <p>Prior to publication of information from Topcat, users should normally remove any personal data, confidential information, information where there are national security concerns, information that presents a risk of environmental harm, and any third-party intellectual property that JNCC does not have permission to publish, unless a legal exception applies that permits publication.</p>
+                        <p>When you publish resources and records from Topcat you agree that they have been risk assessed in accordance with any applicable policies and procedures.</p>
                         <br/>
                         <span class="publishing-extra-info"
                               ng-if="form.publication.assessment.completed">
@@ -106,10 +95,16 @@
                                       (!recordOutput.recordState.publishingState.previouslyPublishedWithDoi && form.publication.target.hub.publishable == true)">
                                     ResourceHub upload: {{ hubPublishingStatus() }}<br />
                                 </span>
+                                <span ng-if="form.publication.target.hub.lastAttempt.message">
+                                    {{form.publication.target.hub.lastAttempt.message}}<br /><br />
+                                </span>
                                 <span ng-if="form.publication.target.gov &&
                                       ((recordOutput.recordState.publishingState.previouslyPublishedWithDoi && form.publication.target.gov.lastSuccess != null) ||
                                       (!recordOutput.recordState.publishingState.previouslyPublishedWithDoi && form.publication.target.gov.publishable == true))">
                                     Data.gov.uk upload: {{ govPublishingStatus() }}<br />
+                                </span>
+                                <span ng-if="form.publication.target.gov.lastAttempt.message">
+                                    {{form.publication.target.gov.lastAttempt.message}}<br />
                                 </span>
                             </p>
                         </span>

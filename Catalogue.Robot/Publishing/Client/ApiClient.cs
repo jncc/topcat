@@ -21,10 +21,12 @@ namespace Catalogue.Robot.Publishing.Client
             this.env = env;
         }
 
-        public void SendToHub(string assetMessage)
+        public string SendToHub(string assetMessage)
         {
             var response = Post(assetMessage).GetAwaiter().GetResult();
             Logger.Info($"Posted asset to Hub API endpoint {env.HUB_API_ENDPOINT}, response is {response}");
+
+            return response;
         }
 
         private async Task<string> Post(string body)

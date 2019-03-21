@@ -84,13 +84,13 @@ namespace Catalogue.Robot.Publishing
                     
                     PublishHubMetadata(record);
                     PublishGovMetadata(record);
+
+                    Logger.Info($"Successfully published record {record.Id} {record.Gemini.Title}");
                 }
                 catch (Exception ex)
                 {
                     Logger.Error($"Could not complete publishing process for record with GUID={record.Id}", ex);
                 }
-
-                Logger.Info($"Successfully published record {record.Id} {record.Gemini.Title}");
             }
             // commit the changes - to both the record (resource locator may have changed) and the attempt object
             db.SaveChanges();
@@ -155,7 +155,7 @@ namespace Catalogue.Robot.Publishing
 
                     hubService.Index(redactedRecord);
                 }
-                catch (WebException ex)
+                catch (Exception ex)
                 {
                     attempt.Message = ex.Message + (ex.InnerException != null ? ex.InnerException.Message : "");
                     Logger.Error($"Could not save record to hub database, GUID={record.Id}", ex);
@@ -183,7 +183,7 @@ namespace Catalogue.Robot.Publishing
 
                     uploadRecordService.UpdateGovPublishSuccess(record, attempt);
                 }
-                catch (WebException ex)
+                catch (Exception ex)
                 {
                     attempt.Message = ex.Message + (ex.InnerException != null ? ex.InnerException.Message : "");
                     Logger.Error($"DGU metadata transfer failed for record with GUID={record.Id}", ex);

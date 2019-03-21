@@ -1,6 +1,8 @@
-﻿using Catalogue.Data.Model;
+﻿using System;
+using Catalogue.Data.Model;
 using Catalogue.Robot.Publishing.Client;
 using log4net;
+using Newtonsoft.Json.Linq;
 
 namespace Catalogue.Robot.Publishing.Hub
 {
@@ -26,7 +28,12 @@ namespace Catalogue.Robot.Publishing.Hub
             var messageBody = hubMessageConverter.ConvertRecordToHubAsset(record);
             //Logger.Debug($"Hub asset to send: {messageBody}");
 
-            apiClient.SendToHub(messageBody);
+            var response = apiClient.SendToHub(messageBody);
+
+            if (!response.Equals("{}"))
+            {
+                throw new InvalidOperationException($"Error saving the record to the ResourceHub: {response}");
+            }
 
             Logger.Info("Message posted to hub API endpoint");
         }
