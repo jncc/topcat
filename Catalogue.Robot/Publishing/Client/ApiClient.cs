@@ -15,21 +15,23 @@ namespace Catalogue.Robot.Publishing.Client
         private static readonly ILog Logger = LogManager.GetLogger(typeof(ApiClient));
 
         private readonly Env env;
+        private readonly HttpClient httpClient;
 
-        public ApiClient(Env env)
+        public ApiClient(Env env, HttpClient httpClient)
         {
             this.env = env;
+            this.httpClient = httpClient;
         }
 
-        public string SendToHub(string assetMessage)
+        public HttpResponseMessage SendToHub(string assetMessage)
         {
             var response = Post(assetMessage).GetAwaiter().GetResult();
-            Logger.Info($"Posted asset to Hub API endpoint {env.HUB_API_ENDPOINT}, response is {response}");
+            Logger.Info($"Posted asset to Hub API endpoint {env.HUB_API_ENDPOINT}, response is {(int)response.StatusCode} {response.StatusCode}");
 
             return response;
         }
 
-        private async Task<string> Post(string body)
+        private async Task<HttpResponseMessage> Post(string body)
         {
             var request = new HttpRequestMessage
             {
@@ -43,10 +45,10 @@ namespace Catalogue.Robot.Publishing.Client
             };
 
             var signedRequest = await GetSignedRequest(request);
-            var response = await new HttpClient().SendAsync(signedRequest);
-            var responseString = await response.Content.ReadAsStringAsync();
+            var response = await httpClient.SendAsync(signedRequest);
+            var responseMessage = response;
 
-            return responseString;
+            return responseMessage;
         }
 
         private async Task<HttpRequestMessage> GetSignedRequest(HttpRequestMessage request)

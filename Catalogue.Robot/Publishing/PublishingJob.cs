@@ -1,4 +1,5 @@
-﻿using Catalogue.Data.Query;
+﻿using System.Net.Http;
+using Catalogue.Data.Query;
 using Catalogue.Data.Write;
 using Catalogue.Robot.Publishing.Client;
 using Catalogue.Robot.Publishing.Data;
@@ -16,11 +17,13 @@ namespace Catalogue.Robot.Publishing
 
         private readonly Env env;
         private readonly IDocumentStore store;
+        private readonly HttpClient httpClient;
 
-        public PublishingJob(Env env, IDocumentStore store)
+        public PublishingJob(Env env, IDocumentStore store, HttpClient httpClient)
         {
             this.env = env;
             this.store = store;
+            this.httpClient = httpClient;
         }
 
         public void Execute(IJobExecutionContext context)
@@ -40,7 +43,7 @@ namespace Catalogue.Robot.Publishing
                 var ftpClient = new FtpClient(env.FTP_USERNAME, env.FTP_PASSWORD);
                 var dataUploader = new DataUploader(env, ftpClient, new FileHelper());
                 var metadataUploader = new MetadataUploader(env);
-                var hubService = new HubService(env);
+                var hubService = new HubService(env, new ApiClient(env, httpClient));
 
                 var robotPublisher = new RobotPublisher(env, db, redactor, publishingUploadService, dataUploader, metadataUploader, hubService);
 

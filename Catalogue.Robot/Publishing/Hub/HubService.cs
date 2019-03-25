@@ -1,8 +1,8 @@
-﻿using System;
-using Catalogue.Data.Model;
+﻿using Catalogue.Data.Model;
 using Catalogue.Robot.Publishing.Client;
 using log4net;
-using Newtonsoft.Json.Linq;
+using System;
+using System.Net;
 
 namespace Catalogue.Robot.Publishing.Hub
 {
@@ -14,9 +14,9 @@ namespace Catalogue.Robot.Publishing.Hub
         private readonly QueueClient queueClient;
         private readonly HubMessageConverter hubMessageConverter;
 
-        public HubService(Env env)
+        public HubService(Env env, ApiClient apiClient)
         {
-            this.apiClient = new ApiClient(env);
+            this.apiClient = apiClient;
             this.queueClient = new QueueClient(env);
             this.hubMessageConverter = new HubMessageConverter(env, new FileHelper());
         }
@@ -30,7 +30,7 @@ namespace Catalogue.Robot.Publishing.Hub
 
             var response = apiClient.SendToHub(messageBody);
 
-            if (!response.Equals("{}"))
+            if (response.StatusCode != HttpStatusCode.OK)
             {
                 throw new InvalidOperationException($"Error saving the record to the ResourceHub: {response}");
             }

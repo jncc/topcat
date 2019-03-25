@@ -28,7 +28,7 @@ namespace Catalogue.Robot.Publishing.Data
 
             var fileSize = fileHelper.GetFileSizeInBytes(filePath);
 
-            if (fileSize <= 1000000000)
+            if (fileSize <= env.MAX_FILE_SIZE_IN_BYTES)
             {
                 string unrootedDataPath = WebificationUtility.GetUnrootedDataPath(recordId, filePath);
 

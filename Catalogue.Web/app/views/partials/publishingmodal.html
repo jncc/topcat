@@ -94,17 +94,17 @@
                                       (recordOutput.recordState.publishingState.previouslyPublishedWithDoi && form.publication.target.hub.lastSuccess != null) ||
                                       (!recordOutput.recordState.publishingState.previouslyPublishedWithDoi && form.publication.target.hub.publishable == true)">
                                     ResourceHub upload: {{ hubPublishingStatus() }}<br />
-                                </span>
-                                <span ng-if="form.publication.target.hub.lastAttempt.message">
-                                    {{form.publication.target.hub.lastAttempt.message}}<br /><br />
+                                    <span ng-if="form.publication.target.hub.lastAttempt.message">
+                                        {{form.publication.target.hub.lastAttempt.message}}<br /><br />
+                                    </span>
                                 </span>
                                 <span ng-if="form.publication.target.gov &&
                                       ((recordOutput.recordState.publishingState.previouslyPublishedWithDoi && form.publication.target.gov.lastSuccess != null) ||
                                       (!recordOutput.recordState.publishingState.previouslyPublishedWithDoi && form.publication.target.gov.publishable == true))">
                                     Data.gov.uk upload: {{ govPublishingStatus() }}<br />
-                                </span>
-                                <span ng-if="form.publication.target.gov.lastAttempt.message">
-                                    {{form.publication.target.gov.lastAttempt.message}}<br />
+                                    <span ng-if="form.publication.target.gov.lastAttempt.message">
+                                        {{form.publication.target.gov.lastAttempt.message}}<br />
+                                    </span>
                                 </span>
                             </p>
                         </span>

@@ -7,6 +7,7 @@ namespace Catalogue.Robot.Publishing
     {
         // data file host
         public string HTTP_ROOT_URL { get; private set; }
+        public long MAX_FILE_SIZE_IN_BYTES { get; private set; }
 
         public string FTP_ROOT_URL { get; private set; }
         public string FTP_USERNAME { get; private set; }
@@ -32,6 +33,7 @@ namespace Catalogue.Robot.Publishing
             DotEnv.Config(filePath: filePath);
 
             this.HTTP_ROOT_URL = GetVariable("HTTP_ROOT_URL");
+            this.MAX_FILE_SIZE_IN_BYTES = long.Parse(GetVariable("MAX_FILE_SIZE_IN_BYTES"));
 
             this.FTP_ROOT_URL = GetVariable("FTP_ROOT_URL");
             this.FTP_USERNAME = GetVariable("FTP_USERNAME");

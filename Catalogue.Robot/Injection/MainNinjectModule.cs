@@ -1,4 +1,5 @@
-﻿using Catalogue.Robot.Publishing;
+﻿using System.Net.Http;
+using Catalogue.Robot.Publishing;
 using Ninject.Extensions.Conventions;
 using Ninject.Modules;
 using Quartz.Spi;
@@ -19,10 +20,12 @@ namespace Catalogue.Robot.Injection
                 .SelectAllClasses()
                 .BindDefaultInterface());
 
-            Bind<IDocumentStore>().ToMethod(x => Program.DocumentStore);
             Bind<Env>().ToMethod(x => new Env());
-//             may want to use the log4net logger
-//            Kernel.Bind<ILog>().ToMethod(x => LogManager.GetLogger(typeof(Program)));
+            Bind<IDocumentStore>().ToMethod(x => Program.DocumentStore);
+            Bind<HttpClient>().ToSelf().InSingletonScope();
+            
+            //             may want to use the log4net logger
+            //            Kernel.Bind<ILog>().ToMethod(x => LogManager.GetLogger(typeof(Program)));
 
             Bind<IJobFactory>().To<NinjectJobFactory>();
         }
