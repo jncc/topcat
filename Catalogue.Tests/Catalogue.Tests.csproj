@@ -77,7 +77,7 @@
     <Compile Include="Slow\Catalogue.Robot\hub_message_helper_specs.cs" />
     <Compile Include="Slow\Catalogue.Robot\publishingxmlhelper_specs.cs" />
     <Compile Include="Slow\Catalogue.Robot\record_redactor_specs.cs" />
-    <Compile Include="Slow\Catalogue.Robot\robot_uploader_specs.cs" />
+    <Compile Include="Slow\Catalogue.Robot\robot_publisher_specs.cs" />
     <Compile Include="Slow\Catalogue.Utilities\jncc_drive_mappings_tests.cs" />
     <Compile Include="Slow\Catalogue.Web\Controllers\Account\account_controller_specs.cs" />
     <Compile Include="Slow\Catalogue.Web\Controllers\Export\export_controller_tests.cs" />

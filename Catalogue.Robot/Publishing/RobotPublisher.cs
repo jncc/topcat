@@ -144,22 +144,30 @@ namespace Catalogue.Robot.Publishing
                 uploadRecordService.UpdateHubPublishAttempt(record, attempt);
                 db.SaveChanges();
 
+                var redactedRecord = recordRedactor.RedactRecord(record); // this isn't saved back to the db
                 try
                 {
-                    var redactedRecord = recordRedactor.RedactRecord(record); // this isn't saved back to the db
-
                     hubService.Save(redactedRecord);
 
                     var url = env.HUB_ASSETS_BASE_URL + Helpers.RemoveCollection(record.Id);
                     uploadRecordService.UpdateHubPublishSuccess(record, url, attempt);
-
-                    hubService.Index(redactedRecord);
+                    // successfully published to the hub at this stage
                 }
                 catch (Exception ex)
                 {
                     attempt.Message = ex.Message + (ex.InnerException != null ? ex.InnerException.Message : "");
                     Logger.Error($"Could not save record to hub database, GUID={record.Id}", ex);
                     throw;
+                }
+
+                try
+                {
+                    // attempt to index the record but don't break downstream processing if this doesn't work
+                    hubService.Index(redactedRecord);
+                }
+                catch (Exception ex)
+                {
+                    Logger.Error($"Tried but failed to index the record in the hub, GUID={record.Id}", ex);
                 }
             }
             else

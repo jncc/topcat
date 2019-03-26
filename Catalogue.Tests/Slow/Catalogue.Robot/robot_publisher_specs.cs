@@ -15,7 +15,7 @@ using System.Collections.Generic;
 
 namespace Catalogue.Tests.Slow.Catalogue.Robot
 {
-    public class robot_uploader_specs : CleanDbTest
+    public class robot_publisher_specs : CleanDbTest
     {
         private Env env;
 
@@ -214,7 +214,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Robot
         }
 
         [Test]
-        public void failed_data_transfer_attempt_for_hub_and_gov_publish()
+        public void previous_failed_data_transfer_attempt_for_hub_and_gov_publish()
         {
             var assessedAndSignedOffRecord = new Record().With(r =>
             {
@@ -257,7 +257,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Robot
         }
 
         [Test]
-        public void failed_data_transfer_attempt_for_hub_and_gov_republish()
+        public void previous_failed_data_transfer_attempt_for_hub_and_gov_republish()
         {
             var attemptedButFailedRecord = readyToUploadRecord.With(r =>
             {
@@ -305,7 +305,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Robot
         }
 
         [Test]
-        public void failed_hub_attempt_for_hub_and_gov_publish()
+        public void previous_failed_hub_attempt_for_hub_and_gov_publish()
         {
             var hubFailure = new Record().With(r =>
             {
@@ -353,7 +353,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Robot
         }
 
         [Test]
-        public void failed_hub_attempt_for_hub_and_gov_republish()
+        public void previous_failed_hub_attempt_for_hub_and_gov_republish()
         {
             var attemptedButFailedRecord = readyToUploadRecord.With(r =>
             {
@@ -401,7 +401,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Robot
         }
 
         [Test]
-        public void failed_gov_attempt_for_hub_and_gov_publish()
+        public void previous_failed_gov_attempt_for_hub_and_gov_publish()
         {
             var attemptedButFailedRecord = readyToUploadRecord.With(r =>
             {
@@ -450,7 +450,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Robot
         }
 
         [Test]
-        public void failed_gov_attempt_for_hub_and_gov_republish()
+        public void previous_failed_gov_attempt_for_hub_and_gov_republish()
         {
             var attemptedButFailedRecord = readyToUploadRecord.With(r =>
             {

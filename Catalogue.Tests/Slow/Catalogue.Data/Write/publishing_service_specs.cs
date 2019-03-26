@@ -503,7 +503,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Data.Write
                 var redactorMock = new Mock<IRecordRedactor>();
                 var uploader = new RobotPublisher(env, db, redactorMock.Object, uploadService, dataUploaderMock.Object, metadataUploaderMock.Object, hubServiceMock.Object);
 
-                dataUploaderMock.Setup(x => x.UploadDataFile(It.IsAny<string>(), It.IsAny<string>())).Throws(new WebException("test message"));
+                dataUploaderMock.Setup(x => x.UploadDataFile(It.IsAny<string>(), It.IsAny<string>())).Throws(new Exception("test message"));
 
                 uploader.PublishRecords(new List<Record> { record });
 
@@ -661,7 +661,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Data.Write
                 var hubServiceMock = new Mock<IHubService>();
                 var redactorMock = new Mock<IRecordRedactor>();
                 var uploader = new RobotPublisher(env, db, redactorMock.Object, uploadService, dataUploaderMock.Object, metadataUploaderMock.Object, hubServiceMock.Object);
-                hubServiceMock.Setup(x => x.Save(It.IsAny<Record>())).Throws(new WebException("test message"));
+                hubServiceMock.Setup(x => x.Save(It.IsAny<Record>())).Throws(new Exception("test message"));
                 redactorMock.Setup(x => x.RedactRecord(It.IsAny<Record>())).Returns(record);
 
                 uploader.PublishRecords(new List<Record> { record });
@@ -676,6 +676,83 @@ namespace Catalogue.Tests.Slow.Catalogue.Data.Write
                 updatedRecord.Publication.Target.Gov.LastSuccess.Should().BeNull();
                 updatedRecord.Gemini.MetadataDate.Should().Be(testTime);
                 redactorMock.Verify(x => x.RedactRecord(It.IsAny<Record>()), Times.Once);
+
+                Clock.CurrentUtcDateTimeGetter = currentTime;
+            }
+        }
+
+        [Test]
+        public void publish_fails_at_hub_index(
+            [Values("publication", "dataset", "nonGeographicDataset", "service")] string resourceType)
+        {
+            var recordId = Guid.NewGuid().ToString();
+            var record = new Record().With(r =>
+            {
+                r.Id = Helpers.AddCollection(recordId);
+                r.Path = @"X:\path\to\upload\test";
+                r.Validation = Validation.Gemini;
+                r.Gemini = Library.Example().With(m => m.ResourceType = resourceType);
+                r.Publication = new PublicationInfo
+                {
+                    Assessment = new AssessmentInfo
+                    {
+                        Completed = true,
+                        CompletedByUser = TestUserInfo.TestUser
+                    },
+                    SignOff = new SignOffInfo
+                    {
+                        DateUtc = new DateTime(2017, 08, 02),
+                        User = TestUserInfo.TestUser
+                    },
+                    Data = new DataInfo
+                    {
+                        Resources = new List<Resource> { new Resource { Name = "Some resource", Path = "x:\\test\\path" } }
+                    },
+                    Target = new TargetInfo
+                    {
+                        Hub = new HubPublicationInfo
+                        {
+                            Publishable = true
+                        },
+                        Gov = new GovPublicationInfo
+                        {
+                            Publishable = true
+                        }
+                    }
+                };
+                r.Footer = new Footer();
+            });
+
+            using (var db = ReusableDocumentStore.OpenSession())
+            {
+                db.Store(record);
+                db.SaveChanges();
+
+                var currentTime = Clock.CurrentUtcDateTimeGetter;
+                var testTime = new DateTime(2017, 08, 18, 12, 0, 0);
+                Clock.CurrentUtcDateTimeGetter = () => testTime;
+
+                var uploadService = new PublishingUploadRecordService(db, new RecordValidator());
+                var dataUploaderMock = new Mock<IDataUploader>();
+                var metadataUploaderMock = new Mock<IMetadataUploader>();
+                var hubServiceMock = new Mock<IHubService>();
+                var redactorMock = new Mock<IRecordRedactor>();
+                var uploader = new RobotPublisher(env, db, redactorMock.Object, uploadService, dataUploaderMock.Object, metadataUploaderMock.Object, hubServiceMock.Object);
+                hubServiceMock.Setup(x => x.Index(It.IsAny<Record>())).Throws(new Exception("test message"));
+                redactorMock.Setup(x => x.RedactRecord(It.IsAny<Record>())).Returns(record);
+
+                uploader.PublishRecords(new List<Record> { record });
+
+                var updatedRecord = db.Load<Record>(record.Id);
+                updatedRecord.Publication.Data.LastAttempt.DateUtc.Should().Be(testTime);
+                updatedRecord.Publication.Data.LastSuccess.DateUtc.Should().Be(testTime);
+                updatedRecord.Publication.Target.Hub.LastAttempt.DateUtc.Should().Be(testTime);
+                updatedRecord.Publication.Target.Hub.LastAttempt.Message.Should().BeNull();
+                updatedRecord.Publication.Target.Hub.LastSuccess.DateUtc.Should().Be(testTime);
+                updatedRecord.Publication.Target.Gov.LastAttempt.DateUtc.Should().Be(testTime);
+                updatedRecord.Publication.Target.Gov.LastSuccess.DateUtc.Should().Be(testTime);
+                updatedRecord.Gemini.MetadataDate.Should().Be(testTime);
+                redactorMock.Verify(x => x.RedactRecord(It.IsAny<Record>()), Times.Exactly(2));
 
                 Clock.CurrentUtcDateTimeGetter = currentTime;
             }
@@ -739,7 +816,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Data.Write
                 var uploader = new RobotPublisher(env, db, redactorMock.Object, uploadService, dataUploaderMock.Object, metadataUploaderMock.Object, hubServiceMock.Object);
 
                 var recordWithoutCollection = Helpers.RemoveCollectionFromId(record);
-                metadataUploaderMock.Setup(x => x.UploadMetadataDocument(recordWithoutCollection)).Throws(new WebException("test message"));
+                metadataUploaderMock.Setup(x => x.UploadMetadataDocument(recordWithoutCollection)).Throws(new Exception("test message"));
                 hubServiceMock.Setup(x => x.Save(It.IsAny<Record>()));
                 redactorMock.Setup(x => x.RedactRecord(It.IsAny<Record>())).Returns(record);
 
