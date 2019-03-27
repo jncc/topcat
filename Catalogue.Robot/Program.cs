@@ -15,8 +15,8 @@ namespace Catalogue.Robot
 {
     public class Options
     {
-        [Option("run", Default = false, HelpText = "Start an unscheduled publish")]
-        public bool Run { get; set; }
+        [Option("publish", Default = false, HelpText = "Start an unscheduled publish")]
+        public bool Publish { get; set; }
 
         [Option("metadataOnly", Default = false, HelpText = "Skip publishable resource file uploads?")]
         public bool MetadataOnly { get; set; }
@@ -34,7 +34,7 @@ namespace Catalogue.Robot
             Parser.Default.ParseArguments<Options>(args)
                 .WithParsed(o =>
                 {
-                    if (o.Run)
+                    if (o.Publish)
                     {
                         Logger.Info("Running unscheduled publish, metadataOnly=" + o.MetadataOnly);
                         var uploadJob = CreateUploadJob();
