@@ -1,99 +1,85 @@
-﻿using Catalogue.Data;
-using Catalogue.Robot.Injection;
+﻿using Catalogue.Robot.Injection;
+using Catalogue.Robot.Publishing;
 using log4net;
 using log4net.Config;
 using Ninject;
 using Quartz;
 using System;
 using System.Configuration;
-using System.Net.Http;
-using Catalogue.Robot.Publishing;
-using dotenv.net;
-using Raven.Client.Documents;
+using CommandLine;
 using Topshelf;
 using Topshelf.Ninject;
 using Topshelf.Quartz;
 
 namespace Catalogue.Robot
 {
+    public class Options
+    {
+        [Option("run", Default = false, HelpText = "Start an unscheduled publish")]
+        public bool Run { get; set; }
+
+        [Option("metadataOnly", Default = false, HelpText = "Skip publishable resource file uploads?")]
+        public bool MetadataOnly { get; set; }
+    }
+
     class Program
     {
         private static readonly ILog Logger = LogManager.GetLogger(typeof(Program));
-
-        public static IDocumentStore DocumentStore
-        {
-            get
-            {
-                try
-                {
-                    // DatabaseFactory.Production() returns the RavenDB DocumentStore using the connection
-                    // string name specfied in the local web.config or app.config, so this is just what we need
-                    // for both production and local dev (where we use the db running in the local dev web app)
-                    return DatabaseFactory.Production();
-                }
-                catch (HttpRequestException ex)
-                {
-                    var e = new Exception("Unable to connect to the Topcat database.", ex);
-                    Logger.Error(e);
-                    throw e;
-                }
-            }
-        }
 
         private static void Main(string[] args)
         {
             GlobalContext.Properties["LogFileName"] = ConfigurationManager.AppSettings["LogFilePath"];
             XmlConfigurator.Configure();
 
-            bool runOnce = args != null && args.Length > 0 && "runOnce".Equals(args[0]);
-
-            if (runOnce)
-            {
-                bool metadataOnly = args.Length > 1 && "metadataOnly".Equals(args[1]);
-                Logger.Info("Running upload in runOnce mode, metadataOnly=" + metadataOnly);
-
-                var uploadJob = CreateUploadJob();
-                uploadJob.Publish(metadataOnly);
-                Logger.Info("Finished run");
-            }
-            else
-            {
-                Logger.Info("Running scheduled service");
-                var startHour = Convert.ToInt32(ConfigurationManager.AppSettings["UploaderStartHour"]);
-                var startMin = Convert.ToInt32(ConfigurationManager.AppSettings["UploaderStartMinute"]);
-                var interval = Convert.ToInt32(ConfigurationManager.AppSettings["UploaderRunIntervalInHours"]);
-
-                HostFactory.Run(x =>
+            Parser.Default.ParseArguments<Options>(args)
+                .WithParsed(o =>
                 {
-                    x.UseNinject(new MainNinjectModule());
-                    x.UsingQuartzJobFactory(() => new NinjectJobFactory(NinjectBuilderConfigurator.Kernel));
-
-                    x.Service<Robot>(s =>
+                    if (o.Run)
                     {
-                        s.ConstructUsingNinject();
-                        s.WhenStarted(p => p.Start());
-                        s.WhenStopped(p => p.Stop());
-                        s.ScheduleQuartzJob(q =>
-                            q.WithJob(() => JobBuilder.Create<PublishingJob>().Build())
-                                .AddTrigger(() => TriggerBuilder.Create()
-                                    .WithDailyTimeIntervalSchedule(b => b
-                                        .WithIntervalInHours(interval)
-                                        .StartingDailyAt(TimeOfDay.HourAndMinuteOfDay(startHour, startMin)))
-                                    .Build()
-                                )
-                        );
-                    });
+                        Logger.Info("Running unscheduled publish, metadataOnly=" + o.MetadataOnly);
+                        var uploadJob = CreateUploadJob();
+                        uploadJob.Publish(o.MetadataOnly);
+                        Logger.Info("Finished run");
+                    }
+                    else
+                    {
+                        Logger.Info("Running scheduled service");
+                        var startHour = Convert.ToInt32(ConfigurationManager.AppSettings["UploaderStartHour"]);
+                        var startMin = Convert.ToInt32(ConfigurationManager.AppSettings["UploaderStartMinute"]);
+                        var interval = Convert.ToInt32(ConfigurationManager.AppSettings["UploaderRunIntervalInHours"]);
 
-                    string serviceName = "Topcat.Robot." + ConfigurationManager.AppSettings["Environment"];
-                    x.SetDisplayName(serviceName);
-                    x.SetServiceName(serviceName);
-                    x.SetDescription("Uploads metadata and data files from Topcat to data.jncc.gov.uk");
+                        HostFactory.Run(x =>
+                        {
+                            x.UseNinject(new MainNinjectModule());
+                            x.UsingQuartzJobFactory(() => new NinjectJobFactory(NinjectBuilderConfigurator.Kernel));
+
+                            x.Service<Robot>(s =>
+                            {
+                                s.ConstructUsingNinject();
+                                s.WhenStarted(p => p.Start());
+                                s.WhenStopped(p => p.Stop());
+                                s.ScheduleQuartzJob(q =>
+                                    q.WithJob(() => JobBuilder.Create<PublishingJob>().Build())
+                                        .AddTrigger(() => TriggerBuilder.Create()
+                                            .WithDailyTimeIntervalSchedule(b => b
+                                                .WithIntervalInHours(interval)
+                                                .StartingDailyAt(TimeOfDay.HourAndMinuteOfDay(startHour, startMin)))
+                                            .Build()
+                                        )
+                                );
+                            });
+
+                            string serviceName = "Topcat.Robot." + ConfigurationManager.AppSettings["Environment"];
+                            x.SetDisplayName(serviceName);
+                            x.SetServiceName(serviceName);
+                            x.SetDescription("Uploads metadata and data files from Topcat to data.jncc.gov.uk");
+                        });
+                    }
                 });
-            }
         }
 
         /// <summary>
-        /// Creates an instance with dependecies injected.
+        /// Creates an instance with dependencies injected.
         /// </summary>
         public static PublishingJob CreateUploadJob()
         {

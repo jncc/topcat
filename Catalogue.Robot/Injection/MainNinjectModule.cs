@@ -1,4 +1,5 @@
 ﻿using System.Net.Http;
+using Catalogue.Data;
 using Catalogue.Robot.Publishing;
 using Ninject.Extensions.Conventions;
 using Ninject.Modules;
@@ -21,7 +22,7 @@ namespace Catalogue.Robot.Injection
                 .BindDefaultInterface());
 
             Bind<Env>().ToMethod(x => new Env());
-            Bind<IDocumentStore>().ToMethod(x => Program.DocumentStore);
+            Bind<IDocumentStore>().ToMethod(x => DatabaseFactory.Production());
             Bind<HttpClient>().ToSelf().InSingletonScope();
             
             //             may want to use the log4net logger
