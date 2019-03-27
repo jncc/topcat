@@ -1,7 +1,6 @@
 ﻿using Catalogue.Data;
 using Catalogue.Data.Model;
 using Catalogue.Gemini.Encoding;
-using Catalogue.Robot.Publishing.Gov;
 using Raven.Client.Documents.Session;
 using System.Net;
 using System.Net.Http;
@@ -23,7 +22,7 @@ namespace Catalogue.Web.Controllers.Download
         {
             var record = db.Load<Record>(Helpers.AddCollection(id));
             record = Helpers.RemoveCollectionFromId(record);
-            var resources = XmlHelper.GetOnlineResourcesFromDataResources(record);
+            var resources = Helpers.GetOnlineResourcesFromDataResources(record);
 
             var xml = new XmlEncoder().Create(record.Id, record.Gemini, resources);
             var result = new HttpResponseMessage(HttpStatusCode.OK) { Content = new StringContent(xml.ToString()) };

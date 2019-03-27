@@ -2,7 +2,6 @@
 using Catalogue.Data.Export;
 using Catalogue.Data.Query;
 using Catalogue.Gemini.Encoding;
-using Catalogue.Robot.Publishing.Gov;
 using System;
 using System.IO;
 using System.Linq;
@@ -73,7 +72,7 @@ namespace Catalogue.Web.Controllers.Export
 
             // encode the records as iso xml elements
             var elements = from record in records
-                           let doc = new XmlEncoder().Create(record.Id, record.Gemini, XmlHelper.GetOnlineResourcesFromDataResources(record))
+                           let doc = new XmlEncoder().Create(record.Id, record.Gemini, Helpers.GetOnlineResourcesFromDataResources(record))
                            select new XElement("topcat-record", new XAttribute("id", record.Id), new XAttribute("path", record.Path), doc.Root);
 
             var output = new XDocument(new XElement("topcat-export", elements)).ToString();

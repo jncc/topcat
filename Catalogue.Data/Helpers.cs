@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using Catalogue.Data.Model;
+using Catalogue.Gemini.Model;
 
 namespace Catalogue.Data
 {
@@ -39,6 +41,25 @@ namespace Catalogue.Data
             }
 
             return isFilePath;
+        }
+
+        public static List<OnlineResource> GetOnlineResourcesFromDataResources(Record record)
+        {
+            var resources = new List<OnlineResource>();
+            if (record.Publication?.Data?.Resources?.Count > 0)
+            {
+                foreach (var resource in record.Publication.Data.Resources)
+                {
+                    var url = IsFileResource(resource) ? resource.PublishedUrl : resource.Path;
+                    resources.Add(new OnlineResource
+                    {
+                        Name = resource.Name,
+                        Url = url
+                    });
+                }
+            }
+
+            return resources;
         }
     }
 }

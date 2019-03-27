@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Xml.Linq;
+using Catalogue.Data;
 using Quartz.Util;
 
 namespace Catalogue.Robot.Publishing.Gov
@@ -60,43 +61,10 @@ namespace Catalogue.Robot.Publishing.Gov
             }
             else
             {
-                onlineResources = GetOnlineResourcesFromDataResources(record);
+                onlineResources = Helpers.GetOnlineResourcesFromDataResources(record);
             }
 
             return onlineResources;
-        }
-
-        public static List<OnlineResource> GetOnlineResourcesFromDataResources(Record record)
-        {
-            var resources = new List<OnlineResource>();
-            if (record.Publication?.Data?.Resources?.Count > 0)
-            {
-                foreach (var resource in record.Publication.Data.Resources)
-                {
-                    var url = IsFileResource(resource) ? resource.PublishedUrl : resource.Path;
-                    resources.Add(new OnlineResource
-                    {
-                        Name = resource.Name,
-                        Url = url
-                    });
-                }
-            }
-
-            return resources;
-        }
-
-        private static bool IsFileResource(Resource resource)
-        {
-            var isFilePath = false;
-            if (Uri.TryCreate(resource.Path, UriKind.Absolute, out var uri))
-            {
-                if (uri.Scheme == Uri.UriSchemeFile)
-                {
-                    isFilePath = true;
-                }
-            }
-
-            return isFilePath;
         }
     }
 }
