@@ -124,7 +124,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Data.Write
 
                 var uploadService = new PublishingUploadRecordService(db, new RecordValidator());
                 var dataUploaderMock = new Mock<IDataUploader>();
-                var metadataUploaderMock = new Mock<IMetadataUploader>();
+                var metadataUploaderMock = new Mock<IGovService>();
                 var hubServiceMock = new Mock<IHubService>();
                 var redactorMock = new Mock<IRecordRedactor>();
                 var uploader = new RobotPublisher(env, db, redactorMock.Object, uploadService, dataUploaderMock.Object, metadataUploaderMock.Object, hubServiceMock.Object);
@@ -144,8 +144,8 @@ namespace Catalogue.Tests.Slow.Catalogue.Data.Write
                 dataUploaderMock.Verify(x => x.UploadDataFile(Helpers.RemoveCollection(record.Id), It.IsAny<string>()), Times.Exactly(fileCount));
                 hubServiceMock.Verify(x => x.Save(record), Times.Once);
                 hubServiceMock.Verify(x => x.Index(record), Times.Once);
-                metadataUploaderMock.Verify(x => x.UploadMetadataDocument(Helpers.RemoveCollectionFromId(record)), Times.Once);
-                metadataUploaderMock.Verify(x => x.UploadWafIndexDocument(Helpers.RemoveCollectionFromId(record)), Times.Once);
+                metadataUploaderMock.Verify(x => x.UploadGeminiXml(Helpers.RemoveCollectionFromId(record)), Times.Once);
+                metadataUploaderMock.Verify(x => x.UpdateDguIndex(Helpers.RemoveCollectionFromId(record)), Times.Once);
                 redactorMock.Verify(x => x.RedactRecord(It.IsAny<Record>()), Times.Exactly(2));
 
                 Clock.CurrentUtcDateTimeGetter = currentTime;
@@ -192,7 +192,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Data.Write
 
                 var uploadService = new PublishingUploadRecordService(db, new RecordValidator());
                 var dataUploaderMock = new Mock<IDataUploader>();
-                var metadataUploaderMock = new Mock<IMetadataUploader>();
+                var metadataUploaderMock = new Mock<IGovService>();
                 var hubServiceMock = new Mock<IHubService>();
                 var redactorMock = new Mock<IRecordRedactor>();
                 var uploader = new RobotPublisher(env, db, redactorMock.Object, uploadService, dataUploaderMock.Object, metadataUploaderMock.Object, hubServiceMock.Object);
@@ -212,8 +212,8 @@ namespace Catalogue.Tests.Slow.Catalogue.Data.Write
                 dataUploaderMock.Verify(x => x.UploadDataFile(Helpers.RemoveCollection(record.Id), It.IsAny<string>()), Times.Exactly(fileCount));
                 hubServiceMock.Verify(x => x.Save(record), Times.Once);
                 hubServiceMock.Verify(x => x.Index(record), Times.Once);
-                metadataUploaderMock.Verify(x => x.UploadMetadataDocument(record), Times.Never);
-                metadataUploaderMock.Verify(x => x.UploadWafIndexDocument(record), Times.Never);
+                metadataUploaderMock.Verify(x => x.UploadGeminiXml(record), Times.Never);
+                metadataUploaderMock.Verify(x => x.UpdateDguIndex(record), Times.Never);
                 redactorMock.Verify(x => x.RedactRecord(It.IsAny<Record>()), Times.Once);
 
                 Clock.CurrentUtcDateTimeGetter = currentTime;
@@ -260,7 +260,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Data.Write
 
                 var uploadService = new PublishingUploadRecordService(db, new RecordValidator());
                 var dataUploaderMock = new Mock<IDataUploader>();
-                var metadataUploaderMock = new Mock<IMetadataUploader>();
+                var metadataUploaderMock = new Mock<IGovService>();
                 var hubServiceMock = new Mock<IHubService>();
                 var redactorMock = new Mock<IRecordRedactor>();
                 var uploader = new RobotPublisher(env, db, redactorMock.Object, uploadService, dataUploaderMock.Object, metadataUploaderMock.Object, hubServiceMock.Object);
@@ -280,8 +280,8 @@ namespace Catalogue.Tests.Slow.Catalogue.Data.Write
                 dataUploaderMock.Verify(x => x.UploadDataFile(Helpers.RemoveCollection(record.Id), It.IsAny<string>()), Times.Exactly(fileCount));
                 hubServiceMock.Verify(x => x.Save(record), Times.Never);
                 hubServiceMock.Verify(x => x.Index(record), Times.Never);
-                metadataUploaderMock.Verify(x => x.UploadMetadataDocument(record), Times.Once);
-                metadataUploaderMock.Verify(x => x.UploadWafIndexDocument(record), Times.Once);
+                metadataUploaderMock.Verify(x => x.UploadGeminiXml(record), Times.Once);
+                metadataUploaderMock.Verify(x => x.UpdateDguIndex(record), Times.Once);
                 redactorMock.Verify(x => x.RedactRecord(It.IsAny<Record>()), Times.Once);
 
                 Clock.CurrentUtcDateTimeGetter = currentTime;
@@ -338,7 +338,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Data.Write
 
                 var uploadService = new PublishingUploadRecordService(db, new RecordValidator());
                 var dataUploaderMock = new Mock<IDataUploader>();
-                var metadataUploaderMock = new Mock<IMetadataUploader>();
+                var metadataUploaderMock = new Mock<IGovService>();
                 var hubServiceMock = new Mock<IHubService>();
                 var redactorMock = new Mock<IRecordRedactor>();
                 var uploader = new RobotPublisher(env, db, redactorMock.Object, uploadService, dataUploaderMock.Object, metadataUploaderMock.Object, hubServiceMock.Object);
@@ -360,8 +360,8 @@ namespace Catalogue.Tests.Slow.Catalogue.Data.Write
                 dataUploaderMock.Verify(x => x.UploadDataFile(Helpers.RemoveCollection(record.Id), It.IsAny<string>()), Times.Exactly(fileCount));
                 hubServiceMock.Verify(x => x.Save(record), Times.Never);
                 hubServiceMock.Verify(x => x.Index(record), Times.Never);
-                metadataUploaderMock.Verify(x => x.UploadMetadataDocument(record), Times.Once);
-                metadataUploaderMock.Verify(x => x.UploadWafIndexDocument(record), Times.Once);
+                metadataUploaderMock.Verify(x => x.UploadGeminiXml(record), Times.Once);
+                metadataUploaderMock.Verify(x => x.UpdateDguIndex(record), Times.Once);
                 redactorMock.Verify(x => x.RedactRecord(It.IsAny<Record>()), Times.Once);
 
                 Clock.CurrentUtcDateTimeGetter = currentTime;
@@ -417,7 +417,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Data.Write
 
                 var uploadService = new PublishingUploadRecordService(db, new RecordValidator());
                 var dataUploaderMock = new Mock<IDataUploader>();
-                var metadataUploaderMock = new Mock<IMetadataUploader>();
+                var metadataUploaderMock = new Mock<IGovService>();
                 var hubServiceMock = new Mock<IHubService>();
                 var redactorMock = new Mock<IRecordRedactor>();
                 var uploader = new RobotPublisher(env, db, redactorMock.Object, uploadService, dataUploaderMock.Object, metadataUploaderMock.Object, hubServiceMock.Object);
@@ -438,8 +438,8 @@ namespace Catalogue.Tests.Slow.Catalogue.Data.Write
                 dataUploaderMock.Verify(x => x.UploadDataFile(Helpers.RemoveCollection(record.Id), It.IsAny<string>()), Times.Exactly(fileCount));
                 hubServiceMock.Verify(x => x.Save(record), Times.Once);
                 hubServiceMock.Verify(x => x.Index(record), Times.Once);
-                metadataUploaderMock.Verify(x => x.UploadMetadataDocument(Helpers.RemoveCollectionFromId(record)), Times.Never);
-                metadataUploaderMock.Verify(x => x.UploadWafIndexDocument(Helpers.RemoveCollectionFromId(record)), Times.Never);
+                metadataUploaderMock.Verify(x => x.UploadGeminiXml(Helpers.RemoveCollectionFromId(record)), Times.Never);
+                metadataUploaderMock.Verify(x => x.UpdateDguIndex(Helpers.RemoveCollectionFromId(record)), Times.Never);
                 redactorMock.Verify(x => x.RedactRecord(It.IsAny<Record>()), Times.Once);
 
                 Clock.CurrentUtcDateTimeGetter = currentTime;
@@ -498,7 +498,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Data.Write
 
                 var uploadService = new PublishingUploadRecordService(db, new RecordValidator());
                 var dataUploaderMock = new Mock<IDataUploader>();
-                var metadataUploaderMock = new Mock<IMetadataUploader>();
+                var metadataUploaderMock = new Mock<IGovService>();
                 var hubServiceMock = new Mock<IHubService>();
                 var redactorMock = new Mock<IRecordRedactor>();
                 var uploader = new RobotPublisher(env, db, redactorMock.Object, uploadService, dataUploaderMock.Object, metadataUploaderMock.Object, hubServiceMock.Object);
@@ -578,7 +578,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Data.Write
 
                 var uploadService = new PublishingUploadRecordService(db, new RecordValidator());
                 var dataUploaderMock = new Mock<IDataUploader>();
-                var metadataUploaderMock = new Mock<IMetadataUploader>();
+                var metadataUploaderMock = new Mock<IGovService>();
                 var hubServiceMock = new Mock<IHubService>();
                 var redactorMock = new Mock<IRecordRedactor>();
                 var uploader = new RobotPublisher(env, db, redactorMock.Object, uploadService, dataUploaderMock.Object, metadataUploaderMock.Object, hubServiceMock.Object);
@@ -657,7 +657,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Data.Write
 
                 var uploadService = new PublishingUploadRecordService(db, new RecordValidator());
                 var dataUploaderMock = new Mock<IDataUploader>();
-                var metadataUploaderMock = new Mock<IMetadataUploader>();
+                var metadataUploaderMock = new Mock<IGovService>();
                 var hubServiceMock = new Mock<IHubService>();
                 var redactorMock = new Mock<IRecordRedactor>();
                 var uploader = new RobotPublisher(env, db, redactorMock.Object, uploadService, dataUploaderMock.Object, metadataUploaderMock.Object, hubServiceMock.Object);
@@ -734,7 +734,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Data.Write
 
                 var uploadService = new PublishingUploadRecordService(db, new RecordValidator());
                 var dataUploaderMock = new Mock<IDataUploader>();
-                var metadataUploaderMock = new Mock<IMetadataUploader>();
+                var metadataUploaderMock = new Mock<IGovService>();
                 var hubServiceMock = new Mock<IHubService>();
                 var redactorMock = new Mock<IRecordRedactor>();
                 var uploader = new RobotPublisher(env, db, redactorMock.Object, uploadService, dataUploaderMock.Object, metadataUploaderMock.Object, hubServiceMock.Object);
@@ -810,13 +810,13 @@ namespace Catalogue.Tests.Slow.Catalogue.Data.Write
 
                 var uploadService = new PublishingUploadRecordService(db, new RecordValidator());
                 var dataUploaderMock = new Mock<IDataUploader>();
-                var metadataUploaderMock = new Mock<IMetadataUploader>();
+                var metadataUploaderMock = new Mock<IGovService>();
                 var hubServiceMock = new Mock<IHubService>();
                 var redactorMock = new Mock<IRecordRedactor>();
                 var uploader = new RobotPublisher(env, db, redactorMock.Object, uploadService, dataUploaderMock.Object, metadataUploaderMock.Object, hubServiceMock.Object);
 
                 var recordWithoutCollection = Helpers.RemoveCollectionFromId(record);
-                metadataUploaderMock.Setup(x => x.UploadMetadataDocument(recordWithoutCollection)).Throws(new Exception("test message"));
+                metadataUploaderMock.Setup(x => x.UploadGeminiXml(recordWithoutCollection)).Throws(new Exception("test message"));
                 hubServiceMock.Setup(x => x.Save(It.IsAny<Record>()));
                 redactorMock.Setup(x => x.RedactRecord(It.IsAny<Record>())).Returns(record);
 

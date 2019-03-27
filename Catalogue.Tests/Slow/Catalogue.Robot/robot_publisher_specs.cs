@@ -1245,7 +1245,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Robot
 
                 var uploadServiceMock = new Mock<IPublishingUploadRecordService>();
                 var dataUploaderMock = new Mock<IDataUploader>();
-                var metadataUploaderMock = new Mock<IMetadataUploader>();
+                var metadataUploaderMock = new Mock<IGovService>();
                 var hubServiceMock = new Mock<IHubService>();
                 var recordRedactorMock = new Mock<IRecordRedactor>();
                 var robotUploader = new RobotPublisher(env, db, recordRedactorMock.Object, uploadServiceMock.Object, dataUploaderMock.Object, metadataUploaderMock.Object, hubServiceMock.Object);

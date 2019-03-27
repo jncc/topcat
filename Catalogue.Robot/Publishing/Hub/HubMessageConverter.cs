@@ -6,6 +6,12 @@ using System.Collections.Generic;
 
 namespace Catalogue.Robot.Publishing.Hub
 {
+    public interface IHubMessageConverter
+    {
+        string ConvertRecordToHubAsset(Record record);
+        string ConvertRecordToQueueMessage(Record record);
+    }
+
     public class HubMessageConverter : IHubMessageConverter
     {
         private readonly Env env;

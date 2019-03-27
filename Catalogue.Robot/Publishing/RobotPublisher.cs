@@ -27,7 +27,7 @@ namespace Catalogue.Robot.Publishing
         private readonly IRecordRedactor recordRedactor;
         private readonly IPublishingUploadRecordService uploadRecordService;
         private readonly IDataUploader dataUploader;
-        private readonly IMetadataUploader metadataUploader;
+        private readonly IGovService govService;
         private readonly IHubService hubService;
 
         public RobotPublisher(
@@ -36,7 +36,7 @@ namespace Catalogue.Robot.Publishing
             IRecordRedactor recordRedactor,
             IPublishingUploadRecordService uploadRecordService,
             IDataUploader dataUploader,
-            IMetadataUploader metadataUploader,
+            IGovService govService,
             IHubService hubService
             )
         {
@@ -45,7 +45,7 @@ namespace Catalogue.Robot.Publishing
             this.recordRedactor = recordRedactor;
             this.uploadRecordService = uploadRecordService;
             this.dataUploader = dataUploader;
-            this.metadataUploader = metadataUploader;
+            this.govService = govService;
             this.hubService = hubService;
         }
 
@@ -186,8 +186,8 @@ namespace Catalogue.Robot.Publishing
                 try
                 {
                     var redactedRecord = recordRedactor.RedactRecord(record); // this isn't saved back to the db
-                    metadataUploader.UploadMetadataDocument(Helpers.RemoveCollectionFromId(redactedRecord));
-                    metadataUploader.UploadWafIndexDocument(Helpers.RemoveCollectionFromId(redactedRecord));
+                    govService.UploadGeminiXml(Helpers.RemoveCollectionFromId(redactedRecord));
+                    govService.UpdateDguIndex(Helpers.RemoveCollectionFromId(redactedRecord));
 
                     uploadRecordService.UpdateGovPublishSuccess(record, attempt);
                 }

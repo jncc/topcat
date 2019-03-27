@@ -17,18 +17,16 @@ namespace Catalogue.Robot.Publishing.Client
 
     public class FtpClient : IFtpClient
     {
-        readonly string username;
-        readonly string password;
+        private readonly Env env;
 
-        public FtpClient(string username, string password)
+        public FtpClient(Env env)
         {
-            this.username = username;
-            this.password = password;
+            this.env = env;
         }
 
         public void UploadFile(string ftpPath, string filepath)
         {
-            using (var c = new WebClient { Credentials = new NetworkCredential(username, password), Proxy = null })
+            using (var c = new WebClient { Credentials = new NetworkCredential(env.FTP_USERNAME, env.FTP_PASSWORD), Proxy = null })
             {
                 c.UploadFile(ftpPath, "STOR", filepath);
             } 
@@ -36,7 +34,7 @@ namespace Catalogue.Robot.Publishing.Client
 
         public void UploadString(string ftpPath, string content)
         {
-            using (var c = new WebClient {Credentials = new NetworkCredential(username, password), Proxy = null})
+            using (var c = new WebClient {Credentials = new NetworkCredential(env.FTP_USERNAME, env.FTP_PASSWORD), Proxy = null})
             {
                 c.UploadString(ftpPath, "STOR", content);
             }
@@ -44,7 +42,7 @@ namespace Catalogue.Robot.Publishing.Client
 
         public void UploadBytes(string ftpPath, byte[] bytes)
         {
-            using (var c = new WebClient {Credentials = new NetworkCredential(username, password), Proxy = null})
+            using (var c = new WebClient {Credentials = new NetworkCredential(env.FTP_USERNAME, env.FTP_PASSWORD), Proxy = null})
             {
                 c.UploadData(ftpPath, "STOR", bytes);
             }
@@ -52,7 +50,7 @@ namespace Catalogue.Robot.Publishing.Client
 
         public string DownloadString(string ftpPath)
         {
-            using (var c = new WebClient {Credentials = new NetworkCredential(username, password), Proxy = null})
+            using (var c = new WebClient {Credentials = new NetworkCredential(env.FTP_USERNAME, env.FTP_PASSWORD), Proxy = null})
             {
                 return c.DownloadString(ftpPath);
             }

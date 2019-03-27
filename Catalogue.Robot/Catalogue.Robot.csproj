@@ -51,6 +51,9 @@
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Ninject.Web.Common">
+      <HintPath>..\Catalogue.Web\Bin\Ninject.Web.Common.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.Composition" />
     <Reference Include="System.Configuration" />
@@ -71,24 +74,17 @@
     <Compile Include="Injection\MainNinjectModule.cs" />
     <Compile Include="Injection\NinjectJobFactory.cs" />
     <Compile Include="Publishing\Env.cs" />
-    <Compile Include="Publishing\Gov\MetadataUploader.cs" />
-    <Compile Include="Publishing\Gov\IMetadataUploader.cs" />
+    <Compile Include="Publishing\Gov\GovService.cs" />
     <Compile Include="Publishing\FileHelper.cs" />
     <Compile Include="Publishing\Client\ApiClient.cs" />
-    <Compile Include="Publishing\IFileHelper.cs" />
-    <Compile Include="Publishing\Hub\IHubMessageConverter.cs" />
     <Compile Include="Publishing\Client\QueueClient.cs" />
     <Compile Include="Publishing\Hub\HubService.cs" />
-    <Compile Include="Publishing\Hub\IHubService.cs" />
     <Compile Include="Publishing\Hub\HubMessageConverter.cs" />
-    <Compile Include="Publishing\IRecordRedactor.cs" />
     <Compile Include="Publishing\RecordRedactor.cs" />
     <Compile Include="Publishing\PublishingJob.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Publishing\Client\FtpClient.cs" />
-    <Compile Include="Publishing\Data\IDataUploader.cs" />
-    <Compile Include="Publishing\Gov\IXmlHelper.cs" />
     <Compile Include="Publishing\Gov\XmlHelper.cs" />
     <Compile Include="Publishing\RobotPublisher.cs" />
     <Compile Include="Publishing\Data\DataUploader.cs" />

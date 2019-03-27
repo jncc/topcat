@@ -7,6 +7,11 @@ using log4net;
 
 namespace Catalogue.Robot.Publishing.Data
 {
+    public interface IDataUploader
+    {
+        void UploadDataFile(string recordId, string filePath);
+    }
+
     public class DataUploader : IDataUploader
     {
         private static readonly ILog Logger = LogManager.GetLogger(typeof(DataUploader));

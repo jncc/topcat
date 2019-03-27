@@ -17,13 +17,17 @@ namespace Catalogue.Robot.Publishing
 
         private readonly Env env;
         private readonly IDocumentStore store;
-        private readonly HttpClient httpClient;
+        private readonly IFtpClient ftpClient;
+        private readonly IApiClient apiClient;
+        private readonly IQueueClient queueClient;
 
-        public PublishingJob(Env env, IDocumentStore store, HttpClient httpClient)
+        public PublishingJob(Env env, IDocumentStore store, IFtpClient ftpClient, IApiClient apiClient, IQueueClient queueClient)
         {
             this.env = env;
             this.store = store;
-            this.httpClient = httpClient;
+            this.ftpClient = ftpClient;
+            this.apiClient = apiClient;
+            this.queueClient = queueClient;
         }
 
         public void Execute(IJobExecutionContext context)
@@ -40,12 +44,11 @@ namespace Catalogue.Robot.Publishing
                 var publishingService = new RecordPublishingService(db, new RecordValidator());
                 var publishingUploadService = publishingService.Upload();
                 var redactor = new RecordRedactor(new VocabQueryer(db));
-                var ftpClient = new FtpClient(env.FTP_USERNAME, env.FTP_PASSWORD);
                 var dataUploader = new DataUploader(env, ftpClient, new FileHelper());
-                var metadataUploader = new MetadataUploader(env);
-                var hubService = new HubService(env, new ApiClient(env, httpClient));
+                var govService = new GovService(env, ftpClient);
+                var hubService = new HubService(env, apiClient, queueClient);
 
-                var robotPublisher = new RobotPublisher(env, db, redactor, publishingUploadService, dataUploader, metadataUploader, hubService);
+                var robotPublisher = new RobotPublisher(env, db, redactor, publishingUploadService, dataUploader, govService, hubService);
 
                 var records = robotPublisher.GetRecordsPendingUpload();
                 Logger.Info($"Found {records.Count} records to upload");

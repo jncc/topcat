@@ -6,18 +6,25 @@ using System.Net;
 
 namespace Catalogue.Robot.Publishing.Hub
 {
+    public interface IHubService
+    {
+        void Save(Record record);
+        // void Delete(Record record); ?
+        void Index(Record record);
+    }
+
     public class HubService : IHubService
     {
         private static readonly ILog Logger = LogManager.GetLogger(typeof(HubService));
         
-        private readonly ApiClient apiClient;
-        private readonly QueueClient queueClient;
+        private readonly IApiClient apiClient;
+        private readonly IQueueClient queueClient;
         private readonly HubMessageConverter hubMessageConverter;
 
-        public HubService(Env env, ApiClient apiClient)
+        public HubService(Env env, IApiClient apiClient, IQueueClient queueClient)
         {
             this.apiClient = apiClient;
-            this.queueClient = new QueueClient(env);
+            this.queueClient = queueClient;
             this.hubMessageConverter = new HubMessageConverter(env, new FileHelper());
         }
 

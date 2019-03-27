@@ -10,7 +10,12 @@ using System.Web;
 
 namespace Catalogue.Robot.Publishing.Client
 {
-    public class ApiClient
+    public interface IApiClient
+    {
+        HttpResponseMessage SendToHub(string assetMessage);
+    }
+
+    public class ApiClient : IApiClient
     {
         private static readonly ILog Logger = LogManager.GetLogger(typeof(ApiClient));
 

@@ -6,6 +6,11 @@ using System.Collections.Generic;
 
 namespace Catalogue.Robot.Publishing
 {
+    public interface IRecordRedactor
+    {
+        Record RedactRecord(Record record);
+    }
+
     public class RecordRedactor : IRecordRedactor
     {
         private readonly IVocabQueryer queryer;

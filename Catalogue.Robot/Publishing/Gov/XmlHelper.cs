@@ -1,16 +1,20 @@
-﻿using Catalogue.Data.Model;
+﻿using Catalogue.Data;
+using Catalogue.Data.Model;
 using Catalogue.Gemini.Model;
-using Catalogue.Utilities.Clone;
-using System;
+using Quartz.Util;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Xml.Linq;
-using Catalogue.Data;
-using Quartz.Util;
 
 namespace Catalogue.Robot.Publishing.Gov
 {
+    public interface IXmlHelper
+    {
+        byte[] GetMetadataDocument(Record record);
+        string UpdateWafIndexDocument(Record record, string indexDocHtml);
+    }
+
     public class XmlHelper : IXmlHelper
     {
         public byte[] GetMetadataDocument(Record record)
