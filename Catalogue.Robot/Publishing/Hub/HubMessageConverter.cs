@@ -92,15 +92,6 @@ namespace Catalogue.Robot.Publishing.Hub
                             file_bytes = fileHelper.GetFileSizeInBytes(resource.Path)
                         });
                     }
-                    else if (!Helpers.IsFileResource(resource))
-                    {
-                        messageResources.Add(new
-                        {
-                            title = resource.Name,
-                            content = record.Gemini.Abstract,
-                            url = resource.Path
-                        });
-                    }
                 }
             }
 
@@ -115,6 +106,7 @@ namespace Catalogue.Robot.Publishing.Hub
                     title = record.Gemini.Title,
                     content = record.Gemini.Abstract,
                     url = record.Publication.Target.Hub.Url,
+                    resource_type = record.Gemini.ResourceType,
                     keywords = record.Gemini.Keywords,
                     published_date = record.Gemini.DatasetReferenceDate
                 },

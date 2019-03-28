@@ -10,6 +10,8 @@ using Moq;
 using NUnit.Framework;
 using Raven.Client.Documents.Session;
 using System;
+using Catalogue.Data.Query;
+using Catalogue.Gemini.Model;
 
 namespace Catalogue.Tests.Slow.Catalogue.Web.Controllers.Publishing
 {
@@ -786,9 +788,11 @@ namespace Catalogue.Tests.Slow.Catalogue.Web.Controllers.Publishing
         {
             var testUserContext = new TestUserContext();
             var userContextMock = new Mock<IUserContext>();
+            var vocabQueryerMock = new Mock<IVocabQueryer>();
+            vocabQueryerMock.Setup(x => x.GetVocab(It.IsAny<string>())).Returns(new Vocabulary());
             userContextMock.Setup(u => u.User).Returns(testUserContext.User);
 
-            var publishingService = new RecordPublishingService(db, new RecordValidator());
+            var publishingService = new RecordPublishingService(db, new RecordValidator(vocabQueryerMock.Object));
 
             return new PublishingController(db, publishingService, userContextMock.Object);
         }

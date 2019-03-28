@@ -6,6 +6,7 @@ using System.Reflection;
 using Catalogue.Data.Import;
 using Catalogue.Data.Import.Mappings;
 using Catalogue.Data.Model;
+using Catalogue.Data.Query;
 using Catalogue.Data.Write;
 using Catalogue.Gemini.DataFormats;
 using Catalogue.Gemini.Helpers;
@@ -40,7 +41,7 @@ namespace Catalogue.Data.Seed
         {
             using (var db = store.OpenSession())
             {
-                var s = new Seeder(db, new RecordService(db, new RecordValidator()));
+                var s = new Seeder(db, new RecordService(db, new RecordValidator(new VocabQueryer(db))));
                 var timeGetter = Clock.CurrentUtcDateTimeGetter;
                 Clock.CurrentUtcDateTimeGetter = () => new DateTime(2015, 1, 1, 12, 0, 0);
 
@@ -851,9 +852,9 @@ namespace Catalogue.Data.Seed
                 r.Path = @"X:\butterflies\a";
                 r.Gemini = r.Gemini.With(m =>
                 {
-                    m.Title = "This record has a keyword 'butterfly' in vocab 'vocabulary-a'";
+                    m.Title = "This record has a keyword 'butterfly' in vocab 'http://vocab.jncc.gov.uk/seabed-survey-technique'";
                     m.Abstract = "This is just another example record.";
-                    m.Keywords.Add(new MetadataKeyword { Vocab = "vocabulary-a", Value = "butterfly" });
+                    m.Keywords.Add(new MetadataKeyword { Vocab = "http://vocab.jncc.gov.uk/seabed-survey-technique", Value = "butterfly" });
                 });
             });
 
@@ -863,9 +864,9 @@ namespace Catalogue.Data.Seed
                 r.Path = @"X:\butterflies\b";
                 r.Gemini = r.Gemini.With(m =>
                 {
-                    m.Title = "This record has a keyword 'butterfly' in vocab 'vocabulary-b'";
+                    m.Title = "This record has a keyword 'butterfly' in vocab 'http://vocab.jncc.gov.uk/seabed-survey-purpose'";
                     m.Abstract = "This is just another example record.";
-                    m.Keywords.Add(new MetadataKeyword { Vocab = "vocabulary-b", Value = "butterfly" });
+                    m.Keywords.Add(new MetadataKeyword { Vocab = "http://vocab.jncc.gov.uk/seabed-survey-purpose", Value = "butterfly" });
                 });
             });
 
@@ -1148,6 +1149,54 @@ namespace Catalogue.Data.Seed
                 Keywords = new List<VocabularyKeyword>()
             };
             db.Store(meshSeabedSurveyTechnique);
+
+            var meshGui = new Vocabulary
+            {
+                Id = "http://vocab.jncc.gov.uk/mesh-gui",
+                Name = "MESH GUI",
+                Description = "Used by MESH",
+                PublicationDate = "2013",
+                Publishable = false,
+                Controlled = true,
+                Keywords = new List<VocabularyKeyword>()
+            };
+            db.Store(meshGui);
+
+            var humanActivity = new Vocabulary
+            {
+                Id = "http://vocab.jncc.gov.uk/human-activity",
+                Name = "Human Activity",
+                Description = "Human Activity vocab",
+                PublicationDate = "2013",
+                Publishable = false,
+                Controlled = true,
+                Keywords = new List<VocabularyKeyword>()
+            };
+            db.Store(humanActivity);
+
+            var someVocab = new Vocabulary
+            {
+                Id = "http://vocab.jncc.gov.uk/some-vocab",
+                Name = "Some Vocab",
+                Description = "Some Vocab",
+                PublicationDate = "2013",
+                Publishable = false,
+                Controlled = true,
+                Keywords = new List<VocabularyKeyword>()
+            };
+            db.Store(someVocab);
+
+            var anotherVocab = new Vocabulary
+            {
+                Id = "http://vocab.jncc.gov.uk/another-vocab",
+                Name = "Another vocab",
+                Description = "Another vocab",
+                PublicationDate = "2013",
+                Publishable = false,
+                Controlled = true,
+                Keywords = new List<VocabularyKeyword>()
+            };
+            db.Store(anotherVocab);
         }
 
         void AddDatesForTimeline()

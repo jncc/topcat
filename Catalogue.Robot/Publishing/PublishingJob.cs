@@ -41,7 +41,7 @@ namespace Catalogue.Robot.Publishing
         {
             using (var db = store.OpenSession())
             {
-                var publishingService = new RecordPublishingService(db, new RecordValidator());
+                var publishingService = new RecordPublishingService(db, new RecordValidator(new VocabQueryer(db)));
                 var publishingUploadService = publishingService.Upload();
                 var redactor = new RecordRedactor(new VocabQueryer(db));
                 var dataUploader = new DataUploader(env, ftpClient, new FileHelper());

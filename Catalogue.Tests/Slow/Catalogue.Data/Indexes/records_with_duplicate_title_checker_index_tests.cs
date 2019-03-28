@@ -9,6 +9,8 @@ using NUnit.Framework;
 using System;
 using System.Linq;
 using Catalogue.Data;
+using Catalogue.Data.Query;
+using Moq;
 using static Catalogue.Tests.TestUserInfo;
 
 namespace Catalogue.Tests.Slow.Catalogue.Data.Indexes
@@ -20,7 +22,9 @@ namespace Catalogue.Tests.Slow.Catalogue.Data.Indexes
         {
             using (var db = ReusableDocumentStore.OpenSession())
             {
-                var service = new RecordService(db, new RecordValidator());
+                var vocabQueryerMock = new Mock<IVocabQueryer>();
+                vocabQueryerMock.Setup(x => x.GetVocab(It.IsAny<string>())).Returns(new Vocabulary());
+                var service = new RecordService(db, new RecordValidator(vocabQueryerMock.Object));
 
                 var record1 = new Record().With(r =>
                 {

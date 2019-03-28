@@ -7,6 +7,7 @@ using Catalogue.Utilities.Text;
 using System;
 using System.Linq;
 using System.Text.RegularExpressions;
+using Catalogue.Data.Query;
 
 namespace Catalogue.Data.Write
 {
@@ -18,6 +19,13 @@ namespace Catalogue.Data.Write
     public class RecordValidator : IRecordValidator
     {
         private const string GeminiSuffix =  " (Gemini)";
+
+        private readonly IVocabQueryer vocabQueryer;
+
+        public RecordValidator(IVocabQueryer vocabQueryer)
+        {
+            this.vocabQueryer = vocabQueryer;
+        }
 
         public ValidationResult<Record> Validate(Record record)
         {
@@ -125,6 +133,20 @@ namespace Catalogue.Data.Write
                 ValidationResult.Errors.Add(
                     String.Format("Keywords cannot be blank"),
                     r => r.Gemini.Keywords);
+            }
+
+            foreach (var keyword in record.Gemini.Keywords)
+            {
+                if (!string.IsNullOrWhiteSpace(keyword.Vocab))
+                {
+                    var vocab = vocabQueryer.GetVocab(keyword.Vocab);
+
+                    if (vocab == null)
+                    {
+                        ValidationResult.Errors.Add($"The vocab for keyword {keyword.Value} does not exist",
+                            r => r.Gemini.Keywords);
+                    }
+                }
             }
         }
 

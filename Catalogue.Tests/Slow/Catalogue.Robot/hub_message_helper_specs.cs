@@ -92,6 +92,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Robot
                         ""title"":""Test record"",
                         ""content"":""This is a test record"",
                         ""url"":""http://hub.jncc.gov.uk/assets/0545c14b-e7fd-472d-8575-5bb75034945f"",
+                        ""resource_type"":""dataset"",
                         ""keywords"":[
                             {""value"":""Vocabless record"",""vocab"":""""},
                             {""value"":""Terrestrial"",""vocab"":""http://vocab.jncc.gov.uk/jncc-domain""},
@@ -137,6 +138,62 @@ namespace Catalogue.Tests.Slow.Catalogue.Robot
                         ""title"":""Test record"",
                         ""content"":""This is a test record"",
                         ""url"":""http://hub.jncc.gov.uk/assets/0545c14b-e7fd-472d-8575-5bb75034945f"",
+                        ""resource_type"":""dataset"",
+                        ""keywords"":[
+                            {""value"":""Vocabless record"",""vocab"":""""},
+                            {""value"":""Terrestrial"",""vocab"":""http://vocab.jncc.gov.uk/jncc-domain""},
+                            {""value"":""Example Collection"",""vocab"":""http://vocab.jncc.gov.uk/jncc-category""}
+                        ],
+                        ""published_date"":""2015-04-14""
+                    },
+                    ""resources"":[
+                        {
+                            ""title"":""A csv resource"",
+                            ""content"":""This is a test record"",
+                            ""url"":""http://data.jncc.gov.uk/data/0545c14b-e7fd-472d-8575-5bb75034945f-test.csv"",
+                            ""file_extension"":""csv"",
+                            ""file_bytes"":5
+                        }
+                    ]
+                }");
+
+            JToken.DeepEquals(expectedObject, actualObject).Should().BeTrue();
+        }
+
+        [Test]
+        public void queue_message_with_publication_resource_type()
+        {
+            var record = readyToUploadRecord.With(r => r.Publication.Data = new DataInfo
+            {
+                Resources = new List<Resource> {
+                    new Resource {
+                        Name = "A csv resource",
+                        Path = "C:\\work\\test.csv",
+                        PublishedUrl = "http://data.jncc.gov.uk/data/0545c14b-e7fd-472d-8575-5bb75034945f-test.csv"
+                    }
+                }
+            })
+            .With(r => r.Gemini.ResourceType = "publication");
+
+            var fileHelperMock = new Mock<IFileHelper>();
+            var hubMessageHelper = new HubMessageConverter(env, fileHelperMock.Object);
+            fileHelperMock.Setup(x => x.GetFileExtensionWithoutDot(It.IsAny<string>())).Returns("csv");
+            fileHelperMock.Setup(x => x.GetFileSizeInBytes(It.IsAny<string>())).Returns(5);
+
+            var queueMessage = hubMessageHelper.ConvertRecordToQueueMessage(record);
+            var actualObject = JObject.Parse(queueMessage);
+
+            var expectedObject = JObject.Parse(
+                @"{
+                    ""verb"":""upsert"",
+                    ""index"":""topcatdev"",
+                    ""document"":{
+                        ""id"":""0545c14b-e7fd-472d-8575-5bb75034945f"",
+                        ""site"":""datahub"",
+                        ""title"":""Test record"",
+                        ""content"":""This is a test record"",
+                        ""url"":""http://hub.jncc.gov.uk/assets/0545c14b-e7fd-472d-8575-5bb75034945f"",
+                        ""resource_type"":""publication"",
                         ""keywords"":[
                             {""value"":""Vocabless record"",""vocab"":""""},
                             {""value"":""Terrestrial"",""vocab"":""http://vocab.jncc.gov.uk/jncc-domain""},
@@ -191,6 +248,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Robot
                         ""title"":""Test record"",
                         ""content"":""This is a test record"",
                         ""url"":""http://hub.jncc.gov.uk/assets/0545c14b-e7fd-472d-8575-5bb75034945f"",
+                        ""resource_type"":""dataset"",
                         ""keywords"":[
                             {""value"":""Vocabless record"",""vocab"":""""},
                             {""value"":""Terrestrial"",""vocab"":""http://vocab.jncc.gov.uk/jncc-domain""},
@@ -243,6 +301,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Robot
                         ""title"":""Test record"",
                         ""content"":""This is a test record"",
                         ""url"":""http://hub.jncc.gov.uk/assets/0545c14b-e7fd-472d-8575-5bb75034945f"",
+                        ""resource_type"":""dataset"",
                         ""keywords"":[
                             {""value"":""Vocabless record"",""vocab"":""""},
                             {""value"":""Terrestrial"",""vocab"":""http://vocab.jncc.gov.uk/jncc-domain""},
@@ -250,13 +309,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Robot
                         ],
                         ""published_date"":""2015-04-14""
                     },
-                    ""resources"":[
-                        {
-                            ""title"":""A url resource"",
-                            ""content"":""This is a test record"",
-                            ""url"":""http://example.url.resource.com""
-                        }
-                    ]
+                    ""resources"":[]
                 }");
 
             JToken.DeepEquals(expectedObject, actualObject).Should().BeTrue();
@@ -305,6 +358,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Robot
                         ""title"":""Test record"",
                         ""content"":""This is a test record"",
                         ""url"":""http://hub.jncc.gov.uk/assets/0545c14b-e7fd-472d-8575-5bb75034945f"",
+                        ""resource_type"":""dataset"",
                         ""keywords"":[
                             {""value"":""Vocabless record"",""vocab"":""""},
                             {""value"":""Terrestrial"",""vocab"":""http://vocab.jncc.gov.uk/jncc-domain""},
@@ -327,11 +381,6 @@ namespace Catalogue.Tests.Slow.Catalogue.Robot
                             ""file_base64"":""encoded file contents"",
                             ""file_extension"":""pdf"",
                             ""file_bytes"":5
-                        },
-                        {
-                            ""title"":""A url resource"",
-                            ""content"":""This is a test record"",
-                            ""url"":""http://example.url.resource.com""
                         }
                     ]
                 }");
@@ -370,6 +419,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Robot
                         ""title"":""Test record"",
                         ""content"":""This is a test record"",
                         ""url"":""http://hub.jncc.gov.uk/assets/0545c14b-e7fd-472d-8575-5bb75034945f"",
+                        ""resource_type"":""dataset"",
                         ""keywords"":[
                             {""value"":""Vocabless record"",""vocab"":""""},
                             {""value"":""Terrestrial"",""vocab"":""http://vocab.jncc.gov.uk/jncc-domain""},
