@@ -6,21 +6,12 @@ using Ninject;
 using Quartz;
 using System;
 using System.Configuration;
-using CommandLine;
 using Topshelf;
 using Topshelf.Ninject;
 using Topshelf.Quartz;
 
 namespace Catalogue.Robot
 {
-    public class Options
-    {
-        [Option("publish", Default = false, HelpText = "Start an unscheduled publish")]
-        public bool Publish { get; set; }
-
-        [Option("metadataOnly", Default = false, HelpText = "Skip publishable resource file uploads?")]
-        public bool MetadataOnly { get; set; }
-    }
 
     class Program
     {
@@ -31,51 +22,50 @@ namespace Catalogue.Robot
             GlobalContext.Properties["LogFileName"] = ConfigurationManager.AppSettings["LogFilePath"];
             XmlConfigurator.Configure();
 
-            Parser.Default.ParseArguments<Options>(args)
-                .WithParsed(o =>
+            bool runOnce = args != null && args.Length > 0 && "runOnce".Equals(args[0]);
+
+            if (runOnce)
+            {
+                bool metadataOnly = args.Length > 1 && "metadataOnly".Equals(args[1]);
+                Logger.Info("Running unscheduled publish, metadataOnly=" + metadataOnly);
+                var uploadJob = CreateUploadJob();
+                uploadJob.Publish(metadataOnly);
+                Logger.Info("Finished run");
+            }
+            else
+            {
+                Logger.Info("Running scheduled service");
+                var startHour = Convert.ToInt32(ConfigurationManager.AppSettings["UploaderStartHour"]);
+                var startMin = Convert.ToInt32(ConfigurationManager.AppSettings["UploaderStartMinute"]);
+                var interval = Convert.ToInt32(ConfigurationManager.AppSettings["UploaderRunIntervalInHours"]);
+
+                HostFactory.Run(x =>
                 {
-                    if (o.Publish)
+                    x.UseNinject(new MainNinjectModule());
+                    x.UsingQuartzJobFactory(() => new NinjectJobFactory(NinjectBuilderConfigurator.Kernel));
+
+                    x.Service<Robot>(s =>
                     {
-                        Logger.Info("Running unscheduled publish, metadataOnly=" + o.MetadataOnly);
-                        var uploadJob = CreateUploadJob();
-                        uploadJob.Publish(o.MetadataOnly);
-                        Logger.Info("Finished run");
-                    }
-                    else
-                    {
-                        Logger.Info("Running scheduled service");
-                        var startHour = Convert.ToInt32(ConfigurationManager.AppSettings["UploaderStartHour"]);
-                        var startMin = Convert.ToInt32(ConfigurationManager.AppSettings["UploaderStartMinute"]);
-                        var interval = Convert.ToInt32(ConfigurationManager.AppSettings["UploaderRunIntervalInHours"]);
+                        s.ConstructUsingNinject();
+                        s.WhenStarted(p => p.Start());
+                        s.WhenStopped(p => p.Stop());
+                        s.ScheduleQuartzJob(q =>
+                            q.WithJob(() => JobBuilder.Create<PublishingJob>().Build())
+                                .AddTrigger(() => TriggerBuilder.Create()
+                                    .WithDailyTimeIntervalSchedule(b => b
+                                        .WithIntervalInHours(interval)
+                                        .StartingDailyAt(TimeOfDay.HourAndMinuteOfDay(startHour, startMin)))
+                                    .Build()
+                                )
+                        );
+                    });
 
-                        HostFactory.Run(x =>
-                        {
-                            x.UseNinject(new MainNinjectModule());
-                            x.UsingQuartzJobFactory(() => new NinjectJobFactory(NinjectBuilderConfigurator.Kernel));
-
-                            x.Service<Robot>(s =>
-                            {
-                                s.ConstructUsingNinject();
-                                s.WhenStarted(p => p.Start());
-                                s.WhenStopped(p => p.Stop());
-                                s.ScheduleQuartzJob(q =>
-                                    q.WithJob(() => JobBuilder.Create<PublishingJob>().Build())
-                                        .AddTrigger(() => TriggerBuilder.Create()
-                                            .WithDailyTimeIntervalSchedule(b => b
-                                                .WithIntervalInHours(interval)
-                                                .StartingDailyAt(TimeOfDay.HourAndMinuteOfDay(startHour, startMin)))
-                                            .Build()
-                                        )
-                                );
-                            });
-
-                            string serviceName = "Topcat.Robot." + ConfigurationManager.AppSettings["Environment"];
-                            x.SetDisplayName(serviceName);
-                            x.SetServiceName(serviceName);
-                            x.SetDescription("Uploads metadata and data files from Topcat to data.jncc.gov.uk");
-                        });
-                    }
+                    string serviceName = "Topcat.Robot." + ConfigurationManager.AppSettings["Environment"];
+                    x.SetDisplayName(serviceName);
+                    x.SetServiceName(serviceName);
+                    x.SetDescription("Uploads metadata and data files from Topcat to data.jncc.gov.uk");
                 });
+            }
         }
 
         /// <summary>
