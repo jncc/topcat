@@ -63,10 +63,6 @@ namespace Catalogue.Robot.Publishing
                         redactedKeywords.Add(keyword);
                     }
                 }
-                else
-                {
-                    redactedKeywords.Add(keyword);
-                }
             }
 
             return record.With(r =>

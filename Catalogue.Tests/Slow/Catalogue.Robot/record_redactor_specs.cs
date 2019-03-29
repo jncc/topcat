@@ -62,7 +62,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Robot
             redactedRecord.Gemini.MetadataPointOfContact.Name.Should().Be("Digital and Data Solutions, JNCC");
             redactedRecord.Gemini.MetadataPointOfContact.Email.Should().Be("data@jncc.gov.uk");
             redactedRecord.Gemini.MetadataPointOfContact.Role.Should().Be("pointOfContact");
-            redactedRecord.Gemini.Keywords.Count.Should().Be(3);
+            redactedRecord.Gemini.Keywords.Count.Should().Be(2);
         }
 
         [Test]
@@ -80,8 +80,8 @@ namespace Catalogue.Tests.Slow.Catalogue.Robot
             redactedRecord.Gemini.MetadataPointOfContact.Name.Should().Be("Digital and Data Solutions, JNCC");
             redactedRecord.Gemini.MetadataPointOfContact.Email.Should().Be("data@jncc.gov.uk");
             redactedRecord.Gemini.MetadataPointOfContact.Role.Should().Be("pointOfContact");
-            redactedRecord.Gemini.Keywords.Count.Should().Be(2);
-            redactedRecord.Gemini.Keywords.Any(k => k.Value.Equals("A vocabless keyword")).Should().BeTrue();
+            redactedRecord.Gemini.Keywords.Count.Should().Be(1);
+            redactedRecord.Gemini.Keywords.Any(k => k.Value.Equals("A vocabless keyword")).Should().BeFalse();
             redactedRecord.Gemini.Keywords.Any(k => k.Value.Equals("Keyword with vocab")).Should().BeFalse();
             redactedRecord.Gemini.Keywords.Any(k => k.Value.Equals("Another keyword with vocab")).Should().BeTrue();
         }
