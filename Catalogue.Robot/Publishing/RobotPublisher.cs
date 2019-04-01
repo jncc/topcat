@@ -99,11 +99,11 @@ namespace Catalogue.Robot.Publishing
         private void PublishDataFiles(Record record)
         {
             var attempt = new PublicationAttempt { DateUtc = Clock.NowUtc };
-            uploadRecordService.UpdateDataPublishAttempt(record, attempt);
-            db.SaveChanges();
-
             try
             {
+                uploadRecordService.UpdateDataPublishAttempt(record, attempt);
+                db.SaveChanges();
+
                 var resources = record.Publication.Data.Resources.Copy(); // don't want to save if any of them fail
                 if (resources != null)
                 {
@@ -141,12 +141,15 @@ namespace Catalogue.Robot.Publishing
             if (record.Publication.Target?.Hub?.Publishable == true)
             {
                 var attempt = new PublicationAttempt {DateUtc = Clock.NowUtc};
-                uploadRecordService.UpdateHubPublishAttempt(record, attempt);
-                db.SaveChanges();
+                Record redactedRecord;
 
-                var redactedRecord = recordRedactor.RedactRecord(record); // this isn't saved back to the db
                 try
                 {
+                    uploadRecordService.UpdateHubPublishAttempt(record, attempt);
+                    db.SaveChanges();
+
+                    redactedRecord = recordRedactor.RedactRecord(record); // this isn't saved back to the db
+
                     hubService.Save(redactedRecord);
 
                     var url = env.HUB_ASSETS_BASE_URL + Helpers.RemoveCollection(record.Id);
@@ -182,11 +185,12 @@ namespace Catalogue.Robot.Publishing
         {
             if (record.Publication.Target?.Gov?.Publishable == true) {
                 var attempt = new PublicationAttempt { DateUtc = Clock.NowUtc };
-                uploadRecordService.UpdateGovPublishAttempt(record, attempt);
-                db.SaveChanges();
-
+                
                 try
                 {
+                    uploadRecordService.UpdateGovPublishAttempt(record, attempt);
+                    db.SaveChanges();
+
                     var redactedRecord = recordRedactor.RedactRecord(record); // this isn't saved back to the db
                     govService.UploadGeminiXml(Helpers.RemoveCollectionFromId(redactedRecord));
                     govService.UpdateDguIndex(Helpers.RemoveCollectionFromId(redactedRecord));

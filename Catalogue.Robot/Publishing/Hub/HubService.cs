@@ -19,7 +19,7 @@ namespace Catalogue.Robot.Publishing.Hub
         
         private readonly IApiClient apiClient;
         private readonly IQueueClient queueClient;
-        private readonly HubMessageConverter hubMessageConverter;
+        private readonly IHubMessageConverter hubMessageConverter;
 
         public HubService(Env env, IApiClient apiClient, IQueueClient queueClient)
         {

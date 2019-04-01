@@ -11,6 +11,7 @@ using Newtonsoft.Json.Linq;
 using NUnit.Framework;
 using System;
 using System.Collections.Generic;
+using Catalogue.Gemini.Model;
 using Catalogue.Robot.Publishing;
 
 namespace Catalogue.Tests.Slow.Catalogue.Robot
@@ -464,6 +465,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Robot
                         },
                         ""datasetReferenceDate"":""2015-04-14"",
                         ""lineage"":""This dataset was imagined by a developer."",
+                        ""dataFormat"":""XLS"",
                         ""responsibleOrganisation"":{
                             ""name"":""Joint Nature Conservation Committee (JNCC)"",
                             ""email"":""data@jncc.gov.uk"",
@@ -534,6 +536,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Robot
                         },
                         ""datasetReferenceDate"":""2015-04-14"",
                         ""lineage"":""This dataset was imagined by a developer."",
+                        ""dataFormat"":""XLS"",
                         ""responsibleOrganisation"":{
                             ""name"":""Joint Nature Conservation Committee (JNCC)"",
                             ""email"":""data@jncc.gov.uk"",
@@ -614,6 +617,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Robot
                         },
                         ""datasetReferenceDate"":""2015-04-14"",
                         ""lineage"":""This dataset was imagined by a developer."",
+                        ""dataFormat"":""XLS"",
                         ""responsibleOrganisation"":{
                             ""name"":""Joint Nature Conservation Committee (JNCC)"",
                             ""email"":""data@jncc.gov.uk"",
@@ -700,6 +704,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Robot
                         },
                         ""datasetReferenceDate"":""2015-04-14"",
                         ""lineage"":""This dataset was imagined by a developer."",
+                        ""dataFormat"":""XLS"",
                         ""responsibleOrganisation"":{
                             ""name"":""Joint Nature Conservation Committee (JNCC)"",
                             ""email"":""data@jncc.gov.uk"",
@@ -789,6 +794,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Robot
                         },
                         ""datasetReferenceDate"":""2015-04-14"",
                         ""lineage"":""This dataset was imagined by a developer."",
+                        ""dataFormat"":""XLS"",
                         ""responsibleOrganisation"":{
                             ""name"":""Joint Nature Conservation Committee (JNCC)"",
                             ""email"":""data@jncc.gov.uk"",
@@ -874,6 +880,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Robot
                         },
                         ""datasetReferenceDate"":""2015-04-14"",
                         ""lineage"":""This dataset was imagined by a developer."",
+                        ""dataFormat"":""XLS"",
                         ""responsibleOrganisation"":{
                             ""name"":""Joint Nature Conservation Committee (JNCC)"",
                             ""email"":""data@jncc.gov.uk"",
@@ -920,10 +927,20 @@ namespace Catalogue.Tests.Slow.Catalogue.Robot
         }
 
         [Test]
-        public void asset_message_with_empty_doi_and_citation_strings()
+        public void asset_message_with_empty_strings()
         {
+
             var record = readyToUploadRecord.With(r =>
             {
+                r.Gemini.ResourceType = "publication";
+                r.Gemini.Keywords.Add(new MetadataKeyword { Value = "test keyword", Vocab = "" });
+                r.Gemini.TemporalExtent = new TemporalExtent
+                {
+                    Begin = "",
+                    End = ""
+                };
+                r.Gemini.SpatialReferenceSystem = "";
+                r.Gemini.DataFormat = "";
                 r.DigitalObjectIdentifier = "";
                 r.Citation = "";
                 r.Publication.Data = new DataInfo
@@ -966,14 +983,16 @@ namespace Catalogue.Tests.Slow.Catalogue.Robot
                         ""keywords"":[
                             {""value"":""Vocabless record"",""vocab"":null},
                             {""value"":""Terrestrial"",""vocab"":""http://vocab.jncc.gov.uk/jncc-domain""},
-                            {""value"":""Example Collection"",""vocab"":""http://vocab.jncc.gov.uk/jncc-category""}
+                            {""value"":""Example Collection"",""vocab"":""http://vocab.jncc.gov.uk/jncc-category""},
+                            {""value"":""test keyword"",""vocab"":null}
                         ],
                         ""temporalExtent"":{
-                            ""begin"":""1998-01"",
+                            ""begin"":null,
                             ""end"":null
                         },
                         ""datasetReferenceDate"":""2015-04-14"",
                         ""lineage"":""This dataset was imagined by a developer."",
+                        ""dataFormat"":null,
                         ""responsibleOrganisation"":{
                             ""name"":""Joint Nature Conservation Committee (JNCC)"",
                             ""email"":""data@jncc.gov.uk"",
@@ -981,14 +1000,14 @@ namespace Catalogue.Tests.Slow.Catalogue.Robot
                         },
                         ""limitationsOnPublicAccess"":""no limitations"",
                         ""useConstraints"":""no conditions apply"",
-                        ""spatialReferenceSystem"":""http://www.opengis.net/def/crs/EPSG/0/4326"",
+                        ""spatialReferenceSystem"":null,
                         ""metadataDate"":""2017-09-26T00:00:00"",
                         ""metadataPointOfContact"":{
                             ""name"":""Joint Nature Conservation Committee (JNCC)"",
                             ""email"":""some.user@jncc.gov.uk"",
                             ""role"":""pointOfContact""
                         },
-                        ""resourceType"":""dataset"",
+                        ""resourceType"":""publication"",
                         ""metadataLanguage"":""English"",
                         ""boundingBox"":{
                             ""north"":60.77,
@@ -1091,6 +1110,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Robot
                         },
                         ""datasetReferenceDate"":""2015-04-14"",
                         ""lineage"":""This dataset was imagined by a developer."",
+                        ""dataFormat"":""XLS"",
                         ""responsibleOrganisation"":{
                             ""name"":""Joint Nature Conservation Committee (JNCC)"",
                             ""email"":""data@jncc.gov.uk"",
@@ -1208,6 +1228,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Robot
                         },
                         ""datasetReferenceDate"":""2015-04-14"",
                         ""lineage"":""This dataset was imagined by a developer."",
+                        ""dataFormat"":""XLS"",
                         ""responsibleOrganisation"":{
                             ""name"":""Joint Nature Conservation Committee (JNCC)"",
                             ""email"":""data@jncc.gov.uk"",

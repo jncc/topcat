@@ -42,6 +42,7 @@ namespace Catalogue.Robot.Publishing.Hub
                     temporalExtent = record.Gemini.TemporalExtent,
                     datasetReferenceDate = record.Gemini.DatasetReferenceDate,
                     lineage = record.Gemini.Lineage,
+                    dataFormat = record.Gemini.DataFormat,
                     responsibleOrganisation = record.Gemini.ResponsibleOrganisation,
                     limitationsOnPublicAccess = record.Gemini.LimitationsOnPublicAccess,
                     useConstraints = record.Gemini.UseConstraints,
@@ -129,11 +130,16 @@ namespace Catalogue.Robot.Publishing.Hub
             if (IsEmptyString(record.Citation))
                 record.Citation = null;
 
-            if (record.Gemini.TemporalExtent != null && IsEmptyString(record.Gemini.TemporalExtent.End))
-                record.Gemini.TemporalExtent.End = null;
-
             if (IsEmptyString(record.Gemini.DataFormat))
                 record.Gemini.DataFormat = null;
+
+            if (record.Gemini.TemporalExtent != null)
+            {
+                if (IsEmptyString(record.Gemini.TemporalExtent.Begin))
+                    record.Gemini.TemporalExtent.Begin = null;
+                if (IsEmptyString(record.Gemini.TemporalExtent.End))
+                    record.Gemini.TemporalExtent.End = null;
+            }
 
             if (IsEmptyString(record.Gemini.SpatialReferenceSystem))
                 record.Gemini.SpatialReferenceSystem = null;
