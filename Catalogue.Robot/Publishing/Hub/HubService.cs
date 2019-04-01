@@ -33,7 +33,7 @@ namespace Catalogue.Robot.Publishing.Hub
             Logger.Info("Saving record as an asset to the Hub database");
 
             var messageBody = hubMessageConverter.ConvertRecordToHubAsset(record);
-            //Logger.Debug($"Hub asset to send: {messageBody}");
+            Logger.Debug($"Hub asset to send: {messageBody}");
 
             var response = apiClient.SendToHub(messageBody);
 

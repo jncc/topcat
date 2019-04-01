@@ -147,6 +147,8 @@ namespace Catalogue.Tests.Slow.Catalogue.Data.Write
                 var fileCount = CountFileResources(record.Publication.Data.Resources);
                 dataUploaderMock.Verify(x => x.UploadDataFile(Helpers.RemoveCollection(record.Id), It.IsAny<string>()), Times.Exactly(fileCount));
                 hubServiceMock.Verify(x => x.Save(record), Times.Once);
+                record.Publication.Target.Hub.Url =
+                    "http://hub.jncc.gov.uk/assets/" + Helpers.RemoveCollection(recordId);
                 hubServiceMock.Verify(x => x.Index(record), Times.Once);
                 metadataUploaderMock.Verify(x => x.UploadGeminiXml(Helpers.RemoveCollectionFromId(record)), Times.Once);
                 metadataUploaderMock.Verify(x => x.UpdateDguIndex(Helpers.RemoveCollectionFromId(record)), Times.Once);
@@ -217,9 +219,11 @@ namespace Catalogue.Tests.Slow.Catalogue.Data.Write
 
                 dataUploaderMock.Verify(x => x.UploadDataFile(Helpers.RemoveCollection(record.Id), It.IsAny<string>()), Times.Exactly(fileCount));
                 hubServiceMock.Verify(x => x.Save(record), Times.Once);
+                record.Publication.Target.Hub.Url =
+                    "http://hub.jncc.gov.uk/assets/" + Helpers.RemoveCollection(recordId);
                 hubServiceMock.Verify(x => x.Index(record), Times.Once);
-                metadataUploaderMock.Verify(x => x.UploadGeminiXml(record), Times.Never);
-                metadataUploaderMock.Verify(x => x.UpdateDguIndex(record), Times.Never);
+                metadataUploaderMock.Verify(x => x.UploadGeminiXml(It.IsAny<Record>()), Times.Never);
+                metadataUploaderMock.Verify(x => x.UpdateDguIndex(It.IsAny<Record>()), Times.Never);
                 redactorMock.Verify(x => x.RedactRecord(It.IsAny<Record>()), Times.Once);
 
                 Clock.CurrentUtcDateTimeGetter = currentTime;
@@ -286,8 +290,8 @@ namespace Catalogue.Tests.Slow.Catalogue.Data.Write
                 var fileCount = CountFileResources(record.Publication.Data.Resources);
 
                 dataUploaderMock.Verify(x => x.UploadDataFile(Helpers.RemoveCollection(record.Id), It.IsAny<string>()), Times.Exactly(fileCount));
-                hubServiceMock.Verify(x => x.Save(record), Times.Never);
-                hubServiceMock.Verify(x => x.Index(record), Times.Never);
+                hubServiceMock.Verify(x => x.Save(It.IsAny<Record>()), Times.Never);
+                hubServiceMock.Verify(x => x.Index(It.IsAny<Record>()), Times.Never);
                 metadataUploaderMock.Verify(x => x.UploadGeminiXml(record), Times.Once);
                 metadataUploaderMock.Verify(x => x.UpdateDguIndex(record), Times.Once);
                 redactorMock.Verify(x => x.RedactRecord(It.IsAny<Record>()), Times.Once);
@@ -368,8 +372,8 @@ namespace Catalogue.Tests.Slow.Catalogue.Data.Write
 
                 var fileCount = CountFileResources(record.Publication.Data.Resources);
                 dataUploaderMock.Verify(x => x.UploadDataFile(Helpers.RemoveCollection(record.Id), It.IsAny<string>()), Times.Exactly(fileCount));
-                hubServiceMock.Verify(x => x.Save(record), Times.Never);
-                hubServiceMock.Verify(x => x.Index(record), Times.Never);
+                hubServiceMock.Verify(x => x.Save(It.IsAny<Record>()), Times.Never);
+                hubServiceMock.Verify(x => x.Index(It.IsAny<Record>()), Times.Never);
                 metadataUploaderMock.Verify(x => x.UploadGeminiXml(record), Times.Once);
                 metadataUploaderMock.Verify(x => x.UpdateDguIndex(record), Times.Once);
                 redactorMock.Verify(x => x.RedactRecord(It.IsAny<Record>()), Times.Once);

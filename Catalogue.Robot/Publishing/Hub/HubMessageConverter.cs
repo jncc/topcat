@@ -118,34 +118,36 @@ namespace Catalogue.Robot.Publishing.Hub
                 ContractResolver = new CamelCasePropertyNamesContractResolver()
             });
         }
-
+        
         private void ConvertEmptyStringsToNull(Record record)
         {
             // handle empty strings for dynamo, should probably use a custom converter if this gets too big
 
-            if (record.DigitalObjectIdentifier != null && string.IsNullOrWhiteSpace(record.DigitalObjectIdentifier))
-            {
+            if (IsEmptyString(record.DigitalObjectIdentifier))
                 record.DigitalObjectIdentifier = null;
-            }
 
-            if (record.Citation != null && string.IsNullOrWhiteSpace(record.Citation))
-            {
+            if (IsEmptyString(record.Citation))
                 record.Citation = null;
-            }
 
-            if (record.Gemini.TemporalExtent?.End != null &&
-                string.IsNullOrWhiteSpace(record.Gemini.TemporalExtent.End))
-            {
+            if (record.Gemini.TemporalExtent != null && IsEmptyString(record.Gemini.TemporalExtent.End))
                 record.Gemini.TemporalExtent.End = null;
-            }
+
+            if (IsEmptyString(record.Gemini.DataFormat))
+                record.Gemini.DataFormat = null;
+
+            if (IsEmptyString(record.Gemini.SpatialReferenceSystem))
+                record.Gemini.SpatialReferenceSystem = null;
 
             foreach (var keyword in record.Gemini.Keywords)
             {
                 if (keyword.Vocab != null && string.IsNullOrWhiteSpace(keyword.Vocab))
-                {
                     keyword.Vocab = null;
-                }
             }
+        }
+
+        private bool IsEmptyString(string value)
+        {
+            return value != null && string.IsNullOrWhiteSpace(value);
         }
 
         private List<object> GetData(Record record)

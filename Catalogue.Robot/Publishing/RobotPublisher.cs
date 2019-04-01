@@ -152,6 +152,8 @@ namespace Catalogue.Robot.Publishing
                     var url = env.HUB_ASSETS_BASE_URL + Helpers.RemoveCollection(record.Id);
                     uploadRecordService.UpdateHubPublishSuccess(record, url, attempt);
                     // successfully published to the hub at this stage
+
+                    redactedRecord.Publication.Target.Hub.Url = url;
                 }
                 catch (Exception ex)
                 {
