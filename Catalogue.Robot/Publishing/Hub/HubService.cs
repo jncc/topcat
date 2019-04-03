@@ -8,7 +8,7 @@ namespace Catalogue.Robot.Publishing.Hub
 {
     public interface IHubService
     {
-        void Save(Record record);
+        void Publish(Record record);
         // void Delete(Record record); ?
         void Index(Record record);
     }
@@ -28,9 +28,9 @@ namespace Catalogue.Robot.Publishing.Hub
             this.hubMessageConverter = new HubMessageConverter(env, new FileHelper());
         }
 
-        public void Save(Record record)
+        public void Publish(Record record)
         {
-            Logger.Info("Saving record as an asset to the Hub database");
+            Logger.Info("Publishing record as an asset to the Hub");
 
             var messageBody = hubMessageConverter.ConvertRecordToHubAsset(record);
             Logger.Debug($"Hub asset to send: {messageBody}");
@@ -39,7 +39,7 @@ namespace Catalogue.Robot.Publishing.Hub
 
             if (response.StatusCode != HttpStatusCode.OK)
             {
-                throw new InvalidOperationException($"Error saving the record to the ResourceHub: {response}");
+                throw new InvalidOperationException($"Error publishing the record to the ResourceHub: {response}");
             }
 
             Logger.Info("Message posted to hub API endpoint");

@@ -9,7 +9,7 @@ namespace Catalogue.Robot.Publishing
         public string HTTP_ROOT_URL { get; private set; }
         public long MAX_FILE_SIZE_IN_BYTES { get; private set; }
 
-        public string FTP_ROOT_URL { get; private set; }
+        public string FTP_HOST { get; private set; }
         public string FTP_USERNAME { get; private set; }
         public string FTP_PASSWORD { get; private set; }
 
@@ -35,7 +35,7 @@ namespace Catalogue.Robot.Publishing
             this.HTTP_ROOT_URL = GetVariable("HTTP_ROOT_URL");
             this.MAX_FILE_SIZE_IN_BYTES = long.Parse(GetVariable("MAX_FILE_SIZE_IN_BYTES"));
 
-            this.FTP_ROOT_URL = GetVariable("FTP_ROOT_URL");
+            this.FTP_HOST = GetVariable("FTP_HOST");
             this.FTP_USERNAME = GetVariable("FTP_USERNAME");
             this.FTP_PASSWORD = GetVariable("FTP_PASSWORD");
 

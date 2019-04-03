@@ -18,7 +18,7 @@ namespace Catalogue.Data.Model
         /// <summary>
         /// Info related to data transfer to data.jncc.gov.uk
         /// </summary>
-        public DataInfo Data { get; set; }
+        public DataInfo Data { get; set; } //todo: rename
 
         /// <summary>
         /// Contains info on all publishing targets
@@ -87,6 +87,7 @@ namespace Catalogue.Data.Model
         /// </summary>
         public bool? Publishable { get; set; }
 
+        //todo: get rid of this?
         /// <summary>
         /// Don't publish this record, for the time being.
         /// </summary>

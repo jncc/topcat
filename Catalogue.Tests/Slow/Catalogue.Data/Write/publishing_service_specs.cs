@@ -66,11 +66,11 @@ namespace Catalogue.Tests.Slow.Catalogue.Data.Write
                 },
                 new List<Resource>
                 {
-                    new Resource {Name = "Migrated Resource Locator", Path = @"http://data.jncc.gov.uk/data/record-guid-here-filename.txt", PublishedUrl = @"http://data.jncc.gov.uk/data/record-guid-here-filename.txt"}
+                    new Resource {Name = "Migrated Resource Locator", Path = @"http://data.jncc.gov.uk/data/record-guid-here/filename.txt", PublishedUrl = @"http://data.jncc.gov.uk/data/record-guid-here/filename.txt"}
                 },
                 new List<Resource>
                 {
-                    new Resource {Name = "Updated file resource", Path = @"x:\test\file2.txt", PublishedUrl = @"http://data.jncc.gov.uk/data/record-guid-here-file.txt"}
+                    new Resource {Name = "Updated file resource", Path = @"x:\test\file2.txt", PublishedUrl = @"http://data.jncc.gov.uk/data/record-guid-here/file.txt"}
                 }
             };
 
@@ -146,7 +146,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Data.Write
 
                 var fileCount = CountFileResources(record.Publication.Data.Resources);
                 dataUploaderMock.Verify(x => x.UploadDataFile(Helpers.RemoveCollection(record.Id), It.IsAny<string>()), Times.Exactly(fileCount));
-                hubServiceMock.Verify(x => x.Save(record), Times.Once);
+                hubServiceMock.Verify(x => x.Publish(record), Times.Once);
                 record.Publication.Target.Hub.Url =
                     "http://hub.jncc.gov.uk/assets/" + Helpers.RemoveCollection(recordId);
                 hubServiceMock.Verify(x => x.Index(record), Times.Once);
@@ -218,7 +218,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Data.Write
                 var fileCount = CountFileResources(record.Publication.Data.Resources);
 
                 dataUploaderMock.Verify(x => x.UploadDataFile(Helpers.RemoveCollection(record.Id), It.IsAny<string>()), Times.Exactly(fileCount));
-                hubServiceMock.Verify(x => x.Save(record), Times.Once);
+                hubServiceMock.Verify(x => x.Publish(record), Times.Once);
                 record.Publication.Target.Hub.Url =
                     "http://hub.jncc.gov.uk/assets/" + Helpers.RemoveCollection(recordId);
                 hubServiceMock.Verify(x => x.Index(record), Times.Once);
@@ -290,7 +290,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Data.Write
                 var fileCount = CountFileResources(record.Publication.Data.Resources);
 
                 dataUploaderMock.Verify(x => x.UploadDataFile(Helpers.RemoveCollection(record.Id), It.IsAny<string>()), Times.Exactly(fileCount));
-                hubServiceMock.Verify(x => x.Save(It.IsAny<Record>()), Times.Never);
+                hubServiceMock.Verify(x => x.Publish(It.IsAny<Record>()), Times.Never);
                 hubServiceMock.Verify(x => x.Index(It.IsAny<Record>()), Times.Never);
                 metadataUploaderMock.Verify(x => x.UploadGeminiXml(record), Times.Once);
                 metadataUploaderMock.Verify(x => x.UpdateDguIndex(record), Times.Once);
@@ -372,7 +372,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Data.Write
 
                 var fileCount = CountFileResources(record.Publication.Data.Resources);
                 dataUploaderMock.Verify(x => x.UploadDataFile(Helpers.RemoveCollection(record.Id), It.IsAny<string>()), Times.Exactly(fileCount));
-                hubServiceMock.Verify(x => x.Save(It.IsAny<Record>()), Times.Never);
+                hubServiceMock.Verify(x => x.Publish(It.IsAny<Record>()), Times.Never);
                 hubServiceMock.Verify(x => x.Index(It.IsAny<Record>()), Times.Never);
                 metadataUploaderMock.Verify(x => x.UploadGeminiXml(record), Times.Once);
                 metadataUploaderMock.Verify(x => x.UpdateDguIndex(record), Times.Once);
@@ -452,7 +452,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Data.Write
                 
                 var fileCount = CountFileResources(record.Publication.Data.Resources);
                 dataUploaderMock.Verify(x => x.UploadDataFile(Helpers.RemoveCollection(record.Id), It.IsAny<string>()), Times.Exactly(fileCount));
-                hubServiceMock.Verify(x => x.Save(record), Times.Once);
+                hubServiceMock.Verify(x => x.Publish(record), Times.Once);
                 hubServiceMock.Verify(x => x.Index(record), Times.Once);
                 metadataUploaderMock.Verify(x => x.UploadGeminiXml(Helpers.RemoveCollectionFromId(record)), Times.Never);
                 metadataUploaderMock.Verify(x => x.UpdateDguIndex(Helpers.RemoveCollectionFromId(record)), Times.Never);
@@ -682,7 +682,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Data.Write
                 var redactorMock = new Mock<IRecordRedactor>();
                 var uploader = new RobotPublisher(env, db, redactorMock.Object, uploadService, dataUploaderMock.Object, metadataUploaderMock.Object, hubServiceMock.Object);
                 vocabQueryerMock.Setup(x => x.GetVocab(It.IsAny<string>())).Returns(new Vocabulary());
-                hubServiceMock.Setup(x => x.Save(It.IsAny<Record>())).Throws(new Exception("test message"));
+                hubServiceMock.Setup(x => x.Publish(It.IsAny<Record>())).Throws(new Exception("test message"));
                 redactorMock.Setup(x => x.RedactRecord(It.IsAny<Record>())).Returns(record);
 
                 uploader.PublishRecords(new List<Record> { record });
@@ -842,7 +842,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Data.Write
                 var recordWithoutCollection = Helpers.RemoveCollectionFromId(record);
                 vocabQueryerMock.Setup(x => x.GetVocab(It.IsAny<string>())).Returns(new Vocabulary());
                 metadataUploaderMock.Setup(x => x.UploadGeminiXml(recordWithoutCollection)).Throws(new Exception("test message"));
-                hubServiceMock.Setup(x => x.Save(It.IsAny<Record>()));
+                hubServiceMock.Setup(x => x.Publish(It.IsAny<Record>()));
                 redactorMock.Setup(x => x.RedactRecord(It.IsAny<Record>())).Returns(record);
 
                 uploader.PublishRecords(new List<Record> { record });
@@ -900,7 +900,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Data.Write
                 if (IsFileResource(updatedResource))
                 {
                     string dataPath = WebificationUtility.GetUnrootedDataPath(recordId, originalResource.Path);
-                    updatedResource.PublishedUrl.Should().Be("http://data.jncc.gov.uk/" + dataPath);
+                    updatedResource.PublishedUrl.Should().Be("http://data.jncc.gov.uk" + dataPath);
                 }
                 else
                 {

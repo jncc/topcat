@@ -34,6 +34,8 @@ namespace Catalogue.Data.Model
         public string SourceIdentifier { get; set; }
         public bool   ReadOnly         { get; set; } // for imported records
 
+        //todo: move publishable resources and datahub url here
+
         public PublicationInfo Publication { get; set; }
 
         /// <summary>

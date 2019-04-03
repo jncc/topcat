@@ -22,6 +22,7 @@ namespace Catalogue.Robot.Publishing
 
         public Record RedactRecord(Record record)
         {
+            //todo: record clone here
             var redactedRecord = RedactResponsibleOrganisation(record);
             redactedRecord = RedactMetadataContact(redactedRecord);
             redactedRecord = RedactKeywords(redactedRecord);

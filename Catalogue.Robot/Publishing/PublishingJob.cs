@@ -45,7 +45,7 @@ namespace Catalogue.Robot.Publishing
                 var publishingUploadService = publishingService.Upload();
                 var redactor = new RecordRedactor(new VocabQueryer(db));
                 var dataUploader = new DataUploader(env, ftpClient, new FileHelper());
-                var govService = new GovService(env, ftpClient);
+                var govService = new GovService(ftpClient);
                 var hubService = new HubService(env, apiClient, queueClient);
 
                 var robotPublisher = new RobotPublisher(env, db, redactor, publishingUploadService, dataUploader, govService, hubService);

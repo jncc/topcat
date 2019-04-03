@@ -116,7 +116,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Robot
                     new Resource {
                         Name = "A csv resource",
                         Path = "C:\\work\\test.csv",
-                        PublishedUrl = "http://data.jncc.gov.uk/data/0545c14b-e7fd-472d-8575-5bb75034945f-test.csv"
+                        PublishedUrl = "http://data.jncc.gov.uk/data/0545c14b-e7fd-472d-8575-5bb75034945f/test.csv"
                     }
                 }
             });
@@ -151,7 +151,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Robot
                         {
                             ""title"":""A csv resource"",
                             ""content"":""This is a test record"",
-                            ""url"":""http://data.jncc.gov.uk/data/0545c14b-e7fd-472d-8575-5bb75034945f-test.csv"",
+                            ""url"":""http://data.jncc.gov.uk/data/0545c14b-e7fd-472d-8575-5bb75034945f/test.csv"",
                             ""file_extension"":""csv"",
                             ""file_bytes"":5
                         }
@@ -170,7 +170,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Robot
                     new Resource {
                         Name = "A csv resource",
                         Path = "C:\\work\\test.csv",
-                        PublishedUrl = "http://data.jncc.gov.uk/data/0545c14b-e7fd-472d-8575-5bb75034945f-test.csv"
+                        PublishedUrl = "http://data.jncc.gov.uk/data/0545c14b-e7fd-472d-8575-5bb75034945f/test.csv"
                     }
                 }
             })
@@ -206,7 +206,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Robot
                         {
                             ""title"":""A csv resource"",
                             ""content"":""This is a test record"",
-                            ""url"":""http://data.jncc.gov.uk/data/0545c14b-e7fd-472d-8575-5bb75034945f-test.csv"",
+                            ""url"":""http://data.jncc.gov.uk/data/0545c14b-e7fd-472d-8575-5bb75034945f/test.csv"",
                             ""file_extension"":""csv"",
                             ""file_bytes"":5
                         }
@@ -225,7 +225,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Robot
                     new Resource {
                         Name = "A pdf resource",
                         Path = "C:\\work\\test.pdf",
-                        PublishedUrl = "http://data.jncc.gov.uk/data/0545c14b-e7fd-472d-8575-5bb75034945f-test.pdf"
+                        PublishedUrl = "http://data.jncc.gov.uk/data/0545c14b-e7fd-472d-8575-5bb75034945f/test.pdf"
                     }
                 }
             });
@@ -261,7 +261,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Robot
                         {
                             ""title"":""A pdf resource"",
                             ""content"":""This is a test record"",
-                            ""url"":""http://data.jncc.gov.uk/data/0545c14b-e7fd-472d-8575-5bb75034945f-test.pdf"",
+                            ""url"":""http://data.jncc.gov.uk/data/0545c14b-e7fd-472d-8575-5bb75034945f/test.pdf"",
                             ""file_base64"":""encoded file contents"",
                             ""file_extension"":""pdf"",
                             ""file_bytes"":5
@@ -325,12 +325,12 @@ namespace Catalogue.Tests.Slow.Catalogue.Robot
                     new Resource {
                         Name = "A csv resource",
                         Path = "C:\\work\\test.csv",
-                        PublishedUrl = "http://data.jncc.gov.uk/data/0545c14b-e7fd-472d-8575-5bb75034945f-test.csv"
+                        PublishedUrl = "http://data.jncc.gov.uk/data/0545c14b-e7fd-472d-8575-5bb75034945f/test.csv"
                     },
                     new Resource {
                         Name = "A pdf resource",
                         Path = "C:\\work\\test.pdf",
-                        PublishedUrl = "http://data.jncc.gov.uk/data/0545c14b-e7fd-472d-8575-5bb75034945f-test.pdf"
+                        PublishedUrl = "http://data.jncc.gov.uk/data/0545c14b-e7fd-472d-8575-5bb75034945f/test.pdf"
                     },
                     new Resource {
                         Name = "A url resource",
@@ -371,14 +371,14 @@ namespace Catalogue.Tests.Slow.Catalogue.Robot
                         {
                             ""title"":""A csv resource"",
                             ""content"":""This is a test record"",
-                            ""url"":""http://data.jncc.gov.uk/data/0545c14b-e7fd-472d-8575-5bb75034945f-test.csv"",
+                            ""url"":""http://data.jncc.gov.uk/data/0545c14b-e7fd-472d-8575-5bb75034945f/test.csv"",
                             ""file_extension"":""csv"",
                             ""file_bytes"":5
                         },
                         {
                             ""title"":""A pdf resource"",
                             ""content"":""This is a test record"",
-                            ""url"":""http://data.jncc.gov.uk/data/0545c14b-e7fd-472d-8575-5bb75034945f-test.pdf"",
+                            ""url"":""http://data.jncc.gov.uk/data/0545c14b-e7fd-472d-8575-5bb75034945f/test.pdf"",
                             ""file_base64"":""encoded file contents"",
                             ""file_extension"":""pdf"",
                             ""file_bytes"":5
@@ -583,7 +583,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Robot
                     new Resource {
                         Name = "A pdf resource",
                         Path = "C:\\work\\test.pdf",
-                        PublishedUrl = "http://data.jncc.gov.uk/data/0545c14b-e7fd-472d-8575-5bb75034945f-test.pdf"
+                        PublishedUrl = "http://data.jncc.gov.uk/data/0545c14b-e7fd-472d-8575-5bb75034945f/test.pdf"
                     },
                 }
             });
@@ -645,7 +645,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Robot
                         {
                             ""title"":""A pdf resource"",
                             ""http"":{
-                                ""url"":""http://data.jncc.gov.uk/data/0545c14b-e7fd-472d-8575-5bb75034945f-test.pdf"",
+                                ""url"":""http://data.jncc.gov.uk/data/0545c14b-e7fd-472d-8575-5bb75034945f/test.pdf"",
                                 ""fileExtension"":""pdf"",
                                 ""fileBytes"":5
                             }
@@ -666,7 +666,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Robot
                     new Resource {
                         Name = "A pdf resource",
                         Path = "C:\\work\\test.pdf",
-                        PublishedUrl = "http://data.jncc.gov.uk/data/0545c14b-e7fd-472d-8575-5bb75034945f-test.pdf"
+                        PublishedUrl = "http://data.jncc.gov.uk/data/0545c14b-e7fd-472d-8575-5bb75034945f/test.pdf"
                     },
                     new Resource {
                         Name = "A url resource",
@@ -732,7 +732,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Robot
                         {
                             ""title"":""A pdf resource"",
                             ""http"":{
-                                ""url"":""http://data.jncc.gov.uk/data/0545c14b-e7fd-472d-8575-5bb75034945f-test.pdf"",
+                                ""url"":""http://data.jncc.gov.uk/data/0545c14b-e7fd-472d-8575-5bb75034945f/test.pdf"",
                                 ""fileExtension"":""pdf"",
                                 ""fileBytes"":5
                             }
@@ -840,7 +840,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Robot
                         {
                             Name = "A pdf resource",
                             Path = "C:\\work\\test.pdf",
-                            PublishedUrl = "http://data.jncc.gov.uk/data/0545c14b-e7fd-472d-8575-5bb75034945f-test.pdf"
+                            PublishedUrl = "http://data.jncc.gov.uk/data/0545c14b-e7fd-472d-8575-5bb75034945f/test.pdf"
                         },
                         new Resource
                         {
@@ -908,7 +908,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Robot
                         {
                             ""title"":""A pdf resource"",
                             ""http"":{
-                                ""url"":""http://data.jncc.gov.uk/data/0545c14b-e7fd-472d-8575-5bb75034945f-test.pdf"",
+                                ""url"":""http://data.jncc.gov.uk/data/0545c14b-e7fd-472d-8575-5bb75034945f/test.pdf"",
                                 ""fileExtension"":""pdf"",
                                 ""fileBytes"":5
                             }
@@ -951,7 +951,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Robot
                         {
                             Name = "A pdf resource",
                             Path = "C:\\work\\test.pdf",
-                            PublishedUrl = "http://data.jncc.gov.uk/data/0545c14b-e7fd-472d-8575-5bb75034945f-test.pdf"
+                            PublishedUrl = "http://data.jncc.gov.uk/data/0545c14b-e7fd-472d-8575-5bb75034945f/test.pdf"
                         },
                         new Resource
                         {
@@ -1020,7 +1020,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Robot
                         {
                             ""title"":""A pdf resource"",
                             ""http"":{
-                                ""url"":""http://data.jncc.gov.uk/data/0545c14b-e7fd-472d-8575-5bb75034945f-test.pdf"",
+                                ""url"":""http://data.jncc.gov.uk/data/0545c14b-e7fd-472d-8575-5bb75034945f/test.pdf"",
                                 ""fileExtension"":""pdf"",
                                 ""fileBytes"":5
                             }
@@ -1062,7 +1062,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Robot
                         {
                             Name = "A pdf resource",
                             Path = "C:\\work\\test.pdf",
-                            PublishedUrl = "http://data.jncc.gov.uk/data/0545c14b-e7fd-472d-8575-5bb75034945f-test.pdf"
+                            PublishedUrl = "http://data.jncc.gov.uk/data/0545c14b-e7fd-472d-8575-5bb75034945f/test.pdf"
                         },
                         new Resource
                         {
@@ -1138,7 +1138,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Robot
                         {
                             ""title"":""A pdf resource"",
                             ""http"":{
-                                ""url"":""http://data.jncc.gov.uk/data/0545c14b-e7fd-472d-8575-5bb75034945f-test.pdf"",
+                                ""url"":""http://data.jncc.gov.uk/data/0545c14b-e7fd-472d-8575-5bb75034945f/test.pdf"",
                                 ""fileExtension"":""pdf"",
                                 ""fileBytes"":5
                             }
@@ -1180,7 +1180,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Robot
                         {
                             Name = "A pdf resource",
                             Path = "C:\\work\\test.pdf",
-                            PublishedUrl = "http://data.jncc.gov.uk/data/0545c14b-e7fd-472d-8575-5bb75034945f-test.pdf"
+                            PublishedUrl = "http://data.jncc.gov.uk/data/0545c14b-e7fd-472d-8575-5bb75034945f/test.pdf"
                         },
                         new Resource
                         {
@@ -1256,7 +1256,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Robot
                         {
                             ""title"":""A pdf resource"",
                             ""http"":{
-                                ""url"":""http://data.jncc.gov.uk/data/0545c14b-e7fd-472d-8575-5bb75034945f-test.pdf"",
+                                ""url"":""http://data.jncc.gov.uk/data/0545c14b-e7fd-472d-8575-5bb75034945f/test.pdf"",
                                 ""fileExtension"":""pdf"",
                                 ""fileBytes"":5
                             }

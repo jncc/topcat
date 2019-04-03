@@ -69,19 +69,14 @@ namespace Catalogue.Robot.Publishing
             foreach (Record record in records)
             {
                 Logger.Info($"Starting publishing process for record {record.Id} {record.Gemini.Title}");
-                if (!record.HasPublishingTarget())
-                {
-                    Logger.Info("No publishing targets defined, aborting publishing");
-                    return;
-                }
-                
+
                 try
                 {
                     if (!metadataOnly)
                     {
                         PublishDataFiles(record);
                     }
-                    
+
                     PublishHubMetadata(record);
                     PublishGovMetadata(record);
 
@@ -91,9 +86,12 @@ namespace Catalogue.Robot.Publishing
                 {
                     Logger.Error($"Could not complete publishing process for record with GUID={record.Id}", ex);
                 }
+                finally
+                {
+                    // commit the changes - to both the record (resource locator may have changed) and the attempt object
+                    db.SaveChanges();
+                }
             }
-            // commit the changes - to both the record (resource locator may have changed) and the attempt object
-            db.SaveChanges();
         }
 
         private void PublishDataFiles(Record record)
@@ -114,7 +112,7 @@ namespace Catalogue.Robot.Publishing
                         {
                             Logger.Info($"Resource {resource.Path} is a file - starting upload process");
                             dataUploader.UploadDataFile(Helpers.RemoveCollection(record.Id), resource.Path);
-                            string dataHttpPath = env.HTTP_ROOT_URL + "/" + GetUnrootedDataPath(Helpers.RemoveCollection(record.Id), resource.Path);
+                            string dataHttpPath = env.HTTP_ROOT_URL + GetUnrootedDataPath(Helpers.RemoveCollection(record.Id), resource.Path);
                             resource.PublishedUrl = dataHttpPath;
                         }
                         else
@@ -134,6 +132,8 @@ namespace Catalogue.Robot.Publishing
                 Logger.Error($"Data transfer failed for record with GUID={record.Id}", ex);
                 throw;
             }
+
+            //todo: save changes here in finally
         }
 
         public void PublishHubMetadata(Record record)
@@ -150,7 +150,7 @@ namespace Catalogue.Robot.Publishing
 
                     redactedRecord = recordRedactor.RedactRecord(record); // this isn't saved back to the db
 
-                    hubService.Save(redactedRecord);
+                    hubService.Publish(redactedRecord);
 
                     var url = env.HUB_ASSETS_BASE_URL + Helpers.RemoveCollection(record.Id);
                     uploadRecordService.UpdateHubPublishSuccess(record, url, attempt);

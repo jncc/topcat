@@ -1,9 +1,9 @@
-﻿using System;
-using Catalogue.Robot.Publishing.Client;
+﻿using Catalogue.Robot.Publishing.Client;
 using Catalogue.Robot.Publishing.Hub;
 using Catalogue.Utilities.DriveMapping;
 using Catalogue.Utilities.Text;
 using log4net;
+using System;
 
 namespace Catalogue.Robot.Publishing.Data
 {
@@ -35,12 +35,11 @@ namespace Catalogue.Robot.Publishing.Data
 
             if (fileSize <= env.MAX_FILE_SIZE_IN_BYTES)
             {
-                string unrootedDataPath = WebificationUtility.GetUnrootedDataPath(recordId, filePath);
-
-                string dataFtpPath = env.FTP_ROOT_URL + "/" + unrootedDataPath;
+                string dataFtpPath = WebificationUtility.GetUnrootedDataPath(recordId, filePath);
+                
                 Logger.Info("Data file path: " + filePath);
                 Logger.Info("Data FTP path: " + dataFtpPath);
-
+                
                 ftpClient.UploadFile(dataFtpPath, filePath);
                 Logger.Info("Uploaded data file successfully");
             }

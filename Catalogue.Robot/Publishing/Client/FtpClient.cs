@@ -1,11 +1,10 @@
-﻿using System.IO;
-using System.Net;
-using log4net;
+﻿using System.Net;
+using System.Text;
 
 namespace Catalogue.Robot.Publishing.Client
 {
     /// <summary>
-    /// Mockable FTP-focussed WebClient.
+    /// Mockable FluentFtp client.
     /// </summary>
     public interface IFtpClient
     {
@@ -26,33 +25,55 @@ namespace Catalogue.Robot.Publishing.Client
 
         public void UploadFile(string ftpPath, string filepath)
         {
-            using (var c = new WebClient { Credentials = new NetworkCredential(env.FTP_USERNAME, env.FTP_PASSWORD), Proxy = null })
+            var client = new FluentFTP.FtpClient(env.FTP_HOST);
+            client.Credentials = new NetworkCredential(env.FTP_USERNAME, env.FTP_PASSWORD);
+            client.Connect();
+
+            try
             {
-                c.UploadFile(ftpPath, "STOR", filepath);
-            } 
+                client.UploadFile(filepath, ftpPath, createRemoteDir: true);
+            }
+            finally
+            {
+                client.Disconnect();
+            }
         }
 
         public void UploadString(string ftpPath, string content)
         {
-            using (var c = new WebClient {Credentials = new NetworkCredential(env.FTP_USERNAME, env.FTP_PASSWORD), Proxy = null})
-            {
-                c.UploadString(ftpPath, "STOR", content);
-            }
+            UploadBytes(ftpPath, Encoding.UTF8.GetBytes(content));
         }
 
         public void UploadBytes(string ftpPath, byte[] bytes)
         {
-            using (var c = new WebClient {Credentials = new NetworkCredential(env.FTP_USERNAME, env.FTP_PASSWORD), Proxy = null})
+            var client = new FluentFTP.FtpClient(env.FTP_HOST);
+            client.Credentials = new NetworkCredential(env.FTP_USERNAME, env.FTP_PASSWORD);
+            client.Connect();
+
+            try
             {
-                c.UploadData(ftpPath, "STOR", bytes);
+                client.Upload(bytes, ftpPath, createRemoteDir: true);
+            }
+            finally
+            {
+                client.Disconnect();
             }
         }
 
         public string DownloadString(string ftpPath)
         {
-            using (var c = new WebClient {Credentials = new NetworkCredential(env.FTP_USERNAME, env.FTP_PASSWORD), Proxy = null})
+            var client = new FluentFTP.FtpClient(env.FTP_HOST);
+            client.Credentials = new NetworkCredential(env.FTP_USERNAME, env.FTP_PASSWORD);
+            client.Connect();
+
+            try
             {
-                return c.DownloadString(ftpPath);
+                client.Download(out byte[] outBytes, ftpPath);
+                return Encoding.UTF8.GetString(outBytes);
+            }
+            finally
+            {
+                client.Disconnect();
             }
         }
     }
