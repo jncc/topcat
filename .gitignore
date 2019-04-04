@@ -144,3 +144,5 @@ Catalogue.Web/app/js/controllers/SearchController.map
 # more raven things to ignore
 */RavenDBServer/*
 *.raven-*-topology
+
+.env
