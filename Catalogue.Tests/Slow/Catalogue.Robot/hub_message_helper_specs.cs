@@ -110,14 +110,11 @@ namespace Catalogue.Tests.Slow.Catalogue.Robot
         [Test]
         public void queue_message_with_a_non_pdf_file_resource()
         {
-            var record = readyToUploadRecord.With(r => r.Publication.Data = new DataInfo
-            {
-                Resources = new List<Resource> {
-                    new Resource {
-                        Name = "A csv resource",
-                        Path = "C:\\work\\test.csv",
-                        PublishedUrl = "http://data.jncc.gov.uk/data/0545c14b-e7fd-472d-8575-5bb75034945f/test.csv"
-                    }
+            var record = readyToUploadRecord.With(r => r.Resources = new List<Resource> {
+                new Resource {
+                    Name = "A csv resource",
+                    Path = "C:\\work\\test.csv",
+                    PublishedUrl = "http://data.jncc.gov.uk/data/0545c14b-e7fd-472d-8575-5bb75034945f/test.csv"
                 }
             });
 
@@ -164,14 +161,11 @@ namespace Catalogue.Tests.Slow.Catalogue.Robot
         [Test]
         public void queue_message_with_publication_resource_type()
         {
-            var record = readyToUploadRecord.With(r => r.Publication.Data = new DataInfo
-            {
-                Resources = new List<Resource> {
-                    new Resource {
-                        Name = "A csv resource",
-                        Path = "C:\\work\\test.csv",
-                        PublishedUrl = "http://data.jncc.gov.uk/data/0545c14b-e7fd-472d-8575-5bb75034945f/test.csv"
-                    }
+            var record = readyToUploadRecord.With(r => r.Resources = new List<Resource> {
+                new Resource {
+                    Name = "A csv resource",
+                    Path = "C:\\work\\test.csv",
+                    PublishedUrl = "http://data.jncc.gov.uk/data/0545c14b-e7fd-472d-8575-5bb75034945f/test.csv"
                 }
             })
             .With(r => r.Gemini.ResourceType = "publication");
@@ -219,14 +213,11 @@ namespace Catalogue.Tests.Slow.Catalogue.Robot
         [Test]
         public void queue_message_with_one_pdf_resource()
         {
-            var record = readyToUploadRecord.With(r => r.Publication.Data = new DataInfo
-            {
-                Resources = new List<Resource> {
-                    new Resource {
-                        Name = "A pdf resource",
-                        Path = "C:\\work\\test.pdf",
-                        PublishedUrl = "http://data.jncc.gov.uk/data/0545c14b-e7fd-472d-8575-5bb75034945f/test.pdf"
-                    }
+            var record = readyToUploadRecord.With(r => r.Resources = new List<Resource> {
+                new Resource {
+                    Name = "A pdf resource",
+                    Path = "C:\\work\\test.pdf",
+                    PublishedUrl = "http://data.jncc.gov.uk/data/0545c14b-e7fd-472d-8575-5bb75034945f/test.pdf"
                 }
             });
 
@@ -275,13 +266,10 @@ namespace Catalogue.Tests.Slow.Catalogue.Robot
         [Test]
         public void queue_message_with_one_url_resource()
         {
-            var record = readyToUploadRecord.With(r => r.Publication.Data = new DataInfo
-            {
-                Resources = new List<Resource> {
-                    new Resource {
-                        Name = "A url resource",
-                        Path = "http://example.url.resource.com"
-                    }
+            var record = readyToUploadRecord.With(r => r.Resources = new List<Resource> {
+                new Resource {
+                    Name = "A url resource",
+                    Path = "http://example.url.resource.com"
                 }
             });
 
@@ -319,23 +307,20 @@ namespace Catalogue.Tests.Slow.Catalogue.Robot
         [Test]
         public void queue_message_with_multiple_resources()
         {
-            var record = readyToUploadRecord.With(r => r.Publication.Data = new DataInfo
-            {
-                Resources = new List<Resource> {
-                    new Resource {
-                        Name = "A csv resource",
-                        Path = "C:\\work\\test.csv",
-                        PublishedUrl = "http://data.jncc.gov.uk/data/0545c14b-e7fd-472d-8575-5bb75034945f/test.csv"
-                    },
-                    new Resource {
-                        Name = "A pdf resource",
-                        Path = "C:\\work\\test.pdf",
-                        PublishedUrl = "http://data.jncc.gov.uk/data/0545c14b-e7fd-472d-8575-5bb75034945f/test.pdf"
-                    },
-                    new Resource {
-                        Name = "A url resource",
-                        Path = "http://example.url.resource.com"
-                    }
+            var record = readyToUploadRecord.With(r => r.Resources = new List<Resource> {
+                new Resource {
+                    Name = "A csv resource",
+                    Path = "C:\\work\\test.csv",
+                    PublishedUrl = "http://data.jncc.gov.uk/data/0545c14b-e7fd-472d-8575-5bb75034945f/test.csv"
+                },
+                new Resource {
+                    Name = "A pdf resource",
+                    Path = "C:\\work\\test.pdf",
+                    PublishedUrl = "http://data.jncc.gov.uk/data/0545c14b-e7fd-472d-8575-5bb75034945f/test.pdf"
+                },
+                new Resource {
+                    Name = "A url resource",
+                    Path = "http://example.url.resource.com"
                 }
             });
 
@@ -394,13 +379,10 @@ namespace Catalogue.Tests.Slow.Catalogue.Robot
         {
             // this might happen if a publish is triggered with the metadata only flag for a record being published for the first time
 
-            var record = readyToUploadRecord.With(r => r.Publication.Data = new DataInfo
-            {
-                Resources = new List<Resource> {
-                    new Resource {
-                        Name = "A pdf resource",
-                        Path = "C:\\work\\test.pdf"
-                    }
+            var record = readyToUploadRecord.With(r => r.Resources = new List<Resource> {
+                new Resource {
+                    Name = "A pdf resource",
+                    Path = "C:\\work\\test.pdf"
                 }
             });
 
@@ -499,13 +481,10 @@ namespace Catalogue.Tests.Slow.Catalogue.Robot
         [Test]
         public void asset_message_with_a_url_resource()
         {
-            var record = readyToUploadRecord.With(r => r.Publication.Data = new DataInfo
-            {
-                Resources = new List<Resource> {
-                    new Resource {
-                        Name = "A url resource",
-                        Path = "http://example.url.resource.com"
-                    }
+            var record = readyToUploadRecord.With(r => r.Resources = new List<Resource> {
+                new Resource {
+                    Name = "A url resource",
+                    Path = "http://example.url.resource.com"
                 }
             });
 
@@ -577,14 +556,11 @@ namespace Catalogue.Tests.Slow.Catalogue.Robot
         [Test]
         public void asset_message_with_a_file_resource()
         {
-            var record = readyToUploadRecord.With(r => r.Publication.Data = new DataInfo
-            {
-                Resources = new List<Resource> {
-                    new Resource {
-                        Name = "A pdf resource",
-                        Path = "C:\\work\\test.pdf",
-                        PublishedUrl = "http://data.jncc.gov.uk/data/0545c14b-e7fd-472d-8575-5bb75034945f/test.pdf"
-                    },
+            var record = readyToUploadRecord.With(r => r.Resources = new List<Resource> {
+                new Resource {
+                    Name = "A pdf resource",
+                    Path = "C:\\work\\test.pdf",
+                    PublishedUrl = "http://data.jncc.gov.uk/data/0545c14b-e7fd-472d-8575-5bb75034945f/test.pdf"
                 }
             });
 
@@ -660,18 +636,15 @@ namespace Catalogue.Tests.Slow.Catalogue.Robot
         [Test]
         public void asset_message_with_multiple_resources()
         {
-            var record = readyToUploadRecord.With(r => r.Publication.Data = new DataInfo
-            {
-                Resources = new List<Resource> {
-                    new Resource {
-                        Name = "A pdf resource",
-                        Path = "C:\\work\\test.pdf",
-                        PublishedUrl = "http://data.jncc.gov.uk/data/0545c14b-e7fd-472d-8575-5bb75034945f/test.pdf"
-                    },
-                    new Resource {
-                        Name = "A url resource",
-                        Path = "http://example.url.resource.com"
-                    }
+            var record = readyToUploadRecord.With(r => r.Resources = new List<Resource> {
+                new Resource {
+                    Name = "A pdf resource",
+                    Path = "C:\\work\\test.pdf",
+                    PublishedUrl = "http://data.jncc.gov.uk/data/0545c14b-e7fd-472d-8575-5bb75034945f/test.pdf"
+                },
+                new Resource {
+                    Name = "A url resource",
+                    Path = "http://example.url.resource.com"
                 }
             });
 
@@ -755,13 +728,10 @@ namespace Catalogue.Tests.Slow.Catalogue.Robot
         {
             // this might happen if a publish is triggered with the metadata only flag for a record being published for the first time
 
-            var record = readyToUploadRecord.With(r => r.Publication.Data = new DataInfo
-            {
-                Resources = new List<Resource> {
-                    new Resource {
-                        Name = "A pdf resource",
-                        Path = "C:\\work\\test.pdf"
-                    }
+            var record = readyToUploadRecord.With(r => r.Resources = new List<Resource> {
+                new Resource {
+                    Name = "A pdf resource",
+                    Path = "C:\\work\\test.pdf"
                 }
             });
 
@@ -832,21 +802,18 @@ namespace Catalogue.Tests.Slow.Catalogue.Robot
             {
                 r.DigitalObjectIdentifier = "10.25603/123456.0.0.0";
                 r.Citation = "a citation";
-                r.Publication.Data = new DataInfo
+                r.Resources = new List<Resource>
                 {
-                    Resources = new List<Resource>
+                    new Resource
                     {
-                        new Resource
-                        {
-                            Name = "A pdf resource",
-                            Path = "C:\\work\\test.pdf",
-                            PublishedUrl = "http://data.jncc.gov.uk/data/0545c14b-e7fd-472d-8575-5bb75034945f/test.pdf"
-                        },
-                        new Resource
-                        {
-                            Name = "A url resource",
-                            Path = "http://example.url.resource.com"
-                        }
+                        Name = "A pdf resource",
+                        Path = "C:\\work\\test.pdf",
+                        PublishedUrl = "http://data.jncc.gov.uk/data/0545c14b-e7fd-472d-8575-5bb75034945f/test.pdf"
+                    },
+                    new Resource
+                    {
+                        Name = "A url resource",
+                        Path = "http://example.url.resource.com"
                     }
                 };
             });
@@ -943,21 +910,18 @@ namespace Catalogue.Tests.Slow.Catalogue.Robot
                 r.Gemini.DataFormat = "";
                 r.DigitalObjectIdentifier = "";
                 r.Citation = "";
-                r.Publication.Data = new DataInfo
+                r.Resources = new List<Resource>
                 {
-                    Resources = new List<Resource>
+                    new Resource
                     {
-                        new Resource
-                        {
-                            Name = "A pdf resource",
-                            Path = "C:\\work\\test.pdf",
-                            PublishedUrl = "http://data.jncc.gov.uk/data/0545c14b-e7fd-472d-8575-5bb75034945f/test.pdf"
-                        },
-                        new Resource
-                        {
-                            Name = "A url resource",
-                            Path = "http://example.url.resource.com"
-                        }
+                        Name = "A pdf resource",
+                        Path = "C:\\work\\test.pdf",
+                        PublishedUrl = "http://data.jncc.gov.uk/data/0545c14b-e7fd-472d-8575-5bb75034945f/test.pdf"
+                    },
+                    new Resource
+                    {
+                        Name = "A url resource",
+                        Path = "http://example.url.resource.com"
                     }
                 };
             });
@@ -1054,21 +1018,18 @@ namespace Catalogue.Tests.Slow.Catalogue.Robot
                         ThumbnailUrl = "http://jncc.defra.gov.uk/laf/JNCCLogo.png"
                     }
                 };
-                r.Publication.Data = new DataInfo
+                r.Resources = new List<Resource>
                 {
-                    Resources = new List<Resource>
+                    new Resource
                     {
-                        new Resource
-                        {
-                            Name = "A pdf resource",
-                            Path = "C:\\work\\test.pdf",
-                            PublishedUrl = "http://data.jncc.gov.uk/data/0545c14b-e7fd-472d-8575-5bb75034945f/test.pdf"
-                        },
-                        new Resource
-                        {
-                            Name = "A url resource",
-                            Path = "http://example.url.resource.com"
-                        }
+                        Name = "A pdf resource",
+                        Path = "C:\\work\\test.pdf",
+                        PublishedUrl = "http://data.jncc.gov.uk/data/0545c14b-e7fd-472d-8575-5bb75034945f/test.pdf"
+                    },
+                    new Resource
+                    {
+                        Name = "A url resource",
+                        Path = "http://example.url.resource.com"
                     }
                 };
             });
@@ -1172,21 +1133,18 @@ namespace Catalogue.Tests.Slow.Catalogue.Robot
                         ThumbnailUrl = null
                     }
                 };
-                r.Publication.Data = new DataInfo
+                r.Resources = new List<Resource>
                 {
-                    Resources = new List<Resource>
+                    new Resource
                     {
-                        new Resource
-                        {
-                            Name = "A pdf resource",
-                            Path = "C:\\work\\test.pdf",
-                            PublishedUrl = "http://data.jncc.gov.uk/data/0545c14b-e7fd-472d-8575-5bb75034945f/test.pdf"
-                        },
-                        new Resource
-                        {
-                            Name = "A url resource",
-                            Path = "http://example.url.resource.com"
-                        }
+                        Name = "A pdf resource",
+                        Path = "C:\\work\\test.pdf",
+                        PublishedUrl = "http://data.jncc.gov.uk/data/0545c14b-e7fd-472d-8575-5bb75034945f/test.pdf"
+                    },
+                    new Resource
+                    {
+                        Name = "A url resource",
+                        Path = "http://example.url.resource.com"
                     }
                 };
             });

@@ -1,4 +1,5 @@
-﻿using Catalogue.Data.Model;
+﻿using System;
+using Catalogue.Data.Model;
 using Microsoft.XmlDiffPatch;
 using Newtonsoft.Json;
 using NUnit.Framework;

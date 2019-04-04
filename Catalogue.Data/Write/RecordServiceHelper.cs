@@ -76,7 +76,7 @@ namespace Catalogue.Data.Write
 
         private static void TrimPublishableResourcePaths(Record record)
         {
-            var resources = record?.Publication?.Data?.Resources;
+            var resources = record?.Resources;
 
             if (resources != null)
             {

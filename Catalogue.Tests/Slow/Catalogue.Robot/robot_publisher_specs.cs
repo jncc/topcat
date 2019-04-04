@@ -19,7 +19,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Robot
     {
         private Env env;
 
-        Record readyToUploadRecord = new Record().With(r =>
+        private Record readyToUploadRecord = new Record().With(r =>
         {
             r.Id = Helpers.AddCollection(Guid.NewGuid().ToString());
             r.Path = @"X:\path\to\uploader\test";
@@ -28,6 +28,8 @@ namespace Catalogue.Tests.Slow.Catalogue.Robot
             {
                 m.MetadataDate = new DateTime(2017, 09, 26);
             });
+            r.Resources = new List<Resource>
+                {new Resource {Name = "File resource", Path = @"X:\path\to\uploader\test.txt"}};
             r.Publication = new PublicationInfo
             {
                 Assessment = new AssessmentInfo
@@ -38,10 +40,6 @@ namespace Catalogue.Tests.Slow.Catalogue.Robot
                 SignOff = new SignOffInfo
                 {
                     DateUtc = new DateTime(2017, 09, 26)
-                },
-                Data = new DataInfo
-                {
-                    Resources = new List<Resource> { new Resource { Name = "File resource", Path = @"X:\path\to\uploader\test.txt" } }
                 },
                 Target = new TargetInfo
                 {
@@ -225,6 +223,8 @@ namespace Catalogue.Tests.Slow.Catalogue.Robot
                 {
                     m.MetadataDate = new DateTime(2017, 09, 26);
                 });
+                r.Resources = new List<Resource>
+                    {new Resource {Name = "File resource", Path = @"X:\path\to\uploader\test.txt"}};
                 r.Publication = new PublicationInfo
                 {
                     Assessment = new AssessmentInfo
@@ -238,7 +238,6 @@ namespace Catalogue.Tests.Slow.Catalogue.Robot
                     },
                     Data = new DataInfo
                     {
-                        Resources = new List<Resource> { new Resource { Name = "File resource", Path = @"X:\path\to\uploader\test.txt" } },
                         LastAttempt = new PublicationAttempt
                         {
                             DateUtc = new DateTime(2017, 09, 20)
@@ -265,6 +264,8 @@ namespace Catalogue.Tests.Slow.Catalogue.Robot
                 {
                     m.MetadataDate = new DateTime(2017, 09, 27);
                 });
+                r.Resources = new List<Resource>
+                    {new Resource {Name = "File resource", Path = @"X:\path\to\uploader\test.txt"}};
                 r.Publication = new PublicationInfo
                 {
                     Assessment = new AssessmentInfo
@@ -278,7 +279,6 @@ namespace Catalogue.Tests.Slow.Catalogue.Robot
                     },
                     Data = new DataInfo
                     {
-                        Resources = new List<Resource> { new Resource { Name = "File resource", Path = @"X:\path\to\uploader\test.txt" } },
                         LastAttempt = new PublicationAttempt { DateUtc = new DateTime(2017, 09, 27) },
                         LastSuccess = new PublicationAttempt { DateUtc = new DateTime(2017, 09, 22) }
                     },
@@ -316,6 +316,8 @@ namespace Catalogue.Tests.Slow.Catalogue.Robot
                 {
                     m.MetadataDate = new DateTime(2017, 09, 26);
                 });
+                r.Resources = new List<Resource>
+                    {new Resource {Name = "File resource", Path = @"X:\path\to\uploader\test.txt"}};
                 r.Publication = new PublicationInfo
                 {
                     Assessment = new AssessmentInfo
@@ -329,7 +331,6 @@ namespace Catalogue.Tests.Slow.Catalogue.Robot
                     },
                     Data = new DataInfo
                     {
-                        Resources = new List<Resource> { new Resource { Name = "File resource", Path = @"X:\path\to\uploader\test.txt" } },
                         LastAttempt = new PublicationAttempt { DateUtc = new DateTime(2017, 09, 23) },
                         LastSuccess = new PublicationAttempt { DateUtc = new DateTime(2017, 09, 23) }
                     },
@@ -361,6 +362,8 @@ namespace Catalogue.Tests.Slow.Catalogue.Robot
                 {
                     m.MetadataDate = new DateTime(2017, 09, 28);
                 });
+                r.Resources = new List<Resource>
+                    {new Resource {Name = "File resource", Path = @"X:\path\to\uploader\test.txt"}};
                 r.Publication = new PublicationInfo
                 {
                     Assessment = new AssessmentInfo
@@ -374,7 +377,6 @@ namespace Catalogue.Tests.Slow.Catalogue.Robot
                     },
                     Data = new DataInfo
                     {
-                        Resources = new List<Resource> { new Resource { Name = "File resource", Path = @"X:\path\to\uploader\test.txt" } },
                         LastAttempt = new PublicationAttempt { DateUtc = new DateTime(2017, 09, 27) },
                         LastSuccess = new PublicationAttempt { DateUtc = new DateTime(2017, 09, 27) }
                     },
@@ -409,6 +411,8 @@ namespace Catalogue.Tests.Slow.Catalogue.Robot
                 {
                     m.MetadataDate = new DateTime(2017, 09, 29);
                 });
+                r.Resources = new List<Resource>
+                    {new Resource {Name = "File resource", Path = @"X:\path\to\uploader\test.txt"}};
                 r.Publication = new PublicationInfo
                 {
                     Assessment = new AssessmentInfo
@@ -422,7 +426,6 @@ namespace Catalogue.Tests.Slow.Catalogue.Robot
                     },
                     Data = new DataInfo
                     {
-                        Resources = new List<Resource> { new Resource { Name = "File resource", Path = @"X:\path\to\uploader\test.txt" } },
                         LastAttempt = new PublicationAttempt{DateUtc = new DateTime(2017, 09, 27)},
                         LastSuccess = new PublicationAttempt { DateUtc = new DateTime(2017, 09, 27) }
                     },
@@ -458,6 +461,8 @@ namespace Catalogue.Tests.Slow.Catalogue.Robot
                 {
                     m.MetadataDate = new DateTime(2017, 09, 29);
                 });
+                r.Resources = new List<Resource>
+                    {new Resource {Name = "File resource", Path = @"X:\path\to\uploader\test.txt"}};
                 r.Publication = new PublicationInfo
                 {
                     Assessment = new AssessmentInfo
@@ -471,7 +476,6 @@ namespace Catalogue.Tests.Slow.Catalogue.Robot
                     },
                     Data = new DataInfo
                     {
-                        Resources = new List<Resource> { new Resource { Name = "File resource", Path = @"X:\path\to\uploader\test.txt" } },
                         LastAttempt = new PublicationAttempt { DateUtc = new DateTime(2017, 09, 27) },
                         LastSuccess = new PublicationAttempt { DateUtc = new DateTime(2017, 09, 27) }
                     },
@@ -506,6 +510,8 @@ namespace Catalogue.Tests.Slow.Catalogue.Robot
                 {
                     m.MetadataDate = new DateTime(2017, 09, 29);
                 });
+                r.Resources = new List<Resource>
+                    {new Resource {Name = "File resource", Path = @"X:\path\to\uploader\test.txt"}};
                 r.Publication = new PublicationInfo
                 {
                     Assessment = new AssessmentInfo
@@ -519,7 +525,6 @@ namespace Catalogue.Tests.Slow.Catalogue.Robot
                     },
                     Data = new DataInfo
                     {
-                        Resources = new List<Resource> { new Resource { Name = "File resource", Path = @"X:\path\to\uploader\test.txt" } },
                         LastAttempt = new PublicationAttempt { DateUtc = new DateTime(2017, 09, 27) },
                         LastSuccess = new PublicationAttempt { DateUtc = new DateTime(2017, 09, 27) }
                     },
@@ -559,6 +564,8 @@ namespace Catalogue.Tests.Slow.Catalogue.Robot
                 {
                     m.MetadataDate = new DateTime(2017, 09, 29);
                 });
+                r.Resources = new List<Resource>
+                    {new Resource {Name = "File resource", Path = @"X:\path\to\uploader\test.txt"}};
                 r.Publication = new PublicationInfo
                 {
                     Assessment = new AssessmentInfo
@@ -572,7 +579,6 @@ namespace Catalogue.Tests.Slow.Catalogue.Robot
                     },
                     Data = new DataInfo
                     {
-                        Resources = new List<Resource> { new Resource { Name = "File resource", Path = @"X:\path\to\uploader\test.txt" } },
                         LastAttempt = new PublicationAttempt { DateUtc = new DateTime(2017, 09, 27) },
                         LastSuccess = new PublicationAttempt { DateUtc = new DateTime(2017, 09, 27) }
                     },
@@ -613,6 +619,8 @@ namespace Catalogue.Tests.Slow.Catalogue.Robot
                 {
                     m.MetadataDate = new DateTime(2017, 09, 29);
                 });
+                r.Resources = new List<Resource>
+                    {new Resource {Name = "File resource", Path = @"X:\path\to\uploader\test.txt"}};
                 r.Publication = new PublicationInfo
                 {
                     Assessment = new AssessmentInfo
@@ -626,7 +634,6 @@ namespace Catalogue.Tests.Slow.Catalogue.Robot
                     },
                     Data = new DataInfo
                     {
-                        Resources = new List<Resource> { new Resource { Name = "File resource", Path = @"X:\path\to\uploader\test.txt" } },
                         LastAttempt = new PublicationAttempt { DateUtc = new DateTime(2017, 09, 27) },
                         LastSuccess = new PublicationAttempt { DateUtc = new DateTime(2017, 09, 27) }
                     },
@@ -667,6 +674,8 @@ namespace Catalogue.Tests.Slow.Catalogue.Robot
                 {
                     m.MetadataDate = new DateTime(2017, 09, 30);
                 });
+                r.Resources = new List<Resource>
+                    {new Resource {Name = "File resource", Path = @"X:\path\to\uploader\test.txt"}};
                 r.Publication = new PublicationInfo
                 {
                     Assessment = new AssessmentInfo
@@ -680,7 +689,6 @@ namespace Catalogue.Tests.Slow.Catalogue.Robot
                     },
                     Data = new DataInfo
                     {
-                        Resources = new List<Resource> { new Resource { Name = "File resource", Path = @"X:\path\to\uploader\test.txt" } },
                         LastAttempt = new PublicationAttempt { DateUtc = new DateTime(2017, 09, 27) },
                         LastSuccess = new PublicationAttempt { DateUtc = new DateTime(2017, 09, 27) }
                     },
@@ -721,6 +729,8 @@ namespace Catalogue.Tests.Slow.Catalogue.Robot
                 {
                     m.MetadataDate = new DateTime(2017, 09, 29);
                 });
+                r.Resources = new List<Resource>
+                    {new Resource {Name = "File resource", Path = @"X:\path\to\uploader\test.txt"}};
                 r.Publication = new PublicationInfo
                 {
                     Assessment = new AssessmentInfo
@@ -734,7 +744,6 @@ namespace Catalogue.Tests.Slow.Catalogue.Robot
                     },
                     Data = new DataInfo
                     {
-                        Resources = new List<Resource> { new Resource { Name = "File resource", Path = @"X:\path\to\uploader\test.txt" } },
                         LastAttempt = new PublicationAttempt { DateUtc = new DateTime(2017, 09, 25) },
                         LastSuccess = new PublicationAttempt { DateUtc = new DateTime(2017, 09, 25) }
                     },
@@ -775,6 +784,8 @@ namespace Catalogue.Tests.Slow.Catalogue.Robot
                 {
                     m.MetadataDate = new DateTime(2017, 09, 29);
                 });
+                r.Resources = new List<Resource>
+                    {new Resource {Name = "File resource", Path = @"X:\path\to\uploader\test.txt"}};
                 r.Publication = new PublicationInfo
                 {
                     Assessment = new AssessmentInfo
@@ -788,7 +799,6 @@ namespace Catalogue.Tests.Slow.Catalogue.Robot
                     },
                     Data = new DataInfo
                     {
-                        Resources = new List<Resource> { new Resource { Name = "File resource", Path = @"X:\path\to\uploader\test.txt" } },
                         LastAttempt = new PublicationAttempt { DateUtc = new DateTime(2017, 09, 25) },
                         LastSuccess = new PublicationAttempt { DateUtc = new DateTime(2017, 09, 25) }
                     },
@@ -829,6 +839,8 @@ namespace Catalogue.Tests.Slow.Catalogue.Robot
                 {
                     m.MetadataDate = new DateTime(2017, 09, 29);
                 });
+                r.Resources = new List<Resource>
+                    {new Resource {Name = "File resource", Path = @"X:\path\to\uploader\test.txt"}};
                 r.Publication = new PublicationInfo
                 {
                     Assessment = new AssessmentInfo
@@ -842,7 +854,6 @@ namespace Catalogue.Tests.Slow.Catalogue.Robot
                     },
                     Data = new DataInfo
                     {
-                        Resources = new List<Resource> { new Resource { Name = "File resource", Path = @"X:\path\to\uploader\test.txt" } },
                         LastAttempt = new PublicationAttempt { DateUtc = new DateTime(2017, 09, 25) },
                         LastSuccess = new PublicationAttempt { DateUtc = new DateTime(2017, 09, 25) }
                     },
@@ -883,6 +894,8 @@ namespace Catalogue.Tests.Slow.Catalogue.Robot
                 {
                     m.MetadataDate = new DateTime(2017, 09, 29);
                 });
+                r.Resources = new List<Resource>
+                    {new Resource {Name = "File resource", Path = @"X:\path\to\uploader\test.txt"}};
                 r.Publication = new PublicationInfo
                 {
                     Assessment = new AssessmentInfo
@@ -896,7 +909,6 @@ namespace Catalogue.Tests.Slow.Catalogue.Robot
                     },
                     Data = new DataInfo
                     {
-                        Resources = new List<Resource> { new Resource { Name = "File resource", Path = @"X:\path\to\uploader\test.txt" } },
                         LastAttempt = new PublicationAttempt { DateUtc = new DateTime(2017, 09, 25) },
                         LastSuccess = new PublicationAttempt { DateUtc = new DateTime(2017, 09, 25) }
                     },
@@ -929,6 +941,8 @@ namespace Catalogue.Tests.Slow.Catalogue.Robot
                 {
                     m.MetadataDate = new DateTime(2017, 09, 29);
                 });
+                r.Resources = new List<Resource>
+                    {new Resource {Name = "File resource", Path = @"X:\path\to\uploader\test.txt"}};
                 r.Publication = new PublicationInfo
                 {
                     Assessment = new AssessmentInfo
@@ -942,7 +956,6 @@ namespace Catalogue.Tests.Slow.Catalogue.Robot
                     },
                     Data = new DataInfo
                     {
-                        Resources = new List<Resource> { new Resource { Name = "File resource", Path = @"X:\path\to\uploader\test.txt" } },
                         LastAttempt = new PublicationAttempt { DateUtc = new DateTime(2017, 09, 25) },
                         LastSuccess = new PublicationAttempt { DateUtc = new DateTime(2017, 09, 25) }
                     },
@@ -974,6 +987,8 @@ namespace Catalogue.Tests.Slow.Catalogue.Robot
                 {
                     m.MetadataDate = new DateTime(2017, 09, 29);
                 });
+                r.Resources = new List<Resource>
+                    {new Resource {Name = "File resource", Path = @"X:\path\to\uploader\test.txt"}};
                 r.Publication = new PublicationInfo
                 {
                     Assessment = new AssessmentInfo
@@ -987,7 +1002,6 @@ namespace Catalogue.Tests.Slow.Catalogue.Robot
                     },
                     Data = new DataInfo
                     {
-                        Resources = new List<Resource> { new Resource { Name = "File resource", Path = @"X:\path\to\uploader\test.txt" } },
                         LastAttempt = new PublicationAttempt { DateUtc = new DateTime(2017, 09, 25) },
                         LastSuccess = new PublicationAttempt { DateUtc = new DateTime(2017, 09, 25) }
                     },
@@ -1019,6 +1033,8 @@ namespace Catalogue.Tests.Slow.Catalogue.Robot
                 {
                     m.MetadataDate = new DateTime(2017, 09, 29);
                 });
+                r.Resources = new List<Resource>
+                    {new Resource {Name = "File resource", Path = @"X:\path\to\uploader\test.txt"}};
                 r.Publication = new PublicationInfo
                 {
                     Assessment = new AssessmentInfo
@@ -1032,7 +1048,6 @@ namespace Catalogue.Tests.Slow.Catalogue.Robot
                     },
                     Data = new DataInfo
                     {
-                        Resources = new List<Resource> { new Resource { Name = "File resource", Path = @"X:\path\to\uploader\test.txt" } },
                         LastAttempt = new PublicationAttempt { DateUtc = new DateTime(2017, 09, 25) },
                         LastSuccess = new PublicationAttempt { DateUtc = new DateTime(2017, 09, 25) }
                     },
@@ -1068,6 +1083,8 @@ namespace Catalogue.Tests.Slow.Catalogue.Robot
                 {
                     m.MetadataDate = new DateTime(2017, 09, 29);
                 });
+                r.Resources = new List<Resource>
+                    {new Resource {Name = "File resource", Path = @"X:\path\to\uploader\test.txt"}};
                 r.Publication = new PublicationInfo
                 {
                     Assessment = new AssessmentInfo
@@ -1081,7 +1098,6 @@ namespace Catalogue.Tests.Slow.Catalogue.Robot
                     },
                     Data = new DataInfo
                     {
-                        Resources = new List<Resource> { new Resource { Name = "File resource", Path = @"X:\path\to\uploader\test.txt" } },
                         LastAttempt = new PublicationAttempt { DateUtc = new DateTime(2017, 09, 25) },
                         LastSuccess = new PublicationAttempt { DateUtc = new DateTime(2017, 09, 25) }
                     },
@@ -1123,6 +1139,8 @@ namespace Catalogue.Tests.Slow.Catalogue.Robot
                 {
                     m.MetadataDate = new DateTime(2017, 09, 28);
                 });
+                r.Resources = new List<Resource>
+                    {new Resource {Name = "File resource", Path = @"X:\path\to\uploader\test.txt"}};
                 r.Publication = new PublicationInfo
                 {
                     Assessment = new AssessmentInfo
@@ -1136,7 +1154,6 @@ namespace Catalogue.Tests.Slow.Catalogue.Robot
                     },
                     Data = new DataInfo
                     {
-                        Resources = new List<Resource> { new Resource { Name = "File resource", Path = @"X:\path\to\uploader\test.txt" } },
                         LastAttempt = new PublicationAttempt { DateUtc = new DateTime(2017, 09, 25) },
                         LastSuccess = new PublicationAttempt { DateUtc = new DateTime(2017, 09, 25) }
                     },
@@ -1177,6 +1194,8 @@ namespace Catalogue.Tests.Slow.Catalogue.Robot
                 {
                     m.MetadataDate = new DateTime(2017, 09, 30);
                 });
+                r.Resources = new List<Resource>
+                    {new Resource {Name = "File resource", Path = @"X:\path\to\uploader\test.txt"}};
                 r.Publication = new PublicationInfo
                 {
                     Assessment = new AssessmentInfo
@@ -1190,7 +1209,6 @@ namespace Catalogue.Tests.Slow.Catalogue.Robot
                     },
                     Data = new DataInfo
                     {
-                        Resources = new List<Resource> { new Resource { Name = "File resource", Path = @"X:\path\to\uploader\test.txt" } },
                         LastAttempt = new PublicationAttempt { DateUtc = new DateTime(2017, 09, 25) },
                         LastSuccess = new PublicationAttempt { DateUtc = new DateTime(2017, 09, 25) }
                     },

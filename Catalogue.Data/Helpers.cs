@@ -46,9 +46,9 @@ namespace Catalogue.Data
         public static List<OnlineResource> GetOnlineResourcesFromDataResources(Record record)
         {
             var resources = new List<OnlineResource>();
-            if (record.Publication?.Data?.Resources?.Count > 0)
+            if (record.Resources?.Count > 0)
             {
-                foreach (var resource in record.Publication.Data.Resources)
+                foreach (var resource in record.Resources)
                 {
                     var url = IsFileResource(resource) ? resource.PublishedUrl : resource.Path;
                     resources.Add(new OnlineResource

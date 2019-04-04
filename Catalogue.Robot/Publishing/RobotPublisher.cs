@@ -102,10 +102,10 @@ namespace Catalogue.Robot.Publishing
                 uploadRecordService.UpdateDataPublishAttempt(record, attempt);
                 db.SaveChanges();
 
-                var resources = record.Publication.Data.Resources.Copy(); // don't want to save if any of them fail
+                var resources = record.Resources.Copy(); // don't want to save if any of them fail
                 if (resources != null)
                 {
-                    Logger.Info($"Found {record.Publication.Data.Resources.Count} publishable resources");
+                    Logger.Info($"Found {record.Resources.Count} publishable resources");
                     foreach (var resource in resources)
                     {
                         if (Helpers.IsFileResource(resource))

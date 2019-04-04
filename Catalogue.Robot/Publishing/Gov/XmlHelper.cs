@@ -54,7 +54,7 @@ namespace Catalogue.Robot.Publishing.Gov
         public static List<OnlineResource> GetOnlineResources(Record record)
         {
             var onlineResources = new List<OnlineResource>();
-            if (record.Publication.Target.Hub != null && record.Publication.Target.Hub.Publishable == true &&
+            if (record.Publication?.Target?.Hub?.Publishable == true &&
                 record.Publication.Target.Hub.Url.IsNullOrWhiteSpace() != true)
             {
                 onlineResources.Add(new OnlineResource

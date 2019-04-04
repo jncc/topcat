@@ -251,6 +251,14 @@ namespace Catalogue.Data.Seed
                 r.Id = Helpers.AddCollection("471da4f2-d9e2-4a5a-b72b-3ae8cc40ae57");
                 r.Gemini.Title = "A record with assessment completed on spreadsheet";
                 r.Gemini.MetadataDate = new DateTime(2015, 1, 1, 09, 59, 59);
+                r.Resources = new List<Resource>
+                {
+                    new Resource
+                    {
+                        Name = "File resource",
+                        Path = @"C:\work\test-data.csv"
+                    }
+                };
                 r.Publication = new PublicationInfo
                 {
                     Assessment = new AssessmentInfo
@@ -262,14 +270,6 @@ namespace Catalogue.Data.Seed
                     SignOff = new SignOffInfo
                     {
                         DateUtc = DateTime.MinValue
-                    },
-                    Data = new DataInfo
-                    {
-                        Resources = new List<Resource> { new Resource
-                        {
-                            Name = "File resource",
-                            Path = @"C:\work\test-data.csv"
-                        } }
                     },
                     Target = new TargetInfo
                     {
@@ -298,23 +298,20 @@ namespace Catalogue.Data.Seed
                 r.Id = Helpers.AddCollection("39f9442a-45e5-464f-8b20-876051560964");
                 r.Gemini.Title = "A record with an incomplete risk-assessment";
                 r.Gemini.MetadataDate = new DateTime(2015, 05, 17, 0, 0, 0);
+                r.Resources = new List<Resource>
+                {
+                    new Resource
+                    {
+                        Name = "File resource",
+                        Path = @"C:\work\test-data.csv"
+                    }
+                };
                 r.Publication = new PublicationInfo
                 {
                     Assessment = new AssessmentInfo
                     {
                         // todo add more assessment fields
                         Completed = false
-                    },
-                    Data = new DataInfo
-                    {
-                        Resources = new List < Resource >
-                        {
-                            new Resource
-                            {
-                                Name = "File resource",
-                                Path = @"C:\work\test-data.csv"
-                            }
-                        }
                     },
                     Target = new TargetInfo
                     {
@@ -335,6 +332,14 @@ namespace Catalogue.Data.Seed
                 r.Id = Helpers.AddCollection("46003050-66f3-4fb2-b2b0-f66b382c8d37");
                 r.Gemini.Title = "An assessed but not signed-off record";
                 r.Gemini.MetadataDate = new DateTime(2015, 1, 1, 12, 0, 0);
+                r.Resources = new List<Resource>
+                {
+                    new Resource
+                    {
+                        Name = "File resource",
+                        Path = @"C:\work\test-data.csv"
+                    }
+                };
                 r.Publication = new PublicationInfo
                 {
                     Assessment = new AssessmentInfo
@@ -349,14 +354,6 @@ namespace Catalogue.Data.Seed
                         CompletedOnUtc = new DateTime(2015, 1, 1, 12, 0, 0)
                     },
                     SignOff = null,
-                    Data = new DataInfo
-                    {
-                        Resources = new List<Resource> { new Resource
-                        {
-                            Name = "File resource",
-                            Path = @"C:\work\test-data.csv"
-                        } }
-                    },
                     Target = new TargetInfo
                     {
                         Hub = new HubPublicationInfo
@@ -376,6 +373,14 @@ namespace Catalogue.Data.Seed
                 r.Id = Helpers.AddCollection("d869ae04-a3eb-477e-b8aa-66bea3e84730");
                 r.Gemini.Title = "An assessed record with url resource";
                 r.Gemini.MetadataDate = new DateTime(2015, 1, 1, 12, 0, 0);
+                r.Resources = new List<Resource>
+                {
+                    new Resource
+                    {
+                        Name = "Web resource",
+                        Path = @"http://a.web.resource"
+                    }
+                };
                 r.Publication = new PublicationInfo
                 {
                     Assessment = new AssessmentInfo
@@ -390,14 +395,6 @@ namespace Catalogue.Data.Seed
                         CompletedOnUtc = new DateTime(2015, 1, 1, 12, 0, 0)
                     },
                     SignOff = null,
-                    Data = new DataInfo
-                    {
-                        Resources = new List<Resource> { new Resource
-                        {
-                            Name = "Web resource",
-                            Path = @"http://a.web.resource"
-                        } }
-                    },
                     Target = new TargetInfo
                     {
                         Hub = new HubPublicationInfo
@@ -417,6 +414,19 @@ namespace Catalogue.Data.Seed
                 r.Id = Helpers.AddCollection("2d6ab878-844d-4759-91a1-3796f92667ab");
                 r.Gemini.Title = "An assessed record with file and url resources";
                 r.Gemini.MetadataDate = new DateTime(2015, 1, 1, 12, 0, 0);
+                r.Resources = new List<Resource>
+                {
+                    new Resource
+                    {
+                        Name = "Web resource",
+                        Path = @"http://a.web.resource"
+                    },
+                    new Resource
+                    {
+                        Name = "File resource",
+                        Path = @"C:\work\test-data.csv"
+                    }
+                };
                 r.Publication = new PublicationInfo
                 {
                     Assessment = new AssessmentInfo
@@ -431,20 +441,6 @@ namespace Catalogue.Data.Seed
                         CompletedOnUtc = new DateTime(2015, 1, 1, 12, 0, 0)
                     },
                     SignOff = null,
-                    Data = new DataInfo
-                    {
-                        Resources = new List<Resource> { new Resource
-                            {
-                                Name = "Web resource",
-                                Path = @"http://a.web.resource"
-                            },
-                            new Resource
-                            {
-                                Name = "File resource",
-                                Path = @"C:\work\test-data.csv"
-                            }
-                        }
-                    },
                     Target = new TargetInfo
                     {
                         Hub = new HubPublicationInfo
@@ -464,6 +460,14 @@ namespace Catalogue.Data.Seed
                 r.Id = Helpers.AddCollection("82ee6baf-26dc-438d-a579-dc7bcbdd1688");
                 r.Gemini.Title = "A signed-off record for publication";
                 r.Gemini.MetadataDate = new DateTime(2015, 1, 1, 12, 0, 0);
+                r.Resources = new List<Resource>
+                {
+                    new Resource
+                    {
+                        Name = "File resource",
+                        Path = @"C:\work\test-data.csv"
+                    }
+                };
                 r.Publication = new PublicationInfo
                 {
                     Assessment = new AssessmentInfo
@@ -482,14 +486,6 @@ namespace Catalogue.Data.Seed
                         },
                         DateUtc = new DateTime(2015, 1, 1, 12, 0, 0),
                         Comment = "All OK now."
-                    },
-                    Data = new DataInfo
-                    {
-                        Resources = new List<Resource> { new Resource
-                        {
-                            Name = "File resource",
-                            Path = @"C:\work\test-data.csv"
-                        } }
                     },
                     Target = new TargetInfo
                     {
@@ -510,6 +506,14 @@ namespace Catalogue.Data.Seed
                 r.Id = Helpers.AddCollection("d2885b03-8efd-472d-8a55-3e9c41a68bd7");
                 r.Gemini.Title = "A DGU unpublishable record ready for publication";
                 r.Gemini.MetadataDate = new DateTime(2015, 1, 1, 12, 0, 0);
+                r.Resources = new List<Resource>
+                {
+                    new Resource
+                    {
+                        Name = "File resource",
+                        Path = @"C:\work\test-data.csv"
+                    }
+                };
                 r.Publication = new PublicationInfo
                 {
                     Assessment = new AssessmentInfo
@@ -526,14 +530,6 @@ namespace Catalogue.Data.Seed
                             Email = "Test.user@jncc.gov.uk"
                         },
                         DateUtc = new DateTime(2015, 1, 1, 12, 0, 0)
-                    },
-                    Data = new DataInfo
-                    {
-                        Resources = new List<Resource> { new Resource
-                        {
-                            Name = "File resource",
-                            Path = @"C:\work\test-data.csv"
-                        } }
                     },
                     Target = new TargetInfo
                     {
@@ -554,6 +550,14 @@ namespace Catalogue.Data.Seed
                 r.Id = Helpers.AddCollection("bcbc2a46-cf2e-4389-8294-15e01111ebda");
                 r.Gemini.Title = "A DGU publishable status unknown record ready for publication";
                 r.Gemini.MetadataDate = new DateTime(2015, 1, 1, 12, 0, 0);
+                r.Resources = new List<Resource>
+                {
+                    new Resource
+                    {
+                        Name = "File resource",
+                        Path = @"C:\work\test-data.csv"
+                    }
+                };
                 r.Publication = new PublicationInfo
                 {
                     Assessment = new AssessmentInfo
@@ -570,14 +574,6 @@ namespace Catalogue.Data.Seed
                             Email = "Test.user@jncc.gov.uk"
                         },
                         DateUtc = new DateTime(2015, 1, 1, 12, 0, 0)
-                    },
-                    Data = new DataInfo
-                    {
-                        Resources = new List<Resource> { new Resource
-                        {
-                            Name = "File resource",
-                            Path = @"C:\work\test-data.csv"
-                        } }
                     },
                     Target = new TargetInfo
                     {
@@ -607,6 +603,15 @@ namespace Catalogue.Data.Seed
                 r.Id = Helpers.AddCollection("b2691fed-e421-4e48-9da9-99bd77e0b8ba");
                 r.Gemini.Title = "An earlier unsuccessfully published record";
                 r.Gemini.MetadataDate = new DateTime(2015, 1, 1, 12, 0, 0);
+                r.Resources = new List<Resource>
+                {
+                    new Resource
+                    {
+                        Name = "File resource",
+                        Path = @"C:\work\test-data.csv",
+                        PublishedUrl = "https://the.hosted.location"
+                    }
+                };
                 r.Publication = new PublicationInfo
                 {
                     Assessment = new AssessmentInfo
@@ -622,12 +627,6 @@ namespace Catalogue.Data.Seed
                     },
                     Data = new DataInfo
                     {
-                        Resources = new List<Resource> { new Resource
-                        {
-                            Name = "File resource",
-                            Path = @"C:\work\test-data.csv",
-                            PublishedUrl = "https://the.hosted.location"
-                        } },
                         LastAttempt = new PublicationAttempt { DateUtc = new DateTime(2015, 1, 1, 11, 58, 0) },
                         LastSuccess = new PublicationAttempt { DateUtc = new DateTime(2015, 1, 1, 11, 58, 0) }
                     },
@@ -655,6 +654,15 @@ namespace Catalogue.Data.Seed
                 r.Id = Helpers.AddCollection("d9c14587-90d8-4eba-b670-4cf36e45196d");
                 r.Gemini.Title = "A later successfully published record";
                 r.Gemini.MetadataDate = new DateTime(2015, 1, 1, 12, 0, 0);
+                r.Resources = new List<Resource>
+                {
+                    new Resource
+                    {
+                        Name = "File resource",
+                        Path = @"C:\work\test-data.csv",
+                        PublishedUrl = "https://the.hosted.location"
+                    }
+                };
                 r.Publication = new PublicationInfo
                 {
                     Assessment = new AssessmentInfo
@@ -670,12 +678,6 @@ namespace Catalogue.Data.Seed
                     },
                     Data = new DataInfo
                     {
-                        Resources = new List<Resource> { new Resource
-                        {
-                            Name = "File resource",
-                            Path = @"C:\work\test-data.csv",
-                            PublishedUrl = "https://the.hosted.location"
-                        } },
                         LastAttempt = new PublicationAttempt { DateUtc = new DateTime(2015, 1, 1, 11, 58, 0) },
                         LastSuccess = new PublicationAttempt { DateUtc = new DateTime(2015, 1, 1, 11, 58, 0) }
                     },
@@ -705,6 +707,15 @@ namespace Catalogue.Data.Seed
                 r.Id = Helpers.AddCollection("19b8c7ab-5c33-4d55-bc1d-3762b8207a9f");
                 r.Gemini.Title = "An updated since successfully published record";
                 r.Gemini.MetadataDate = new DateTime(2015, 1, 1, 12, 0, 0);
+                r.Resources = new List<Resource>
+                {
+                    new Resource
+                    {
+                        Name = "File resource",
+                        Path = @"C:\work\test-data.csv",
+                        PublishedUrl = "https://the.hosted.location"
+                    }
+                };
                 r.Publication = new PublicationInfo
                 {
                     Assessment = new AssessmentInfo
@@ -717,15 +728,6 @@ namespace Catalogue.Data.Seed
                     {
                         DateUtc = new DateTime(2014, 12, 29),
                         User = userInfo
-                    },
-                    Data = new DataInfo
-                    {
-                        Resources = new List<Resource> { new Resource
-                        {
-                            Name = "File resource",
-                            Path = @"C:\work\test-data.csv",
-                            PublishedUrl = "https://the.hosted.location"
-                        } }
                     },
                     Target = new TargetInfo
                     {
@@ -744,6 +746,25 @@ namespace Catalogue.Data.Seed
                 r.Id = Helpers.AddCollection("90fe83ac-d3e4-4342-8eeb-5919b38bc670");
                 r.Gemini.Title = "A record with multiple open data resources";
                 r.Gemini.MetadataDate = new DateTime(2014, 12, 31);
+                r.Resources = new List<Resource>
+                {
+                    new Resource
+                    {
+                        Name = "File resource",
+                        Path = @"Z:\some\resource\1.xlsx"
+                    },
+                    new Resource
+                    {
+                        Name = "File resource with published URL",
+                        Path = @"Z:\some\resource\2.pdf",
+                        PublishedUrl = "https://data.example.com/resources/2.pdf"
+                    },
+                    new Resource
+                    {
+                        Name = "Web resource",
+                        Path = @"https://link.to.resource"
+                    }
+                };
                 r.Publication = new PublicationInfo
                 {
                     Assessment = new AssessmentInfo
@@ -751,29 +772,6 @@ namespace Catalogue.Data.Seed
                         Completed = true,
                         CompletedByUser = userInfo,
                         CompletedOnUtc = new DateTime(2014, 12, 31)
-                    },
-                    Data = new DataInfo
-                    {
-                        Resources = new List<Resource>
-                        {
-                            new Resource
-                            {
-                                Name = "File resource",
-                                Path = @"Z:\some\resource\1.xlsx" },
-                            new Resource
-                            {
-                                Name = "File resource with published URL",
-                                Path = @"Z:\some\resource\2.pdf",
-                                PublishedUrl ="https://data.example.com/resources/2.pdf"
-                            },
-                            new Resource
-                            {
-                                Name = "Web resource",
-                                Path = @"https://link.to.resource"
-                            }
-                        },
-                        LastAttempt = null,
-                        LastSuccess = null,
                     },
                     Target = new TargetInfo
                     {

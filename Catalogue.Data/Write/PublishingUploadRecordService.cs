@@ -41,7 +41,7 @@ namespace Catalogue.Data.Write
         public void UpdateDataPublishSuccess(Record record, List<Resource> resources, PublicationAttempt attempt)
         {
             record.Publication.Data.LastSuccess = attempt;
-            record.Publication.Data.Resources = resources;
+            record.Resources = resources;
             UpdateMetadataDate(record, attempt.DateUtc);
 
             var recordServiceResult = Upsert(record, db, validator);

@@ -249,19 +249,14 @@ namespace Catalogue.Tests.Slow.Catalogue.Data.Write
             var database = Mock.Of<IDocumentSession>();
             var service = new RecordService(database, ValidatorStub());
 
-            var record = BasicRecord().With(r => r.Publication = new PublicationInfo
-            {
-                Data = new DataInfo
+            var record = BasicRecord().With(r => r.Resources = new List<Resource>
                 {
-                    Resources = new List<Resource>
-                    {
-                        new Resource { Path = "Z:\\does\\not\\need\\trimming.pdf" },
-                        new Resource { Path = " Z:\\needs\\trimming\\left.pdf" },
-                        new Resource { Path = "Z:\\needs\\trimming\\right.pdf " },
-                        new Resource { Path = " Z:\\needs\\trimming\\both.pdf "} ,
-                    }
+                    new Resource { Path = "Z:\\does\\not\\need\\trimming.pdf" },
+                    new Resource { Path = " Z:\\needs\\trimming\\left.pdf" },
+                    new Resource { Path = "Z:\\needs\\trimming\\right.pdf " },
+                    new Resource { Path = " Z:\\needs\\trimming\\both.pdf "} ,
                 }
-            });
+            );
 
             var expected = new List<string>
             {
@@ -273,7 +268,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Data.Write
 
             var result = service.Update(record, TestUser);
 
-            result.Record.Publication.Data.Resources.Select(r => r.Path).Should().ContainInOrder(expected);
+            result.Record.Resources.Select(r => r.Path).Should().ContainInOrder(expected);
         }
 
         Record BasicRecord()

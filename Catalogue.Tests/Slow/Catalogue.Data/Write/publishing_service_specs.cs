@@ -91,6 +91,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Data.Write
                 r.Path = @"X:\path\to\working\folder";
                 r.Validation = Validation.Gemini;
                 r.Gemini = Library.Example().With(m => m.ResourceType = resourceType);
+                r.Resources = resources;
                 r.Publication = new PublicationInfo
                 {
                     Assessment = new AssessmentInfo { Completed = true },
@@ -99,7 +100,6 @@ namespace Catalogue.Tests.Slow.Catalogue.Data.Write
                         DateUtc = new DateTime(2017, 08, 02),
                         User = TestUserInfo.TestUser
                     },
-                    Data = new DataInfo { Resources = resources },
                     Target = new TargetInfo
                     {
                         Hub = new HubPublicationInfo
@@ -140,11 +140,11 @@ namespace Catalogue.Tests.Slow.Catalogue.Data.Write
                 DataPublishedSuccessfully(updatedRecord, testTime);
                 HubPublishedSuccessfully(updatedRecord, testTime);
                 GovPublishedSuccessfully(updatedRecord, testTime);
-                ResourcesUpdatedCorrectly(recordId, record.Publication.Data.Resources, updatedRecord.Publication.Data.Resources);
+                ResourcesUpdatedCorrectly(recordId, record.Resources, updatedRecord.Resources);
 
                 updatedRecord.Gemini.MetadataDate.Should().Be(testTime);
 
-                var fileCount = CountFileResources(record.Publication.Data.Resources);
+                var fileCount = CountFileResources(record.Resources);
                 dataUploaderMock.Verify(x => x.UploadDataFile(Helpers.RemoveCollection(record.Id), It.IsAny<string>()), Times.Exactly(fileCount));
                 hubServiceMock.Verify(x => x.Publish(record), Times.Once);
                 record.Publication.Target.Hub.Url =
@@ -167,6 +167,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Data.Write
                 r.Path = @"X:\path\to\working\folder";
                 r.Validation = Validation.Gemini;
                 r.Gemini = Library.Example().With(m => m.ResourceType = resourceType);
+                r.Resources = resources;
                 r.Publication = new PublicationInfo
                 {
                     Assessment = new AssessmentInfo { Completed = true },
@@ -175,7 +176,6 @@ namespace Catalogue.Tests.Slow.Catalogue.Data.Write
                         DateUtc = new DateTime(2017, 08, 02),
                         User = TestUserInfo.TestUser
                     },
-                    Data = new DataInfo { Resources = resources },
                     Target = new TargetInfo
                     {
                         Hub = new HubPublicationInfo
@@ -212,10 +212,10 @@ namespace Catalogue.Tests.Slow.Catalogue.Data.Write
                 DataPublishedSuccessfully(updatedRecord, testTime);
                 HubPublishedSuccessfully(updatedRecord, testTime);
                 updatedRecord.Publication.Target.Gov.Should().BeNull();
-                ResourcesUpdatedCorrectly(recordId, record.Publication.Data.Resources, updatedRecord.Publication.Data.Resources);
+                ResourcesUpdatedCorrectly(recordId, record.Resources, updatedRecord.Resources);
 
                 updatedRecord.Gemini.MetadataDate.Should().Be(testTime);
-                var fileCount = CountFileResources(record.Publication.Data.Resources);
+                var fileCount = CountFileResources(record.Resources);
 
                 dataUploaderMock.Verify(x => x.UploadDataFile(Helpers.RemoveCollection(record.Id), It.IsAny<string>()), Times.Exactly(fileCount));
                 hubServiceMock.Verify(x => x.Publish(record), Times.Once);
@@ -239,6 +239,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Data.Write
                 r.Path = @"X:\path\to\working\folder";
                 r.Validation = Validation.Gemini;
                 r.Gemini = Library.Example().With(m => m.ResourceType = resourceType);
+                r.Resources = resources;
                 r.Publication = new PublicationInfo
                 {
                     Assessment = new AssessmentInfo { Completed = true },
@@ -247,7 +248,6 @@ namespace Catalogue.Tests.Slow.Catalogue.Data.Write
                         DateUtc = new DateTime(2017, 08, 02),
                         User = TestUserInfo.TestUser
                     },
-                    Data = new DataInfo { Resources = resources },
                     Target = new TargetInfo
                     {
                         Gov = new GovPublicationInfo
@@ -284,10 +284,10 @@ namespace Catalogue.Tests.Slow.Catalogue.Data.Write
                 DataPublishedSuccessfully(updatedRecord, testTime);
                 updatedRecord.Publication.Target.Hub.Should().BeNull();
                 GovPublishedSuccessfully(updatedRecord, testTime);
-                ResourcesUpdatedCorrectly(recordId, record.Publication.Data.Resources, updatedRecord.Publication.Data.Resources);
+                ResourcesUpdatedCorrectly(recordId, record.Resources, updatedRecord.Resources);
 
                 updatedRecord.Gemini.MetadataDate.Should().Be(testTime);
-                var fileCount = CountFileResources(record.Publication.Data.Resources);
+                var fileCount = CountFileResources(record.Resources);
 
                 dataUploaderMock.Verify(x => x.UploadDataFile(Helpers.RemoveCollection(record.Id), It.IsAny<string>()), Times.Exactly(fileCount));
                 hubServiceMock.Verify(x => x.Publish(It.IsAny<Record>()), Times.Never);
@@ -310,6 +310,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Data.Write
                 r.Path = @"X:\path\to\working\folder";
                 r.Validation = Validation.Gemini;
                 r.Gemini = Library.Example();
+                r.Resources = new List<Resource> {new Resource {Name = "File resource", Path = "x:\\test\\path.txt"}};
                 r.Publication = new PublicationInfo
                 {
                     Assessment = new AssessmentInfo { Completed = true },
@@ -318,7 +319,6 @@ namespace Catalogue.Tests.Slow.Catalogue.Data.Write
                         DateUtc = new DateTime(2017, 08, 02),
                         User = TestUserInfo.TestUser
                     },
-                    Data = new DataInfo { Resources = new List<Resource>{new Resource { Name = "File resource", Path = "x:\\test\\path.txt" }} },
                     Target = new TargetInfo
                     {
                         Hub = new HubPublicationInfo
@@ -362,15 +362,15 @@ namespace Catalogue.Tests.Slow.Catalogue.Data.Write
                 var updatedRecord = db.Load<Record>(record.Id);
 
                 DataPublishedSuccessfully(updatedRecord, testTime);
-                updatedRecord.Publication.Data.Resources.Should().Contain(r => r.Name.Equals("File resource"));
+                updatedRecord.Resources.Should().Contain(r => r.Name.Equals("File resource"));
                 updatedRecord.Publication.Target.Hub.LastSuccess.DateUtc.Should().Be(new DateTime(2017, 08, 17, 12, 0, 0));
                 updatedRecord.Publication.Target.Hub.Url.Should().Be("http://hub.jncc.gov.uk/assets/record-guid");
                 GovPublishedSuccessfully(updatedRecord, testTime);
-                ResourcesUpdatedCorrectly(recordId, record.Publication.Data.Resources, updatedRecord.Publication.Data.Resources);
+                ResourcesUpdatedCorrectly(recordId, record.Resources, updatedRecord.Resources);
 
                 updatedRecord.Gemini.MetadataDate.Should().Be(testTime);
 
-                var fileCount = CountFileResources(record.Publication.Data.Resources);
+                var fileCount = CountFileResources(record.Resources);
                 dataUploaderMock.Verify(x => x.UploadDataFile(Helpers.RemoveCollection(record.Id), It.IsAny<string>()), Times.Exactly(fileCount));
                 hubServiceMock.Verify(x => x.Publish(It.IsAny<Record>()), Times.Never);
                 hubServiceMock.Verify(x => x.Index(It.IsAny<Record>()), Times.Never);
@@ -392,6 +392,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Data.Write
                 r.Path = @"X:\path\to\working\folder";
                 r.Validation = Validation.Gemini;
                 r.Gemini = Library.Example();
+                r.Resources = new List<Resource> {new Resource {Name = "File resource", Path = "x:\\test\\path.txt"}};
                 r.Publication = new PublicationInfo
                 {
                     Assessment = new AssessmentInfo { Completed = true },
@@ -400,7 +401,6 @@ namespace Catalogue.Tests.Slow.Catalogue.Data.Write
                         DateUtc = new DateTime(2017, 08, 02),
                         User = TestUserInfo.TestUser
                     },
-                    Data = new DataInfo { Resources = new List<Resource> { new Resource { Name = "File resource", Path = "x:\\test\\path.txt" } } },
                     Target = new TargetInfo
                     {
                         Hub = new HubPublicationInfo
@@ -443,14 +443,14 @@ namespace Catalogue.Tests.Slow.Catalogue.Data.Write
                 var updatedRecord = db.Load<Record>(record.Id);
 
                 DataPublishedSuccessfully(updatedRecord, testTime);
-                updatedRecord.Publication.Data.Resources.Should().Contain(r => r.Name.Equals("File resource"));
+                updatedRecord.Resources.Should().Contain(r => r.Name.Equals("File resource"));
                 HubPublishedSuccessfully(updatedRecord, testTime);
                 updatedRecord.Publication.Target.Gov.LastSuccess.DateUtc.Should().Be(new DateTime(2017, 08, 17, 12, 0, 0));
-                ResourcesUpdatedCorrectly(recordId, record.Publication.Data.Resources, updatedRecord.Publication.Data.Resources);
+                ResourcesUpdatedCorrectly(recordId, record.Resources, updatedRecord.Resources);
 
                 updatedRecord.Gemini.MetadataDate.Should().Be(testTime);
                 
-                var fileCount = CountFileResources(record.Publication.Data.Resources);
+                var fileCount = CountFileResources(record.Resources);
                 dataUploaderMock.Verify(x => x.UploadDataFile(Helpers.RemoveCollection(record.Id), It.IsAny<string>()), Times.Exactly(fileCount));
                 hubServiceMock.Verify(x => x.Publish(record), Times.Once);
                 hubServiceMock.Verify(x => x.Index(record), Times.Once);
@@ -473,6 +473,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Data.Write
                 r.Path = @"X:\path\to\upload\test";
                 r.Validation = Validation.Gemini;
                 r.Gemini = Library.Example().With(m => m.ResourceType = resourceType);
+                r.Resources = new List<Resource> {new Resource {Name = "Some resource", Path = "x:\\test\\path.txt"}};
                 r.Publication = new PublicationInfo
                 {
                     Assessment = new AssessmentInfo
@@ -483,10 +484,6 @@ namespace Catalogue.Tests.Slow.Catalogue.Data.Write
                     {
                         DateUtc = new DateTime(2017, 08, 02),
                         User = TestUserInfo.TestUser
-                    },
-                    Data = new DataInfo
-                    {
-                        Resources = new List<Resource> { new Resource { Name = "Some resource", Path = "x:\\test\\path.txt" } }
                     },
                     Target = new TargetInfo
                     {
@@ -549,6 +546,12 @@ namespace Catalogue.Tests.Slow.Catalogue.Data.Write
                 r.Path = @"X:\path\to\upload\test";
                 r.Validation = Validation.Gemini;
                 r.Gemini = Library.Example().With(m => m.ResourceType = resourceType);
+                r.Resources = new List<Resource>
+                {
+                    new Resource {Name = "File resource", Path = "x:\\a\\test\\path.txt"},
+                    new Resource {Name = "Another file resource", Path = "x:\\another\\test\\path.txt"},
+                    new Resource {Name = "Web resource", Path = "http://a.web.resource"}
+                };
                 r.Publication = new PublicationInfo
                 {
                     Assessment = new AssessmentInfo
@@ -559,15 +562,6 @@ namespace Catalogue.Tests.Slow.Catalogue.Data.Write
                     {
                         DateUtc = new DateTime(2017, 08, 02),
                         User = TestUserInfo.TestUser
-                    },
-                    Data = new DataInfo
-                    {
-                        Resources = new List<Resource>
-                        {
-                            new Resource { Name = "File resource", Path = "x:\\a\\test\\path.txt" },
-                            new Resource { Name = "Another file resource", Path = "x:\\another\\test\\path.txt" },
-                            new Resource { Name = "Web resource", Path = "http://a.web.resource" }
-                        }
                     },
                     Target = new TargetInfo
                     {
@@ -609,7 +603,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Data.Write
                 updatedRecord.Publication.Data.LastAttempt.DateUtc.Should().Be(testTime);
                 updatedRecord.Publication.Data.LastAttempt.Message.Should().Be("test message");
                 updatedRecord.Publication.Data.LastSuccess.Should().BeNull();
-                foreach (var resource in updatedRecord.Publication.Data.Resources)
+                foreach (var resource in updatedRecord.Resources)
                 {
                     resource.PublishedUrl.Should().BeNullOrEmpty();
                 }
@@ -634,6 +628,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Data.Write
                 r.Path = @"X:\path\to\upload\test";
                 r.Validation = Validation.Gemini;
                 r.Gemini = Library.Example().With(m => m.ResourceType = resourceType);
+                r.Resources = new List<Resource> {new Resource {Name = "Some resource", Path = "x:\\test\\path"}};
                 r.Publication = new PublicationInfo
                 {
                     Assessment = new AssessmentInfo
@@ -645,10 +640,6 @@ namespace Catalogue.Tests.Slow.Catalogue.Data.Write
                     {
                         DateUtc = new DateTime(2017, 08, 02),
                         User = TestUserInfo.TestUser
-                    },
-                    Data = new DataInfo
-                    {
-                        Resources = new List<Resource> { new Resource { Name = "Some resource", Path = "x:\\test\\path" } }
                     },
                     Target = new TargetInfo
                     {
@@ -713,6 +704,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Data.Write
                 r.Path = @"X:\path\to\upload\test";
                 r.Validation = Validation.Gemini;
                 r.Gemini = Library.Example().With(m => m.ResourceType = resourceType);
+                r.Resources = new List<Resource> {new Resource {Name = "Some resource", Path = "x:\\test\\path"}};
                 r.Publication = new PublicationInfo
                 {
                     Assessment = new AssessmentInfo
@@ -724,10 +716,6 @@ namespace Catalogue.Tests.Slow.Catalogue.Data.Write
                     {
                         DateUtc = new DateTime(2017, 08, 02),
                         User = TestUserInfo.TestUser
-                    },
-                    Data = new DataInfo
-                    {
-                        Resources = new List<Resource> { new Resource { Name = "Some resource", Path = "x:\\test\\path" } }
                     },
                     Target = new TargetInfo
                     {
@@ -792,6 +780,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Data.Write
                 r.Path = @"X:\path\to\upload\test";
                 r.Validation = Validation.Gemini;
                 r.Gemini = Library.Example().With(m => m.ResourceType = resourceType);
+                r.Resources = new List<Resource> {new Resource {Name = "Some resource", Path = "x:\\test\\path"}};
                 r.Publication = new PublicationInfo
                 {
                     Assessment = new AssessmentInfo
@@ -802,10 +791,6 @@ namespace Catalogue.Tests.Slow.Catalogue.Data.Write
                     {
                         DateUtc = new DateTime(2017, 08, 02),
                         User = TestUserInfo.TestUser
-                    },
-                    Data = new DataInfo
-                    {
-                        Resources = new List<Resource> { new Resource { Name = "Some resource", Path = "x:\\test\\path" } }
                     },
                     Target = new TargetInfo
                     {

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Catalogue.Gemini.Model;
 
 namespace Catalogue.Data.Model
@@ -34,7 +35,10 @@ namespace Catalogue.Data.Model
         public string SourceIdentifier { get; set; }
         public bool   ReadOnly         { get; set; } // for imported records
 
-        //todo: move publishable resources and datahub url here
+        /// <summary>
+        /// List of publishable resources
+        /// </summary>
+        public List<Resource> Resources { get; set; }
 
         public PublicationInfo Publication { get; set; }
 

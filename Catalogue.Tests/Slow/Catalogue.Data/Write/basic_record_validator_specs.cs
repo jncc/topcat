@@ -298,14 +298,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Data.Write
                     Path = path
                 }
             };
-            var record = SimpleRecord()
-                .With(r => r.Publication = new PublicationInfo
-                {
-                    Data = new DataInfo
-                    {
-                        Resources = resources
-                    }
-                });
+            var record = SimpleRecord().With(r => r.Resources = resources);
             var result = new RecordValidator(vocabQueryer).Validate(record);
 
             result.Errors.Should().BeEmpty();
@@ -325,17 +318,10 @@ namespace Catalogue.Tests.Slow.Catalogue.Data.Write
                     Path = path
                 }
             };
-            var record = SimpleRecord()
-                .With(r => r.Publication = new PublicationInfo
-                {
-                    Data = new DataInfo
-                    {
-                        Resources = resources
-                    }
-                });
+            var record = SimpleRecord().With(r => r.Resources = resources);
             var result = new RecordValidator(vocabQueryer).Validate(record);
             result.Errors.Single().Message.Should().Contain("Publishable resource path must be a file system path or URL");
-            result.Errors.Single().Fields.Single().Should().Be("publication.data.resources");
+            result.Errors.Single().Fields.Single().Should().Be("resources");
         }
 
         [Test]
@@ -349,17 +335,10 @@ namespace Catalogue.Tests.Slow.Catalogue.Data.Write
                     Path = ""
                 }
             };
-            var record = SimpleRecord()
-                .With(r => r.Publication = new PublicationInfo
-                {
-                    Data = new DataInfo
-                    {
-                        Resources = resources
-                    }
-                });
+            var record = SimpleRecord().With(r => r.Resources = resources);
             var result = new RecordValidator(vocabQueryer).Validate(record);
             result.Errors.Single().Message.Should().Contain("Publishable resource name and path must not be blank");
-            result.Errors.Single().Fields.Single().Should().Be("publication.data.resources");
+            result.Errors.Single().Fields.Single().Should().Be("resources");
         }
 
         [Test]
@@ -376,17 +355,10 @@ namespace Catalogue.Tests.Slow.Catalogue.Data.Write
                 Path = @"X:\some\path"
             };
             var resources = new List<Resource>{ resource1, resource2};
-            var record = SimpleRecord()
-                .With(r => r.Publication = new PublicationInfo
-                {
-                    Data = new DataInfo
-                    {
-                        Resources = resources
-                    }
-                });
+            var record = SimpleRecord().With(r => r.Resources = resources);
             var result = new RecordValidator(vocabQueryer).Validate(record);
             result.Errors.Single().Message.Should().Contain("Publishable resources must be unique - no duplicates");
-            result.Errors.Single().Fields.Single().Should().Be("publication.data.resources");
+            result.Errors.Single().Fields.Single().Should().Be("resources");
         }
 
         [Test]
@@ -403,17 +375,10 @@ namespace Catalogue.Tests.Slow.Catalogue.Data.Write
                 Path = @"X:\another\path"
             };
             var resources = new List<Resource> { resource1, resource2 };
-            var record = SimpleRecord()
-                .With(r => r.Publication = new PublicationInfo
-                {
-                    Data = new DataInfo
-                    {
-                        Resources = resources
-                    }
-                });
+            var record = SimpleRecord().With(r => r.Resources = resources);
             var result = new RecordValidator(vocabQueryer).Validate(record);
             result.Errors.Single().Message.Should().Contain("Publishable resource names must be unique - no duplicates");
-            result.Errors.Single().Fields.Single().Should().Be("publication.data.resources");
+            result.Errors.Single().Fields.Single().Should().Be("resources");
         }
     }
 }
