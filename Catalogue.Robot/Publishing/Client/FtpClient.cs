@@ -25,17 +25,9 @@ namespace Catalogue.Robot.Publishing.Client
 
         public void UploadFile(string ftpPath, string filepath)
         {
-            var client = new FluentFTP.FtpClient(env.FTP_HOST);
-            client.Credentials = new NetworkCredential(env.FTP_USERNAME, env.FTP_PASSWORD);
-            client.Connect();
-
-            try
+            using (var client = new FluentFTP.FtpClient(env.FTP_HOST, new NetworkCredential(env.FTP_USERNAME, env.FTP_PASSWORD)))
             {
                 client.UploadFile(filepath, ftpPath, createRemoteDir: true);
-            }
-            finally
-            {
-                client.Disconnect();
             }
         }
 
@@ -46,34 +38,19 @@ namespace Catalogue.Robot.Publishing.Client
 
         public void UploadBytes(string ftpPath, byte[] bytes)
         {
-            var client = new FluentFTP.FtpClient(env.FTP_HOST);
-            client.Credentials = new NetworkCredential(env.FTP_USERNAME, env.FTP_PASSWORD);
-            client.Connect();
-
-            try
+            using (var client = new FluentFTP.FtpClient(env.FTP_HOST, new NetworkCredential(env.FTP_USERNAME, env.FTP_PASSWORD)))
             {
                 client.Upload(bytes, ftpPath, createRemoteDir: true);
-            }
-            finally
-            {
-                client.Disconnect();
             }
         }
 
         public string DownloadString(string ftpPath)
         {
-            var client = new FluentFTP.FtpClient(env.FTP_HOST);
-            client.Credentials = new NetworkCredential(env.FTP_USERNAME, env.FTP_PASSWORD);
-            client.Connect();
-
-            try
+            using (var client = new FluentFTP.FtpClient(env.FTP_HOST, new NetworkCredential(env.FTP_USERNAME, env.FTP_PASSWORD)))
             {
                 client.Download(out byte[] outBytes, ftpPath);
+
                 return Encoding.UTF8.GetString(outBytes);
-            }
-            finally
-            {
-                client.Disconnect();
             }
         }
     }
