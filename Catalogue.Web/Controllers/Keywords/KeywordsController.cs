@@ -17,23 +17,20 @@ namespace Catalogue.Web.Controllers.Keywords
             this.db = db;
         }
 
-        public List<KeywordModel> Get(string q, int take = 10)
+        public List<KeywordModel> Get(string q)
         {
             var vocabfulKeywords = db.Query<VocabularyKeywordIndex.Result, VocabularyKeywordIndex>()
                 .Search(k => k.ValueN, q)
-                .Take(take)
                 .Select(r => new { r.Vocab, r.Value })
                 .ToList();
 
             var vocablessKeywords = db.Query<RecordKeywordIndex.Result, RecordKeywordIndex>()
                 .Search(k => k.ValueN, q)
-                .Take(take)
                 .Select(r => new { r.Vocab, r.Value })
                 .ToList();
 
             return vocabfulKeywords.Concat(vocablessKeywords.Except(vocabfulKeywords))
                 .Select(x => new KeywordModel { Vocab = x.Vocab, Value = x.Value })
-                .Take(take)
                 .OrderBy(x => x.Vocab != "http://vocab.jncc.gov.uk/jncc-domain")
                 .ThenBy(x => x.Vocab != "http://vocab.jncc.gov.uk/jncc-category")
                 .ToList();
