@@ -62,7 +62,7 @@ namespace Catalogue.Data.Query
 
             var query = _db.Query<RecordIndex.Result, RecordIndex>()
                 .Statistics(out stats)
-                .Highlight("Title", 400, 1, highlightingOptions, out titleLites) //keep this bigger because we want to display the full title
+                .Highlight("Title", 1000, 1, highlightingOptions, out titleLites) //keep this bigger because we want to display the full title
                 .Highlight("TitleN", 202, 1, highlightingOptions, out titleNLites)
                 .Highlight("Abstract", 202, 1, highlightingOptions, out abstractLites)
                 .Highlight("AbstractN", 202, 1, highlightingOptions, out abstractNLites);
