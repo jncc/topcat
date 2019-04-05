@@ -13,10 +13,12 @@ angular.module('app.controllers').controller 'ImagePickerController',
         $scope.selectedImage = {}
 
         $scope.getImages = () ->
-            $http.get(imagePickerUrl)
-                .then (response) ->
-                    $scope.images = response.data
-                    $scope.refreshPages()
+            if imagePickerUrl
+                $http.get(imagePickerUrl)
+                    .then (response) ->
+                        $scope.images = response.data
+                        $scope.refreshPages()
+                $scope.images = []
 
         $scope.refreshPages = () ->
             # looks like they're already sorted, but just in case

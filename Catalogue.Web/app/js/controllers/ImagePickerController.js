@@ -11,10 +11,13 @@
     $scope.selectedImageUrl = "";
     $scope.selectedImage = {};
     $scope.getImages = function() {
-      return $http.get(imagePickerUrl).then(function(response) {
-        $scope.images = response.data;
-        return $scope.refreshPages();
-      });
+      if (imagePickerUrl) {
+        $http.get(imagePickerUrl).then(function(response) {
+          $scope.images = response.data;
+          return $scope.refreshPages();
+        });
+        return $scope.images = [];
+      }
     };
     $scope.refreshPages = function() {
       $scope.images = $scope.images.sort(function(first, second) {
