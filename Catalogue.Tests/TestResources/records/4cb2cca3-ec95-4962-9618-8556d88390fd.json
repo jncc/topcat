@@ -1,8 +1,7 @@
 ﻿{
   "Gemini": {
     "Title": "Raw sidescan sonar data from Dogger Bank SCI",
-    "Abstract":
-      "Raw sidescan sonar data from Dogger Bank SCI (CEND 07/08). This survey was carried out at Dogger Bank SAC  on the Cefas Endeavour research vessel to better define the extent of the Annex 1 shallow sandbank habitat and to conduct habitat mapping.",
+    "Abstract": "Raw sidescan sonar data from Dogger Bank SCI (CEND 07/08). This survey was carried out at Dogger Bank SAC  on the Cefas Endeavour research vessel to better define the extent of the Annex 1 shallow sandbank habitat and to conduct habitat mapping.",
     "TopicCategory": "oceans",
     "Keywords": [
       {
@@ -39,14 +38,11 @@
       "End": "2008-04-20"
     },
     "DatasetReferenceDate": "2015-09-01",
-    "Lineage":
-      "This dataset is an output of a collaborative offshore seabed survey undertaken with Joint Nature Conservation Committee (JNCC).",
-    "ResourceLocator":
-      "http://s3-eu-west-1.amazonaws.com/data.defra.gov.uk/Marine/JNCC2008_04DoggerBankGeophysSidescanRawData.zip",
+    "Lineage": "This dataset is an output of a collaborative offshore seabed survey undertaken with Joint Nature Conservation Committee (JNCC).",
     "AdditionalInformationSource": "Some additional information",
     "DataFormat": "Other",
     "ResponsibleOrganisation": {
-      "Name": "Joint Nature Conservation Committee (JNCC)",
+      "Name": "Digital and Data Solutions, JNCC",
       "Email": "data@jncc.gov.uk",
       "Role": "custodian"
     },
@@ -57,7 +53,7 @@
     "Extent": null,
     "MetadataDate": "2016-07-07T21:50:18.5043915Z",
     "MetadataPointOfContact": {
-      "Name": "Joint Nature Conservation Committee",
+      "Name": "Digital and Data Solutions, JNCC",
       "Email": "data@jncc.gov.uk",
       "Role": "pointOfContact"
     },
@@ -78,29 +74,37 @@
   "Notes": "",
   "SourceIdentifier": "",
   "ReadOnly": false,
+  "Resources": [
+    {
+      "Name": "Raw Data ZIP",
+      "Path": "http://s3-eu-west-1.amazonaws.com/data.defra.gov.uk/Marine/JNCC2008_04DoggerBankGeophysSidescanRawData.zip"
+    }
+  ],
   "Publication": {
-    "OpenData": {
-      "Assessment": {
-        "Completed": true,
-        "CompletedByUser": null,
-        "CompletedOnUtc": "0001-01-01T00:00:00.0000000",
-        "InitialAssessmentWasDoneOnSpreadsheet": true,
-        "CompletedBy": null
-      },
-      "SignOff": {
-        "DateUtc": "0001-01-01T00:00:00.0000000",
-        "User": null,
-        "Comment": null
-      },
-      "Resources": null,
-      "Paused": false,
-      "LastAttempt": {
-        "DateUtc": "2016-07-07T21:51:35.4446864Z",
-        "Message": null
-      },
-      "LastSuccess": {
-        "DateUtc": "2016-07-07T21:51:35.4446864Z",
-        "Message": null
+    "Assessment": {
+      "Completed": true,
+      "CompletedByUser": null,
+      "CompletedOnUtc": "0001-01-01T00:00:00.0000000",
+      "InitialAssessmentWasDoneOnSpreadsheet": true,
+      "CompletedBy": null
+    },
+    "SignOff": {
+      "DateUtc": "0001-01-01T00:00:00.0000000",
+      "User": null,
+      "Comment": null
+    },
+    "Target": {
+      "Gov": {
+        "Publishable": true,
+        "Paused": false,
+        "LastAttempt": {
+          "DateUtc": "2016-07-07T21:51:35.4446864Z",
+          "Message": null
+        },
+        "LastSuccess": {
+          "DateUtc": "2016-07-07T21:51:35.4446864Z",
+          "Message": null
+        }
       }
     }
   },

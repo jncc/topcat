@@ -31,12 +31,13 @@
         $scope.getDataFormatObj = getDataFormatObj
         $scope.updateDataFormatObj = updateDataFormatObj
         $scope.getPendingSignOff = getPendingSignOff
-        $scope.getOpenDataButtonText = getOpenDataButtonText
-        $scope.getOpenDataButtonToolTip = getOpenDataButtonToolTip
-        $scope.addOpenDataResource = addOpenDataResource
-        $scope.removeOpenDataResource = removeOpenDataResource
+        $scope.getPublishingText = getPublishingText
+        $scope.getPublishButtonTooltip = getPublishButtonTooltip
+        $scope.getFormattedDate = getFormattedDate
+        $scope.addPublishableResource = addPublishableResource
+        $scope.removePublishableResource = removePublishableResource
         $scope.trimDoubleQuotes = trimDoubleQuotes
-
+        $scope.getResourceUrl = getResourceUrl
         
         $scope.cancel = ->
             $scope.reset()
@@ -99,9 +100,10 @@
         $scope.isSaveDisabled = -> $scope.isClean() # || $scope.theForm.$invalid 
         $scope.isCloneHidden = -> $scope.isNew()
         $scope.isCloneDisabled = -> !$scope.isClean()
+        $scope.isPublishDisabled = -> !$scope.isSaveHidden() || $scope.form.validation != 1
+        $scope.isPublishHidden = -> !($scope.form.publication && $scope.form.publication.target && ($scope.form.publication.target.hub && $scope.form.publication.target.hub.publishable == true ||
+            $scope.form.publication.target.gov && $scope.form.publication.target.gov.publishable == true))
         $scope.isHttpPath = (path) -> path and path.toLowerCase().startsWith "http"
-        $scope.isPublishingModalButtonEnabled = -> isFilePath($scope.form.path) and $scope.isSaveHidden()
-        $scope.isPublishingModalButtonVisible = -> $scope.form.publication && $scope.form.publication.openData && $scope.form.publication.openData.publishable == true
         $scope.hasUsageConstraints = () -> (!!$scope.form.gemini.limitationsOnPublicAccess and $scope.form.gemini.limitationsOnPublicAccess isnt 'no limitations') or (!!$scope.form.gemini.useConstraints and $scope.form.gemini.useConstraints isnt 'no conditions apply')
 
         # keywords # update arg name and use cs in
@@ -132,14 +134,24 @@
 
         $scope.openPublishingModal = ->
             modal = $modal.open
-                controller:  'OpenDataModalController'
-                templateUrl: 'views/partials/opendatamodal.html?' + new Date().getTime() # stop iis express caching the html
+                controller:  'PublishingModalController'
+                templateUrl: 'views/partials/publishingmodal.html?' + new Date().getTime() # stop iis express caching the html
                 size:        'lg'
                 scope:       $scope
                 resolve:     'recordOutput': -> $scope.recordOutput
                 backdrop:  'static'
             modal.result
                 .then (result) -> $scope.reloadRecord result
+
+        $scope.openImagePicker = ->
+            modal = $modal.open
+                controller:  'ImagePickerController'
+                templateUrl: 'views/partials/imagepicker.html?' + new Date().getTime() # stop iis express caching the html
+                size:        'lg'
+                scope:       $scope
+                resolve:     'recordImage': -> $scope.form.image
+            modal.result
+                .then (image) -> $scope.form.image = image
 
         $scope.removeExtent = (extent) ->
             $scope.form.gemini.extent.splice ($.inArray extent, $scope.form.gemini.extent), 1
@@ -161,77 +173,60 @@
             if not $scope.form.manager then $scope.form.manager = {}
             $scope.form.manager.displayName = $scope.user.displayName
 
-        $scope.setPublishable = (value) ->
-            if !$scope.form.publication
-                $scope.form.publication = {}
-
-            if !$scope.form.publication.openData
-                $scope.form.publication.openData = {}
-
-            if (value == true && $scope.form.publication.openData.publishable == true) or (value == false && $scope.form.publication.openData.publishable == false)
-                $scope.form.publication.openData.publishable = null
-            else
-                $scope.form.publication.openData.publishable = value
-
-        $scope.togglePublishable = () ->
-            if !$scope.form.publication
-                $scope.form.publication = {}
-
-            if !$scope.form.publication.openData
-                $scope.form.publication.openData = {}
-                $scope.form.publication.openData.publishable = null
-
-            if $scope.form.publication.openData.publishable == null
-                $scope.form.publication.openData.publishable = true
-            else if $scope.form.publication.openData.publishable == true
-                $scope.form.publication.openData.publishable = false
-            else
-                $scope.form.publication.openData.publishable = null
-
 
 
 isFilePath = (path) -> path and path.match /^([a-z]:|\\\\jncc-corpfile\\)/i
 
-addOpenDataResource = (record) ->
-    if !record.publication
-        record.publication = {}    
-    if !record.publication.openData
-        record.publication.openData = {}    
-    if !record.publication.openData.resources
-        record.publication.openData.resources = []
-    record.publication.openData.resources.push { path: "" }
-    console.log record.publication.openData.resources.length
-removeOpenDataResource = (record, resource) ->
-    record.publication.openData.resources.splice ($.inArray resource, record.publication.openData.resources), 1
+addPublishableResource = (record) ->
+    if !record.resources
+        record.resources = []
+    record.resources.push { path: "" }
+
+getResourceUrl = (resource) ->
+    if resource.path.startsWith("http://") || resource.path.startsWith("https://")
+        return resource.path
+    else if resource.publishedUrl != null
+        return resource.publishedUrl
+    else
+        return null
+
+removePublishableResource = (record, resource) ->
+    record.resources.splice ($.inArray resource, record.resources), 1
+
 trimDoubleQuotes = (s) -> # removes double quotes surrounding a string
     if s.match(/^(").*(")$/) then s.substring(1, s.length - 1) else s
 
-getOpenDataButtonToolTip = (record, publishingState) ->
-    if !isFilePath(record.path)
-        return "Open data publishing not available for non-file resources"
-    else if record.publication == null or record.publication.openData == null or record.publication.openData.publishable != true
-        return "The open data publication status of the record, editing the record may affect the status."
-    else if record.publication.openData.lastSuccess != null && record.publication.openData.lastSuccess != undefined && !publishingState.assessedAndUpToDate
-        return "This record has been changed since it was last published, it may need republishing."
+getPublishButtonTooltip = (record) ->
+    if record.validation == 1
+        return "View the publishing workflow"
     else
-        return "The open data publication status of the record, editing the record may affect the status."
+        return "Validation level must be Gemini"
 
-getOpenDataButtonText = (record, publishingState) ->
-    if record.publication == null || record.publication.openData == null || record.publication.openData.publishable != true
-        return "Publishable"
-    else if record.publication.openData.lastSuccess != null && record.publication.openData.lastSuccess != undefined && !publishingState.assessedAndUpToDate
-        return "Republish"
-    else if publishingState.uploadedAndUpToDate
-        return "Published"
-    else if publishingState.signedOffAndUpToDate
-        return "Signed Off"
-    else if publishingState.assessedAndUpToDate
-        return "Assessed"
+getPublishingText = (record, publishingState) ->
+    previouslyPublishedText = "Never Published"
+    publishingStatusText = null
+
+    if record.publication && record.publication.target && (record.publication.target.gov && record.publication.target.gov.lastSuccess || record.publication.target.hub && record.publication.target.hub.lastSuccess)
+        previouslyPublishedText = "Published"
+
+    if record.publication && record.publication.target
+        if previouslyPublishedText == "Published" && !publishingState.assessedAndUpToDate
+            publishingStatusText = "Out Of Date"
+        else if publishingState.signedOffAndUpToDate && !publishingState.publishedToHubAndUpToDate && !publishingState.publishedToGovAndUpToDate
+            publishingStatusText = "Signed Off"
+        else if publishingState.assessedAndUpToDate && !publishingState.publishedToHubAndUpToDate && !publishingState.publishedToGovAndUpToDate
+            publishingStatusText = "Assessed"
+
+    if publishingStatusText != null
+        return previouslyPublishedText + ", " + publishingStatusText
     else
-        return "Publishable"
+        return previouslyPublishedText
+
+getFormattedDate = (date) ->
+    return moment(new Date(date)).format('DD MMM YYYY')
 
 getPendingSignOff = (publication) ->
-    if (publication != null && publication.openData.assessment.completed && publication.openData.signOff == null)
+    if publication != null && publication.assessment.completed && publication.signOff == null
         return true
     else
         return false

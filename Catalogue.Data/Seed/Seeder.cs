@@ -6,6 +6,7 @@ using System.Reflection;
 using Catalogue.Data.Import;
 using Catalogue.Data.Import.Mappings;
 using Catalogue.Data.Model;
+using Catalogue.Data.Query;
 using Catalogue.Data.Write;
 using Catalogue.Gemini.DataFormats;
 using Catalogue.Gemini.Helpers;
@@ -40,7 +41,7 @@ namespace Catalogue.Data.Seed
         {
             using (var db = store.OpenSession())
             {
-                var s = new Seeder(db, new RecordService(db, new RecordValidator()));
+                var s = new Seeder(db, new RecordService(db, new RecordValidator(new VocabQueryer(db))));
                 var timeGetter = Clock.CurrentUtcDateTimeGetter;
                 Clock.CurrentUtcDateTimeGetter = () => new DateTime(2015, 1, 1, 12, 0, 0);
 
@@ -49,7 +50,7 @@ namespace Catalogue.Data.Seed
                 s.AddHumanActivitiesRecord();
                 s.AddOverseasTerritoriesRecord();
                 s.AddSimpleGeminiExampleRecord();
-                s.AddRecordsWithOpenDataPublishingInfo();
+                s.AddRecordsWithPublishingInfo();
                 s.AddRecordWithLotsOfVocablessTags();
                 s.AddRecordsWithSameKeywordsInDifferentVocabs();
                 s.AddReadOnlyRecord();
@@ -168,7 +169,6 @@ namespace Catalogue.Data.Seed
                         m.TemporalExtent = new TemporalExtent { Begin = "1998", End = "2005" };
                         m.DatasetReferenceDate = "2015-04-14";
                         m.Lineage = "This dataset was imagined by a developer.";
-                        m.ResourceLocator = "http://data.jncc.gov.uk/679434f5-baab-47b9-98e4-81c8e3a1a6f9";
                         m.DataFormat = "Geospatial (raster)";
                         m.ResponsibleOrganisation = new ResponsibleParty
                         {
@@ -202,7 +202,7 @@ namespace Catalogue.Data.Seed
             recordService.Insert(record, userInfo);
         }
 
-        void AddRecordsWithOpenDataPublishingInfo()
+        void AddRecordsWithPublishingInfo()
         {
             var record = MakeExampleSeedRecord().With(r =>
             {
@@ -218,7 +218,6 @@ namespace Catalogue.Data.Seed
                     m.TemporalExtent = new TemporalExtent { Begin = "1998", End = "2005" };
                     m.DatasetReferenceDate = "2015-04-14";
                     m.Lineage = "This dataset was imagined by a developer.";
-                    m.ResourceLocator = "";
                     m.DataFormat = "Comma Separated Values";
                     m.ResponsibleOrganisation = new ResponsibleParty
                     {
@@ -252,28 +251,43 @@ namespace Catalogue.Data.Seed
                 r.Id = Helpers.AddCollection("471da4f2-d9e2-4a5a-b72b-3ae8cc40ae57");
                 r.Gemini.Title = "A record with assessment completed on spreadsheet";
                 r.Gemini.MetadataDate = new DateTime(2015, 1, 1, 09, 59, 59);
+                r.Resources = new List<Resource>
+                {
+                    new Resource
+                    {
+                        Name = "File resource",
+                        Path = @"C:\work\test-data.csv"
+                    }
+                };
                 r.Publication = new PublicationInfo
                 {
-                    OpenData = new OpenDataPublicationInfo
+                    Assessment = new AssessmentInfo
                     {
-                        Publishable = true,
-                        Assessment = new OpenDataAssessmentInfo
+                        Completed = true,
+                        CompletedOnUtc = DateTime.MinValue,
+                        InitialAssessmentWasDoneOnSpreadsheet = true
+                    },
+                    SignOff = new SignOffInfo
+                    {
+                        DateUtc = DateTime.MinValue
+                    },
+                    Target = new TargetInfo
+                    {
+                        Hub = new HubPublicationInfo
                         {
-                            Completed = true,
-                            CompletedOnUtc = DateTime.MinValue,
-                            InitialAssessmentWasDoneOnSpreadsheet = true
+                            Publishable = true,
                         },
-                        SignOff = new OpenDataSignOffInfo
+                        Gov = new GovPublicationInfo
                         {
-                            DateUtc = DateTime.MinValue
-                        },
-                        LastAttempt = new PublicationAttempt
-                        {
-                            DateUtc = new DateTime(2015, 1, 1, 10, 0, 0)
-                        },
-                        LastSuccess = new PublicationAttempt
-                        {
-                            DateUtc = new DateTime(2015, 1, 1, 10, 0, 0)
+                            Publishable = true,
+                            LastAttempt = new PublicationAttempt
+                            {
+                                DateUtc = new DateTime(2015, 1, 1, 10, 0, 0)
+                            },
+                            LastSuccess = new PublicationAttempt
+                            {
+                                DateUtc = new DateTime(2015, 1, 1, 10, 0, 0)
+                            }
                         }
                     }
                 };
@@ -284,15 +298,30 @@ namespace Catalogue.Data.Seed
                 r.Id = Helpers.AddCollection("39f9442a-45e5-464f-8b20-876051560964");
                 r.Gemini.Title = "A record with an incomplete risk-assessment";
                 r.Gemini.MetadataDate = new DateTime(2015, 05, 17, 0, 0, 0);
+                r.Resources = new List<Resource>
+                {
+                    new Resource
+                    {
+                        Name = "File resource",
+                        Path = @"C:\work\test-data.csv"
+                    }
+                };
                 r.Publication = new PublicationInfo
                 {
-                    OpenData = new OpenDataPublicationInfo
+                    Assessment = new AssessmentInfo
                     {
-                        Publishable = true,
-                        Assessment = new OpenDataAssessmentInfo
+                        // todo add more assessment fields
+                        Completed = false
+                    },
+                    Target = new TargetInfo
+                    {
+                        Hub = new HubPublicationInfo
                         {
-                            // todo add more assessment fields
-                            Completed = false
+                            Publishable = true,
+                        },
+                        Gov = new GovPublicationInfo
+                        {
+                            Publishable = true
                         }
                     }
                 };
@@ -303,23 +332,125 @@ namespace Catalogue.Data.Seed
                 r.Id = Helpers.AddCollection("46003050-66f3-4fb2-b2b0-f66b382c8d37");
                 r.Gemini.Title = "An assessed but not signed-off record";
                 r.Gemini.MetadataDate = new DateTime(2015, 1, 1, 12, 0, 0);
+                r.Resources = new List<Resource>
+                {
+                    new Resource
+                    {
+                        Name = "File resource",
+                        Path = @"C:\work\test-data.csv"
+                    }
+                };
                 r.Publication = new PublicationInfo
                 {
-                    OpenData = new OpenDataPublicationInfo
+                    Assessment = new AssessmentInfo
                     {
-                        Publishable = true,
-                        Assessment = new OpenDataAssessmentInfo
+                        // todo add more assessment fields
+                        Completed = true,
+                        CompletedByUser = new UserInfo
                         {
-                            // todo add more assessment fields
-                            Completed = true,
-                            CompletedByUser = new UserInfo
-                            {
-                                DisplayName = "Cathy",
-                                Email = "cathy@example.com"
-                            },
-                            CompletedOnUtc = new DateTime(2015, 1, 1, 12, 0, 0)
+                            DisplayName = "Test User",
+                            Email = "Test.user@jncc.gov.uk"
                         },
-                        SignOff = null
+                        CompletedOnUtc = new DateTime(2015, 1, 1, 12, 0, 0)
+                    },
+                    SignOff = null,
+                    Target = new TargetInfo
+                    {
+                        Hub = new HubPublicationInfo
+                        {
+                            Publishable = true,
+                        },
+                        Gov = new GovPublicationInfo
+                        {
+                            Publishable = true
+                        }
+                    }
+                };
+            });
+
+            var assessedRecordWithUrlResource = record.With(r =>
+            {
+                r.Id = Helpers.AddCollection("d869ae04-a3eb-477e-b8aa-66bea3e84730");
+                r.Gemini.Title = "An assessed record with url resource";
+                r.Gemini.MetadataDate = new DateTime(2015, 1, 1, 12, 0, 0);
+                r.Resources = new List<Resource>
+                {
+                    new Resource
+                    {
+                        Name = "Web resource",
+                        Path = @"http://a.web.resource"
+                    }
+                };
+                r.Publication = new PublicationInfo
+                {
+                    Assessment = new AssessmentInfo
+                    {
+                        // todo add more assessment fields
+                        Completed = true,
+                        CompletedByUser = new UserInfo
+                        {
+                            DisplayName = "Test User",
+                            Email = "Test.user@jncc.gov.uk"
+                        },
+                        CompletedOnUtc = new DateTime(2015, 1, 1, 12, 0, 0)
+                    },
+                    SignOff = null,
+                    Target = new TargetInfo
+                    {
+                        Hub = new HubPublicationInfo
+                        {
+                            Publishable = true,
+                        },
+                        Gov = new GovPublicationInfo
+                        {
+                            Publishable = true
+                        }
+                    }
+                };
+            });
+
+            var assessedRecordWithMixedResources = record.With(r =>
+            {
+                r.Id = Helpers.AddCollection("2d6ab878-844d-4759-91a1-3796f92667ab");
+                r.Gemini.Title = "An assessed record with file and url resources";
+                r.Gemini.MetadataDate = new DateTime(2015, 1, 1, 12, 0, 0);
+                r.Resources = new List<Resource>
+                {
+                    new Resource
+                    {
+                        Name = "Web resource",
+                        Path = @"http://a.web.resource"
+                    },
+                    new Resource
+                    {
+                        Name = "File resource",
+                        Path = @"C:\work\test-data.csv"
+                    }
+                };
+                r.Publication = new PublicationInfo
+                {
+                    Assessment = new AssessmentInfo
+                    {
+                        // todo add more assessment fields
+                        Completed = true,
+                        CompletedByUser = new UserInfo
+                        {
+                            DisplayName = "Test User",
+                            Email = "Test.user@jncc.gov.uk"
+                        },
+                        CompletedOnUtc = new DateTime(2015, 1, 1, 12, 0, 0)
+                    },
+                    SignOff = null,
+                    Target = new TargetInfo
+                    {
+                        Hub = new HubPublicationInfo
+                        {
+                            Publishable = true,
+                        },
+                        Gov = new GovPublicationInfo
+                        {
+                            Publishable = true
+                        }
                     }
                 };
             });
@@ -329,28 +460,132 @@ namespace Catalogue.Data.Seed
                 r.Id = Helpers.AddCollection("82ee6baf-26dc-438d-a579-dc7bcbdd1688");
                 r.Gemini.Title = "A signed-off record for publication";
                 r.Gemini.MetadataDate = new DateTime(2015, 1, 1, 12, 0, 0);
+                r.Resources = new List<Resource>
+                {
+                    new Resource
+                    {
+                        Name = "File resource",
+                        Path = @"C:\work\test-data.csv"
+                    }
+                };
                 r.Publication = new PublicationInfo
                 {
-                    OpenData = new OpenDataPublicationInfo
+                    Assessment = new AssessmentInfo
                     {
-                        Publishable = true,
-                        Assessment = new OpenDataAssessmentInfo
-                        {
-                            // todo add more assessment fields
-                            Completed = true,
-                            CompletedOnUtc = new DateTime(2014, 12, 06)
-                        },
-                        SignOff = new OpenDataSignOffInfo
-                        {
-                            User = new UserInfo
-                            {
-                                DisplayName = "Pete Montgomery",
-                                Email = "pete.montgomery@jncc.gov.uk"
-                            },
-                            DateUtc = new DateTime(2015, 1, 1, 12, 0, 0),
-                            Comment = "All OK now."
-                        }
+                        // todo add more assessment fields
+                        Completed = true,
+                        CompletedByUser = userInfo,
+                        CompletedOnUtc = new DateTime(2014, 12, 06)
                     },
+                    SignOff = new SignOffInfo
+                    {
+                        User = new UserInfo
+                        {
+                            DisplayName = "Test User",
+                            Email = "Test.user@jncc.gov.uk"
+                        },
+                        DateUtc = new DateTime(2015, 1, 1, 12, 0, 0),
+                        Comment = "All OK now."
+                    },
+                    Target = new TargetInfo
+                    {
+                        Hub = new HubPublicationInfo
+                        {
+                            Publishable = true,
+                        },
+                        Gov = new GovPublicationInfo
+                        {
+                            Publishable = true
+                        }
+                    }
+                };
+            });
+
+            var signedOffUnpublishableRecord = record.With(r =>
+            {
+                r.Id = Helpers.AddCollection("d2885b03-8efd-472d-8a55-3e9c41a68bd7");
+                r.Gemini.Title = "A DGU unpublishable record ready for publication";
+                r.Gemini.MetadataDate = new DateTime(2015, 1, 1, 12, 0, 0);
+                r.Resources = new List<Resource>
+                {
+                    new Resource
+                    {
+                        Name = "File resource",
+                        Path = @"C:\work\test-data.csv"
+                    }
+                };
+                r.Publication = new PublicationInfo
+                {
+                    Assessment = new AssessmentInfo
+                    {
+                        Completed = true,
+                        CompletedByUser = userInfo,
+                        CompletedOnUtc = new DateTime(2014, 12, 06)
+                    },
+                    SignOff = new SignOffInfo
+                    {
+                        User = new UserInfo
+                        {
+                            DisplayName = "Test User",
+                            Email = "Test.user@jncc.gov.uk"
+                        },
+                        DateUtc = new DateTime(2015, 1, 1, 12, 0, 0)
+                    },
+                    Target = new TargetInfo
+                    {
+                        Hub = new HubPublicationInfo
+                        {
+                            Publishable = true
+                        },
+                        Gov = new GovPublicationInfo
+                        {
+                            Publishable = false
+                        }
+                    }
+                };
+            });
+
+            var signedOffPublishableUnknownRecord = record.With(r =>
+            {
+                r.Id = Helpers.AddCollection("bcbc2a46-cf2e-4389-8294-15e01111ebda");
+                r.Gemini.Title = "A DGU publishable status unknown record ready for publication";
+                r.Gemini.MetadataDate = new DateTime(2015, 1, 1, 12, 0, 0);
+                r.Resources = new List<Resource>
+                {
+                    new Resource
+                    {
+                        Name = "File resource",
+                        Path = @"C:\work\test-data.csv"
+                    }
+                };
+                r.Publication = new PublicationInfo
+                {
+                    Assessment = new AssessmentInfo
+                    {
+                        Completed = true,
+                        CompletedByUser = userInfo,
+                        CompletedOnUtc = new DateTime(2014, 12, 06)
+                    },
+                    SignOff = new SignOffInfo
+                    {
+                        User = new UserInfo
+                        {
+                            DisplayName = "Test User",
+                            Email = "Test.user@jncc.gov.uk"
+                        },
+                        DateUtc = new DateTime(2015, 1, 1, 12, 0, 0)
+                    },
+                    Target = new TargetInfo
+                    {
+                        Hub = new HubPublicationInfo
+                        {
+                            Publishable = true
+                        },
+                        Gov = new GovPublicationInfo
+                        {
+                            Publishable = null
+                        }
+                    }
                 };
             });
 
@@ -368,27 +603,47 @@ namespace Catalogue.Data.Seed
                 r.Id = Helpers.AddCollection("b2691fed-e421-4e48-9da9-99bd77e0b8ba");
                 r.Gemini.Title = "An earlier unsuccessfully published record";
                 r.Gemini.MetadataDate = new DateTime(2015, 1, 1, 12, 0, 0);
+                r.Resources = new List<Resource>
+                {
+                    new Resource
+                    {
+                        Name = "File resource",
+                        Path = @"C:\work\test-data.csv",
+                        PublishedUrl = "https://the.hosted.location"
+                    }
+                };
                 r.Publication = new PublicationInfo
                 {
-                    OpenData = new OpenDataPublicationInfo
+                    Assessment = new AssessmentInfo
                     {
-                        Publishable = true,
-                        LastAttempt = new PublicationAttempt { DateUtc = new DateTime(2015, 1, 1, 12, 0, 0), Message = "Failed with a terrible error in Sector 7G"},
-                        LastSuccess = null,
-                        Assessment = new OpenDataAssessmentInfo
+                        Completed = true,
+                        CompletedByUser = userInfo,
+                        CompletedOnUtc = new DateTime(2014, 01, 01)
+                    },
+                    SignOff = new SignOffInfo
+                    {
+                        DateUtc = new DateTime(2014, 02, 01),
+                        User = userInfo
+                    },
+                    Data = new DataInfo
+                    {
+                        LastAttempt = new PublicationAttempt { DateUtc = new DateTime(2015, 1, 1, 11, 58, 0) },
+                        LastSuccess = new PublicationAttempt { DateUtc = new DateTime(2015, 1, 1, 11, 58, 0) }
+                    },
+                    Target = new TargetInfo
+                    {
+                        Hub = new HubPublicationInfo
                         {
-                            Completed = true,
-                            CompletedByUser = new UserInfo
-                            {
-                                DisplayName = "Cathy",
-                                Email = "cathy@example.com"
-                            },
-                            CompletedOnUtc = new DateTime(2014, 01, 01)
+                            Publishable = true,
+                            Url = "https://hub.jncc.gov.uk/assets/b2691fed-e421-4e48-9da9-99bd77e0b8ba",
+                            LastAttempt = new PublicationAttempt { DateUtc = new DateTime(2015, 1, 1, 11, 59, 0) },
+                            LastSuccess = new PublicationAttempt { DateUtc = new DateTime(2015, 1, 1, 11, 59, 0) }
                         },
-                        SignOff = new OpenDataSignOffInfo
+                        Gov = new GovPublicationInfo
                         {
-                            DateUtc = new DateTime(2014, 02, 01),
-                            User = userInfo
+                            Publishable = true,
+                            LastAttempt = new PublicationAttempt { DateUtc = new DateTime(2015, 1, 1, 12, 0, 0), Message = "Failed with a terrible error in Sector 7G" },
+                            LastSuccess = null
                         }
                     }
                 };
@@ -399,23 +654,47 @@ namespace Catalogue.Data.Seed
                 r.Id = Helpers.AddCollection("d9c14587-90d8-4eba-b670-4cf36e45196d");
                 r.Gemini.Title = "A later successfully published record";
                 r.Gemini.MetadataDate = new DateTime(2015, 1, 1, 12, 0, 0);
+                r.Resources = new List<Resource>
+                {
+                    new Resource
+                    {
+                        Name = "File resource",
+                        Path = @"C:\work\test-data.csv",
+                        PublishedUrl = "https://the.hosted.location"
+                    }
+                };
                 r.Publication = new PublicationInfo
                 {
-                    OpenData = new OpenDataPublicationInfo
+                    Assessment = new AssessmentInfo
                     {
-                        Publishable = true,
-                        LastAttempt = new PublicationAttempt { DateUtc = new DateTime(2015, 1, 1, 12, 0, 0) },
-                        LastSuccess = new PublicationAttempt { DateUtc = new DateTime(2015, 1, 1, 12, 0, 0) },
-                        Assessment = new OpenDataAssessmentInfo
+                        Completed = true,
+                        CompletedByUser = userInfo,
+                        CompletedOnUtc = new DateTime(2014, 01, 01)
+                    },
+                    SignOff = new SignOffInfo
+                    {
+                        DateUtc = new DateTime(2014, 01, 02),
+                        User = userInfo
+                    },
+                    Data = new DataInfo
+                    {
+                        LastAttempt = new PublicationAttempt { DateUtc = new DateTime(2015, 1, 1, 11, 58, 0) },
+                        LastSuccess = new PublicationAttempt { DateUtc = new DateTime(2015, 1, 1, 11, 58, 0) }
+                    },
+                    Target = new TargetInfo
+                    {
+                        Hub = new HubPublicationInfo
                         {
-                            Completed = true,
-                            CompletedByUser = userInfo,
-                            CompletedOnUtc = new DateTime(2014, 01, 01)
+                            Publishable = true,
+                            Url = "https://hub.jncc.gov.uk/assets/d9c14587-90d8-4eba-b670-4cf36e45196d",
+                            LastAttempt = new PublicationAttempt { DateUtc = new DateTime(2015, 1, 1, 11, 59, 0) },
+                            LastSuccess = new PublicationAttempt { DateUtc = new DateTime(2015, 1, 1, 11, 59, 0) }
                         },
-                        SignOff = new OpenDataSignOffInfo
+                        Gov = new GovPublicationInfo
                         {
-                            DateUtc = new DateTime(2014, 01, 02),
-                            User = userInfo
+                            Publishable = true,
+                            LastAttempt = new PublicationAttempt { DateUtc = new DateTime(2015, 1, 1, 12, 0, 0) },
+                            LastSuccess = new PublicationAttempt { DateUtc = new DateTime(2015, 1, 1, 12, 0, 0) }
                         }
                     }
                 };
@@ -423,28 +702,40 @@ namespace Catalogue.Data.Seed
 
             // metadata date is set at dev/test-time seed to new DateTime(2015, 1, 1, 12, 0, 0)
             // so we need to set the publish date to earlier than this
-            var updatedSinceSuccessfullyPublishedRecordAndNowPaused = record.With(r =>
+            var updatedSinceSuccessfullyPublishedRecord = record.With(r =>
             {
                 r.Id = Helpers.AddCollection("19b8c7ab-5c33-4d55-bc1d-3762b8207a9f");
-                r.Gemini.Title = "An updated since successfully published record, now paused";
+                r.Gemini.Title = "An updated since successfully published record";
                 r.Gemini.MetadataDate = new DateTime(2015, 1, 1, 12, 0, 0);
+                r.Resources = new List<Resource>
+                {
+                    new Resource
+                    {
+                        Name = "File resource",
+                        Path = @"C:\work\test-data.csv",
+                        PublishedUrl = "https://the.hosted.location"
+                    }
+                };
                 r.Publication = new PublicationInfo
                 {
-                    OpenData = new OpenDataPublicationInfo
+                    Assessment = new AssessmentInfo
                     {
-                        Publishable = true,
-                        LastAttempt = new PublicationAttempt { DateUtc = new DateTime(2014, 12, 31) },
-                        LastSuccess = new PublicationAttempt { DateUtc = new DateTime(2014, 12, 31) },
-                        Paused = true,
-                        Assessment = new OpenDataAssessmentInfo
+                        Completed = true,
+                        CompletedOnUtc = new DateTime(2014, 12, 28),
+                        InitialAssessmentWasDoneOnSpreadsheet = true
+                    },
+                    SignOff = new SignOffInfo
+                    {
+                        DateUtc = new DateTime(2014, 12, 29),
+                        User = userInfo
+                    },
+                    Target = new TargetInfo
+                    {
+                        Gov = new GovPublicationInfo
                         {
-                            Completed = true,
-                            CompletedOnUtc = new DateTime(2014, 12, 28)
-                        },
-                        SignOff = new OpenDataSignOffInfo
-                        {
-                            DateUtc = new DateTime(2014, 12, 29),
-                            User = userInfo
+                            Publishable = true,
+                            LastAttempt = new PublicationAttempt { DateUtc = new DateTime(2014, 12, 31) },
+                            LastSuccess = new PublicationAttempt { DateUtc = new DateTime(2014, 12, 31) }
                         }
                     }
                 };
@@ -455,37 +746,40 @@ namespace Catalogue.Data.Seed
                 r.Id = Helpers.AddCollection("90fe83ac-d3e4-4342-8eeb-5919b38bc670");
                 r.Gemini.Title = "A record with multiple open data resources";
                 r.Gemini.MetadataDate = new DateTime(2014, 12, 31);
-                r.Gemini.ResourceLocator = "http://example.com/this/will/get/ignored/when/published";
+                r.Resources = new List<Resource>
+                {
+                    new Resource
+                    {
+                        Name = "File resource",
+                        Path = @"Z:\some\resource\1.xlsx"
+                    },
+                    new Resource
+                    {
+                        Name = "File resource with published URL",
+                        Path = @"Z:\some\resource\2.pdf",
+                        PublishedUrl = "https://data.example.com/resources/2.pdf"
+                    },
+                    new Resource
+                    {
+                        Name = "Web resource",
+                        Path = @"https://link.to.resource"
+                    }
+                };
                 r.Publication = new PublicationInfo
                 {
-                    OpenData = new OpenDataPublicationInfo
+                    Assessment = new AssessmentInfo
                     {
-                        Publishable = true,
-                        LastAttempt = null,
-                        LastSuccess = null,
-                        Resources = new List<Resource>
+                        Completed = true,
+                        CompletedByUser = userInfo,
+                        CompletedOnUtc = new DateTime(2014, 12, 31)
+                    },
+                    Target = new TargetInfo
+                    {
+                        Gov = new GovPublicationInfo
                         {
-                            new Resource
-                            {
-                                Name = "File resource",
-                                Path = @"Z:\some\resource\1.xlsx" },
-                            new Resource
-                            {
-                                Name = "File resource with published URL",
-                                Path = @"Z:\some\resource\2.pdf",
-                                PublishedUrl ="https://data.example.com/resources/2.pdf"
-                            },
-                            new Resource
-                            {
-                                Name = "Web resource",
-                                Path = @"https://link.to.resource"
-                            }
-                        },
-                        Assessment = new OpenDataAssessmentInfo
-                        {
-                            Completed = true,
-                            CompletedByUser = userInfo,
-                            CompletedOnUtc = new DateTime(2014, 12, 31)
+                            Publishable = true,
+                            LastAttempt = null,
+                            LastSuccess = null
                         }
                     }
                 };
@@ -496,12 +790,14 @@ namespace Catalogue.Data.Seed
                 r.Id = Helpers.AddCollection("fef1d883-b6ea-4ade-93ae-8bf0abd4e29b");
                 r.Gemini.Title = "A record which is unpublishable";
                 r.Gemini.MetadataDate = new DateTime(2014, 12, 31);
-                r.Gemini.ResourceLocator = "http://example.com/this/will/get/ignored/when/published";
                 r.Publication = new PublicationInfo
                 {
-                    OpenData = new OpenDataPublicationInfo
+                    Target = new TargetInfo
                     {
-                        Publishable = false
+                        Gov = new GovPublicationInfo
+                        {
+                            Publishable = false
+                        }
                     }
                 };
             });
@@ -517,9 +813,13 @@ namespace Catalogue.Data.Seed
             recordService.Insert(signedOffRecord, userInfo);
             recordService.Insert(earlierUnsuccessfullyPublishedRecord, userInfo);
             recordService.Insert(laterSuccessfullyPublishedRecord, userInfo);
-            recordService.Insert(updatedSinceSuccessfullyPublishedRecordAndNowPaused, userInfo);
+            recordService.Insert(updatedSinceSuccessfullyPublishedRecord, userInfo);
             recordService.Insert(recordWithOpenDataResources, userInfo);
             recordService.Insert(unpublishableRecord, userInfo);
+            recordService.Insert(assessedRecordWithUrlResource, userInfo);
+            recordService.Insert(assessedRecordWithMixedResources, userInfo);
+            recordService.Insert(signedOffUnpublishableRecord, userInfo);
+            recordService.Insert(signedOffPublishableUnknownRecord, userInfo);
         }
 
         void AddRecordWithLotsOfVocablessTags()
@@ -550,9 +850,9 @@ namespace Catalogue.Data.Seed
                 r.Path = @"X:\butterflies\a";
                 r.Gemini = r.Gemini.With(m =>
                 {
-                    m.Title = "This record has a keyword 'butterfly' in vocab 'vocabulary-a'";
+                    m.Title = "This record has a keyword 'butterfly' in vocab 'http://vocab.jncc.gov.uk/seabed-survey-technique'";
                     m.Abstract = "This is just another example record.";
-                    m.Keywords.Add(new MetadataKeyword { Vocab = "vocabulary-a", Value = "butterfly" });
+                    m.Keywords.Add(new MetadataKeyword { Vocab = "http://vocab.jncc.gov.uk/seabed-survey-technique", Value = "butterfly" });
                 });
             });
 
@@ -562,9 +862,9 @@ namespace Catalogue.Data.Seed
                 r.Path = @"X:\butterflies\b";
                 r.Gemini = r.Gemini.With(m =>
                 {
-                    m.Title = "This record has a keyword 'butterfly' in vocab 'vocabulary-b'";
+                    m.Title = "This record has a keyword 'butterfly' in vocab 'http://vocab.jncc.gov.uk/seabed-survey-purpose'";
                     m.Abstract = "This is just another example record.";
-                    m.Keywords.Add(new MetadataKeyword { Vocab = "vocabulary-b", Value = "butterfly" });
+                    m.Keywords.Add(new MetadataKeyword { Vocab = "http://vocab.jncc.gov.uk/seabed-survey-purpose", Value = "butterfly" });
                 });
             });
 
@@ -847,6 +1147,54 @@ namespace Catalogue.Data.Seed
                 Keywords = new List<VocabularyKeyword>()
             };
             db.Store(meshSeabedSurveyTechnique);
+
+            var meshGui = new Vocabulary
+            {
+                Id = "http://vocab.jncc.gov.uk/mesh-gui",
+                Name = "MESH GUI",
+                Description = "Used by MESH",
+                PublicationDate = "2013",
+                Publishable = false,
+                Controlled = true,
+                Keywords = new List<VocabularyKeyword>()
+            };
+            db.Store(meshGui);
+
+            var humanActivity = new Vocabulary
+            {
+                Id = "http://vocab.jncc.gov.uk/human-activity",
+                Name = "Human Activity",
+                Description = "Human Activity vocab",
+                PublicationDate = "2013",
+                Publishable = false,
+                Controlled = true,
+                Keywords = new List<VocabularyKeyword>()
+            };
+            db.Store(humanActivity);
+
+            var someVocab = new Vocabulary
+            {
+                Id = "http://vocab.jncc.gov.uk/some-vocab",
+                Name = "Some Vocab",
+                Description = "Some Vocab",
+                PublicationDate = "2013",
+                Publishable = false,
+                Controlled = true,
+                Keywords = new List<VocabularyKeyword>()
+            };
+            db.Store(someVocab);
+
+            var anotherVocab = new Vocabulary
+            {
+                Id = "http://vocab.jncc.gov.uk/another-vocab",
+                Name = "Another vocab",
+                Description = "Another vocab",
+                PublicationDate = "2013",
+                Publishable = false,
+                Controlled = true,
+                Keywords = new List<VocabularyKeyword>()
+            };
+            db.Store(anotherVocab);
         }
 
         void AddDatesForTimeline()

@@ -10,6 +10,8 @@ using NUnit.Framework;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Catalogue.Data.Query;
+using Moq;
 
 namespace Catalogue.Tests.Slow.Catalogue.Data.Write
 {
@@ -33,12 +35,22 @@ namespace Catalogue.Tests.Slow.Catalogue.Data.Write
             };
         }
 
+        private IVocabQueryer vocabQueryer;
+
+        [OneTimeSetUp]
+        public void SetUp()
+        {
+            var vocabQueryerMock = new Mock<IVocabQueryer>();
+            vocabQueryerMock.Setup(x => x.GetVocab(It.IsAny<string>())).Returns(new Vocabulary());
+            this.vocabQueryer = vocabQueryerMock.Object;
+        }
+
         [Test]
         public void should_produce_no_warnings_by_default()
         {
             // the basic level of validation shouldn't produce warnings - that would be too annoying
 
-            var result = new RecordValidator().Validate(SimpleRecord() /* no Level argument */);
+            var result = new RecordValidator(vocabQueryer).Validate(SimpleRecord() /* no Level argument */);
             result.Warnings.Should().BeEmpty();
         }
 
@@ -46,7 +58,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Data.Write
         public void title_must_not_be_blank([Values("", " ", null)] string blank)
         {
             var result =
-                new RecordValidator().Validate(SimpleRecord().With(r => r.Gemini.Title = blank));
+                new RecordValidator(vocabQueryer).Validate(SimpleRecord().With(r => r.Gemini.Title = blank));
 
             result.Errors.Single().Message.Should().StartWith("Title must not be blank");
             result.Errors.Single().Fields.Single().Should().Be("gemini.title");
@@ -56,7 +68,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Data.Write
         public void title_must_not_be_longer_then_200([Values("", " ", null)] string blank)
         {
             var result =
-                new RecordValidator().Validate(SimpleRecord().With(r => r.Gemini.Title = new String('x', 201)));
+                new RecordValidator(vocabQueryer).Validate(SimpleRecord().With(r => r.Gemini.Title = new String('x', 201)));
 
             result.Errors.Single().Message.Should().StartWith("Title is too long. 200 characters or less, please");
             result.Errors.Single().Fields.Single().Should().Be("gemini.title");
@@ -66,7 +78,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Data.Write
         public void publication_title_must_not_be_longer_then_250([Values("", " ", null)] string blank)
         {
             var result =
-                new RecordValidator().Validate(SimpleRecord().With(r => {
+                new RecordValidator(vocabQueryer).Validate(SimpleRecord().With(r => {
                     r.Gemini.Title = new String('x', 251);
                     r.Gemini.ResourceType = "publication";
                 }));
@@ -79,7 +91,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Data.Write
         public void publication_title_can_be_longer_then_150([Values("", " ", null)] string blank)
         {
             var result =
-                new RecordValidator().Validate(SimpleRecord().With(r =>
+                new RecordValidator(vocabQueryer).Validate(SimpleRecord().With(r =>
                 {
                     r.Gemini.Title = new String('x', 155);
                     r.Gemini.ResourceType = "publication";
@@ -91,7 +103,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Data.Write
         [Test]
         public void path_must_not_be_blank([Values("", " ", null)] string blank)
         {
-            var result = new RecordValidator().Validate(SimpleRecord().With(r => r.Path = blank));
+            var result = new RecordValidator(vocabQueryer).Validate(SimpleRecord().With(r => r.Path = blank));
 
             result.Errors.Single().Fields.Single().Should().Be("path");
         }
@@ -99,7 +111,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Data.Write
         [Test]
         public void path_must_be_valid()
         {
-            var result = new RecordValidator().Validate(SimpleRecord().With(r => r.Path = "not a valid path"));
+            var result = new RecordValidator(vocabQueryer).Validate(SimpleRecord().With(r => r.Path = "not a valid path"));
             result.Errors.Single().Fields.Single().Should().Be("path");
         }
 
@@ -113,7 +125,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Data.Write
             //@"postgres://username@hostname/databasename"
             )] string path)
         {
-            var result = new RecordValidator().Validate(SimpleRecord().With(r => r.Path = path));
+            var result = new RecordValidator(vocabQueryer).Validate(SimpleRecord().With(r => r.Path = path));
             result.Errors.Should().BeEmpty();
         }
 
@@ -122,7 +134,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Data.Write
         {
             // should not validate on empty list
             var r1 =
-                new RecordValidator().Validate(SimpleRecord().With(r => r.Gemini.Keywords = new List<MetadataKeyword>()));
+                new RecordValidator(vocabQueryer).Validate(SimpleRecord().With(r => r.Gemini.Keywords = new List<MetadataKeyword>()));
 
             r1.Errors.First().Message.Should().StartWith("Must specify a JNCC Domain");
         }
@@ -134,7 +146,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Data.Write
             record.Gemini.Keywords.Add(new MetadataKeyword() { Value = String.Empty, Vocab = String.Empty });
 
             var result =
-                new RecordValidator().Validate(record);
+                new RecordValidator(vocabQueryer).Validate(record);
 
             result.Errors.Single().Message.Should().StartWith("Keywords cannot be blank");
             result.Errors.Single().Fields.Single().Should().Be("gemini.keywords");
@@ -159,7 +171,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Data.Write
         public void topic_category_must_be_valid()
         {
             var record = SimpleRecord().With(r => r.Gemini.TopicCategory = "anInvalidTopicCategory");
-            var result = new RecordValidator().Validate(record);
+            var result = new RecordValidator(vocabQueryer).Validate(record);
 
             result.Errors.Single().Message.Should().Contain("Topic Category 'anInvalidTopicCategory' is not valid");
             result.Errors.Single().Fields.Single().Should().Be("gemini.topicCategory");
@@ -169,7 +181,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Data.Write
         public void topic_category_may_be_blank([Values("", null)] string blank)
         {
             var record = SimpleRecord().With(r => r.Gemini.TopicCategory = blank);
-            var result = new RecordValidator().Validate(record);
+            var result = new RecordValidator(vocabQueryer).Validate(record);
             result.Errors.Should().BeEmpty();
         }
 
@@ -183,28 +195,10 @@ namespace Catalogue.Tests.Slow.Catalogue.Data.Write
                 r.Gemini.LimitationsOnPublicAccess = blank;
             });
 
-            var result = new RecordValidator().Validate(record);
+            var result = new RecordValidator(vocabQueryer).Validate(record);
 
             result.Errors.Single().Fields.Should().Contain("security");
             result.Errors.Single().Fields.Should().Contain("gemini.limitationsOnPublicAccess");
-        }
-
-        [Test]
-        public void resource_locator_must_be_a_well_formed_http_url(
-            [Values(@"Z:\some\path", "utter rubbish")] string nonHttpUrl)
-        {
-            var record = SimpleRecord().With(r => r.Gemini.ResourceLocator = nonHttpUrl);
-            var result = new RecordValidator().Validate(record);
-            result.Errors.Single().Fields.Should().Contain("gemini.resourceLocator");
-        }
-
-        [Test]
-        public void resource_locator_may_be_set(
-            [Values(@"http://www.example.org/resource/locator", @"https://www.example.org/resource/locator")] string httpUrl)
-        {
-            var record = SimpleRecord().With(r => r.Gemini.ResourceLocator = httpUrl);
-            var result = new RecordValidator().Validate(record);
-            result.Errors.Should().BeEmpty();
         }
 
         [Test]
@@ -216,7 +210,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Data.Write
                 Name = "A. Mann",
                 Role = "some role that isn't allowed",
             });
-            var result = new RecordValidator().Validate(record);
+            var result = new RecordValidator(vocabQueryer).Validate(record);
             result.Errors.Single().Fields.Should().Contain("gemini.responsibleOrganisation.role");
         }
 
@@ -229,7 +223,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Data.Write
                 Name = "A. Mann",
                 Role = "some role that isn't allowed",
             });
-            var result = new RecordValidator().Validate(record);
+            var result = new RecordValidator(vocabQueryer).Validate(record);
             result.Errors.Single().Fields.Should().Contain("gemini.metadataPointOfContact.role");
         }
 
@@ -255,7 +249,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Data.Write
         public void mesh_gui_keywords_must_be_of_valid_form()
         {
             var record = SimpleRecord().With(r => r.Gemini.Keywords.Add(new MetadataKeyword { Vocab = "http://vocab.jncc.gov.uk/mesh-gui", Value = "blah" }));
-            var result = new RecordValidator().Validate(record);
+            var result = new RecordValidator(vocabQueryer).Validate(record);
             result.Errors.Single().Fields.Should().Contain("gemini.keywords");
         }
 
@@ -263,7 +257,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Data.Write
         public void doi_with_invalid_formats([Values(" ", "a bad doi", "baddoi", "104124/ABC-123", "10./ABC-123", "10.4124/ABC-123?", "AB.1234/ABC-123")] string doi)
         {
             var record = SimpleRecord().With(r => r.DigitalObjectIdentifier = doi).With(r => r.Citation = "Record has a citation");
-            var result = new RecordValidator().Validate(record);
+            var result = new RecordValidator(vocabQueryer).Validate(record);
 
             result.Errors.Single().Message.Should().Contain("Digital Object Identifier is not in a valid format");
             result.Errors.Single().Fields.Single().Should().Be("digitalObjectIdentifier");
@@ -273,7 +267,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Data.Write
         public void doi_with_valid_formats([Values(null, "", "12.3456/ABC123", "12.3456789/ABC123", "00.1234/long.string+which-is:still_valid/123")] string doi)
         {
             var record = SimpleRecord().With(r => r.DigitalObjectIdentifier = doi).With(r => r.Citation = "Record has a citation");
-            var result = new RecordValidator().Validate(record);
+            var result = new RecordValidator(vocabQueryer).Validate(record);
 
             result.Errors.Should().BeEmpty();
         }
@@ -282,7 +276,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Data.Write
         public void doi_with_no_citation()
         {
             var record = SimpleRecord().With(r => r.DigitalObjectIdentifier = "12.3456789/ABC123");
-            var result = new RecordValidator().Validate(record);
+            var result = new RecordValidator(vocabQueryer).Validate(record);
 
             result.Errors.Single().Message.Should().Contain("Citation must be provided for DOI record");
             result.Errors.Single().Fields.Single().Should().Be("citation");
@@ -304,15 +298,8 @@ namespace Catalogue.Tests.Slow.Catalogue.Data.Write
                     Path = path
                 }
             };
-            var record = SimpleRecord()
-                .With(r => r.Publication = new PublicationInfo
-                {
-                    OpenData = new OpenDataPublicationInfo
-                    {
-                        Resources = resources
-                    }
-                });
-            var result = new RecordValidator().Validate(record);
+            var record = SimpleRecord().With(r => r.Resources = resources);
+            var result = new RecordValidator(vocabQueryer).Validate(record);
 
             result.Errors.Should().BeEmpty();
         }
@@ -331,17 +318,10 @@ namespace Catalogue.Tests.Slow.Catalogue.Data.Write
                     Path = path
                 }
             };
-            var record = SimpleRecord()
-                .With(r => r.Publication = new PublicationInfo
-                {
-                    OpenData = new OpenDataPublicationInfo
-                    {
-                        Resources = resources
-                    }
-                });
-            var result = new RecordValidator().Validate(record);
+            var record = SimpleRecord().With(r => r.Resources = resources);
+            var result = new RecordValidator(vocabQueryer).Validate(record);
             result.Errors.Single().Message.Should().Contain("Publishable resource path must be a file system path or URL");
-            result.Errors.Single().Fields.Single().Should().Be("publication.openData.resources");
+            result.Errors.Single().Fields.Single().Should().Be("resources");
         }
 
         [Test]
@@ -355,17 +335,10 @@ namespace Catalogue.Tests.Slow.Catalogue.Data.Write
                     Path = ""
                 }
             };
-            var record = SimpleRecord()
-                .With(r => r.Publication = new PublicationInfo
-                {
-                    OpenData = new OpenDataPublicationInfo
-                    {
-                        Resources = resources
-                    }
-                });
-            var result = new RecordValidator().Validate(record);
+            var record = SimpleRecord().With(r => r.Resources = resources);
+            var result = new RecordValidator(vocabQueryer).Validate(record);
             result.Errors.Single().Message.Should().Contain("Publishable resource name and path must not be blank");
-            result.Errors.Single().Fields.Single().Should().Be("publication.openData.resources");
+            result.Errors.Single().Fields.Single().Should().Be("resources");
         }
 
         [Test]
@@ -381,18 +354,11 @@ namespace Catalogue.Tests.Slow.Catalogue.Data.Write
                 Name = "Another resource",
                 Path = @"X:\some\path"
             };
-            var resources = new List<Resource> { resource1, resource2 };
-            var record = SimpleRecord()
-                .With(r => r.Publication = new PublicationInfo
-                {
-                    OpenData = new OpenDataPublicationInfo
-                    {
-                        Resources = resources
-                    }
-                });
-            var result = new RecordValidator().Validate(record);
+            var resources = new List<Resource>{ resource1, resource2};
+            var record = SimpleRecord().With(r => r.Resources = resources);
+            var result = new RecordValidator(vocabQueryer).Validate(record);
             result.Errors.Single().Message.Should().Contain("Publishable resources must be unique - no duplicates");
-            result.Errors.Single().Fields.Single().Should().Be("publication.openData.resources");
+            result.Errors.Single().Fields.Single().Should().Be("resources");
         }
 
         [Test]
@@ -409,17 +375,10 @@ namespace Catalogue.Tests.Slow.Catalogue.Data.Write
                 Path = @"X:\another\path"
             };
             var resources = new List<Resource> { resource1, resource2 };
-            var record = SimpleRecord()
-                .With(r => r.Publication = new PublicationInfo
-                {
-                    OpenData = new OpenDataPublicationInfo
-                    {
-                        Resources = resources
-                    }
-                });
-            var result = new RecordValidator().Validate(record);
+            var record = SimpleRecord().With(r => r.Resources = resources);
+            var result = new RecordValidator(vocabQueryer).Validate(record);
             result.Errors.Single().Message.Should().Contain("Publishable resource names must be unique - no duplicates");
-            result.Errors.Single().Fields.Single().Should().Be("publication.openData.resources");
+            result.Errors.Single().Fields.Single().Should().Be("resources");
         }
     }
 }

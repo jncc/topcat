@@ -173,16 +173,6 @@
       </gmd:distributionFormat>
       <gmd:transferOptions>
         <gmd:MD_DigitalTransferOptions>
-          <gmd:onLine>
-            <gmd:CI_OnlineResource>
-              <gmd:linkage>
-                <gmd:URL>http://s3-eu-west-1.amazonaws.com/data.defra.gov.uk/Marine/JNCC2008_04DoggerBankGeophysSidescanRawData.zip</gmd:URL>
-              </gmd:linkage>
-              <gmd:name>
-                <gco:CharacterString>JNCC2008-04DoggerBankGeophysSidescanRawData.zip</gco:CharacterString>
-              </gmd:name>
-            </gmd:CI_OnlineResource>
-          </gmd:onLine>
         </gmd:MD_DigitalTransferOptions>
       </gmd:transferOptions>
     </gmd:MD_Distribution>

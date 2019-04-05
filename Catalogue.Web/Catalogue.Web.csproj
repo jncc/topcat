@@ -81,8 +81,7 @@
     <Compile Include="Controllers\Collections\CollectionOutputModel.cs" />
     <Compile Include="Controllers\Keywords\KeywordModel.cs" />
     <Compile Include="Controllers\Keywords\KeywordsController.cs" />
-    <Compile Include="Controllers\Publishing\PublishingResponse.cs" />
-    <Compile Include="Controllers\Publishing\OpenDataPublishingController.cs" />
+    <Compile Include="Controllers\Publishing\PublishingController.cs" />
     <Compile Include="Controllers\Patch\PatchController.cs" />
     <Compile Include="Controllers\Publishing\AssessmentRequest.cs" />
     <Compile Include="Controllers\Publishing\SignOffRequest.cs" />
@@ -102,13 +101,10 @@
     <Compile Include="Customization\CustomWebApiAssembliesResolver.cs" />
     <Compile Include="Logging\ElmahHandledErrorLoggerFilter.cs" />
     <Compile Include="Logging\UnhandledExceptionFilter.cs" />
-    <Compile Include="Security\AuthorizeOpenDataIaoAttribute.cs" />
+    <Compile Include="Security\AuthorizeIaoAttribute.cs" />
     <Compile Include="Settings.cs" />
     <Compile Include="Account\AccountController.cs" />
     <Compile Include="Controllers\Search\SearchController.cs" />
-    <Compile Include="Validator\ValidatorController.cs" />
-    <Compile Include="Validator\ValidatorInputModel.cs" />
-    <Compile Include="Validator\ValidatorResult.cs" />
     <Compile Include="Environment.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -159,23 +155,29 @@
     <Content Include="app\js\config.js.map">
       <DependentUpon>config.js</DependentUpon>
     </Content>
-    <Content Include="app\js\controllers\OpenDataManagementController.js">
-      <DependentUpon>OpenDataManagementController.coffee</DependentUpon>
+    <Content Include="app\js\controllers\ImagePickerController.js">
+      <DependentUpon>ImagePickerController.coffee</DependentUpon>
     </Content>
-    <Content Include="app\js\controllers\OpenDataManagementController.min.js">
-      <DependentUpon>OpenDataManagementController.js</DependentUpon>
+    <Content Include="app\js\controllers\ImagePickerController.min.js">
+      <DependentUpon>ImagePickerController.js</DependentUpon>
     </Content>
-    <Content Include="app\js\controllers\OpenDataModalController.js">
-      <DependentUpon>OpenDataModalController.coffee</DependentUpon>
+    <Content Include="app\js\controllers\PublishingManagementController.js">
+      <DependentUpon>PublishingManagementController.coffee</DependentUpon>
     </Content>
-    <Content Include="app\js\controllers\OpenDataModalController.min.js">
-      <DependentUpon>OpenDataModalController.js</DependentUpon>
+    <Content Include="app\js\controllers\PublishingManagementController.min.js">
+      <DependentUpon>PublishingManagementController.js</DependentUpon>
+    </Content>
+    <Content Include="app\js\controllers\PublishingModalController.js">
+      <DependentUpon>PublishingModalController.coffee</DependentUpon>
+    </Content>
+    <Content Include="app\js\controllers\PublishingModalController.min.js">
+      <DependentUpon>PublishingModalController.js</DependentUpon>
     </Content>
     <Content Include="app\js\controllers\SignOffController.coffee" />
-    <None Include="app.config">
-      <SubType>Designer</SubType>
-    </None>
-    <None Include="app\js\controllers\OpenDataManagementController.coffee" />
+    <Content Include="app\js\controllers\ImagePickerController.js.map">
+      <DependentUpon>ImagePickerController.js</DependentUpon>
+    </Content>
+    <None Include="app\js\controllers\PublishingManagementController.coffee" />
     <Content Include="app\js\controllers\MainController.js">
       <DependentUpon>MainController.coffee</DependentUpon>
     </Content>
@@ -338,12 +340,12 @@
     <Content Include="app\views\partials\jncc-categories.html" />
     <Content Include="app\views\partials\markdown.html" />
     <Content Include="app\views\partials\presentation.html" />
-    <Content Include="app\views\partials\opendatamodal.html" />
+    <Content Include="app\views\partials\imagepicker.html" />
+    <Content Include="app\views\partials\publishingmodal.html" />
     <Content Include="app\views\partials\vocabulator.html" />
     <Content Include="app\views\partials\what-is-data.html" />
     <Content Include="app\views\partials\why-topcat.html" />
-    <Content Include="app\views\opendatapublishing\opendatamanagement.html" />
-    <Content Include="app\views\publishing\publishing.html" />
+    <Content Include="app\views\publishing\publishingmanagement.html" />
     <Content Include="app\views\sandbox\colours.html" />
     <Content Include="app\views\sandbox\dropdown.html" />
     <Content Include="app\views\sandbox\glyphs.html" />
@@ -351,7 +353,6 @@
     <Content Include="app\views\sandbox\tooltip.html" />
     <Content Include="app\views\search\search.html" />
     <Content Include="app\views\signoff\signoff.html" />
-    <Content Include="app\views\Vocabularies\editor.html" />
     <Content Include="app\views\Vocabularies\vocabularies.html" />
     <Content Include="favicon.ico" />
     <Content Include="Global.asax" />
@@ -390,10 +391,6 @@
     <ProjectReference Include="..\Catalogue.Gemini\Catalogue.Gemini.csproj">
       <Project>{b4789e53-cc5c-4e4e-8358-fc9739846ccc}</Project>
       <Name>Catalogue.Gemini</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Catalogue.Robot\Catalogue.Robot.csproj">
-      <Project>{27fdaf42-45d1-4ccf-9c5e-d6af36cd15ac}</Project>
-      <Name>Catalogue.Robot</Name>
     </ProjectReference>
     <ProjectReference Include="..\Catalogue.Utilities\Catalogue.Utilities.csproj">
       <Project>{b6b90aa2-bf70-4460-a975-5192ab5ecdca}</Project>
@@ -572,16 +569,17 @@
     <Content Include="app\js\controllers\ContentController.min.js.map">
       <DependentUpon>ContentController.min.js</DependentUpon>
     </Content>
-    <Content Include="app\js\controllers\OpenDataModalController.coffee" />
+    <Content Include="app\js\controllers\PublishingModalController.coffee" />
     <Content Include="app\js\controllers\SignOffController.js.map">
       <DependentUpon>SignOffController.js</DependentUpon>
     </Content>
-    <Content Include="app\js\controllers\OpenDataManagementController.js.map">
-      <DependentUpon>OpenDataManagementController.js</DependentUpon>
+    <Content Include="app\js\controllers\PublishingManagementController.js.map">
+      <DependentUpon>PublishingManagementController.js</DependentUpon>
     </Content>
-    <Content Include="app\js\controllers\OpenDataModalController.js.map">
-      <DependentUpon>OpenDataModalController.js</DependentUpon>
+    <Content Include="app\js\controllers\PublishingModalController.js.map">
+      <DependentUpon>PublishingModalController.js</DependentUpon>
     </Content>
+    <Content Include="app\js\controllers\ImagePickerController.coffee" />
     <None Include="app\js\controllers\VocabulatorController.coffee" />
     <Content Include="app\js\controllers\VocabulatorController.js.map">
       <DependentUpon>VocabulatorController.js</DependentUpon>
@@ -632,26 +630,26 @@
     <Service Include="{82A7F48D-3B50-4B1E-B82E-3ADA8210C358}" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="CsvHelper">
-      <Version>9.2.3</Version>
-    </PackageReference>
     <PackageReference Include="elmah.corelibrary">
       <Version>1.2.2</Version>
     </PackageReference>
-    <PackageReference Include="FluentAssertions">
-      <Version>5.5.3</Version>
-    </PackageReference>
     <PackageReference Include="Microsoft.AspNet.Mvc">
-      <Version>5.2.6</Version>
+      <Version>5.2.7</Version>
     </PackageReference>
     <PackageReference Include="Microsoft.AspNet.WebApi">
-      <Version>5.2.6</Version>
+      <Version>5.2.7</Version>
     </PackageReference>
     <PackageReference Include="NETStandard.Library">
       <Version>2.0.3</Version>
     </PackageReference>
+    <PackageReference Include="Newtonsoft.Json">
+      <Version>12.0.1</Version>
+    </PackageReference>
     <PackageReference Include="Ninject">
       <Version>3.3.4</Version>
+    </PackageReference>
+    <PackageReference Include="Ninject.Extensions.Conventions">
+      <Version>3.3.0</Version>
     </PackageReference>
     <PackageReference Include="Ninject.Extensions.Factory">
       <Version>3.3.2</Version>
@@ -666,7 +664,9 @@
       <Version>3.11.0</Version>
     </PackageReference>
     <PackageReference Include="OctoPack">
-      <Version>3.6.3</Version>
+      <Version>3.6.4</Version>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
+      <PrivateAssets>all</PrivateAssets>
     </PackageReference>
     <PackageReference Include="RavenDB.Client">
       <Version>4.1.1</Version>
@@ -707,9 +707,6 @@
     <PackageReference Include="System.ValueTuple">
       <Version>4.5.0</Version>
     </PackageReference>
-    <PackageReference Include="Topshelf">
-      <Version>4.1.0</Version>
-    </PackageReference>
     <PackageReference Include="WebActivator">
       <Version>1.5.3</Version>
     </PackageReference>
@@ -721,6 +718,9 @@
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
+  </PropertyGroup>
+  <PropertyGroup>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
   </PropertyGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="$(VSToolsPath)\WebApplications\Microsoft.WebApplication.targets" Condition="'$(VSToolsPath)' != ''" />

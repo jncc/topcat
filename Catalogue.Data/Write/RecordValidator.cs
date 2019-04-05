@@ -7,6 +7,7 @@ using Catalogue.Utilities.Text;
 using System;
 using System.Linq;
 using System.Text.RegularExpressions;
+using Catalogue.Data.Query;
 
 namespace Catalogue.Data.Write
 {
@@ -19,6 +20,13 @@ namespace Catalogue.Data.Write
     {
         private const string GeminiSuffix =  " (Gemini)";
 
+        private readonly IVocabQueryer vocabQueryer;
+
+        public RecordValidator(IVocabQueryer vocabQueryer)
+        {
+            this.vocabQueryer = vocabQueryer;
+        }
+
         public ValidationResult<Record> Validate(Record record)
         {
             var result = new ValidationResult<Record>();
@@ -29,12 +37,10 @@ namespace Catalogue.Data.Write
             ValidateDatasetReferenceDate(record, result);
             ValidateTemporalExtent(record, result);
             ValidateTopicCategory(record, result);
-            ValidateResourceLocator(record, result);
             ValidateResponsibleOrganisation(record, result);
             ValidateMetadataPointOfContact(record, result);
             ValidateResourceType(record, result);
             ValidateSecurityInvariants(record, result);
-            ValidatePublishableInvariants(record, result);
             ValidateBoundingBox(record, result);
             ValidateJnccSpecificRules(record, result);
             ValidatePublishableResources(record, result);
@@ -128,6 +134,20 @@ namespace Catalogue.Data.Write
                     String.Format("Keywords cannot be blank"),
                     r => r.Gemini.Keywords);
             }
+
+            foreach (var keyword in record.Gemini.Keywords)
+            {
+                if (!string.IsNullOrWhiteSpace(keyword.Vocab))
+                {
+                    var vocab = vocabQueryer.GetVocab(keyword.Vocab);
+
+                    if (vocab == null)
+                    {
+                        ValidationResult.Errors.Add($"The vocab for keyword {keyword.Value} does not exist",
+                            r => r.Gemini.Keywords);
+                    }
+                }
+            }
         }
 
         void ValidateDatasetReferenceDate(Record record, ValidationResult<Record> result)
@@ -156,28 +176,6 @@ namespace Catalogue.Data.Write
             }
 
             // todo ensure End is after Begin
-        }
-
-        void ValidateResourceLocator(Record record, ValidationResult<Record> result)
-        {
-            // resource_locator_must_be_a_well_formed_http_url
-            if (record.Gemini.ResourceLocator.IsNotBlank())
-            {
-                Uri url;
-                if (Uri.TryCreate(record.Gemini.ResourceLocator, UriKind.Absolute, out url))
-                {
-                    if (url.Scheme != Uri.UriSchemeHttp && url.Scheme != Uri.UriSchemeHttps)
-                    {
-                        result.Errors.Add("Resource locator must be an http url",
-                            r => r.Gemini.ResourceLocator);
-                    }
-                }
-                else
-                {
-                    result.Errors.Add("Resource locator must be a valid url",
-                        r => r.Gemini.ResourceLocator);
-                }
-            }
         }
 
         void ValidateTopicCategory(Record record, ValidationResult<Record> result)
@@ -237,17 +235,6 @@ namespace Catalogue.Data.Write
             }
         }
 
-        void ValidatePublishableInvariants(Record record, ValidationResult<Record> result)
-        {
-            // disabled until publishing mechanism created
-            // publishable_records_must_have_a_resource_locator
-//            if (record.Status == Status.Publishable && record.Gemini.ResourceLocator.IsBlank())
-//            {
-//                result.Errors.Add("Publishable records must have a resource locator",
-//                    r => r.Status, r => r.Gemini.ResourceLocator);
-//            }
-        }
-
         void ValidateBoundingBox(Record record, ValidationResult<Record> result)
         {
             if (!BoundingBoxUtility.IsBlank(record.Gemini.BoundingBox))
@@ -286,10 +273,10 @@ namespace Catalogue.Data.Write
                 result.Errors.Add("Citation must be provided for DOI record", r => r.Citation);
             }
         }
-
+        
         void ValidatePublishableResources(Record record, ValidationResult<Record> result)
         {
-            var resources = record?.Publication?.OpenData?.Resources;
+            var resources = record?.Resources;
 
             if (resources != null)
             {
@@ -300,7 +287,7 @@ namespace Catalogue.Data.Write
                 {
                     if (resource.Path.IsBlank() || resource.Name.IsBlank())
                     {
-                        result.Errors.Add("Publishable resource name and path must not be blank", r => r.Publication.OpenData.Resources);
+                        result.Errors.Add("Publishable resource name and path must not be blank", r => r.Resources);
                     }
                     else // (let's not add additional errors if it's just that it's blank)
                     {
@@ -308,12 +295,12 @@ namespace Catalogue.Data.Write
                         {
                             if (uri.Scheme != Uri.UriSchemeFile && uri.Scheme != Uri.UriSchemeHttp && uri.Scheme != Uri.UriSchemeHttps)
                             {
-                                result.Errors.Add("Publishable resource path must be a file system path or URL", r => r.Publication.OpenData.Resources);
+                                result.Errors.Add("Publishable resource path must be a file system path or URL", r => r.Resources);
                             }
                         }
                         else
                         {
-                            result.Errors.Add("Publishable resource path must be a file system path or URL", r => r.Publication.OpenData.Resources);
+                            result.Errors.Add("Publishable resource path must be a file system path or URL", r => r.Resources);
                         }
                     }
 
@@ -326,12 +313,12 @@ namespace Catalogue.Data.Write
 
                 if (containsDuplicatePaths)
                 {
-                    result.Errors.Add("Publishable resources must be unique - no duplicates", r => r.Publication.OpenData.Resources);
+                    result.Errors.Add("Publishable resources must be unique - no duplicates", r => r.Resources);
                 }
 
                 if (containsDuplicateNames)
                 {
-                    result.Errors.Add("Publishable resource names must be unique - no duplicates", r => r.Publication.OpenData.Resources);
+                    result.Errors.Add("Publishable resource names must be unique - no duplicates", r => r.Resources);
                 }
             }
         }
@@ -379,8 +366,8 @@ namespace Catalogue.Data.Write
                 result.Errors.Add("Keywords must be provided" + GeminiSuffix, r => r.Gemini.Keywords);
             }
 
-            // 7 temporal extent is mandatory - at least Begin must be provided
-            if (record.Gemini.TemporalExtent.Begin.IsBlank())
+            // 7 temporal extent is mandatory for datasets - at least Begin must be provided
+            if (record.Gemini.ResourceType == "dataset" && record.Gemini.TemporalExtent.Begin.IsBlank())
             {
                 result.Errors.Add("Temporal Extent must be provided" + GeminiSuffix,
                     r => r.Gemini.TemporalExtent.Begin);
@@ -492,7 +479,7 @@ namespace Catalogue.Data.Write
             // Equivalent scale, optional
 
             // we're going to try to squash gemini and non-geographic iso metadata together in the same validation
-            if (record.Gemini.ResourceType != "nonGeographicDataset")
+            if (record.Gemini.ResourceType == "dataset")
             {
                 // BoundingBox
                 // mandatory

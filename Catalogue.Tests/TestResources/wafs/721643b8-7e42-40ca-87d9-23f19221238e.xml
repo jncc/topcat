@@ -1,5 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<gmd:MD_Metadata xmlns:gmd="http://www.isotc211.org/2005/gmd" xmlns:gco="http://www.isotc211.org/2005/gco" xmlns:gml="http://www.opengis.net/gml/3.2">
+<gmd:MD_Metadata xmlns:gmd="http://www.isotc211.org/2005/gmd"
+                 xmlns:gco="http://www.isotc211.org/2005/gco"
+                 xmlns:gml="http://www.opengis.net/gml/3.2">
   <gmd:fileIdentifier>
     <gco:CharacterString>721643b8-7e42-40ca-87d9-23f19221238e</gco:CharacterString>
   </gmd:fileIdentifier>
@@ -182,10 +184,10 @@
           <gmd:onLine>
             <gmd:CI_OnlineResource>
               <gmd:linkage>
-                <gmd:URL>http://data.jncc.gov.uk/data/721643b8-7e42-40ca-87d9-23f19221238e-Scotia-Herring-Acoustic-Grab</gmd:URL>
+                <gmd:URL>http://data.jncc.gov.uk/data/721643b8-7e42-40ca-87d9-23f19221238e/Scotia-Herring-Acoustic-Grab.zip</gmd:URL>
               </gmd:linkage>
               <gmd:name>
-                <gco:CharacterString>Scotia-Herring-Acoustic-Grab</gco:CharacterString>
+                <gco:CharacterString>Scotia Herring Acoustic Grab</gco:CharacterString>
               </gmd:name>
             </gmd:CI_OnlineResource>
           </gmd:onLine>

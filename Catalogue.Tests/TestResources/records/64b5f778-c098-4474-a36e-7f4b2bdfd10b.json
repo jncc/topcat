@@ -1,0 +1,155 @@
+﻿{
+  "Gemini": {
+    "Title": "GIS grab Log data from North Sea Acoustic Herring survey 2010",
+    "Abstract": "GIS grab log data from the North Sea Acoustic Herring survey during 2010 on the research vessel Scotia. The aim of the survey was obtain information on seabed habitats in the North Sea.",
+    "TopicCategory": "oceans",
+    "Keywords": [
+      {
+        "Value": "Marine",
+        "Vocab": "http://vocab.jncc.gov.uk/jncc-domain"
+      },
+      {
+        "Value": "Offshore Seabed Survey",
+        "Vocab": "http://vocab.jncc.gov.uk/jncc-category"
+      },
+      {
+        "Value": "North East Scotland",
+        "Vocab": "http://vocab.jncc.gov.uk/location"
+      },
+      {
+        "Value": "North Sea",
+        "Vocab": "http://vocab.jncc.gov.uk/location"
+      },
+      {
+        "Value": "0810S",
+        "Vocab": "http://vocab.jncc.gov.uk/seabed-survey-cruise-id"
+      },
+      {
+        "Value": "Processed",
+        "Vocab": "http://vocab.jncc.gov.uk/seabed-survey-data-type"
+      },
+      {
+        "Value": "North East Scotland",
+        "Vocab": "http://vocab.jncc.gov.uk/seabed-survey-technique"
+      },
+      {
+        "Value": "North Sea",
+        "Vocab": "http://vocab.jncc.gov.uk/seabed-survey-technique"
+      },
+      {
+        "Value": "MRV Scotia",
+        "Vocab": "http://vocab.jncc.gov.uk/seabed-survey-vessel"
+      }
+    ],
+    "TemporalExtent": {
+      "Begin": "2010-06-28",
+      "End": "2010-07-18"
+    },
+    "DatasetReferenceDate": "2015-09-01",
+    "Lineage": "This dataset is an output of a collaborative offshore seabed survey undertaken with Joint Nature Conservation Committee (JNCC).",
+    "AdditionalInformationSource": null,
+    "DataFormat": "Geospatial (Vector point)",
+    "ResponsibleOrganisation": {
+      "Name": "Digital and Data Solutions, JNCC",
+      "Email": "data@jncc.gov.uk",
+      "Role": "custodian"
+    },
+    "LimitationsOnPublicAccess": "No limitations",
+    "UseConstraints": "This resource is made available under the Open Government Licence (OGL) v2.0 http://www.nationalarchives.gov.uk/doc/open-government-licence/version/2/",
+    "Copyright": "© 2014 Joint Nature Conservation Committee (JNCC)/Marine Scotland Science (MSS)",
+    "SpatialReferenceSystem": "GCS_WGS_1984",
+    "Extent": null,
+    "MetadataDate": "2016-07-07T21:50:18.5356357Z",
+    "MetadataPointOfContact": {
+      "Name": "Digital and Data Solutions, JNCC",
+      "Email": "data@jncc.gov.uk",
+      "Role": "pointOfContact"
+    },
+    "ResourceType": "dataset",
+    "BoundingBox": {
+      "North": 61.283,
+      "South": 58.066,
+      "East": 1.724,
+      "West": -2.297
+    }
+  },
+  "Path": "X:\\OffshoreSurvey\\SurveyData\\2010_06_RVScotia_NorthSea_HerringAcousticSurvey\\Groundtruthing\\Sampling\\Logs\\Scotia_Herring_Acoustic_Grab",
+  "TopCopy": true,
+  "Status": "Internal",
+  "Validation": "Gemini",
+  "Security": "Official",
+  "Review": null,
+  "Notes": "",
+  "SourceIdentifier": "",
+  "ReadOnly": false,
+  "Resources": [
+    {
+      "Name": "Scotia Herring Acoustic Grab",
+      "Path": "\\\\jncc-corpfile\\marine survey\\OffshoreSurvey\\SurveyData\\2010_06_RVScotia_NorthSea_HerringAcousticSurvey\\Groundtruthing\\Sampling\\Logs\\Scotia_Herring_Acoustic_Grab.zip",
+      "PublishedUrl": "http://data.jncc.gov.uk/data/64b5f778-c098-4474-a36e-7f4b2bdfd10b/Scotia-Herring-Acoustic-Grab.zip"
+    }
+  ],
+  "Publication": {
+    "Assessment": {
+      "Completed": true,
+      "CompletedByUser": null,
+      "CompletedOnUtc": "0001-01-01T00:00:00.0000000",
+      "InitialAssessmentWasDoneOnSpreadsheet": true,
+      "CompletedBy": null
+    },
+    "SignOff": {
+      "DateUtc": "0001-01-01T00:00:00.0000000",
+      "User": null,
+      "Comment": null
+    },
+    "Target": {
+      "Hub": {
+        "Publishable": true,
+        "Url": "http://hub.jncc.gov.uk/assets/64b5f778-c098-4474-a36e-7f4b2bdfd10b",
+        "LastAttempt": {
+          "DateUtc": "2016-07-07T20:53:43.4319086Z",
+          "Message": null
+        },
+        "LastSuccess": {
+          "DateUtc": "2016-07-07T20:53:43.4319086Z",
+          "Message": null
+        }
+      },
+      "Gov": {
+        "Publishable": true,
+        "Paused": false,
+        "LastAttempt": {
+          "DateUtc": "2016-07-07T21:53:43.4319086Z",
+          "Message": null
+        },
+        "LastSuccess": {
+          "DateUtc": "2016-07-07T21:53:43.4319086Z",
+          "Message": null
+        }
+      }
+    }
+  },
+  "Wkt": "POLYGON((-2.297 58.066,1.724 58.066,1.724 61.283,-2.297 61.283,-2.297 58.066))",
+  "Revision": 0,
+  "Footer": {
+    "CreatedOnUtc": "0001-01-01T00:00:00.0000000",
+    "CreatedByUser": {
+      "DisplayName": "Joint Nature Conservation Committee (JNCC)",
+      "Email": "data@jncc.gov.uk"
+    },
+    "ModifiedOnUtc": "2016-07-07T21:50:18.5356357Z",
+    "ModifiedByUser": {
+      "DisplayName": "Joint Nature Conservation Committee",
+      "Email": "data@jncc.gov.uk"
+    }
+  },
+  "@metadata": {
+    "Raven-Entity-Name": "Records",
+    "Raven-Clr-Type": "Catalogue.Data.Model.Record, Catalogue.Data",
+    "@id": "records/64b5f778-c098-4474-a36e-7f4b2bdfd10b",
+    "Temp-Index-Score": 8.390182,
+    "Last-Modified": "2017-08-16T11:26:20.0555738Z",
+    "Raven-Last-Modified": "2017-08-16T11:26:20.0555738",
+    "@etag": "01000000-0000-0BF1-0000-000000000AA6"
+  }
+}

@@ -189,7 +189,7 @@ namespace Catalogue.Web.Controllers.Patch
 
             var records = _queryer.Query(query).ToList();
 
-            var service = new RecordService(db, new RecordValidator());
+            var service = new RecordService(db, new RecordValidator(new VocabQueryer(db)));
 
             foreach (var record in records)
             {
@@ -213,7 +213,7 @@ namespace Catalogue.Web.Controllers.Patch
 
             var records = _queryer.Query(query).ToList();
 
-            var service = new RecordService(db, new RecordValidator());
+            var service = new RecordService(db, new RecordValidator(new VocabQueryer(db)));
 
             foreach (var record in records)
             {

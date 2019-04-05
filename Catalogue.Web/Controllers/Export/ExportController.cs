@@ -1,4 +1,8 @@
-﻿using System;
+﻿using Catalogue.Data;
+using Catalogue.Data.Export;
+using Catalogue.Data.Query;
+using Catalogue.Gemini.Encoding;
+using System;
 using System.IO;
 using System.Linq;
 using System.Net;
@@ -7,10 +11,6 @@ using System.Net.Http.Headers;
 using System.Text;
 using System.Web.Http;
 using System.Xml.Linq;
-using Catalogue.Data;
-using Catalogue.Data.Export;
-using Catalogue.Data.Query;
-using Catalogue.Gemini.Encoding;
 
 namespace Catalogue.Web.Controllers.Export
 {
@@ -72,7 +72,7 @@ namespace Catalogue.Web.Controllers.Export
 
             // encode the records as iso xml elements
             var elements = from record in records
-                           let doc = new XmlEncoder().Create(record.Id, record.Gemini)
+                           let doc = new XmlEncoder().Create(record.Id, record.Gemini, Helpers.GetOnlineResourcesFromDataResources(record))
                            select new XElement("topcat-record", new XAttribute("id", record.Id), new XAttribute("path", record.Path), doc.Root);
 
             var output = new XDocument(new XElement("topcat-export", elements)).ToString();

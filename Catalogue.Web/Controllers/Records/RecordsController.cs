@@ -41,19 +41,24 @@ namespace Catalogue.Web.Controllers.Records
                 record = Helpers.RemoveCollectionFromId(record);
             }
 
-            return new RecordOutputModel
+            var output = new RecordOutputModel
             {
                 Record = record,
                 RecordState = new RecordState
                 {
-                    OpenDataPublishingState = new OpenDataPublishingState
+                    PublishingState = new PublishingState
                     {
                         AssessedAndUpToDate = record.IsAssessedAndUpToDate(),
                         SignedOffAndUpToDate = record.IsSignedOffAndUpToDate(),
-                        UploadedAndUpToDate = record.IsUploadedAndUpToDate()
+                        PublishedToHubAndUpToDate = record.IsPublishedToHubAndUpToDate(),
+                        PublishedToGovAndUpToDate = record.IsPublishedToGovAndUpToDate(),
+                        PublishedAndUpToDate = record.IsPublishedAndUpToDate(),
+                        PreviouslyPublishedWithDoi = record.HasPreviouslyBeenPublishedWithDoi()
                     }
                 }
             };
+
+            return output;
         }
 
         private Record Clone(Record record)

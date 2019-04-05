@@ -11,6 +11,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Catalogue.Data;
+using Catalogue.Data.Query;
+using Moq;
 
 namespace Catalogue.Tests.Slow.Catalogue.Web.Controllers.Usage
 {
@@ -85,7 +87,10 @@ namespace Catalogue.Tests.Slow.Catalogue.Web.Controllers.Usage
             
             using (var db = ReusableDocumentStore.OpenSession())
             {
-                IRecordService recordService = new RecordService(db, new RecordValidator());
+                var vocabQueryerMock = new Mock<IVocabQueryer>();
+                vocabQueryerMock.Setup(x => x.GetVocab(It.IsAny<string>())).Returns(new Vocabulary());
+
+                IRecordService recordService = new RecordService(db, new RecordValidator(vocabQueryerMock.Object));
                 AddLastModifiedDateRecords(testRecords, recordService);
                 db.SaveChanges();
 

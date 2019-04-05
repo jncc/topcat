@@ -1,9 +1,7 @@
-﻿using Catalogue.Web.Controllers.Records;
-
-namespace Catalogue.Data.Model
+﻿namespace Catalogue.Data.Model
 {
     public class RecordState
     {
-        public OpenDataPublishingState OpenDataPublishingState { get; set; }
+        public PublishingState PublishingState { get; set; }
     }
 }

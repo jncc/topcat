@@ -1,0 +1,117 @@
+﻿
+
+
+<div>
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close" ng-click="cancelSignOff(); close()"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title"></h4>
+    </div>
+    <div class="modal-body">
+        <div class="row">
+            <nav>
+                <ol class="cd-multi-steps text-center">
+                    <li ng-class="publishingStatus.riskAssessment.currentClass">
+                        <a ng-click="publishingStatus.currentActiveView = 'risk assessment'">
+                            1. Risk assessment <span ng-if="recordOutput.recordState.publishingState.assessedAndUpToDate || recordOutput.recordState.publishingState.previouslyPublishedWithDoi" class="glyphicon glyphicon-ok"></span>
+                        </a>
+                    </li>
+                    <li ng-class="publishingStatus.signOff.currentClass">
+                        <a ng-click="publishingStatus.currentActiveView = 'sign off'">
+                            2. Final approval <span ng-if="recordOutput.recordState.publishingState.signedOffAndUpToDate || recordOutput.recordState.publishingState.previouslyPublishedWithDoi" class="glyphicon glyphicon-ok"></span>
+                        </a>
+                    </li>
+                    <li ng-class="publishingStatus.upload.currentClass">
+                        <a ng-click="publishingStatus.currentActiveView = 'upload'">
+                            3. Data upload <span ng-if="recordOutput.recordState.publishingState.publishedAndUpToDate || recordOutput.recordState.publishingState.previouslyPublishedWithDoi" class="glyphicon glyphicon-ok"></span>
+                        </a>
+                    </li>
+                </ol>
+            </nav>
+        </div>
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="publishing-status">
+                    <div ng-show="publishingStatus.currentActiveView == 'risk assessment'" class="quick-fade-in">
+                        <h3>Risk assessment</h3>
+                        <p>Resources and records published from Topcat must be risk assessed to ensure that the information is suitable for public access and use in line with relevant JNCC policies and protocols, including data protection requirements, editorial guidelines and quality assurance processes. The risk assessment should also be reviewed and confirmed prior to publication of any updated resources or metadata.</p>
+                        <p>
+                            Advice on <a href="file:///Z:\Prog110-FutureData\0264 Information Management\Open Data\Guidance\Open Data Publication - Advice for Data Managers.pdf">publication</a> and <a href="file:///Z:\Prog110-FutureData\0264 Information Management\Tools\Topcat\Guidance\Risk Assessment for Open Data Publication.pdf">risk assessment</a> is available for open data resources, and may also be relevant as a source of guidance for publication of other datasets.
+                        </p>
+                        <p>Prior to publication of information from Topcat, users should normally remove any personal data, confidential information, information where there are national security concerns, information that presents a risk of environmental harm, and any third-party intellectual property that JNCC does not have permission to publish, unless a legal exception applies that permits publication.</p>
+                        <p>When you publish resources and records from Topcat you agree that they have been risk assessed in accordance with any applicable policies and procedures.</p>
+                        <br/>
+                        <span class="publishing-extra-info"
+                              ng-if="form.publication.assessment.completed">
+                            <p>
+                                {{assessmentCompletedInfo}}
+                            </p>
+                        </span>
+                        <span class="pull-right" ng-if="publishingStatus.riskAssessment.showButton">
+                            <button type="button" class="btn btn-primary"
+                                    ng-click="assessButtonClick()">
+                                I AGREE
+                            </button>
+                        </span>
+                    </div>
+                    <div ng-show="publishingStatus.currentActiveView == 'sign off'" class="quick-fade-in">
+                        <h3>Final approval</h3>
+                        <p>Publication of the data must be approved by an Information Asset Owner. Please review the record with your Information Asset Owner and ask them to sign off by clicking the button below.</p>
+                        <p>Alternatively, sign off can be provided on the <a ng-click="$dismiss()" href="#publishing/signoff">Final Approval</a> page.</p>
+                        <br />
+                        <span class="publishing-extra-info"
+                              ng-if="form.publication.signOff != null">
+                            <p>
+                                {{signOffCompletedInfo}}
+                            </p>
+                        </span>
+                        <span class="pull-right" ng-if="publishingStatus.signOff.showButton">
+                            <button class="btn btn-danger sign-off"
+                                    tc-tip title="Publishing sign off for Information Asset Owners"
+                                    ng-click="signOffButtonClick(r.id)">
+                                <span ng-if="publishingStatus.signOff.signOffButtonText.indexOf('Cancel') == 0" class="glyphicon glyphicon-remove sign-off"></span>
+                                &nbsp;{{ publishingStatus.signOff.signOffButtonText }}
+                            </button>
+                        </span>
+                    </div>
+                    <div ng-show="publishingStatus.currentActiveView == 'upload'" class="quick-fade-in">
+                        <h3>Data upload</h3>
+                        <p>The record is now waiting to be published to
+                            <span ng-if="form.publication.target.hub.publishable == true">the JNCC ResourceHub</span>
+                            <span ng-if="form.publication.target.hub.publishable == true && form.publication.target.gov.publishable == true">and</span>
+                            <span ng-if="form.publication.target.gov.publishable == true">Data.gov.uk</span>.
+                            This process may take a day so please check back later.
+                        </p>
+                        <br />
+                        <span class="publishing-extra-info">
+                            <p>
+                                {{uploadStatus}}
+                            </p>
+                            <p ng-if="form.publication.data.lastAttempt.message">
+                                Whoops there was a problem while uploading your data files: {{form.publication.data.lastAttempt.message}}
+                            </p>
+                            <p>
+                                <span ng-if="form.publication.target.hub &&
+                                      (recordOutput.recordState.publishingState.previouslyPublishedWithDoi && form.publication.target.hub.lastSuccess != null) ||
+                                      (!recordOutput.recordState.publishingState.previouslyPublishedWithDoi && form.publication.target.hub.publishable == true)">
+                                    ResourceHub upload: {{ hubPublishingStatus() }}<br />
+                                    <span ng-if="form.publication.target.hub.lastAttempt.message">
+                                        {{form.publication.target.hub.lastAttempt.message}}<br /><br />
+                                    </span>
+                                </span>
+                                <span ng-if="form.publication.target.gov &&
+                                      ((recordOutput.recordState.publishingState.previouslyPublishedWithDoi && form.publication.target.gov.lastSuccess != null) ||
+                                      (!recordOutput.recordState.publishingState.previouslyPublishedWithDoi && form.publication.target.gov.publishable == true))">
+                                    Data.gov.uk upload: {{ govPublishingStatus() }}<br />
+                                    <span ng-if="form.publication.target.gov.lastAttempt.message">
+                                        {{form.publication.target.gov.lastAttempt.message}}<br />
+                                    </span>
+                                </span>
+                            </p>
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer"></div>
+</div>

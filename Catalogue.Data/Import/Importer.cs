@@ -7,6 +7,7 @@ using CsvHelper;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using Catalogue.Data.Query;
 using Raven.Client.Documents.Session;
 
 namespace Catalogue.Data.Import
@@ -21,7 +22,7 @@ namespace Catalogue.Data.Import
             return new Importer(
                 mapping,
                 new FileSystem(),
-                new RecordService(db, new RecordValidator()),
+                new RecordService(db, new RecordValidator(new VocabQueryer(db))),
                 new VocabularyService(db, new VocabularyValidator()),
                 new UserInfo
                 {

@@ -42,14 +42,14 @@ namespace Catalogue.Web.Controllers.Dumps
         [HttpGet, Route("api/dumps/recordswithpublishinginfo")]
         public List<RecordWithPublicationInfoResultShape> RecordsWithPublishingInfo()
         {
-            var results = db.Query<Record, RecordsWithOpenDataPublicationInfoIndex>().Fetch(1024);
+            var results = db.Query<Record, RecordsWithPublicationInfoIndex>().Fetch(1024);
 
             return results.Select(r => new RecordWithPublicationInfoResultShape
                 {
                     Id = Helpers.RemoveCollection(r.Id),
                     Title = r.Gemini.Title,
                     MetadataDate = r.Gemini.MetadataDate,
-                    PublicationInfo = r.Publication.OpenData,
+                    PublicationInfo = r.Publication.Target.Gov,
                 }).ToList();
         }
 
@@ -84,7 +84,7 @@ namespace Catalogue.Web.Controllers.Dumps
             public string Id { get; set; }
             public string Title { get; set; }
             public DateTime MetadataDate { get; set; }
-            public OpenDataPublicationInfo PublicationInfo { get; set; }
+            public GovPublicationInfo PublicationInfo { get; set; }
 
         }
 
@@ -105,8 +105,8 @@ namespace Catalogue.Web.Controllers.Dumps
         [HttpGet, Route("api/dumps/recordsnotpublishedsincelastupdated")]
         public List<RecordWithPublicationInfoResultShape> RecordsNotPublishedSinceLastUpdated()
         {
-            var results = db.Query<RecordsWithOpenDataPublicationInfoIndex.Result, RecordsWithOpenDataPublicationInfoIndex>()
-                .Where(r => !r.PublishedSinceLastUpdated)
+            var results = db.Query<RecordsWithPublicationInfoIndex.Result, RecordsWithPublicationInfoIndex>()
+                .Where(r => !r.PublishedToGovSinceLastUpdated)
                 .OfType<Record>()
                 .Fetch(1024);
 
@@ -115,7 +115,7 @@ namespace Catalogue.Web.Controllers.Dumps
                 Id = Helpers.RemoveCollection(r.Id),
                 Title = r.Gemini.Title,
                 MetadataDate = r.Gemini.MetadataDate,
-                PublicationInfo = r.Publication.OpenData,
+                PublicationInfo = r.Publication.Target.Gov,
             }).ToList();
         }
 

@@ -13,7 +13,7 @@ namespace Catalogue.Gemini.Encoding
         /// <summary>
         /// Creates an ISO XML metadata document using the given metadata.
         /// </summary>
-        XDocument Create(string id, Metadata metadata);
+        XDocument Create(string id, Metadata metadata, List<OnlineResource> resources);
     }
 
     public class XmlEncoder : IXmlEncoder
@@ -24,7 +24,7 @@ namespace Catalogue.Gemini.Encoding
         public static readonly XNamespace gml = "http://www.opengis.net/gml/3.2";
         public static readonly XNamespace xlink = "http://www.w3.org/1999/xlink";
 
-        public XDocument Create(string id, Metadata m)
+        public XDocument Create(string id, Metadata m, List<OnlineResource> resources)
         {
             // see http://data.gov.uk/sites/default/files/UK%20GEMINI%20Encoding%20Guidance%201.4.pdf
             
@@ -60,7 +60,7 @@ namespace Catalogue.Gemini.Encoding
                     new XElement(gmd + "distributionInfo",
                         new XElement(gmd + "MD_Distribution",
                             MakeDataFormat(m),
-                            MakeResourceLocator(m, id))),
+                            MakeResourceLocators(resources))),
                     MakeLineage(m)));
         }
 
@@ -239,23 +239,17 @@ namespace Catalogue.Gemini.Encoding
             // not supporting versions for data format
         }
 
-        XElement MakeResourceLocator(Metadata metadata, string id)
+        XElement MakeResourceLocators(List<OnlineResource> resources)
         {
-            string fileName = WebificationUtility.ToUrlFriendlyString(Path.GetFileName(metadata.ResourceLocator));
-            // but this doesn't work so well when the resource locator contains the guid like this
-            // http://data.jncc.gov.uk/data/d4ddd363-97eb-4ef6-9b8b-6f019f434103-ProcessedImages.zip
-            // so remove the proceeding guid
-            if (fileName.IsNotBlank() && fileName.StartsWith(id + "-"))
-                fileName = fileName.Replace(id + "-", String.Empty);
-
             return new XElement(gmd + "transferOptions",
                 new XElement(gmd + "MD_DigitalTransferOptions",
-                    new XElement(gmd + "onLine",
+                    from r in resources
+                    select new XElement(gmd + "onLine",
                         new XElement(gmd + "CI_OnlineResource",
                             new XElement(gmd + "linkage",
-                                new XElement(gmd + "URL", metadata.ResourceLocator)),
+                                new XElement(gmd + "URL", r.Url)),
                             new XElement(gmd + "name", 
-                                new XElement(gco + "CharacterString", fileName))))));
+                                new XElement(gco + "CharacterString", r.Name))))));
         }
 
         XElement MakeLineage(Metadata metadata)

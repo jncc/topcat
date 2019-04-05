@@ -16,7 +16,6 @@ namespace Catalogue.Gemini.Model
         public string DatasetReferenceDate { get; set; } // might be changed to a collection for creation/publication/revision
         public string Lineage { get; set; }
 //      public decimal SpatialResolution { get; set; } // todo we'll probably need this https://wiki.ceh.ac.uk/display/cehigh/Spatial+resolution
-        public string ResourceLocator { get; set; }
         public string AdditionalInformationSource { get; set; }
         public string DataFormat { get; set; }
         public ResponsibleParty ResponsibleOrganisation { get; set; }

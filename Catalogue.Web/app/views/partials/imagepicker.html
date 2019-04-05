@@ -1,0 +1,69 @@
+﻿
+
+
+<div class="image-picker">
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close" ng-click="$dismiss()"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title"></h4>
+    </div>
+    <div class="modal-body">
+        <div class="row">
+            <div class="col-md-7 col-md-offset-2">
+                <input type="text" class="form-control"
+                       ng-model="selectedImageUrl"
+                       placeholder="Paste an image URL here, or select an image from the ResourceHub gallery"
+                       tc-focus
+                       title="Paste the URL to the image here" />
+            </div>
+            <div class="col-md-1">
+                <button class="btn btn-primary wide-button" ng-click="saveImage(selectedImage)">
+                    OK
+                </button>
+            </div>
+        </div>
+        <br />
+        <br />
+        <div class="row">
+            <div class="col-md-10 col-md-offset-1">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div ng-if="images.length < 1">
+                            <p>No images found in the ResourceHub gallery</p>
+                        </div>
+                        <div class="row editor-image-row" ng-repeat="row in page">
+                            <div ng-repeat="image in row">
+                                <div class="col-md-3">
+                                    <div class="editor-image">
+                                        <a href="" ng-click="setSelectedImage(image)">
+                                            <img class="img-thumbnail" ng-src="{{image.Crops.Square}}" title="{{image.Url}}" tc-tip>
+                                            <div ng-class="{ 'editor-image-selected': image.Url == selectedImageUrl, 'editor-image-edit': image.Url !== selectedImageUrl }">
+                                                <button class="btn btn-primary" title="Use this image" tc-tip><span class="glyphicon glyphicon-ok"></span></button>
+                                            </div>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row text-center" ng-if="images.length > 0">
+                    <ul class="pagination">
+                        <li style="cursor: pointer;">
+                            <span ng-click="setPage(currentPage-1)">&laquo;</span>
+                        </li>
+                        <li style="cursor: pointer;" ng-repeat="x in [].constructor(noOfPages) track by $index" ng-class="($index===currentPage) ? 'active' : ''"><a ng-click="setPage($index)">{{$index+1}}</a></li>
+                        <li style="cursor: pointer;">
+                            <span ng-click="setPage(currentPage+1)">&raquo;</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <span class="pull-left">
+            <button type="button" class="btn btn-default" data-dismiss="modal" ng-click="$dismiss()">CANCEL</button>
+        </span>
+    </div>
+</div>
+

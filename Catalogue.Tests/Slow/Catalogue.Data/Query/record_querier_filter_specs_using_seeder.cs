@@ -1,16 +1,8 @@
-﻿using Catalogue.Data.Model;
-using Catalogue.Data.Query;
-using Catalogue.Data.Test;
-using Catalogue.Gemini.Templates;
+﻿using Catalogue.Data.Query;
 using Catalogue.Utilities.Clone;
 using FluentAssertions;
 using NUnit.Framework;
-using Raven.Client;
-using Raven.Client.Documents.Session;
-using System;
 using System.Linq;
-using Catalogue.Data.Seed;
-using Raven.Client.Documents.Indexes;
 
 namespace Catalogue.Tests.Slow.Catalogue.Data.Query
 {

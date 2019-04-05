@@ -1,6 +1,5 @@
 ﻿using Catalogue.Data;
 using Catalogue.Data.Model;
-using Catalogue.Data.Test;
 using Catalogue.Data.Write;
 using Catalogue.Gemini.Templates;
 using Catalogue.Utilities.Clone;
@@ -11,15 +10,17 @@ using Moq;
 using NUnit.Framework;
 using Raven.Client.Documents.Session;
 using System;
+using Catalogue.Data.Query;
+using Catalogue.Gemini.Model;
 
 namespace Catalogue.Tests.Slow.Catalogue.Web.Controllers.Publishing
 {
     public class publishing_controller_specs_for_assessment : CleanDbTest
     {
         [Test]
-        public void assessment_completed_test()
+        public void assessment_completed_for_dgu_publication()
         {
-            var recordId = Helpers.AddCollection("1a86bbbe-7f19-4fe2-82ff-7847e68266da");
+            var recordId = Helpers.AddCollection(Guid.NewGuid().ToString());
             var record = new Record().With(r =>
             {
                 r.Id = recordId;
@@ -31,9 +32,12 @@ namespace Catalogue.Tests.Slow.Catalogue.Web.Controllers.Publishing
                 });
                 r.Publication = new PublicationInfo
                 {
-                    OpenData = new OpenDataPublicationInfo
+                    Target = new TargetInfo
                     {
-                        Publishable = true
+                        Gov = new GovPublicationInfo
+                        {
+                            Publishable = true
+                        }
                     }
                 };
                 r.Footer = new Footer();
@@ -45,42 +49,61 @@ namespace Catalogue.Tests.Slow.Catalogue.Web.Controllers.Publishing
             resultRecord.Footer.ModifiedByUser.DisplayName.Should().Be("Test User");
             resultRecord.Footer.ModifiedOnUtc.Should().NotBe(DateTime.MinValue);
 
-            var openDataInfo = resultRecord.Publication.OpenData;
-            openDataInfo.Should().NotBeNull();
-            openDataInfo.LastAttempt.Should().BeNull();
-            openDataInfo.LastSuccess.Should().BeNull();
-            openDataInfo.Resources.Should().BeNull();
-            openDataInfo.Paused.Should().BeFalse();
-            openDataInfo.Assessment.Completed.Should().BeTrue();
-            openDataInfo.Assessment.CompletedByUser.DisplayName.Should().Be("Test User");
-            openDataInfo.Assessment.CompletedByUser.Email.Should().Be("tester@example.com");
-            openDataInfo.Assessment.CompletedOnUtc.Should().NotBe(DateTime.MinValue);
-            resultRecord.Gemini.MetadataDate.Should().Be(openDataInfo.Assessment.CompletedOnUtc);
+            var publicationInfo = resultRecord.Publication;
+            publicationInfo.Should().NotBeNull();
+            publicationInfo.Target.Gov.LastAttempt.Should().BeNull();
+            publicationInfo.Target.Gov.LastSuccess.Should().BeNull();
+            resultRecord.Publication.Data.Should().BeNull();
+            publicationInfo.Assessment.Completed.Should().BeTrue();
+            publicationInfo.Assessment.CompletedByUser.DisplayName.Should().Be("Test User");
+            publicationInfo.Assessment.CompletedByUser.Email.Should().Be("tester@example.com");
+            publicationInfo.Assessment.CompletedOnUtc.Should().NotBe(DateTime.MinValue);
+            resultRecord.Gemini.MetadataDate.Should().Be(publicationInfo.Assessment.CompletedOnUtc);
         }
 
         [Test]
-        public void assessment_completed_with_unc_path_test()
+        public void assessment_completed_for_hub_publication()
         {
-            var recordId = Helpers.AddCollection("b69f47c1-4c17-42d0-a396-8209aa5568b1");
+            var recordId = Helpers.AddCollection(Guid.NewGuid().ToString());
             var record = new Record().With(r =>
             {
                 r.Id = recordId;
-                r.Path = @"\\jncc-corpfile\testfile";
+                r.Path = @"X:\path\to\assessment\test";
                 r.Validation = Validation.Gemini;
-                r.Gemini = Library.Example();
+                r.Gemini = Library.Example().With(m =>
+                {
+                    m.MetadataDate = new DateTime(2017, 07, 30);
+                });
                 r.Publication = new PublicationInfo
                 {
-                    OpenData = new OpenDataPublicationInfo
+                    Target = new TargetInfo
                     {
-                        Publishable = true
+                        Hub = new HubPublicationInfo
+                        {
+                            Publishable = true
+                        }
                     }
                 };
                 r.Footer = new Footer();
             });
 
             var resultRecord = TestAssessment(record);
-            var openDataInfo = resultRecord.Publication.OpenData;
-            openDataInfo.Assessment.Completed.Should().BeTrue();
+
+            resultRecord.Publication.Should().NotBeNull();
+            resultRecord.Footer.ModifiedByUser.DisplayName.Should().Be("Test User");
+            resultRecord.Footer.ModifiedOnUtc.Should().NotBe(DateTime.MinValue);
+
+            var publicationInfo = resultRecord.Publication;
+            publicationInfo.Should().NotBeNull();
+            publicationInfo.Data.Should().BeNull();
+            publicationInfo.Target.Hub.LastSuccess.Should().BeNull();
+            publicationInfo.Target.Hub.LastAttempt.Should().BeNull();
+            publicationInfo.Target.Gov.Should().BeNull();
+            publicationInfo.Assessment.Completed.Should().BeTrue();
+            publicationInfo.Assessment.CompletedByUser.DisplayName.Should().Be("Test User");
+            publicationInfo.Assessment.CompletedByUser.Email.Should().Be("tester@example.com");
+            publicationInfo.Assessment.CompletedOnUtc.Should().NotBe(DateTime.MinValue);
+            resultRecord.Gemini.MetadataDate.Should().Be(publicationInfo.Assessment.CompletedOnUtc);
         }
 
         [Test]
@@ -98,15 +121,18 @@ namespace Catalogue.Tests.Slow.Catalogue.Web.Controllers.Publishing
                 });
                 r.Publication = new PublicationInfo
                 {
-                    OpenData = new OpenDataPublicationInfo
+                    Assessment = new AssessmentInfo
                     {
-                        Publishable = true,
-                        Assessment = new OpenDataAssessmentInfo
+                        Completed = false,
+                        CompletedByUser = null,
+                        CompletedOnUtc = DateTime.MinValue,
+                        InitialAssessmentWasDoneOnSpreadsheet = false
+                    },
+                    Target = new TargetInfo
+                    {
+                        Gov = new GovPublicationInfo
                         {
-                            Completed = false,
-                            CompletedByUser = null,
-                            CompletedOnUtc = DateTime.MinValue,
-                            InitialAssessmentWasDoneOnSpreadsheet = false
+                            Publishable = true
                         }
                     }
                 };
@@ -117,16 +143,15 @@ namespace Catalogue.Tests.Slow.Catalogue.Web.Controllers.Publishing
 
             resultRecord.Publication.Should().NotBeNull();
 
-            var openDataInfo = resultRecord.Publication.OpenData;
-            openDataInfo.Should().NotBeNull();
-            openDataInfo.LastAttempt.Should().BeNull();
-            openDataInfo.LastSuccess.Should().BeNull();
-            openDataInfo.Resources.Should().BeNull();
-            openDataInfo.Paused.Should().BeFalse();
-            openDataInfo.Assessment.Completed.Should().BeTrue();
-            openDataInfo.Assessment.CompletedByUser.DisplayName.Should().Be("Test User");
-            openDataInfo.Assessment.CompletedByUser.Email.Should().Be("tester@example.com");
-            openDataInfo.Assessment.CompletedOnUtc.Should().NotBe(DateTime.MinValue);
+            var publicationInfo = resultRecord.Publication;
+            publicationInfo.Should().NotBeNull();
+            publicationInfo.Target.Gov.LastAttempt.Should().BeNull();
+            publicationInfo.Target.Gov.LastSuccess.Should().BeNull();
+            resultRecord.Publication.Data.Should().BeNull();
+            publicationInfo.Assessment.Completed.Should().BeTrue();
+            publicationInfo.Assessment.CompletedByUser.DisplayName.Should().Be("Test User");
+            publicationInfo.Assessment.CompletedByUser.Email.Should().Be("tester@example.com");
+            publicationInfo.Assessment.CompletedOnUtc.Should().NotBe(DateTime.MinValue);
         }
 
         [Test]
@@ -144,13 +169,16 @@ namespace Catalogue.Tests.Slow.Catalogue.Web.Controllers.Publishing
                 });
                 r.Publication = new PublicationInfo
                 {
-                    OpenData = new OpenDataPublicationInfo
+                    Assessment = new AssessmentInfo
                     {
-                        Publishable = true,
-                        Assessment = new OpenDataAssessmentInfo
+                        Completed = true,
+                        CompletedOnUtc = new DateTime(2017, 07, 30)
+                    },
+                    Target = new TargetInfo
+                    {
+                        Gov = new GovPublicationInfo
                         {
-                            Completed = true,
-                            CompletedOnUtc = new DateTime(2017, 07, 30)
+                            Publishable = true
                         }
                     }
                 };
@@ -176,22 +204,25 @@ namespace Catalogue.Tests.Slow.Catalogue.Web.Controllers.Publishing
                 });
                 r.Publication = new PublicationInfo
                 {
-                    OpenData = new OpenDataPublicationInfo
+                    Assessment = new AssessmentInfo
                     {
-                        Publishable = true,
-                        Assessment = new OpenDataAssessmentInfo
+                        Completed = true,
+                        InitialAssessmentWasDoneOnSpreadsheet = true,
+                        CompletedOnUtc = DateTime.MinValue
+                    },
+                    SignOff = new SignOffInfo
+                    {
+                        DateUtc = DateTime.MinValue
+                    },
+                    Target = new TargetInfo
+                    {
+                        Gov = new GovPublicationInfo
                         {
-                            Completed = true,
-                            InitialAssessmentWasDoneOnSpreadsheet = true,
-                            CompletedOnUtc = DateTime.MinValue
-                        },
-                        SignOff = new OpenDataSignOffInfo
-                        {
-                            DateUtc = DateTime.MinValue
-                        },
-                        LastAttempt = new PublicationAttempt
-                        {
-                            DateUtc = new DateTime(2017, 07, 30)
+                            Publishable = true,
+                            LastAttempt = new PublicationAttempt
+                            {
+                                DateUtc = new DateTime(2017, 07, 30)
+                            }
                         }
                     }
                 };
@@ -200,6 +231,57 @@ namespace Catalogue.Tests.Slow.Catalogue.Web.Controllers.Publishing
 
             Action a = () => TestAssessment(record);
             a.Should().Throw<InvalidOperationException>().And.Message.Should().Be("Assessment has already been completed and is up to date");
+        }
+
+        [Test]
+        public void assessment_fails_with_null_publication_info()
+        {
+            var recordId = Helpers.AddCollection(Guid.NewGuid().ToString());
+            var record = new Record().With(r =>
+            {
+                r.Id = recordId;
+                r.Path = @"X:\path\to\assessment\test";
+                r.Validation = Validation.Gemini;
+                r.Gemini = Library.Example().With(m =>
+                {
+                    m.MetadataDate = new DateTime(2017, 07, 30);
+                });
+                r.Publication = null;
+                r.Footer = new Footer();
+            });
+
+            Action a = () => TestAssessment(record);
+            a.Should().Throw<InvalidOperationException>().And.Message.Should().Be("Must select at least one publishing destination");
+        }
+
+        [Test]
+        public void assessment_fails_with_no_publishable_destinations(
+            [Values(false, null)] bool? govPublishable,
+            [Values(false, null)] bool hubPublishable)
+        {
+            var recordId = Helpers.AddCollection(Guid.NewGuid().ToString());
+            var record = new Record().With(r =>
+            {
+                r.Id = recordId;
+                r.Path = @"X:\path\to\assessment\test";
+                r.Validation = Validation.Gemini;
+                r.Gemini = Library.Example().With(m =>
+                {
+                    m.MetadataDate = new DateTime(2017, 07, 30);
+                });
+                r.Publication = new PublicationInfo
+                {
+                    Target = new TargetInfo
+                    {
+                        Hub = new HubPublicationInfo { Publishable = hubPublishable },
+                        Gov = new GovPublicationInfo { Publishable = govPublishable }
+                    }
+                };
+                r.Footer = new Footer();
+            });
+
+            Action a = () => TestAssessment(record);
+            a.Should().Throw<InvalidOperationException>().And.Message.Should().Be("Must select at least one publishing destination");
         }
 
         [Test]
@@ -217,9 +299,12 @@ namespace Catalogue.Tests.Slow.Catalogue.Web.Controllers.Publishing
                 });
                 r.Publication = new PublicationInfo
                 {
-                    OpenData = new OpenDataPublicationInfo
+                    Target = new TargetInfo
                     {
-                        Publishable = true
+                        Gov = new GovPublicationInfo
+                        {
+                            Publishable = true
+                        }
                     }
                 };
                 r.Footer = new Footer();
@@ -230,9 +315,60 @@ namespace Catalogue.Tests.Slow.Catalogue.Web.Controllers.Publishing
         }
 
         [Test]
-        public void successful_reassessment_for_republishing()
+        public void assessment_for_previously_published_doi_record_should_fail()
         {
-            var recordId = Helpers.AddCollection("18c4b5bc-353f-4f0c-a243-1d7d06cacbec");
+            var recordId = Helpers.AddCollection(Guid.NewGuid().ToString());
+            var record = new Record().With(r =>
+            {
+                r.Id = recordId;
+                r.Path = @"X:\path\to\assessment\test";
+                r.Validation = Validation.Gemini;
+                r.Gemini = Library.Example().With(m =>
+                {
+                    m.MetadataDate = new DateTime(2017, 07, 30);
+                });
+                r.Citation = "citation";
+                r.DigitalObjectIdentifier = "10.25603/000000.0.0.0";
+                r.Publication = new PublicationInfo
+                {
+                    Assessment = new AssessmentInfo
+                    {
+                        Completed = true,
+                        CompletedOnUtc = new DateTime(2017, 07, 21),
+                        CompletedByUser = new UserInfo
+                        {
+                            DisplayName = "Pete",
+                            Email = "pete@example.com"
+                        },
+                        InitialAssessmentWasDoneOnSpreadsheet = false
+                    },
+                    SignOff = new SignOffInfo
+                    {
+                        DateUtc = new DateTime(2017, 07, 22)
+                    },
+                    Target = new TargetInfo
+                    {
+                        Gov = new GovPublicationInfo
+                        {
+                            Publishable = true,
+                            LastSuccess = new PublicationAttempt
+                            {
+                                DateUtc = new DateTime(2017, 07, 23)
+                            }
+                        }
+                    }
+                };
+                r.Footer = new Footer();
+            });
+
+            Action a = () => TestAssessment(record);
+            a.Should().Throw<InvalidOperationException>().And.Message.Should().Be("Cannot republish a DOI minted record");
+        }
+
+        [Test]
+        public void assessment_for_dgu_unpublishable_but_hub_publishable_record()
+        {
+            var recordId = Helpers.AddCollection(Guid.NewGuid().ToString());
             var record = new Record().With(r =>
             {
                 r.Id = recordId;
@@ -244,27 +380,165 @@ namespace Catalogue.Tests.Slow.Catalogue.Web.Controllers.Publishing
                 });
                 r.Publication = new PublicationInfo
                 {
-                    OpenData = new OpenDataPublicationInfo
+                    Target = new TargetInfo
                     {
-                        Publishable = true,
-                        Assessment = new OpenDataAssessmentInfo
+                        Hub = new HubPublicationInfo
                         {
-                            Completed = true,
-                            CompletedOnUtc = new DateTime(2017, 07, 21),
-                            CompletedByUser = new UserInfo
+                            Publishable = true
+                        },
+                        Gov = new GovPublicationInfo
+                        {
+                            Publishable = false
+                        }
+                    }
+                };
+                r.Footer = new Footer();
+            });
+
+            var resultRecord = TestAssessment(record);
+
+            resultRecord.Publication.Should().NotBeNull();
+            resultRecord.Footer.ModifiedByUser.DisplayName.Should().Be("Test User");
+            resultRecord.Footer.ModifiedOnUtc.Should().NotBe(DateTime.MinValue);
+
+            var publicationInfo = resultRecord.Publication;
+            publicationInfo.Should().NotBeNull();
+            publicationInfo.Assessment.Completed.Should().BeTrue();
+            publicationInfo.Assessment.CompletedByUser.DisplayName.Should().Be("Test User");
+            publicationInfo.Assessment.CompletedByUser.Email.Should().Be("tester@example.com");
+            publicationInfo.Assessment.CompletedOnUtc.Should().NotBe(DateTime.MinValue);
+            resultRecord.Gemini.MetadataDate.Should().Be(publicationInfo.Assessment.CompletedOnUtc);
+        }
+
+        [Test]
+        public void assessment_for_dgu_publishable_but_hub_unpublishable_record()
+        {
+            var recordId = Helpers.AddCollection(Guid.NewGuid().ToString());
+            var record = new Record().With(r =>
+            {
+                r.Id = recordId;
+                r.Path = @"X:\path\to\assessment\test";
+                r.Validation = Validation.Gemini;
+                r.Gemini = Library.Example().With(m =>
+                {
+                    m.MetadataDate = new DateTime(2017, 07, 30);
+                });
+                r.Publication = new PublicationInfo
+                {
+                    Target = new TargetInfo
+                    {
+                        Hub = new HubPublicationInfo
+                        {
+                            Publishable = false
+                        },
+                        Gov = new GovPublicationInfo
+                        {
+                            Publishable = true
+                        }
+                    }
+                };
+                r.Footer = new Footer();
+            });
+
+            var resultRecord = TestAssessment(record);
+
+            resultRecord.Publication.Should().NotBeNull();
+            resultRecord.Footer.ModifiedByUser.DisplayName.Should().Be("Test User");
+            resultRecord.Footer.ModifiedOnUtc.Should().NotBe(DateTime.MinValue);
+
+            var publicationInfo = resultRecord.Publication;
+            publicationInfo.Should().NotBeNull();
+            publicationInfo.Assessment.Completed.Should().BeTrue();
+            publicationInfo.Assessment.CompletedByUser.DisplayName.Should().Be("Test User");
+            publicationInfo.Assessment.CompletedByUser.Email.Should().Be("tester@example.com");
+            publicationInfo.Assessment.CompletedOnUtc.Should().NotBe(DateTime.MinValue);
+            resultRecord.Gemini.MetadataDate.Should().Be(publicationInfo.Assessment.CompletedOnUtc);
+        }
+
+        [Test]
+        public void assessment_for_dgu_and_hub_both_publishable_record()
+        {
+            var recordId = Helpers.AddCollection(Guid.NewGuid().ToString());
+            var record = new Record().With(r =>
+            {
+                r.Id = recordId;
+                r.Path = @"X:\path\to\assessment\test";
+                r.Validation = Validation.Gemini;
+                r.Gemini = Library.Example().With(m =>
+                {
+                    m.MetadataDate = new DateTime(2017, 07, 30);
+                });
+                r.Publication = new PublicationInfo
+                {
+                    Target = new TargetInfo
+                    {
+                        Hub = new HubPublicationInfo
+                        {
+                            Publishable = true
+                        },
+                        Gov = new GovPublicationInfo
+                        {
+                            Publishable = true
+                        }
+                    }
+                };
+                r.Footer = new Footer();
+            });
+
+            var resultRecord = TestAssessment(record);
+
+            resultRecord.Publication.Should().NotBeNull();
+            resultRecord.Footer.ModifiedByUser.DisplayName.Should().Be("Test User");
+            resultRecord.Footer.ModifiedOnUtc.Should().NotBe(DateTime.MinValue);
+
+            var publicationInfo = resultRecord.Publication;
+            publicationInfo.Should().NotBeNull();
+            publicationInfo.Assessment.Completed.Should().BeTrue();
+            publicationInfo.Assessment.CompletedByUser.DisplayName.Should().Be("Test User");
+            publicationInfo.Assessment.CompletedByUser.Email.Should().Be("tester@example.com");
+            publicationInfo.Assessment.CompletedOnUtc.Should().NotBe(DateTime.MinValue);
+            resultRecord.Gemini.MetadataDate.Should().Be(publicationInfo.Assessment.CompletedOnUtc);
+        }
+
+        [Test]
+        public void successful_reassessment_for_republishing()
+        {
+            var recordId = Helpers.AddCollection(Guid.NewGuid().ToString());
+            var record = new Record().With(r =>
+            {
+                r.Id = recordId;
+                r.Path = @"X:\path\to\assessment\test";
+                r.Validation = Validation.Gemini;
+                r.Gemini = Library.Example().With(m =>
+                {
+                    m.MetadataDate = new DateTime(2017, 07, 30);
+                });
+                r.Publication = new PublicationInfo
+                {
+                    Assessment = new AssessmentInfo
+                    {
+                        Completed = true,
+                        CompletedOnUtc = new DateTime(2017, 07, 21),
+                        CompletedByUser = new UserInfo
+                        {
+                            DisplayName = "Pete",
+                            Email = "pete@example.com"
+                        },
+                        InitialAssessmentWasDoneOnSpreadsheet = false
+                    },
+                    SignOff = new SignOffInfo
+                    {
+                        DateUtc = new DateTime(2017, 07, 22)
+                    },
+                    Target = new TargetInfo
+                    {
+                        Gov = new GovPublicationInfo
+                        {
+                            Publishable = true,
+                            LastAttempt = new PublicationAttempt
                             {
-                                DisplayName = "Pete",
-                                Email = "pete@example.com"
-                            },
-                            InitialAssessmentWasDoneOnSpreadsheet = false
-                        },
-                        SignOff = new OpenDataSignOffInfo
-                        {
-                            DateUtc = new DateTime(2017, 07, 22)
-                        },
-                        LastAttempt = new PublicationAttempt
-                        {
-                            DateUtc = new DateTime(2017, 07, 23)
+                                DateUtc = new DateTime(2017, 07, 23)
+                            }
                         }
                     }
                 };
@@ -274,24 +548,23 @@ namespace Catalogue.Tests.Slow.Catalogue.Web.Controllers.Publishing
             var resultRecord = TestAssessment(record);
             resultRecord.Publication.Should().NotBeNull();
 
-            var openDataInfo = resultRecord.Publication.OpenData;
-            openDataInfo.Should().NotBeNull();
-            openDataInfo.LastAttempt.DateUtc.Should().Be(new DateTime(2017, 07, 23));
-            openDataInfo.LastSuccess.Should().BeNull();
-            openDataInfo.Resources.Should().BeNull();
-            openDataInfo.Paused.Should().BeFalse();
-            openDataInfo.Assessment.Completed.Should().BeTrue();
-            openDataInfo.Assessment.CompletedByUser.DisplayName.Should().Be("Test User");
-            openDataInfo.Assessment.CompletedByUser.Email.Should().Be("tester@example.com");
-            openDataInfo.Assessment.CompletedOnUtc.Should().NotBe(new DateTime(2017, 07, 21));
-            openDataInfo.Assessment.CompletedOnUtc.Should().NotBe(DateTime.MinValue);
-            openDataInfo.Assessment.InitialAssessmentWasDoneOnSpreadsheet.Should().BeFalse();
+            var publicationInfo = resultRecord.Publication;
+            publicationInfo.Should().NotBeNull();
+            publicationInfo.Target.Gov.LastAttempt.DateUtc.Should().Be(new DateTime(2017, 07, 23));
+            publicationInfo.Target.Gov.LastSuccess.Should().BeNull();
+            resultRecord.Publication.Data.Should().BeNull();
+            publicationInfo.Assessment.Completed.Should().BeTrue();
+            publicationInfo.Assessment.CompletedByUser.DisplayName.Should().Be("Test User");
+            publicationInfo.Assessment.CompletedByUser.Email.Should().Be("tester@example.com");
+            publicationInfo.Assessment.CompletedOnUtc.Should().NotBe(new DateTime(2017, 07, 21));
+            publicationInfo.Assessment.CompletedOnUtc.Should().NotBe(DateTime.MinValue);
+            publicationInfo.Assessment.InitialAssessmentWasDoneOnSpreadsheet.Should().BeFalse();
         }
 
         [Test]
         public void fail_when_reassessing_up_to_date_record_at_sign_off_stage()
         {
-            var recordId = Helpers.AddCollection("4fbdba6e-9b5c-40bc-842c-e99b6c976a08");
+            var recordId = Helpers.AddCollection(Guid.NewGuid().ToString());
             var record = new Record().With(r =>
             {
                 r.Id = recordId;
@@ -303,27 +576,30 @@ namespace Catalogue.Tests.Slow.Catalogue.Web.Controllers.Publishing
                 });
                 r.Publication = new PublicationInfo
                 {
-                    OpenData = new OpenDataPublicationInfo
+                    Assessment = new AssessmentInfo
                     {
-                        Publishable = true,
-                        Assessment = new OpenDataAssessmentInfo
+                        Completed = true,
+                        CompletedOnUtc = new DateTime(2017, 07, 21),
+                        CompletedByUser = new UserInfo
                         {
-                            Completed = true,
-                            CompletedOnUtc = new DateTime(2017, 07, 21),
-                            CompletedByUser = new UserInfo
+                            DisplayName = "Pete",
+                            Email = "pete@example.com"
+                        },
+                        InitialAssessmentWasDoneOnSpreadsheet = false
+                    },
+                    SignOff = new SignOffInfo
+                    {
+                        DateUtc = new DateTime(2017, 07, 30)
+                    },
+                    Target = new TargetInfo
+                    {
+                        Gov = new GovPublicationInfo
+                        {
+                            Publishable = true,
+                            LastAttempt = new PublicationAttempt
                             {
-                                DisplayName = "Pete",
-                                Email = "pete@example.com"
-                            },
-                            InitialAssessmentWasDoneOnSpreadsheet = false
-                        },
-                        SignOff = new OpenDataSignOffInfo
-                        {
-                            DateUtc = new DateTime(2017, 07, 30)
-                        },
-                        LastAttempt = new PublicationAttempt
-                        {
-                            DateUtc = new DateTime(2017, 07, 20)
+                                DateUtc = new DateTime(2017, 07, 20)
+                            }
                         }
                     }
                 };
@@ -335,7 +611,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Web.Controllers.Publishing
                 db.Store(record);
                 db.SaveChanges();
 
-                var publishingController = GetTestOpenDataPublishingController(db);
+                var publishingController = GetTestPublishingController(db);
 
                 var request = new AssessmentRequest
                 {
@@ -348,13 +624,13 @@ namespace Catalogue.Tests.Slow.Catalogue.Web.Controllers.Publishing
                 var resultRecord = db.Load<Record>(record.Id);
                 resultRecord.Publication.Should().NotBeNull();
 
-                var openDataInfo = resultRecord.Publication.OpenData;
-                openDataInfo.Should().NotBeNull();
-                openDataInfo.Assessment.Completed.Should().BeTrue();
-                openDataInfo.Assessment.CompletedByUser.DisplayName.Should().Be("Pete");
-                openDataInfo.Assessment.CompletedByUser.Email.Should().Be("pete@example.com");
-                openDataInfo.Assessment.CompletedOnUtc.Should().Be(new DateTime(2017, 07, 21));
-                resultRecord.Gemini.MetadataDate.Should().NotBe(openDataInfo.Assessment.CompletedOnUtc);
+                var publicationInfo = resultRecord.Publication;
+                publicationInfo.Should().NotBeNull();
+                publicationInfo.Assessment.Completed.Should().BeTrue();
+                publicationInfo.Assessment.CompletedByUser.DisplayName.Should().Be("Pete");
+                publicationInfo.Assessment.CompletedByUser.Email.Should().Be("pete@example.com");
+                publicationInfo.Assessment.CompletedOnUtc.Should().Be(new DateTime(2017, 07, 21));
+                resultRecord.Gemini.MetadataDate.Should().NotBe(publicationInfo.Assessment.CompletedOnUtc);
             }
         }
 
@@ -373,27 +649,30 @@ namespace Catalogue.Tests.Slow.Catalogue.Web.Controllers.Publishing
                 });
                 r.Publication = new PublicationInfo
                 {
-                    OpenData = new OpenDataPublicationInfo
+                    Assessment = new AssessmentInfo
                     {
-                        Publishable = true,
-                        Assessment = new OpenDataAssessmentInfo
+                        Completed = true,
+                        CompletedOnUtc = new DateTime(2017, 07, 21),
+                        CompletedByUser = new UserInfo
                         {
-                            Completed = true,
-                            CompletedOnUtc = new DateTime(2017, 07, 21),
-                            CompletedByUser = new UserInfo
+                            DisplayName = "Pete",
+                            Email = "pete@example.com"
+                        },
+                        InitialAssessmentWasDoneOnSpreadsheet = false
+                    },
+                    SignOff = new SignOffInfo
+                    {
+                        DateUtc = new DateTime(2017, 07, 29)
+                    },
+                    Target = new TargetInfo
+                    {
+                        Gov = new GovPublicationInfo
+                        {
+                            Publishable = true,
+                            LastAttempt = new PublicationAttempt
                             {
-                                DisplayName = "Pete",
-                                Email = "pete@example.com"
-                            },
-                            InitialAssessmentWasDoneOnSpreadsheet = false
-                        },
-                        SignOff = new OpenDataSignOffInfo
-                        {
-                            DateUtc = new DateTime(2017, 07, 29)
-                        },
-                        LastAttempt = new PublicationAttempt
-                        {
-                            DateUtc = new DateTime(2017, 07, 30)
+                                DateUtc = new DateTime(2017, 07, 30)
+                            }
                         }
                     }
                 };
@@ -405,7 +684,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Web.Controllers.Publishing
                 db.Store(record);
                 db.SaveChanges();
 
-                var publishingController = GetTestOpenDataPublishingController(db);
+                var publishingController = GetTestPublishingController(db);
 
                 var request = new AssessmentRequest
                 {
@@ -418,13 +697,13 @@ namespace Catalogue.Tests.Slow.Catalogue.Web.Controllers.Publishing
                 var resultRecord = db.Load<Record>(record.Id);
                 resultRecord.Publication.Should().NotBeNull();
 
-                var openDataInfo = resultRecord.Publication.OpenData;
-                openDataInfo.Should().NotBeNull();
-                openDataInfo.Assessment.Completed.Should().BeTrue();
-                openDataInfo.Assessment.CompletedByUser.DisplayName.Should().Be("Pete");
-                openDataInfo.Assessment.CompletedByUser.Email.Should().Be("pete@example.com");
-                openDataInfo.Assessment.CompletedOnUtc.Should().Be(new DateTime(2017, 07, 21));
-                resultRecord.Gemini.MetadataDate.Should().NotBe(openDataInfo.Assessment.CompletedOnUtc);
+                var publicationInfo = resultRecord.Publication;
+                publicationInfo.Should().NotBeNull();
+                publicationInfo.Assessment.Completed.Should().BeTrue();
+                publicationInfo.Assessment.CompletedByUser.DisplayName.Should().Be("Pete");
+                publicationInfo.Assessment.CompletedByUser.Email.Should().Be("pete@example.com");
+                publicationInfo.Assessment.CompletedOnUtc.Should().Be(new DateTime(2017, 07, 21));
+                resultRecord.Gemini.MetadataDate.Should().NotBe(publicationInfo.Assessment.CompletedOnUtc);
             }
         }
 
@@ -443,27 +722,30 @@ namespace Catalogue.Tests.Slow.Catalogue.Web.Controllers.Publishing
                 });
                 r.Publication = new PublicationInfo
                 {
-                    OpenData = new OpenDataPublicationInfo
+                    Assessment = new AssessmentInfo
                     {
-                        Publishable = true,
-                        Assessment = new OpenDataAssessmentInfo
+                        Completed = true,
+                        CompletedOnUtc = new DateTime(2017, 07, 21),
+                        CompletedByUser = new UserInfo
                         {
-                            Completed = true,
-                            CompletedOnUtc = new DateTime(2017, 07, 21),
-                            CompletedByUser = new UserInfo
+                            DisplayName = "Pete",
+                            Email = "pete@example.com"
+                        },
+                        InitialAssessmentWasDoneOnSpreadsheet = true
+                    },
+                    SignOff = new SignOffInfo
+                    {
+                        DateUtc = new DateTime(2017, 07, 22)
+                    },
+                    Target = new TargetInfo
+                    {
+                        Gov = new GovPublicationInfo
+                        {
+                            Publishable = true,
+                            LastAttempt = new PublicationAttempt
                             {
-                                DisplayName = "Pete",
-                                Email = "pete@example.com"
-                            },
-                            InitialAssessmentWasDoneOnSpreadsheet = true
-                        },
-                        SignOff = new OpenDataSignOffInfo
-                        {
-                            DateUtc = new DateTime(2017, 07, 22)
-                        },
-                        LastAttempt = new PublicationAttempt
-                        {
-                            DateUtc = new DateTime(2017, 07, 23)
+                                DateUtc = new DateTime(2017, 07, 23)
+                            }
                         }
                     }
                 };
@@ -473,180 +755,15 @@ namespace Catalogue.Tests.Slow.Catalogue.Web.Controllers.Publishing
             var resultRecord = TestAssessment(record);
             resultRecord.Publication.Should().NotBeNull();
 
-            var openDataInfo = resultRecord.Publication.OpenData;
-            openDataInfo.Should().NotBeNull();
-            openDataInfo.Assessment.Completed.Should().BeTrue();
-            openDataInfo.Assessment.CompletedByUser.DisplayName.Should().Be("Test User");
-            openDataInfo.Assessment.CompletedByUser.Email.Should().Be("tester@example.com");
-            openDataInfo.Assessment.CompletedOnUtc.Should().NotBe(new DateTime(2017, 07, 21));
-            openDataInfo.Assessment.CompletedOnUtc.Should().NotBe(DateTime.MinValue);
-            openDataInfo.Assessment.InitialAssessmentWasDoneOnSpreadsheet.Should().BeTrue();
-            resultRecord.Gemini.MetadataDate.Should().Be(openDataInfo.Assessment.CompletedOnUtc);
-        }
-
-        static readonly Record[] NotEligibleForAssessmentRecords =
-        {
-            new Record().With(r =>
-            {
-                r.Id = Helpers.AddCollection("dc370d41-c8b4-4eba-8e39-6e2d70c50c07");
-                r.Path = @"http://www.example.com";
-                r.Validation = Validation.Gemini;
-                r.Gemini = Library.Example();
-                r.Publication = new PublicationInfo
-                {
-                    OpenData = new OpenDataPublicationInfo
-                    {
-                        Publishable = true
-                    }
-                };
-                r.Footer = new Footer();
-            }),
-            new Record().With(r =>
-            {
-                r.Id = Helpers.AddCollection("60df47fc-d4df-48ce-9bdd-289c145f7de0");
-                r.Path = @"https://www.example.com";
-                r.Validation = Validation.Gemini;
-                r.Gemini = Library.Example();
-                r.Publication = new PublicationInfo
-                {
-                    OpenData = new OpenDataPublicationInfo
-                    {
-                        Publishable = true
-                    }
-                };
-                r.Footer = new Footer();
-            }),
-            new Record().With(r =>
-            {
-                r.Id = Helpers.AddCollection("d82afb6c-2699-4570-a72f-cdf2cf93fa4c");
-                r.Path = @"postgres://username@hostname/databasename";
-                r.Validation = Validation.Gemini;
-                r.Gemini = Library.Example();
-                r.Publication = new PublicationInfo
-                {
-                    OpenData = new OpenDataPublicationInfo
-                    {
-                        Publishable = true
-                    }
-                };
-                r.Footer = new Footer();
-            })
-        };
-
-        [Test, TestCaseSource(nameof(NotEligibleForAssessmentRecords))]
-        public void not_eligible_for_assessment_when_path_is_not_file_path(Record record)
-        {
-            using (var db = ReusableDocumentStore.OpenSession())
-            {
-                db.Store(record);
-                db.SaveChanges();
-
-                var publishingController = GetTestOpenDataPublishingController(db);
-
-                var request = new AssessmentRequest
-                {
-                    Id = Helpers.RemoveCollection(record.Id)
-                };
-
-                Action a = () => publishingController.Assess(request);
-                a.Should().Throw<InvalidOperationException>().And.Message.Should().Be("Must have a file path for publishing");
-
-                var resultRecord = db.Load<Record>(record.Id);
-                resultRecord.Publication.OpenData.Assessment.Should().BeNull();
-            }
-        }
-
-        [Test]
-        public void assessment_for_not_publishable_record_should_fail_test()
-        {
-            var recordId = Helpers.AddCollection("3e3fef01-1c43-4a16-82b3-4caab363a55a");
-            var record = new Record().With(r =>
-            {
-                r.Id = recordId;
-                r.Path = @"X:\path\to\assessment\test";
-                r.Validation = Validation.Gemini;
-                r.Gemini = Library.Blank().With(m =>
-                {
-                    m.MetadataDate = new DateTime(2017, 07, 30);
-                });
-                r.Publication = new PublicationInfo
-                {
-                    OpenData = new OpenDataPublicationInfo
-                    {
-                        Publishable = false
-                    }
-                };
-                r.Footer = new Footer();
-            });
-
-            Action a = () => TestAssessment(record);
-            a.Should().Throw<InvalidOperationException>().And.Message.Should().Be("Record must be publishable as Open Data");
-        }
-
-        [Test]
-        public void reassessment_for_not_publishable_record_should_fail_test()
-        {
-            var recordId = Helpers.AddCollection("13da2640-9241-4ad8-a14f-aad02109cf59");
-            var record = new Record().With(r =>
-            {
-                r.Id = recordId;
-                r.Path = @"X:\path\to\assessment\test";
-                r.Validation = Validation.Gemini;
-                r.Gemini = Library.Blank().With(m =>
-                {
-                    m.MetadataDate = new DateTime(2017, 07, 30);
-                });
-                r.Publication = new PublicationInfo
-                {
-                    OpenData = new OpenDataPublicationInfo
-                    {
-                        Publishable = false,
-                        Assessment = new OpenDataAssessmentInfo
-                        {
-                            Completed = true,
-                            CompletedOnUtc = new DateTime(2017, 07, 21),
-                            CompletedByUser = new UserInfo
-                            {
-                                DisplayName = "Pete",
-                                Email = "pete@example.com"
-                            },
-                            InitialAssessmentWasDoneOnSpreadsheet = false
-                        },
-                        SignOff = new OpenDataSignOffInfo
-                        {
-                            DateUtc = new DateTime(2017, 07, 22)
-                        },
-                        LastAttempt = new PublicationAttempt
-                        {
-                            DateUtc = new DateTime(2017, 07, 23)
-                        }
-                    }
-                };
-                r.Footer = new Footer();
-            });
-
-            Action a = () => TestAssessment(record);
-            a.Should().Throw<InvalidOperationException>().And.Message.Should().Be("Record must be publishable as Open Data");
-        }
-
-        [Test]
-        public void assessment_for_record_with_null_publishable_field_should_fail_test()
-        {
-            var recordId = Helpers.AddCollection("71639cc0-94bd-430a-a0f2-37247698abe3");
-            var record = new Record().With(r =>
-            {
-                r.Id = recordId;
-                r.Path = @"X:\path\to\assessment\test";
-                r.Validation = Validation.Gemini;
-                r.Gemini = Library.Blank().With(m =>
-                {
-                    m.MetadataDate = new DateTime(2017, 07, 30);
-                });
-                r.Footer = new Footer();
-            });
-
-            Action a = () => TestAssessment(record);
-            a.Should().Throw<InvalidOperationException>().And.Message.Should().Be("Record must be publishable as Open Data");
+            var publicationInfo = resultRecord.Publication;
+            publicationInfo.Should().NotBeNull();
+            publicationInfo.Assessment.Completed.Should().BeTrue();
+            publicationInfo.Assessment.CompletedByUser.DisplayName.Should().Be("Test User");
+            publicationInfo.Assessment.CompletedByUser.Email.Should().Be("tester@example.com");
+            publicationInfo.Assessment.CompletedOnUtc.Should().NotBe(new DateTime(2017, 07, 21));
+            publicationInfo.Assessment.CompletedOnUtc.Should().NotBe(DateTime.MinValue);
+            publicationInfo.Assessment.InitialAssessmentWasDoneOnSpreadsheet.Should().BeTrue();
+            resultRecord.Gemini.MetadataDate.Should().Be(publicationInfo.Assessment.CompletedOnUtc);
         }
 
         private Record TestAssessment(Record record)
@@ -656,7 +773,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Web.Controllers.Publishing
                 db.Store(record);
                 db.SaveChanges();
 
-                var publishingController = GetTestOpenDataPublishingController(db);
+                var publishingController = GetTestPublishingController(db);
 
                 var request = new AssessmentRequest
                 {
@@ -667,15 +784,17 @@ namespace Catalogue.Tests.Slow.Catalogue.Web.Controllers.Publishing
             }
         }
 
-        private static OpenDataPublishingController GetTestOpenDataPublishingController(IDocumentSession db)
+        private static PublishingController GetTestPublishingController(IDocumentSession db)
         {
             var testUserContext = new TestUserContext();
             var userContextMock = new Mock<IUserContext>();
+            var vocabQueryerMock = new Mock<IVocabQueryer>();
+            vocabQueryerMock.Setup(x => x.GetVocab(It.IsAny<string>())).Returns(new Vocabulary());
             userContextMock.Setup(u => u.User).Returns(testUserContext.User);
 
-            var publishingService = new OpenDataPublishingRecordService(db, new RecordValidator());
+            var publishingService = new RecordPublishingService(db, new RecordValidator(vocabQueryerMock.Object));
 
-            return new OpenDataPublishingController(db, publishingService, userContextMock.Object);
+            return new PublishingController(db, publishingService, userContextMock.Object);
         }
     }
 }

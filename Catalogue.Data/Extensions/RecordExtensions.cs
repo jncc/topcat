@@ -5,40 +5,57 @@ namespace Catalogue.Data.Extensions
 {
     public static class RecordExtensions
     {
-        public static bool IsEligibleForOpenDataPublishing(this Record record)
-        {
-            var eligible = false;
-
-            Uri uri;
-
-            if (Uri.TryCreate(record.Path, UriKind.Absolute, out uri))
-            {
-                eligible = uri.IsFile;
-            }
-
-            return eligible;
-        }
 
         public static bool IsAssessedAndUpToDate(this Record record)
         {
-            return record.Publication?.OpenData.Assessment != null
-                && record.Publication.OpenData.Assessment.Completed
-                && (record.Publication.OpenData.Assessment.CompletedOnUtc.Equals(record.Gemini.MetadataDate)
+            return record.Publication?.Assessment != null
+                && record.Publication.Assessment.Completed
+                && (record.Publication.Assessment.CompletedOnUtc.Equals(record.Gemini.MetadataDate)
                 || IsSignedOffAndUpToDate(record));
         }
 
         public static bool IsSignedOffAndUpToDate(this Record record)
         {
-            return record.Publication?.OpenData?.SignOff != null
-                && (record.Publication.OpenData.SignOff.DateUtc.Equals(record.Gemini.MetadataDate)
-                || record.Publication.OpenData.LastAttempt != null
-                && record.Publication.OpenData.LastAttempt.DateUtc.Equals(record.Gemini.MetadataDate));
+            return record.Publication?.SignOff != null
+                && (record.Publication.SignOff.DateUtc.Equals(record.Gemini.MetadataDate)
+                || record.Publication.Data?.LastAttempt != null
+                && record.Publication.Data.LastAttempt.DateUtc.Equals(record.Gemini.MetadataDate)
+                || record.Publication.Target.Hub?.LastAttempt != null
+                && record.Publication.Target.Hub.LastAttempt.DateUtc.Equals(record.Gemini.MetadataDate)
+                || record.Publication.Target.Gov?.LastAttempt != null
+                && record.Publication.Target.Gov.LastAttempt.DateUtc.Equals(record.Gemini.MetadataDate));
         }
 
-        public static bool IsUploadedAndUpToDate(this Record record)
+        public static bool IsPublishedToGovAndUpToDate(this Record record)
         {
-            return record.Publication?.OpenData?.LastSuccess != null
-                && record.Publication.OpenData.LastSuccess.DateUtc.Equals(record.Gemini.MetadataDate);
+            return record.Publication?.Target?.Gov?.LastSuccess != null &&
+                   record.Publication.Target.Gov.LastSuccess.DateUtc.Equals(record.Gemini.MetadataDate);
+        }
+
+        public static bool IsPublishedToHubAndUpToDate(this Record record)
+        {
+            return record.Publication?.Target?.Hub?.LastSuccess != null &&
+                   (record.Publication.Target.Hub.LastSuccess.DateUtc.Equals(record.Gemini.MetadataDate) || record.IsPublishedToGovAndUpToDate() &&
+                   record.Publication.SignOff != null && record.Publication.Target.Hub.LastSuccess.DateUtc > record.Publication.SignOff.DateUtc);
+        }
+
+        public static bool IsPublishedAndUpToDate(this Record record)
+        {
+            return !(record.Publication?.Target?.Hub?.Publishable == true && !record.IsPublishedToHubAndUpToDate() ||
+                   record.Publication?.Target?.Gov?.Publishable == true && !record.IsPublishedToGovAndUpToDate());
+        }
+
+        public static bool HasPublishingTarget(this Record record)
+        {
+            return record.Publication != null && record.Publication.Target != null &&
+                   (record.Publication.Target.Hub != null && record.Publication.Target.Hub.Publishable == true ||
+                   record.Publication.Target.Gov != null && record.Publication.Target.Gov.Publishable == true);
+        }
+
+        public static bool HasPreviouslyBeenPublishedWithDoi(this Record record)
+        {
+            return !string.IsNullOrWhiteSpace(record.DigitalObjectIdentifier) && record.Publication?.Target != null &&
+                   (record.Publication.Target.Hub?.LastSuccess != null || record.Publication.Target.Gov?.LastSuccess != null);
         }
     }
 }

@@ -1,10 +1,10 @@
-﻿using System.Security.Principal;
-using System.Web;
-using Catalogue.Web.Account;
+﻿using Catalogue.Web.Account;
 using Ninject.Extensions.Conventions;
 using Ninject.Modules;
 using Ninject.Web.Common;
 using Raven.Client.Documents.Session;
+using System.Security.Principal;
+using System.Web;
 
 namespace Catalogue.Web.Injection
 {

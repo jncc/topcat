@@ -1,11 +1,10 @@
-﻿using System;
+﻿using Catalogue.Utilities.Expressions;
+using Catalogue.Utilities.Text;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Linq.Expressions;
-using Catalogue.Data.Model;
-using Catalogue.Utilities.Expressions;
-using Catalogue.Utilities.Text;
 using System.Text.RegularExpressions;
 
 namespace Catalogue.Data.Write

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Catalogue.Gemini.Model;
 
 namespace Catalogue.Data.Model
@@ -13,6 +14,7 @@ namespace Catalogue.Data.Model
         public Metadata Gemini  { get; set; }
 
         public string     Path            { get; set; }
+        public Image      Image           { get; set; }
         public bool       TopCopy         { get; set; }
         public Status     Status          { get; set; }
         public Validation Validation      { get; set; }
@@ -32,6 +34,11 @@ namespace Catalogue.Data.Model
         /// </summary>
         public string SourceIdentifier { get; set; }
         public bool   ReadOnly         { get; set; } // for imported records
+
+        /// <summary>
+        /// List of publishable resources
+        /// </summary>
+        public List<Resource> Resources { get; set; }
 
         public PublicationInfo Publication { get; set; }
 

@@ -1,7 +1,6 @@
 ﻿using Catalogue.Data.Model;
 using Catalogue.Gemini.Spatial;
 using Catalogue.Utilities.Text;
-using Catalogue.Web.Controllers.Records;
 using System.Linq;
 using Catalogue.Data.Extensions;
 using Raven.Client.Documents.Session;
@@ -15,7 +14,7 @@ namespace Catalogue.Data.Write
             CorrectlyOrderKeywords(record);
             StandardiseUnconditionalUseConstraints(record);
             SetMetadataPointOfContactRoleToOnlyAllowedValue(record);
-            TrimOpenDataResourcePaths(record);
+            TrimPublishableResourcePaths(record);
 
             var validation = validator.Validate(record);
 
@@ -30,13 +29,16 @@ namespace Catalogue.Data.Write
                     Record = record,
                     RecordState = new RecordState
                     {
-                        OpenDataPublishingState = new OpenDataPublishingState {
+                        PublishingState = new PublishingState {
                             AssessedAndUpToDate = record.IsAssessedAndUpToDate(),
                             SignedOffAndUpToDate = record.IsSignedOffAndUpToDate(),
-                            UploadedAndUpToDate = record.IsUploadedAndUpToDate()
+                            PublishedToHubAndUpToDate = record.IsPublishedToHubAndUpToDate(),
+                            PublishedToGovAndUpToDate = record.IsPublishedToGovAndUpToDate(),
+                            PublishedAndUpToDate = record.IsPublishedAndUpToDate(),
+                            PreviouslyPublishedWithDoi = record.HasPreviouslyBeenPublishedWithDoi()
                         }
                     },
-                    Validation = validation,
+                    Validation = validation
                 };
         }
 
@@ -72,9 +74,9 @@ namespace Catalogue.Data.Write
                 record.Gemini.UseConstraints = unconditional;
         }
 
-        private static void TrimOpenDataResourcePaths(Record record)
+        private static void TrimPublishableResourcePaths(Record record)
         {
-            var resources = record?.Publication?.OpenData?.Resources;
+            var resources = record?.Resources;
 
             if (resources != null)
             {

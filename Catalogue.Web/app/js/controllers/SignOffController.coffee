@@ -1,9 +1,9 @@
 ﻿angular.module('app.controllers').controller 'SignOffController',
 
-    ($scope, $http, $location, $timeout, signOffGroup) ->
+    ($scope, $http, $location, $timeout) ->
         
         m =
-            openData:
+            publishing:
                 summary: {}
                 list: []
             signOffStatus: {}
@@ -11,8 +11,8 @@
         
         $scope.m = m
 
-        loadData = -> $http.get('../api/publishing/opendata/pendingsignoff').success (result) ->
-            m.openData.list = result
+        loadData = -> $http.get('../api/publishing/pendingsignoff').success (result) ->
+            m.publishing.list = result
             m.signOffStatus[r.id] = "Sign Off" for r in result
                 
         loadData()
@@ -21,7 +21,7 @@
         $scope.submitSignOff = (recordId) ->
             $scope.signOffRequest = { id: recordId, comment: "" }
 
-            $http.put('../api/publishing/opendata/signoff', $scope.signOffRequest)
+            $http.put('../api/publishing/signoff', $scope.signOffRequest)
             .success (result) ->
                 m.signOffStatus[recordId] = "Signed Off"
                 $scope.status.refresh()

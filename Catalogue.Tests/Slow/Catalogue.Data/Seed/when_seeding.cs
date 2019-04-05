@@ -1,11 +1,8 @@
-﻿using System.Linq;
-using Catalogue.Data.Model;
-using Catalogue.Data.Seed;
+﻿using Catalogue.Data.Model;
 using Catalogue.Gemini.Model;
-using Catalogue.Utilities.Text;
 using FluentAssertions;
 using NUnit.Framework;
-using Raven.Client.Documents.Indexes;
+using System.Linq;
 
 namespace Catalogue.Tests.Slow.Catalogue.Data.Seed
 {
@@ -29,7 +26,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Data.Seed
         [Test]
         public void should_seed_vocabs()
         {
-            Db.Query<Vocabulary>().Count().Should().Be(8);
+            Db.Query<Vocabulary>().Count().Should().Be(12);
         }
     }
 }
