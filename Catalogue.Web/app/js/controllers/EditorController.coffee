@@ -178,13 +178,9 @@
 isFilePath = (path) -> path and path.match /^([a-z]:|\\\\jncc-corpfile\\)/i
 
 addPublishableResource = (record) ->
-    if !record.publication
-        record.publication = {}    
-    if !record.publication.data
-        record.publication.data = {}    
-    if !record.publication.data.resources
-        record.publication.data.resources = []
-    record.publication.data.resources.push { path: "" }
+    if !record.resources
+        record.resources = []
+    record.resources.push { path: "" }
 
 getResourceUrl = (resource) ->
     if resource.path.startsWith("http://") || resource.path.startsWith("https://")
@@ -195,7 +191,7 @@ getResourceUrl = (resource) ->
         return null
 
 removePublishableResource = (record, resource) ->
-    record.publication.data.resources.splice ($.inArray resource, record.publication.data.resources), 1
+    record.resources.splice ($.inArray resource, record.resources), 1
 
 trimDoubleQuotes = (s) -> # removes double quotes surrounding a string
     if s.match(/^(").*(")$/) then s.substring(1, s.length - 1) else s

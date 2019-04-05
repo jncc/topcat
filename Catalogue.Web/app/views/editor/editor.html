@@ -527,8 +527,8 @@
     <div tab>
         <tab-heading>
             <span class="glyphicon glyphicon-gift"></span> Publishing
-            <small ng-show="true" class="little-warning-badge" tc-tip title="This resource has {{form.publication.data.resources.length}} publishable resources">
-                <span class="badge small">{{form.publication.data.resources.length}}</span>
+            <small ng-show="true" class="little-warning-badge" tc-tip title="This resource has {{form.resources.length}} publishable resources">
+                <span class="badge small">{{form.resources.length}}</span>
             </small>
         </tab-heading>
 
@@ -608,7 +608,7 @@
                 </div>
             </div>
             <hr />
-            <div ng-if="!form.publication.data.resources.length">
+            <div ng-if="!form.resources.length">
                 This record currently has <b>no publishable resources</b> defined.
                 <br />
                 <br />
@@ -616,11 +616,11 @@
                     Add publishable resources
                 </button>
             </div>
-            <div ng-if="form.publication.data.resources.length">
-                This record has {{form.publication.data.resources.length}} publishable resource<span ng-if="form.publication.data.resources.length > 1">s</span>.
+            <div ng-if="form.resources.length">
+                This record has {{form.resources.length}} publishable resource<span ng-if="form.resources.length > 1">s</span>.
                 <br />
                 <br />
-                <div ng-repeat="resource in form.publication.data.resources" style="margin-bottom: .4em;">
+                <div ng-repeat="resource in form.resources" style="margin-bottom: .4em;">
                     <form class="form-inline" role="form">
                         <div class="form-group">
                             <div class="input-group">

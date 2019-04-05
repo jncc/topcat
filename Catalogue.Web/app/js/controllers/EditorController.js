@@ -241,16 +241,10 @@
   };
 
   addPublishableResource = function(record) {
-    if (!record.publication) {
-      record.publication = {};
+    if (!record.resources) {
+      record.resources = [];
     }
-    if (!record.publication.data) {
-      record.publication.data = {};
-    }
-    if (!record.publication.data.resources) {
-      record.publication.data.resources = [];
-    }
-    return record.publication.data.resources.push({
+    return record.resources.push({
       path: ""
     });
   };
@@ -266,7 +260,7 @@
   };
 
   removePublishableResource = function(record, resource) {
-    return record.publication.data.resources.splice($.inArray(resource, record.publication.data.resources), 1);
+    return record.resources.splice($.inArray(resource, record.resources), 1);
   };
 
   trimDoubleQuotes = function(s) {
