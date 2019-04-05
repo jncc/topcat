@@ -73,15 +73,22 @@
       "West": -2.297
     }
   },
-    "Path": "X:\\OffshoreSurvey\\SurveyData\\2010_06_RVScotia_NorthSea_HerringAcousticSurvey\\Groundtruthing\\Sampling\\Logs\\Scotia_Herring_Acoustic_Grab",
-    "TopCopy": true,
-    "Status": "Internal",
-    "Validation": "Gemini",
-    "Security": "Official",
-    "Review": null,
-    "Notes": "",
-    "SourceIdentifier": "",
-    "ReadOnly": false,
+  "Path": "X:\\OffshoreSurvey\\SurveyData\\2010_06_RVScotia_NorthSea_HerringAcousticSurvey\\Groundtruthing\\Sampling\\Logs\\Scotia_Herring_Acoustic_Grab",
+  "TopCopy": true,
+  "Status": "Internal",
+  "Validation": "Gemini",
+  "Security": "Official",
+  "Review": null,
+  "Notes": "",
+  "SourceIdentifier": "",
+  "ReadOnly": false,
+  "Resources": [
+    {
+      "Name": "Scotia Herring Acoustic Grab",
+      "Path": "\\\\jncc-corpfile\\marine survey\\OffshoreSurvey\\SurveyData\\2010_06_RVScotia_NorthSea_HerringAcousticSurvey\\Groundtruthing\\Sampling\\Logs\\Scotia_Herring_Acoustic_Grab.zip",
+      "PublishedUrl": "http://data.jncc.gov.uk/data/85a9bbdc-2397-4f7c-a71e-0480b26b8807/Scotia-Herring-Acoustic-Grab.zip"
+    }
+  ],
   "Publication": {
     "Assessment": {
       "Completed": true,
@@ -94,15 +101,6 @@
       "DateUtc": "0001-01-01T00:00:00.0000000",
       "User": null,
       "Comment": null
-    },
-    "Data": {
-      "Resources": [
-        {
-          "Name": "Scotia Herring Acoustic Grab",
-          "Path": "\\\\jncc-corpfile\\marine survey\\OffshoreSurvey\\SurveyData\\2010_06_RVScotia_NorthSea_HerringAcousticSurvey\\Groundtruthing\\Sampling\\Logs\\Scotia_Herring_Acoustic_Grab.zip",
-          "PublishedUrl": "http://data.jncc.gov.uk/data/85a9bbdc-2397-4f7c-a71e-0480b26b8807/Scotia-Herring-Acoustic-Grab.zip"
-        }
-      ]
     },
     "Target": {
       "Hub": {
@@ -131,20 +129,20 @@
       }
     }
   },
-    "Wkt": "POLYGON((-2.297 58.066,1.724 58.066,1.724 61.283,-2.297 61.283,-2.297 58.066))",
-    "Revision": 0,
-    "Footer": {
+  "Wkt": "POLYGON((-2.297 58.066,1.724 58.066,1.724 61.283,-2.297 61.283,-2.297 58.066))",
+  "Revision": 0,
+  "Footer": {
     "CreatedOnUtc": "0001-01-01T00:00:00.0000000",
     "CreatedByUser": {
-        "DisplayName": "Joint Nature Conservation Committee (JNCC)",
-        "Email": "data@jncc.gov.uk"
+      "DisplayName": "Joint Nature Conservation Committee (JNCC)",
+      "Email": "data@jncc.gov.uk"
     },
     "ModifiedOnUtc": "2016-07-07T21:50:18.5356357Z",
     "ModifiedByUser": {
-        "DisplayName": "Joint Nature Conservation Committee",
-        "Email": "data@jncc.gov.uk"
+      "DisplayName": "Joint Nature Conservation Committee",
+      "Email": "data@jncc.gov.uk"
     }
-    },
+  },
   "@metadata": {
     "Raven-Entity-Name": "Records",
     "Raven-Clr-Type": "Catalogue.Data.Model.Record, Catalogue.Data",

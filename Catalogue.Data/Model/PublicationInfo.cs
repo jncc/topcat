@@ -29,11 +29,6 @@ namespace Catalogue.Data.Model
     public class DataInfo
     {
         /// <summary>
-        /// List of publishable resources
-        /// </summary>
-        public List<Resource> Resources { get; set; }
-
-        /// <summary>
         /// Details of the last attempt to publish these resources.
         /// </summary>
         public PublicationAttempt LastAttempt { get; set; }
@@ -86,12 +81,6 @@ namespace Catalogue.Data.Model
         /// Captures whether the record should be published to DGU. 
         /// </summary>
         public bool? Publishable { get; set; }
-
-        //todo: get rid of this?
-        /// <summary>
-        /// Don't publish this record, for the time being.
-        /// </summary>
-        public bool Paused { get; set; }
 
         /// <summary>
         /// Details of the last attempt to publish this record.

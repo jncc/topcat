@@ -66,9 +66,9 @@ namespace Catalogue.Robot.Publishing.Hub
         {
             var messageResources = new List<object>();
 
-            if (record.Publication.Data?.Resources?.Count > 0)
+            if (record.Resources?.Count > 0)
             {
-                foreach (var resource in record.Publication.Data.Resources)
+                foreach (var resource in record.Resources)
                 {
                     if (IsPdfFileResource(resource) && !string.IsNullOrWhiteSpace(resource.PublishedUrl))
                     {
@@ -160,9 +160,9 @@ namespace Catalogue.Robot.Publishing.Hub
         {
             List<object> data = new List<object>();
 
-            if (record.Publication.Data?.Resources?.Count > 0)
+            if (record.Resources?.Count > 0)
             {
-                foreach (var resource in record.Publication.Data.Resources)
+                foreach (var resource in record.Resources)
                 {
                     if (Helpers.IsFileResource(resource) && !string.IsNullOrWhiteSpace(resource.PublishedUrl))
                     {

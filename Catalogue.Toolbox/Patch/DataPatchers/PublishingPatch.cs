@@ -301,14 +301,9 @@ namespace Catalogue.Toolbox.Patch.DataPatchers
 
                         if (resourcesArray.Length > 0)
                         {
-                            if (record.Publication.Data == null)
+                            if (record.Resources == null)
                             {
-                                record.Publication.Data = new DataInfo();
-                            }
-
-                            if (record.Publication.Data.Resources == null)
-                            {
-                                record.Publication.Data.Resources = new List<Resource>();
+                                record.Resources = new List<Resource>();
                             }
 
                             foreach (var resource in resourcesArray)
@@ -317,7 +312,7 @@ namespace Catalogue.Toolbox.Patch.DataPatchers
                                 {
                                     if (resourceObject.TryGet("Path", out string path))
                                     {
-                                        if (!record.Publication.Data.Resources.Any(r => r.Path.Equals(path)))
+                                        if (!record.Resources.Any(r => r.Path.Equals(path)))
                                         {
                                             var newResource = new Resource();
                                             newResource.Path = path;
@@ -336,7 +331,7 @@ namespace Catalogue.Toolbox.Patch.DataPatchers
                                                 newResource.PublishedUrl = publishedUrl;
                                             }
 
-                                            record.Publication.Data.Resources.Add(newResource);
+                                            record.Resources.Add(newResource);
                                         }
                                     }
                                 }
@@ -379,29 +374,19 @@ namespace Catalogue.Toolbox.Patch.DataPatchers
                         {
                             Logger.Info($"Migrating resource locator {resourceLocator}");
 
-                            if (record.Publication == null)
+                            if (record.Resources == null)
                             {
-                                record.Publication = new PublicationInfo();
+                                record.Resources = new List<Resource>();
                             }
 
-                            if (record.Publication.Data == null)
-                            {
-                                record.Publication.Data = new DataInfo();
-                            }
-
-                            if (record.Publication.Data.Resources == null)
-                            {
-                                record.Publication.Data.Resources = new List<Resource>();
-                            }
-
-                            if (!record.Publication.Data.Resources.Any(r => r.Path.Equals(resourceLocator)))
+                            if (!record.Resources.Any(r => r.Path.Equals(resourceLocator)))
                             {
                                 if (resourceLocator.Contains("http://data.jncc.gov.uk/data/"))
                                 {
                                     var friendlyFilename = resourceLocator.Replace(
                                         "http://data.jncc.gov.uk/data/" + Helpers.RemoveCollection(record.Id) + "-",
                                         "");
-                                    record.Publication.Data.Resources.Add(new Resource
+                                    record.Resources.Add(new Resource
                                     {
                                         Name = friendlyFilename,
                                         Path = resourceLocator,
@@ -410,7 +395,7 @@ namespace Catalogue.Toolbox.Patch.DataPatchers
                                 }
                                 else
                                 {
-                                    record.Publication.Data.Resources.Add(new Resource
+                                    record.Resources.Add(new Resource
                                     {
                                         Name = "Published location for online access",
                                         Path = resourceLocator

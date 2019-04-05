@@ -1,8 +1,7 @@
 ﻿{
   "Gemini": {
     "Title": "Raw sidescan sonar data from Dogger Bank SCI",
-    "Abstract":
-      "Raw sidescan sonar data from Dogger Bank SCI (CEND 07/08). This survey was carried out at Dogger Bank SAC  on the Cefas Endeavour research vessel to better define the extent of the Annex 1 shallow sandbank habitat and to conduct habitat mapping.",
+    "Abstract": "Raw sidescan sonar data from Dogger Bank SCI (CEND 07/08). This survey was carried out at Dogger Bank SAC  on the Cefas Endeavour research vessel to better define the extent of the Annex 1 shallow sandbank habitat and to conduct habitat mapping.",
     "TopicCategory": "oceans",
     "Keywords": [
       {
@@ -39,8 +38,7 @@
       "End": "2008-04-20"
     },
     "DatasetReferenceDate": "2015-09-01",
-    "Lineage":
-      "This dataset is an output of a collaborative offshore seabed survey undertaken with Joint Nature Conservation Committee (JNCC).",
+    "Lineage": "This dataset is an output of a collaborative offshore seabed survey undertaken with Joint Nature Conservation Committee (JNCC).",
     "AdditionalInformationSource": null,
     "DataFormat": "Other",
     "ResponsibleOrganisation": {
@@ -76,10 +74,8 @@
   "Notes": "",
   "SourceIdentifier": "",
   "ReadOnly": false,
+  "Resources": null,
   "Publication": {
-    "Data": {
-      "Resources": null
-    },
     "Assessment": {
       "Completed": true,
       "CompletedByUser": null,
@@ -105,7 +101,7 @@
           "Message": null
         }
       }
-    } 
+    }
   },
   "Wkt": "POLYGON((1.571 47.207,4.39 47.207,4.39 49.242,1.571 49.242,1.571 47.207))",
   "Revision": 0,
