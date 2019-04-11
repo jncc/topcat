@@ -64,33 +64,31 @@ namespace Catalogue.Robot.Publishing
             return records;
         }
 
-        public void PublishRecords(List<Record> records, bool metadataOnly = false)
+        public void PublishRecord(Record record, bool metadataOnly = false)
         {
-            foreach (Record record in records)
+            
+            Logger.Info($"Starting publishing process for record {record.Id} {record.Gemini.Title}");
+
+            try
             {
-                Logger.Info($"Starting publishing process for record {record.Id} {record.Gemini.Title}");
-
-                try
+                if (!metadataOnly)
                 {
-                    if (!metadataOnly)
-                    {
-                        PublishDataFiles(record);
-                    }
+                    PublishDataFiles(record);
+                }
 
-                    PublishHubMetadata(record);
-                    PublishGovMetadata(record);
+                PublishHubMetadata(record);
+                PublishGovMetadata(record);
 
-                    Logger.Info($"Successfully published record {record.Id} {record.Gemini.Title}");
-                }
-                catch (Exception ex)
-                {
-                    Logger.Error($"Could not complete publishing process for record with GUID={record.Id}", ex);
-                }
-                finally
-                {
-                    // commit the changes - to both the record (resource locator may have changed) and the attempt object
-                    db.SaveChanges();
-                }
+                Logger.Info($"Successfully published record {record.Id} {record.Gemini.Title}");
+            }
+            catch (Exception ex)
+            {
+                Logger.Error($"Could not complete publishing process for record with GUID={record.Id}", ex);
+            }
+            finally
+            {
+                // commit the changes - to both the record (resource locator may have changed) and the attempt object
+                db.SaveChanges();
             }
         }
 

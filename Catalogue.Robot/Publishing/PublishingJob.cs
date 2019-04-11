@@ -1,15 +1,13 @@
-﻿using System.Collections.Generic;
-using System.Net.Http;
-using Catalogue.Data.Model;
+﻿using Catalogue.Data.Model;
 using Catalogue.Data.Query;
 using Catalogue.Data.Write;
-using Catalogue.Robot.Publishing.Client;
 using Catalogue.Robot.Publishing.Data;
 using Catalogue.Robot.Publishing.Gov;
 using Catalogue.Robot.Publishing.Hub;
 using log4net;
 using Quartz;
 using Raven.Client.Documents;
+using System.Collections.Generic;
 
 namespace Catalogue.Robot.Publishing
 {
@@ -19,17 +17,17 @@ namespace Catalogue.Robot.Publishing
 
         private readonly Env env;
         private readonly IDocumentStore store;
-        private readonly IFtpClient ftpClient;
-        private readonly IApiClient apiClient;
-        private readonly IQueueClient queueClient;
+        private readonly IDataUploader dataUploader;
+        private readonly IHubService hubService;
+        private readonly IGovService govService;
 
-        public PublishingJob(Env env, IDocumentStore store, IFtpClient ftpClient, IApiClient apiClient, IQueueClient queueClient)
+        public PublishingJob(Env env, IDocumentStore store, IDataUploader dataUploader, IHubService hubService, IGovService govService)
         {
             this.env = env;
             this.store = store;
-            this.ftpClient = ftpClient;
-            this.apiClient = apiClient;
-            this.queueClient = queueClient;
+            this.dataUploader = dataUploader;
+            this.hubService = hubService;
+            this.govService = govService;
         }
 
         public void Execute(IJobExecutionContext context)
@@ -48,9 +46,6 @@ namespace Catalogue.Robot.Publishing
                 var publishingService = new RecordPublishingService(db, new RecordValidator(new VocabQueryer(db)));
                 var publishingUploadService = publishingService.Upload();
                 var redactor = new RecordRedactor(new VocabQueryer(db));
-                var dataUploader = new DataUploader(env, ftpClient, new FileHelper());
-                var govService = new GovService(ftpClient);
-                var hubService = new HubService(env, apiClient, queueClient);
 
                 var robotPublisher = new RobotPublisher(env, db, redactor, publishingUploadService, dataUploader, govService, hubService);
 
@@ -66,9 +61,6 @@ namespace Catalogue.Robot.Publishing
                     var publishingService = new RecordPublishingService(db, new RecordValidator(new VocabQueryer(db)));
                     var publishingUploadService = publishingService.Upload();
                     var redactor = new RecordRedactor(new VocabQueryer(db));
-                    var dataUploader = new DataUploader(env, ftpClient, new FileHelper());
-                    var govService = new GovService(ftpClient);
-                    var hubService = new HubService(env, apiClient, queueClient);
 
                     var robotPublisher = new RobotPublisher(env, db, redactor, publishingUploadService, dataUploader, govService, hubService);
 

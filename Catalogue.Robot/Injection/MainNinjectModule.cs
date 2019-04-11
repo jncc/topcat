@@ -1,10 +1,10 @@
-﻿using System.Net.Http;
-using Catalogue.Data;
+﻿using Catalogue.Data;
 using Catalogue.Robot.Publishing;
 using Ninject.Extensions.Conventions;
 using Ninject.Modules;
 using Quartz.Spi;
 using Raven.Client.Documents;
+using System.Net.Http;
 
 namespace Catalogue.Robot.Injection
 {
@@ -20,8 +20,7 @@ namespace Catalogue.Robot.Injection
                 .FromAssembliesMatching("Catalogue.*")
                 .SelectAllClasses()
                 .BindDefaultInterface());
-
-            Bind<Env>().ToMethod(x => new Env());
+            
             Bind<IDocumentStore>().ToMethod(x => DatabaseFactory.Production());
             Bind<HttpClient>().ToSelf().InSingletonScope();
             
