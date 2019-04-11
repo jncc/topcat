@@ -58,6 +58,7 @@ namespace Catalogue.Robot.Publishing
             {
                 using (var db = store.OpenSession())
                 {
+                    // using separate sessions means we have to recreate the publisher each time, maybe there's a cleaner way to do this?
                     var publishingService = new RecordPublishingService(db, new RecordValidator(new VocabQueryer(db)));
                     var publishingUploadService = publishingService.Upload();
                     var redactor = new RecordRedactor(new VocabQueryer(db));
