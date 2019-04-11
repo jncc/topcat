@@ -1,4 +1,6 @@
-﻿using System.Net.Http;
+﻿using System.Collections.Generic;
+using System.Net.Http;
+using Catalogue.Data.Model;
 using Catalogue.Data.Query;
 using Catalogue.Data.Write;
 using Catalogue.Robot.Publishing.Client;
@@ -39,6 +41,8 @@ namespace Catalogue.Robot.Publishing
 
         public void Publish(bool metadataOnly = false)
         {
+            List<Record> recordsToPublish;
+
             using (var db = store.OpenSession())
             {
                 var publishingService = new RecordPublishingService(db, new RecordValidator(new VocabQueryer(db)));
@@ -50,11 +54,28 @@ namespace Catalogue.Robot.Publishing
 
                 var robotPublisher = new RobotPublisher(env, db, redactor, publishingUploadService, dataUploader, govService, hubService);
 
-                var records = robotPublisher.GetRecordsPendingUpload();
-                Logger.Info($"Found {records.Count} records to upload");
-
-                robotPublisher.PublishRecords(records, metadataOnly);
+                recordsToPublish = robotPublisher.GetRecordsPendingUpload();
+                Logger.Info($"Found {recordsToPublish.Count} records to publish");
             }
+
+            
+            foreach (var record in recordsToPublish)
+            {
+                using (var db = store.OpenSession())
+                {
+                    var publishingService = new RecordPublishingService(db, new RecordValidator(new VocabQueryer(db)));
+                    var publishingUploadService = publishingService.Upload();
+                    var redactor = new RecordRedactor(new VocabQueryer(db));
+                    var dataUploader = new DataUploader(env, ftpClient, new FileHelper());
+                    var govService = new GovService(ftpClient);
+                    var hubService = new HubService(env, apiClient, queueClient);
+
+                    var robotPublisher = new RobotPublisher(env, db, redactor, publishingUploadService, dataUploader, govService, hubService);
+
+                    robotPublisher.PublishRecord(record, metadataOnly);
+                }
+            }
+            
         }
     }
 }

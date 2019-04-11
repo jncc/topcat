@@ -134,7 +134,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Data.Write
                 vocabQueryerMock.Setup(x => x.GetVocab(It.IsAny<string>())).Returns(new Vocabulary());
                 redactorMock.Setup(x => x.RedactRecord(It.IsAny<Record>())).Returns(record);
 
-                uploader.PublishRecords(new List<Record> { record });
+                uploader.PublishRecord(record);
                 var updatedRecord = db.Load<Record>(record.Id);
                 
                 DataPublishedSuccessfully(updatedRecord, testTime);
@@ -206,7 +206,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Data.Write
                 vocabQueryerMock.Setup(x => x.GetVocab(It.IsAny<string>())).Returns(new Vocabulary());
                 redactorMock.Setup(x => x.RedactRecord(It.IsAny<Record>())).Returns(record);
 
-                uploader.PublishRecords(new List<Record> { record });
+                uploader.PublishRecord(record);
                 var updatedRecord = db.Load<Record>(record.Id);
 
                 DataPublishedSuccessfully(updatedRecord, testTime);
@@ -278,7 +278,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Data.Write
                 vocabQueryerMock.Setup(x => x.GetVocab(It.IsAny<string>())).Returns(new Vocabulary());
                 redactorMock.Setup(x => x.RedactRecord(It.IsAny<Record>())).Returns(record);
 
-                uploader.PublishRecords(new List<Record> { record });
+                uploader.PublishRecord(record);
                 var updatedRecord = db.Load<Record>(record.Id);
 
                 DataPublishedSuccessfully(updatedRecord, testTime);
@@ -358,7 +358,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Data.Write
                 vocabQueryerMock.Setup(x => x.GetVocab(It.IsAny<string>())).Returns(new Vocabulary());
                 redactorMock.Setup(x => x.RedactRecord(It.IsAny<Record>())).Returns(record);
 
-                uploader.PublishRecords(new List<Record> { record });
+                uploader.PublishRecord(record);
                 var updatedRecord = db.Load<Record>(record.Id);
 
                 DataPublishedSuccessfully(updatedRecord, testTime);
@@ -439,7 +439,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Data.Write
                 vocabQueryerMock.Setup(x => x.GetVocab(It.IsAny<string>())).Returns(new Vocabulary());
                 redactorMock.Setup(x => x.RedactRecord(It.IsAny<Record>())).Returns(record);
 
-                uploader.PublishRecords(new List<Record> { record });
+                uploader.PublishRecord(record);
                 var updatedRecord = db.Load<Record>(record.Id);
 
                 DataPublishedSuccessfully(updatedRecord, testTime);
@@ -519,7 +519,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Data.Write
                 vocabQueryerMock.Setup(x => x.GetVocab(It.IsAny<string>())).Returns(new Vocabulary());
                 dataUploaderMock.Setup(x => x.UploadDataFile(It.IsAny<string>(), It.IsAny<string>())).Throws(new Exception("test message"));
 
-                uploader.PublishRecords(new List<Record> { record });
+                uploader.PublishRecord(record);
 
                 var updatedRecord = db.Load<Record>(record.Id);
                 updatedRecord.Publication.Data.LastAttempt.DateUtc.Should().Be(testTime);
@@ -597,7 +597,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Data.Write
                 vocabQueryerMock.Setup(x => x.GetVocab(It.IsAny<string>())).Returns(new Vocabulary());
                 dataUploaderMock.Setup(x => x.UploadDataFile(It.IsAny<string>(), "x:\\another\\test\\path.txt")).Throws(new WebException("test message"));
 
-                uploader.PublishRecords(new List<Record> { record });
+                uploader.PublishRecord(record);
 
                 var updatedRecord = db.Load<Record>(record.Id);
                 updatedRecord.Publication.Data.LastAttempt.DateUtc.Should().Be(testTime);
@@ -676,7 +676,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Data.Write
                 hubServiceMock.Setup(x => x.Publish(It.IsAny<Record>())).Throws(new Exception("test message"));
                 redactorMock.Setup(x => x.RedactRecord(It.IsAny<Record>())).Returns(record);
 
-                uploader.PublishRecords(new List<Record> { record });
+                uploader.PublishRecord(record);
 
                 var updatedRecord = db.Load<Record>(record.Id);
                 updatedRecord.Publication.Data.LastAttempt.DateUtc.Should().Be(testTime);
@@ -752,7 +752,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Data.Write
                 hubServiceMock.Setup(x => x.Index(It.IsAny<Record>())).Throws(new Exception("test message"));
                 redactorMock.Setup(x => x.RedactRecord(It.IsAny<Record>())).Returns(record);
 
-                uploader.PublishRecords(new List<Record> { record });
+                uploader.PublishRecord(record);
 
                 var updatedRecord = db.Load<Record>(record.Id);
                 updatedRecord.Publication.Data.LastAttempt.DateUtc.Should().Be(testTime);
@@ -830,7 +830,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Data.Write
                 hubServiceMock.Setup(x => x.Publish(It.IsAny<Record>()));
                 redactorMock.Setup(x => x.RedactRecord(It.IsAny<Record>())).Returns(record);
 
-                uploader.PublishRecords(new List<Record> { record });
+                uploader.PublishRecord(record);
 
                 var updatedRecord = db.Load<Record>(record.Id);
                 updatedRecord.Publication.Data.LastAttempt.DateUtc.Should().Be(testTime);
