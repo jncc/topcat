@@ -62,7 +62,7 @@ namespace Catalogue.Data.Query
 
             var query = _db.Query<RecordIndex.Result, RecordIndex>()
                 .Statistics(out stats)
-                .Highlight("Title", 202, 1, highlightingOptions, out titleLites)
+                .Highlight("Title", 1000, 1, highlightingOptions, out titleLites) //todo: longer titles not shown even with huge fragment length?
                 .Highlight("TitleN", 202, 1, highlightingOptions, out titleNLites)
                 .Highlight("Abstract", 202, 1, highlightingOptions, out abstractLites)
                 .Highlight("AbstractN", 202, 1, highlightingOptions, out abstractNLites);
@@ -116,8 +116,7 @@ namespace Catalogue.Data.Query
             var results = from r in Query(input).ToList()
                           let titleFragments = titleLites.GetFragments(r.Id).Concat(titleNLites.GetFragments(r.Id))
                           let abstractFragments = abstractLites.GetFragments(r.Id).Concat(abstractNLites.GetFragments(r.Id))
-                          let title = titleFragments.Select(f => f.TruncateNicely(200)).FirstOrDefault()
-                                      ?? r.Gemini.Title.TruncateNicely(200)
+                          let title = titleFragments.FirstOrDefault() ?? r.Gemini.Title
                           let snippet = abstractFragments.Select(f => f.TruncateNicely(200)).FirstOrDefault()
                                          ?? r.Gemini.Abstract.TruncateNicely(200)
                           let format = DataFormatQueries.GetDataFormatInfo(r.Gemini.DataFormat)
