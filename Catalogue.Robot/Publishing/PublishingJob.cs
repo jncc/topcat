@@ -8,6 +8,7 @@ using log4net;
 using Quartz;
 using Raven.Client.Documents;
 using System.Collections.Generic;
+using Raven.Client.Documents.Session;
 
 namespace Catalogue.Robot.Publishing
 {
@@ -43,11 +44,7 @@ namespace Catalogue.Robot.Publishing
 
             using (var db = store.OpenSession())
             {
-                var publishingService = new RecordPublishingService(db, new RecordValidator(new VocabQueryer(db)));
-                var publishingUploadService = publishingService.Upload();
-                var redactor = new RecordRedactor(new VocabQueryer(db));
-
-                var robotPublisher = new RobotPublisher(env, db, redactor, publishingUploadService, dataUploader, govService, hubService);
+                var robotPublisher = GetPublisher(db);
 
                 recordsToPublish = robotPublisher.GetRecordsPendingUpload();
                 Logger.Info($"Found {recordsToPublish.Count} records to publish");
@@ -58,17 +55,20 @@ namespace Catalogue.Robot.Publishing
             {
                 using (var db = store.OpenSession())
                 {
-                    // using separate sessions means we have to recreate the publisher each time, maybe there's a cleaner way to do this?
-                    var publishingService = new RecordPublishingService(db, new RecordValidator(new VocabQueryer(db)));
-                    var publishingUploadService = publishingService.Upload();
-                    var redactor = new RecordRedactor(new VocabQueryer(db));
-
-                    var robotPublisher = new RobotPublisher(env, db, redactor, publishingUploadService, dataUploader, govService, hubService);
-
+                    var robotPublisher = GetPublisher(db);
                     robotPublisher.PublishRecord(record, metadataOnly);
                 }
             }
             
+        }
+
+        private RobotPublisher GetPublisher(IDocumentSession db)
+        {
+            var publishingService = new RecordPublishingService(db, new RecordValidator(new VocabQueryer(db)));
+            var publishingUploadService = publishingService.Upload();
+            var redactor = new RecordRedactor(new VocabQueryer(db));
+
+            return new RobotPublisher(env, db, redactor, publishingUploadService, dataUploader, govService, hubService);
         }
     }
 }
