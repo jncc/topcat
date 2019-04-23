@@ -45,6 +45,7 @@ namespace Catalogue.Data.Write
             ValidateJnccSpecificRules(record, result);
             ValidatePublishableResources(record, result);
             ValidateDoi(record, result);
+            ValidateImageUrl(record, result);
 
             if (record.Validation == Validation.Gemini)
             {
@@ -273,7 +274,27 @@ namespace Catalogue.Data.Write
                 result.Errors.Add("Citation must be provided for DOI record", r => r.Citation);
             }
         }
-        
+
+        void ValidateImageUrl(Record record, ValidationResult<Record> result)
+        {
+            var imageUrl = record.Image?.Url;
+
+            if (!imageUrl.IsBlank())
+            {
+                if (Uri.TryCreate(imageUrl, UriKind.Absolute, out var uri))
+                {
+                    if (uri.Scheme != Uri.UriSchemeHttp && uri.Scheme != Uri.UriSchemeHttps)
+                    {
+                        result.Errors.Add("Must use a URL for images", r => r.Image.Url);
+                    }
+                }
+                else
+                {
+                    result.Errors.Add("Must use a URL for images", r => r.Image.Url);
+                }
+            }
+        }
+
         void ValidatePublishableResources(Record record, ValidationResult<Record> result)
         {
             var resources = record?.Resources;
