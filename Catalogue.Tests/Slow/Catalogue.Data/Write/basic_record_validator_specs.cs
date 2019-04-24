@@ -283,6 +283,25 @@ namespace Catalogue.Tests.Slow.Catalogue.Data.Write
         }
 
         [Test]
+        public void image_url_with_invalid_formats([Values("a bad image url", "imageurl.png", "file://C:\\a\\file\\path.png", "C:\\a\\file\\path.png")] string imageUrl)
+        {
+            var record = SimpleRecord().With(r => r.Image = new Image{Url = imageUrl});
+            var result = new RecordValidator(vocabQueryer).Validate(record);
+
+            result.Errors.Single().Message.Should().Contain("Must use a URL for images");
+            result.Errors.Single().Fields.Single().Should().Be("image.url");
+        }
+
+        [Test]
+        public void image_url_with_valid_formats([Values(null, "", "http://example.com/here/is/an/image.png", "https://example.com/here/is/another/image.jpeg")] string imageUrl)
+        {
+            var record = SimpleRecord().With(r => r.Image = new Image { Url = imageUrl });
+            var result = new RecordValidator(vocabQueryer).Validate(record);
+
+            result.Errors.Should().BeEmpty();
+        }
+
+        [Test]
         public void accepted_publishable_resource_paths([Values(
             @"X:\some\path",
             @"\\jncc-corpfile\jncc corporate data\my_dataset.xlsx",

@@ -76,7 +76,7 @@
                     <div ng-show="publishingStatus.currentActiveView == 'upload'" class="quick-fade-in">
                         <h3>Data upload</h3>
                         <p>The record is now waiting to be published to
-                            <span ng-if="form.publication.target.hub.publishable == true">the JNCC ResourceHub</span>
+                            <span ng-if="form.publication.target.hub.publishable == true">the Resource hub</span>
                             <span ng-if="form.publication.target.hub.publishable == true && form.publication.target.gov.publishable == true">and</span>
                             <span ng-if="form.publication.target.gov.publishable == true">Data.gov.uk</span>.
                             This process may take a day so please check back later.
@@ -93,7 +93,7 @@
                                 <span ng-if="form.publication.target.hub &&
                                       (recordOutput.recordState.publishingState.previouslyPublishedWithDoi && form.publication.target.hub.lastSuccess != null) ||
                                       (!recordOutput.recordState.publishingState.previouslyPublishedWithDoi && form.publication.target.hub.publishable == true)">
-                                    ResourceHub upload: {{ hubPublishingStatus() }}<br />
+                                    Resource hub upload: {{ hubPublishingStatus() }}<br />
                                     <span ng-if="form.publication.target.hub.lastAttempt.message">
                                         {{form.publication.target.hub.lastAttempt.message}}<br /><br />
                                     </span>
