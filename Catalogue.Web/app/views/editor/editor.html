@@ -12,8 +12,8 @@
                     </span>
                 </div>
                 <div ng-show="form.publication.target.hub.lastSuccess || form.publication.target.gov.lastSuccess" class="form-group">
-                    <a href="{{form.publication.target.hub.url}}" class="btn btn-default" target="_blank" ng-show="form.publication.target.hub.lastSuccess" tc-tip title="Published to the ResourceHub">
-                        ResourceHub <span class="glyphicon glyphicon-new-window"></span>
+                    <a href="{{form.publication.target.hub.url}}" class="btn btn-default" target="_blank" ng-show="form.publication.target.hub.lastSuccess" tc-tip title="Published to the Resource hub">
+                        Resource hub <span class="glyphicon glyphicon-new-window"></span>
                     </a>
                     <a href="https://data.gov.uk/" class="btn btn-default" target="_blank" ng-show="form.publication.target.gov.lastSuccess" tc-tip title="Published to Data.gov.uk">
                         Data.gov.uk <span class="glyphicon glyphicon-new-window"></span>
@@ -545,7 +545,7 @@
             <div class="row">
                 <div class="col-md-3">
                     <div class="publishing-target">
-                        <span>For ResourceHub</span> <span class="glyphicon glyphicon-info-sign" title="For all JNCC owned resources to be shared publicly" tc-tip></span>
+                        <span>For Resource hub</span> <span class="glyphicon glyphicon-info-sign" title="For all JNCC owned resources to be shared publicly" tc-tip></span>
                     </div>
                 </div>
                 <div class="col-md-9">
@@ -564,7 +564,7 @@
                             <button ng-click="form.publication.target.hub.publishable = true"
                                     ng-class="{ 'btn-primary': form.publication.target.hub.publishable == true, 'btn-default': form.publication.target.hub.publishable != true }"
                                     class="btn"
-                                    title="Can this record be published to the ResourceHub?"
+                                    title="Can this record be published to the Resource hub?"
                                     tc-tip>
                                 Publishable <span class="glyphicon glyphicon-globe"></span>
                             </button>
