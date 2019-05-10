@@ -22,28 +22,28 @@
                 <td><span tc-tip title="{{r.metadataDate | date:'yyyy-MM-dd HH:mm:ss'}}">{{r.metadataDate | date}}</span></td>
                 <td>{{r.publicationInfo.assessment.completedByUser.displayName}}</td>
                 <td>
-                    <span ng-if="r.publicationInfo.hub.lastSuccess != null">
-                        <span tc-tip title="{{r.publicationInfo.hub.lastSuccess.dateUtc | date:'yyyy-MM-dd HH:mm:ss'}}">
-                            {{r.publicationInfo.hub.lastSuccess.dateUtc | date}}
+                    <span ng-if="r.publicationInfo.target.hub.lastSuccess != null">
+                        <span tc-tip title="{{r.publicationInfo.target.hub.lastSuccess.dateUtc | date:'yyyy-MM-dd HH:mm:ss'}}">
+                            {{r.publicationInfo.target.hub.lastSuccess.dateUtc | date}}
                         </span>
-                        <span ng-if="form.publication.hub.lastSuccess.dateUtc && !recordOutput.publishingPolicy.hubRecord"
+                        <span ng-if="form.publication.target.hub.lastSuccess.dateUtc && !recordOutput.publishingPolicy.hubRecord"
                               class="glyphicon glyphicon-warning-sign"
                               title="The record will no longer be updated at this destination, does it need to be removed?"
                               tc-tip></span>
                     </span>
-                    <span ng-if="r.publicationInfo.hub.lastSuccess == null">Never</span>
+                    <span ng-if="r.publicationInfo.target.hub.lastSuccess == null">Never</span>
                 </td>
                 <td>
-                    <span ng-if="r.publicationInfo.gov.lastSuccess != null">
-                        <span tc-tip title="{{r.publicationInfo.gov.lastSuccess.dateUtc | date:'yyyy-MM-dd HH:mm:ss'}}">
-                            {{r.publicationInfo.gov.lastSuccess.dateUtc | date}}
+                    <span ng-if="r.publicationInfo.target.gov.lastSuccess != null">
+                        <span tc-tip title="{{r.publicationInfo.target.gov.lastSuccess.dateUtc | date:'yyyy-MM-dd HH:mm:ss'}}">
+                            {{r.publicationInfo.target.gov.lastSuccess.dateUtc | date}}
                         </span>
-                        <span ng-if="form.publication.gov.lastSuccess.dateUtc && !recordOutput.publishingPolicy.govRecord"
+                        <span ng-if="form.publication.target.gov.lastSuccess.dateUtc && !recordOutput.publishingPolicy.govRecord"
                               class="glyphicon glyphicon-warning-sign"
                               title="The record will no longer be updated at this destination, does it need to be removed?"
                               tc-tip></span>
                     </span>
-                    <span ng-if="r.publicationInfo.gov.lastSuccess == null">Never</span>
+                    <span ng-if="r.publicationInfo.target.gov.lastSuccess == null">Never</span>
                 </td>
                 <td>
                     <button class="btn btn-danger sign-off"
