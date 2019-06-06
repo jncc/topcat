@@ -27,18 +27,6 @@ namespace Catalogue.Tests.Slow.Catalogue.Data.Indexes
         }
 
         [Test]
-        public void should_be_able_to_get_the_unsuccessful_attempt_record()
-        {
-            var results = Db.Query<RecordsWithPublicationInfoIndex.Result, RecordsWithPublicationInfoIndex>()
-                .Where(x => x.LastPublicationAttemptWasUnsuccessful)
-                .OfType<Record>()
-                .ToList();
-
-            results.Count.Should().Be(1);
-            results.Single().Id.Should().Be(Helpers.AddCollection("b2691fed-e421-4e48-9da9-99bd77e0b8ba"));
-        }
-
-        [Test]
         public void should_be_able_to_get_successful_attempt_records()
         {
             // in other words, the last publication was successful and the record hasn't been updated since!

@@ -33,10 +33,9 @@ namespace Catalogue.Web.Controllers.Publishing
 
             return new SummaryRepresentation
                 {
-                    CountOfPublishedSinceLastUpdated = query.Count(x => x.PublishedToGovSinceLastUpdated),
-                    CountOfNotYetPublishedSinceLastUpdated = query.Count(x => !x.PublishedToGovSinceLastUpdated && x.SignedOff),
+                    CountOfPublishedSinceLastUpdated = query.Count(x => x.PublishedToGovSinceLastUpdated || x.PublishedToHubSinceLastUpdated),
+                    CountOfNotYetPublishedSinceLastUpdated = query.Count(x => !x.PublishedToGovSinceLastUpdated && !x.PublishedToHubSinceLastUpdated && x.SignedOff),
                     CountOfPublicationNeverAttempted = query.Count(x => x.PublicationNeverAttempted),
-                    CountOfLastPublicationAttemptWasUnsuccessful = query.Count(x => x.LastPublicationAttemptWasUnsuccessful),
                     CountOfPendingSignOff = query.Count(x => x.Assessed && !x.SignedOff)
             };
         }
@@ -140,16 +139,6 @@ namespace Catalogue.Web.Controllers.Publishing
             return GetRecords(query, p);
         }
 
-        [HttpGet, Route("api/publishing/lastpublicationattemptwasunsuccessful")]
-        public List<RecordRepresentation> LastPublicationAttemptWasUnsuccessful(int p = 1)
-        {
-            var query = db
-                .Query<RecordsWithPublicationInfoIndex.Result, RecordsWithPublicationInfoIndex>()
-                .Where(x => x.LastPublicationAttemptWasUnsuccessful);
-
-            return GetRecords(query, p);
-        }
-
         List<RecordRepresentation> GetRecords(IQueryable<RecordsWithPublicationInfoIndex.Result> query, int p)
         {
             int take = 1000; // can change this when paging is implemented in the UI
@@ -188,7 +177,6 @@ namespace Catalogue.Web.Controllers.Publishing
         public int CountOfPublishedSinceLastUpdated { get; set; }
         public int CountOfNotYetPublishedSinceLastUpdated { get; set; }
         public int CountOfPublicationNeverAttempted { get; set; }
-        public int CountOfLastPublicationAttemptWasUnsuccessful { get; set; }
         public int CountOfPendingSignOff { get; set; }
     }
 }

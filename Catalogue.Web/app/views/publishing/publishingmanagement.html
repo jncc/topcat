@@ -15,9 +15,6 @@
             <span>{{m.publishing.summary.countOfPublicationNeverAttempted}}</span> not attempted yet
         </div>
         <div class="publishing-summary-item-hoverable" ng-class="{'hi': m.tab == 4}" ng-click="m.tab = 4">
-            <span>{{m.publishing.summary.countOfLastPublicationAttemptWasUnsuccessful}}</span> failed last publication
-        </div>
-        <div class="publishing-summary-item-hoverable" ng-class="{'hi': m.tab == 5}" ng-click="m.tab = 5">
             <span>{{m.publishing.summary.countOfPendingSignOff}}</span> pending sign off
         </div>
     </div>
@@ -27,29 +24,29 @@
         <tr>
             <th class="first"></th>
             <th>Metadata date</th>
-            <th ng-if="m.tab != 5">Gemini</th>
-            <th ng-if="m.tab != 5">Signed off by</th>
-            <th ng-if="m.tab == 5">Risk assessed by</th>
-            <th ng-if="m.tab == 5">Last published</th>
-            <th ng-if="m.tab != 5">Last attempt</th>
-            <th ng-if="m.tab != 5">Last success</th>
-            <th ng-if="m.tab != 5"></th>
+            <th ng-if="m.tab != 4">Gemini</th>
+            <th ng-if="m.tab != 4">Signed off by</th>
+            <th ng-if="m.tab == 4">Risk assessed by</th>
+            <th ng-if="m.tab == 4">Last published</th>
+            <th ng-if="m.tab != 4">Last attempt</th>
+            <th ng-if="m.tab != 4">Last success</th>
+            <th ng-if="m.tab != 4"></th>
         </tr>
         </thead>
         <tbody>
             <tr ng-repeat="r in m.publishing.list">
                 <td><a ng-href="#/editor/{{r.id}}" target="_blank" ng-bind-html="r.title"></a></td>
                 <td><span tc-tip title="{{r.metadataDate | date:'yyyy-MM-dd HH:mm:ss'}}">{{r.metadataDate | date}}</span></td>
-                <td ng-if="m.tab != 5">{{r.isGeminiValid}}</td>
-                <td ng-if="m.tab == 5">{{r.publicationInfo.assessment.completedByUser.displayName}}</td>
-                <td ng-if="m.tab != 5">{{r.publicationInfo.signOff.user.displayName}}</td>
-                <td ng-if="m.tab == 5">
+                <td ng-if="m.tab != 4">{{r.isGeminiValid}}</td>
+                <td ng-if="m.tab == 4">{{r.publicationInfo.assessment.completedByUser.displayName}}</td>
+                <td ng-if="m.tab != 4">{{r.publicationInfo.signOff.user.displayName}}</td>
+                <td ng-if="m.tab == 4">
                     <span ng-if="r.publicationInfo.target.gov.lastSuccess != null" tc-tip title="{{r.publicationInfo.target.gov.lastSuccess.dateUtc | date:'yyyy-MM-dd HH:mm:ss'}}">{{r.publicationInfo.target.gov.lastSuccess.dateUtc | date}}</span>
                     <span ng-if="r.publicationInfo.target.gov.lastSuccess == null">Never</span>
                 </td>
-                <td ng-if="m.tab != 5"><span ng-if="r.publicationInfo.target.gov.lastAttempt.dateUtc" tc-tip title="{{r.publicationInfo.target.gov.lastAttempt.dateUtc | date:'yyyy-MM-dd HH:mm:ss'}}">{{r.publicationInfo.target.gov.lastAttempt.dateUtc | date}}</span></td>
-                <td ng-if="m.tab != 5"><span ng-if="r.publicationInfo.target.gov.lastSuccess.dateUtc" tc-tip title="{{r.publicationInfo.target.gov.lastSuccess.dateUtc | date:'yyyy-MM-dd HH:mm:ss'}}">{{r.publicationInfo.target.gov.lastSuccess.dateUtc | date}}</span></td>
-                <td ng-if="m.tab != 5"><span ng-show="r.publicationInfo.target.gov.lastAttempt.message" class="glyphicon glyphicon-warning-sign" tc-tip title="{{r.publicationInfo.target.gov.lastAttempt.message}}"></span></td>
+                <td ng-if="m.tab != 4"><span ng-if="r.publicationInfo.target.gov.lastAttempt.dateUtc" tc-tip title="{{r.publicationInfo.target.gov.lastAttempt.dateUtc | date:'yyyy-MM-dd HH:mm:ss'}}">{{r.publicationInfo.target.gov.lastAttempt.dateUtc | date}}</span></td>
+                <td ng-if="m.tab != 4"><span ng-if="r.publicationInfo.target.gov.lastSuccess.dateUtc" tc-tip title="{{r.publicationInfo.target.gov.lastSuccess.dateUtc | date:'yyyy-MM-dd HH:mm:ss'}}">{{r.publicationInfo.target.gov.lastSuccess.dateUtc | date}}</span></td>
+                <td ng-if="m.tab != 4"><span ng-show="r.publicationInfo.target.gov.lastAttempt.message" class="glyphicon glyphicon-warning-sign" tc-tip title="{{r.publicationInfo.target.gov.lastAttempt.message}}"></span></td>
             </tr>
         </tbody>
     </table>
