@@ -32,7 +32,7 @@
     };
     loadTab4Data = function() {
       return $http.get('../api/publishing/pendingsignoff').success(function(result) {
-        return m.openData.list = result;
+        return m.publishing.list = result;
       });
     };
     loadList = function() {

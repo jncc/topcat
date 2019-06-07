@@ -16,7 +16,7 @@
         loadTab2Data = -> $http.get('../api/publishing/notpublishedsincelastupdated').success (result) -> m.publishing.list = result
         loadTab3Data = -> $http.get('../api/publishing/publicationneverattempted').success (result) -> m.publishing.list = result
         loadTab4Data = -> $http.get('../api/publishing/pendingsignoff').success (result) ->
-            m.openData.list = result
+            m.publishing.list = result
         
         loadList = ->
             switch m.tab
