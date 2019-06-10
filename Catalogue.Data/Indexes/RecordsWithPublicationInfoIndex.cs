@@ -16,7 +16,6 @@ namespace Catalogue.Data.Indexes
             public bool Assessed { get; set; }
             public bool SignedOff { get; set; }
             public bool PublicationNeverAttempted { get; set; }
-            public bool LastPublicationAttemptWasUnsuccessful { get; set; }
             public bool PublishedToHubSinceLastUpdated { get; set; }
             public bool PublishedToGovSinceLastUpdated { get; set; }
         }
@@ -46,18 +45,10 @@ namespace Catalogue.Data.Indexes
                                 PublicationNeverAttempted = r.Publication.Target.Hub == null && r.Publication.Target.Gov == null ||
                                                             r.Publication.Target.Hub.LastAttempt == null && r.Publication.Target.Gov.LastAttempt == null &&
                                                             r.Publication.SignOff != null && r.Publication.SignOff.DateUtc == r.Gemini.MetadataDate,
-                                LastPublicationAttemptWasUnsuccessful = (r.Publication.Target.Gov != null && r.Publication.Target.Gov.LastAttempt != null && r.Publication.Target.Gov.LastSuccess == null
-                                                                        || r.Publication.Target.Gov.LastAttempt != null && r.Publication.Target.Gov.LastSuccess != null
-                                                                        && r.Publication.Target.Gov.LastAttempt.DateUtc > r.Publication.Target.Gov.LastSuccess.DateUtc) ||
-                                                                        (r.Publication.Target.Hub != null && r.Publication.Target.Hub.LastAttempt != null && r.Publication.Target.Hub.LastSuccess == null
-                                                                         || r.Publication.Target.Hub.LastAttempt != null && r.Publication.Target.Hub.LastSuccess != null &&
-                                                                         r.Publication.Target.Hub.LastAttempt.DateUtc > r.Publication.Target.Hub.LastSuccess.DateUtc),
-                                PublishedToHubSinceLastUpdated = r.Publication.Target.Hub != null && r.Publication.Target.Hub.Publishable == true && r.Publication.Target.Hub.LastSuccess != null &&
+                                PublishedToHubSinceLastUpdated = r.Publication.Target.Hub != null && r.Publication.Target.Hub.LastSuccess != null &&
                                                                  (r.Publication.Target.Hub.LastSuccess.DateUtc >= r.Gemini.MetadataDate ||
-                                                                 r.Publication.SignOff != null && r.Publication.Target.Hub.LastSuccess.DateUtc > r.Publication.SignOff.DateUtc &&
-                                                                 r.Publication.Target.Gov != null && r.Publication.Target.Gov.LastSuccess != null &&
-                                                                 r.Publication.Target.Gov.LastSuccess.DateUtc >= r.Gemini.MetadataDate),
-                                PublishedToGovSinceLastUpdated = r.Publication.Target.Gov != null && r.Publication.Target.Gov.Publishable == true &&
+                                                                 r.Publication.SignOff != null && r.Publication.Target.Hub.LastSuccess.DateUtc > r.Publication.SignOff.DateUtc),
+                                PublishedToGovSinceLastUpdated = r.Publication.Target.Gov != null &&
                                                                  r.Publication.Target.Gov.LastSuccess != null && r.Publication.Target.Gov.LastSuccess.DateUtc >= r.Gemini.MetadataDate
                             });
         }
