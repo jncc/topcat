@@ -48,6 +48,13 @@
 
         </div>
 
+        <!-- publishing notifications-->
+        <div ng-show="publishingNotifications" class="editor-validation-summary">
+            <div ng-repeat="n in publishingNotifications" class="editor-validation-summary-item">
+                <span class="glyphicon glyphicon-exclamation-sign" /> {{n.message}}
+            </div>
+        </div>
+        
         <!-- validation summary -->
         <div ng-show="validation.errors" class="editor-validation-summary">
             <div ng-repeat="e in validation.errors" class="editor-validation-summary-item">
@@ -55,7 +62,7 @@
             </div>
         </div>
 
-        <!-- title -->
+    <!-- title -->
         <div class="row">
             <div class="col-md-12">
                 <div class="form-group">

@@ -23,6 +23,7 @@
                     <li ng-class="publishingStatus.upload.currentClass">
                         <a ng-click="publishingStatus.currentActiveView = 'upload'">
                             3. Data upload <span ng-if="recordOutput.recordState.publishingState.publishedAndUpToDate || recordOutput.recordState.publishingState.previouslyPublishedWithDoi" class="glyphicon glyphicon-ok"></span>
+                            <span ng-if="(form.publication.data.lastAttempt.message && form.publication.data.lastAttempt.dateUtc == form.gemini.metadataDate) || (form.publication.target.hub.lastAttempt.message && form.publication.target.hub.lastAttempt.dateUtc == form.gemini.metadataDate) || (form.publication.target.gov.lastAttempt.message && form.publication.target.gov.lastAttempt.dateUtc == form.gemini.metadataDate)" class="glyphicon glyphicon-warning-sign"></span>
                         </a>
                     </li>
                 </ol>
@@ -86,15 +87,15 @@
                             <p>
                                 {{uploadStatus}}
                             </p>
-                            <p ng-if="form.publication.data.lastAttempt.message">
-                                Whoops there was a problem while uploading your data files: {{form.publication.data.lastAttempt.message}}
+                            <p ng-if="form.publication.data.lastAttempt.message && form.publication.data.lastAttempt.dateUtc == form.gemini.metadataDate">
+                                Error occurred during file upload: {{form.publication.data.lastAttempt.message}}
                             </p>
                             <p>
                                 <span ng-if="form.publication.target.hub &&
                                       (recordOutput.recordState.publishingState.previouslyPublishedWithDoi && form.publication.target.hub.lastSuccess != null) ||
                                       (!recordOutput.recordState.publishingState.previouslyPublishedWithDoi && form.publication.target.hub.publishable == true)">
                                     ResourceHub upload: {{ hubPublishingStatus() }}<br />
-                                    <span ng-if="form.publication.target.hub.lastAttempt.message">
+                                    <span ng-if="form.publication.target.hub.lastAttempt.message && form.publication.target.hub.lastAttempt.dateUtc == form.gemini.metadataDate">
                                         {{form.publication.target.hub.lastAttempt.message}}<br /><br />
                                     </span>
                                 </span>
@@ -102,7 +103,7 @@
                                       ((recordOutput.recordState.publishingState.previouslyPublishedWithDoi && form.publication.target.gov.lastSuccess != null) ||
                                       (!recordOutput.recordState.publishingState.previouslyPublishedWithDoi && form.publication.target.gov.publishable == true))">
                                     Data.gov.uk upload: {{ govPublishingStatus() }}<br />
-                                    <span ng-if="form.publication.target.gov.lastAttempt.message">
+                                    <span ng-if="form.publication.target.gov.lastAttempt.message && form.publication.target.gov.lastAttempt.dateUtc == form.gemini.metadataDate">
                                         {{form.publication.target.gov.lastAttempt.message}}<br />
                                     </span>
                                 </span>
