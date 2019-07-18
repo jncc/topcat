@@ -13,6 +13,9 @@ angular.module('app.controllers').controller 'ImagePickerController',
         $scope.selectedImage = {}
 
         $scope.getImages = () ->
+            if $scope.recordImage
+                $scope.selectedImageUrl = $scope.recordImage.url
+
             if imagePickerUrl
                 $http.get(imagePickerUrl)
                     .then (response) ->
@@ -23,9 +26,6 @@ angular.module('app.controllers').controller 'ImagePickerController',
         $scope.refreshPages = () ->
             # looks like they're already sorted, but just in case
             $scope.images = $scope.images.sort((first, second) -> new Date(second.LastEdited) - new Date(first.LastEdited))
-            
-            if $scope.recordImage
-                $scope.selectedImageUrl = $scope.recordImage.url
 
             $scope.noOfPages = Math.ceil $scope.images.length/($scope.rowsPerPage*$scope.imagesPerRow)
             $scope.setPage($scope.currentPage)

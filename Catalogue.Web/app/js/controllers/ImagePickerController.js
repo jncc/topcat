@@ -11,6 +11,9 @@
     $scope.selectedImageUrl = "";
     $scope.selectedImage = {};
     $scope.getImages = function() {
+      if ($scope.recordImage) {
+        $scope.selectedImageUrl = $scope.recordImage.url;
+      }
       if (imagePickerUrl) {
         $http.get(imagePickerUrl).then(function(response) {
           $scope.images = response.data;
@@ -23,9 +26,6 @@
       $scope.images = $scope.images.sort(function(first, second) {
         return new Date(second.LastEdited) - new Date(first.LastEdited);
       });
-      if ($scope.recordImage) {
-        $scope.selectedImageUrl = $scope.recordImage.url;
-      }
       $scope.noOfPages = Math.ceil($scope.images.length / ($scope.rowsPerPage * $scope.imagesPerRow));
       return $scope.setPage($scope.currentPage);
     };
