@@ -12,6 +12,9 @@ namespace Catalogue.Robot.Publishing
         public string FTP_HOST { get; private set; }
         public string FTP_USERNAME { get; private set; }
         public string FTP_PASSWORD { get; private set; }
+        public string FTP_DATA_FOLDER { get; private set; }
+        public string FTP_WAF_FOLDER { get; private set; }
+        public string FTP_OLD_FOLDER { get; private set; }
 
         // resource hub
         public string HUB_ASSETS_BASE_URL { get; private set; }
@@ -38,7 +41,9 @@ namespace Catalogue.Robot.Publishing
             this.FTP_HOST = GetVariable("FTP_HOST");
             this.FTP_USERNAME = GetVariable("FTP_USERNAME");
             this.FTP_PASSWORD = GetVariable("FTP_PASSWORD");
-
+            this.FTP_DATA_FOLDER = GetVariable("FTP_DATA_FOLDER");
+            this.FTP_WAF_FOLDER = GetVariable("FTP_WAF_FOLDER");
+            this.FTP_OLD_FOLDER = GetVariable("FTP_OLD_FOLDER");
 
             this.HUB_ASSETS_BASE_URL = GetVariable("HUB_ASSETS_BASE_URL");
 

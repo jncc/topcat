@@ -13,12 +13,14 @@ namespace Catalogue.Robot.Publishing.Gov
     public class GovService : IGovService
     {
         private static readonly ILog Logger = LogManager.GetLogger(typeof(GovService));
-        
+
+        private readonly Env env;
         private readonly IFtpClient ftpClient;
         private readonly IXmlHelper xmlHelper;
 
-        public GovService(IFtpClient ftpClient)
+        public GovService(Env env, IFtpClient ftpClient)
         {
+            this.env = env;
             this.ftpClient = ftpClient;
             xmlHelper = new XmlHelper();
         }
@@ -26,7 +28,7 @@ namespace Catalogue.Robot.Publishing.Gov
         public void UploadGeminiXml(Record record)
         {
             var metaXmlDoc = xmlHelper.GetMetadataDocument(record);
-            string metaFtpPath = $"/waf/{record.Id}.xml";
+            string metaFtpPath = $"{env.FTP_WAF_FOLDER}/{record.Id}.xml";
             
             Logger.Info("Metadata FTP path: " + metaFtpPath);
 
@@ -36,7 +38,7 @@ namespace Catalogue.Robot.Publishing.Gov
 
         public void UpdateDguIndex(Record record)
         {
-            string indexDocFtpPath = $"/waf/index.html";
+            string indexDocFtpPath = env.FTP_WAF_FOLDER + "/index.html";
             string indexDocHtml = ftpClient.DownloadString(indexDocFtpPath);
             string updatedIndexDoc = xmlHelper.UpdateWafIndexDocument(record, indexDocHtml);
             ftpClient.UploadString(indexDocFtpPath, updatedIndexDoc);

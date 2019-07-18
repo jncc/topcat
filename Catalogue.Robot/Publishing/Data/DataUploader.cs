@@ -9,7 +9,9 @@ namespace Catalogue.Robot.Publishing.Data
 {
     public interface IDataUploader
     {
+        void MoveFolderIfExists(string recordId);
         void UploadDataFile(string recordId, string filePath);
+        void Rollback(string recordId);
     }
 
     public class DataUploader : IDataUploader
@@ -25,6 +27,14 @@ namespace Catalogue.Robot.Publishing.Data
             this.env = env;
             this.ftpClient = ftpClient;
             this.fileHelper = fileHelper;
+        }
+
+        public void MoveFolderIfExists(string recordId)
+        {
+            var sourceFolder = $"{env.FTP_DATA_FOLDER}/{recordId}";
+            var destinationFolder = $"{env.FTP_OLD_FOLDER}/{recordId}";
+            
+            ftpClient.MoveFolder(sourceFolder, destinationFolder);
         }
 
         public void UploadDataFile(string recordId, string filePath)
@@ -48,6 +58,15 @@ namespace Catalogue.Robot.Publishing.Data
                 // force fail large files
                 throw new InvalidOperationException($"File at path {filePath} is too large to be uploaded by Topcat - manual upload required");
             }
+        }
+
+        public void Rollback(string recordId)
+        {
+            var sourceFolder = $"{env.FTP_OLD_FOLDER}/{recordId}";
+            var destinationFolder = $"{env.FTP_DATA_FOLDER}/{recordId}";
+
+            ftpClient.DeleteFolder(destinationFolder);
+            ftpClient.MoveFolder(sourceFolder, destinationFolder);
         }
     }
 }

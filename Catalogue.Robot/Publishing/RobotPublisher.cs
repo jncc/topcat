@@ -100,6 +100,10 @@ namespace Catalogue.Robot.Publishing
                 uploadRecordService.UpdateDataPublishAttempt(record, attempt);
                 db.SaveChanges();
 
+                var recordId = Helpers.RemoveCollection(record.Id);
+
+                dataUploader.MoveFolderIfExists(recordId);
+
                 var resources = record.Resources.Copy(); // don't want to save if any of them fail
                 if (resources != null)
                 {
@@ -109,8 +113,8 @@ namespace Catalogue.Robot.Publishing
                         if (Helpers.IsFileResource(resource))
                         {
                             Logger.Info($"Resource {resource.Path} is a file - starting upload process");
-                            dataUploader.UploadDataFile(Helpers.RemoveCollection(record.Id), resource.Path);
-                            string dataHttpPath = env.HTTP_ROOT_URL + GetUnrootedDataPath(Helpers.RemoveCollection(record.Id), resource.Path);
+                            dataUploader.UploadDataFile(recordId, resource.Path);
+                            string dataHttpPath = env.HTTP_ROOT_URL + GetUnrootedDataPath(recordId, resource.Path);
                             resource.PublishedUrl = dataHttpPath;
                         }
                         else
