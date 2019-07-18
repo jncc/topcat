@@ -62,11 +62,17 @@ namespace Catalogue.Robot.Publishing.Data
 
         public void Rollback(string recordId)
         {
-            var sourceFolder = $"{env.FTP_OLD_FOLDER}/{recordId}";
-            var destinationFolder = $"{env.FTP_DATA_FOLDER}/{recordId}";
+            var oldFolder = $"{env.FTP_OLD_FOLDER}/{recordId}";
+            var dataFolder = $"{env.FTP_DATA_FOLDER}/{recordId}";
+            var oldFolderExists = ftpClient.FolderExists(oldFolder);
 
-            ftpClient.DeleteFolder(destinationFolder);
-            ftpClient.MoveFolder(sourceFolder, destinationFolder);
+            if (oldFolderExists)
+            {
+                // don't delete this if we have nothing to replace it with
+                ftpClient.DeleteFolder(dataFolder);   
+            }
+
+            ftpClient.MoveFolder(oldFolder, dataFolder);
         }
     }
 }
