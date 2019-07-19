@@ -359,7 +359,7 @@
       notifications = [];
       if (publishingState.assessedAndUpToDate && !publishingState.signedOffAndUpToDate) {
         notifications.push({
-          message: 'Awaiting sign off'
+          message: 'Awaiting publishing sign off, editing this record will remove it from the approvals list and require resubmission'
         });
       }
       if ((publication.data && publication.data.lastAttempt && publication.data.lastAttempt.message) || (publication.target.hub && publication.target.hub.lastAttempt && publication.target.hub.lastAttempt.message) || (publication.target.gov && publication.target.gov.lastAttempt && publication.target.gov.lastAttempt.message)) {
