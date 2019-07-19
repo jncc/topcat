@@ -66,7 +66,7 @@
     <Compile Include="Slow\Catalogue.Data\Seed\when_seeding.cs" />
     <Compile Include="Slow\Catalogue.Data\Write\basic_record_validator_specs.cs" />
     <Compile Include="Slow\Catalogue.Data\Write\gemini_record_validator_specs.cs" />
-    <Compile Include="Slow\Catalogue.Data\Write\publishing_service_specs.cs" />
+    <Compile Include="Slow\Catalogue.Robot\robot_publisher_publish_record_specs.cs" />
     <Compile Include="Slow\Catalogue.Data\Write\record_service_specs.cs" />
     <Compile Include="Slow\Catalogue.Data\Write\vocabulary_service_specs.cs" />
     <Compile Include="Slow\Catalogue.Gemini\Validation\when_validating_the_example_document.cs" />
@@ -75,7 +75,7 @@
     <Compile Include="Slow\Catalogue.Robot\hub_message_helper_specs.cs" />
     <Compile Include="Slow\Catalogue.Robot\publishingxmlhelper_specs.cs" />
     <Compile Include="Slow\Catalogue.Robot\record_redactor_specs.cs" />
-    <Compile Include="Slow\Catalogue.Robot\robot_publisher_specs.cs" />
+    <Compile Include="Slow\Catalogue.Robot\robot_publisher_pending_upload_specs.cs" />
     <Compile Include="Slow\Catalogue.Utilities\jncc_drive_mappings_tests.cs" />
     <Compile Include="Slow\Catalogue.Web\Controllers\Account\account_controller_specs.cs" />
     <Compile Include="Slow\Catalogue.Web\Controllers\Export\export_controller_tests.cs" />

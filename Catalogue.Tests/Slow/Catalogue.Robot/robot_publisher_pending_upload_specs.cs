@@ -15,7 +15,7 @@ using System.Collections.Generic;
 
 namespace Catalogue.Tests.Slow.Catalogue.Robot
 {
-    public class robot_publisher_specs : CleanDbTest
+    public class robot_publisher_pending_upload_specs : CleanDbTest
     {
         private Env env;
 

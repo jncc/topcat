@@ -64,14 +64,8 @@ namespace Catalogue.Robot.Publishing.Data
         {
             var oldFolder = $"{env.FTP_OLD_FOLDER}/{recordId}";
             var dataFolder = $"{env.FTP_DATA_FOLDER}/{recordId}";
-            var oldFolderExists = ftpClient.FolderExists(oldFolder);
 
-            if (oldFolderExists)
-            {
-                // don't delete this if we have nothing to replace it with
-                ftpClient.DeleteFolder(dataFolder);   
-            }
-
+            ftpClient.DeleteFolder(dataFolder);
             ftpClient.MoveFolder(oldFolder, dataFolder);
         }
     }

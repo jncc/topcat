@@ -84,6 +84,16 @@ namespace Catalogue.Robot.Publishing
             catch (Exception ex)
             {
                 Logger.Error($"Could not complete publishing process for record with GUID={record.Id}", ex);
+
+                try
+                {
+                    dataUploader.Rollback(Helpers.RemoveCollection(record.Id));
+                    Logger.Info($"Data rollback successfully completed for record with GUID={record.Id}");
+                }
+                catch (Exception e)
+                {
+                    Logger.Error($"Could not complete data rollback for record with GUID={record.Id}", e);
+                }
             }
             finally
             {

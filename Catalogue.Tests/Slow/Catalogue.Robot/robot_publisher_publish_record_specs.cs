@@ -1,6 +1,12 @@
-﻿using Catalogue.Data;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Net;
+using Catalogue.Data;
 using Catalogue.Data.Model;
+using Catalogue.Data.Query;
 using Catalogue.Data.Write;
+using Catalogue.Gemini.Model;
 using Catalogue.Gemini.Templates;
 using Catalogue.Robot.Publishing;
 using Catalogue.Robot.Publishing.Data;
@@ -12,17 +18,11 @@ using Catalogue.Utilities.Time;
 using FluentAssertions;
 using Moq;
 using NUnit.Framework;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net;
-using Catalogue.Data.Query;
-using Catalogue.Gemini.Model;
 using PublicationAttempt = Catalogue.Data.Model.PublicationAttempt;
 
-namespace Catalogue.Tests.Slow.Catalogue.Data.Write
+namespace Catalogue.Tests.Slow.Catalogue.Robot
 {
-    public class publishing_service_specs : CleanDbTest
+    public class robot_publisher_publish_record_specs : CleanDbTest
     {
         private static string HUB_URL_ROOT = "http://hub.jncc.gov.uk/assets/";
 
