@@ -9,8 +9,9 @@ namespace Catalogue.Robot.Publishing.Data
 {
     public interface IDataUploader
     {
-        void MoveFolderIfExists(string recordId);
+        void CreateDataRollback(string recordId);
         void UploadDataFile(string recordId, string filePath);
+        void RemoveRollbackFiles(string recordId);
         void Rollback(string recordId);
     }
 
@@ -29,10 +30,10 @@ namespace Catalogue.Robot.Publishing.Data
             this.fileHelper = fileHelper;
         }
 
-        public void MoveFolderIfExists(string recordId)
+        public void CreateDataRollback(string recordId)
         {
             var sourceFolder = $"{env.FTP_DATA_FOLDER}/{recordId}";
-            var destinationFolder = $"{env.FTP_OLD_FOLDER}/{recordId}";
+            var destinationFolder = $"{env.FTP_ROLLBACK_FOLDER}/{recordId}";
             
             ftpClient.MoveFolder(sourceFolder, destinationFolder);
         }
@@ -60,12 +61,31 @@ namespace Catalogue.Robot.Publishing.Data
             }
         }
 
+        public void RemoveRollbackFiles(string recordId)
+        {
+            var oldFolderPath = $"{env.FTP_ROLLBACK_FOLDER}/{recordId}";
+
+            if (ftpClient.FolderExists(oldFolderPath))
+            {
+                Logger.Info("Cleaning up old data");
+                ftpClient.DeleteFolder(oldFolderPath);
+            }
+            else
+            {
+                Logger.Info("No data clean up required");
+            }
+        }
+
         public void Rollback(string recordId)
         {
-            var oldFolder = $"{env.FTP_OLD_FOLDER}/{recordId}";
+            Logger.Info("Rolling back to use old data");
+            var oldFolder = $"{env.FTP_ROLLBACK_FOLDER}/{recordId}";
             var dataFolder = $"{env.FTP_DATA_FOLDER}/{recordId}";
 
-            ftpClient.DeleteFolder(dataFolder);
+            if (ftpClient.FolderExists(dataFolder))
+            {
+                ftpClient.DeleteFolder(dataFolder);
+            }
             ftpClient.MoveFolder(oldFolder, dataFolder);
         }
     }

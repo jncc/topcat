@@ -8,6 +8,7 @@ namespace Catalogue.Robot.Publishing.Client
     /// </summary>
     public interface IFtpClient
     {
+        bool FolderExists(string folderPath);
         void MoveFolder(string folderPath, string destinationFolderPath);
         void UploadFile(string ftpPath, string filepath);
         void UploadString(string ftpPath, string content);
@@ -23,6 +24,14 @@ namespace Catalogue.Robot.Publishing.Client
         public FtpClient(Env env)
         {
             this.env = env;
+        }
+
+        public bool FolderExists(string folderPath)
+        {
+            using (var client = new FluentFTP.FtpClient(env.FTP_HOST, new NetworkCredential(env.FTP_USERNAME, env.FTP_PASSWORD)))
+            {
+                return client.DirectoryExists(folderPath);
+            }
         }
 
         public void MoveFolder(string folderPath, string destinationFolderPath)
