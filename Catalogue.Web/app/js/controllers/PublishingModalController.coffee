@@ -153,8 +153,7 @@ angular.module('app.controllers').controller 'PublishingModalController',
                     return "Pending - last completed on " + moment(new Date($scope.form.publication.target.gov.lastSuccess.dateUtc)).format('DD MMM YYYY h:mm a')
                 else if $scope.form.publication.target.gov.lastAttempt != null
                     # attempted before
-                    return "Pending - last failed on " + moment(new Date($scope.form.publication.target.gov.lastAttempt.dateUtc)).format('DD MMM YYYY h:mm a') +
-                        " with error \"" + $scope.form.publication.target.gov.lastAttempt.message + "\""
+                    return "Pending - last attempted on " + moment(new Date($scope.form.publication.target.gov.lastAttempt.dateUtc)).format('DD MMM YYYY h:mm a')
                 else
                     # anything else?
                     return "Pending"

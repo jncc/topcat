@@ -1,13 +1,15 @@
 ﻿angular.module('app.controllers').controller 'EditorController',
 
-    ($scope, $http, $routeParams, $location, record, $modal, Account) -> 
+    ($scope, $http, $routeParams, $location, record, $modal, Account) ->
 
         Account.then (user) -> $scope.user = user
-
+        
         $scope.editing = {}
         $scope.lookups = {}
         $scope.lookups.currentDataFormat = {}
         $scope.recordOutput = record
+
+        $scope.publishingNotifications = getPublishingNotifications record.record.publication, record.recordState.publishingState
         
         # store a vocabulator scope here to save state between modal instances
         $scope.vocabulator = {}
@@ -30,7 +32,6 @@
         $scope.getSecurityText = getSecurityText
         $scope.getDataFormatObj = getDataFormatObj
         $scope.updateDataFormatObj = updateDataFormatObj
-        $scope.getPendingSignOff = getPendingSignOff
         $scope.getPublishingText = getPublishingText
         $scope.getPublishButtonTooltip = getPublishButtonTooltip
         $scope.getFormattedDate = getFormattedDate
@@ -60,6 +61,7 @@
                 record: response.record
                 recordState: response.recordState
             $scope.validation = {}
+            $scope.publishingNotifications = getPublishingNotifications response.record.publication, response.recordState.publishingState
             $scope.reset()
             $scope.status.refresh()
             $location.path('/editor/' + $scope.recordOutput.record.id)
@@ -225,12 +227,6 @@ getPublishingText = (record, publishingState) ->
 getFormattedDate = (date) ->
     return moment(new Date(date)).format('DD MMM YYYY')
 
-getPendingSignOff = (publication) ->
-    if publication != null && publication.assessment.completed && publication.signOff == null
-        return true
-    else
-        return false
-
 getSecurityText = (n) -> switch n
     when 0 then 'Official'
     when 1 then 'Official-Sensitive'
@@ -260,6 +256,18 @@ getDataFormatObj = (name, formats) ->
 updateDataFormatObj = (name, formats, form) ->
     form.gemini.dataFormat = name
     getDataFormatObj(name, formats)
+
+getPublishingNotifications = (publication, publishingState) ->
+    if publication && publication.target && publishingState
+        notifications = []
+        if publishingState.assessedAndUpToDate && !publishingState.signedOffAndUpToDate
+            notifications.push {message: 'Awaiting publishing sign off, editing this record will remove it from the approvals list and require resubmission'}
+        if (publication.data && publication.data.lastAttempt && publication.data.lastAttempt.message) || (publication.target.hub && publication.target.hub.lastAttempt && publication.target.hub.lastAttempt.message) || (publication.target.gov && publication.target.gov.lastAttempt && publication.target.gov.lastAttempt.message)
+            notifications.push {message: 'Failure during a previous publishing attempt, please contact Topcat support'}
+
+        return notifications
+
+    return null
 
 fakeValidationData = errors: [
     { message: 'There was an error' }
