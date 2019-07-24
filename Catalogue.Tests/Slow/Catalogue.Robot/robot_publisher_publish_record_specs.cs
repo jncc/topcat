@@ -68,7 +68,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Robot
             var db = new Mock<IDocumentSession>();
             var vocabQueryerMock = new Mock<IVocabQueryer>();
             var uploadService = new Mock<IPublishingUploadRecordService>();
-            var dataUploaderMock = new Mock<IDataUploader>();
+            var dataUploaderMock = new Mock<IDataService>();
             var metadataUploaderMock = new Mock<IGovService>();
             var hubServiceMock = new Mock<IHubService>();
             var redactorMock = new Mock<IRecordRedactor>();
@@ -130,27 +130,27 @@ namespace Catalogue.Tests.Slow.Catalogue.Robot
             var db = new Mock<IDocumentSession>();
             var vocabQueryerMock = new Mock<IVocabQueryer>();
             var uploadService = new Mock<IPublishingUploadRecordService>();
-            var dataUploaderMock = new Mock<IDataUploader>();
+            var dataServiceMock = new Mock<IDataService>();
             var metadataUploaderMock = new Mock<IGovService>();
             var hubServiceMock = new Mock<IHubService>();
             var redactorMock = new Mock<IRecordRedactor>();
-            var uploader = new RobotPublisher(env, db.Object, redactorMock.Object, uploadService.Object, dataUploaderMock.Object, metadataUploaderMock.Object, hubServiceMock.Object);
+            var uploader = new RobotPublisher(env, db.Object, redactorMock.Object, uploadService.Object, dataServiceMock.Object, metadataUploaderMock.Object, hubServiceMock.Object);
             vocabQueryerMock.Setup(x => x.GetVocab(It.IsAny<string>())).Returns(new Vocabulary());
             hubServiceMock.Setup(x => x.Publish(It.IsAny<Record>())).Throws(new Exception("test message"));
             redactorMock.Setup(x => x.RedactRecord(It.IsAny<Record>())).Returns(record);
 
             uploader.PublishRecord(record);
 
-            dataUploaderMock.Verify(x => x.CreateDataRollback(It.IsAny<string>()), Times.Once);
-            dataUploaderMock.Verify(x => x.UploadDataFile(It.IsAny<string>(), It.IsAny<string>()), Times.Once);
+            dataServiceMock.Verify(x => x.CreateDataRollback(It.IsAny<string>()), Times.Once);
+            dataServiceMock.Verify(x => x.UploadDataFile(It.IsAny<string>(), It.IsAny<string>()), Times.Once);
             hubServiceMock.Verify(x => x.Publish(It.IsAny<Record>()), Times.Once);
             hubServiceMock.Verify(x => x.Index(It.IsAny<Record>()), Times.Never);
             metadataUploaderMock.Verify(x => x.UploadGeminiXml(It.IsAny<Record>()), Times.Never);
             metadataUploaderMock.Verify(x => x.UpdateDguIndex(It.IsAny<Record>()), Times.Never);
             uploadService.Verify(x => x.UpdateGovPublishSuccess(It.IsAny<Record>(), It.IsAny<PublicationAttempt>()), Times.Never);
             redactorMock.Verify(x => x.RedactRecord(It.IsAny<Record>()), Times.Exactly(1));
-            dataUploaderMock.Verify(x => x.RemoveRollbackFiles(It.IsAny<string>()), Times.Never);
-            dataUploaderMock.Verify(x => x.Rollback(It.IsAny<string>()), Times.Once);
+            dataServiceMock.Verify(x => x.RemoveRollbackFiles(It.IsAny<string>()), Times.Never);
+            dataServiceMock.Verify(x => x.Rollback(It.IsAny<string>()), Times.Once);
         }
     }
 }

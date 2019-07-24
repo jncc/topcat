@@ -7,27 +7,30 @@ using System;
 
 namespace Catalogue.Robot.Publishing.Data
 {
-    public interface IDataUploader
+    public interface IDataService
     {
         void CreateDataRollback(string recordId);
         void UploadDataFile(string recordId, string filePath);
         void RemoveRollbackFiles(string recordId);
         void Rollback(string recordId);
+        void ReportDataCleanup();
     }
 
-    public class DataUploader : IDataUploader
+    public class DataService : IDataService
     {
-        private static readonly ILog Logger = LogManager.GetLogger(typeof(DataUploader));
+        private static readonly ILog Logger = LogManager.GetLogger(typeof(DataService));
 
         private readonly Env env;
         private readonly IFtpClient ftpClient;
         private readonly IFileHelper fileHelper;
+        private readonly ISmtpClient smtpClient;
 
-        public DataUploader(Env env, IFtpClient ftpClient, IFileHelper fileHelper)
+        public DataService(Env env, IFtpClient ftpClient, IFileHelper fileHelper, ISmtpClient smtpClient)
         {
             this.env = env;
             this.ftpClient = ftpClient;
             this.fileHelper = fileHelper;
+            this.smtpClient = smtpClient;
         }
 
         public void CreateDataRollback(string recordId)
@@ -87,6 +90,11 @@ namespace Catalogue.Robot.Publishing.Data
                 ftpClient.DeleteFolder(dataFolder);
             }
             ftpClient.MoveFolder(oldFolder, dataFolder);
+        }
+
+        public void ReportDataCleanup()
+        {
+            smtpClient.SendEmail(env.SMTP_FROM, env.SMTP_TO, "Topcat email test", "hello!");
         }
     }
 }

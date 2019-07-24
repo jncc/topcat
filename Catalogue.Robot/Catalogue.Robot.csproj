@@ -73,6 +73,7 @@
     <Compile Include="DeadLinks\FileLinkChecker.cs" />
     <Compile Include="Injection\MainNinjectModule.cs" />
     <Compile Include="Injection\NinjectJobFactory.cs" />
+    <Compile Include="Publishing\Client\SmtpClient.cs" />
     <Compile Include="Publishing\Env.cs" />
     <Compile Include="Publishing\Gov\GovService.cs" />
     <Compile Include="Publishing\FileHelper.cs" />

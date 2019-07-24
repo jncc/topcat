@@ -31,6 +31,12 @@ namespace Catalogue.Robot.Publishing
         public string HUB_API_AWS_SECRETACCESSKEY { get; private set; }
         public string HUB_API_ENDPOINT { get; private set; }
 
+        // emailing
+        public bool SMTP_NOTIFICATIONS_ON { get; private set; }
+        public string SMTP_HOST { get; private set; }
+        public string SMTP_FROM { get; private set; }
+        public string SMTP_TO { get; private set; }
+
         public Env(string filePath = ".env")
         {
             DotEnv.Config(filePath: filePath);
@@ -58,6 +64,11 @@ namespace Catalogue.Robot.Publishing
             this.HUB_API_AWS_ACCESSKEY = GetVariable("HUB_API_AWS_ACCESSKEY");
             this.HUB_API_AWS_SECRETACCESSKEY = GetVariable("HUB_API_AWS_SECRETACCESSKEY");
             this.HUB_API_ENDPOINT = GetVariable("HUB_API_ENDPOINT");
+
+            this.SMTP_NOTIFICATIONS_ON = bool.Parse(GetVariable("SMTP_NOTIFICATIONS_ON"));
+            this.SMTP_HOST = GetVariable("SMTP_HOST");
+            this.SMTP_FROM = GetVariable("SMTP_FROM");
+            this.SMTP_TO = GetVariable("SMTP_TO");
         }
 
         string GetVariable(string name, bool required = true, string defaultValue = null)

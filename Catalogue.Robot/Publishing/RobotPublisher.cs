@@ -26,7 +26,7 @@ namespace Catalogue.Robot.Publishing
         private readonly IDocumentSession db;
         private readonly IRecordRedactor recordRedactor;
         private readonly IPublishingUploadRecordService uploadRecordService;
-        private readonly IDataUploader dataUploader;
+        private readonly IDataService dataService;
         private readonly IGovService govService;
         private readonly IHubService hubService;
 
@@ -35,7 +35,7 @@ namespace Catalogue.Robot.Publishing
             IDocumentSession db,
             IRecordRedactor recordRedactor,
             IPublishingUploadRecordService uploadRecordService,
-            IDataUploader dataUploader,
+            IDataService dataService,
             IGovService govService,
             IHubService hubService
             )
@@ -44,7 +44,7 @@ namespace Catalogue.Robot.Publishing
             this.db = db;
             this.recordRedactor = recordRedactor;
             this.uploadRecordService = uploadRecordService;
-            this.dataUploader = dataUploader;
+            this.dataService = dataService;
             this.govService = govService;
             this.hubService = hubService;
         }
@@ -80,7 +80,8 @@ namespace Catalogue.Robot.Publishing
                 PublishHubMetadata(record);
                 PublishGovMetadata(record);
 
-                dataUploader.RemoveRollbackFiles(recordId);
+                dataService.RemoveRollbackFiles(recordId);
+                dataService.ReportDataCleanup();
 
                 Logger.Info($"Successfully published record {recordId} {record.Gemini.Title}");
             }
@@ -90,7 +91,7 @@ namespace Catalogue.Robot.Publishing
 
                 try
                 {
-                    dataUploader.Rollback(Helpers.RemoveCollection(recordId));
+                    dataService.Rollback(Helpers.RemoveCollection(recordId));
                     Logger.Info($"Data rollback successfully completed for record with GUID={recordId}");
                 }
                 catch (Exception e)
@@ -115,7 +116,7 @@ namespace Catalogue.Robot.Publishing
 
                 var recordId = Helpers.RemoveCollection(record.Id);
 
-                dataUploader.CreateDataRollback(recordId);
+                dataService.CreateDataRollback(recordId);
 
                 var resources = record.Resources.Copy(); // don't want to save if any of them fail
                 if (resources != null)
@@ -126,7 +127,7 @@ namespace Catalogue.Robot.Publishing
                         if (Helpers.IsFileResource(resource))
                         {
                             Logger.Info($"Resource {resource.Path} is a file - starting upload process");
-                            dataUploader.UploadDataFile(recordId, resource.Path);
+                            dataService.UploadDataFile(recordId, resource.Path);
                             string dataHttpPath = env.HTTP_ROOT_URL + GetUnrootedDataPath(recordId, resource.Path);
                             resource.PublishedUrl = dataHttpPath;
                         }
