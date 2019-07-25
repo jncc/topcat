@@ -86,7 +86,6 @@ namespace Catalogue.Tests.Slow.Catalogue.Robot
             metadataUploaderMock.Verify(x => x.UpdateDguIndex(It.IsAny<Record>()), Times.Once);
             uploadService.Verify(x => x.UpdateGovPublishSuccess(It.IsAny<Record>(), It.IsAny<PublicationAttempt>()), Times.Once);
             redactorMock.Verify(x => x.RedactRecord(It.IsAny<Record>()), Times.Exactly(2));
-            dataUploaderMock.Verify(x => x.RemoveRollbackFiles(It.IsAny<string>()), Times.Once);
             dataUploaderMock.Verify(x => x.Rollback(It.IsAny<string>()), Times.Never);
         }
 

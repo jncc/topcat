@@ -64,8 +64,9 @@ namespace Catalogue.Robot.Publishing
             return records;
         }
 
-        public void PublishRecord(Record record, bool metadataOnly = false)
+        public bool PublishRecord(Record record, bool metadataOnly = false)
         {
+            var result = false;
             var recordId = Helpers.RemoveCollection(record.Id);
 
             Logger.Info($"Starting publishing process for record {recordId} {record.Gemini.Title}");
@@ -80,10 +81,8 @@ namespace Catalogue.Robot.Publishing
                 PublishHubMetadata(record);
                 PublishGovMetadata(record);
 
-                dataService.RemoveRollbackFiles(recordId);
-                dataService.ReportDataCleanup();
-
                 Logger.Info($"Successfully published record {recordId} {record.Gemini.Title}");
+                result = true;
             }
             catch (Exception ex)
             {
@@ -104,6 +103,8 @@ namespace Catalogue.Robot.Publishing
                 // commit the changes - to both the record (resource locator may have changed) and the attempt object
                 db.SaveChanges();
             }
+
+            return result;
         }
 
         private void PublishDataFiles(Record record)
@@ -230,5 +231,6 @@ namespace Catalogue.Robot.Publishing
                 Logger.Info("Data.gov.uk not defined as a target publishing destination");
             }
         }
+        
     }
 }

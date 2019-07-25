@@ -5,6 +5,14 @@ namespace Catalogue.Robot.Publishing
 {
     public class Env
     {
+        public string ENV { get; private set; }
+        public string LOG_PATH { get; private set; }
+
+        // scheduled service
+        public int JOB_START_HOUR { get; private set; }
+        public int JOB_START_MINUTE { get; private set; }
+        public int JOB_RUN_INTERVAL_IN_HOURS { get; private set; }
+
         // data file host
         public string HTTP_ROOT_URL { get; private set; }
         public long MAX_FILE_SIZE_IN_BYTES { get; private set; }
@@ -40,6 +48,13 @@ namespace Catalogue.Robot.Publishing
         public Env(string filePath = ".env")
         {
             DotEnv.Config(filePath: filePath);
+
+            this.ENV = GetVariable("ENV");
+            this.LOG_PATH = GetVariable("LOG_PATH");
+
+            this.JOB_START_HOUR = int.Parse(GetVariable("JOB_START_HOUR"));
+            this.JOB_START_MINUTE = int.Parse(GetVariable("JOB_START_MINUTE"));
+            this.JOB_RUN_INTERVAL_IN_HOURS = int.Parse(GetVariable("JOB_RUN_INTERVAL_IN_HOURS"));
 
             this.HTTP_ROOT_URL = GetVariable("HTTP_ROOT_URL");
             this.MAX_FILE_SIZE_IN_BYTES = long.Parse(GetVariable("MAX_FILE_SIZE_IN_BYTES"));

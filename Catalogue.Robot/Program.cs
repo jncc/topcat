@@ -19,7 +19,8 @@ namespace Catalogue.Robot
 
         private static void Main(string[] args)
         {
-            GlobalContext.Properties["LogFileName"] = ConfigurationManager.AppSettings["LogFilePath"];
+            var env = new Env();
+            GlobalContext.Properties["LogFileName"] = env.LOG_PATH;
             XmlConfigurator.Configure();
 
             bool runOnce = args != null && args.Length > 0 && "runOnce".Equals(args[0]);
@@ -35,9 +36,9 @@ namespace Catalogue.Robot
             else
             {
                 Logger.Info("Running scheduled service");
-                var startHour = Convert.ToInt32(ConfigurationManager.AppSettings["UploaderStartHour"]);
-                var startMin = Convert.ToInt32(ConfigurationManager.AppSettings["UploaderStartMinute"]);
-                var interval = Convert.ToInt32(ConfigurationManager.AppSettings["UploaderRunIntervalInHours"]);
+                var startHour = env.JOB_START_HOUR;
+                var startMin = env.JOB_START_MINUTE;
+                var interval = env.JOB_RUN_INTERVAL_IN_HOURS;
 
                 HostFactory.Run(x =>
                 {
@@ -60,7 +61,7 @@ namespace Catalogue.Robot
                         );
                     });
 
-                    string serviceName = "Topcat.Robot." + ConfigurationManager.AppSettings["Environment"];
+                    string serviceName = "Topcat.Robot." + env.ENV;
                     x.SetDisplayName(serviceName);
                     x.SetServiceName(serviceName);
                     x.SetDescription("Uploads metadata and data files from Topcat to data.jncc.gov.uk");

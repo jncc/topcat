@@ -1,4 +1,5 @@
-﻿using Catalogue.Data.Model;
+﻿using System;
+using Catalogue.Data.Model;
 using Catalogue.Data.Query;
 using Catalogue.Data.Write;
 using Catalogue.Robot.Publishing.Data;
@@ -8,6 +9,9 @@ using log4net;
 using Quartz;
 using Raven.Client.Documents;
 using System.Collections.Generic;
+using Catalogue.Data;
+using Catalogue.Robot.Publishing.Client;
+using Lucene.Net.Search;
 using Raven.Client.Documents.Session;
 
 namespace Catalogue.Robot.Publishing
@@ -21,14 +25,16 @@ namespace Catalogue.Robot.Publishing
         private readonly IDataService dataService;
         private readonly IHubService hubService;
         private readonly IGovService govService;
+        private readonly ISmtpClient smtpClient;
 
-        public PublishingJob(Env env, IDocumentStore store, IDataService dataService, IHubService hubService, IGovService govService)
+        public PublishingJob(Env env, IDocumentStore store, IDataService dataService, IHubService hubService, IGovService govService, ISmtpClient smtpClient)
         {
             this.env = env;
             this.store = store;
             this.dataService = dataService;
             this.hubService = hubService;
             this.govService = govService;
+            this.smtpClient = smtpClient;
         }
 
         public void Execute(IJobExecutionContext context)
@@ -40,26 +46,65 @@ namespace Catalogue.Robot.Publishing
 
         public void Publish(bool metadataOnly = false)
         {
-            List<Record> recordsToPublish;
-
-            using (var db = store.OpenSession())
+            try
             {
-                var robotPublisher = GetPublisher(db);
-
-                recordsToPublish = robotPublisher.GetRecordsPendingUpload();
-                Logger.Info($"Found {recordsToPublish.Count} records to publish");
-            }
-
-            
-            foreach (var record in recordsToPublish)
-            {
+                List<Record> recordsToPublish;
+                
+                // retrieve records
                 using (var db = store.OpenSession())
                 {
                     var robotPublisher = GetPublisher(db);
-                    robotPublisher.PublishRecord(record, metadataOnly);
+
+                    recordsToPublish = robotPublisher.GetRecordsPendingUpload();
+                    Logger.Info($"Found {recordsToPublish.Count} records to publish");
                 }
+
+                var oldDataFiles = new Dictionary<string, List<string>>();
+
+                // publish records
+                foreach (var record in recordsToPublish)
+                {
+                    var recordId = Helpers.RemoveCollection(record.Id);
+                    var dataFiles = dataService.GetDataFiles(recordId);
+
+                    using (var db = store.OpenSession())
+                    {
+                        var robotPublisher = GetPublisher(db);
+                        if (robotPublisher.PublishRecord(record, metadataOnly) && dataFiles.Count > 0)
+                        {
+                            oldDataFiles.Add(recordId, dataFiles);
+                        }
+                    }
+                }
+
+                // cleanup and reporting
+                var removedFiles = new List<string>();
+                foreach (var entry in oldDataFiles)
+                {
+                    var currentDataFiles = dataService.GetDataFiles(entry.Key);
+                    foreach (var oldDataFile in entry.Value)
+                    {
+                        if (!currentDataFiles.Contains(oldDataFile))
+                        {
+                            removedFiles.Add(oldDataFile);
+                        }
+                    }
+
+                    dataService.RemoveRollbackFiles(entry.Key);
+                }
+
+                dataService.ReportRemovedDataFiles(removedFiles);
             }
-            
+            catch (Exception e)
+            {
+                Logger.Error("Error in publishing process, attempting to send email alert", e);
+
+                smtpClient.SendEmail(env.SMTP_FROM, env.SMTP_TO, "MEOW - Publishing error",
+                    $"Something went wrong which caused the process to stop unexpectedly. Check the logs at {env.LOG_PATH}\n\n{e}");
+
+                Logger.Info("Email sent successfully");
+            }
+
         }
 
         private RobotPublisher GetPublisher(IDocumentSession db)

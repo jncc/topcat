@@ -88,7 +88,7 @@
     <Compile Include="Publishing\Client\FtpClient.cs" />
     <Compile Include="Publishing\Gov\XmlHelper.cs" />
     <Compile Include="Publishing\RobotPublisher.cs" />
-    <Compile Include="Publishing\Data\DataUploader.cs" />
+    <Compile Include="Publishing\Data\DataService.cs" />
     <Compile Include="Robot.cs" />
   </ItemGroup>
   <ItemGroup>

@@ -4,16 +4,19 @@ using Catalogue.Utilities.DriveMapping;
 using Catalogue.Utilities.Text;
 using log4net;
 using System;
+using System.Collections.Generic;
+using System.Text;
 
 namespace Catalogue.Robot.Publishing.Data
 {
     public interface IDataService
     {
+        List<string> GetDataFiles(string recordId);
         void CreateDataRollback(string recordId);
         void UploadDataFile(string recordId, string filePath);
         void RemoveRollbackFiles(string recordId);
         void Rollback(string recordId);
-        void ReportDataCleanup();
+        void ReportRemovedDataFiles(List<string> fileUrls);
     }
 
     public class DataService : IDataService
@@ -31,6 +34,19 @@ namespace Catalogue.Robot.Publishing.Data
             this.ftpClient = ftpClient;
             this.fileHelper = fileHelper;
             this.smtpClient = smtpClient;
+        }
+
+        public List<string> GetDataFiles(string recordId)
+        {
+            var folderPath = $"{env.FTP_DATA_FOLDER}/{recordId}";
+
+            var dataFiles = new List<string>();
+            if (ftpClient.FolderExists(folderPath))
+            {
+                dataFiles = ftpClient.ListFolder(folderPath);
+            }
+
+            return dataFiles;
         }
 
         public void CreateDataRollback(string recordId)
@@ -70,18 +86,18 @@ namespace Catalogue.Robot.Publishing.Data
 
             if (ftpClient.FolderExists(oldFolderPath))
             {
-                Logger.Info("Cleaning up old data");
+                Logger.Info($"Cleaning up old data for {recordId}");
                 ftpClient.DeleteFolder(oldFolderPath);
             }
             else
             {
-                Logger.Info("No data clean up required");
+                Logger.Info($"No data clean up required for {recordId}");
             }
         }
 
         public void Rollback(string recordId)
         {
-            Logger.Info("Rolling back to use old data");
+            Logger.Info($"Rolling back to use old data for {recordId}");
             var oldFolder = $"{env.FTP_ROLLBACK_FOLDER}/{recordId}";
             var dataFolder = $"{env.FTP_DATA_FOLDER}/{recordId}";
 
@@ -90,11 +106,30 @@ namespace Catalogue.Robot.Publishing.Data
                 ftpClient.DeleteFolder(dataFolder);
             }
             ftpClient.MoveFolder(oldFolder, dataFolder);
+            Logger.Info($"Rollback successful for {recordId}");
         }
 
-        public void ReportDataCleanup()
+        public void ReportRemovedDataFiles(List<string> fileUrls)
         {
-            smtpClient.SendEmail(env.SMTP_FROM, env.SMTP_TO, "Topcat email test", "hello!");
+            if (fileUrls != null && fileUrls.Count > 0)
+            {
+                Logger.Info($"Sending removed data files report with the following URLs: {string.Join(", ", fileUrls)}");
+                var body = new StringBuilder();
+                body.AppendLine($"Report for Topcat robot run {DateTime.Now}");
+                body.AppendLine();
+                body.AppendLine("The following files have been removed:");
+                foreach (var url in fileUrls)
+                {
+                    body.AppendLine(url);
+                }
+
+                smtpClient.SendEmail(env.SMTP_FROM, env.SMTP_TO, "MEOW - Removed data files", body.ToString());
+            }
+            else
+            {
+                Logger.Info("No data files removed, reporting not needed");
+            }
+            
         }
     }
 }

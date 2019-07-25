@@ -1,4 +1,5 @@
-﻿using System.Net;
+﻿using System.Collections.Generic;
+using System.Net;
 using System.Text;
 
 namespace Catalogue.Robot.Publishing.Client
@@ -10,6 +11,7 @@ namespace Catalogue.Robot.Publishing.Client
     {
         bool FolderExists(string folderPath);
         void MoveFolder(string folderPath, string destinationFolderPath);
+        List<string> ListFolder(string folderPath);
         void UploadFile(string ftpPath, string filepath);
         void UploadString(string ftpPath, string content);
         void UploadBytes(string ftpPath, byte[] bytes);
@@ -40,6 +42,14 @@ namespace Catalogue.Robot.Publishing.Client
                 new FluentFTP.FtpClient(env.FTP_HOST, new NetworkCredential(env.FTP_USERNAME, env.FTP_PASSWORD)))
             {
                 client.MoveDirectory(folderPath, destinationFolderPath);
+            }
+        }
+
+        public List<string> ListFolder(string folderPath)
+        {
+            using (var client = new FluentFTP.FtpClient(env.FTP_HOST, new NetworkCredential(env.FTP_USERNAME, env.FTP_PASSWORD)))
+            {
+                return new List<string>(client.GetNameListing(folderPath));
             }
         }
 
