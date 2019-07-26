@@ -1,4 +1,8 @@
-﻿using Catalogue.Data;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Net;
+using Catalogue.Data;
 using Catalogue.Data.Model;
 using Catalogue.Data.Query;
 using Catalogue.Data.Write;
@@ -14,13 +18,9 @@ using Catalogue.Utilities.Time;
 using FluentAssertions;
 using Moq;
 using NUnit.Framework;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net;
 using PublicationAttempt = Catalogue.Data.Model.PublicationAttempt;
 
-namespace Catalogue.Tests.Slow.Catalogue.Robot
+namespace Catalogue.Tests.Slow.Catalogue.Data.Write
 {
     public class publishing_upload_record_service_specs : CleanDbTest
     {
