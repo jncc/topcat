@@ -9,6 +9,7 @@ using log4net;
 using Quartz;
 using Raven.Client.Documents;
 using System.Collections.Generic;
+using System.Configuration;
 using Catalogue.Data;
 using Catalogue.Robot.Publishing.Client;
 using Lucene.Net.Search;
@@ -100,7 +101,7 @@ namespace Catalogue.Robot.Publishing
                 Logger.Error("Error in publishing process, attempting to send email alert", e);
 
                 smtpClient.SendEmail(env.SMTP_FROM, env.SMTP_TO, "MEOW - Publishing error",
-                    $"Something went wrong which caused the process to stop unexpectedly. Check the logs at {env.LOG_PATH}\n\n{e}");
+                    $"Something went wrong which caused the process to stop unexpectedly. Check the logs at {ConfigurationManager.AppSettings["LogFilePath"]}\n\n{e}");
 
                 Logger.Info("Email sent successfully");
             }
