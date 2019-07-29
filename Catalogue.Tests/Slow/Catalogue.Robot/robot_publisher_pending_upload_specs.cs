@@ -15,7 +15,7 @@ using System.Collections.Generic;
 
 namespace Catalogue.Tests.Slow.Catalogue.Robot
 {
-    public class robot_publisher_specs : CleanDbTest
+    public class robot_publisher_pending_upload_specs : CleanDbTest
     {
         private Env env;
 
@@ -1262,11 +1262,11 @@ namespace Catalogue.Tests.Slow.Catalogue.Robot
                 WaitForIndexing(ReusableDocumentStore);
 
                 var uploadServiceMock = new Mock<IPublishingUploadRecordService>();
-                var dataUploaderMock = new Mock<IDataUploader>();
+                var dataServiceMock = new Mock<IDataService>();
                 var metadataUploaderMock = new Mock<IGovService>();
                 var hubServiceMock = new Mock<IHubService>();
                 var recordRedactorMock = new Mock<IRecordRedactor>();
-                var robotUploader = new RobotPublisher(env, db, recordRedactorMock.Object, uploadServiceMock.Object, dataUploaderMock.Object, metadataUploaderMock.Object, hubServiceMock.Object);
+                var robotUploader = new RobotPublisher(env, db, recordRedactorMock.Object, uploadServiceMock.Object, dataServiceMock.Object, metadataUploaderMock.Object, hubServiceMock.Object);
 
                 var result = robotUploader.GetRecordsPendingUpload();
                 return result;

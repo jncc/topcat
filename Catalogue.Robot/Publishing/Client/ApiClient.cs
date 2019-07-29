@@ -17,8 +17,6 @@ namespace Catalogue.Robot.Publishing.Client
 
     public class ApiClient : IApiClient
     {
-        private static readonly ILog Logger = LogManager.GetLogger(typeof(ApiClient));
-
         private readonly Env env;
         private readonly HttpClient httpClient;
 
@@ -31,7 +29,6 @@ namespace Catalogue.Robot.Publishing.Client
         public HttpResponseMessage SendToHub(string assetMessage)
         {
             var response = Post(assetMessage).GetAwaiter().GetResult();
-            Logger.Info($"Posted asset to Hub API endpoint {env.HUB_API_ENDPOINT}, response is {(int)response.StatusCode} {response.StatusCode}");
 
             return response;
         }

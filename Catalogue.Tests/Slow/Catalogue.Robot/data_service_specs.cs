@@ -14,7 +14,7 @@ using NUnit.Framework;
 
 namespace Catalogue.Tests.Slow.Catalogue.Robot
 {
-    public class data_uploader_specs
+    public class data_service_specs
     {
         private Env env;
 
@@ -29,7 +29,8 @@ namespace Catalogue.Tests.Slow.Catalogue.Robot
         {
             var ftpClientMock = new Mock<IFtpClient>();
             var fileHelperMock = new Mock<IFileHelper>();
-            var dataUploader = new DataUploader(env, ftpClientMock.Object, fileHelperMock.Object);
+            var smtpClientMock = new Mock<ISmtpClient>();
+            var dataUploader = new DataService(env, ftpClientMock.Object, fileHelperMock.Object, smtpClientMock.Object);
             fileHelperMock.Setup(x => x.GetFileSizeInBytes("\\\\JNCC-CORPFILE\\Marine Survey\\path\\to\\uploader\\test.txt")).Returns(1000000001);
             
             Action a = () => dataUploader.UploadDataFile("guid-here", @"X:\path\to\uploader\test.txt");
@@ -44,7 +45,8 @@ namespace Catalogue.Tests.Slow.Catalogue.Robot
         {
             var ftpClientMock = new Mock<IFtpClient>();
             var fileHelperMock = new Mock<IFileHelper>();
-            var dataUploader = new DataUploader(env, ftpClientMock.Object, fileHelperMock.Object);
+            var smtpClientMock = new Mock<ISmtpClient>();
+            var dataUploader = new DataService(env, ftpClientMock.Object, fileHelperMock.Object, smtpClientMock.Object);
             fileHelperMock.Setup(x => x.GetFileSizeInBytes("\\\\JNCC-CORPFILE\\Marine Survey\\path\\to\\uploader\\test.txt")).Returns(100000);
 
             dataUploader.UploadDataFile("guid-here", @"X:\path\to\uploader\test.txt");

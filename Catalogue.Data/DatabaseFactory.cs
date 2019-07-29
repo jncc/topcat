@@ -17,7 +17,6 @@ namespace Catalogue.Data
                 Urls = new[] { ConfigurationManager.AppSettings["RavenDbUrls"] },
                 Database = ConfigurationManager.AppSettings["RavenDbDatabase"]
             };
-            store.Conventions.MaxNumberOfRequestsPerSession = 100;
             store.Initialize();
             IndexCreation.CreateIndexes(typeof(Record).Assembly, store);
 

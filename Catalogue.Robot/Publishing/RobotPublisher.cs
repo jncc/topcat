@@ -26,7 +26,7 @@ namespace Catalogue.Robot.Publishing
         private readonly IDocumentSession db;
         private readonly IRecordRedactor recordRedactor;
         private readonly IPublishingUploadRecordService uploadRecordService;
-        private readonly IDataUploader dataUploader;
+        private readonly IDataService dataService;
         private readonly IGovService govService;
         private readonly IHubService hubService;
 
@@ -35,7 +35,7 @@ namespace Catalogue.Robot.Publishing
             IDocumentSession db,
             IRecordRedactor recordRedactor,
             IPublishingUploadRecordService uploadRecordService,
-            IDataUploader dataUploader,
+            IDataService dataService,
             IGovService govService,
             IHubService hubService
             )
@@ -44,7 +44,7 @@ namespace Catalogue.Robot.Publishing
             this.db = db;
             this.recordRedactor = recordRedactor;
             this.uploadRecordService = uploadRecordService;
-            this.dataUploader = dataUploader;
+            this.dataService = dataService;
             this.govService = govService;
             this.hubService = hubService;
         }
@@ -64,10 +64,12 @@ namespace Catalogue.Robot.Publishing
             return records;
         }
 
-        public void PublishRecord(Record record, bool metadataOnly = false)
+        public bool PublishRecord(Record record, bool metadataOnly = false)
         {
-            
-            Logger.Info($"Starting publishing process for record {record.Id} {record.Gemini.Title}");
+            var result = false;
+            var recordId = Helpers.RemoveCollection(record.Id);
+
+            Logger.Info($"Starting publishing process for record {recordId} {record.Gemini.Title}");
 
             try
             {
@@ -79,17 +81,30 @@ namespace Catalogue.Robot.Publishing
                 PublishHubMetadata(record);
                 PublishGovMetadata(record);
 
-                Logger.Info($"Successfully published record {record.Id} {record.Gemini.Title}");
+                Logger.Info($"Successfully published record {recordId} {record.Gemini.Title}");
+                result = true;
             }
             catch (Exception ex)
             {
-                Logger.Error($"Could not complete publishing process for record with GUID={record.Id}", ex);
+                Logger.Error($"Could not complete publishing process for record with GUID={recordId}", ex);
+
+                try
+                {
+                    dataService.Rollback(Helpers.RemoveCollection(recordId));
+                    Logger.Info($"Data rollback successfully completed for record with GUID={recordId}");
+                }
+                catch (Exception e)
+                {
+                    Logger.Error($"Could not complete data rollback for record with GUID={recordId}", e);
+                }
             }
             finally
             {
                 // commit the changes - to both the record (resource locator may have changed) and the attempt object
                 db.SaveChanges();
             }
+
+            return result;
         }
 
         private void PublishDataFiles(Record record)
@@ -100,6 +115,10 @@ namespace Catalogue.Robot.Publishing
                 uploadRecordService.UpdateDataPublishAttempt(record, attempt);
                 db.SaveChanges();
 
+                var recordId = Helpers.RemoveCollection(record.Id);
+
+                dataService.CreateDataRollback(recordId);
+
                 var resources = record.Resources.Copy(); // don't want to save if any of them fail
                 if (resources != null)
                 {
@@ -109,8 +128,8 @@ namespace Catalogue.Robot.Publishing
                         if (Helpers.IsFileResource(resource))
                         {
                             Logger.Info($"Resource {resource.Path} is a file - starting upload process");
-                            dataUploader.UploadDataFile(Helpers.RemoveCollection(record.Id), resource.Path);
-                            string dataHttpPath = env.HTTP_ROOT_URL + GetUnrootedDataPath(Helpers.RemoveCollection(record.Id), resource.Path);
+                            dataService.UploadDataFile(recordId, resource.Path);
+                            string dataHttpPath = env.HTTP_ROOT_URL + GetUnrootedDataPath(recordId, resource.Path);
                             resource.PublishedUrl = dataHttpPath;
                         }
                         else
@@ -143,6 +162,7 @@ namespace Catalogue.Robot.Publishing
 
                 try
                 {
+                    Logger.Info("Starting publish to Resource hub");
                     uploadRecordService.UpdateHubPublishAttempt(record, attempt);
                     db.SaveChanges();
 
@@ -155,27 +175,29 @@ namespace Catalogue.Robot.Publishing
                     // successfully published to the hub at this stage
 
                     redactedRecord.Publication.Target.Hub.Url = url;
+                    Logger.Info("Publish to Resource hub completed successfully");
                 }
                 catch (Exception ex)
                 {
                     attempt.Message = ex.Message + (ex.InnerException != null ? ex.InnerException.Message : "");
-                    Logger.Error($"Could not save record to hub database, GUID={record.Id}", ex);
+                    Logger.Error($"Could not save record to Resource hub database, GUID={record.Id}", ex);
                     throw;
                 }
 
                 try
                 {
                     // attempt to index the record but don't break downstream processing if this doesn't work
+                    Logger.Info("Attempting to add record to queue for search indexing");
                     hubService.Index(redactedRecord);
                 }
                 catch (Exception ex)
                 {
-                    Logger.Error($"Tried but failed to index the record in the hub, GUID={record.Id}", ex);
+                    Logger.Error($"Tried but failed to index the record in the Resource hub, GUID={record.Id}", ex);
                 }
             }
             else
             {
-                Logger.Info("Hub not defined as a target publishing destination");
+                Logger.Info("Resource hub not defined as a target publishing destination");
             }
         }
 
@@ -186,6 +208,7 @@ namespace Catalogue.Robot.Publishing
                 
                 try
                 {
+                    Logger.Info("Starting publish to data.gov.uk");
                     uploadRecordService.UpdateGovPublishAttempt(record, attempt);
                     db.SaveChanges();
 
@@ -194,6 +217,7 @@ namespace Catalogue.Robot.Publishing
                     govService.UpdateDguIndex(Helpers.RemoveCollectionFromId(redactedRecord));
 
                     uploadRecordService.UpdateGovPublishSuccess(record, attempt);
+                    Logger.Info("Publish to data.gov.uk completed successfully");
                 }
                 catch (Exception ex)
                 {
@@ -204,8 +228,9 @@ namespace Catalogue.Robot.Publishing
             }
             else
             {
-                Logger.Info("Gov not defined as a target publishing destination");
+                Logger.Info("Data.gov.uk not defined as a target publishing destination");
             }
         }
+        
     }
 }

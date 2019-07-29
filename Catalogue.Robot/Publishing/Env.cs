@@ -12,6 +12,9 @@ namespace Catalogue.Robot.Publishing
         public string FTP_HOST { get; private set; }
         public string FTP_USERNAME { get; private set; }
         public string FTP_PASSWORD { get; private set; }
+        public string FTP_DATA_FOLDER { get; private set; }
+        public string FTP_WAF_FOLDER { get; private set; }
+        public string FTP_ROLLBACK_FOLDER { get; private set; }
 
         // resource hub
         public string HUB_ASSETS_BASE_URL { get; private set; }
@@ -28,6 +31,12 @@ namespace Catalogue.Robot.Publishing
         public string HUB_API_AWS_SECRETACCESSKEY { get; private set; }
         public string HUB_API_ENDPOINT { get; private set; }
 
+        // emailing
+        public bool SMTP_NOTIFICATIONS_ON { get; private set; }
+        public string SMTP_HOST { get; private set; }
+        public string SMTP_FROM { get; private set; }
+        public string SMTP_TO { get; private set; }
+
         public Env(string filePath = ".env")
         {
             DotEnv.Config(filePath: filePath);
@@ -38,7 +47,9 @@ namespace Catalogue.Robot.Publishing
             this.FTP_HOST = GetVariable("FTP_HOST");
             this.FTP_USERNAME = GetVariable("FTP_USERNAME");
             this.FTP_PASSWORD = GetVariable("FTP_PASSWORD");
-
+            this.FTP_DATA_FOLDER = GetVariable("FTP_DATA_FOLDER");
+            this.FTP_WAF_FOLDER = GetVariable("FTP_WAF_FOLDER");
+            this.FTP_ROLLBACK_FOLDER = GetVariable("FTP_ROLLBACK_FOLDER");
 
             this.HUB_ASSETS_BASE_URL = GetVariable("HUB_ASSETS_BASE_URL");
 
@@ -53,6 +64,11 @@ namespace Catalogue.Robot.Publishing
             this.HUB_API_AWS_ACCESSKEY = GetVariable("HUB_API_AWS_ACCESSKEY");
             this.HUB_API_AWS_SECRETACCESSKEY = GetVariable("HUB_API_AWS_SECRETACCESSKEY");
             this.HUB_API_ENDPOINT = GetVariable("HUB_API_ENDPOINT");
+
+            this.SMTP_NOTIFICATIONS_ON = bool.Parse(GetVariable("SMTP_NOTIFICATIONS_ON"));
+            this.SMTP_HOST = GetVariable("SMTP_HOST");
+            this.SMTP_FROM = GetVariable("SMTP_FROM");
+            this.SMTP_TO = GetVariable("SMTP_TO");
         }
 
         string GetVariable(string name, bool required = true, string defaultValue = null)

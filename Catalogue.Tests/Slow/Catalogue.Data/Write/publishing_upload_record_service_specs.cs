@@ -1,6 +1,12 @@
-﻿using Catalogue.Data;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Net;
+using Catalogue.Data;
 using Catalogue.Data.Model;
+using Catalogue.Data.Query;
 using Catalogue.Data.Write;
+using Catalogue.Gemini.Model;
 using Catalogue.Gemini.Templates;
 using Catalogue.Robot.Publishing;
 using Catalogue.Robot.Publishing.Data;
@@ -12,17 +18,11 @@ using Catalogue.Utilities.Time;
 using FluentAssertions;
 using Moq;
 using NUnit.Framework;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net;
-using Catalogue.Data.Query;
-using Catalogue.Gemini.Model;
 using PublicationAttempt = Catalogue.Data.Model.PublicationAttempt;
 
 namespace Catalogue.Tests.Slow.Catalogue.Data.Write
 {
-    public class publishing_service_specs : CleanDbTest
+    public class publishing_upload_record_service_specs : CleanDbTest
     {
         private static string HUB_URL_ROOT = "http://hub.jncc.gov.uk/assets/";
 
@@ -126,11 +126,11 @@ namespace Catalogue.Tests.Slow.Catalogue.Data.Write
 
                 var vocabQueryerMock = new Mock<IVocabQueryer>();
                 var uploadService = new PublishingUploadRecordService(db, new RecordValidator(vocabQueryerMock.Object));
-                var dataUploaderMock = new Mock<IDataUploader>();
+                var dataServiceMock = new Mock<IDataService>();
                 var metadataUploaderMock = new Mock<IGovService>();
                 var hubServiceMock = new Mock<IHubService>();
                 var redactorMock = new Mock<IRecordRedactor>();
-                var uploader = new RobotPublisher(env, db, redactorMock.Object, uploadService, dataUploaderMock.Object, metadataUploaderMock.Object, hubServiceMock.Object);
+                var uploader = new RobotPublisher(env, db, redactorMock.Object, uploadService, dataServiceMock.Object, metadataUploaderMock.Object, hubServiceMock.Object);
                 vocabQueryerMock.Setup(x => x.GetVocab(It.IsAny<string>())).Returns(new Vocabulary());
                 redactorMock.Setup(x => x.RedactRecord(It.IsAny<Record>())).Returns(record);
 
@@ -145,7 +145,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Data.Write
                 updatedRecord.Gemini.MetadataDate.Should().Be(testTime);
 
                 var fileCount = CountFileResources(record.Resources);
-                dataUploaderMock.Verify(x => x.UploadDataFile(Helpers.RemoveCollection(record.Id), It.IsAny<string>()), Times.Exactly(fileCount));
+                dataServiceMock.Verify(x => x.UploadDataFile(Helpers.RemoveCollection(record.Id), It.IsAny<string>()), Times.Exactly(fileCount));
                 hubServiceMock.Verify(x => x.Publish(record), Times.Once);
                 record.Publication.Target.Hub.Url =
                     "http://hub.jncc.gov.uk/assets/" + Helpers.RemoveCollection(recordId);
@@ -198,11 +198,11 @@ namespace Catalogue.Tests.Slow.Catalogue.Data.Write
 
                 var vocabQueryerMock = new Mock<IVocabQueryer>();
                 var uploadService = new PublishingUploadRecordService(db, new RecordValidator(vocabQueryerMock.Object));
-                var dataUploaderMock = new Mock<IDataUploader>();
+                var dataServiceMock = new Mock<IDataService>();
                 var metadataUploaderMock = new Mock<IGovService>();
                 var hubServiceMock = new Mock<IHubService>();
                 var redactorMock = new Mock<IRecordRedactor>();
-                var uploader = new RobotPublisher(env, db, redactorMock.Object, uploadService, dataUploaderMock.Object, metadataUploaderMock.Object, hubServiceMock.Object);
+                var uploader = new RobotPublisher(env, db, redactorMock.Object, uploadService, dataServiceMock.Object, metadataUploaderMock.Object, hubServiceMock.Object);
                 vocabQueryerMock.Setup(x => x.GetVocab(It.IsAny<string>())).Returns(new Vocabulary());
                 redactorMock.Setup(x => x.RedactRecord(It.IsAny<Record>())).Returns(record);
 
@@ -217,7 +217,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Data.Write
                 updatedRecord.Gemini.MetadataDate.Should().Be(testTime);
                 var fileCount = CountFileResources(record.Resources);
 
-                dataUploaderMock.Verify(x => x.UploadDataFile(Helpers.RemoveCollection(record.Id), It.IsAny<string>()), Times.Exactly(fileCount));
+                dataServiceMock.Verify(x => x.UploadDataFile(Helpers.RemoveCollection(record.Id), It.IsAny<string>()), Times.Exactly(fileCount));
                 hubServiceMock.Verify(x => x.Publish(record), Times.Once);
                 record.Publication.Target.Hub.Url =
                     "http://hub.jncc.gov.uk/assets/" + Helpers.RemoveCollection(recordId);
@@ -270,11 +270,11 @@ namespace Catalogue.Tests.Slow.Catalogue.Data.Write
 
                 var vocabQueryerMock = new Mock<IVocabQueryer>();
                 var uploadService = new PublishingUploadRecordService(db, new RecordValidator(vocabQueryerMock.Object));
-                var dataUploaderMock = new Mock<IDataUploader>();
+                var dataServiceMock = new Mock<IDataService>();
                 var metadataUploaderMock = new Mock<IGovService>();
                 var hubServiceMock = new Mock<IHubService>();
                 var redactorMock = new Mock<IRecordRedactor>();
-                var uploader = new RobotPublisher(env, db, redactorMock.Object, uploadService, dataUploaderMock.Object, metadataUploaderMock.Object, hubServiceMock.Object);
+                var uploader = new RobotPublisher(env, db, redactorMock.Object, uploadService, dataServiceMock.Object, metadataUploaderMock.Object, hubServiceMock.Object);
                 vocabQueryerMock.Setup(x => x.GetVocab(It.IsAny<string>())).Returns(new Vocabulary());
                 redactorMock.Setup(x => x.RedactRecord(It.IsAny<Record>())).Returns(record);
 
@@ -289,7 +289,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Data.Write
                 updatedRecord.Gemini.MetadataDate.Should().Be(testTime);
                 var fileCount = CountFileResources(record.Resources);
 
-                dataUploaderMock.Verify(x => x.UploadDataFile(Helpers.RemoveCollection(record.Id), It.IsAny<string>()), Times.Exactly(fileCount));
+                dataServiceMock.Verify(x => x.UploadDataFile(Helpers.RemoveCollection(record.Id), It.IsAny<string>()), Times.Exactly(fileCount));
                 hubServiceMock.Verify(x => x.Publish(It.IsAny<Record>()), Times.Never);
                 hubServiceMock.Verify(x => x.Index(It.IsAny<Record>()), Times.Never);
                 metadataUploaderMock.Verify(x => x.UploadGeminiXml(record), Times.Once);
@@ -350,11 +350,11 @@ namespace Catalogue.Tests.Slow.Catalogue.Data.Write
 
                 var vocabQueryerMock = new Mock<IVocabQueryer>();
                 var uploadService = new PublishingUploadRecordService(db, new RecordValidator(vocabQueryerMock.Object));
-                var dataUploaderMock = new Mock<IDataUploader>();
+                var dataServiceMock = new Mock<IDataService>();
                 var metadataUploaderMock = new Mock<IGovService>();
                 var hubServiceMock = new Mock<IHubService>();
                 var redactorMock = new Mock<IRecordRedactor>();
-                var uploader = new RobotPublisher(env, db, redactorMock.Object, uploadService, dataUploaderMock.Object, metadataUploaderMock.Object, hubServiceMock.Object);
+                var uploader = new RobotPublisher(env, db, redactorMock.Object, uploadService, dataServiceMock.Object, metadataUploaderMock.Object, hubServiceMock.Object);
                 vocabQueryerMock.Setup(x => x.GetVocab(It.IsAny<string>())).Returns(new Vocabulary());
                 redactorMock.Setup(x => x.RedactRecord(It.IsAny<Record>())).Returns(record);
 
@@ -371,7 +371,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Data.Write
                 updatedRecord.Gemini.MetadataDate.Should().Be(testTime);
 
                 var fileCount = CountFileResources(record.Resources);
-                dataUploaderMock.Verify(x => x.UploadDataFile(Helpers.RemoveCollection(record.Id), It.IsAny<string>()), Times.Exactly(fileCount));
+                dataServiceMock.Verify(x => x.UploadDataFile(Helpers.RemoveCollection(record.Id), It.IsAny<string>()), Times.Exactly(fileCount));
                 hubServiceMock.Verify(x => x.Publish(It.IsAny<Record>()), Times.Never);
                 hubServiceMock.Verify(x => x.Index(It.IsAny<Record>()), Times.Never);
                 metadataUploaderMock.Verify(x => x.UploadGeminiXml(record), Times.Once);
@@ -431,11 +431,11 @@ namespace Catalogue.Tests.Slow.Catalogue.Data.Write
 
                 var vocabQueryerMock = new Mock<IVocabQueryer>();
                 var uploadService = new PublishingUploadRecordService(db, new RecordValidator(vocabQueryerMock.Object));
-                var dataUploaderMock = new Mock<IDataUploader>();
+                var dataServiceMock = new Mock<IDataService>();
                 var metadataUploaderMock = new Mock<IGovService>();
                 var hubServiceMock = new Mock<IHubService>();
                 var redactorMock = new Mock<IRecordRedactor>();
-                var uploader = new RobotPublisher(env, db, redactorMock.Object, uploadService, dataUploaderMock.Object, metadataUploaderMock.Object, hubServiceMock.Object);
+                var uploader = new RobotPublisher(env, db, redactorMock.Object, uploadService, dataServiceMock.Object, metadataUploaderMock.Object, hubServiceMock.Object);
                 vocabQueryerMock.Setup(x => x.GetVocab(It.IsAny<string>())).Returns(new Vocabulary());
                 redactorMock.Setup(x => x.RedactRecord(It.IsAny<Record>())).Returns(record);
 
@@ -451,7 +451,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Data.Write
                 updatedRecord.Gemini.MetadataDate.Should().Be(testTime);
                 
                 var fileCount = CountFileResources(record.Resources);
-                dataUploaderMock.Verify(x => x.UploadDataFile(Helpers.RemoveCollection(record.Id), It.IsAny<string>()), Times.Exactly(fileCount));
+                dataServiceMock.Verify(x => x.UploadDataFile(Helpers.RemoveCollection(record.Id), It.IsAny<string>()), Times.Exactly(fileCount));
                 hubServiceMock.Verify(x => x.Publish(record), Times.Once);
                 hubServiceMock.Verify(x => x.Index(record), Times.Once);
                 metadataUploaderMock.Verify(x => x.UploadGeminiXml(Helpers.RemoveCollectionFromId(record)), Times.Never);
@@ -511,13 +511,13 @@ namespace Catalogue.Tests.Slow.Catalogue.Data.Write
 
                 var vocabQueryerMock = new Mock<IVocabQueryer>();
                 var uploadService = new PublishingUploadRecordService(db, new RecordValidator(vocabQueryerMock.Object));
-                var dataUploaderMock = new Mock<IDataUploader>();
+                var dataServiceMock = new Mock<IDataService>();
                 var metadataUploaderMock = new Mock<IGovService>();
                 var hubServiceMock = new Mock<IHubService>();
                 var redactorMock = new Mock<IRecordRedactor>();
-                var uploader = new RobotPublisher(env, db, redactorMock.Object, uploadService, dataUploaderMock.Object, metadataUploaderMock.Object, hubServiceMock.Object);
+                var uploader = new RobotPublisher(env, db, redactorMock.Object, uploadService, dataServiceMock.Object, metadataUploaderMock.Object, hubServiceMock.Object);
                 vocabQueryerMock.Setup(x => x.GetVocab(It.IsAny<string>())).Returns(new Vocabulary());
-                dataUploaderMock.Setup(x => x.UploadDataFile(It.IsAny<string>(), It.IsAny<string>())).Throws(new Exception("test message"));
+                dataServiceMock.Setup(x => x.UploadDataFile(It.IsAny<string>(), It.IsAny<string>())).Throws(new Exception("test message"));
 
                 uploader.PublishRecord(record);
 
@@ -589,13 +589,13 @@ namespace Catalogue.Tests.Slow.Catalogue.Data.Write
 
                 var vocabQueryerMock = new Mock<IVocabQueryer>();
                 var uploadService = new PublishingUploadRecordService(db, new RecordValidator(vocabQueryerMock.Object));
-                var dataUploaderMock = new Mock<IDataUploader>();
+                var dataServiceMock = new Mock<IDataService>();
                 var metadataUploaderMock = new Mock<IGovService>();
                 var hubServiceMock = new Mock<IHubService>();
                 var redactorMock = new Mock<IRecordRedactor>();
-                var uploader = new RobotPublisher(env, db, redactorMock.Object, uploadService, dataUploaderMock.Object, metadataUploaderMock.Object, hubServiceMock.Object);
+                var uploader = new RobotPublisher(env, db, redactorMock.Object, uploadService, dataServiceMock.Object, metadataUploaderMock.Object, hubServiceMock.Object);
                 vocabQueryerMock.Setup(x => x.GetVocab(It.IsAny<string>())).Returns(new Vocabulary());
-                dataUploaderMock.Setup(x => x.UploadDataFile(It.IsAny<string>(), "x:\\another\\test\\path.txt")).Throws(new WebException("test message"));
+                dataServiceMock.Setup(x => x.UploadDataFile(It.IsAny<string>(), "x:\\another\\test\\path.txt")).Throws(new WebException("test message"));
 
                 uploader.PublishRecord(record);
 
@@ -667,11 +667,11 @@ namespace Catalogue.Tests.Slow.Catalogue.Data.Write
 
                 var vocabQueryerMock = new Mock<IVocabQueryer>();
                 var uploadService = new PublishingUploadRecordService(db, new RecordValidator(vocabQueryerMock.Object));
-                var dataUploaderMock = new Mock<IDataUploader>();
+                var dataServiceMock = new Mock<IDataService>();
                 var metadataUploaderMock = new Mock<IGovService>();
                 var hubServiceMock = new Mock<IHubService>();
                 var redactorMock = new Mock<IRecordRedactor>();
-                var uploader = new RobotPublisher(env, db, redactorMock.Object, uploadService, dataUploaderMock.Object, metadataUploaderMock.Object, hubServiceMock.Object);
+                var uploader = new RobotPublisher(env, db, redactorMock.Object, uploadService, dataServiceMock.Object, metadataUploaderMock.Object, hubServiceMock.Object);
                 vocabQueryerMock.Setup(x => x.GetVocab(It.IsAny<string>())).Returns(new Vocabulary());
                 hubServiceMock.Setup(x => x.Publish(It.IsAny<Record>())).Throws(new Exception("test message"));
                 redactorMock.Setup(x => x.RedactRecord(It.IsAny<Record>())).Returns(record);
@@ -743,11 +743,11 @@ namespace Catalogue.Tests.Slow.Catalogue.Data.Write
 
                 var vocabQueryerMock = new Mock<IVocabQueryer>();
                 var uploadService = new PublishingUploadRecordService(db, new RecordValidator(vocabQueryerMock.Object));
-                var dataUploaderMock = new Mock<IDataUploader>();
+                var dataServiceMock = new Mock<IDataService>();
                 var metadataUploaderMock = new Mock<IGovService>();
                 var hubServiceMock = new Mock<IHubService>();
                 var redactorMock = new Mock<IRecordRedactor>();
-                var uploader = new RobotPublisher(env, db, redactorMock.Object, uploadService, dataUploaderMock.Object, metadataUploaderMock.Object, hubServiceMock.Object);
+                var uploader = new RobotPublisher(env, db, redactorMock.Object, uploadService, dataServiceMock.Object, metadataUploaderMock.Object, hubServiceMock.Object);
                 vocabQueryerMock.Setup(x => x.GetVocab(It.IsAny<string>())).Returns(new Vocabulary());
                 hubServiceMock.Setup(x => x.Index(It.IsAny<Record>())).Throws(new Exception("test message"));
                 redactorMock.Setup(x => x.RedactRecord(It.IsAny<Record>())).Returns(record);
@@ -818,11 +818,11 @@ namespace Catalogue.Tests.Slow.Catalogue.Data.Write
 
                 var vocabQueryerMock = new Mock<IVocabQueryer>();
                 var uploadService = new PublishingUploadRecordService(db, new RecordValidator(vocabQueryerMock.Object));
-                var dataUploaderMock = new Mock<IDataUploader>();
+                var dataServiceMock = new Mock<IDataService>();
                 var metadataUploaderMock = new Mock<IGovService>();
                 var hubServiceMock = new Mock<IHubService>();
                 var redactorMock = new Mock<IRecordRedactor>();
-                var uploader = new RobotPublisher(env, db, redactorMock.Object, uploadService, dataUploaderMock.Object, metadataUploaderMock.Object, hubServiceMock.Object);
+                var uploader = new RobotPublisher(env, db, redactorMock.Object, uploadService, dataServiceMock.Object, metadataUploaderMock.Object, hubServiceMock.Object);
 
                 var recordWithoutCollection = Helpers.RemoveCollectionFromId(record);
                 vocabQueryerMock.Setup(x => x.GetVocab(It.IsAny<string>())).Returns(new Vocabulary());
@@ -921,5 +921,6 @@ namespace Catalogue.Tests.Slow.Catalogue.Data.Write
 
             return isFilePath;
         }
+        
     }
 }
