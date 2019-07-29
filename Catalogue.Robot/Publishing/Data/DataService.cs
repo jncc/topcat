@@ -113,17 +113,29 @@ namespace Catalogue.Robot.Publishing.Data
         {
             if (fileUrls != null && fileUrls.Count > 0)
             {
-                Logger.Info($"Sending removed data files report with the following URLs: {string.Join(", ", fileUrls)}");
-                var body = new StringBuilder();
-                body.AppendLine($"Report for Topcat robot run {DateTime.Now}");
-                body.AppendLine();
-                body.AppendLine("The following files have been removed:");
-                foreach (var url in fileUrls)
-                {
-                    body.AppendLine(url);
-                }
+                Logger.Info($"Removed data files to include in the report: {string.Join(", ", fileUrls)}");
 
-                smtpClient.SendEmail(env.SMTP_FROM, env.SMTP_TO, "MEOW - Removed data files", body.ToString());
+                if (env.SMTP_NOTIFICATIONS_ON)
+                {
+                    Logger.Info("SMTP_NOTIFICATIONS_ON = true, sending email");
+
+                    var body = new StringBuilder();
+                    body.AppendLine($"Report for Topcat robot run {DateTime.Now}");
+                    body.AppendLine();
+                    body.AppendLine("The following files have been removed:");
+                    foreach (var url in fileUrls)
+                    {
+                        body.AppendLine(url);
+                    }
+
+                    smtpClient.SendEmail(env.SMTP_FROM, env.SMTP_TO, "MEOW - Removed data files", body.ToString());
+
+                    Logger.Info("Email sent successfully");
+                }
+                else
+                {
+                    Logger.Info("SMTP_NOTIFICATIONS_ON = false");
+                }
             }
             else
             {

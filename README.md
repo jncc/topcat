@@ -38,6 +38,7 @@ There are a couple of workarounds required for the upgrade:
   3. Copy Catalogue.Tests\bin\Debug\RavenDBServer\Catalogue.Data.Analyzers.dll to the new RavenDBServer folder in Catalogue.Web
   4. Copy Catalogue.Data\bin\Debug\Catalogue.Data.dll to the new RavenDBServer folder in Catalogue.Web
   5. Run it!
+  6. If it complains about framework versions, change the Catalogue.Web Web.config RavenDbFrameworkVersion appSettings value to whatever you're running
 * To recreate the Catalogue.Data.Analyzers.dll:
   1. Unzip and open the .NET Core project in Catalogue.Data\Analyzers\Analyzers.zip
   2. Build as release and take the dll.

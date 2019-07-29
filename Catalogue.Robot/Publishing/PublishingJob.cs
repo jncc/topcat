@@ -98,12 +98,22 @@ namespace Catalogue.Robot.Publishing
             }
             catch (Exception e)
             {
-                Logger.Error("Error in publishing process, attempting to send email alert", e);
+                Logger.Error("Error in publishing process", e);
 
-                smtpClient.SendEmail(env.SMTP_FROM, env.SMTP_TO, "MEOW - Publishing error",
-                    $"Something went wrong which caused the process to stop unexpectedly. Check the logs at {ConfigurationManager.AppSettings["LogFilePath"]}\n\n{e}");
+                if (env.SMTP_NOTIFICATIONS_ON)
+                {
+                    Logger.Info("SMTP_NOTIFICATIONS_ON = true, sending email");
 
-                Logger.Info("Email sent successfully");
+                    smtpClient.SendEmail(env.SMTP_FROM, env.SMTP_TO, "MEOW - Publishing error",
+                        $"Something went wrong which caused the process to stop unexpectedly. Check the logs at {ConfigurationManager.AppSettings["LogFilePath"]}\n\n{e}");
+
+                    Logger.Info("Email sent successfully");
+                }
+                else
+                {
+                    Logger.Info("SMTP_NOTIFICATIONS_ON = false");
+                }
+
             }
 
         }
