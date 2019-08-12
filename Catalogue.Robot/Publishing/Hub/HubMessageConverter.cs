@@ -8,8 +8,7 @@ namespace Catalogue.Robot.Publishing.Hub
 {
     public interface IHubMessageConverter
     {
-        string ConvertRecordToHubAsset(Record record);
-        string ConvertRecordToQueueMessage(Record record);
+        string ConvertRecordToHubMessage(Record record);
     }
 
     public class HubMessageConverter : IHubMessageConverter
@@ -23,100 +22,68 @@ namespace Catalogue.Robot.Publishing.Hub
             this.fileHelper = fileHelper;
         }
 
-        public string ConvertRecordToHubAsset(Record record)
+        public string ConvertRecordToHubMessage(Record record)
         {
             ConvertEmptyStringsToNull(record);
 
-            var asset = new
-            {
-                id = Helpers.RemoveCollection(record.Id),
-                digitalObjectIdentifier = record.DigitalObjectIdentifier,
-                citation = record.Citation,
-                image = record.Image,
-                metadata = new
-                {
-                    title = record.Gemini.Title,
-                    @abstract = record.Gemini.Abstract,
-                    topicCategory = record.Gemini.TopicCategory,
-                    keywords = record.Gemini.Keywords,
-                    temporalExtent = record.Gemini.TemporalExtent,
-                    datasetReferenceDate = record.Gemini.DatasetReferenceDate,
-                    lineage = record.Gemini.Lineage,
-                    dataFormat = record.Gemini.DataFormat,
-                    responsibleOrganisation = record.Gemini.ResponsibleOrganisation,
-                    limitationsOnPublicAccess = record.Gemini.LimitationsOnPublicAccess,
-                    useConstraints = record.Gemini.UseConstraints,
-                    spatialReferenceSystem = record.Gemini.SpatialReferenceSystem,
-                    metadataDate = record.Gemini.MetadataDate,
-                    metadataPointOfContact = record.Gemini.MetadataPointOfContact,
-                    resourceType = record.Gemini.ResourceType,
-                    metadataLanguage = "English",
-                    boundingBox = record.Gemini.BoundingBox
-                },
-                data = GetData(record)
-            };
-
-            return JsonConvert.SerializeObject(asset, new JsonSerializerSettings
-            {
-                ContractResolver = new CamelCasePropertyNamesContractResolver()
-            });
-        }
-
-        public string ConvertRecordToQueueMessage(Record record)
-        {
-            var messageResources = new List<object>();
-
-            if (record.Resources?.Count > 0)
-            {
-                foreach (var resource in record.Resources)
-                {
-                    if (IsPdfFileResource(resource) && !string.IsNullOrWhiteSpace(resource.PublishedUrl))
-                    {
-                        messageResources.Add(new
-                        {
-                            title = resource.Name,
-                            content = record.Gemini.Abstract,
-                            url = resource.PublishedUrl,
-                            file_base64 = fileHelper.GetBase64String(resource.Path),
-                            file_extension = fileHelper.GetFileExtensionWithoutDot(resource.Path),
-                            file_bytes = fileHelper.GetFileSizeInBytes(resource.Path)
-                        });
-                    }
-                    else if (Helpers.IsFileResource(resource) && !string.IsNullOrWhiteSpace(resource.PublishedUrl))
-                    {
-                        messageResources.Add(new
-                        {
-                            title = resource.Name,
-                            content = record.Gemini.Abstract,
-                            url = resource.PublishedUrl,
-                            file_extension = fileHelper.GetFileExtensionWithoutDot(resource.Path),
-                            file_bytes = fileHelper.GetFileSizeInBytes(resource.Path)
-                        });
-                    }
-                }
-            }
-
             var message = new
             {
-                verb = "upsert",
-                index = env.HUB_QUEUE_INDEX,
-                document = new
+                config = new
+                {
+                    elasticsearch = new
+                    {
+                        index = env.ES_INDEX,
+                        site = env.ES_SITE
+                    },
+                    hub = new
+                    {
+                        baseUrl = env.HUB_BASE_URL
+                    },
+                    dynamo = new
+                    {
+                        table = env.HUB_DYNAMO_TABLE
+                    },
+                    sqs = new
+                    {
+                        queueEndpoint = env.SQS_ENDPOINT,
+                        largeMessageBucket = env.SQS_PAYLOAD_BUCKET
+                    },
+                    action = "publish"
+                },
+                asset = new
                 {
                     id = Helpers.RemoveCollection(record.Id),
-                    site = "datahub",
-                    title = record.Gemini.Title,
-                    content = record.Gemini.Abstract,
-                    url = record.Publication.Target.Hub.Url,
-                    resource_type = record.Gemini.ResourceType,
-                    keywords = record.Gemini.Keywords,
-                    published_date = record.Gemini.DatasetReferenceDate
-                },
-                resources = messageResources
+                    digitalObjectIdentifier = record.DigitalObjectIdentifier,
+                    citation = record.Citation,
+                    image = record.Image,
+                    metadata = new
+                    {
+                        title = record.Gemini.Title,
+                        @abstract = record.Gemini.Abstract,
+                        topicCategory = record.Gemini.TopicCategory,
+                        keywords = record.Gemini.Keywords,
+                        temporalExtent = record.Gemini.TemporalExtent,
+                        datasetReferenceDate = record.Gemini.DatasetReferenceDate,
+                        lineage = record.Gemini.Lineage,
+                        dataFormat = record.Gemini.DataFormat,
+                        responsibleOrganisation = record.Gemini.ResponsibleOrganisation,
+                        limitationsOnPublicAccess = record.Gemini.LimitationsOnPublicAccess,
+                        useConstraints = record.Gemini.UseConstraints,
+                        spatialReferenceSystem = record.Gemini.SpatialReferenceSystem,
+                        metadataDate = record.Gemini.MetadataDate,
+                        metadataPointOfContact = record.Gemini.MetadataPointOfContact,
+                        resourceType = record.Gemini.ResourceType,
+                        metadataLanguage = "English",
+                        boundingBox = record.Gemini.BoundingBox
+                    },
+                    data = GetData(record)
+                }
             };
 
             return JsonConvert.SerializeObject(message, new JsonSerializerSettings
             {
-                ContractResolver = new CamelCasePropertyNamesContractResolver()
+                ContractResolver = new CamelCasePropertyNamesContractResolver(),
+                NullValueHandling = NullValueHandling.Ignore
             });
         }
         
@@ -164,7 +131,21 @@ namespace Catalogue.Robot.Publishing.Hub
             {
                 foreach (var resource in record.Resources)
                 {
-                    if (Helpers.IsFileResource(resource) && !string.IsNullOrWhiteSpace(resource.PublishedUrl))
+                    if (IsPdfFileResource(resource) && !string.IsNullOrWhiteSpace(resource.PublishedUrl))
+                    {
+                        data.Add(new
+                        {
+                            title = resource.Name,
+                            http = new
+                            {
+                                url = resource.PublishedUrl,
+                                fileBase64 = fileHelper.GetBase64String(resource.Path),
+                                fileExtension = fileHelper.GetFileExtensionWithoutDot(resource.Path),
+                                fileBytes = fileHelper.GetFileSizeInBytes(resource.Path)
+                            }
+                        });
+                    }
+                    else if (Helpers.IsFileResource(resource) && !string.IsNullOrWhiteSpace(resource.PublishedUrl))
                     {
                         data.Add(new
                         {

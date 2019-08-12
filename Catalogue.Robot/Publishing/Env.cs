@@ -17,19 +17,18 @@ namespace Catalogue.Robot.Publishing
         public string FTP_ROLLBACK_FOLDER { get; private set; }
 
         // resource hub
+        public string HUB_AWS_REGION { get; private set; }
+        public string HUB_AWS_ACCESSKEY { get; private set; }
+        public string HUB_AWS_SECRETACCESSKEY { get; private set; }
         public string HUB_ASSETS_BASE_URL { get; private set; }
+        public string HUB_BASE_URL { get; private set; }
+        public string HUB_DYNAMO_TABLE { get; private set; }
+        public string HUB_LAMBDA_FUNCTION { get; private set; }
 
-        public string HUB_QUEUE_INDEX { get; private set; }
-        public string HUB_QUEUE_AWS_REGION { get; private set; }
-        public string HUB_QUEUE_AWS_ACCESSKEY { get; private set; }
-        public string HUB_QUEUE_AWS_SECRETACCESSKEY { get; private set; }
         public string SQS_ENDPOINT { get; private set; }
         public string SQS_PAYLOAD_BUCKET { get; private set; }
-
-        public string HUB_API_AWS_REGION { get; private set; }
-        public string HUB_API_AWS_ACCESSKEY { get; private set; }
-        public string HUB_API_AWS_SECRETACCESSKEY { get; private set; }
-        public string HUB_API_ENDPOINT { get; private set; }
+        public string ES_INDEX { get; private set; }
+        public string ES_SITE { get; private set; }
 
         // emailing
         public bool SMTP_NOTIFICATIONS_ON { get; private set; }
@@ -51,19 +50,18 @@ namespace Catalogue.Robot.Publishing
             this.FTP_WAF_FOLDER = GetVariable("FTP_WAF_FOLDER");
             this.FTP_ROLLBACK_FOLDER = GetVariable("FTP_ROLLBACK_FOLDER");
 
+            this.HUB_AWS_REGION = GetVariable("HUB_AWS_REGION");
+            this.HUB_AWS_ACCESSKEY = GetVariable("HUB_AWS_ACCESSKEY");
+            this.HUB_AWS_SECRETACCESSKEY = GetVariable("HUB_AWS_SECRETACCESSKEY");
             this.HUB_ASSETS_BASE_URL = GetVariable("HUB_ASSETS_BASE_URL");
+            this.HUB_BASE_URL = GetVariable("HUB_BASE_URL");
+            this.HUB_LAMBDA_FUNCTION = GetVariable("HUB_LAMBDA_FUNCTION");
+            this.HUB_DYNAMO_TABLE = GetVariable("HUB_DYNAMO_TABLE");
 
-            this.HUB_QUEUE_INDEX = GetVariable("HUB_QUEUE_INDEX");
-            this.HUB_QUEUE_AWS_REGION = GetVariable("HUB_QUEUE_AWS_REGION");
-            this.HUB_QUEUE_AWS_ACCESSKEY = GetVariable("HUB_QUEUE_AWS_ACCESSKEY");
-            this.HUB_QUEUE_AWS_SECRETACCESSKEY = GetVariable("HUB_QUEUE_AWS_SECRETACCESSKEY");
             this.SQS_ENDPOINT = GetVariable("SQS_ENDPOINT");
             this.SQS_PAYLOAD_BUCKET = GetVariable("SQS_PAYLOAD_BUCKET");
-
-            this.HUB_API_AWS_REGION = GetVariable("HUB_API_AWS_REGION");
-            this.HUB_API_AWS_ACCESSKEY = GetVariable("HUB_API_AWS_ACCESSKEY");
-            this.HUB_API_AWS_SECRETACCESSKEY = GetVariable("HUB_API_AWS_SECRETACCESSKEY");
-            this.HUB_API_ENDPOINT = GetVariable("HUB_API_ENDPOINT");
+            this.ES_INDEX = GetVariable("ES_INDEX");
+            this.ES_SITE = GetVariable("ES_SITE");
 
             this.SMTP_NOTIFICATIONS_ON = bool.Parse(GetVariable("SMTP_NOTIFICATIONS_ON"));
             this.SMTP_HOST = GetVariable("SMTP_HOST");

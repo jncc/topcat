@@ -2,18 +2,16 @@
 using Catalogue.Data.Indexes;
 using Catalogue.Data.Model;
 using Catalogue.Data.Write;
+using Catalogue.Robot.Publishing.Data;
+using Catalogue.Robot.Publishing.Gov;
 using Catalogue.Robot.Publishing.Hub;
+using Catalogue.Utilities.Clone;
 using Catalogue.Utilities.Time;
 using log4net;
 using Raven.Client.Documents.Session;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Net;
-using Catalogue.Data.Extensions;
-using Catalogue.Robot.Publishing.Data;
-using Catalogue.Robot.Publishing.Gov;
-using Catalogue.Utilities.Clone;
 using static Catalogue.Utilities.Text.WebificationUtility;
 
 namespace Catalogue.Robot.Publishing
@@ -182,17 +180,6 @@ namespace Catalogue.Robot.Publishing
                     attempt.Message = ex.Message + (ex.InnerException != null ? ex.InnerException.Message : "");
                     Logger.Error($"Could not save record to Resource hub database, GUID={record.Id}", ex);
                     throw;
-                }
-
-                try
-                {
-                    // attempt to index the record but don't break downstream processing if this doesn't work
-                    Logger.Info("Attempting to add record to queue for search indexing");
-                    hubService.Index(redactedRecord);
-                }
-                catch (Exception ex)
-                {
-                    Logger.Error($"Tried but failed to index the record in the Resource hub, GUID={record.Id}", ex);
                 }
             }
             else

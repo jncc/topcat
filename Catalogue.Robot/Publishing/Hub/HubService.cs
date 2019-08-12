@@ -10,7 +10,6 @@ namespace Catalogue.Robot.Publishing.Hub
     {
         void Publish(Record record);
         // void Delete(Record record); ?
-        void Index(Record record);
     }
 
     public class HubService : IHubService
@@ -18,39 +17,28 @@ namespace Catalogue.Robot.Publishing.Hub
         private static readonly ILog Logger = LogManager.GetLogger(typeof(HubService));
 
         private readonly Env env;
-        private readonly IApiClient apiClient;
-        private readonly IQueueClient queueClient;
+        private readonly ILambdaClient lambdaClient;
         private readonly IHubMessageConverter hubMessageConverter;
 
-        public HubService(Env env, IApiClient apiClient, IQueueClient queueClient)
+        public HubService(Env env, ILambdaClient lambdaClient)
         {
             this.env = env;
-            this.apiClient = apiClient;
-            this.queueClient = queueClient;
+            this.lambdaClient = lambdaClient;
             this.hubMessageConverter = new HubMessageConverter(env, new FileHelper());
         }
 
         public void Publish(Record record)
         {
-            var messageBody = hubMessageConverter.ConvertRecordToHubAsset(record);
-            Logger.Debug($"Hub asset to send: {messageBody}");
+            var messageBody = hubMessageConverter.ConvertRecordToHubMessage(record);
 
-            var response = apiClient.SendToHub(messageBody);
+            Logger.Info($"Sending hub message to {env.HUB_LAMBDA_FUNCTION} lambda");
+            var response = lambdaClient.SendToHub(messageBody);
 
-            if (response.StatusCode != HttpStatusCode.OK)
+            if (response.StatusCode != 200)
             {
                 throw new InvalidOperationException($"Error publishing the record to the ResourceHub: {response}");
             }
-
-            Logger.Info($"Posted asset to Hub API endpoint {env.HUB_API_ENDPOINT}, response is {(int)response.StatusCode} {response.StatusCode}");
-        }
-
-        public void Index(Record record)
-        {
-            var message = hubMessageConverter.ConvertRecordToQueueMessage(record);
-            //Logger.Debug($"Queue message to send: {message}");
-
-            queueClient.Send(message);
+            
         }
     }
 }

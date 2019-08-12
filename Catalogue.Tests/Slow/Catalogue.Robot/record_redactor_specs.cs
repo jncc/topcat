@@ -123,5 +123,24 @@ namespace Catalogue.Tests.Slow.Catalogue.Robot
             var redactedRecord = redactor.RedactRecord(publicationRecord);
             redactedRecord.Image.Url.Should().Be("http://an.image.url");
         }
+
+        [Test]
+        public void use_comms_contact_details_for_publications()
+        {
+            var publicationRecord = record.With(r =>
+            {
+                r.Gemini.ResourceType = "publication";
+            });
+
+            var queryerMock = new Mock<IVocabQueryer>();
+            var redactor = new RecordRedactor(queryerMock.Object);
+            queryerMock.Setup(x => x.GetVocab(It.IsAny<string>())).Returns(new Vocabulary { Publishable = true });
+
+            var redactedRecord = redactor.RedactRecord(publicationRecord);
+            redactedRecord.Gemini.ResponsibleOrganisation.Name.Should().Be("Communications, JNCC");
+            redactedRecord.Gemini.ResponsibleOrganisation.Email.Should().Be("comms@jncc.gov.uk");
+            redactedRecord.Gemini.MetadataPointOfContact.Name.Should().Be("Communications, JNCC");
+            redactedRecord.Gemini.MetadataPointOfContact.Email.Should().Be("comms@jncc.gov.uk");
+        }
     }
 }

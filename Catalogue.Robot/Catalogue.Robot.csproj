@@ -77,8 +77,7 @@
     <Compile Include="Publishing\Env.cs" />
     <Compile Include="Publishing\Gov\GovService.cs" />
     <Compile Include="Publishing\FileHelper.cs" />
-    <Compile Include="Publishing\Client\ApiClient.cs" />
-    <Compile Include="Publishing\Client\QueueClient.cs" />
+    <Compile Include="Publishing\Client\LambdaClient.cs" />
     <Compile Include="Publishing\Hub\HubService.cs" />
     <Compile Include="Publishing\Hub\HubMessageConverter.cs" />
     <Compile Include="Publishing\RecordRedactor.cs" />
@@ -122,8 +121,8 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Amazon.SQS.ExtendedClient">
-      <Version>1.2.1</Version>
+    <PackageReference Include="AWSSDK.Lambda">
+      <Version>3.3.102.38</Version>
     </PackageReference>
     <PackageReference Include="dotenv.net">
       <Version>1.0.4</Version>
