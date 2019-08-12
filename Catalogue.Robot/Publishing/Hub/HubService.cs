@@ -34,9 +34,9 @@ namespace Catalogue.Robot.Publishing.Hub
             Logger.Info($"Sending hub message to {env.HUB_LAMBDA_FUNCTION} lambda");
             var response = lambdaClient.SendToHub(messageBody);
 
-            if (response.StatusCode != 200)
+            if (response.StatusCode != 200 || response.FunctionError != null)
             {
-                throw new InvalidOperationException($"Error publishing the record to the ResourceHub: {response}");
+                throw new InvalidOperationException($"Error publishing the record to the ResourceHub: {response.StatusCode} {response.FunctionError}");
             }
             
         }
