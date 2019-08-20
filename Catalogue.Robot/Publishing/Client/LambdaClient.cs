@@ -25,7 +25,7 @@ namespace Catalogue.Robot.Publishing.Client
                 new BasicAWSCredentials(env.HUB_AWS_ACCESSKEY, env.HUB_AWS_SECRETACCESSKEY),
                 RegionEndpoint.GetBySystemName(env.HUB_AWS_REGION)))
             {
-                var request = new InvokeRequest()
+                var request = new InvokeRequest
                 {
                     FunctionName = env.HUB_LAMBDA_FUNCTION,
                     Payload = assetMessage

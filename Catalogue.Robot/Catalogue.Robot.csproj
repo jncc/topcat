@@ -73,6 +73,7 @@
     <Compile Include="DeadLinks\FileLinkChecker.cs" />
     <Compile Include="Injection\MainNinjectModule.cs" />
     <Compile Include="Injection\NinjectJobFactory.cs" />
+    <Compile Include="Publishing\Client\S3Client.cs" />
     <Compile Include="Publishing\Client\SmtpClient.cs" />
     <Compile Include="Publishing\Env.cs" />
     <Compile Include="Publishing\Gov\GovService.cs" />
@@ -123,6 +124,9 @@
   <ItemGroup>
     <PackageReference Include="AWSSDK.Lambda">
       <Version>3.3.102.38</Version>
+    </PackageReference>
+    <PackageReference Include="AWSSDK.S3">
+      <Version>3.3.104.17</Version>
     </PackageReference>
     <PackageReference Include="dotenv.net">
       <Version>1.0.4</Version>

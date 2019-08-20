@@ -8,7 +8,8 @@ namespace Catalogue.Robot.Publishing.Hub
 {
     public interface IHubMessageConverter
     {
-        string ConvertRecordToHubMessage(Record record);
+        string GetS3PublishMessage(string recordId);
+        string ConvertRecordToHubPublishMessage(Record record);
     }
 
     public class HubMessageConverter : IHubMessageConverter
@@ -22,7 +23,32 @@ namespace Catalogue.Robot.Publishing.Hub
             this.fileHelper = fileHelper;
         }
 
-        public string ConvertRecordToHubMessage(Record record)
+        public string GetS3PublishMessage(string recordId)
+        {
+            var message = new
+            {
+                config = new
+                {
+                    s3 = new
+                    {
+                        bucketName = env.HUB_LARGE_MESSAGE_BUCKET,
+                        objectKey = recordId
+                    },
+                    action = "s3-publish"
+                },
+                asset = new
+                {
+                    id = recordId
+                }
+            };
+
+            return JsonConvert.SerializeObject(message, new JsonSerializerSettings
+            {
+                ContractResolver = new CamelCasePropertyNamesContractResolver()
+            });
+        }
+
+        public string ConvertRecordToHubPublishMessage(Record record)
         {
             ConvertEmptyStringsToNull(record);
 
@@ -86,7 +112,7 @@ namespace Catalogue.Robot.Publishing.Hub
                 NullValueHandling = NullValueHandling.Ignore
             });
         }
-        
+
         private void ConvertEmptyStringsToNull(Record record)
         {
             // handle empty strings for dynamo, should probably use a custom converter if this gets too big
@@ -131,7 +157,7 @@ namespace Catalogue.Robot.Publishing.Hub
             {
                 foreach (var resource in record.Resources)
                 {
-                    if (IsPdfFileResource(resource) && !string.IsNullOrWhiteSpace(resource.PublishedUrl))
+                    if (fileHelper.IsPdfFile(resource.Path) && !string.IsNullOrWhiteSpace(resource.PublishedUrl))
                     {
                         data.Add(new
                         {
@@ -174,21 +200,5 @@ namespace Catalogue.Robot.Publishing.Hub
 
             return data;
         }
-
-        private bool IsPdfFileResource(Resource resource)
-        {
-            if (Helpers.IsFileResource(resource))
-            {
-                var extension = fileHelper.GetFileExtensionWithoutDot(resource.Path);
-
-                if (!string.IsNullOrWhiteSpace(extension) && extension.Equals("pdf"))
-                {
-                    return true;
-                }
-            }
-            
-            return false;
-        }
     }
-
 }

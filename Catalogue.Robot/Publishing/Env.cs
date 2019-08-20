@@ -24,6 +24,7 @@ namespace Catalogue.Robot.Publishing
         public string HUB_BASE_URL { get; private set; }
         public string HUB_DYNAMO_TABLE { get; private set; }
         public string HUB_LAMBDA_FUNCTION { get; private set; }
+        public string HUB_LARGE_MESSAGE_BUCKET { get; private set; }
 
         public string SQS_ENDPOINT { get; private set; }
         public string SQS_PAYLOAD_BUCKET { get; private set; }
@@ -55,8 +56,9 @@ namespace Catalogue.Robot.Publishing
             this.HUB_AWS_SECRETACCESSKEY = GetVariable("HUB_AWS_SECRETACCESSKEY");
             this.HUB_ASSETS_BASE_URL = GetVariable("HUB_ASSETS_BASE_URL");
             this.HUB_BASE_URL = GetVariable("HUB_BASE_URL");
-            this.HUB_LAMBDA_FUNCTION = GetVariable("HUB_LAMBDA_FUNCTION");
             this.HUB_DYNAMO_TABLE = GetVariable("HUB_DYNAMO_TABLE");
+            this.HUB_LAMBDA_FUNCTION = GetVariable("HUB_LAMBDA_FUNCTION");
+            this.HUB_LARGE_MESSAGE_BUCKET = GetVariable("HUB_LARGE_MESSAGE_BUCKET");
 
             this.SQS_ENDPOINT = GetVariable("SQS_ENDPOINT");
             this.SQS_PAYLOAD_BUCKET = GetVariable("SQS_PAYLOAD_BUCKET");
