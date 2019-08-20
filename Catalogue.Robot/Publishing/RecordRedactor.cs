@@ -33,6 +33,15 @@ namespace Catalogue.Robot.Publishing
 
         private Record RedactResponsibleOrganisation(Record record)
         {
+            if (record.Gemini.ResourceType.Equals("publication"))
+            {
+                return record.With(r =>
+                {
+                    r.Gemini.ResponsibleOrganisation.Name = "Communications, JNCC";
+                    r.Gemini.ResponsibleOrganisation.Email = "comms@jncc.gov.uk";
+                });
+            }
+
             return record.With(r =>
             {
                 r.Gemini.ResponsibleOrganisation.Name = "Digital and Data Solutions, JNCC";
@@ -42,6 +51,15 @@ namespace Catalogue.Robot.Publishing
 
         private Record RedactMetadataContact(Record record)
         {
+            if (record.Gemini.ResourceType.Equals("publication"))
+            {
+                return record.With(r =>
+                {
+                    r.Gemini.MetadataPointOfContact.Name = "Communications, JNCC";
+                    r.Gemini.MetadataPointOfContact.Email = "comms@jncc.gov.uk";
+                });
+
+            }
             return record.With(r =>
             {
                 r.Gemini.MetadataPointOfContact.Name = "Digital and Data Solutions, JNCC";
