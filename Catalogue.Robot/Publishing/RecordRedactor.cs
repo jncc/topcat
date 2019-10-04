@@ -58,8 +58,8 @@ namespace Catalogue.Robot.Publishing
                     r.Gemini.MetadataPointOfContact.Name = "Communications, JNCC";
                     r.Gemini.MetadataPointOfContact.Email = "comms@jncc.gov.uk";
                 });
-            }
 
+            }
             return record.With(r =>
             {
                 r.Gemini.MetadataPointOfContact.Name = "Digital and Data Solutions, JNCC";
