@@ -24,7 +24,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Data.Write
 {
     public class publishing_upload_record_service_specs : CleanDbTest
     {
-        private static string HUB_URL_ROOT = "http://hub.jncc.gov.uk/assets/";
+        private static string HUB_URL_ROOT = "https://hub.jncc.gov.uk/assets/";
 
         private Env env;
 
@@ -148,8 +148,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Data.Write
                 dataServiceMock.Verify(x => x.UploadDataFile(Helpers.RemoveCollection(record.Id), It.IsAny<string>()), Times.Exactly(fileCount));
                 hubServiceMock.Verify(x => x.Publish(record), Times.Once);
                 record.Publication.Target.Hub.Url =
-                    "http://hub.jncc.gov.uk/assets/" + Helpers.RemoveCollection(recordId);
-                hubServiceMock.Verify(x => x.Index(record), Times.Once);
+                    "https://hub.jncc.gov.uk/assets/" + Helpers.RemoveCollection(recordId);
                 metadataUploaderMock.Verify(x => x.UploadGeminiXml(Helpers.RemoveCollectionFromId(record)), Times.Once);
                 metadataUploaderMock.Verify(x => x.UpdateDguIndex(Helpers.RemoveCollectionFromId(record)), Times.Once);
                 redactorMock.Verify(x => x.RedactRecord(It.IsAny<Record>()), Times.Exactly(2));
@@ -220,8 +219,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Data.Write
                 dataServiceMock.Verify(x => x.UploadDataFile(Helpers.RemoveCollection(record.Id), It.IsAny<string>()), Times.Exactly(fileCount));
                 hubServiceMock.Verify(x => x.Publish(record), Times.Once);
                 record.Publication.Target.Hub.Url =
-                    "http://hub.jncc.gov.uk/assets/" + Helpers.RemoveCollection(recordId);
-                hubServiceMock.Verify(x => x.Index(record), Times.Once);
+                    "https://hub.jncc.gov.uk/assets/" + Helpers.RemoveCollection(recordId);
                 metadataUploaderMock.Verify(x => x.UploadGeminiXml(It.IsAny<Record>()), Times.Never);
                 metadataUploaderMock.Verify(x => x.UpdateDguIndex(It.IsAny<Record>()), Times.Never);
                 redactorMock.Verify(x => x.RedactRecord(It.IsAny<Record>()), Times.Once);
@@ -291,7 +289,6 @@ namespace Catalogue.Tests.Slow.Catalogue.Data.Write
 
                 dataServiceMock.Verify(x => x.UploadDataFile(Helpers.RemoveCollection(record.Id), It.IsAny<string>()), Times.Exactly(fileCount));
                 hubServiceMock.Verify(x => x.Publish(It.IsAny<Record>()), Times.Never);
-                hubServiceMock.Verify(x => x.Index(It.IsAny<Record>()), Times.Never);
                 metadataUploaderMock.Verify(x => x.UploadGeminiXml(record), Times.Once);
                 metadataUploaderMock.Verify(x => x.UpdateDguIndex(record), Times.Once);
                 redactorMock.Verify(x => x.RedactRecord(It.IsAny<Record>()), Times.Once);
@@ -324,7 +321,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Data.Write
                         Hub = new HubPublicationInfo
                         {
                             Publishable = false, //previously published here
-                            Url = "http://hub.jncc.gov.uk/assets/record-guid",
+                            Url = "https://hub.jncc.gov.uk/assets/record-guid",
                             LastSuccess = new PublicationAttempt
                             {
                                 DateUtc = new DateTime(2017, 08, 17, 12, 0, 0)
@@ -364,7 +361,7 @@ namespace Catalogue.Tests.Slow.Catalogue.Data.Write
                 DataPublishedSuccessfully(updatedRecord, testTime);
                 updatedRecord.Resources.Should().Contain(r => r.Name.Equals("File resource"));
                 updatedRecord.Publication.Target.Hub.LastSuccess.DateUtc.Should().Be(new DateTime(2017, 08, 17, 12, 0, 0));
-                updatedRecord.Publication.Target.Hub.Url.Should().Be("http://hub.jncc.gov.uk/assets/record-guid");
+                updatedRecord.Publication.Target.Hub.Url.Should().Be("https://hub.jncc.gov.uk/assets/record-guid");
                 GovPublishedSuccessfully(updatedRecord, testTime);
                 ResourcesUpdatedCorrectly(recordId, record.Resources, updatedRecord.Resources);
 
@@ -373,7 +370,6 @@ namespace Catalogue.Tests.Slow.Catalogue.Data.Write
                 var fileCount = CountFileResources(record.Resources);
                 dataServiceMock.Verify(x => x.UploadDataFile(Helpers.RemoveCollection(record.Id), It.IsAny<string>()), Times.Exactly(fileCount));
                 hubServiceMock.Verify(x => x.Publish(It.IsAny<Record>()), Times.Never);
-                hubServiceMock.Verify(x => x.Index(It.IsAny<Record>()), Times.Never);
                 metadataUploaderMock.Verify(x => x.UploadGeminiXml(record), Times.Once);
                 metadataUploaderMock.Verify(x => x.UpdateDguIndex(record), Times.Once);
                 redactorMock.Verify(x => x.RedactRecord(It.IsAny<Record>()), Times.Once);
@@ -453,7 +449,6 @@ namespace Catalogue.Tests.Slow.Catalogue.Data.Write
                 var fileCount = CountFileResources(record.Resources);
                 dataServiceMock.Verify(x => x.UploadDataFile(Helpers.RemoveCollection(record.Id), It.IsAny<string>()), Times.Exactly(fileCount));
                 hubServiceMock.Verify(x => x.Publish(record), Times.Once);
-                hubServiceMock.Verify(x => x.Index(record), Times.Once);
                 metadataUploaderMock.Verify(x => x.UploadGeminiXml(Helpers.RemoveCollectionFromId(record)), Times.Never);
                 metadataUploaderMock.Verify(x => x.UpdateDguIndex(Helpers.RemoveCollectionFromId(record)), Times.Never);
                 redactorMock.Verify(x => x.RedactRecord(It.IsAny<Record>()), Times.Once);
@@ -749,7 +744,6 @@ namespace Catalogue.Tests.Slow.Catalogue.Data.Write
                 var redactorMock = new Mock<IRecordRedactor>();
                 var uploader = new RobotPublisher(env, db, redactorMock.Object, uploadService, dataServiceMock.Object, metadataUploaderMock.Object, hubServiceMock.Object);
                 vocabQueryerMock.Setup(x => x.GetVocab(It.IsAny<string>())).Returns(new Vocabulary());
-                hubServiceMock.Setup(x => x.Index(It.IsAny<Record>())).Throws(new Exception("test message"));
                 redactorMock.Setup(x => x.RedactRecord(It.IsAny<Record>())).Returns(record);
 
                 uploader.PublishRecord(record);

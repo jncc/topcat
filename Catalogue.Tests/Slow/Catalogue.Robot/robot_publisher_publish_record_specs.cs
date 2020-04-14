@@ -81,7 +81,6 @@ namespace Catalogue.Tests.Slow.Catalogue.Robot
             dataUploaderMock.Verify(x => x.CreateDataRollback(It.IsAny<string>()), Times.Once);
             dataUploaderMock.Verify(x => x.UploadDataFile(It.IsAny<string>(), It.IsAny<string>()), Times.Once);
             hubServiceMock.Verify(x => x.Publish(It.IsAny<Record>()), Times.Once);
-            hubServiceMock.Verify(x => x.Index(It.IsAny<Record>()), Times.Once);
             metadataUploaderMock.Verify(x => x.UploadGeminiXml(It.IsAny<Record>()), Times.Once);
             metadataUploaderMock.Verify(x => x.UpdateDguIndex(It.IsAny<Record>()), Times.Once);
             uploadService.Verify(x => x.UpdateGovPublishSuccess(It.IsAny<Record>(), It.IsAny<PublicationAttempt>()), Times.Once);
@@ -143,7 +142,6 @@ namespace Catalogue.Tests.Slow.Catalogue.Robot
             dataServiceMock.Verify(x => x.CreateDataRollback(It.IsAny<string>()), Times.Once);
             dataServiceMock.Verify(x => x.UploadDataFile(It.IsAny<string>(), It.IsAny<string>()), Times.Once);
             hubServiceMock.Verify(x => x.Publish(It.IsAny<Record>()), Times.Once);
-            hubServiceMock.Verify(x => x.Index(It.IsAny<Record>()), Times.Never);
             metadataUploaderMock.Verify(x => x.UploadGeminiXml(It.IsAny<Record>()), Times.Never);
             metadataUploaderMock.Verify(x => x.UpdateDguIndex(It.IsAny<Record>()), Times.Never);
             uploadService.Verify(x => x.UpdateGovPublishSuccess(It.IsAny<Record>(), It.IsAny<PublicationAttempt>()), Times.Never);
