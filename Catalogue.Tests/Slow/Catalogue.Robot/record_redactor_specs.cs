@@ -138,9 +138,9 @@ namespace Catalogue.Tests.Slow.Catalogue.Robot
 
             var redactedRecord = redactor.RedactRecord(publicationRecord);
             redactedRecord.Gemini.ResponsibleOrganisation.Name.Should().Be("Communications, JNCC");
-            redactedRecord.Gemini.ResponsibleOrganisation.Email.Should().Be("comms@jncc.gov.uk");
+            redactedRecord.Gemini.ResponsibleOrganisation.Email.Should().Be("communications@jncc.gov.uk");
             redactedRecord.Gemini.MetadataPointOfContact.Name.Should().Be("Communications, JNCC");
-            redactedRecord.Gemini.MetadataPointOfContact.Email.Should().Be("comms@jncc.gov.uk");
+            redactedRecord.Gemini.MetadataPointOfContact.Email.Should().Be("communications@jncc.gov.uk");
         }
     }
 }
